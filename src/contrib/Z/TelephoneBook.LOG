@@ -1,0 +1,291 @@
+
+
+===============================================================================
+         HOL88 Version 2.02 (SUN4/AKCL: pre-release), built on 26/1/94
+===============================================================================
+
+
+() : void
+
+..........................false : bool
+
+
+File hol-init loaded
+() : void
+
+###########.............................Loading library sets ...
+Updating search path.
+Updating help search path.
+Theory sets loaded
+.....................
+Library sets loaded.
+.Loading library string ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+....
+Library string loaded.
+.Loading library taut ...
+Updating help search path
+........................................
+Library taut loaded.
+.Loading library reduce ...
+Extending help search path.
+Loading boolean conversions........
+Loading arithmetic conversions..................
+Loading general conversions, rule and tactic.....
+Library reduce loaded.
+.Loading library arith ...
+reduce already loaded
+.Updating help search path
+.......................................................................................................................................................................................................................................................................................
+Library arith loaded.
+.Loading library unwind ...
+Updating help search path
+..................................
+Library unwind loaded.
+.......Theory Z loaded
+......................................................................................................................................................................................................................() : void
+
+######() : void
+
+######() : void
+
+#######() : void
+
+Axiom_1 = |- NUMBER =/= {}
+
+##() : void
+
+Axiom_2 = |- SUBSCRIBER =/= {}
+
+##########"TelephoneBook" : term
+
+###################Theorem Ap_SING autoloading from theory `Z` ...
+Ap_SING = |- !x v. {x |-> v} ^^ x = v
+
+Theorem RangeAntiResSING autoloading from theory `Z` ...
+RangeAntiResSING = |- !x y. {x |-> y} +> {y} = {}
+
+Theorem CHOICE autoloading from theory `Z` ...
+CHOICE = |- !s. s =/= {} = (CHOICE s) IN s
+
+Definition |-> autoloading from theory `Z` ...
+|-> = |- !x y. x |-> y = x,y
+
+Theorem IN_DIFF autoloading from theory `sets` ...
+IN_DIFF = |- !s t x. x IN (s DIFF t) = x IN s /\ ~x IN t
+
+Definition NOT_IN autoloading from theory `Z` ...
+NOT_IN = |- !x s. x NOT_IN s = ~x IN s
+
+Theorem ran_SING autoloading from theory `Z` ...
+ran_SING = |- !x y. ran{x |-> y} = {y}
+
+Theorem dom_SING autoloading from theory `Z` ...
+dom_SING = |- !x y. dom{x |-> y} = {x}
+
+Theorem UNION_EMPTY autoloading from theory `sets` ...
+UNION_EMPTY = |- (!s. {} UNION s = s) /\ (!s. s UNION {} = s)
+
+Theorem IN_SING autoloading from theory `sets` ...
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Theorem DIFF_EMPTY autoloading from theory `sets` ...
+DIFF_EMPTY = |- !s. s DIFF {} = s
+
+Theorem ran_EMPTY autoloading from theory `Z` ...
+ran_EMPTY = |- ran{} = {}
+
+Theorem dom_EMPTY autoloading from theory `Z` ...
+dom_EMPTY = |- dom{} = {}
+
+Definition true_DEF autoloading from theory `Z` ...
+true_DEF = |- true = T
+
+Theorem NOT_IN_EMPTY autoloading from theory `sets` ...
+NOT_IN_EMPTY = |- !x. ~x IN {}
+
+Definition SUBSET_DEF autoloading from theory `sets` ...
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+Definition P autoloading from theory `Z` ...
+P = |- !X. P X = {Y | Y SUBSET X}
+
+Definition >< autoloading from theory `Z` ...
+>< = |- !X Y. X >< Y = {(x,y) | x IN X /\ y IN Y}
+
+Definition <-> autoloading from theory `Z` ...
+<-> = |- !X Y. X <-> Y = P(X >< Y)
+
+Definition -+> autoloading from theory `Z` ...
+-+> = 
+|- !X Y.
+    X -+> Y =
+    {f | 
+     f IN (X <-> Y) /\
+     (!x y1 y2. (x |-> y1) IN f /\ (x |-> y2) IN f ==> (y1 = y2))}
+
+Definition :: autoloading from theory `Z` ...
+:: = |- !x s. x :: s = x IN s
+
+EXISTS_CONSISTENT_TAC = - : tactic
+
+########() : void
+
+TelephoneBook_consistent = |- EXISTS[TelephoneBook]true
+
+############"Connect" : term
+
+#############() : void
+
+Connect_consistent = |- EXISTS[Connect]true
+
+######Theorem dom_UNION autoloading from theory `Z` ...
+dom_UNION = |- !X Y. dom(X UNION Y) = (dom X) UNION (dom Y)
+
+() : void
+
+Connect_proof_1 = |- FORALL[Connect](known' = known UNION {subscriber?})
+
+######Theorem DIFF_UNION autoloading from theory `Z` ...
+DIFF_UNION = |- !s t u. s DIFF (t UNION u) = (s DIFF t) DIFF u
+
+Theorem EXTENSION autoloading from theory `sets` ...
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+Theorem ran_UNION autoloading from theory `Z` ...
+ran_UNION = |- !X Y. ran(X UNION Y) = (ran X) UNION (ran Y)
+
+() : void
+
+Connect_proof_2 = |- FORALL[Connect](free' = free DIFF {number!})
+
+#########"Disconnect" : term
+
+############() : void
+
+Disconnect_consistent = |- EXISTS[Disconnect]true
+
+#############################Theorem IN_dom_ran autoloading from theory `Z` ...
+IN_dom_ran = 
+|- !f X Y x y. f IN (X -+> Y) /\ (x,y) IN f ==> x IN X /\ y IN Y
+
+Theorem ApFunCor autoloading from theory `Z` ...
+ApFunCor = |- !f X Y x y. f IN (X -+> Y) /\ (x,y) IN f ==> (f ^^ x = y)
+
+Definition dom autoloading from theory `Z` ...
+dom = |- !R. dom R = {x | ?y. (x |-> y) IN R}
+
+Definition +> autoloading from theory `Z` ...
++> = |- !R T. R +> T = {x |-> y | (x |-> y) IN R /\ ~y IN T}
+
+Definition DIFF_DEF autoloading from theory `sets` ...
+DIFF_DEF = |- !s t. s DIFF t = {x | x IN s /\ ~x IN t}
+
+() : void
+
+Disconnect_proof_1 = 
+|- FORALL
+   [Disconnect]
+   (known' = known DIFF {s | s IN SUBSCRIBER /\ (book ^^ s = number?)})
+
+###########################Theorem IN_UNION autoloading from theory `sets` ...
+IN_UNION = |- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+
+Definition ran autoloading from theory `Z` ...
+ran = |- !R. ran R = {y | ?x. (x |-> y) IN R}
+
+() : void
+
+Disconnect_proof_2 = |- FORALL[Disconnect](free' = free UNION {number?})
+
+##########"FindNumber" : term
+
+##############() : void
+
+FindNumber_consistent = |- EXISTS[FindNumber]true
+
+#######"initTelephoneBook" : term
+
+########() : void
+
+initTelephoneBook_consistent = |- EXISTS[initTelephoneBook]true
+
+#######() : void
+
+REPORT_Axiom = 
+|- !e0 e1 e2 e3 e4.
+    ?! fn.
+     (fn ok = e0) /\
+     (fn full_book = e1) /\
+     (fn already_known = e2) /\
+     (fn unknown_number = e3) /\
+     (fn unknown_subscriber = e4)
+
+REPORT = |- REPORT = UNIV
+
+#######"Success" : term
+
+#########"FullBook" : term
+
+##########"AlreadyKnown" : term
+
+####"RConnect" : term
+
+#################################Definition =/= autoloading from theory `Z` ...
+=/= = |- !x y. x =/= y = ~(x = y)
+
+Theorem DIFF_IN_P autoloading from theory `Z` ...
+DIFF_IN_P = |- !s t. (s DIFF t) IN (P s)
+
+Theorem UNION_SING_Pfun autoloading from theory `Z` ...
+UNION_SING_Pfun = 
+|- !f X Y x y.
+    f IN (X -+> Y) /\ x IN X /\ y IN Y /\ ~x IN (dom f) ==>
+    (f UNION {x |-> y}) IN (X -+> Y)
+
+Theorem ranPfunIN autoloading from theory `Z` ...
+ranPfunIN = |- !f X Y. f IN (X -+> Y) ==> (ran f) IN (P Y)
+
+Theorem domPfunIN autoloading from theory `Z` ...
+domPfunIN = |- !f X Y. f IN (X -+> Y) ==> (dom f) IN (P X)
+
+Theorem UNION_SING_IN_P autoloading from theory `Z` ...
+UNION_SING_IN_P = 
+|- !f X Y x y.
+    f IN (X -+> Y) /\ x IN X /\ y IN Y ==>
+    (dom(f UNION {x |-> y})) IN (P X)
+
+() : void
+
+RConnect_total = |- FORALL[RConnect](pre RConnect)
+
+##########"UnknownNumber" : term
+
+####"RDisconnect" : term
+
+#################################Theorem domRangeAntiResPfun autoloading from theory `Z` ...
+domRangeAntiResPfun = 
+|- !X Y f y. f IN (X -+> Y) ==> (dom(f +> {y})) IN (P X)
+
+Theorem RangeAntiResPfun autoloading from theory `Z` ...
+RangeAntiResPfun = 
+|- !X Y f y. f IN (X -+> Y) ==> (f +> {y}) IN (X -+> Y)
+
+() : void
+
+RDisconnect_total = |- FORALL[RDisconnect](pre RDisconnect)
+
+##########"UnknownSubscriber" : term
+
+####"RFindNumber" : term
+
+###################Theorem IN_UNIV autoloading from theory `sets` ...
+IN_UNIV = |- !x. x IN UNIV
+
+() : void
+
+RFindNumber_total = |- FORALL[RFindNumber](pre RFindNumber)
+
+#

@@ -1,0 +1,25 @@
+paper.dvi :  
+
+Report on an earlier implementation
+of execution sequence semantics. Useful for
+some underlying concepts.
+
+@Article{Tredoux:92,
+  Author	= {G. Tredoux},
+  Title		= {Mechanizing Execution Sequence Semantics in {HOL}},
+  Journal	= {South African Computer Journal},
+  Number	= {7},
+  Month		= {July},
+  Year		= {1992}}
+
+--------------------------------------------------------------
+
+outline.dvi :  
+
+Outline of a tech report
+describing the current implementation
+
+This is all in rough as of now and "as is". For the latest
+mail gavan@elc.mth.uct.ac.za 
+
+

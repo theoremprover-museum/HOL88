@@ -1,0 +1,64 @@
+\chapter{\LaTeX\ macros}
+
+This chapter documents all the \LaTeX\ macros defined in the file {\tt
+holmacs.tex}. They are required to format the output produced by the
+functions of this library. The macros can be divided into two groups:
+special symbols and environments. They can be changed to suit the
+document style in use. Care should be taken not to abuse them. All
+special symbols are listed in the table below and this is followed by
+the description of the environment macros.
+\section*{Special symbols}
+\begin{center}
+\begin{tabular}{|l|c||l|c||l|c|}
+\hline
+\sc NAME & \sc SYMBOL & \sc NAME & \sc SYMBOL & \sc NAME & \sc SYMBOL
+\\ \hline \hline
+\verb|\US| & \US & \verb|\SH| & \SH & \verb|\AM| & \AM \\ \hline
+\verb|\PC| & \PC & \verb|\DO| & \DO & \verb|\BS| & \BS \\ \hline
+\verb|\PR| & \PR & \verb|\TI| & \TI & \verb|\AS| & \AS \\ \hline
+\verb|\LE| & \LE & \verb|\BA| & \BA & \verb|\GR| & \GR \\ \hline
+\verb|\LB| & \LB & \verb|\RB| & \RB & \verb|\CI| & \CI \\ \hline
+\verb|\LC| & \LC & \verb|\RC| & \RC &    &   \\ \hline \hline
+\verb|\THM| & \THM & \verb|\AND| & \AND & \verb|\OR| & \OR \\ \hline
+\verb|\IMP| & \IMP & \verb|\LONG| & \LONG & \verb|\IFF| & \IFF \\ \hline
+\verb|\LEE| & \LEE & \verb|\GEE| & \GEE & \verb|\EXISTSUNIQUE| & \EXISTSUNIQUE \\ \hline
+\verb|\LES| & \LES & \verb|\GRE| & \GRE & \verb|\MUL| & \MUL \\ \hline
+\verb|\NOT| & \NOT & \verb|\FORALL| & \FORALL & \verb|\EXISTS| & \EXISTS \\ \hline
+\verb|\SELECT| & \SELECT & \verb|\FUNCOM| & \FUNCOM & \verb|\LAMBDA| & \LAMBDA \\ \hline
+\verb|\DOT| & \DOT & \verb|\NIL| & \NIL & \verb|\EMPTYSET| & \EMPTYSET \\ \hline
+\verb|\BEGINSET| & $\BEGINSET\right.$ & \verb|\ENDSET| &$\left. \ENDSET$ & \verb|\SUCHTHAT| & \SUCHTHAT \\ \hline
+\end{tabular}
+\end{center}
+
+\section*{Commands}
+\begin{description}
+\item[{\tt\BS CONST}]  The argument to this is a logical constant. It
+	is set in the font specified by \verb|\constfont|.
+\item[{\tt\BS KEYWD}]  The argument to this is a keyword. It
+	is set in the font specified by \verb|\keyfont|.
+\item[{\tt\BS sec}]  This begins a section within a theory. It produces
+	an unnumbered section heading.
+\item[{\tt\BS theory}]  This begins a theory. It produces a numbered
+	section heading.
+\item[{\tt\BS endthy}]  This ends a theory. It produces a rule across
+	the page with the nam of the theory at the center of it.
+\item[{\tt\BS typefont}]  This font is used to typeset logical
+	types and ML identifiers. By default, it it \verb|\tt|.
+\item[{\tt\BS constfont}]  This font is used to typeset logical
+	constants. By default, it it \verb|\sf|.
+\item[{\tt\BS keyfont}]  This font is used to typeset keywords.
+	By default, it it \verb|\bf|.
+\end{description}
+
+\section*{Environments}
+
+\begin{description}
+\item[{\tt ttlist}] The {\it parents\/} and {\it types\/} sections are
+	set in this environment.
+\item[{\tt typelist}] The {\it constants\/} and {\it infixes\/}
+	sections are set in this environment. It is a labeled list with the
+	names of the constants as the labels.
+\item[{\tt thmlist}] The {\it definitions\/} and {\it theorems\/}
+	sections are set in this environment. It is a labeled list
+	with the names of the definitions or theorems as the labels.
+\end{description}

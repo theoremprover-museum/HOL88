@@ -1,0 +1,4 @@
+\THEOREM hrat_inv HRAT
+|- !g00013.
+    hrat_inv g00013 = mk_hrat($trat_eq(trat_inv($@(dest_hrat g00013))))
+\ENDTHEOREM

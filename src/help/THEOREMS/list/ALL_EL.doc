@@ -1,0 +1,4 @@
+\THEOREM ALL_EL list
+|- (!P. ALL_EL P[] = T) /\
+   (!P x l. ALL_EL P(CONS x l) = P x /\ ALL_EL P l)
+\ENDTHEOREM

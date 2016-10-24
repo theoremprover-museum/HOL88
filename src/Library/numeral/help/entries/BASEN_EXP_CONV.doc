@@ -1,0 +1,35 @@
+\DOC BASEN_EXP_CONV
+
+\TYPE {BASEN_EXP_CONV : term -> thm}
+
+\SYNOPSIS
+Proves the result of raising one numeral to the power specified by another.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} and {n} are lists of digits in base {r}, and {p} is the list of digits
+in the base {r} numeral representing the sum of {m} and {n}, then
+{BASEN_EXP_CONV} returns the theorem:
+{
+        |- (BASEN r m EXP BASEN r n) = BASEN r p
+}
+\FAILURE
+The argument to {BASEN_EXP_CONV} must be of the form
+{"BASEN r [...] EXP BASEN r [...]"}, and the radix of the two numerals must be
+the same, and the radix must be a numeric constant that is at least 2, and all
+elements of the digit lists must be numeric constants, and must be less than
+the radix.
+
+\EXAMPLE
+{
+#BASEN_EXP_CONV "BASEN 10 [2] EXP BASEN 10 [1;2]";;
+|- BASEN 10 [2] EXP BASEN 10 [1;2] = BASEN 10 [4;0;9;6]
+
+#BASEN_EXP_CONV "BASEN 2 [1;1] EXP BASEN 2 [1;0]";;
+|- BASEN 2 [1;1] EXP BASEN 2 [1;0]) = BASEN 2 [1;0;0;1]
+
+#BASEN_EXP_CONV "BASEN 16 [1;0] EXP BASEN 16 [4]";;
+|- BASEN 16 [1;0] EXP BASEN 16 [4]) = BASEN 16 [1;0;0;0;0]
+}
+\ENDDOC

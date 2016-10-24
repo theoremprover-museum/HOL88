@@ -1,0 +1,3 @@
+\THEOREM ADD_SUC_0 add
+|- !m. SUC m = (SUC 0) + m
+\ENDTHEOREM

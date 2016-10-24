@@ -1,0 +1,13 @@
+\DOC pmi_tm
+
+\TYPE {pmi_tm : term}
+
+\SYNOPSIS
+The boolean constant "<==".
+
+\LIBRARY window
+
+\SEEALSO
+equiv_tm, imp_tm.
+
+\ENDDOC

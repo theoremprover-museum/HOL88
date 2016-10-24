@@ -1,0 +1,3 @@
+\THEOREM ISMET_R1 TOPOLOGY
+|- ismet(\(x,y). abs(y - x))
+\ENDTHEOREM

@@ -1,0 +1,98 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: csp							|
+| 									|
+| DESCRIPTION   : Definition of csp trace theory.                       |
+|									|
+| AUTHOR	: A J Camilleri						|
+| AFFILIATION   : Hewlett-Packard Laboratories				|
+|									|
+| DATE		: 7 December 1989 		         		|
+| REVISED	: 1 October 1991 for HOL88 1.12	         		|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    
+    boolarith1.ml    Additional boolean algebra and arithmetic theorems.
+
+    boolarith2.ml    Additional boolean algebra and arithmetic theorems.
+
+    list_lib1.ml     Additional list theorems.
+
+    traces.ml        Definition of traces as lists.
+
+    restrict.ml	     Definition of restrict operator.
+
+    star.ml	     Definition of star operator.
+
+    process_ty.ml    Definition of a process datatype and constructors.
+
+    rules_and_tacs.ml   Some elementary tactics found useful for proofs.
+
+    process_fix.ml   A fix point theory for processes.
+
+    stop.ml	     Definition of process stop.
+
+    run.ml	     Definition of process run.
+
+    prefix.ml	     Definition of process prefix.
+
+    choice.ml	     Definition of process choice.
+
+    after.ml	     Definition of process after.
+
+    parallel.ml	     Definition of process parallel.
+
+    mu.ml	     Definition of process mu.
+
+    process.ml       Loads the above theories as parents.
+
+    csp.ml           Loads the library into hol.
+
+    after_laws.ml    Some laws about the after operator.
+
+    par_laws.ml      Some laws about the parallel operator.
+
+    csp_syntax.ml    Syntactic type and denotational semantics.
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+This library contains a basic theory of traces for CSP, as described in
+"Communicating Sequential Processes", Hoare C.A.R., Prentice-Hall.
+
+The theories are still unpolished and uncommented.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+                                      
+   0) necessary libraries: string taut sets
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `csp`;;
+
+

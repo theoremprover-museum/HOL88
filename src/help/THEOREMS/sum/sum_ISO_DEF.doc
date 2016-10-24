@@ -1,0 +1,4 @@
+\THEOREM sum_ISO_DEF sum
+|- (!a. ABS_sum(REP_sum a) = a) /\
+   (!r. IS_SUM_REP r = (REP_sum(ABS_sum r) = r))
+\ENDTHEOREM

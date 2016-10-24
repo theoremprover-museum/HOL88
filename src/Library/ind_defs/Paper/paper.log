@@ -1,0 +1,39 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  11 MAY 1992 15:10
+**paper
+(paper.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art10.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (alltt.sty)
+(/usr/lib/tex/macros/twocolumn.sty) (/usr/lib/tex/macros/fleqn.sty
+\mathindent=\dimen99
+)
+(layout.sty) (paper.aux) (macros.tex
+\hsbw=\skip41
+\c@sessioncount=\count87
+) [1
+
+
+
+
+] [2] [3] [4] [5] [6] [7] [8]
+(paper.aux) ) 
+Here is how much of TeX's memory you used:
+ 196 strings out of 4463
+ 1839 string characters out of 63169
+ 40217 words of memory out of 262141
+ 2133 multiletter control sequences out of 9500
+ 19348 words of font info for 73 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 13i,19n,17p,171b,385s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on paper.dvi (8 pages, 47536 bytes).

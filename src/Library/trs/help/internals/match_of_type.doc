@@ -1,0 +1,10 @@
+\DOC match_of_type
+
+\TYPE {match_of_type : (matching -> wildtype -> type)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

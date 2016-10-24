@@ -1,0 +1,10 @@
+\DOC Kind
+
+\TYPE {Kind : (thmkind -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM SER_CAUCHY SEQ
+|- !f.
+    summable f =
+    (!e. (& 0) < e ==> (?N. !m n. m num_ge N ==> (abs(Sum(m,n)f)) < e))
+\ENDTHEOREM

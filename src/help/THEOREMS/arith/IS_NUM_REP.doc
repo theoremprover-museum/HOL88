@@ -1,0 +1,5 @@
+\THEOREM IS_NUM_REP num
+|- !m.
+    IS_NUM_REP m =
+    (!P. P ZERO_REP /\ (!n. P n ==> P(SUC_REP n)) ==> P m)
+\ENDTHEOREM

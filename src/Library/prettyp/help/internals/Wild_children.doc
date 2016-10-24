@@ -1,0 +1,10 @@
+\DOC Wild_children
+
+\TYPE {Wild_children : child_metavar}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

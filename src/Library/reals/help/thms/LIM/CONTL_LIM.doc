@@ -1,0 +1,3 @@
+\THEOREM CONTL_LIM LIM
+|- !f x. f contl x = (f --> (f x))x
+\ENDTHEOREM

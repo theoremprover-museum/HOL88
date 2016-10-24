@@ -1,0 +1,4 @@
+\THEOREM COND_RAND \none
+|- !f b x y. f(b => x | y) = (b => f x | f y)
+\ENDTHEOREM
+

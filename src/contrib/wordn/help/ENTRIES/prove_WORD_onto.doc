@@ -1,0 +1,28 @@
+\DOC prove_WORD_onto
+
+\TYPE {prove_WORD_onto : thm -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC

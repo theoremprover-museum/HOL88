@@ -1,0 +1,3 @@
+\THEOREM TREAL_LT_TOTAL REALAX
+|- !x y. x treal_eq y \/ x treal_lt y \/ y treal_lt x
+\ENDTHEOREM

@@ -1,0 +1,14 @@
+\DOC match_term
+
+\BLTYPE
+match_term : (term ->
+              term ->
+              ((term # term) list # (type # type) list))
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

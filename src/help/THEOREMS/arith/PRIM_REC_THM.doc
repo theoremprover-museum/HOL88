@@ -1,0 +1,5 @@
+\THEOREM PRIM_REC_THM prim_rec
+|- !x f.
+    (PRIM_REC x f 0 = x) /\
+    (!m. PRIM_REC x f(SUC m) = f(PRIM_REC x f m)m)
+\ENDTHEOREM

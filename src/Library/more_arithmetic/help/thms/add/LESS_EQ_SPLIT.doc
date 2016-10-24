@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_SPLIT add
+|- !m n p. (m + n) <= p ==> n <= p /\ m <= p
+\ENDTHEOREM

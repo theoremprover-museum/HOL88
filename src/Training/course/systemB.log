@@ -1,0 +1,46 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  15 MAR 1992 15:52
+**systemB.tex
+(systemB.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (layout.sty
+HOL Course Slide Layout
+\rfootbox=\box25
+\lfootbox=\box26
+) (macros.tex
+\stitle=\box27
+\blobwidth=\skip41
+\pointwidth=\skip42
+\subblobwidth=\skip43
+\sind=\skip44
+\lwid=\skip45
+\hsbw=\skip46
+) (systemB.aux) [1
+
+
+] [2] [3] [4] [5] [6] [7] [8]
+\warn=\box28
+ [9] [10] [11]
+[12] [13] [14] [15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26]
+[27] [28] [29] [30] [31] [32] [33] [34] [35] [36] [37] [38] [39] [40] [41]
+[42] [43] [44] (systemB.aux) ) 
+Here is how much of TeX's memory you used:
+ 193 strings out of 4463
+ 1742 string characters out of 63169
+ 30837 words of memory out of 262141
+ 2133 multiletter control sequences out of 9500
+ 20640 words of font info for 78 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 14i,11n,16p,160b,426s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on systemB.dvi (44 pages, 46288 bytes).

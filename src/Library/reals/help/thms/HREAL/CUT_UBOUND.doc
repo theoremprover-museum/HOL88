@@ -1,0 +1,3 @@
+\THEOREM CUT_UBOUND HREAL
+|- !X x y. ~cut X x /\ x hrat_lt y ==> ~cut X y
+\ENDTHEOREM

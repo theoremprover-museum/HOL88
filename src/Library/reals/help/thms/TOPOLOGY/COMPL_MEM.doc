@@ -1,0 +1,3 @@
+\THEOREM COMPL_MEM TOPOLOGY
+|- !S x. S x = ~compl S x
+\ENDTHEOREM

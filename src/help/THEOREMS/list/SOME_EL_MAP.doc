@@ -1,0 +1,3 @@
+\THEOREM SOME_EL_MAP list
+|- !P f l. SOME_EL P(MAP f l) = SOME_EL(P o f)l
+\ENDTHEOREM

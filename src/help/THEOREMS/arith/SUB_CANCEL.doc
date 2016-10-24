@@ -1,0 +1,3 @@
+\THEOREM SUB_CANCEL arithmetic
+|- !p n m. n <= p /\ m <= p ==> ((p - n = p - m) = (n = m))
+\ENDTHEOREM

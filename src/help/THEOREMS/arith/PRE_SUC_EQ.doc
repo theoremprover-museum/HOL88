@@ -1,0 +1,3 @@
+\THEOREM PRE_SUC_EQ arithmetic
+|- !m n. 0 < n ==> ((m = PRE n) = (SUC m = n))
+\ENDTHEOREM

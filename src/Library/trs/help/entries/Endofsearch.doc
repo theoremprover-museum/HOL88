@@ -1,0 +1,23 @@
+\DOC Endofsearch
+
+\TYPE {Endofsearch : (foundthm list -> searchstep)}
+
+\SYNOPSIS
+Constructor function for the final step of a search.
+
+\LIBRARY trs
+
+\DESCRIBE
+Searches proceed in steps, one theory segment at a time. At the end of the
+search, the theorems found are presented using the constructor {Endofsearch}.
+At intermediate steps, the name of the theory being searched is displayed. If
+the search halts after an intermediate step, a list of theorems found so far
+and a function to continue the search are returned.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+Step, find_theorems, continue_search, show_step.
+
+\ENDDOC

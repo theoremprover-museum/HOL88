@@ -1,0 +1,5 @@
+\THEOREM LENGTH_EQ_CONS list
+|- !P n.
+    (!l. (LENGTH l = SUC n) ==> P l) =
+    (!l. (LENGTH l = n) ==> (\l. !x. P(CONS x l))l)
+\ENDTHEOREM

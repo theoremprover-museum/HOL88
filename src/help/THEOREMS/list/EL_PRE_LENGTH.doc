@@ -1,0 +1,3 @@
+\THEOREM EL_PRE_LENGTH list
+|- !l. ~(l = []) ==> (EL(PRE(LENGTH l))l = LAST l)
+\ENDTHEOREM

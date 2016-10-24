@@ -1,0 +1,4 @@
+\THEOREM APPEND_BUTLASTN_BUTFIRSTN list
+|- !m n l.
+    (m + n = LENGTH l) ==> (APPEND(BUTLASTN m l)(BUTFIRSTN n l) = l)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM SUM_POS REAL
+|- !f. (!n. (& 0) <= (f n)) ==> (!m n. (& 0) <= (Sum(m,n)f))
+\ENDTHEOREM

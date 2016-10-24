@@ -1,0 +1,4 @@
+\THEOREM list_ISO_DEF list
+|- (!a. ABS_list(REP_list a) = a) /\
+   (!r. IS_list_REP r = (REP_list(ABS_list r) = r))
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM GP_FINITE SEQ
+|- !x.
+    ~(x = & 1) ==>
+    (!n. Sum(0,n)(\n'. x pow n') = ((x pow n) - (& 1)) / (x - (& 1)))
+\ENDTHEOREM

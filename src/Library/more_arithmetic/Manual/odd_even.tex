@@ -1,0 +1,21 @@
+\section{The Theory {\tt odd\_even}}
+
+The theory \ml{odd\_even}\index{odd_even, theory@{\ptt odd\_even}, theory}
+contains theorems about the predicates \ml{ODD}\index{ODD@{\ptt
+ODD}} and \ml{EVEN}\index{EVEN@{\ptt EVEN}} which test for odd and even
+numbers, respectively. 
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+
+\begin{hol}
+\index{EVEN\_ODD\_0@{\ptt EVEN\_ODD\_0}}
+\index{EVEN\_ODD\_SUC@{\ptt EVEN\_ODD\_SUC}}
+\index{EVEN\_IMPL\_MULT@{\ptt EVEN\_IMPL\_MULT}}
+\begin{verbatim}
+  EVEN_ODD_0        |- EVEN 0 /\ ~ODD 0
+
+  EVEN_ODD_SUC      |- !n.  (EVEN(SUC n) = ODD n) /\
+                            (ODD(SUC n) = EVEN n)
+
+  EVEN_IMPL_MULT    |- !n m. EVEN n \/ EVEN m ==> EVEN(n * m)
+\end{verbatim}\end{hol}

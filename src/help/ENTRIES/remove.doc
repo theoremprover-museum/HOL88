@@ -1,0 +1,21 @@
+\DOC remove
+
+\TYPE {remove : ((* -> bool) -> * list -> (* # * list))}
+
+\SYNOPSIS
+Separates the first element of a list to satisfy a predicate from the rest of
+the list.
+
+\FAILURE
+Fails with {hd} if no element satisfes the predicate. This will always be the
+case for an empty list.
+
+\EXAMPLE
+{
+#remove (\x. x = 3) [1;2;3;4;5;6];;
+(3, [1; 2; 4; 5; 6]) : (int # int list)
+}
+\SEEALSO
+partition, filter.
+
+\ENDDOC

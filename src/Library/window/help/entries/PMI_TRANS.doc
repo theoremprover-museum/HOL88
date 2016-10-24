@@ -1,0 +1,19 @@
+\DOC PMI_TRANS
+
+\TYPE {PMI_TRANS : (thm -> thm -> thm)}
+
+\SYNOPSIS
+Implements the transitivity of backward implication.
+
+\LIBRARY window
+
+\DESCRIBE
+{
+ A1 |- t1 <== t2  A2 |- t2 <== t3
+---------------------------------- PMI_TRANS
+       A1 u A2 |- t1 <== t3
+}
+\SEEALSO
+TRANS, IMP_TRANS, PMI_DEF
+
+\ENDDOC

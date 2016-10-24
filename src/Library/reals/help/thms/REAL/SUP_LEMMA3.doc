@@ -1,0 +1,3 @@
+\THEOREM SUP_LEMMA3 REAL
+|- !d. (?z. !x. P x ==> x < z) ==> (?z. !x. (\x. P(x + d))x ==> x < z)
+\ENDTHEOREM

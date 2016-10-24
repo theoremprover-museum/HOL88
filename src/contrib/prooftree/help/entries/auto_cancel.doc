@@ -1,0 +1,25 @@
+\DOC auto_cancel
+
+\TYPE {auto_cancel : (void -> bool)}
+
+\SYNOPSIS
+Allows writing over a previously expanded node in a {prooftree}.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. By default, tactics can only be applied to nodes
+marked as unexpanded. To apply a different tactic at a node already
+expanded (and maybe already proved) one must first cancel the effect
+of the previous tactic. Using {auto_cancel} allows a node to be
+re-expanded, at which time the previous proof of the node in question
+is discarded.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\SEEALSO
+cancel_tac, do_tac, new_goal.
+
+\ENDDOC

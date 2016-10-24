@@ -1,0 +1,33 @@
+\DOC preterm_const
+
+\TYPE {preterm_const : (string -> preterm)}
+
+\SYNOPSIS
+Constructs constant preterm.
+
+\DESCRIBE
+{preterm_const} is analogous to the oft-used ML function {mk_var}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {mk_const} (i.e. that the constant must be either implicitly or
+explicitly associated with a specific type) are not encountered until the
+preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#preterm_const `T`;;
+preterm_const `T` : preterm
+
+#preterm_to_term it;;
+"T" : term
+
+#type_of it;;
+":bool" : type
+}
+\SEEALSO
+mk_const, preterm_abs, preterm_antiquot, preterm_comb, preterm_typed,
+preterm_var, preterm_to_term.
+
+\ENDDOC

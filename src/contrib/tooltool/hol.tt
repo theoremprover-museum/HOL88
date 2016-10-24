@@ -1,0 +1,63 @@
+ 
+/*--------------------------------------------------------------------------*/
+/*From: David Shepherd <des@inmos.co.uk>                                    */
+/*Date: Wed, 10 May 89 17:23:08 BST                                         */
+/*To: mjcg@sri-cam                                                          */
+/*Subject: Re: Windows interfaces                                           */
+/*                                                                          */
+/*Have you come across tooltool ?? It's a program that produces windowed    */
+/*versions of ordinary applications from a "simple" script langugae. I found*/
+/*out about it while looking for a windowed news reader in the Oxford PRG   */
+/*archive. As an example here is a (very) simple script to provide an       */
+/*interface to the HOL sub goal package. Basically, it provides a level of  */
+/*window interface to an application similar to that of mailtool relative   */
+/*to mail without having to delve into the details of SunView -- so it      */
+/*may be useful in providing more "user friendly" interfaces to HOL.        */
+/*                                                                          */
+/*david                                                                     */
+/*                                                                          */
+/* --------------- here's the sample script ---------------                 */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
+
+/*tooltool script for HOL to support sub_goal package */
+application "hol"
+label "HOL88"
+gadgets
+  bottom
+  font "/usr/lib/fonts/fixedwidthfonts/screen.r.11"  /*use a small font */
+  text command
+    label "%:"
+    display 80
+    retain 256
+    font "/usr/lib/fonts/fixedwidthfonts/serif.r.14"
+    action send format("%s;;\n",command);
+  end_text
+  button
+    normal " goal " {
+    	send format("set_goal([],\"%s\");;\n",command);
+    	command = "";
+    }
+  end_button
+  button
+    normal " expand " {
+    	send format("expand(%s);;\n",command);
+    	command = "";
+    }
+  end_button
+  button
+    normal " backup " send "backup();;\n";
+  end_button
+  button
+    normal " rotate " send "rotate 1;;\n";
+  end_button
+  button
+    normal " exit " exit;
+  end_button
+end_gadgets
+
+
+
+
+

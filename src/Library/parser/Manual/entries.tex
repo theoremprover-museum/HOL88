@@ -1,0 +1,35 @@
+\chapter{ML Functions in the parser Library}
+\input{entries-intro}
+\DOC{parse}
+
+\TYPE {\small\verb%parse : (* -> void)%}\egroup
+
+\SYNOPSIS
+Top-level function to invoke the parser-generator.
+
+\DESCRIBE
+The function invokes the parser-generator.  The generator prompts for various
+input files and types.
+
+\FAILURE
+Fails if there is an error in the input grammar that specifies the operation
+of the parser to be generated.  A descriptive message is produced to help
+pinpoint the cause of the failure.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#parse();;
+Input file:  foo.grm
+Output file: foo
+Opening the file foo.ml (MAIN OUTPUT)
+Opening the file foo_decls.ml (DECLARATIONS)
+Load the declarations file before the main output.
+See the file foo_load.ml for a sample.
+See the file ./Makefile.foo for a sample Makefile.
+Output type: *
+\end{verbatim}
+}
+
+\ENDDOC
+

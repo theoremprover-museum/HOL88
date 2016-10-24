@@ -1,0 +1,3 @@
+\THEOREM SER_ACONV SEQ
+|- !f. summable(\n. abs(f n)) ==> summable f
+\ENDTHEOREM

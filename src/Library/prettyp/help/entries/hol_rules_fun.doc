@@ -1,0 +1,19 @@
+\DOC hol_rules_fun
+
+\TYPE {hol_rules_fun : print_rule_function}
+
+\SYNOPSIS
+Pretty-printing rules (as a function) for HOL types, terms and theorems.
+
+\LIBRARY prettyp
+
+\FAILURE
+Fails if none of the rules match the input. However, this function should not
+be applied `by hand'; it should only be used as an argument to one of the
+pretty-printing functions.
+
+\SEEALSO
+hol_type_rules_fun, hol_term_rules_fun, hol_thm_rules_fun, raw_tree_rules_fun,
+then_try, pretty_print, pp, pp_write.
+
+\ENDDOC

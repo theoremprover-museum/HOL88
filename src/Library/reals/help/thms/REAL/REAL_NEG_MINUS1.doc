@@ -1,0 +1,3 @@
+\THEOREM REAL_NEG_MINUS1 REAL
+|- !x. -- x = (--(& 1)) * x
+\ENDTHEOREM

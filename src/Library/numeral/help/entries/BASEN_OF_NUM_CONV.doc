@@ -1,0 +1,36 @@
+\DOC BASEN_OF_NUM_CONV
+
+\TYPE {BASEN_OF_NUM_CONV : conv}
+
+\SYNOPSIS
+Proves what the numeral is that represents a given numeric value in a given
+radix.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} and {r} are numeric constants, and {n} is a list of base {r} digits with
+a value of {m} (in base {r}), then {BASEN_OF_NUM_CONV "r" "m"} returns the
+theorem:
+{
+        |- BASEN_DIGITS r m = n
+}
+\FAILURE
+The radix must be a numeric constant with a value of at least 2, and the value
+must be a numeric constant.
+
+\EXAMPLE
+{
+#BASEN_OF_NUM_CONV "2" "32";;
+|- 32 = BASEN 2 [1;0;0;0;0;0]
+
+#BASEN_OF_NUM_CONV "10" "265";;
+|- 265 = BASEN 10 [2;6;5]
+
+#BASEN_OF_NUM_CONV "16" "3072";;
+|- 3072 = BASEN 16 [12;0;0]
+}
+\SEEALSO
+mk_basen, BASEN_CONV, basen_of_int.
+
+\ENDDOC

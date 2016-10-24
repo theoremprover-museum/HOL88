@@ -1,0 +1,28 @@
+\DOC prove_function_defn_thm
+
+\TYPE {prove_function_defn_thm : thm -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC

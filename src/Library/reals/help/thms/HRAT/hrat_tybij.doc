@@ -1,0 +1,4 @@
+\THEOREM hrat_tybij HRAT
+|- (!a. mk_hrat(dest_hrat a) = a) /\
+   (!r. (\c. ?x. c = $trat_eq x)r = (dest_hrat(mk_hrat r) = r))
+\ENDTHEOREM

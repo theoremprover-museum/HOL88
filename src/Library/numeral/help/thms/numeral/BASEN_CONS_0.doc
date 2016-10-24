@@ -1,0 +1,3 @@
+\THEOREM BASEN_CONS_0 numeral
+|- !r l. BASEN r(CONS 0 l) = BASEN r l
+\ENDTHEOREM

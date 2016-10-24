@@ -1,0 +1,137 @@
+% =====================================================================
+% Macros for HOL course slides 	                      (c) T Melham 1990
+% =====================================================================
+
+% ---------------------------------------------------------------------
+% Macro for title page of a section:
+%
+%     \bsectitle
+%       ...<title>...
+%     \esectitle
+%
+% starts a new page, and typesets <title> in a large box at the top
+% of the page.
+% ---------------------------------------------------------------------
+
+\newbox\stitle
+
+\long\def\Frame#1{\leavevmode
+    \hbox{\vbox{\hrule height2pt
+              \hbox{\vrule width2pt #1\vrule width2pt}
+  	      \hrule height2pt}}}
+
+\long\def\bsectitle{\setbox\stitle=\hbox\bgroup\begin{minipage}{140mm}
+		   \begin{center}\Huge\bf\vskip10mm}
+
+\long\def\esectitle{\vskip10mm\end{center}\end{minipage}\egroup
+		    \clearpage\vspace*{30mm}%
+		   \begin{center}\Frame{\box\stitle}\end{center}}
+
+% ---------------------------------------------------------------------
+% Macro for title of slide:
+%
+%     \slide{<title>} 
+%
+% starts a new page, and typesets <title> in a large box at the top
+% of the page.
+% ---------------------------------------------------------------------
+
+\long\def\slide#1{\newpage\leavevmode
+ \hbox{\vbox{\hrule height2pt%
+ \hbox to \textwidth{\vrule width2pt\hskip5mm%
+ \vbox to 16mm{\vfill\vskip1mm\hbox{\Huge\bf #1}\vfill}\hfil\vrule width2pt}%
+ \hrule height2pt}}\vskip7mm}
+
+% ---------------------------------------------------------------------
+% round circles: \blob and \subblob 
+% ---------------------------------------------------------------------
+
+\newcommand{\blob}{\begin{picture}(8.5,4)(0,-0.1)
+		    \put(2.5,2){\circle*{3}} \end{picture}}
+
+\newcommand{\subblob}{\begin{picture}(4.5,4)(0,0)
+		    \put(1,1.5){\circle*{2}} \end{picture}}
+
+% ---------------------------------------------------------------------
+% Various lengths
+%
+% \blobwidth     = the width of a blob
+% \subblobwidth  = the width of a sub-blob
+% \pointwidth    = the text width of a major point
+% \sind          = the standard indentation
+% ---------------------------------------------------------------------
+
+\newlength{\blobwidth}
+\settowidth{\blobwidth}{\blob}
+
+\newlength{\pointwidth}
+\setlength{\pointwidth}{\textwidth}
+\addtolength{\pointwidth}{-1\blobwidth}
+
+\newlength{\subblobwidth}
+\settowidth{\subblobwidth}{\subblob}
+
+\newlength{\sind}
+\setlength{\sind}{15mm}
+
+% ---------------------------------------------------------------------
+% \point : for making points
+% ---------------------------------------------------------------------
+
+\def\point#1{\vskip10mm\blob\parbox[t]{\pointwidth}{\LARGE\bf#1}\par}
+
+% ---------------------------------------------------------------------
+% \subpoint : for making sub-points
+% ---------------------------------------------------------------------
+
+\def\subpoint#1{{\addtolength{\pointwidth}{-\sind}
+	      \addtolength{\pointwidth}{-1\subblobwidth}\vskip5mm
+	      \hspace*{\sind}\subblob
+	      \parbox[t]{\pointwidth}{\Large\bf#1}\par}}
+
+% ---------------------------------------------------------------------
+% \pindent : indent to the level of a point
+% ---------------------------------------------------------------------
+
+\def\bpindent{\bgroup\leftskip=\blobwidth}
+\def\epindent{\par\egroup}
+
+% ---------------------------------------------------------------------
+% \pindent : indent to the level of a subpoint
+% ---------------------------------------------------------------------
+
+\def\bspindent{\bgroup\leftskip=\subblobwidth\addtolength{\leftskip}{\sind}}
+\def\espindent{\par\egroup}
+
+% ---------------------------------------------------------------------
+% Macros for little HOL sessions displayed in boxes.
+%
+% Usage:     \begin{session}\begin{verbatim}
+%	      .
+%	       < lines from hol session >
+%	      .
+%	     \end{verbatim}\end{session}   
+%
+%            typesets the session in a box.
+%
+% Lengths: \hsbw = width of box, \lwid = width of lines
+% ---------------------------------------------------------------------
+
+\newlength{\lwid}
+\setlength{\lwid}{0.8pt}
+
+\newlength{\hsbw}
+\setlength{\hsbw}{\textwidth}
+\addtolength{\hsbw}{-\lwid}
+\addtolength{\hsbw}{-\tabcolsep}
+\addtolength{\hsbw}{-\blobwidth}
+\addtolength{\hsbw}{-1mm}
+
+\newenvironment{session}{\setlength{\arrayrulewidth}{\lwid}
+ \begin{flushleft}\hskip\blobwidth\hskip1mm
+ \begin{tabular}{@{}|c@{}|@{}}\hline 
+ \begin{minipage}[b]{\hsbw}
+ \vspace*{5.5pt}
+ \begingroup\Large\baselineskip17.5pt}{\endgroup\end{minipage}\\[1.5pt]\hline 
+ \end{tabular}
+ \end{flushleft}}

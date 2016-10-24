@@ -1,0 +1,16 @@
+\DOC print_tree_children
+
+\TYPE {print_tree_children : (print_tree -> print_tree list)}
+
+\SYNOPSIS
+Function to extract the sub-trees (children) of the root node of a print-tree.
+
+\LIBRARY prettyp
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+print_tree_name, Print_node.
+
+\ENDDOC

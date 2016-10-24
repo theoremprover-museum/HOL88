@@ -1,0 +1,5 @@
+\THEOREM SER_GROUP SEQ
+|- !f k.
+    summable f /\ 0 num_lt k ==>
+    (\n. Sum(n num_mul k,k)f) sums (suminf f)
+\ENDTHEOREM

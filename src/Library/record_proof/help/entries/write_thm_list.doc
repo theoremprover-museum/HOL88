@@ -1,0 +1,43 @@
+\DOC write_thm_list
+
+\TYPE {write_thm_list : string -> thm list -> void}
+
+\KEYWORDS
+proof recording.
+
+\LIBRARY
+record_proof
+
+\SYNOPSIS
+Output a proof line to a port.
+
+\DESCRIBE
+A proof is a list of inference steps.  The proof recorder records
+every inference performed by the system in an internal buffer.
+When a proof is completed, the raw records are converted into a list
+of proof lines as in Hilbert's style proofs. These lines are then
+output to a disk file. This file is in the {prf} format specified in
+[1].
+
+{write_thm_list} is the output function for writing a list of theorems to a
+output port. The first argument is a string representing a port. It
+should be the value returned by the system function {openw}.
+
+
+\FAILURE
+Never fail.
+
+
+\COMMENTS
+This function is used to implement higher level user functions for
+recording proof in the library {record_proof}. It is much more
+convenient to use those functions than this low level function directly.
+
+\SEEALSO
+write_thm_list, write_env,
+write_proof_add_to, write_proof_to, write_last_proof,
+current_proof, current_proof_file,
+new_proof_file, close_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm
+
+\ENDDOC

@@ -1,0 +1,19 @@
+\DOC mk_pabs
+
+\TYPE {mk_pabs : ((term # term) -> term)}
+
+\SYNOPSIS
+Constructs a paired abstraction.
+
+\DESCRIBE
+{mk_pabs "(v1,..(..)..,vn)","t"} returns the abstraction
+{"\(v1,..(..)..,vn). t"}.
+
+\FAILURE
+Fails unless the first term is an arbitrarily nested pair composed from
+variables.
+
+\SEEALSO
+dest_pabs, is_pabs, mk_abs.
+
+\ENDDOC

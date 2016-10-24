@@ -1,0 +1,26 @@
+\DOC compilef
+
+\TYPE {compilef : (string -> void)}
+
+\SYNOPSIS
+Compiles an ML source file `silently'.
+
+\DESCRIBE
+Given a string {`name`}, {compile} loads the named file, and then compiles it
+into LISP generating a file {name_ml.l}. It then calls the LISP compiler to
+create an object file {name_ml.o}. The intermediate LISP file is automatically
+deleted once the {name_ml.o} file has been generated. Loading and compilation
+are silent.
+
+\FAILURE
+Fails if the named ML source file does not exist, or if the load is
+unsuccessful. In the latter case, the intermediate {name_ml.l} file is
+left undeleted.
+
+\COMMENTS
+The function call {compilef `foo`} is the same as {compile (`foo`,false)}.
+
+\SEEALSO
+compile, compilet, load, loadf, loadt
+
+\ENDDOC

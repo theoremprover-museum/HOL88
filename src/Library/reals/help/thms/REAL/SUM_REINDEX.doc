@@ -1,0 +1,3 @@
+\THEOREM SUM_REINDEX REAL
+|- !f m k n. Sum(m num_add k,n)f = Sum(m,n)(\r. f(r num_add k))
+\ENDTHEOREM

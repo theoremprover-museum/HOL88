@@ -1,0 +1,18 @@
+\DOC No_types
+
+\TYPE {No_types : type_selection}
+
+\SYNOPSIS
+Value used to control the amount of type information included in the print-tree
+of a term.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{No_types} is a value used to instruct the term-to-print-tree conversion
+function to include no type information in the tree.
+
+\SEEALSO
+Hidden_types, Useful_types, All_types, term_to_print_tree.
+
+\ENDDOC

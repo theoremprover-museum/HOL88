@@ -1,0 +1,3 @@
+\THEOREM PI2 TRANSC
+|- pi / (& 2) = (@x. (& 0) <= x /\ x <= (& 2) /\ (cos x = & 0))
+\ENDTHEOREM

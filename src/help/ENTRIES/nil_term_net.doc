@@ -1,0 +1,9 @@
+\DOC nil_term_net
+
+\TYPE {nil_term_net : * term_net}
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC

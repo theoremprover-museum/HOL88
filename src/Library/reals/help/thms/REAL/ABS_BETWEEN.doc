@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_BETWEEN REAL
+|- !x y d. (& 0) < d /\ (x - d) < y /\ y < (x + d) = (abs(y - x)) < d
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REAL_POASQ REAL
+|- !x. (& 0) < (x * x) = ~(x = & 0)
+\ENDTHEOREM

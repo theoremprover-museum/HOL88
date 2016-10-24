@@ -1,0 +1,3 @@
+\THEOREM CONT_CONST LIM
+|- !x. (\x. k) contl x
+\ENDTHEOREM

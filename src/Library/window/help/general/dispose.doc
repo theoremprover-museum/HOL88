@@ -1,0 +1,16 @@
+\DOC dispose
+
+\TYPE {dispose : (* pointer -> void)}
+
+\SYNOPSIS
+Disposes of the information stored in a pointer, making it nil.
+
+\LIBRARY window
+
+\FAILURE
+{dispose p} never fails.
+
+\SEEALSO
+is_nil, ptrtype, store, value.
+
+\ENDDOC

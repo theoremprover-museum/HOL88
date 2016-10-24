@@ -1,0 +1,10 @@
+\DOC open_context_basis
+
+\TYPE {open_context_basis : (win_path -> window -> (window # ...))}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

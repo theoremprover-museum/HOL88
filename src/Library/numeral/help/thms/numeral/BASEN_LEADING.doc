@@ -1,0 +1,7 @@
+\THEOREM BASEN_LEADING numeral
+|- !r l.
+    1 < r ==>
+    IS_BASEN r l ==>
+    ~NULL l ==>
+    (BASEN r(BUTLAST l) = (BASEN r l) DIV r)
+\ENDTHEOREM

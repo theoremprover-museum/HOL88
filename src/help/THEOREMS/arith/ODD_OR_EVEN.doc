@@ -1,0 +1,3 @@
+\THEOREM ODD_OR_EVEN arithmetic
+|- !n. ?m. (n = (SUC(SUC 0)) * m) \/ (n = ((SUC(SUC 0)) * m) + 1)
+\ENDTHEOREM

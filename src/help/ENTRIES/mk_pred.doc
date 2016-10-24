@@ -1,0 +1,24 @@
+\DOC mk_pred
+
+\TYPE {mk_pred : ((string # term) -> term)}
+
+\SYNOPSIS
+Makes an application of a predicate.
+
+\DESCRIBE
+When applied to the name of a constant predicate, that is a constant of type
+{":* -> bool"} for some type `{*}', and an operand term, {mk_pred} constructs
+an application of the predicate to the operand.
+
+\FAILURE
+Fails if there is no constant with the appropriate name and type.
+
+\EXAMPLE
+{
+#mk_pred(`~`,"T");;
+"~T" : term
+}
+\SEEALSO
+mk_comb, mk_const, new_predicate.
+
+\ENDDOC

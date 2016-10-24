@@ -1,0 +1,28 @@
+\DOC dest_unary_basen_comb
+
+\TYPE {dest_unary_basen_comb  : term -> thm}
+
+\SYNOPSIS
+Takes apart a term containing a unary operation on BASEN numerals, and returns
+the parts.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term containing an operation applied to one BASEN numeral, returns the
+operation, the radix of the numeral, the numeral itself, and the numeral's
+digits (in two forms).
+
+\EXAMPLE
+{
+#dest_unary_basen_comb "SUC" "SUC (BASEN 10 [2;3;4])";;
+("10",
+ "BASEN 10[2;3;4]",
+ "[2;3;4]",
+ ["2"; "3"; "4"])
+: (term # term # term # term list)
+}
+\FAILURE
+Never fails.
+
+\ENDDOC

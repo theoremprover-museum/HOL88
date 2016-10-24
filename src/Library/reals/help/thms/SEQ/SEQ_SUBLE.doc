@@ -1,0 +1,3 @@
+\THEOREM SEQ_SUBLE SEQ
+|- !f. subseq f ==> (!n. n num_le (f n))
+\ENDTHEOREM

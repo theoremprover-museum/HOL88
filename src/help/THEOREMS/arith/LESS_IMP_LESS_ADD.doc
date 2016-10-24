@@ -1,0 +1,3 @@
+\THEOREM LESS_IMP_LESS_ADD arithmetic
+|- !n m. n < m ==> (!p. n < (m + p))
+\ENDTHEOREM

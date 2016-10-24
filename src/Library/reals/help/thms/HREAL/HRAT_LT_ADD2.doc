@@ -1,0 +1,4 @@
+\THEOREM HRAT_LT_ADD2 HREAL
+|- !u v x y.
+    u hrat_lt x /\ v hrat_lt y ==> (u hrat_add v) hrat_lt (x hrat_add y)
+\ENDTHEOREM

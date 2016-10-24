@@ -1,0 +1,3 @@
+\THEOREM SUM_NSUB REAL
+|- !n f c. (Sum(0,n)f) - ((& n) * c) = Sum(0,n)(\p. (f p) - c)
+\ENDTHEOREM

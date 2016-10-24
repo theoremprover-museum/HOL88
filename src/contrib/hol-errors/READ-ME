@@ -1,0 +1,15 @@
+Directory: hol-errors
+
+Summary:
+
+The file hol.errors contains interpretations of various HOL errors and how to
+fix them (sometimes).
+
+Author:
+
+Phil Windley
+Dept. of Computer Science
+University of Idaho
+Moscow ID 83843
+
+windley@cs.uidaho.edu

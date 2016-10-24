@@ -1,0 +1,28 @@
+\DOC TRANSFORM_WIN
+
+\TYPE {TRANSFORM_WIN : (thm -> void)}
+
+\SYNOPSIS
+Transform the focus of the top window.
+
+\LIBRARY window
+
+\DESCRIBE
+{TRANSFORM_WIN (H |- F' R F)} is used to transform the focus of the
+window on top of the window stack from {F} to {F'}.
+
+\FAILURE
+If {f} is not the focus of the top window, then 
+{TRANSFORM_WIN (H |- F' R F)} will fail.
+{TRANSFORM_WIN (H |- F' R F)} will fail if {H} is not a subset of the
+context of the top window.
+{TRANSFORM_WIN (H |- F' R F)} will fail if {R} is not equal to or
+stronger than the relation that the top window is supposed to maintain.
+
+\SEEALSO
+transform_win, match_transform_win, MATCH_TRANSFORM_WIN,
+convert_win, CONVERT_WIN, rule_win, RULE_WIN,
+thm_rule_win, THM_RULE_WIN, foc_rule_win, FOC_RULE_WIN,
+tactic_win, TACTIC_WIN, rewrite_win, REWRITE_WIN
+
+\ENDDOC

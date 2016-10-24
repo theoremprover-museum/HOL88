@@ -1,0 +1,9 @@
+\THEOREM treal_inv REALAX
+|- !x y.
+    treal_inv(x,y) =
+    ((x = y) =>
+     treal_0 |
+     (y hreal_lt x =>
+      ((hreal_inv(x hreal_sub y)) hreal_add hreal_1,hreal_1) |
+      (hreal_1,(hreal_inv(y hreal_sub x)) hreal_add hreal_1)))
+\ENDTHEOREM

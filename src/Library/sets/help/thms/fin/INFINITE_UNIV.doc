@@ -1,0 +1,4 @@
+\THEOREM INFINITE_UNIV sets
+|- INFINITE (UNIV:(*)set) =
+   (?f:*->*. (!x y. (f x = f y) ==> (x = y)) /\ (?y. !x. ~(f x = y)))
+\ENDTHEOREM

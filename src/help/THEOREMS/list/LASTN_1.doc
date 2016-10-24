@@ -1,0 +1,3 @@
+\THEOREM LASTN_1 list
+|- !l. ~(l = []) ==> (LASTN 1 l = [LAST l])
+\ENDTHEOREM

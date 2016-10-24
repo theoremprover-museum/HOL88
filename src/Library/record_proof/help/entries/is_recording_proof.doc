@@ -1,0 +1,37 @@
+\DOC is_recording_proof
+
+\TYPE {is_recording_proof : void -> bool}
+
+\KEYWORDS
+proof recording.
+
+
+\SYNOPSIS
+Get the current state of proof recorder.
+
+\DESCRIBE
+A proof is a list of inference steps. After the proof recorder is
+enabled, every inference performed by the system is recorded and
+cumulated in an internal buffer. When a proof is completed, the raw
+records can then be processed and output to a disk file.
+
+{is_recording_proof} is a low level user function for managing the proof
+recorder. It returns {true} is the proof recording is currently enabled.
+Otherwise, it returns {false}.
+
+\FAILURE
+Never fail.
+
+\COMMENTS
+This function is used to implement higher level user functions for
+recording proof in the library {record_proof}. It is much more
+convenient to use those functions than the low level functions
+such as {is_recording_proof} directly.
+
+\SEEALSO
+record_proof, RecordStep, get_steps, suspend_recording, resume_recording,
+current_proof, current_proof_file,
+new_proof_file, close_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM COS_PERIODIC TRANSC
+|- !x. cos(x + ((& 2) * pi)) = cos x
+\ENDTHEOREM

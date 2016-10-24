@@ -1,0 +1,25 @@
+\DOC SAVE_WIN_THM
+
+\TYPE {SAVE_WIN_THM : (void -> thm)}
+
+\SYNOPSIS
+Stores the theorem held by the top window of the current stack.
+
+\LIBRARY window
+
+\DESCRIBE
+
+The call {SAVE_WIN_THM ()} add the theorem held by the top window 
+of the current window stack to the current theory segment under the
+name of the current window stack.
+
+\FAILURE
+Fails if there is no current window stack.
+Fails if there the name of the current window stack is already present
+in the current theory segment.
+Also fails if the current theory file is read-only.
+
+\SEEALSO
+WIN_THM, save_thm
+
+\ENDDOC

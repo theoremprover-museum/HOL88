@@ -1,0 +1,25 @@
+\DOC conc
+
+\TYPE {conc : (term -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern for testing the conclusion of a theorem.
+
+\LIBRARY trs
+
+\DESCRIBE
+{conc t} returns a pattern that matches a theorem if and only if the
+term {t}, when interpreted as a pattern, matches the conclusion of the theorem.
+Variables in {t} match any term of a matching type. Type variables in {t}
+match any type. If a variable or type variable occurs more than once in {t},
+it must match to the same object at each occurrence. If not, {t} will not
+match the term.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+hypP, hypF, kind, thryname, thmname, Andalso, Orelse, Not, Where, BigAnd,
+BigOr.
+
+\ENDDOC

@@ -1,0 +1,57 @@
+
+
++ =====================================================================	+
+|									|
+| LIBRARY	: bags							|
+|									|
+| DESCRIPTION   : Theory of bags (from Manna and Waldinger's book)	|
+| AUTHOR	: P Leveilley						|
+|									|
+| DATE		: 29 June 1989						|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    
+    mk_bags.ml             creates the theory of bags
+
+    mk_more_arithmetc.ml   Defines MAX and MIN, which are used by bags
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `bags`  
+
+      In draft mode this makes bags a new parent (more_arithmetic is a 
+      parent of bags), otherwise bags is loaded.
+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   bags.doc

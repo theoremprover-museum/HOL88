@@ -1,0 +1,28 @@
+\DOC strlen
+
+\TYPE {strlen : (string -> int)}
+
+\SYNOPSIS
+Function to compute the number of characters in a string.
+
+\LIBRARY prettyp
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#strlen `abcdef`;;
+6 : int
+
+#strlen ``;;
+0 : int
+}
+\COMMENTS
+{strlen} is an internal function of the `{prettyp}' library, but is of general
+use.
+
+\SEEALSO
+substr.
+
+\ENDDOC

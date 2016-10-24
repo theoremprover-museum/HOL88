@@ -1,0 +1,3 @@
+\THEOREM SUBSET_TRANS TOPOLOGY
+|- !P Q R. P subset Q /\ Q subset R ==> P subset R
+\ENDTHEOREM

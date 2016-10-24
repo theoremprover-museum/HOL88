@@ -1,0 +1,26 @@
+\DOC print_bool
+
+\TYPE {print_bool : (bool -> void)}
+
+\SYNOPSIS
+Prints the value of a boolean variable.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+As a simple example, assign the value {true} to a variable:
+{
+   #let B = true;;
+
+   B = true : bool
+}
+\noindent If we now want find the value of B we type:
+{
+   #print_bool B;;
+}
+\noindent and the system responds with:
+{
+   true() : void
+}
+\ENDDOC

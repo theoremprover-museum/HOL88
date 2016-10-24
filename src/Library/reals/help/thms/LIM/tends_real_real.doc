@@ -1,0 +1,3 @@
+\THEOREM tends_real_real LIM
+|- !f l x0. (f --> l)x0 = (f tends l)(mtop mr1,tendsto(mr1,x0))
+\ENDTHEOREM

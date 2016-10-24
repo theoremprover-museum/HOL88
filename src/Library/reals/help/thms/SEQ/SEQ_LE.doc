@@ -1,0 +1,5 @@
+\THEOREM SEQ_LE SEQ
+|- !f g l m.
+    f --> l /\ g --> m /\ (?N. !n. n num_ge N ==> (f n) <= (g n)) ==>
+    l <= m
+\ENDTHEOREM

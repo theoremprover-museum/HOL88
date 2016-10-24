@@ -1,0 +1,3 @@
+\THEOREM treal_of_hreal REALAX
+|- !x. treal_of_hreal x = x hreal_add hreal_1,hreal_1
+\ENDTHEOREM

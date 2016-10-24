@@ -1,0 +1,10 @@
+\DOC build_print_box
+
+\TYPE {build_print_box : (int -> int -> * -> * unbuilt_box -> * print_box)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

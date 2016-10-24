@@ -1,0 +1,3 @@
+\THEOREM SUC_ADD_SYM arithmetic
+|- !m n. SUC(m + n) = (SUC n) + m
+\ENDTHEOREM

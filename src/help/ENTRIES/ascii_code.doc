@@ -1,0 +1,18 @@
+\DOC ascii_code
+
+\TYPE {ascii_code : (string -> int)}
+
+\SYNOPSIS
+Maps a character to corresponding ASCII numeric code.
+
+\DESCRIBE
+When given a string, {ascii_code} returns the numeric encoding in the
+ASCII character set of the first character of that string.
+
+\FAILURE
+Fails if the string is empty ({``}).
+
+\SEEALSO
+ascii, int_of_string, is_alphanum, is_letter, string_of_int.
+
+\ENDDOC

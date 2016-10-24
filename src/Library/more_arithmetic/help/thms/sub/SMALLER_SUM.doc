@@ -1,0 +1,3 @@
+\THEOREM SMALLER_SUM sub
+|- !m n p. m < p /\ n < p ==> ~((m + n) - p) > m
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_1 REAL
+|- abs(& 1) = & 1
+\ENDTHEOREM

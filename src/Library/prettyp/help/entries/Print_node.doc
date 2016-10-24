@@ -1,0 +1,20 @@
+\DOC Print_node
+
+\TYPE {Print_node : ((string # print_tree list) -> print_tree)}
+
+\SYNOPSIS
+Constructor function for print-trees (parse-trees).
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{Print_node} takes a node label and a list of sub-trees and uses them to
+construct a new print-tree. Leaf nodes have an empty sub-tree (child) list.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+print_tree_name, print_tree_children.
+
+\ENDDOC

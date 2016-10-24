@@ -1,0 +1,20 @@
+\DOC split
+
+\TYPE {split : ((* # **) list -> (* list # ** list))}
+
+\SYNOPSIS
+Converts a list of pairs into a pair of lists.
+
+\KEYWORDS
+list.
+
+\DESCRIBE
+{split [(x1,y1);...;(xn,yn)]} returns {([x1;...;xn],[y1;...;yn])}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+combine, com.
+
+\ENDDOC

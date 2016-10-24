@@ -1,0 +1,710 @@
+\subsection{First order group theory}
+\begin{verbatim}
+The Theory elt_gp
+Parents --  HOL     
+Constants --
+  GROUP ":(* -> bool) # (* -> (* -> *)) -> bool"
+  ID ":(* -> bool) # (* -> (* -> *)) -> *"
+  INV ":(* -> bool) # (* -> (* -> *)) -> (* -> *)"
+
+Definitions --
+  GROUP_DEF
+    |- !G prod.
+        GROUP(G,prod) =
+        (!x y. G x /\ G y ==> G(prod x y)) /\
+        (!x y z. G x /\ G y /\ G z ==> 
+          (prod(prod x y)z = prod x(prod y z))) /\
+        (?e. G e /\
+             (!x. G x ==> (prod e x = x)) /\
+             (!x. G x ==> (?y. G y /\ (prod y x = e))))
+  ID_DEF
+    |- !G prod.
+        ID(G,prod) =
+        (@e. G e /\
+             (!x. G x ==> (prod e x = x)) /\
+             (!x. G x ==> (?y. G y /\ (prod y x = e))))
+  INV_DEF
+    |- !G prod x. INV(G,prod)x = (@y. G y /\ (prod y x = ID(G,prod)))
+
+Theorems --
+\end{verbatim}
+A group is closed under multiplication.
+\begin{verbatim}
+  CLOSURE 
+   |- GROUP(G,prod) ==> (!x y. G x /\ G y ==> G(prod x y))
+
+\end{verbatim}
+The multiplication in a group is associative.
+\begin{verbatim}
+  GROUP_ASSOC
+    |- GROUP(G,prod) ==>
+       (!x y z. G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y z)))
+
+\end{verbatim}
+{\tt ID} is both a left and a right identity in {\tt G}.
+\begin{verbatim}
+  ID_LEMMA
+    |- GROUP(G,prod) ==>
+       G(ID(G,prod)) /\
+       (!x. G x ==> (prod(ID(G,prod))x = x)) /\
+       (!x. G x ==> (prod x(ID(G,prod)) = x)) /\
+       (!x. G x ==> (?y. G y /\ (prod y x = ID(G,prod))))
+
+\end{verbatim}
+{\tt G} is closed under the taking of inverses.
+\begin{verbatim}
+  INV_CLOSURE
+    |- GROUP(G,prod) ==> (!x. G x ==> G(INV(G,prod)x))
+
+\end{verbatim}
+A left inverse for {\tt x} in {\tt G} with respect to {\tt ID} is also a right
+inverse for {\tt x} in {\tt G} with respect to {\tt ID}.
+\begin{verbatim}
+  LEFT_RIGHT_INV
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+             (prod y x = ID(G,prod)) ==> (prod x y = ID(G,prod)))
+
+\end{verbatim}
+{\tt INV x} is both a left inverse for {\tt x} and a right inverse for {\tt x}
+in {\tt G}.
+\begin{verbatim}
+  INV_LEMMA
+    |- GROUP(G,prod) ==>
+       (!x. G x ==>
+            (prod(INV(G,prod)x)x = ID(G,prod)) /\
+            (prod x(INV(G,prod)x) = ID(G,prod)))
+
+\end{verbatim}
+We have right and left cancelation in {\tt G}.
+\begin{verbatim}
+  LEFT_CANCELLATION
+    |- GROUP(G,prod) ==>
+       (!x y z. G x /\ G y /\ G z ==> (prod x y = prod x z) ==> (y = z))
+
+  RIGHT_CANCELLATION
+    |- GROUP(G,prod) ==>
+       (!x y z. G x /\ G y /\ G z ==> (prod y x = prod z x) ==> (y = z))
+
+\end{verbatim}
+Given elements {\tt x} and {\tt y} in {\tt G}, there exist a unique
+element {\tt z} in {\tt G} such that \mbox{\tt (prod x z = y)}.
+\begin{verbatim}
+  RIGHT_ONE_ONE_ONTO
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+        (?z. G z /\ (prod x z = y) /\ (!u. G u /\ (prod x u = y) ==> (u = z))))
+
+\end{verbatim}
+Given elements {\tt x} and {\tt y} in {\tt G}, there exist a unique
+element {\tt z} in {\tt G} such that \mbox{\tt (prod z x = y)}.
+\begin{verbatim}
+  LEFT_ONE_ONE_ONTO
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+        (?z. G z /\ (prod z x = y) /\ (!u. G u /\ (prod u x = y) ==> (u = z))))
+
+\end{verbatim}
+{\tt ID} is the unique left identity and the unique right identity in {\tt G}.
+\begin{verbatim}
+  UNIQUE_ID
+    |- GROUP(G,prod) ==>
+       (!e. G e /\
+            ((?x. G x /\ (prod e x = x)) \/ (?x. G x /\ (prod x e = x))) ==>
+            (e = ID(G,prod)))
+
+\end{verbatim}
+{\tt INV} is the unique left inverse for {\tt x}.
+\begin{verbatim}
+  UNIQUE_INV
+    |- GROUP(G,prod) ==>
+       (!x. G x ==>
+            (!u. G u /\ (prod u x = ID(G,prod)) ==> (u = INV(G,prod)x)))
+
+\end{verbatim}
+The inverse of the identity is the identity.
+\begin{verbatim}
+  INV_ID_LEMMA
+    |- GROUP(G,prod) ==> (INV(G,prod)(ID(G,prod)) = ID(G,prod))
+\end{verbatim}
+The inverse of the inverse of {\tt x} is {\tt x}.
+\begin{verbatim}
+  INV_INV_LEMMA
+    |- GROUP(G,prod) ==> (!x. G x ==> (INV(G,prod)(INV(G,prod)x) = x))
+
+\end{verbatim}
+The group product anti-distributes over the inverse.
+\begin{verbatim}
+  DIST_INV_LEMMA
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+              (prod(INV(G,prod)x)(INV(G,prod)y) = INV(G,prod)(prod y x)))
+\end{verbatim}
+
+\subsection{Higher order group theory}
+
+Included here is the result of a development of the some basic higher-order
+group theory in HOL.
+
+\begin{verbatim}
+The Theory more_gp
+Parents --  HOL     elt_gp     
+Constants --
+  SUBGROUP ":(* -> bool) # (* -> (* -> *)) -> ((* -> bool) -> bool)"
+  LEFT_COSET
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> (* -> (* -> bool)))"
+  EQUIV_REL ":(* -> bool) -> ((* -> (* -> bool)) -> bool)"
+  NORMAL ":(* -> bool) # (* -> (* -> *)) -> ((* -> bool) -> bool)"
+  set_prod
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> ((* -> bool) -> (* -> bool)))"
+  quot_set
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> ((* -> bool) -> bool))"
+  quot_prod
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> ((* -> bool) -> ((* -> bool) -> (* -> bool))))"
+  GP_HOM
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) -> ((* -> **) -> bool))"
+  IM ":(* -> bool) -> ((* -> **) -> (** -> bool))"
+  KERNEL
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) -> ((* -> **) -> (* -> bool)))"
+  INV_IM ":(* -> bool) -> ((** -> bool) -> ((* -> **) -> (* -> bool)))"
+  NAT_HOM
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> (* -> (* -> bool)))"
+  quot_hom
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) ->
+       ((* -> bool) -> ((* -> **) -> ((* -> bool) -> **))))"
+  GP_ISO
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) -> ((* -> **) -> bool))"     
+Definitions --
+  SUBGROUP_DEF
+    |- !G prod H.
+        SUBGROUP(G,prod)H =
+        GROUP(G,prod) /\ (!x. H x ==> G x) /\ GROUP(H,prod)
+  LEFT_COSET_DEF
+    |- !G prod H x y.
+        LEFT_COSET(G,prod)H x y =
+        GROUP(G,prod) /\
+        SUBGROUP(G,prod)H /\
+        G x /\
+        G y /\
+        (?h. H h /\ (y = prod x h))
+  EQUIV_REL_DEF
+    |- !G R.
+        EQUIV_REL G R =
+        (!x. G x ==> R x x) /\
+        (!x y. G x /\ G y ==> R x y ==> R y x) /\
+        (!x y z. G x /\ G y /\ G z ==> R x y /\ R y z ==> R x z)
+  NORMAL_DEF
+    |- !G prod N.
+        NORMAL(G,prod)N =
+        SUBGROUP(G,prod)N /\
+        (!x n. G x /\ N n ==> N(prod(INV(G,prod)x)(prod n x)))
+  SET_PROD_DEF
+    |- !G prod A B.
+        set_prod(G,prod)A B =
+        (\x.
+          GROUP(G,prod) /\
+          (!a. A a ==> G a) /\
+          (!b. B b ==> G b) /\
+          (?a. A a /\ (?b. B b /\ (x = prod a b))))
+  QUOTIENT_SET_DEF
+    |- !G prod N q.
+        quot_set(G,prod)N q =
+        NORMAL(G,prod)N /\ (?x. G x /\ (q = LEFT_COSET(G,prod)N x))
+  QUOTIENT_PROD_DEF
+    |- !G prod N q r.
+        quot_prod(G,prod)N q r =
+        LEFT_COSET
+        (G,prod)
+        N
+        (prod
+         (@x. G x /\ (q = LEFT_COSET(G,prod)N x))
+         (@y. G y /\ (r = LEFT_COSET(G,prod)N y)))
+  GP_HOM_DEF
+    |- !G1 prod1 G2 prod2 f.
+        GP_HOM(G1,prod1)(G2,prod2)f =
+        GROUP(G1,prod1) /\
+        GROUP(G2,prod2) /\
+        (!x. G1 x ==> G2(f x)) /\
+        (!x y. G1 x /\ G1 y ==> (f(prod1 x y) = prod2(f x)(f y)))
+  IM_DEF  |- !G f. IM G f = (\y. ?x. G x /\ (y = f x))
+  KERNEL_DEF
+    |- !G1 prod1 G2 prod2 f.
+        KERNEL(G1,prod1)(G2,prod2)f =
+        (\x.
+          GP_HOM(G1,prod1)(G2,prod2)f /\ G1 x /\ (f x = ID(G2,prod2)))
+  INV_IM_DEF  |- !G1 G2 f. INV_IM G1 G2 f = (\x. G1 x /\ G2(f x))
+  NAT_HOM_DEF
+    |- !G prod N x.
+        NAT_HOM(G,prod)N x =
+        (\y.
+          GROUP(G,prod) /\ NORMAL(G,prod)N /\ LEFT_COSET(G,prod)N x y)
+  QUOTIENT_HOM_DEF
+    |- !G1 prod1 G2 prod2 N f.
+        quot_hom(G1,prod1)(G2,prod2)N f =
+        (\q.
+          f
+          (@w.
+            GP_HOM(G1,prod1)(G2,prod2)f /\
+            NORMAL(G1,prod1)N /\
+            (!n. N n ==> KERNEL(G1,prod1)(G2,prod2)f n) /\
+            (?x. G1 x /\ (q = LEFT_COSET(G1,prod1)N x)) ==>
+            G1 w /\ (q = LEFT_COSET(G1,prod1)N w)))
+  GP_ISO_DEF
+    |- !G1 prod1 G2 prod2 f.
+        GP_ISO(G1,prod1)(G2,prod2)f =
+        GP_HOM(G1,prod1)(G2,prod2)f /\
+        (?g.
+          GP_HOM(G2,prod2)(G1,prod1)g /\
+          (!x. G1 x ==> (g(f x) = x)) /\
+          (!y. G2 y ==> (f(g y) = y)))
+  
+Theorems --
+  SBGP_ID_GP_ID  |- SUBGROUP(G,prod)H ==> (ID(H,prod) = ID(G,prod))
+  SBGP_INV_GP_INV
+    |- SUBGROUP(G,prod)H ==> (!x. H x ==> (INV(H,prod)x = INV(G,prod)x))
+  SBGP_SBGP_LEMMA
+    |- SUBGROUP(G,prod)H /\ SUBGROUP(H,prod)K1 ==> SUBGROUP(G,prod)K1
+  GROUP_IS_SBGP  |- GROUP(G,prod) ==> SUBGROUP(G,prod)G
+  ID_IS_SBGP  |- GROUP(G,prod) ==> SUBGROUP(G,prod)(\x. x = ID(G,prod))
+  SUBGROUP_LEMMA
+    |- SUBGROUP(G,prod)H =
+       GROUP(G,prod) /\
+       (?x. H x) /\
+       (!x. H x ==> G x) /\
+       (!x y. H x /\ H y ==> H(prod x y)) /\
+       (!x. H x ==> H(INV(G,prod)x))
+  SBGP_INTERSECTION
+    |- (?j. Ind j) ==>
+       (!i. Ind i ==> SUBGROUP(G,prod)(H i)) ==>
+       SUBGROUP(G,prod)(\x. !i. Ind i ==> H i x)
+  COR_SBGP_INT
+    |- SUBGROUP(G,prod)H /\ SUBGROUP(G,prod)K1 ==>
+       SUBGROUP(G,prod)(\x. H x /\ K1 x)
+  LEFT_COSETS_COVER
+    |- SUBGROUP(G,prod)H ==> (!x. G x ==> LEFT_COSET(G,prod)H x x)
+  LEFT_COSET_DISJOINT_LEMMA
+    |- SUBGROUP(G,prod)H ==>
+       (!x y.
+         G x /\ G y ==>
+         (?w. LEFT_COSET(G,prod)H x w /\ LEFT_COSET(G,prod)H y w) ==>
+         (!z. LEFT_COSET(G,prod)H x z ==> LEFT_COSET(G,prod)H y z))
+  LEFT_COSET_DISJOINT_UNION
+    |- SUBGROUP(G,prod)H ==>
+       (!x. G x ==> (?y. G y /\ LEFT_COSET(G,prod)H y x)) /\
+       (!x y.
+         G x /\ G y ==>
+         (LEFT_COSET(G,prod)H x = LEFT_COSET(G,prod)H y) \/
+         ((\z. LEFT_COSET(G,prod)H x z /\ LEFT_COSET(G,prod)H y z) =
+          (\z. F)))
+  LEFT_COSET_EQUIV_REL
+    |- SUBGROUP(G,prod)H ==> EQUIV_REL G(LEFT_COSET(G,prod)H)
+  LEFT_COSETS_SAME_SIZE
+    |- SUBGROUP(G,prod)H ==>
+       (!x y.
+         G x /\ G y ==>
+         (?f g.
+           (!u. LEFT_COSET(G,prod)H x u ==> LEFT_COSET(G,prod)H y(f u)) /\
+           (!v. LEFT_COSET(G,prod)H y v ==> LEFT_COSET(G,prod)H x(g v)) /\
+           (!u. LEFT_COSET(G,prod)H x u ==> (g(f u) = u)) /\
+           (!v. LEFT_COSET(G,prod)H y v ==> (f(g v) = v))))
+  GROUP_IS_NORMAL  |- GROUP(G,prod) ==> NORMAL(G,prod)G
+  ID_IS_NORMAL  |- GROUP(G,prod) ==> NORMAL(G,prod)(\x. x = ID(G,prod))
+  NORMAL_INTERSECTION
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N ==>
+       NORMAL(H,prod)(\x. H x /\ N x)
+  NORM_NORM_INT
+    |- NORMAL(G,prod)N1 /\ NORMAL(G,prod)N2 ==>
+       NORMAL(G,prod)(\n. N1 n /\ N2 n)
+  NORMAL_PROD
+    |- NORMAL(G,prod)N /\ SUBGROUP(G,prod)H ==>
+       SUBGROUP(G,prod)(set_prod(G,prod)H N)
+  QUOT_PROD
+    |- NORMAL(G,prod)N ==>
+       (!x y.
+         G x /\ G y ==>
+         (quot_prod
+          (G,prod)
+          N
+          (LEFT_COSET(G,prod)N x)
+          (LEFT_COSET(G,prod)N y) =
+          LEFT_COSET(G,prod)N(prod x y)))
+  QUOTIENT_GROUP
+    |- NORMAL(G,prod)N ==> GROUP(quot_set(G,prod)N,quot_prod(G,prod)N)
+  GP_HOM_COMP
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ GP_HOM(G2,prod2)(G3,prod3)g ==>
+       GP_HOM(G1,prod1)(G3,prod3)(\x. g(f x))
+  HOM_ID_INV_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (f(ID(G1,prod1)) = ID(G2,prod2)) /\
+       (!x. G1 x ==> (f(INV(G1,prod1)x) = INV(G2,prod2)(f x)))
+  Id_GP_HOM  |- GROUP(G1,prod1) ==> GP_HOM(G1,prod1)(G1,prod1)(\x. x)
+  Triv_GP_HOM
+    |- GROUP(G1,prod1) /\ GROUP(G2,prod2) ==>
+       GP_HOM(G1,prod1)(G2,prod2)(\x. ID(G2,prod2))
+  GP_HOM_RESTRICT_DOM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ SUBGROUP(G1,prod1)H1 ==>
+       GP_HOM(H1,prod1)(G2,prod2)f
+  SUBGROUP_HOM_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (!H. SUBGROUP(G1,prod1)H ==> SUBGROUP(G2,prod2)(IM H f))
+  GROUP_HOM_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==> SUBGROUP(G2,prod2)(IM G1 f)
+  GP_HOM_RESTRICT_RANGE
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\
+       SUBGROUP(G2,prod2)H2 /\
+       (!y. IM G1 f y ==> H2 y) ==>
+       GP_HOM(G1,prod1)(H2,prod2)f
+  GP_HOM_RES_TO_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==> GP_HOM(G1,prod1)(IM G1 f,prod2)f
+  GP_HOM_RES_TO_SBGP
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ SUBGROUP(G1,prod1)H ==>
+       GP_HOM(H,prod1)(G2,prod2)f /\
+       (KERNEL(H,prod1)(G2,prod2)f =
+        (\x. H x /\ KERNEL(G1,prod1)(G2,prod2)f x)) /\
+       (!y. IM H f y ==> IM G1 f y)
+  KERNEL_NORMAL
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       NORMAL(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f)
+  KERNEL_IM_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (IM(KERNEL(G1,prod1)(G2,prod2)f)f = (\y. y = ID(G2,prod2)))
+  KERNEL_INV_IM_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (KERNEL(G1,prod1)(G2,prod2)f = INV_IM G1(\y. y = ID(G2,prod2))f)
+  SUBGROUP_INV_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ SUBGROUP(G2,prod2)H ==>
+       SUBGROUP(G1,prod1)(INV_IM G1 G2 f) /\
+       (!x. KERNEL(G1,prod1)(G2,prod2)f x ==> INV_IM G1 G2 f x)
+  NORMAL_INV_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ NORMAL(G2,prod2)H ==>
+       NORMAL(G1,prod1)(INV_IM G1 G2 f)
+  NAT_HOM_THM
+    |- GROUP(G,prod) /\ NORMAL(G,prod)N ==>
+       GP_HOM
+       (G,prod)
+       (quot_set(G,prod)N,quot_prod(G,prod)N)
+       (NAT_HOM(G,prod)N) /\
+       (!q.
+         (?x. G x /\ (q = LEFT_COSET(G,prod)N x)) ==>
+         (?x. G x /\ (q = NAT_HOM(G,prod)N x))) /\
+       (KERNEL
+        (G,prod)
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (NAT_HOM(G,prod)N) =
+        N)
+  QUOTIENT_HOM_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\
+       SUBGROUP(G1,prod1)H /\
+       (!h. H h ==> KERNEL(G1,prod1)(G2,prod2)f h) ==>
+       (!x y. LEFT_COSET(G1,prod1)H x y ==> (f x = f y))
+  QUOT_HOM_THM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\
+       NORMAL(G1,prod1)N /\
+       (!n. N n ==> KERNEL(G1,prod1)(G2,prod2)f n) ==>
+       GP_HOM
+       (quot_set(G1,prod1)N,quot_prod(G1,prod1)N)
+       (G2,prod2)
+       (quot_hom(G1,prod1)(G2,prod2)N f) /\
+       (!x.
+         G1 x ==>
+         (quot_hom(G1,prod1)(G2,prod2)N f(NAT_HOM(G1,prod1)N x) = f x)) /\
+       (IM(quot_set(G1,prod1)N)(quot_hom(G1,prod1)(G2,prod2)N f) =
+        IM G1 f) /\
+       (KERNEL
+        (quot_set(G1,prod1)N,quot_prod(G1,prod1)N)
+        (G2,prod2)
+        (quot_hom(G1,prod1)(G2,prod2)N f) =
+        IM(KERNEL(G1,prod1)(G2,prod2)f)(NAT_HOM(G1,prod1)N)) /\
+       (!g.
+         GP_HOM(quot_set(G1,prod1)N,quot_prod(G1,prod1)N)(G2,prod2)g /\
+         (!x. G1 x ==> (g(NAT_HOM(G1,prod1)N x) = f x)) ==>
+         (!q.
+           quot_set(G1,prod1)N q ==>
+           (g q = quot_hom(G1,prod1)(G2,prod2)N f q)))
+  QUOTIENT_IM_LEMMA
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N /\ (!n. N n ==> H n) ==>
+       (IM H(NAT_HOM(G,prod)N) = quot_set(H,prod)N)
+  GP_ISO_COMP
+    |- GP_ISO(G1,prod1)(G2,prod2)f /\ GP_ISO(G2,prod2)(G3,prod3)g ==>
+       GP_ISO(G1,prod1)(G3,prod3)(\x. g(f x))
+  Id_GP_ISO  |- GROUP(G1,prod1) ==> GP_ISO(G1,prod1)(G1,prod1)(\x. x)
+  GP_ISO_INV
+    |- GP_ISO(G1,prod1)(G2,prod2)f ==>
+       (?g.
+         (!x. G1 x ==> (g(f x) = x)) /\
+         (!y. G2 y ==> (f(g y) = y)) /\
+         GP_ISO(G2,prod2)(G1,prod1)g)
+  GP_ISO_IM_LEMMA  |- GP_ISO(G1,prod1)(G2,prod2)f ==> (IM G1 f = G2)
+  GP_ISO_KERNEL
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (GP_ISO(G1,prod1)(IM G1 f,prod2)f =
+        (KERNEL(G1,prod1)(G2,prod2)f = (\x. x = ID(G1,prod1))))
+  GP_ISO_CHAR
+    |- GP_ISO(G1,prod1)(G2,prod2)f =
+       GP_HOM(G1,prod1)(G2,prod2)f /\
+       (IM G1 f = G2) /\
+       (KERNEL(G1,prod1)(G2,prod2)f = (\x. x = ID(G1,prod1)))
+  FIRST_ISO_THM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       GP_ISO
+       (quot_set(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f),
+        quot_prod(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f))
+       (IM G1 f,prod2)
+       (quot_hom(G1,prod1)(G2,prod2)(KERNEL(G1,prod1)(G2,prod2)f)f) /\
+       (!x.
+         G1 x ==>
+         (quot_hom
+          (G1,prod1)
+          (G2,prod2)
+          (KERNEL(G1,prod1)(G2,prod2)f)
+          f
+          (NAT_HOM(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f)x) =
+          f x))
+  CLASSICAL_FIRST_ISO_THM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (?f_bar.
+         GP_ISO
+         (quot_set(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f),
+          quot_prod(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f))
+         (IM G1 f,prod2)
+         f_bar /\
+         (!x.
+           G1 x ==>
+           (f_bar(NAT_HOM(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f)x) =
+            f x)))
+  SND_ISO_THM
+    |- NORMAL(G,prod)N /\ NORMAL(G,prod)M /\ (!n. N n ==> M n) ==>
+       GP_ISO
+       (quot_set
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (quot_set(M,prod)N),
+        quot_prod
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (quot_set(M,prod)N))
+       (quot_set(G,prod)M,quot_prod(G,prod)M)
+       (quot_hom
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (quot_set(G,prod)M,quot_prod(G,prod)M)
+        (quot_set(M,prod)N)
+        (quot_hom
+         (G,prod)
+         (quot_set(G,prod)M,quot_prod(G,prod)M)
+         N
+         (NAT_HOM(G,prod)M)))
+  CLASSICAL_SND_ISO_THM
+    |- NORMAL(G,prod)N /\ NORMAL(G,prod)M /\ (!n. N n ==> M n) ==>
+       (?f.
+         GP_ISO
+         (quot_set
+          (quot_set(G,prod)N,quot_prod(G,prod)N)
+          (quot_set(M,prod)N),
+          quot_prod
+          (quot_set(G,prod)N,quot_prod(G,prod)N)
+          (quot_set(M,prod)N))
+         (quot_set(G,prod)M,quot_prod(G,prod)M)
+         f)
+  THIRD_ISO_THM
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N ==>
+       GP_ISO
+       (quot_set(H,prod)(\x. H x /\ N x),
+        quot_prod(H,prod)(\x. H x /\ N x))
+       (quot_set(set_prod(G,prod)H N,prod)N,
+        quot_prod(set_prod(G,prod)H N,prod)N)
+       (quot_hom
+        (H,prod)
+        (quot_set(set_prod(G,prod)H N,prod)N,
+         quot_prod(set_prod(G,prod)H N,prod)N)
+        (\x. H x /\ N x)
+        (NAT_HOM(set_prod(G,prod)H N,prod)N))
+  CLASSICAL_THIRD_ISO_THM
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N ==>
+       (?f.
+         GP_ISO
+         (quot_set(H,prod)(\x. H x /\ N x),
+          quot_prod(H,prod)(\x. H x /\ N x))
+         (quot_set(set_prod(G,prod)H N,prod)N,
+          quot_prod(set_prod(G,prod)H N,prod)N)
+         f)
+  
+******************** more_gp ********************
+
+\end{verbatim}
+
+\subsection{The integers as a group}
+Included here is the result of a development of the theory of the integers
+in HOL.
+
+\begin{verbatim}
+print_theory `integer`;;
+The Theory integer
+Parents --  HOL     more_arith     elt_gp     
+Types --  ":integer"     
+Constants --
+  plus ":integer -> (integer -> integer)"
+  minus ":integer -> (integer -> integer)"
+  times ":integer -> (integer -> integer)"
+  below ":integer -> (integer -> bool)"
+  is_integer ":num # num -> bool"
+  REP_integer ":integer -> num # num"
+  ABS_integer ":num # num -> integer"     INT ":num -> integer"
+  proj ":num # num -> integer"     neg ":integer -> integer"
+  POS ":integer -> bool"     NEG ":integer -> bool"     
+Curried Infixes --
+  plus ":integer -> (integer -> integer)"
+  minus ":integer -> (integer -> integer)"
+  times ":integer -> (integer -> integer)"
+  below ":integer -> (integer -> bool)"     
+Definitions --
+  IS_INTEGER_DEF  |- !X. is_integer X = (?p. X = p,0) \/ (?n. X = 0,n)
+  integer_AXIOM  |- ?rep. TYPE_DEFINITION is_integer rep
+  REP_integer
+    |- REP_integer =
+       (@rep.
+         (!x' x''. (rep x' = rep x'') ==> (x' = x'')) /\
+         (!x. is_integer x = (?x'. x = rep x')))
+  ABS_integer  |- !x. ABS_integer x = (@x'. x = REP_integer x')
+  INT_DEF  |- !p. INT p = (@N. p,0 = REP_integer N)
+  PROJ_DEF
+    |- !p n.
+        proj(p,n) =
+        (n < p => 
+         (@K1. REP_integer K1 = p - n,0) | 
+         (@K1. REP_integer K1 = 0,n - p))
+  PLUS_DEF
+    |- !M N.
+        M plus N =
+        proj
+        ((FST(REP_integer M)) + (FST(REP_integer N)),
+         (SND(REP_integer M)) + (SND(REP_integer N)))
+  neg_DEF  |- neg = INV((\N. T),$plus)
+  MINUS_DEF  |- !M N. M minus N = M plus (neg N)
+  TIMES_DEF
+    |- !M N.
+        M times N =
+        proj
+        (((FST(REP_integer M)) * (FST(REP_integer N))) +
+         ((SND(REP_integer M)) * (SND(REP_integer N))),
+         ((FST(REP_integer M)) * (SND(REP_integer N))) +
+         ((SND(REP_integer M)) * (FST(REP_integer N))))
+  POS_DEF  |- !M. POS M = (?n. M = INT(SUC n))
+  NEG_DEF  |- !M. NEG M = POS(neg M)
+  BELOW_DEF  |- !M N. M below N = POS(N minus M)
+
+Theorems --
+  INT_ONE_ONE  |- !m n. (INT m = INT n) = (m = n)
+  NUM_ADD_IS_INT_ADD  |- !m n. (INT m) plus (INT n) = INT(m + n)
+  ASSOC_PLUS  |- !M N P. M plus (N plus P) = (M plus N) plus P
+  COMM_PLUS  |- !M N. M plus N = N plus M
+  PLUS_ID  |- !M. (INT 0) plus M = M
+  PLUS_INV  |- !M. ?N. N plus M = INT 0
+  integer_as_GROUP  |- GROUP((\N. T),$plus)
+  ID_EQ_0  |- ID((\N. T),$plus) = INT 0
+\end{verbatim}
+With these definitions and theorems, we are now in a position to instantiate
+the theory of groups with the particular example of the integers.  The theorems
+{\tt PLUS\_ID} and {\tt PLUS\_INV} allow us to automatically rewrite the
+instantiated theory in a form that is more traditional.  The resulting theory
+is listed below.
+\begin{verbatim}
+  PLUS_GROUP_ASSOC  |- !x y z. (x plus y) plus z = x plus (y plus z)
+  PLUS_ID_LEMMA
+    |- (!x. (INT 0) plus x = x) /\
+       (!x. x plus (INT 0) = x) /\
+       (!x. ?y. y plus x = INT 0)
+  PLUS_LEFT_RIGHT_INV
+    |- !x y. (y plus x = INT 0) ==> (x plus y = INT 0)
+  PLUS_INV_LEMMA
+    |- !x. ((neg x) plus x = INT 0) /\ (x plus (neg x) = INT 0)
+  PLUS_LEFT_CANCELLATION  |- !x y z. (x plus y = x plus z) ==> (y = z)
+  PLUS_RIGHT_CANCELLATION  |- !x y z. (y plus x = z plus x) ==> (y = z)
+  PLUS_RIGHT_ONE_ONE_ONTO
+    |- !x y. ?z. (x plus z = y) /\ (!u. (x plus u = y) ==> (u = z))
+  PLUS_LEFT_ONE_ONE_ONTO
+    |- !x y. ?z. (z plus x = y) /\ (!u. (u plus x = y) ==> (u = z))
+  PLUS_UNIQUE_ID
+    |- !e. (?x. e plus x = x) \/ (?x. x plus e = x) ==> (e = INT 0)
+  PLUS_UNIQUE_INV  |- !x u. (u plus x = INT 0) ==> (u = neg x)
+  PLUS_INV_INV_LEMMA  |- !x. neg(neg x) = x
+  PLUS_DIST_INV_LEMMA  |- !x y. (neg x) plus (neg y) = neg(y plus x)
+\end{verbatim}  
+Using the computational theory inherited from the first order group
+theory, we can more readily proceed to develop more of the standard theory
+of the integers.  Below is listed the theorems that were proven to extend
+the theory to include various order theoretic facts about the integers.
+\begin{verbatim}
+  neg_PLUS_DISTRIB  |- neg(M plus N) = (neg M) plus (neg N)
+  PLUS_IDENTITY  |- !M. (M plus (INT 0) = M) /\ ((INT 0) plus M = M)
+  PLUS_INVERSE
+    |- !M. (M plus (neg M) = INT 0) /\ ((neg M) plus M = INT 0)
+  NEG_NEG_IS_IDENTITY  |- !M. neg(neg M) = M
+  NUM_MULT_IS_INT_MULT  |- !m n. (INT m) times (INT n) = INT(m * n)
+  ASSOC_TIMES  |- !M N P. M times (N times P) = (M times N) times P
+  COMM_TIMES  |- !M N. M times N = N times M
+  TIMES_IDENTITY  |- !M. (M times (INT 1) = M) /\ ((INT 1) times M = M)
+  RIGHT_PLUS_DISTRIB
+    |- !M N P. (M plus N) times P = (M times P) plus (N times P)
+  LEFT_PLUS_DISTRIB
+    |- !M N P. M times (N plus P) = (M times N) plus (M times P)
+  TIMES_ZERO
+    |- !M. (M times (INT 0) = INT 0) /\ ((INT 0) times M = INT 0)
+  TIMES_neg
+    |- (!M N. M times (neg N) = neg(M times N)) /\
+       (!M N. (neg M) times N = neg(M times N))
+  neg_IS_TIMES_neg1  |- !M. neg M = M times (neg(INT 1))
+  TRICHOTOMY
+    |- !M.
+        (POS M \/ NEG M \/ (M = INT 0)) /\
+        ~(POS M /\ NEG M) /\
+        ~(POS M /\ (M = INT 0)) /\
+        ~(NEG M /\ (M = INT 0))
+  NON_NEG_INT_IS_NUM  |- !N. ~NEG N = (?n. N = INT n)
+  INT_CASES  |- !P. (!m. P(INT m)) /\ (!m. P(neg(INT m))) ==> (!M. P M)
+  NUM_LESS_IS_INT_BELOW  |- !m n. m < n = (INT m) below (INT n)
+  ANTISYM  |- !M. ~M below M
+  TRANSIT  |- !M N P. M below N /\ N below P ==> M below P
+  COMPAR  |- !M N. M below N \/ N below M \/ (M = N)
+  DOUBLE_INF  |- !M. (?N. N below M) /\ (?P. M below P)
+  PLUS_BELOW_TRANSL  |- !M N P. M below N = (M plus P) below (N plus P)
+  neg_REV_BELOW  |- !M N. (neg M) below (neg N) = N below M
+  DISCRETE
+    |- !S1.
+        (?M. S1 M) ==>
+        ((?K1. !N. N below K1 ==> ~S1 N) ==>
+         (?M1. S1 M1 /\ (!N1. N1 below M1 ==> ~S1 N1))) /\
+        ((?K1. !N. K1 below N ==> ~S1 N) ==>
+         (?M1. S1 M1 /\ (!N1. M1 below N1 ==> ~S1 N1)))
+         (?M1. S1 M1 /\ (!N1. M1 below N1 ==> ~S1 N1)))
+  POS_MULT_PRES_BELOW
+    |- !M N P. POS M ==> (N below P = (M times N) below (M times P))
+  NEG_MULT_REV_BELOW
+    |- !M N P. NEG M ==> (N below P = (M times P) below (M times N))
+  POS_IS_ZERO_BELOW  |- !N. POS N = (INT 0) below N
+  NEG_IS_BELOW_ZERO  |- !N. NEG N = N below (INT 0)
+  neg_ONE_ONE  |- !x y. (neg x = neg y) = (x = y)
+  neg_ZERO  |- neg(INT 0) = INT 0
+  INT_INTEGRAL_DOMAIN
+    |- !x y. (x times y = INT 0) ==> (x = INT 0) \/ (y = INT 0)
+  TIMES_LEFT_CANCELLATION
+    |- !x y z. ~(x = INT 0) ==> (x times y = x times z) ==> (y = z)
+  TIMES_RIGHT_CANCELLATION
+    |- !x y z. ~(x = INT 0) ==> (y times x = z times x) ==> (y = z)
+  
+******************** integer ********************
+
+() : void
+
+\end{verbatim}
+
+Although the theory of the integers was developed through a particular
+representation, the set of definitions and theorems whose statements
+do not mention this representation are sufficient to characterize the
+integers.

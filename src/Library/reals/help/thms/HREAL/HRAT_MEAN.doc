@@ -1,0 +1,3 @@
+\THEOREM HRAT_MEAN HREAL
+|- !x y. x hrat_lt y ==> (?z. x hrat_lt z /\ z hrat_lt y)
+\ENDTHEOREM

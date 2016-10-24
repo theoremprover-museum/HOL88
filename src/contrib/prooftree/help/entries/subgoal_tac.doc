@@ -1,0 +1,47 @@
+\DOC subgoal_tac
+
+\TYPE {subgoal_tac : (string -> string -> void)}
+
+\SYNOPSIS
+Prints the tactic used in solving the subgoal at the given location.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {show_the_tactic} displays the
+whole tactic associated with the proof tree; the function
+{subgoal_tac} is more specific in displaying the tactic applied at any
+one subtree of the proof tree indicated by the first argument. The
+second argument is the path to the root of the subtree for which the
+tactic should be printed. Nodes in the subtree in question may be
+either proved or unproved.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+This function fails if there is no proof tree by the given name or if
+the tree does not have a node at the position specified by the second
+argument.
+
+\USES
+This function is often useful when attempting to solve a similar
+subgoal in another part of the proof tree, or even in another proof.
+
+\EXAMPLE
+{
+# subgoal_tac `myproof` `1.1` ;;
+
+STRIP_TAC
+THEN (ASM_REWRITE_TAC [])
+
+() : void
+}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs,
+show_all_subgoals, show_tac, top_goal.
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM real_lt REALAX
+|- !g00029 g00030.
+    g00029 < g00030 =
+    ($@(dest_real g00029)) treal_lt ($@(dest_real g00030))
+\ENDTHEOREM

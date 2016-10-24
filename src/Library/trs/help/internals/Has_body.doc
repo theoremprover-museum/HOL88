@@ -1,0 +1,10 @@
+\DOC Has_body
+
+\TYPE {Has_body : (wildvar -> termpattern -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

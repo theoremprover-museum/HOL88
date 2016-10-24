@@ -1,0 +1,3 @@
+\THEOREM POW_LE REAL
+|- !n x y. (& 0) <= x /\ x <= y ==> (x pow n) <= (y pow n)
+\ENDTHEOREM

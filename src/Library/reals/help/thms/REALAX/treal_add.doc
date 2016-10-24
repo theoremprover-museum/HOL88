@@ -1,0 +1,4 @@
+\THEOREM treal_add REALAX
+|- !x1 y1 x2 y2.
+    (x1,y1) treal_add (x2,y2) = x1 hreal_add x2,y1 hreal_add y2
+\ENDTHEOREM

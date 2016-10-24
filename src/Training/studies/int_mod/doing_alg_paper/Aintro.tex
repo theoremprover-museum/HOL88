@@ -1,0 +1,78 @@
+\thispagestyle{empty}
+
+\begin{center}
+{\Large \bf Doing Algebra in Simple Type Theory}\\[0.4cm]
+Elsa L.~Gunter\\
+Department of Computer and Information Science,\\[0.4cm]
+University of Pennsylvania\\
+200 South 33rd Street, \\
+Philadelphia, PA, 19104-6389, U.S.A\\
+\end{center}
+
+\noindent{\small{\bf Abstract.}
+To fully utilize the power of higher-order logic in interactive theorem
+proving,  it is desirable to be able to develop abstract areas of Mathematics
+such as algebra and topology in an automated setting.  Theorems provers
+capable of higher order reasoning have generally had some form of type
+theory as their object language.  But mathematicians have tended to use
+the language of set theory to give definitions and prove theorems in
+algebra and topology.  In this paper, we give an incremental description
+of how to express various basic algebraic concepts in terms of simple type
+theory.  We present a method for representing algebras, subalgebras,
+quotient algebras, homomorphisms and isomorphisms in simple type theory, using
+group theory as an example in each case.  Following this, we discuss how
+to automatically apply such an abstract theory to concrete examples.
+Finally, we conclude with some observations about a
+potential inconvenience associated with this method of representation,
+and discuss a difficulty inherent in any attempt to remove this
+inconvenience.}
+\bigskip
+
+\noindent{\small{\bf Key words:} Higher-order logic, simple type theory,
+algebras, theories, instantiation of theories.}
+
+
+\section{Introduction}
+
+In programming language development, it has been recognized that it is
+highly desirable to allow programmers the freedom to write procedures
+at an appropriate level of generality.  The programmer should not have
+to write one procedure to append one list of integers onto another,
+and then have to write a separate procedure to append a list of
+characters onto another.  To deal with this need for generality and
+flexibility, features such as polymorphic type systems have been
+developed.  Since the activity of proving mathematical theorems in an
+automated setting ultimately must allow for an interactive ability,
+the need for generality in this setting is just as real.  The facts
+that for all integers $a$, $b$, and $c$
+$$(a + b = c + b) \imp (a = c)$$
+and that for all invertible $2\times 2$-matrices $A$, $B$, and $C$
+$$(A \cdot B = C \cdot B) \imp (A = C)$$
+are immediate consequences of a more general fact of algebra, and a
+non-specialized automated theorem prover should allow the user to
+guide it through proofs of these facts by way of using this more
+general algebraic fact.  To some extent the need for generality in
+theorem provers has already been addressed by the ability to prove,
+record and reuse lemmas.  But this is just scratching the surface.  In
+mathematics, much work has been done in developing whole areas in which
+studying entities at varying levels of generality is a major aspect,
+and automated deduction should take advantage of this work.
+
+In this paper, we begin by giving a brief description of simple type
+theory and its implementation in a particular automated theorem prover,
+HOL.  Following this, we give an incremental description of how to
+express various basic algebraic concepts in terms of simple type
+theory.  Any representation of an algebraic theory must be able to
+express the notions of subalgebra, quotient algebra, homomorphism and
+isomorphism.  We present a method of representing algebras in simple
+type theory, and then show how this method extends to each of these
+ideas.  With each of these concepts, we show as an example how this
+method was carried out in the particular instance of group theory.
+Following this we discuss how to apply such an abstract theory to
+concrete examples.  Again we appeal to group theory, and to the
+integers to give us an explicit example of how such an application was
+carried out.  Finally, we conclude with some observations about a
+potential inconvenience associated with this method of representation,
+and discuss a difficulty inherent in any attempt to remove this
+inconvenience.
+

@@ -1,0 +1,88 @@
+% =====================================================================
+% HOL Manual LaTeX Source: prettyp library (standard latex style)
+% =====================================================================
+
+\documentstyle[12pt,fleqn,
+               ../../../Manual/LaTeX/alltt,
+               ../../../Manual/LaTeX/layout]{book}
+
+% ---------------------------------------------------------------------
+% Input defined macros and commands
+% ---------------------------------------------------------------------
+\input{../../../Manual/LaTeX/commands}
+\input{../../../Manual/LaTeX/ref-macros}
+
+% ---------------------------------------------------------------------
+% Additional macros and commands
+% ---------------------------------------------------------------------
+\input{win-macros}
+\def\PPML{{\small PPML}}
+\def\CENTAUR{{\small CENTAUR}}
+
+%\includeonly{entries}
+
+% ---------------------------------------------------------------------
+% The document has an index
+% ---------------------------------------------------------------------
+\makeindex
+
+\begin{document}
+
+   \setlength{\unitlength}{1mm}		  % unit of length = 1mm
+   \setlength{\baselineskip}{16pt}        % line spacing = 16pt
+
+   % ---------------------------------------------------------------------
+   % prelims
+   % ---------------------------------------------------------------------
+
+   \pagenumbering{roman}	          % roman page numbers for prelims
+   \setcounter{page}{1}		          % start at page 1
+
+   \include{title}			  % title page
+   \tableofcontents			  % table of contents
+
+   % ---------------------------------------------------------------------
+   % Systematic description of the library 
+   % ---------------------------------------------------------------------
+
+   \cleardoublepage			 % kick to a right-hand page
+   \pagenumbering{arabic}		 % arabic page numbers
+   \setcounter{page}{1}		         % start at page 1
+
+   \include{intro}
+   \include{language}
+   \include{functions}
+   \include{datatypes}
+   \include{link_to_hol}
+   \include{debugging}
+   \include{examples}
+   \include{algorithm}
+   \include{holppspec}
+
+   % ---------------------------------------------------------------------
+   % References 
+   % ---------------------------------------------------------------------
+
+   \include{references}
+
+   % ---------------------------------------------------------------------
+   % Appendices
+   % ---------------------------------------------------------------------
+
+   \appendix
+
+   \include{syntax}
+   \include{types}
+   \include{entries}
+
+   % ---------------------------------------------------------------------
+   % Index
+   % ---------------------------------------------------------------------
+ 
+   {\def\_{{\char'137}}		         % \tt style `_' character
+
+    \include{index}}
+
+\end{document}
+
+

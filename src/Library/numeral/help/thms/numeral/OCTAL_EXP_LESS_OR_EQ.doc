@@ -1,0 +1,7 @@
+\THEOREM OCTAL_EXP_LESS_OR_EQ numeral
+|- !l.
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_OCTAL l ==>
+    (8 EXP ((LENGTH l) - 1)) <= (OCTAL l)
+\ENDTHEOREM

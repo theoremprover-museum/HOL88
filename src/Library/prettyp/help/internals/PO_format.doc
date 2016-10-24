@@ -1,0 +1,10 @@
+\DOC PO_format
+
+\TYPE {PO_format : (print_format -> print_object)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

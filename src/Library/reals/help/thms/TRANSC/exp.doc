@@ -1,0 +1,3 @@
+\THEOREM exp TRANSC
+|- !x. exp x = suminf(\n. ((\n'. inv(&(FACT n')))n) * (x pow n))
+\ENDTHEOREM

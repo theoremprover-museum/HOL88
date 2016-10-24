@@ -1,0 +1,10 @@
+\DOC is_primtype
+
+\TYPE {is_primtype : (type -> bool)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

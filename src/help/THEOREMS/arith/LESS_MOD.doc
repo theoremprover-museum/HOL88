@@ -1,0 +1,3 @@
+\THEOREM LESS_MOD arithmetic
+|- !n k. k < n ==> (k MOD n = k)
+\ENDTHEOREM

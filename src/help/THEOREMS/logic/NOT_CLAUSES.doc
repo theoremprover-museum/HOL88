@@ -1,0 +1,4 @@
+\THEOREM NOT_CLAUSES \none
+|- (!t. ~~t = t) /\ (~T = F) /\ (~F = T) 
+\ENDTHEOREM
+

@@ -1,0 +1,9 @@
+\THEOREM SER_POS_LT_PAIR SEQ
+|- !f n.
+    summable f /\
+    (!d.
+      (& 0) <
+      ((f(n num_add (2 num_mul d))) +
+       (f(n num_add ((2 num_mul d) num_add 1))))) ==>
+    (Sum(0,n)f) < (suminf f)
+\ENDTHEOREM

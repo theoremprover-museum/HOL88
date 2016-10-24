@@ -1,0 +1,28 @@
+\DOC print_unquoted_type
+
+\TYPE {print_unquoted_type : (type -> void)}
+
+\SYNOPSIS
+Prints a HOL type to the terminal without surrounding quotes and without the
+leading colon.
+
+\DESCRIBE
+{print_unquoted_type ty} returns {():void} with the side-effect of printing
+the value of {ty} to the terminal without surrounding quotes and without the
+leading colon. The text is not terminated with a carriage return. In fact, the
+text is queued until the pretty-printer decides where line breaks are needed,
+or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#print_unquoted_type ":bool";;
+bool() : void
+}
+\SEEALSO
+print_type, print_begin, print_end, print_newline, print_term, print_thm,
+print_unquoted_term.
+
+\ENDDOC

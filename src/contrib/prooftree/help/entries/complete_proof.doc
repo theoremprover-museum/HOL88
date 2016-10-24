@@ -1,0 +1,41 @@
+\DOC complete_proof
+
+\TYPE {complete_proof : (string -> void)}
+
+\SYNOPSIS
+Pretty-prints a proof, showing the goals at each node and the tactics
+applied.
+
+\DESCRIBE
+Displays the whole proof tree, including proved, expanded, and
+unexpanded nodes. The current focus node (top of stack) is indicated,
+as well as the tactic applied at each node. The argument to the
+function is the name assigned to the proof.
+
+\KEYWORDS
+subgoal.
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails when there is no proof tree of the given name.
+
+\EXAMPLE
+{
+# complete_proof `another` ;;
+
+"!a b c. (a = b) /\ (b = c) ==> (a = c)"
+   (REPEAT STRIP_TAC)
+   "a = c"
+         ["b = c"]
+         ["a = b"]
+
+() : void
+}
+
+\SEEALSO
+all_subgoals, cancel_tac, compact, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+
+\ENDDOC

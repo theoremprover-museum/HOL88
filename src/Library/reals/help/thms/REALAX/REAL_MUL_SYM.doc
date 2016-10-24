@@ -1,0 +1,3 @@
+\THEOREM REAL_MUL_SYM REALAX
+|- !x y. x * y = y * x
+\ENDTHEOREM

@@ -1,0 +1,24 @@
+\DOC find_terms
+
+\TYPE {find_terms : ((term -> bool) -> term -> term list)}
+
+\SYNOPSIS
+Searches a term for all subterms that satisfy a predicate.
+
+\DESCRIBE
+A list of subterms of a given term that satisfy the predicate is returned. The
+terms may not be disjoint.
+
+\FAILURE
+Fails if no subterm of the given term satisfies the predicate.
+
+\EXAMPLE
+The following shows that the terms returned may overlap or contain each other:
+{
+   #find_terms (\tm. rator tm = "SUC" ? false) "SUC(SUC 1 + SUC 2)";;
+   ["SUC 2"; "SUC 1"; "SUC((SUC 1) + (SUC 2))"] : term list
+}
+\SEEALSO
+find_term.
+
+\ENDDOC

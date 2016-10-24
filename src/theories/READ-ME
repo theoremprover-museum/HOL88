@@ -1,0 +1,109 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: theories					|
++ ===================================================================== +
+
+This directory contains the files needed to rebuild all the built-in HOL
+theories. The theory files themselves are also kept here.
+
+Theory Hierarchy for BASIC-HOL is:
+
+
+
+
+		            PPLAMB
+			      |
+			      |
+			     bool
+			      |
+			      | 
+			     ind
+			      |
+			      |
+			  BASIC-HOL
+
+
+Where these theories are:
+
+   PPLAMB     - The interface to the LCF world. HOL users don't need
+                to know about this.
+
+   bool       - Introduces the type ":bool" and the constants "==>", "="
+                and "@". Contains the definitions of the logical constants
+                ("T", "!", "?", "/\", \/", "<=>", "F", "~", "LET", "COND",
+                "FCOND", "ONE_ONE" and "ONTO"). Introduces the axioms of HOL.
+                The type ":prod" is also introduced in the theory bool,
+                together with the pairing functions "$,", "FST" and "SND".
+                For boring reasons to do with how the system is build
+                pairing can't be in a separate theory with `bool` as
+                parent (see hol/theories/mk_bool.ml for details).
+
+   ind        - Introduces the type ":ind" and the Axiom of Infinity.
+
+   BASIC-HOL  - A dummy theory which is what you are in when you run
+                the basic-hol system (HOL users can ignore this).
+
+
+The  HOL system is built on top of BASIC-HOL, which is a parent to all the
+theories described below. The theory hierarchy for HOL is:
+
+        num
+         |
+         |    
+     prim_rec
+         |
+         |
+     arithmetic       combin
+         |		|
+         |		|
+       list	    ---------	
+         |	    |       |
+         |	    |      sum	      one
+       tree	    |       |	       |
+	 |	    |	    |	       |
+	 --------|  |	    |	       |
+		 |  |	    |	       |
+		 ltree	    |	       |
+		  |	    |	       |
+		  |	    |	       |
+	        tydefs	    |	       |
+		  |	    |	       |
+		  |	    |	       |
+		  --------- | ----------
+		          | | |
+			  | | |
+		           HOL
+
+Where these theories are
+
+   combin     - defines the combinators o, K, S, I.
+
+   sum	      - defines the disjoint sum type operator
+
+   one	      - defines the type :one with only one element
+
+   num        - Defines the type ":num" and the constants "0" and "SUC".
+                Has Peano's Axioms as theorems.
+
+   prim_rec   - Defines "<" and contains the Primitive Recursion Theorem
+                (together with several trivial about numbers that are needed
+                in proving it).
+
+   arithmetic - Defines "+", "-", "*",  "/", ">", "<=", ">=" and contains
+                various theorems about them.
+
+   list       - Defines the type ":list" and the constants "NIL",
+                "CONS", "HD", "TL", "NULL" and various others. Contains
+                various theorems including structural induction.
+
+   tree       - defines the type :tree of arbitrary-branching trees.  Used 
+   		to automate recursive type definitions.
+
+   ltree      - defines the type :(*)ltree of arbitrary-branching LABELLED 
+   		trees.   Used to automate recursive type definitions.
+
+   tydefs     - contains the proof of a "master theorem" for automating
+   		recursive type definitions.
+
+   HOL        - The theory you are in when starting up a hol system.
+
+

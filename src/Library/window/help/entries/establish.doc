@@ -1,0 +1,29 @@
+\DOC establish
+
+\TYPE {establish : (term -> (window -> window) -> window -> window)}
+
+\SYNOPSIS
+Prove a new lemma.
+(Also used to establish the truth of conjectures.)
+
+\LIBRARY window
+
+\DESCRIBE
+{establish tm fn win} opens a subwindow with focus {tm}.
+If {tm} is a conjecture in the parent window,
+it (and any lemmas that depend on it) will be removed from the subwindow.
+The relationship preserved in the subwindow is {"==>"}.
+{fn} is then used to transform the focus of the subwindow from {tm} to
+{"T"}(true).
+The subwindow is then closed and {tm} becomes a lemma in the parent window.
+The parent window with the new lemma is returned as the result.
+
+\FAILURE
+{establish tm fn win} will fail if {fn} does not transform {tm} to {"T"} in
+the subwindow.
+
+\SEEALSO
+open_win, OPEN_WIN, CLOSE_WIN, open_context, OPEN_CONTEXT, ESTABLISH,
+gen_open_win, GEN_OPEN_WIN
+
+\ENDDOC

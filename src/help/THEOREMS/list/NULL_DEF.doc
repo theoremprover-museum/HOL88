@@ -1,0 +1,3 @@
+\THEOREM NULL_DEF list
+|- (NULL[] = T) /\ (!h t. NULL(CONS h t) = F)
+\ENDTHEOREM

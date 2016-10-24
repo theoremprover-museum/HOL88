@@ -1,0 +1,40 @@
+\DOC load_axioms
+
+\TYPE {load_axioms : (string -> void list)}
+
+\SYNOPSIS
+Loads in all the axioms from a given theory.
+
+\DESCRIBE
+If {thy} is the name of an ancestor theory, then the call
+{
+   load_axioms `thy`
+}
+\noindent attempts to load in all the axioms from that theory, that is, for
+each axiom {ax}, to perform dynamically the following toplevel binding:
+{
+  let ax = axiom `thy` `ax`;;
+}
+
+\FAILURE
+Fails unless {thy} is an ancestor theory.
+
+\EXAMPLE
+{
+#load_axioms `bool`;;
+[(); (); (); (); ()] : void list
+
+SELECT_AX = |- !P x. P x ==> P($@ P)
+
+ETA_AX = |- !t. (\x. t x) = t
+
+IMP_ANTISYM_AX = |- !t1 t2. (t1 ==> t2) ==> (t2 ==> t1) ==> (t1 = t2)
+
+BOOL_CASES_AX = |- !t. (t = T) \/ (t = F)
+
+ARB_THM = |- $= = $=
+}
+\SEEALSO
+axioms, let_after, let_before, load_axiom.
+
+\ENDDOC

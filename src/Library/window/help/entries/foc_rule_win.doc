@@ -1,0 +1,34 @@
+\DOC foc_rule_win
+
+\TYPE {foc_rule_win :  ((term -> thm) -> window -> window)}
+
+\SYNOPSIS
+Apply an inference rule to the focus of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+Assuming {RULE} is an inference rule of the following form:
+{
+   ------------- RULE "f"
+    H |- f' R f
+}
+\noindent {foc_rule_win RULE} can be used to transform the focus of a window
+from {f} to {f'}, providing the window is supposed to preserve {"R"} or
+some weaker relation.
+
+\COMMENTS
+The actual type displayed by the system is ":(conv -> window -> window)".
+
+\FAILURE
+{rule_win r} will fail if the window is not supposed to preserve some
+relation which is equal to or weaker than {"<=="}.
+{rule_win r} will fail if the hypotheses of the theorem produced by {r}
+are not a subset of the context of the window.
+
+\SEEALSO
+transform_win, TRANSFORM_WIN, convert_win, CONVERT_WIN,
+rule_win, RULE_WIN, thm_rule_win, THM_RULE_WIN, FOC_RULE_WIN,
+tactic_win, TACTIC_WIN, rewrite_win, REWRITE_WIN.
+
+\ENDDOC

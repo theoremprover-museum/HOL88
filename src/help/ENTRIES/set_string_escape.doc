@@ -1,0 +1,17 @@
+\DOC set_string_escape
+
+\TYPE {set_string_escape : (int -> int)}
+
+\SYNOPSIS
+Changes the escape character inside strings.
+
+\DESCRIBE
+{set_string_escape n} changes the escape character in strings to be the
+character with ascii code {n}. The previous character code is returned.
+Initially the escape is ascii 92 (i.e. `{\}'). If {n} is not an ascii code
+then there is no escape character available.
+
+\FAILURE
+Never fails (not even if the supplied code is not an ascii code).
+
+\ENDDOC

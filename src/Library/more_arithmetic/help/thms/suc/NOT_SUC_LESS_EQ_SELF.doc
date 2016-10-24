@@ -1,0 +1,3 @@
+\THEOREM NOT_SUC_LESS_EQ_SELF suc
+|- !n. ~(SUC n) <= n
+\ENDTHEOREM

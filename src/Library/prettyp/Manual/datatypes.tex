@@ -1,0 +1,88 @@
+
+\chapter{Pretty-printing ML datatypes\label{mldatatypes}}
+
+The pretty-printer described in this document cannot only be used for
+extending the \HOL\ pretty-printer. It can also be used to pretty-print \ML\
+datatypes. Typically this will be of use with user-defined concrete datatypes
+and abstract datatypes.
+
+The pretty-printer can only print from parse-trees represented by a specific
+\ML\ datatype defined in the code for the pretty-printer. So, to pretty-print
+any other datatype, a function must be written to convert that datatype into
+the datatype for parse-trees. This datatype is called \ml{print\_tree} and is
+defined by:
+
+\begin{small}\begin{verbatim}
+   rectype print_tree = Print_node of string # print_tree list;;
+\end{verbatim}\end{small}
+
+\noindent
+The datatype is a recursive concrete type with one constructor. The tree
+consists of nodes which are labelled and have a list of sub-trees (children).
+A leaf node is represented by a labelled node with no children (empty list).
+
+Consider the \ML\ datatype declaration below, for simple arithmetical
+expressions:
+
+\begin{small}\begin{verbatim}
+   rectype arith_exp = Num of int
+                     | Neg of arith_exp
+                     | Plus of arith_exp # arith_exp
+                     | Minus of arith_exp # arith_exp;;
+\end{verbatim}\end{small}
+
+\noindent
+Here is a function to convert something of type \ml{arith\_exp} to an
+equivalent entity of type \ml{print\_tree}:
+
+\begin{small}\begin{verbatim}
+   letrec arith_to_print_tree ae =
+
+      % : (arith_exp -> print_tree) %
+
+      case ae
+      of (Num n) .
+            (Print_node (`NUM`,[Print_node (string_of_int n,[])]))
+       | (Neg ae1) .
+            (Print_node (`NEG`,[arith_to_print_tree ae1]))
+       | (Plus (ae1,ae2)) .
+            (Print_node (`PLUS`,[arith_to_print_tree ae1;
+                                 arith_to_print_tree ae2]))
+       | (Minus (ae1,ae2)) .
+            (Print_node (`MINUS`,[arith_to_print_tree ae1;
+                                  arith_to_print_tree ae2]));;
+\end{verbatim}\end{small}
+
+\noindent
+This function constructs trees of the form:
+
+\begin{small}\begin{verbatim}
+                NUM           NEG           PLUS          MINUS
+                 |             |            /  \          /   \
+               number         ...         ...  ...      ...   ...
+\end{verbatim}\end{small}
+
+\noindent
+which can then be pretty-printed.
+
+It is often useful to have a node labelling the tree as (in this case) an
+arithmetical expression. This allows the tree to be used within the tree for
+a more complex object. The rules can detect the labelling node, and switch
+context accordingly (see Section~\ref{context}). It is also useful if the
+printed expression is to appear enclosed within quotes or the like. The
+following function converts an arithmetical expression to a \ml{print\_tree},
+adding the labelling node {\small\verb%ARITH%}.
+
+\begin{small}\begin{verbatim}
+   let arith_exp_to_print_tree ae =
+
+      % : (arith_exp -> print_tree) %
+
+      Print_node (`ARITH`,[arith_to_print_tree ae]);;
+\end{verbatim}\end{small}
+
+\noindent
+Having a labelling node means that, by carefully designing the printing rules
+to switch contexts, the node-names used need not be distinct from other
+node-names in use. However, the labelling node-name (in this case
+{\small\verb%ARITH%}) must be distinct.

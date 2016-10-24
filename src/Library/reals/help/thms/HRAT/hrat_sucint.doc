@@ -1,0 +1,3 @@
+\THEOREM hrat_sucint HRAT
+|- !g00018. hrat_sucint g00018 = mk_hrat($trat_eq(trat_sucint g00018))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM LAST_DEF list
+|- !l. LAST l = HD(SEG 1(PRE(LENGTH l))l)
+\ENDTHEOREM

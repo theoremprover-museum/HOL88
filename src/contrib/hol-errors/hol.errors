@@ -1,0 +1,144 @@
+|----------------------------------------------------------------------------|
+|                   This file was supplied by Phil Windley                   |
+|----------------------------------------------------------------------------|
+
+-------------------------- hol.errors -------------------------------
+This file contains interpretations of various HOL errors and how to fix
+them (sometimes):
+
+--------------------------------------------------------------------------
+Error:
+
+"bad variable structure in term"
+
+Cause:
+
+Usually caused by having a variable in a definition that has been
+previously defined as a constant (in a parent perhaps).  To find out which,
+try typing the name of each variable followed by ";;" into HOL.  If it has
+been defined as a constant, you'll get the definition.
+
+Fix:
+
+Change the name of the variable.
+
+
+--------------------------------------------------------------------------
+Error:
+
+Indeterminate types:  "$!:((num -> ?) -> bool) -> bool"
+
+evaluation failed     types indeterminate in quotation
+
+Cause:
+
+Frequently caused by unbound variables.  The unbound variable message will
+not appear until all type clashes are fixed and type values resolved.  Thus
+if you get this error and you're pretty sure that all the types should be
+resolvable from the information given, you might have an unbound variable.
+
+Fix:
+
+Two routes:
+
+a.) Look for misspelled constant names that are being interpreted as
+variables.  If you find one, you're in luck.  When you fix it, the problem
+will probably correct itself.
+
+b.) Start explicitly typing things until you get a clash, or HOL tells you
+which variables are unbound.
+
+--------------------------------------------------------------------------
+Error:
+
+Error in HOL system, please report it.
+(Diagnostic: mk_comb -- while reading theory file)
+
+Cause:
+
+This error can occur when an ancestor has been updated and you are loading
+a file which depends on it that has not been updated.
+
+Fix:
+
+Remake the file that failed to load.
+
+
+--------------------------------------------------------------------------
+Error:
+
+evaluation failed     definition not an equation
+
+Cause:
+
+This message has been mistakenly reported when the declaration for
+universally quantified variables had the form
+
+   "! (b1,b2,b3,b4:bool) ...
+
+Of course, this should have been
+
+   "! (b1 b2 b3 b4:bool) ...
+
+I don't know why HOL didn't complain about the mistaken declaration and
+chose to say that the terms wasn't an equation instead.
+
+Fix:
+
+Correct the declaration of the universally quantified variables.
+
+--------------------------------------------------------------------------
+Error:
+
+evaluation failed     mk_type in quotation
+
+Cause:
+
+Can be caused by a type name that is not a type constant.  For example
+
+   "b:int"
+
+would give this error if ":int" were not a valid type constant.
+
+Fix:
+
+Either declare the type constant or use a valid one.
+
+
+--------------------------------------------------------------------------
+Error:
+
+non top level decln must have IN clause
+skipping: ) ) ;; parse failed     
+
+
+Cause:
+
+Sometimes caused by too many closing parens.
+
+Fix:
+
+Make sure parens balance.
+
+--------------------------------------------------------------------------
+Error:
+
+Error in HOL system, please report it.
+(Diagnostic: term-match)
+FUN%8643%73(lambda (%e) <**>)
+
+Cause:
+
+Infinite rewriting.  For example, ASM_REWRITE_TAC[] applied to
+
+   b
+   [ b = a ]
+   [ a = P b ]
+
+Fix:
+
+Use ONCE_ASM_REWRITE_TAC.
+
+
+
+

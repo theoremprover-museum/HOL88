@@ -1,0 +1,41 @@
+\DOC BASEN_ADD_CONV
+
+\TYPE {BASEN_ADD_CONV : term -> thm}
+
+\SYNOPSIS
+Proves the result of adding one numeral to another.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} and {n} are lists of digits in base {r}, and {p} is the list of digits
+in the base {r} numeral representing the sum of {m} and {n}, then
+{BASEN_ADD_CONV} returns the theorem:
+{
+        |- (BASEN r m + BASEN r n) = BASEN r p
+}
+If the addend and augend are not normalized, the resulting theorem expresses
+them normalized anyway.
+
+\FAILURE
+The argument to {BASEN_ADD_CONV} must be of the form
+{"BASEN r [...] + BASEN r [...]"}, the radix of the two numerals must be the
+same, and the radix must be a numeric constant that is at least 2, and all
+elements of the digit lists must be numeric constants, and must be less than
+the radix.
+
+\EXAMPLE
+{
+#BASEN_ADD_CONV "BASEN 10 [3;4;5] + BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] + BASEN 10 [3;4;5] = BASEN 10 [6;9;0]
+
+#BASEN_ADD_CONV "BASEN 2 [1;1;1;1] + BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] + BASEN 2 [1;1;1;0]) = BASEN 2 [1;1;1;0;1]
+
+#BASEN_ADD_CONV "BASEN 16 [8;10;14] + BASEN 16 [12;4]";;
+|- BASEN 16 [8;10;14] + BASEN 16 [12;4]) = BASEN 16 [9;7;2]
+}
+\SEEALSO
+BASEN_SUC_CONV.
+
+\ENDDOC

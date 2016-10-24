@@ -1,0 +1,10 @@
+\DOC Bound_children
+
+\TYPE {Bound_children : ((print_tree # address) list -> metavar_binding)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

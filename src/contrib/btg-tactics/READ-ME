@@ -1,0 +1,30 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: btg-tactics						%
+%									%
+% DESCRIPTION: Extra general-purpose tactics.				%
+%									%
+% AUTHOR: Brian Graham							%
+%									%
+% ADDRESS: Brian Graham							%
+%	   University of Cambridge					%
+%          Computer Laboratory						%
+%          New Museums Site						%
+%	   Pembroke Street						%
+%   	   Cambridge, England CB2 3QG					%
+%									%
+%	   email: btg@cl.cam.ac.uk					%
+%									%
+% DATE: 91.01.25							%
+% --------------------------------------------------------------------- %
+
+The contents are:
+
+abbrev_tac.ml :	Tactic to substitute a variable for a subterm in a goal and
+	        assumptions, adding an assumption that the subterm equals
+  		the variable.	
+
+binder_eq_tac.ml : Tactic strips matching binders from a top-level
+		   equality goal.
+
+
+

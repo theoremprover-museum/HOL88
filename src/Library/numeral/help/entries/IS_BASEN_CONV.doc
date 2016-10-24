@@ -1,0 +1,41 @@
+\DOC IS_BASEN_CONV
+
+\TYPE {IS_BASEN_CONV : term -> thm}
+
+\SYNOPSIS
+Proves that a numeral's digits are or are not all less than its radix.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {r} is a radix and {m} is a list of radix {r} digits (that is, each digit is
+less than {r}), then {IS_BASEN_CONV "IS_BASEN r m"} returns the theorem:
+{
+        |- IS_BASEN r m = T
+}
+and if one or more digits of {m} is not a radix {r} digit (that is, if some
+digit in {m} is equal to or greater than {r}), then
+{IS_BASEN_CONV "IS_BASEN r m"} returns the theorem:
+{
+        |- IS_BASEN r m = F
+}
+\FAILURE
+The argument to {IS_BASEN_CONV} must be of the form {"IS_BASEN r [...]"}, and
+the radix must be a numeric constant that is at least 2, and all elements of
+the digit list must be numeric constants.
+
+\EXAMPLE
+{
+#IS_BASEN_CONV "IS_BASEN 10 [2;3;5;0]";;
+|- IS_BASEN 10 [2;3;5;0] = T
+
+#IS_BASEN_CONV "IS_BASEN 10 [2;3;15;0]";;
+|- IS_BASEN 10 [2;3;15;0] = F
+
+#IS_BASEN_CONV "IS_BASEN 16 [2;3;15;0]";;
+|- IS_BASEN 16 [2;3;15;0] = F
+}
+\SEEALSO
+IS_NORMALIZED_CONV, BASEN_NORMALIZE_CONV.
+
+\ENDDOC

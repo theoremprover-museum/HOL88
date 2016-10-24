@@ -1,0 +1,22 @@
+\DOC dodo
+
+\TYPE {dodo : ((* -> *) -> * history -> * history)}
+
+\SYNOPSIS
+Place an event in the history.
+
+\LIBRARY window
+
+\DESCRIBE
+
+{dodo f h} returns a history with {f (present h)} as its present.
+{present h} will be the first recorded event in the past of the new history,
+except of course if the size of the history is 1.
+
+
+\FAILURE
+
+\SEEALSO
+set_max_hist, get_max_hist, present, epoch, undo, redo
+
+\ENDDOC

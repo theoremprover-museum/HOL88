@@ -1,0 +1,16 @@
+\DOC pp_print_type
+
+\TYPE {pp_print_type : (type -> void)}
+
+\SYNOPSIS
+Print function for HOL types. Simulates the HOL system function {print_type}.
+
+\LIBRARY prettyp
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_print_term, pp_print_thm, pp_print_all_thm.
+
+\ENDDOC

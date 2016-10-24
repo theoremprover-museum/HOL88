@@ -1,0 +1,7 @@
+\THEOREM BINARY_EXP_LESS_OR_EQ numeral
+|- !l.
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_BINARY l ==>
+    (2 EXP ((LENGTH l) - 1)) <= (BINARY l)
+\ENDTHEOREM

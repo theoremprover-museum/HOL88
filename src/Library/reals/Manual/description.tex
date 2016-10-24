@@ -1,0 +1,145 @@
+\chapter{The reals library}
+
+The reals library provides a theory of real numbers, including properties of
+the elementary transcendental functions. The theories are constructed purely
+definitionally, using Dedekind cuts of rationals.
+
+\section{Loading the library}
+
+Assuming \HOL\ is installed properly, it is only necessary to execute the
+following \ML\ command:
+
+\begin{session}\begin{alltt}
+#load_library `reals`;;
+\end{alltt}\end{session}
+
+This makes the real theory hierarchy a parent, sets up the most useful theorems
+from the theories {\tt REAL} and {\tt TRANSC} to autoload, and provides an
+interface map in {\tt real\_interface\_map} which makes real operations more
+presentable. Note however that this interface map is not set up automatically.
+If required, the following command will set it up:
+
+\begin{session}\begin{alltt}
+#set\_interface\_map real\_interface\_map;;
+\end{alltt}\end{session}
+
+However if there is an existing interface map, something rather more elaborate
+may be necessary. Various types are used in auxiliary ways within the theory
+hierarchy, but the only one which matters to most users is the type of real
+numbers, which is called simply {\tt real}.
+
+\section{Theories in the reals library}
+
+The theory hierarchy underlying the library is quite extensive, but the
+dependencies are almost linear. In the list that follows, each theory depends
+on the ones above it, except that {\tt LIM} and {\tt SEQ} are independent; the
+theory {\tt POWSER} brings the two together.
+
+\begin{itemize}
+
+\item{\tt HRAT:} Positive rational numbers
+
+\item{\tt HREAL:} Positive real numbers
+
+\item{\tt REALAX:} Basic ``axioms'' characterizing the real numbers
+
+\item{\tt REAL:} Main algebraic properties of real numbers
+
+\item{\tt TOPOLOGY:} Basic topological definitions and theorems
+
+\item{\tt NETS:} Moore-Smith convergence nets
+
+\item{\tt LIM:} Limits, continuity and differentiation
+
+\item{\tt SEQ:} Infinite sequences and series
+
+\item{\tt POWSER:} Power series
+
+\item{\tt TRANSC:} Transcendental functions
+
+\end{itemize}
+
+For most purposes, only the main definitions and theorems from {\tt REAL} and
+{\tt TRANSC} should be needed, and these are set up to autoload when the
+library is loaded. The intermediate theories {\tt TOPOLOGY} to {\tt POWSER} are
+a means to an end, and are not necessarily suitable as a foundation for a
+serious theory of mathematical analysis.
+
+\section{The user interface}
+
+HOL does not support subtypes, so the real numbers are formally a different
+type from the natual numbers. The ``inclusion'' mapping
+$\iota: num \rightarrow real$ is called {\tt real\_of\_num}, but the ampersand
+({\tt \&}) represents it in the standard interface map.
+interface map represents it by the ampersand {\tt \&}. Thus the real number
+``numerals'' can be written as {\tt \&0}, {\tt \&1} etc. Occasionally it is
+necessary to bracket such combinations to avoid problems with associativity.
+
+The arithmetic operations also have different names from their natural number
+counterparts:
+
+\begin{itemize}
+
+\item{\tt real\_neg} Negation (unary $-$)
+
+\item{\tt real\_add} Addition ($+$)
+
+\item{\tt real\_mul} Multiplication ($*$)
+
+\item{\tt real\_sub} Subtraction (binary $-$)
+
+\item{\tt real\_lt} Less-than ($<$)
+
+\item{\tt real\_le} Less-than-or-equal-to ($\leq$)
+
+\item{\tt real\_gt} Greater-than ($>$)
+
+\item{\tt real\_ge} Greater-than-or-equal-to ($\geq$)
+
+\item{\tt real\_inv} Multiplicative inverse ($inv$)
+
+\end{itemize}
+
+The interface map provided in {\tt real\_interface\_map} when the library is
+loaded provides the normal names for these (except that unary minus is
+{\tt --}), and replaces the natural number conterparts with {\tt num\_add} etc.
+This can make it clumsy to mix real and natural number arithmetic, but is
+usually satisfactory.
+
+\section{Other functions defined}
+
+Apart from the basic arithmetic operations listed above, the library defines
+various other constants, including the following:
+
+\begin{itemize}
+
+\item{\tt abs:} Absolute value; $abs(x) = |x|$
+
+\item{\tt acs:} Arc cosine; $0 \leq acs(x) \leq \pi$
+
+\item{\tt asn:} Arc sine; $- \pi/2 \leq asn(x) \leq \pi/2$
+
+\item{\tt atn:} Arc tangent; $ - \pi/2 < atn(x) < \pi/2$
+
+\item{\tt cos:} Cosine
+
+\item{\tt exp:} Exponential function; $exp(x) = e^x$
+
+\item{\tt ln:} Natural logarithm; base $e = exp(1)$
+
+\item{\tt pi:} The constant $\pi = 3.14159\ldots$
+
+\item{\tt pow:} Natural number power: $x\ pow\ n = x^n$
+
+\item{\tt root:} n'th root; $root(n) x = \sqrt[n]{x}$
+
+\item{\tt sin:} Sine
+
+\item{\tt sqrt:} Square root; $sqrt(x) = \sqrt{x}$)
+
+\item{\tt tan:} Tangent
+
+\end{itemize}
+
+A list of theorems about each of these constants is provided --- see the
+following sections for a full list.

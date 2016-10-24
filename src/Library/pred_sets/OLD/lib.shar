@@ -1,0 +1,777 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  READ-ME Makefile mk_set_defs.ml mk_set.ml set.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 11:35:44 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'READ-ME' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'READ-ME'\"
+else
+echo shar: Extracting \"'READ-ME'\" \(1819 characters\)
+sed "s/^X//" >'READ-ME' <<'END_OF_FILE'
+X+ =====================================================================	+
+X|									|
+X| LIBRARY	: set						|
+X|									|
+X| DESCRIPTION   : Definition of set theory.                          |
+X|									|
+X| AUTHOR	: T. kalker						|
+X| DATE		: 8 JUNE 1989  			         		|
+X|									|
+X+ =====================================================================	+
+X
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| FILES:								|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X    
+X    mk_set_defs.ml    elementary definitions of set theory.
+X
+X    mk_set.ml         elementary theorems of set theory.
+X
+X    set.ml            loads the library into hol.
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| DOCUMENTATION:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+XSets are modeled as predicates on types.
+XThe empty set is borrowed from "fixpoints" where
+Xit is called BOT.
+XThe constructed is mainly concerned with theorems on
+Xfunctions on sets. The boolean algebra of sets is hardly
+Xconsidered, and is left to the taste of the user.
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO REBUILD THE LIBRARY:						|
+X|									|
+X+ --------------------------------------------------------------------- +
+X                                      
+X   0) necessary libraries: fixpoints, auxiliary
+X
+X   1) edit the pathnames in the Makefile (if necessary)
+X
+X   2) type "make clean"
+X
+X   3) type "make all"
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO USE THE LIBRARY:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X   load_library `set`;;
+X
+X
+END_OF_FILE
+if test 1819 -ne `wc -c <'READ-ME'`; then
+    echo shar: \"'READ-ME'\" unpacked with wrong size!
+fi
+chmod +x 'READ-ME'
+# end of 'READ-ME'
+fi
+if test -f 'Makefile' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Makefile'\"
+else
+echo shar: Extracting \"'Makefile'\" \(977 characters\)
+sed "s/^X//" >'Makefile' <<'END_OF_FILE'
+X# =====================================================================
+X#
+X# 		 MAKEFILE FOR THE HOL LIBRARY: SET
+X#
+X# =====================================================================
+X
+X# =====================================================================
+X#
+X# MAIN ENTRIES:
+X#
+X# make all	    : create theories and compile code
+X#
+X# make clean	    : remove theories and compiled code
+X#	
+X# =====================================================================
+X
+X# =====================================================================
+X# MACROS:
+X#
+X# Hol	    : the pathname of the version of hol used
+X# =====================================================================
+X
+XHol=~/com/hol
+X
+Xclean:
+X	rm -f *_ml.o *_ml.l *.th 
+X	@echo "===> library set: all object code and theory files deleted"  
+X
+Xset.th: mk_set_defs.ml mk_set.ml
+X	rm -f set.th
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'loadt `mk_set_defs`;;'\
+X	     'loadt `mk_set`;;'\
+X	     'quit();;' | ${Hol}
+X
+Xall: set.th
+END_OF_FILE
+if test 977 -ne `wc -c <'Makefile'`; then
+    echo shar: \"'Makefile'\" unpacked with wrong size!
+fi
+chmod +x 'Makefile'
+# end of 'Makefile'
+fi
+if test -f 'mk_set_defs.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'mk_set_defs.ml'\"
+else
+echo shar: Extracting \"'mk_set_defs.ml'\" \(3410 characters\)
+sed "s/^X//" >'mk_set_defs.ml' <<'END_OF_FILE'
+X%<
+XFILE: mk_set_defs.ml
+X
+XAUTHOR:	Ton Kalker
+X
+XDATE:	10 july 1989
+X
+XCOMMENT: a preliminary version
+X         of set theory!
+X         Should in the end be fitted
+X         in with a standarized HOL
+X         set theory.
+X         The constant "empty set" is
+X         borrowed from "fixpoints" where
+X         is is called BOT.
+X>%
+X
+Xnew_theory `set`;; 
+X
+Xnew_parent `fixpoints`;;
+X
+Xlet TOP =
+X    new_definition
+X    (`TOP`,
+X     "TOP = \x:*.T");;  
+X                    
+Xlet MEMBER =
+X    new_infix_definition
+X    (`MEMBER`,
+X    "MEMBER a (A:*->bool) = A a");;
+X
+Xlet SING =
+X    new_definition
+X     (`SING`,
+X      "SING (a:*) = (\x.x = a)");;
+X
+Xlet UNION =
+X    new_infix_definition
+X    (`UNION`,                             
+X    "UNION IN (OUT:*->bool) = \a.((IN a) \/ (OUT a))");;
+X
+Xlet INTERSECT =
+X    new_infix_definition
+X    (`INTERSECT`,
+X    "INTERSECT A (B:*->bool) = \a.((A a) /\ (B a))");;   
+X
+Xlet DELETE = 
+X    new_infix_definition
+X    (`DELETE`,
+X    "DELETE A (B:*->bool) = \a.((A a) /\ ~(B a))");;
+X
+Xlet DIFF =
+X    new_infix_definition
+X    (`DIFF`,
+X    "DIFF A (B:*->bool) = \a.(((A a) /\ ~(B a)) \/ (~(A a) /\ (B a)))");;   
+X
+Xlet SUBSET =
+X    new_infix_definition
+X     (`SUBSET`,
+X      "SUBSET A (B:*->bool) = (!a. (A a) ==> (B a))");;  
+X
+Xlet SUPSET =
+X    new_infix_definition
+X     (`SUPSET`,
+X      "SUPSET A (B:*->bool) = (!a. (B a) ==> (A a))");;
+X
+Xlet DISJOINT =
+X    new_definition
+X     (`DISJOINT`,
+X      "DISJOINT A B  = (!a:*.~((A a) /\ (B a)))");;
+X
+Xlet PSUBSET = 
+X    new_infix_definition(`PSUBSET`,
+X      "PSUBSET A (B:*->bool) = ~(A = B) /\ (A SUBSET B)");;
+X
+Xlet PSUPSET = 
+X   new_infix_definition(`PSUPSET`,
+X      "PSUPSET A (B:*->bool) = ~(A = B) /\ (A SUPSET B)");;
+X
+Xlet GINTERSECT = new_definition(`GINTERSECT`,
+X          "GINTERSECT (SS:(*->bool)->bool) x = !X.(SS X) ==> (X x)");;
+X
+Xlet GUNION = new_definition(`GUNION`,
+X          "GUNION (SS:(*->bool)->bool) x = ?X.(SS X) /\ (X x)");;
+X
+Xlet FUN_TY_DEF =  
+X    new_infix_definition
+X    (`FUN_TY_DEF`,
+X    "--> (A:*->bool) (B:*->bool) f = !x.((A x) ==> (B (f x)))");;
+X
+Xnew_special_symbol `-->>`;;
+X
+Xnew_special_symbol `>-->`;;   
+X
+Xnew_special_symbol `<-->`;;
+X
+Xlet FUN_ONTO =
+X    new_infix_definition
+X    (`FUN_ONTO`,
+X    " -->> (A:*->bool) (B:*->bool) f = ((!x.((A x) ==> (B (f x)))) /\
+X                                  (!x.(B x) ==> (?y.(A y) /\ (x = (f y)))))");;
+X
+Xlet FUN_ONE_ONE =
+X    new_infix_definition
+X    (`FUN_ONE_ONE`,
+X    ">--> (A:*->bool) (B:*->bool) f = ((!x.((A x) ==> (B (f x)))) /\  
+X                                       (! x y.((A x) /\ (A y) /\ ((f x) = (f y)))
+X                                               ==> (x = y)))");; 
+X
+Xlet FUN_ISO = 
+X    new_infix_definition
+X    (`FUN_ISO`,
+X    "<--> A (B:*->bool) f = (((A >--> B) f) /\ ((A -->> B) f)  )");;  
+X
+Xlet FUN_INV =
+X    new_definition
+X    (`FUN_INV`,
+X    "FINV A B f (y:*):* = ((B y) /\ (?x.((A x) /\ (y = (f x))))) => 
+X                                    (@x.((A x) /\ (y = (f x)))) | @x.A x");; 
+X
+Xlet PINVERSE =
+X    new_definition
+X    (`PINVERSE`,
+X    "PINVERSE (A,B) f (g:*->*) = ((A --> B) f) /\
+X                                  ((B --> A) g) /\
+X                                  (!x:*.((A x) ==> (((g o f) x) = x)))");;  
+X
+Xlet INVERSE =
+X    new_definition
+X    (`INVERSE`,
+X    "INVERSE (A,B) f (g:*->*) = (PINVERSE (A,B) f g) /\ (PINVERSE (B,A) g f)");;  
+X
+Xlet IMAGE =
+X    new_definition
+X    (`IMAGE`,
+X    "IMAGE (f:*->*) (A:*->bool) a  = (?b.((A b) /\ (a = (f b))))");;   
+X
+X
+END_OF_FILE
+if test 3410 -ne `wc -c <'mk_set_defs.ml'`; then
+    echo shar: \"'mk_set_defs.ml'\" unpacked with wrong size!
+fi
+chmod +x 'mk_set_defs.ml'
+# end of 'mk_set_defs.ml'
+fi
+if test -f 'mk_set.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'mk_set.ml'\"
+else
+echo shar: Extracting \"'mk_set.ml'\" \(10958 characters\)
+sed "s/^X//" >'mk_set.ml' <<'END_OF_FILE'
+X%<
+XAUTHOR:	Ton Kalker
+X
+XDATE:	13 september 1989
+X
+XCOMMENT: proves some basic theorems
+X         on functions on sets.
+X>%
+X  
+X%<
+Xload_theory `set`;;
+X                            
+Xautoload_defs_and_thms `set`;; 
+X>% 
+X
+Xload_library `auxiliary`;;  
+X
+Xautoload_defs_and_thms `fixpoints`;; 
+X
+X%<
+Xnew_special_symbol `-->>`;;
+X
+Xnew_special_symbol `>-->`;;   
+X
+Xnew_special_symbol `<-->`;; 
+X>%  
+X
+Xlet w = "!A B (f:*->*).(((A >-->B) f) \/ ((A -->> B) f)) ==> ((A --> B) f)";;  
+X
+Xlet FUN_TY = prove_thm(
+X   `FUN_TY`,
+X    w,
+X    REPEAT STRIP_TAC THEN 
+X    RULE_ASSUM_TAC (REWRITE_RULE[FUN_ONTO;FUN_ONE_ONE]) THEN
+X    ASM_REWRITE_TAC[FUN_TY_DEF]);;
+X
+Xlet w = "!A (B:*->bool).!f.((A --> B) f) = ((IMAGE f A) SUBSET B)";;
+X
+Xlet FUN_TY_IMAGE =
+X    prove_thm(
+X     `FUN_TY_IMAGE`,
+X     w,
+X     REPEAT GEN_TAC THEN
+X     REWRITE_TAC[IMAGE;SUBSET;FUN_TY_DEF] THEN
+X     EQ_TAC THEN  
+X     REPEAT STRIP_TAC THENL
+X           [RES_TAC THEN
+X            ASM_REWRITE_TAC[];
+X            ASSUM_LIST ((MAP_EVERY MATCH_MP_TAC) o (sublist [2])) THEN
+X            EXISTS_TAC "x:*" THEN
+X            ASM_REWRITE_TAC[]]);;
+X
+Xlet w = "!A (B:*->bool).!f:*->*.((A -->> B) f) = ((IMAGE f A) = B)";;
+X
+Xlet ONTO_IMAGE =
+X    prove_thm(
+X    `ONTO_IMAGE`,
+X      w,
+X      REPEAT GEN_TAC THEN 
+X      CONV_TAC (RAND_CONV FUN_EQ_CONV) THEN
+X      REWRITE_TAC [IMAGE;FUN_ONTO] THEN
+X      EQ_TAC THEN
+X      REPEAT STRIP_TAC THENL
+X          [EQ_TAC THEN 
+X           REPEAT STRIP_TAC THEN
+X           RES_TAC THEN
+X           ASM_REWRITE_TAC[];
+X           FILTER_RULE_ASSUM_TAC [2] (SPEC "f (x:*):*") THEN
+X           FILTER_RULE_ASSUM_TAC [2] SYM THEN 
+X           ASM_REWRITE_TAC[] THEN 
+X           EXISTS_TAC "x:*" THEN
+X           ASM_REWRITE_TAC[];
+X           FILTER_RULE_ASSUM_TAC [2] (SPEC "x:*") THEN
+X           REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X           ASM_REWRITE_TAC[]]);;  
+X
+Xlet w= "!A:*->bool.!f g. (IMAGE g (IMAGE f A)) = IMAGE (g o f) A";; 
+X
+Xlet IMAGE_COMP  =
+X    prove_thm(
+X    `IMAGE_COMP`,
+X     w, 
+X     CONV_TAC (ONCE_DEPTH_CONV FUN_EQ_CONV) THEN
+X     REPEAT GEN_TAC THEN
+X     REWRITE_TAC [IMAGE;o_DEF] THEN
+X     BETA_TAC THEN
+X     EQ_TAC THEN
+X     REPEAT STRIP_TAC THENL
+X           [EXISTS_TAC "b':*" THEN 
+X            ASM_REWRITE_TAC[];
+X            EXISTS_TAC "f (b:*):*" THEN
+X            ASM_REWRITE_TAC[] THEN
+X            EXISTS_TAC "b:*" THEN
+X            ASM_REWRITE_TAC[]]);;  
+X
+Xlet w1 = "!A:*->bool.(A --> A) I";;
+X
+Xlet thm1 =
+X    prove
+X     (w1,
+X      REPEAT GEN_TAC THEN
+X      REWRITE_TAC[FUN_TY_DEF] THEN
+X      BETA_TAC THEN
+X      REWRITE_TAC[I_THM]);;
+X
+Xlet w2 = "!A:*->bool.(A >--> A) I";;  
+X
+Xlet thm2 =
+X    prove
+X     (w2,
+X      REPEAT GEN_TAC THEN
+X      REWRITE_TAC[FUN_ONE_ONE;thm1] THEN
+X      BETA_TAC THEN 
+X      REWRITE_TAC[I_THM] THEN
+X      REPEAT STRIP_TAC THEN
+X      ASM_REWRITE_TAC[]);;  
+X
+Xlet w3 = "!A:*->bool.(A -->> A) I";; 
+X
+Xlet thm3 =
+X    prove
+X     (w3,
+X      REPEAT GEN_TAC THEN
+X      REWRITE_TAC[FUN_ONTO;thm1] THEN
+X      BETA_TAC THEN 
+X      REWRITE_TAC[I_THM] THEN
+X      REPEAT STRIP_TAC THEN 
+X      EXISTS_TAC "x:*" THEN
+X      ASM_REWRITE_TAC[]);;  
+X 
+Xlet w4 = "!A:*->bool.(A <--> A) I";; 
+X
+Xlet thm4 =
+X    prove
+X     (w4,
+X      REPEAT GEN_TAC THEN
+X      REWRITE_TAC[FUN_ISO] THEN
+X      BETA_TAC THEN
+X      REWRITE_TAC[thm2;thm3]);;
+X
+Xlet FUN_IDEN =
+X    save_thm
+X    (`FUN_IDEN`,
+X    GEN_ALL (LIST_CONJ (map SPEC_ALL [thm1;thm2;thm3;thm4])));;
+X
+Xlet w1 = "!B.!f:*->*.((BOT --> B) f)";;  
+X
+Xlet thm1 = 
+X      prove(
+X      w1,
+X      REWRITE_TAC[FUN_TY_DEF;BOT]);;   
+X
+Xlet w2 = "!B.!f:*->*.((BOT >--> B) f)";;
+X
+Xlet thm2 =
+X       prove(
+X       w2,
+X       REWRITE_TAC[BOT;FUN_ONE_ONE]);;  
+X                                                    
+X
+Xlet w3 =  "!B.!f:*->*.((BOT -->> B)f) = (B = BOT)";;   
+X
+Xlet thm3 = 
+X       prove(
+X       w3,
+X       REWRITE_TAC[BOT;FUN_ONTO] THEN
+X       GEN_TAC THEN
+X       CONV_TAC SYM_CONV THEN
+X       CONV_TAC (LHS_CONV (FUN_EQ_CONV THENC (REDEPTH_CONV BETA_CONV))) THEN
+X       REWRITE_TAC[]);; 
+X
+Xlet w4 =  "!B.!f:*->*.((BOT <--> B)f) = (B = BOT)";;
+X
+Xlet thm4 = 
+X       prove(
+X       w4,
+X       REPEAT GEN_TAC THEN
+X       REWRITE_TAC[FUN_ISO;thm2;thm3]);;
+X
+Xlet BOTTOM_LEFT =
+X       save_thm(
+X       `BOTTOM_LEFT`,
+X       GEN_ALL (LIST_CONJ (map SPEC_ALL [thm1;thm2;thm3;thm4])));;
+X
+Xlet w1 = "!A.!f:*->*.((A --> BOT) f) = (A = BOT)";;  
+X
+Xlet thm1 = 
+X       prove(
+X       w1,
+X       REWRITE_TAC[BOT;FUN_TY_DEF] THEN
+X       GEN_TAC THEN
+X       CONV_TAC SYM_CONV THEN
+X       CONV_TAC (LHS_CONV (FUN_EQ_CONV THENC (REDEPTH_CONV BETA_CONV))) THEN
+X       REWRITE_TAC[]);; 
+X
+Xlet w2 = "!A.!f:*->*.((A >--> BOT) f) = (A = BOT)";;  
+X
+Xlet thm2 = 
+X       prove(
+X       w2,
+X       REWRITE_TAC[BOT;FUN_ONE_ONE] THEN 
+X       BETA_TAC THEN
+X       REPEAT GEN_TAC THEN
+X       CONV_TAC SYM_CONV THEN
+X       CONV_TAC (LHS_CONV (FUN_EQ_CONV THENC (REDEPTH_CONV BETA_CONV))) THEN
+X       REWRITE_TAC[] THEN 
+X       EQ_TAC THEN 
+X       STRIP_TAC THEN 
+X       REPEAT CONJ_TAC THEN 
+X       ASM_REWRITE_TAC[]);;
+X
+X
+X
+Xlet w3 = "!A.!f:*->*.((A -->> BOT) f) = (A = BOT)";;  
+X
+Xlet thm3 = 
+X       prove(
+X       w3,
+X       REWRITE_TAC[BOT;FUN_ONTO] THEN 
+X       BETA_TAC THEN
+X       REPEAT GEN_TAC THEN
+X       CONV_TAC SYM_CONV THEN
+X       CONV_TAC (LHS_CONV (FUN_EQ_CONV THENC (REDEPTH_CONV BETA_CONV))) THEN
+X       REWRITE_TAC[]);; 
+X
+Xlet w4 = "!A.!f:*->*.((A <--> BOT) f) = (A = BOT)";;  
+X
+Xlet thm4 = 
+X       prove(
+X       w4,
+X       REPEAT GEN_TAC THEN
+X       REWRITE_TAC[FUN_ISO;thm2;thm3]);;
+X
+X
+Xlet BOTTOM_RIGHT =
+X      save_thm(
+X       `BOTTOM_RIGHT`,
+X        GEN_ALL (LIST_CONJ (map SPEC_ALL [thm1;thm2;thm3;thm4])));; 
+X
+Xlet w1 = "!A B (D:*->bool).!f g.((A --> B)f) /\ ((B --> D)g) ==>
+X                                 ((A --> D)(g o f))";;   
+X
+Xlet thm1 = 
+X    prove
+X    (w1, 
+X     REPEAT GEN_TAC THEN 
+X     REWRITE_TAC[FUN_TY_DEF;o_DEF] THEN 
+X     (2 TIMES BETA_TAC) THEN 
+X     REPEAT STRIP_TAC THEN
+X     (2 TIMES  RES_TAC));;  
+X
+Xlet w2 = "!A B (D:*->bool).!f g.((A >--> B)f) /\ ((B >--> D)g) ==>
+X                                 ((A >--> D)(g o f))";;
+X
+Xlet thm2 = 
+X    prove
+X    (w2, 
+X     REPEAT GEN_TAC THEN 
+X     REWRITE_TAC[FUN_ONE_ONE;o_DEF] THEN 
+X     (2 TIMES BETA_TAC) THEN
+X     REPEAT STRIP_TAC THEN
+X     (3 TIMES RES_TAC));;  
+X
+Xlet w3 = "!A B (D:*->bool).!f g.((A -->> B)f) /\ ((B -->> D)g) ==>
+X                                 ((A -->> D)(g o f))";;  
+X
+Xlet thm3 = 
+X    prove
+X    (w3, 
+X     REPEAT GEN_TAC THEN 
+X     REWRITE_TAC[ONTO_IMAGE;SYM (SPEC_ALL IMAGE_COMP)] THEN
+X     REPEAT STRIP_TAC THEN
+X     ASM_REWRITE_TAC[]);;
+X
+X
+X
+Xlet w4 = "!A B (D:*->bool).!f g.((A <--> B)f) /\ ((B <--> D)g) ==>
+X                                 ((A <--> D)(g o f))";; 
+X
+Xlet thm4 = 
+X    prove
+X    (w4, 
+X     REPEAT GEN_TAC THEN 
+X     REWRITE_TAC[FUN_ISO] THEN 
+X     BETA_TAC THEN
+X     REPEAT STRIP_TAC THEN 
+X     ((MAP_EVERY IMP_RES_TAC) [thm2;thm3]));;
+X
+Xlet FUN_COMP =
+X    save_thm
+X    (`FUN_COMP`,
+X    GEN_ALL (LIST_CONJ (map SPEC_ALL [thm1;thm2;thm3;thm4])));;  
+X
+Xlet w = "!A.~(A = BOT) = (?x:*.A x)";;  
+X
+Xlet NOT_BOT = 
+X    prove_thm(
+X   `NOT_BOT`,
+X    w,
+X    GEN_TAC THEN
+X    REWRITE_TAC[BOT] THEN
+X    BETA_TAC THEN 
+X    CONV_TAC ((ONCE_DEPTH_CONV FUN_EQ_CONV) THENC    
+X              (ONCE_DEPTH_CONV NOT_FORALL_CONV)) THEN
+X    REWRITE_TAC[]);;
+X
+Xlet w =" !A (B:*->bool).!f g g'.((PINVERSE (A,B) f g) /\ (PINVERSE (B,A) g' f))
+X                                                    ==>
+X                               ((PINVERSE (A,B) f g') /\ (PINVERSE (B,A) g f))";;
+X
+Xlet LR_INV =
+X    prove_thm(
+X    `LR_INV`,
+X     w,
+X     REWRITE_TAC[PINVERSE;FUN_TY_DEF;o_DEF] THEN
+X     BETA_TAC THEN
+X     REPEAT STRIP_TAC THEN 
+X     ASM_REWRITE_TAC[] THEN 
+X     RES_TAC THENL
+X        [RES_TAC THEN
+X         SUB_ASSUM_TAC  [5;6;8;12] THEN
+X         RES_TAC THEN
+X         REWRITE_RULE_ASSUM_TAC [1] [3;4] THEN
+X         FILTER_RULE_ASSUM_TAC [1] SYM THEN 
+X         ASM_REWRITE_TAC[];
+X         REWRITE_RULE_ASSUM_TAC [4] [6] THEN 
+X         ASM_REWRITE_TAC[]]);; 
+X
+Xlet w = "! A B (f:*->*).(~(A = BOT)) ==> (B --> A) (FINV A B f)";;
+X
+Xlet FUN_INV_TY = 
+X    prove_thm(
+X    `FUN_INV_TY`,
+X     w,
+X     REPEAT GEN_TAC THEN 
+X     REWRITE_TAC[NOT_BOT;FUN_TY_DEF;FUN_INV] THEN
+X     DISCH_THEN ASSUME_TAC THEN
+X     REPEAT STRIP_TAC THEN
+X     FILTER_RULE_ASSUM_TAC [2] SELECT_RULE THEN
+X     ASM_CASES_TAC "(?x':*. A x' /\ ((x:*) = f x'))" THEN 
+X     ASM_REWRITE_TAC[] THEN
+X     FILTER_RULE_ASSUM_TAC [1] SELECT_RULE THEN 
+X     ASM_REWRITE_TAC[]);;
+X
+X
+X
+Xlet w = "!A B (f:*->*).(( ~(A = BOT)) /\ ((A >--> B) f))  ==> 
+X                       (PINVERSE (A,B) f (FINV A B f))";; 
+X
+Xlet INJ_FINV =
+X    prove_thm(
+X    `INJ_FINV`,
+X     w, 
+X     REPEAT GEN_TAC THEN
+X     REWRITE_TAC [FUN_ONE_ONE;PINVERSE;FUN_TY_DEF;o_DEF] THEN
+X     BETA_TAC THEN
+X     REPEAT STRIP_TAC THENL   
+X      [RES_TAC;  
+X       IMP_RES_TAC (REWRITE_RULE[FUN_TY_DEF] FUN_INV_TY);
+X       REWRITE_TAC[FUN_INV] THEN
+X       SUBGOAL_THEN  "?x':*. A x' /\ (f x = (f x':*))" ASSUME_TAC THENL
+X       [EXISTS_TAC "x:*" THEN ASM_REWRITE_TAC[];ALL_TAC] THEN
+X       ASM_REWRITE_TAC[] THEN
+X       FILTER_RULE_ASSUM_TAC [1] SELECT_RULE THEN
+X       FILTER_STRIP_ASSUM_TAC [1] THEN
+X       FILTER_RULE_ASSUM_TAC [1] SYM THEN
+X       RES_TAC THEN
+X       ASM_REWRITE_TAC[]]);;
+X
+Xlet w = "!A B (f:*->*).(( ~(A = BOT)) /\ ((A -->> B) f))  ==>
+X                       (PINVERSE (B,A) (FINV A B f) f)";; 
+X
+Xlet SURJ_FINV =
+X    prove_thm(
+X    `SURJ_FINV`,
+X     w,  
+X     REPEAT GEN_TAC THEN
+X     REWRITE_TAC [FUN_ONTO;PINVERSE;FUN_TY_DEF;o_DEF] THEN
+X     BETA_TAC THEN
+X     REPEAT STRIP_TAC THENL 
+X      [IMP_RES_TAC (REWRITE_RULE[FUN_TY_DEF] FUN_INV_TY);  
+X       RES_TAC;
+X       REWRITE_TAC[FUN_INV] THEN
+X       RES_TAC THEN 
+X       ASM_REWRITE_TAC[] THEN
+X       FILTER_RULE_ASSUM_TAC [1] (SYM o CONJUNCT2 o SELECT_RULE) THEN
+X       ASM_REWRITE_TAC[]]);;  
+X
+Xlet w = "!A B (f:*->*) g.(((A --> B) f) /\ ((B --> A) g) /\ (PINVERSE (A,B) f g)) ==>
+X                 (((A >--> B) f) /\ ((B -->> A) g))";;  
+X
+Xlet INJ_SURJ_PINVERSE = prove_thm(
+X   `INJ_SURJ_PINVERSE`,
+X    w,
+X    REPEAT GEN_TAC THEN 
+X    REWRITE_TAC[FUN_TY_DEF;FUN_ONE_ONE;FUN_ONTO;PINVERSE;o_DEF] THEN     
+X    BETA_TAC THEN 
+X    REPEAT STRIP_TAC THEN 
+X    RES_TAC THENL
+X     [REWRITE_RULE_ASSUM_TAC [3] [5;4] THEN
+X      ASM_REWRITE_TAC[]; 
+X      EXISTS_TAC "f (x:*):*" THEN 
+X      ASM_REWRITE_TAC[]]);; 
+X
+Xlet w = "!A (B:*->bool) f g.((A --> B) f) /\ ((B --> A) g) /\ (INVERSE (A,B) f g) ==>
+X                           (((A <--> B) f) /\ ((B <--> A) g))";;
+X
+Xlet ISO_INVERSE =
+X    prove_thm(
+X    `ISO_INVERSE`,
+X     w, 
+X     REWRITE_TAC[INVERSE;FUN_ISO] THEN
+X     REPEAT STRIP_TAC THEN
+X     NEW_IMP_RES_TAC INJ_SURJ_PINVERSE);;
+X
+X
+Xlet w = "!A (B:*->bool).!f.((A <--> B)f) ==> ((B <--> A) (FINV A B f))";;  
+X
+Xlet ISO_FINV =
+X    prove_thm(
+X   `ISO_FINV`,
+X    w, 
+X    REPEAT GEN_TAC  THEN 
+X    REWRITE_TAC [FUN_ISO] THEN
+X    ASM_CASES_TAC "(A:*->bool) = BOT" THEN
+X    ASM_REWRITE_TAC[BOTTOM_LEFT;BOTTOM_RIGHT] THEN
+X    ASM_CASES_TAC "(B:*->bool) = BOT" THEN
+X    ASM_REWRITE_TAC[BOTTOM_LEFT;BOTTOM_RIGHT] THEN
+X    REPEAT STRIP_TAC THEN
+X    MAP_EVERY IMP_RES_TAC [FUN_TY;FUN_INV_TY;SURJ_FINV;INJ_FINV;INJ_SURJ_PINVERSE]);;
+X
+X
+X
+X
+X
+X
+END_OF_FILE
+if test 10958 -ne `wc -c <'mk_set.ml'`; then
+    echo shar: \"'mk_set.ml'\" unpacked with wrong size!
+fi
+chmod +x 'mk_set.ml'
+# end of 'mk_set.ml'
+fi
+if test -f 'set.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'set.ml'\"
+else
+echo shar: Extracting \"'set.ml'\" \(826 characters\)
+sed "s/^X//" >'set.ml' <<'END_OF_FILE'
+X% FILE		: set.ml						%
+X% DESCRIPTION   : loads the library set into hol.			%
+X%									%
+X% AUTHOR        : T. Kalker						%
+X% DATE		: 18 September 1989						%
+X
+X
+Xif draft_mode() 
+X then  (if mem `set` (parents (current_theory())) 
+X         then
+X           (print_newline();
+X            print_string`set is parent`;
+X            print_newline())
+X         else
+X            (print_newline();
+X             print_string`set declared a new parent`;
+X             print_newline();
+X             new_parent`set`))
+X else (load_theory`set` ? print_newline());;
+X
+Xnew_special_symbol `-->>`;;
+X
+Xnew_special_symbol `>-->`;;   
+X
+Xnew_special_symbol `<-->`;;
+X
+Xload_from_lib false `auxiliary` `functions`;;
+X
+Xautoload_theory(`definition`,`fixpoints`,`BOT`);;
+X
+Xautoload_defs_and_thms `set`;;                      
+X
+Xlet goal = g
+Xand apply  = expandf;;
+END_OF_FILE
+if test 826 -ne `wc -c <'set.ml'`; then
+    echo shar: \"'set.ml'\" unpacked with wrong size!
+fi
+chmod +x 'set.ml'
+# end of 'set.ml'
+fi
+echo shar: End of shell archive.
+exit 0

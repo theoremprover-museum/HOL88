@@ -1,0 +1,3 @@
+\THEOREM HRAT_LT_REFL HREAL
+|- !x. ~x hrat_lt x
+\ENDTHEOREM

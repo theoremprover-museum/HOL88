@@ -1,0 +1,10 @@
+\DOC top_path
+
+\TYPE {top_path : (window_stack -> win_path)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

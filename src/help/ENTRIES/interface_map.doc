@@ -1,0 +1,19 @@
+\DOC interface_map
+
+\TYPE {interface_map : (void -> (string # string) list)}
+
+\SYNOPSIS
+Returns the current interface map.
+
+\DESCRIBE
+A call {interface_map()} will return the current interface map. This is a list
+of string pairs which specify different toplevel representations for constants;
+see the DESCRIPTION for further details.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+set_interface_map.
+
+\ENDDOC

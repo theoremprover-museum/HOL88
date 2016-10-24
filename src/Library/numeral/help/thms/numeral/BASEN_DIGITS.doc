@@ -1,0 +1,6 @@
+\THEOREM BASEN_DIGITS numeral
+|- !n m r.
+    1 < r ==>
+    (LENGTH(BASEN_DIGITS r n m) = n) /\
+    (BASEN r(BASEN_DIGITS r n m) = m MOD (r EXP n))
+\ENDTHEOREM

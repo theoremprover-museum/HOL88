@@ -1,0 +1,3 @@
+\THEOREM NULL_FOLDL list
+|- !l. NULL l = FOLDL(\x l'. F)T l
+\ENDTHEOREM

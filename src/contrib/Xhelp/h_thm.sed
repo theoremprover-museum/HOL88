@@ -1,0 +1,9 @@
+
+# SED SCRIPT TO PROCESS THEOREM DOCUMENTATION
+
+/\\none/s/\\none//g
+
+/^\\THEOREM/s/^\\THEOREM[ ]*//
+
+/\\ENDTHEOREM.*/,$d
+

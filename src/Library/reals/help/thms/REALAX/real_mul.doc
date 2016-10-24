@@ -1,0 +1,6 @@
+\THEOREM real_mul REALAX
+|- !g00027 g00028.
+    g00027 * g00028 =
+    mk_real
+    ($treal_eq(($@(dest_real g00027)) treal_mul ($@(dest_real g00028))))
+\ENDTHEOREM

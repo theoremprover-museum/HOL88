@@ -1,0 +1,3 @@
+\THEOREM NULL_FOLDR list
+|- !l. NULL l = FOLDR(\x l'. F)T l
+\ENDTHEOREM

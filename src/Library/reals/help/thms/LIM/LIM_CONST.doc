@@ -1,0 +1,3 @@
+\THEOREM LIM_CONST LIM
+|- !k x. ((\x. k) --> k)x
+\ENDTHEOREM

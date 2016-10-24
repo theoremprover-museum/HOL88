@@ -1,0 +1,4 @@
+\THEOREM REPLICATE list
+|- (!x. REPLICATE 0 x = []) /\
+   (!n x. REPLICATE(SUC n)x = CONS x(REPLICATE n x))
+\ENDTHEOREM

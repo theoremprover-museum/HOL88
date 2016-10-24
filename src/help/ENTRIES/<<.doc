@@ -1,0 +1,26 @@
+\DOC <<
+
+\TYPE {$<< : ((* # **) -> bool)}
+
+\SYNOPSIS
+Performs a lexical comparison of values.
+
+\KEYWORDS
+address, order.
+
+\DESCRIBE
+{$<<} performs a fast ordering on values.  It is substitutive with
+respect to equality in ML (i.e. if {x << y} and {x = x'} and {y = y'}
+then {x' << y'}).
+
+\FAILURE
+Never fails.
+
+\USES
+It is often useful, for example in normalizing terms in some way, to be able to
+impose some arbitrary (but definite) ordering on ML values.
+
+\SEEALSO
+=.
+
+\ENDDOC

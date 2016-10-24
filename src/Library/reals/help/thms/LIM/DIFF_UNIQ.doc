@@ -1,0 +1,3 @@
+\THEOREM DIFF_UNIQ LIM
+|- !f l m x. (f diffl l)x /\ (f diffl m)x ==> (l = m)
+\ENDTHEOREM

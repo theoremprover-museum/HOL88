@@ -1,0 +1,5 @@
+\THEOREM NET_ABS NETS
+|- !x x0.
+    (x tends x0)(mtop mr1,g) ==>
+    ((\n. abs(x n)) tends (abs x0))(mtop mr1,g)
+\ENDTHEOREM

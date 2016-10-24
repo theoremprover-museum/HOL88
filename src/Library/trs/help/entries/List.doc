@@ -1,0 +1,21 @@
+\DOC List
+
+\TYPE {List : (foundthm list -> source)}
+
+\SYNOPSIS
+Generates a source for a search from a list of previously found theorems.
+
+\LIBRARY trs
+
+\DESCRIBE
+A {source} for a search can be either a list of search paths, or a list of
+theorems found on a previous search. {List} generates a {source} of the second
+kind.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+List_from, Paths.
+
+\ENDDOC

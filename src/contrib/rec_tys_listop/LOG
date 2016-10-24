@@ -1,0 +1,350 @@
+echo    'set_flag(`abort_when_fail`,true);;\
+                compilet `rt_lop_tydefs`;;\
+                quit();;' | /usr/groups/hol/HOL21/sun4/hol
+
+
+===============================================================================
+         HOL88 Version 2.01 (SUN4/AKCL), built on 4/12/92
+===============================================================================
+
+#false : bool
+
+#
+
+ignore = - : (string -> bool)
+
+is_sing = - : (string -> bool)
+
+getid = - : (string -> string list -> (string # string list))
+
+gettyvid = - : (string -> string list -> (string # string list))
+
+gnt = 
+-
+: (string list -> ((string + string + string + void) # string list))
+
+isid = - : ((* + **) -> bool)
+istyvar = - : ((* + ** + ***) -> bool)
+is = - : ((* + ** + *** + ****) -> *** -> bool)
+end = - : ((* + ** + *** + ****) -> bool)
+
+istyop = - : ((string + *) -> bool)
+
+ckrb = - : ((* + ** + string + ***) -> (* + ** + string + ***))
+
+mk_ty = - : ((string # type list) -> type)
+
+parse_types = 
+-
+: (string -> string list -> ((type + void + void) list # string list))
+
+parse_clause = 
+-
+: (string ->
+   string ->
+   string list ->
+   string list ->
+   (string # (type + void + void) list # string list))
+
+parse_clauses = 
+-
+: (string ->
+   string list ->
+   string list ->
+   (string # (type + void + void) list) list)
+
+parse_input = 
+-
+: (string -> (string # (string # (type + void + void) list) list))
+
+pargs = - : ((* + ** + ***) list -> (* list # term # bool))
+
+mk_tuple_ty = - : (type list -> type)
+
+mk_tuple = - : (term list -> term)
+
+mk_sum_ty = - : (type list -> type)
+
+inject = - : (type -> term list -> term list)
+
+mkvars = - : (type list -> term list)
+
+mk_subset_pred = - : ((type + * + **) list list -> term)
+
+splitf = - : ((* -> bool) -> * list -> (* list # * # * list))
+
+prove_existence_thm = - : conv
+
+variant_tyvar = - : (type list -> string list -> type)
+
+OR_IMP_CONV = - : conv
+
+FORALL_IN_CONV = - : conv
+
+CONJS_CONV = - : (conv -> conv)
+
+EQN_ELIM_CONV = - : conv
+
+LENGTH_MAP_CONV = - : (thm -> conv)
+
+Theorem CONS_11 autoloading from theory `list` ...
+CONS_11 = |- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+
+Theorem INV_SUC_EQ autoloading from theory `prim_rec` ...
+INV_SUC_EQ = |- !m n. (SUC m = SUC n) = (m = n)
+
+Theorem NOT_LESS_0 autoloading from theory `prim_rec` ...
+NOT_LESS_0 = |- !n. ~n < 0
+
+Theorem NOT_SUC autoloading from theory `num` ...
+NOT_SUC = |- !n. ~(SUC n = 0)
+
+Theorem list_INDUCT autoloading from theory `list` ...
+list_INDUCT = 
+|- !P. P[] /\ (!t. P t ==> (!h. P(CONS h t))) ==> (!l. P l)
+
+Theorem LESS_MONO_EQ autoloading from theory `arithmetic` ...
+LESS_MONO_EQ = |- !m n. (SUC m) < (SUC n) = m < n
+
+Definition LENGTH autoloading from theory `list` ...
+LENGTH = |- (LENGTH[] = 0) /\ (!h t. LENGTH(CONS h t) = SUC(LENGTH t))
+
+Definition GREATER autoloading from theory `arithmetic` ...
+GREATER = |- !m n. m > n = n < m
+
+Definition GREATER_OR_EQ autoloading from theory `arithmetic` ...
+GREATER_OR_EQ = |- !m n. m >= n = m > n \/ (m = n)
+
+LENGTH_GEQ_CONS = 
+|- !P n.
+    (!l. (LENGTH l) >= (SUC n) ==> P l) =
+    (!l. (LENGTH l) >= n ==> (\l. !x. P(CONS x l))l)
+
+Theorem LESS_0 autoloading from theory `prim_rec` ...
+LESS_0 = |- !n. 0 < (SUC n)
+
+VACUOUS = |- !l. (LENGTH l) >= 0
+
+GEQ_lnil = |- !P. (!l. (LENGTH l) >= 0 ==> P l) = (!l. P l)
+
+LENGTH_ELIM_CONV = - : conv
+
+MAP_CONV = - : conv
+
+ELIM_MAP_CONV = - : conv
+
+TRANSFORM = - : (term -> thm -> (term # thm))
+
+part = - : (int -> * list -> (* list # * list))
+
+define_const = - : ((string # (* + ** + ***) list # term) -> thm)
+
+DEFINE_CONSTRUCTORS = 
+-
+: (string list -> (* + ** + ***) list list -> thm -> thm)
+
+mk_tests = - : (* list -> type -> (term # term list))
+
+mk_proj = - : (term -> * list -> type -> term list)
+
+extract_list = - : (type -> term -> term -> term list)
+
+strip_inj = - : (term -> term)
+
+extract_tuple = - : (type -> term -> term -> term list)
+
+gen_names = - : ((bool # bool) -> * list list -> string list)
+
+mk_fun_ty = - : (term -> type -> type)
+
+make_rhs = 
+-
+: (type ->
+   term ->
+   term ->
+   (bool # term # string # term list) ->
+   (term # term))
+
+make_conditional = - : (term list -> term list -> term)
+
+make_function = - : ((* + **) list list -> thm -> goal)
+
+PROJ_CONV = - : conv
+
+TEST_SIMP_CONV = - : conv
+
+LIST_ELS = - : (term -> thm list)
+
+GEN_PROJ_CONV = - : conv
+
+TUPLE_COMPS = - : (thm -> thm list)
+
+SIMP_CONV = - : conv
+
+SIMPLIFY = - : (thm -> thm)
+
+define_type = - : (string -> string -> thm)
+
+- : (string -> string -> thm)
+
+
+define_type = - : (string -> string -> thm)
+
+Calling Lisp compiler
+
+File rt_lop_tydefs compiled
+() : void
+
+##Bye.
+echo    'set_flag(`abort_when_fail`,true);;\
+                compilet `rt_lop_prim_rec`;;\
+                quit();;' | /usr/groups/hol/HOL21/sun4/hol
+
+
+===============================================================================
+         HOL88 Version 2.01 (SUN4/AKCL), built on 4/12/92
+===============================================================================
+
+#false : bool
+
+#
+remove = - : ((* -> bool) -> * list -> (* # * list))
+
+
+derive_existence_thm = - : (thm -> conv)
+
+mk_fn = 
+-
+: ((term # term # term list # term # goal) -> (term # term list # thm))
+
+instantiate_existence_thm = - : (thm -> conv)
+
+ETA_THM = |- !fn lst. MAP(\x. fn x)lst = MAP fn lst
+
+closeup = - : (term -> term)
+
+prove_rec_fn_exists = - : (thm -> conv)
+
+- : (thm -> conv)
+
+
+prove_rec_fn_exists = - : (thm -> conv)
+
+new_recursive_definition = - : (bool -> thm -> string -> conv)
+
+Calling Lisp compiler
+
+File rt_lop_prim_rec compiled
+() : void
+
+##Bye.
+echo    'set_flag(`abort_when_fail`,true);;\
+                compilet `rt_lop_tyfns`;;\
+                quit();;' | /usr/groups/hol/HOL21/sun4/hol
+
+
+===============================================================================
+         HOL88 Version 2.01 (SUN4/AKCL), built on 4/12/92
+===============================================================================
+
+#false : bool
+
+#
+() : void
+
+
+UNIQUENESS = - : (thm -> thm)
+
+DEPTH_FORALL_CONV = - : (conv -> conv)
+
+CONJS_CONV = - : (conv -> conv)
+
+CONJS_SIMP = - : (conv -> conv)
+
+T_AND_CONV = - : conv
+
+GENL_T = - : (term list -> thm)
+
+Definition EVERY_DEF autoloading from theory `list` ...
+EVERY_DEF = 
+|- (!P. EVERY P[] = T) /\ (!P h t. EVERY P(CONS h t) = P h /\ EVERY P t)
+
+Theorem I_THM autoloading from theory `combin` ...
+I_THM = |- !x. I x = x
+
+Definition MAP autoloading from theory `list` ...
+MAP = 
+|- (!f. MAP f[] = []) /\ (!f h t. MAP f(CONS h t) = CONS(f h)(MAP f t))
+
+EVERY_I_MAP_THM = |- !l. EVERY I(MAP(\x. T)l) = T
+
+EVERY_I_MAP_CONV = - : conv
+
+SIMP_CONV = - : conv
+
+EVERY_I_MAP_P = |- !P l. EVERY I(MAP P l) = EVERY P l
+
+EVERY_I_MAP_P_CONV = - : conv
+
+HYP_SIMP = - : conv
+
+ANTE_ALL_CONV = - : conv
+
+CONCL_SIMP = - : conv
+
+prove_induction_thm = - : (thm -> thm)
+
+- : (thm -> thm)
+
+
+prove_induction_thm = - : (thm -> thm)
+
+
+NOT_ALL_THENC = - : (conv -> conv)
+
+BASE_CONV = - : conv
+
+STEP_CONV = - : conv
+
+NOT_IN_CONV = - : conv
+
+STEP_SIMP = - : conv
+
+DISJS_CHAIN = - : (conv -> thm -> thm)
+
+prove_cases_thm = - : (thm -> thm)
+
+- : (thm -> thm)
+
+
+prove_cases_thm = - : (thm -> thm)
+
+
+PAIR_EQ_CONV = - : conv
+
+list_variant = - : (term list -> term list -> term list)
+
+prove_const_one_one = - : (thm -> conv)
+
+prove_constructors_one_one = - : (thm -> thm)
+
+- : (thm -> thm)
+
+
+prove_constructors_one_one = - : (thm -> thm)
+
+Theorem INV_SUC autoloading from theory `num` ...
+INV_SUC = |- !m n. (SUC m = SUC n) ==> (m = n)
+
+Theorem NOT_SUC autoloading from theory `num` ...
+NOT_SUC = |- !n. ~(SUC n = 0)
+
+prove_constructors_distinct = - : (thm -> thm)
+
+Calling Lisp compiler
+
+File rt_lop_tyfns compiled
+() : void
+
+##Bye.
+===> rec_tys_listop object code rebuilt

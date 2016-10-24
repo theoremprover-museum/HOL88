@@ -1,0 +1,581 @@
+% =====================================================================
+% HOL Course Slides: introduction to ML		      (c) T melham 1990
+% =====================================================================
+
+\documentstyle[alltt,12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Introduction to ML}{4}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+A Brief\\
+Introduction to ML
+\esectitle
+
+% =====================================================================
+\slide{The ML Programming Language}
+
+\point{Functional programming language.}
+\point{Normally used interactively.}
+\point{Strongly typed, with:}
+   \subpoint{type inference,}
+   \subpoint{abstract data types, and}
+   \subpoint{polymorphic types.}
+\point{Has exception-handling mechanisms.}
+
+\vskip5mm
+
+\point{ML is the meta-language for HOL.}
+\point{Note: the ML of HOL88 is \underline{not} SML.}
+
+
+% =====================================================================
+\slide{Evaluation and Bindings}
+
+\point{Evaluation:}
+
+\begin{session}\begin{verbatim}
+#2 + 3;;   
+5 : int
+
+#rev [1;2;3;4;5];;
+[5; 4; 3; 2; 1] : int list
+\end{verbatim}\end{session}
+
+\point{Simple bindings:}
+
+\begin{session}\begin{verbatim}
+#let n = 8 * 2 + 5;;
+n = 21 : int
+
+#n * 2;;
+42 : int
+\end{verbatim}\end{session}
+
+\point{The special identifier `{\tt it}':}
+
+\begin{session}\begin{verbatim}
+#it;;
+42 : int
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Multiple and Local Bindings}
+
+\point{Multiple bindings:}
+
+\begin{session}\begin{verbatim}
+#let one = 1 and two = 2;;
+one = 1 : int
+two = 2 : int
+\end{verbatim}\end{session}
+
+\point{Local bindings:}
+
+\begin{session}\begin{verbatim}
+#let n = 0;;
+n = 0 : int
+
+#let n = 12 in n/6;;
+2 : int
+
+#n;;
+0 : int
+\end{verbatim}\end{session}
+
+\point{Multiple local bindings:}
+
+\begin{session}\begin{verbatim}
+#let n = 5 and m = 6 in n + m;;
+11 : int
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Integers and Booleans}
+
+\point{Operations on integers:}
+
+\begin{session}\begin{verbatim}
+#let n = 2 + (3 * 4);;
+n = 14 : int
+
+#let n = (10 / 2) - 7;;
+n = -2 : int
+\end{verbatim}\end{session}
+
+
+\point{Operations on booleans:}
+
+\begin{session}\begin{verbatim}
+#let b1 = true and b2 = false;;
+b1 = true : bool
+b2 = false : bool
+
+#1 = (1 + 1);;
+false : bool
+
+#not (b1 or b2);;
+false : bool
+
+#(7 < 3) & (false or 2 > 0);;
+true : bool
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Defining Functions}
+
+\point{One argument:}
+
+\begin{session}\begin{verbatim}
+#let f n = n + n;;
+f = - : (int -> int)
+
+#f 22;;
+44 : int
+\end{verbatim}\end{session}
+
+\point{Two or more arguments:}
+
+\begin{session}\begin{verbatim}
+#let plus(n,m) = n + m;;
+plus = - : ((int # int) -> int)
+
+#plus (1,2);;
+3 : int
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Curried Functions}
+
+\point{Curried addition:}
+
+\begin{session}\begin{verbatim}
+#let plus n m = n + m;;
+plus = - : (int -> int -> int)
+
+#plus 1 2;;
+3 : int
+\end{verbatim}\end{session}
+
+\point{Partial application:}
+
+\begin{session}\begin{verbatim}
+#let inc = plus 1;;
+inc = - : (int -> int)
+
+#inc 7;;
+8 : int
+\end{verbatim}\end{session}
+
+\point{Higher-order functions:}
+
+\begin{session}\begin{verbatim}
+#let foo f n = (f(n+1)) / 2 ;;
+foo = - : ((int -> int) -> int -> int)
+
+#foo inc 3;;
+2 : int
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Defining Recursive Functions}
+
+\point{{\tt let} won't define recursive functions:}
+
+\begin{session}\begin{verbatim}
+#let f n = n + n;;
+f = - : (int -> int)
+
+#let f n = if (n=0) then 1 else n * f(n-1);;
+f = - : (int -> int)
+
+#f 3;;
+12 : int
+\end{verbatim}\end{session}
+
+\point{Defining recursive functions, {\tt letrec}:}
+
+\begin{session}\begin{verbatim}
+#letrec f n = if (n=0) then 1 else n * f(n-1);;
+f = - : (int -> int)
+
+#f 3;;
+6 : int
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Lambda Abstractions}
+
+\point{The increment function:}
+
+\begin{session}\begin{verbatim}
+#\x. x + 1;;
+- : (int -> int)
+
+#(\x. x + 1) 2;;
+3 : int
+\end{verbatim}\end{session}
+
+\point{Curried multiplication:}
+
+\begin{session}\begin{verbatim}
+#\x. \y. x * y;;
+- : (int -> int -> int)
+
+#let double = (\x. \y. x * y) 2;;
+double = - : (int -> int)
+
+#double 22;;
+44 : int
+\end{verbatim}\end{session}
+
+\point{Abbreviation:}
+\begin{session}\begin{verbatim}
+#\x y. x * y;;
+- : (int -> int -> int)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Other Data Types}
+
+\point{Strings:}
+\begin{session}\begin{verbatim}
+#`abc`;;
+`abc` : string
+
+#ascii;;
+- : (int -> string)
+
+#ascii 97;;
+`a` : string
+\end{verbatim}\end{session}
+
+\point{Void:}
+
+\begin{session}\begin{verbatim}
+#();;
+() : void
+
+#quit;;
+- : (void -> void)
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Lists}
+
+\point{Head and tail:}
+
+\begin{session}\begin{verbatim}
+#let l = [2;3;2+3];;
+l = [2; 3; 5] : int list
+
+#hd l;;
+2 : int
+
+#tl l;;
+[3; 5] : int list
+\end{verbatim}\end{session}
+
+\point{Cons and concatenation:}
+\begin{session}\begin{verbatim}
+#9 . l;;
+[9; 2; 3; 5] : int list
+
+#[true;false] @ [false;true];;
+[true; false; false; true] : bool list
+\end{verbatim}\end{session}
+
+\point{Empty lists:}
+\begin{session}\begin{verbatim}
+#null l;;
+false : bool
+
+#null [];;
+true : bool
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Pairs}
+
+\point{Notation:}
+
+\begin{session}\begin{verbatim}
+#let p = (2,3);;
+p = (2, 3) : (int # int)
+
+#fst p;;
+2 : int
+
+#snd p;;
+3 : int
+\end{verbatim}\end{session}
+
+\point{Right associativity:}
+
+\begin{session}\begin{verbatim}
+#fst (2,3,4);;
+2 : int
+
+#snd(2,3,4);;
+(3, 4) : (int # int)
+\end{verbatim}\end{session}
+
+\point{Example:}
+\begin{session}\begin{verbatim}
+#let swap p = (snd p, fst p);;
+rev = - : ((* # **) -> (** # *))
+
+#rev p;;
+(3, 2) : (int # int)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Polymorphism}
+
+\point{Example: the function {\tt hd}}
+
+\begin{session}\begin{verbatim}
+#hd [2;3];;
+2 : int
+
+#hd [true;false];;
+true : bool
+\end{verbatim}\end{session}
+\vskip1mm
+\bpindent\LARGE\bf
+What is the type of {\tt hd}:
+\epindent
+\vskip7mm
+\bspindent\LARGE
+\bf \verb!int list -> int! or  \verb!bool list -> bool!?
+\espindent
+\vskip5mm
+
+\point{The function {\tt hd} has both these types:}
+
+\begin{session}\begin{verbatim}
+#hd;;
+- : (* list -> *)
+\end{verbatim}\end{session}
+\vskip1mm
+\bpindent\LARGE\bf
+The `{\tt *}' here is a type variable.
+\epindent
+
+\vskip5mm
+
+
+\point{That is, {\tt hd} can have any type of the form}
+\vskip7mm
+\bspindent\LARGE
+ {\tt $\sigma$ list -> $\sigma$} 
+\espindent 
+\vskip7mm
+\bpindent\LARGE\bf
+where $\sigma$ is an ML type. 
+\epindent
+
+
+% =====================================================================
+\slide{Type Inference}
+
+\point{ML infers the most general type.}
+
+\vskip4mm
+
+\point{For example, the mapping function:}
+\begin{session}\begin{verbatim}
+#letrec map f l =
+        if (null l)
+           then []
+           else f(hd l).(map f (tl l));;
+map = - : ((* -> **) -> * list -> ** list)
+
+#map (\x.0);;
+- : (* list -> int list)
+\end{verbatim}\end{session}
+
+\point{Function composition:}
+\begin{session}\begin{verbatim}
+#let comp f g x = f(g x);;
+comp = - : ((* -> **) -> (*** -> *) -> *** -> **)
+
+#comp null (map \y.y+1);;
+- : (int list -> bool)
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Exception Handling}
+
+\point{Failure:}
+
+\begin{session}\begin{verbatim}
+#hd [];;
+evaluation failed     hd
+
+#1 / 0;;
+evaluation failed     div
+\end{verbatim}\end{session}
+
+\point{Explicitly generating failure}
+\begin{session}\begin{verbatim}
+#failwith `foo`;;
+evaluation failed     foo
+
+#letrec fact n =
+    if (n<0)
+       then failwith `negative argument to fact`
+       else if (n=0) then 1 else n * fact(n-1);;
+fact = - : (int -> int)
+
+#fact (-1);;
+evaluation failed     negative argument to fact
+\end{verbatim}\end{session}
+
+\point{Trapping failure:}
+\begin{session}\begin{verbatim}
+#hd [] ? 99;;
+99 : int
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Common Errors}
+
+\point{Unbound variable:}
+\begin{session}\begin{verbatim}
+#foo;;
+
+unbound or non-assignable variable foo
+1 error in typing
+typecheck failed     
+\end{verbatim}\end{session}
+
+\point{Type violation:}
+\begin{session}\begin{verbatim}
+#hd 2;;
+
+ill-typed phrase: 2
+has an instance of type  int
+which should match type  * list
+1 error in typing
+typecheck failed     
+\end{verbatim}\end{session}
+
+\point{Mismatched parentheses}
+\begin{session}\begin{verbatim}
+#let f x = (x + 2;;
+bad paren balance
+skipping: 2 ;; parse failed     
+
+#let f x = x + 2);;
+non top level decln must have IN clause
+skipping: 2 ) ;; parse failed     
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Some System Functions}
+
+
+\point{Load a file called {\tt foo.ml}:}
+
+\begin{session}\begin{alltt}
+#load;;
+- : ((string # bool) -> void)
+
+#load(`foo`, false);;
+......() : void
+
+#load(`foo`,true);;
+      \(\vdots\)   
+   {\it (output from evaluating contents of{\tt foo})}
+File foo loaded
+() : void
+\end{alltt}\end{session}
+
+\point{Get online help:}
+\begin{session}\begin{alltt}
+#help;;
+- : (string -> void)
+
+#help `item`;;
+      \(\vdots\)
+   {\it (prints information about{\tt item})}
+() : void
+\end{alltt}\end{session}
+
+\point{Terminate the session:}
+
+\begin{session}\begin{alltt}
+#quit();;
+\end{alltt}\end{session}
+
+
+% =====================================================================
+\slide{Summary}
+
+\def\bk{{\tt\char`\\ }}
+\def\_{\char'137}
+
+\point{Bindings}
+
+  \subpoint{{\tt let $x_1$ = $e_1$ and $\dots$ and $x_n$ = $e_n$;;}}
+  \subpoint{{\tt let $x_1$ = $e_1$ and $\dots$ and $x_n$ = $e_n$ in $e$;;}}
+
+\point{Defining functions}
+
+  \subpoint{{\tt let f $v_1$ $\dots$ $v_n$ = $e$;;}}
+  \subpoint{{\tt letrec f $v_1$ $\dots$ $v_n$ = $e$;;}}
+
+\point{Lambda abstractions}
+
+  \subpoint{{\tt \bk $v_1$ $\dots$ $v_n$ .\ $e$}}
+
+\point{Data types}
+
+  \subpoint{{\tt bool}, {\tt int}, {\tt string}, {\tt void}}
+  \subpoint{{\tt * list}, {\tt * \# **}, {\tt * -> **}}
+
+\point{Exception handling}
+
+\subpoint{{\tt $e_1$ ?\ $e_2$}, {\tt failwith `{\it string}`}}
+
+\point{Useful system functions}
+
+  \subpoint{{\tt load}, {\tt help}, {\tt quit}}
+
+
+\end{document}
+

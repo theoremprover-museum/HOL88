@@ -1,0 +1,26 @@
+\DOC GEN_ALL
+
+\TYPE {GEN_ALL : (thm -> thm)}
+
+\SYNOPSIS
+Generalizes the conclusion of a theorem over its own free variables.
+
+\KEYWORDS
+rule, quantifier, universal.
+
+\DESCRIBE
+When applied to a theorem {A |- t}, the inference rule {GEN_ALL} returns
+the theorem {A |- !x1...xn. t}, where the {xi} are all the variables,
+if any, which are free in {t} but not in the assumptions.
+{
+         A |- t
+   ------------------  GEN_ALL
+    A |- !x1...xn. t
+}
+\FAILURE
+Never fails.
+
+\SEEALSO
+GEN, GENL, GEN_ALL, SPEC, SPECL, SPEC_ALL, SPEC_TAC.
+
+\ENDDOC

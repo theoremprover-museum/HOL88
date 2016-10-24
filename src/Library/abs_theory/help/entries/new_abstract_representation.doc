@@ -1,0 +1,22 @@
+\DOC new_abstract_representation
+
+\TYPE {new_abstract_representation : string -> (string # type) list -> thm}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Declares a new abstract representation.
+
+\DESCRIBE
+A call to {new_abstract_representation name decl} creates a new abstract
+structure with the name {name} using the declaration list {decl}, where
+{decl} is a list of string--type pairs giving the name and type of the
+constituent abstract objects.  
+The structure name, {name}, is used as the constructor when building
+representations. 
+The returned theorem is used by the function {abs_type_info}.
+
+\FAILURE
+Fails if any of the names have been used in the theory segment.  
+
+\ENDDOC

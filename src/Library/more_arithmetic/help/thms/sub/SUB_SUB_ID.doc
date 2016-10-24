@@ -1,0 +1,3 @@
+\THEOREM SUB_SUB_ID sub
+|- !k l. l < k ==> (k - (k - l) = l)
+\ENDTHEOREM

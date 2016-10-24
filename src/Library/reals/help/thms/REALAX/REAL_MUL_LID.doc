@@ -1,0 +1,3 @@
+\THEOREM REAL_MUL_LID REALAX
+|- !x. r1 * x = x
+\ENDTHEOREM

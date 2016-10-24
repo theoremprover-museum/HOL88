@@ -1,0 +1,21 @@
+\DOC remove_sticky_type
+
+\TYPE {remove_sticky_type : (string -> type)}
+
+\SYNOPSIS
+Removes a sticky type from a given variable.
+
+\DESCRIBE
+A call {remove_sticky_type name} will remove any sticky type from {name},
+whether this was inferred automatically as a result of the setting of the
+{sticky} flag, or given explicitly by the {set_sticky_type} function. It
+returns the sticky type which was associated with that name. For more
+details of the sticky type mechanism, refer to the DESCRIPTION.
+
+\FAILURE
+Fails if the name was not associated with a sticky type.
+
+\SEEALSO
+set_sticky_type, sticky_list.
+
+\ENDDOC

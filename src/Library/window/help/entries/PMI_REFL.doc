@@ -1,0 +1,19 @@
+\DOC PMI_REFL
+
+\TYPE {PMI_REFL : conv}
+
+\SYNOPSIS
+Returns a theorem expressing the reflexivity of backward implication.
+
+\LIBRARY window
+
+\DESCRIBE
+{
+------------ PMI_REFL "t"
+ |- t <== t
+}
+
+\SEEALSO
+REFL, IMP_REFL, PMI_DEF
+
+\ENDDOC

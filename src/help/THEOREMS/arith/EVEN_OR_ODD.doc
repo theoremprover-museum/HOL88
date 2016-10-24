@@ -1,0 +1,3 @@
+\THEOREM EVEN_OR_ODD arithmetic
+|- !n. EVEN n \/ ODD n
+\ENDTHEOREM

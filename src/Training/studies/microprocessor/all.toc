@@ -1,0 +1,66 @@
+\contentsline {section}{\numberline {1}Introduction}{5}
+\contentsline {subsection}{\numberline {1.1}Overview}{7}
+\contentsline {subsection}{\numberline {1.2}Notation}{8}
+\contentsline {subsection}{\numberline {1.3}Supporting files}{8}
+\contentsline {section}{\numberline {2}Programming level model}{9}
+\contentsline {subsection}{\numberline {2.1}Basic data types and primitive operations}{10}
+\contentsline {subsection}{\numberline {2.2}Externally visible state}{11}
+\contentsline {subsection}{\numberline {2.3}Instruction word format}{11}
+\contentsline {subsection}{\numberline {2.4}Instruction set semantics}{12}
+\contentsline {subsection}{\numberline {2.5}Hardware interrupts}{14}
+\contentsline {section}{\numberline {3}Memory interface}{15}
+\contentsline {subsection}{\numberline {3.1}Fully synchronous mode}{15}
+\contentsline {subsection}{\numberline {3.2}Fully asynchronous mode}{16}
+\contentsline {subsection}{\numberline {3.3}Extended cycle mode}{18}
+\contentsline {section}{\numberline {4}Internal architecture}{18}
+\contentsline {subsection}{\numberline {4.1}Register-transfer level structure}{19}
+\contentsline {subsection}{\numberline {4.2}Overview of instruction interpretation}{19}
+\contentsline {subsection}{\numberline {4.3}Multiple interpretation levels}{22}
+\contentsline {subsubsection}{\numberline {4.3.1}Microprogramming level}{23}
+\contentsline {subsubsection}{\numberline {4.3.2}Phase level}{26}
+\contentsline {subsection}{\numberline {4.4}Some bottom level assumptions}{29}
+\contentsline {section}{\numberline {5}Abstract description and specification}{30}
+\contentsline {subsection}{\numberline {5.1}Motivation}{30}
+\contentsline {subsection}{\numberline {5.2}Formal basis}{32}
+\contentsline {section}{\numberline {6}Formal specification}{36}
+\contentsline {subsection}{\numberline {6.1}Specifying structure and behaviour}{36}
+\contentsline {subsection}{\numberline {6.2}Internal architecture}{37}
+\contentsline {subsubsection}{\numberline {6.2.1}Primitive components of the datapath}{37}
+\contentsline {subsubsection}{\numberline {6.2.2}Modelling system bus operation}{38}
+\contentsline {subsubsection}{\numberline {6.2.3}More primitive components of the datapath}{40}
+\contentsline {subsubsection}{\numberline {6.2.4}Datapath implementation}{41}
+\contentsline {subsubsection}{\numberline {6.2.5}Microcode source and micro-assembler}{42}
+\contentsline {subsubsection}{\numberline {6.2.6}Primitive components of the control unit}{47}
+\contentsline {subsubsection}{\numberline {6.2.7}Control unit implementation}{48}
+\contentsline {subsubsection}{\numberline {6.2.8}Top level structure}{48}
+\contentsline {subsection}{\numberline {6.3}Programming level model}{49}
+\contentsline {subsection}{\numberline {6.4}External memory specification}{53}
+\contentsline {section}{\numberline {7}Verification plan and methodology}{53}
+\contentsline {subsection}{\numberline {7.1}Stating correctness results}{53}
+\contentsline {subsection}{\numberline {7.2}Multi-level verification}{54}
+\contentsline {subsection}{\numberline {7.3}Symbolic execution}{55}
+\contentsline {section}{\numberline {8}Formal verification: `bread and butter' method}{56}
+\contentsline {subsection}{\numberline {8.1}Phase level}{56}
+\contentsline {subsection}{\numberline {8.2}Microprogramming level}{65}
+\contentsline {subsection}{\numberline {8.3}Completing the proof}{74}
+\contentsline {section}{\numberline {9}Synchronizing multiple levels of timing}{79}
+\contentsline {section}{\numberline {10}Using temporal logic to deal with asynchrony}{85}
+\contentsline {subsection}{\numberline {10.1}Specification using temporal logic operators}{86}
+\contentsline {subsection}{\numberline {10.2}Embedding temporal logic in higher-order logic}{87}
+\contentsline {subsection}{\numberline {10.3}Sender and receiver specifications}{89}
+\contentsline {subsection}{\numberline {10.4}Memory specification}{90}
+\contentsline {subsection}{\numberline {10.5}Verification}{91}
+\contentsline {subsubsection}{\numberline {10.5.1}Phase level}{91}
+\contentsline {subsubsection}{\numberline {10.5.2}Implementation of the sender specification}{92}
+\contentsline {subsubsection}{\numberline {10.5.3}Collapsing repeat-loops to single steps}{92}
+\contentsline {subsubsection}{\numberline {10.5.4}Symbolic execution}{94}
+\contentsline {subsubsection}{\numberline {10.5.5}Top level correctness statement}{95}
+\contentsline {section}{\numberline {11}What has been proved ?}{96}
+\contentsline {section}{\numberline {12}Relating this proof to other levels}{98}
+\contentsline {subsection}{\numberline {12.1}Lower levels}{98}
+\contentsline {subsection}{\numberline {12.2}Higher levels}{101}
+\contentsline {section}{\numberline {13}Summary}{103}
+\contentsline {section}{\numberline {14}References}{105}
+\contentsline {section}{\numberline {15}Suggested exercises}{110}
+\contentsline {section}{\numberline {A}Appendix: phase level correctness results}{111}
+\contentsline {section}{\numberline {B}Appendix: asynchronous memory specification}{119}

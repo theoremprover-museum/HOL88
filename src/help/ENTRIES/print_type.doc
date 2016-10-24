@@ -1,0 +1,25 @@
+\DOC print_type
+
+\TYPE {print_type : (type -> void)}
+
+\SYNOPSIS
+Prints a HOL type to the terminal.
+
+\DESCRIBE
+{print_type ty} returns {():void} with the side-effect of printing the value
+of {ty} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#print_type ":bool";;
+":bool"() : void
+}
+\SEEALSO
+print_begin, print_end, print_newline, print_term, print_thm.
+
+\ENDDOC

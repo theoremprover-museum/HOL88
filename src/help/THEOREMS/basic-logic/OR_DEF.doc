@@ -1,0 +1,3 @@
+\THEOREM OR_DEF bool
+|- $\/ = (\t1 t2. !t. (t1 ==> t) ==> (t2 ==> t) ==> t)
+\ENDTHEOREM

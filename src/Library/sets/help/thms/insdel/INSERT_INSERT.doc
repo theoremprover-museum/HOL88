@@ -1,0 +1,3 @@
+\THEOREM INSERT_INSERT sets
+|- !x s. x INSERT (x INSERT s) = x INSERT s
+\ENDTHEOREM

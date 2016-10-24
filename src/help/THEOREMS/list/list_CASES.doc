@@ -1,0 +1,3 @@
+\THEOREM list_CASES list
+|- !l. (l = []) \/ (?t h. l = CONS h t)
+\ENDTHEOREM

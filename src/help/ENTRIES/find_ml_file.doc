@@ -1,0 +1,34 @@
+\DOC find_ml_file
+
+\TYPE {find_ml_file: (string -> string)}
+
+\SYNOPSIS
+Searches for a named {ML} file.
+
+\DESCRIBE
+Given a {`.ml`} suffixed string {`foo.ml`}, {find_ml_file} searches for the
+{ML} source file {foo.ml}. If the given string does not have a {`.ml`} suffix,
+then {find_ml_file} searches for the object file {foo_ml.o} or the {ML} source
+file {foo.ml}. If the object file exists, then its name is returned.
+Otherwise, the name of the {ML} source file is returned if it
+exists.
+
+\FAILURE
+Fails if the appropriate file cannot be found using the current search path.
+
+\EXAMPLE
+{
+#find_ml_file `foo`;;
+`foo_ml.o` : string
+
+#find_ml_file `foo.ml`;;
+`foo.ml` : string
+}
+\USES
+Typically used to determine whether an object file exists for a named {ML}
+source file.
+
+\SEEALSO
+find_file, search_path, set_search_path
+
+\ENDDOC

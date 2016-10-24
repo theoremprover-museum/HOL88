@@ -1,0 +1,5 @@
+\THEOREM REAL_SUP REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+    (!y. (?x. P x /\ y < x) = y < (sup P))
+\ENDTHEOREM

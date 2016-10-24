@@ -1,0 +1,3 @@
+\THEOREM SNOC_FOLDR list
+|- !x l. SNOC x l = FOLDR CONS[x]l
+\ENDTHEOREM

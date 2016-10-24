@@ -1,0 +1,4 @@
+\THEOREM AND_IMP_INTRO \none
+|- !t1 t2 t3. t1 ==> t2 ==> t3 = t1 /\ t2 ==> t3
+\ENDTHEOREM
+

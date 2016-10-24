@@ -1,0 +1,5 @@
+\THEOREM HREAL_LDISTRIB HREAL
+|- !X Y Z.
+    X hreal_mul (Y hreal_add Z) =
+    (X hreal_mul Y) hreal_add (X hreal_mul Z)
+\ENDTHEOREM

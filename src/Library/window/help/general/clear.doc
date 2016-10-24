@@ -1,0 +1,21 @@
+\DOC clear
+
+\TYPE {clear : (* signal -> void)}
+
+\SYNOPSIS
+Clears all the signal handlers from a signal.
+
+\LIBRARY window
+
+\DESCRIBE
+{clear s} disassociates all the signal handler functions that have been 
+associated with the signal {s} from that signal.
+Rasing the signal {s} would then not invoke any signal handlers.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+clear, handle, sigtype.
+
+\ENDDOC

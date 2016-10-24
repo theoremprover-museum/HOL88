@@ -1,0 +1,22 @@
+\DOC splitp
+
+\TYPE {splitp : ((* -> bool) -> * list -> (* list # * list))}
+
+\SYNOPSIS
+Splits a list into a pair of lists according to a predicate.
+
+\KEYWORDS
+list.
+
+\DESCRIBE
+{splitp P [x1;...;xk;...;xn]} returns {([x1;...;x(k-1)],[xk;...;xn])}
+where {xk} is the first element satisfying the predicate {P}.
+If no element satisfies {P}, {([x1;...;xn],[])} is returned.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+split, partition, chop_list.
+
+\ENDDOC

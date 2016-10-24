@@ -1,0 +1,10 @@
+\DOC Print_label
+
+\TYPE {Print_label : ((string # print_patt_tree) -> print_patt_tree)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

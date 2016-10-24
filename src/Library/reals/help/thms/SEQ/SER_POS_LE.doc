@@ -1,0 +1,5 @@
+\THEOREM SER_POS_LE SEQ
+|- !f n.
+    summable f /\ (!m. n num_le m ==> (& 0) <= (f m)) ==>
+    (Sum(0,n)f) <= (suminf f)
+\ENDTHEOREM

@@ -1,0 +1,36 @@
+\DOC is_binder_type
+
+\TYPE {is_binder_type : (type -> bool)}
+
+\SYNOPSIS
+Determines whether a given type is an appropriate type for a binder.
+
+\DESCRIBE
+The most general binder type is {":(* -> **) -> ***"}. The function
+{is_binder_type} returns {true} if the given type is an instance of the
+most general binder type: it returns false otherwise.
+
+\FAILURE
+Sometimes fails in a nasty way: e.g.,
+{
+   #is_binder_type ":(* -> **)";;
+   evaluation failed     dest_type
+}
+\EXAMPLE
+{
+#is_binder_type ":(* -> **) -> ***";;
+true : bool
+
+#is_binder_type ":(* -> **) -> (* -> **)";;
+true : bool
+
+#is_binder_type ":(num -> bool) -> bool";;
+true : bool
+
+#is_binder_type ":(num)list";;
+false : bool
+}
+\SEEALSO
+is_binder, is_infix_type, is_type
+
+\ENDDOC

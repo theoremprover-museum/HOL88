@@ -1,0 +1,3 @@
+\THEOREM SEG_SUC_CONS list
+|- !m n l x. SEG m(SUC n)(CONS x l) = SEG m n l
+\ENDTHEOREM

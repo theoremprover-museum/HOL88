@@ -1,0 +1,24 @@
+\DOC find_theory
+
+\TYPE {find_theory : (string -> string)}
+
+\SYNOPSIS
+Attempts to find a named theory.
+
+\DESCRIBE
+Given a string {`foo`}, {find_theory} attempts to find the theory file
+{`foo.th`} using the current search path. If it succeeds, it returns a full
+pathname (possibly a relative pathname identical to the argument string).
+
+\FAILURE
+Fails if the named theory file cannot be found using the current search path.
+
+\EXAMPLE
+{
+#find_theory `num`;;
+`/usr/groups/hol/HOL2/sun4_sos/theories/num.th` : string
+}
+\SEEALSO
+find_file, find_ml_file, search_path, set_search_path.
+
+\ENDDOC

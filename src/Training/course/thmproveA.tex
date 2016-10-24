@@ -1,0 +1,639 @@
+% =====================================================================
+% HOL Course Slides: overview of higher order logic   (c) T melham 1990
+% =====================================================================
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+\def\meta#1{{$\langle\hbox{\it #1\/}\rangle$}}
+\def\Rule#1#2{\mbox{${\displaystyle\raise 6pt\hbox{$\;\;\;#1\;\;\;$}} \over 
+                     {\displaystyle\lower7pt\hbox{$\;\;\;#2\;\;\;$}}$}}
+
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Forward Proof}{7}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+Basic Theorem Proving\\
+{\vrule width20mm height2.5mm depth-2mm}\\
+Forward Proof
+\esectitle
+
+% =====================================================================
+\slide{Forward Proof in HOL}
+
+\point{Forward inference:}
+\vskip5mm
+\subpoint{That is, apply the inference rules in sequence to already proved
+theorems in order to prove the desired theorem.} 
+\vskip5mm
+\subpoint{All theorems in HOL ultimately proved this way.}
+\vskip5mm
+\subpoint{Not natural for `one-off' proofs (for this, use {\it goal directed
+proof\/} instead).}
+\vskip5mm
+\subpoint{But it is essential to know the inference rules for tool building.}
+
+
+% =====================================================================
+\slide{Example of Forward Proof}
+
+
+\point{Example: the proof of $\vdash \neg F$ we did before:}
+
+
+\vskip 10mm
+\bspindent{\Large{\bf
+\begin{tabular}{@{}l@{$\;\;\;\;$}l@{$\;\;\;\;$}l@{}}
+1) & \( \vdash (\lambda b. \; b \supset F)F = (F \supset F) \) &
+    {\Large\bf BETA\_CONV}\\[3mm]
+2) & \( \vdash (\lambda b. \; b \supset F)F =
+         (\lambda b. \; b \supset F)F \) &
+{\Large\bf REFL} \\[3mm]
+3) & \( \vdash (F \supset F) = (\lambda b. \; b \supset F)F \) &
+SUBST 1,2 \\[3mm]
+4) & \( \{F\} \vdash F \) & ASSUME \\[3mm]
+5) & \( \vdash F \supset F \) & DISCH 4 \\[3mm]
+6) & \( \vdash (\lambda b. \; b \supset F)F \) & SUBST 3,5\\[3mm]
+7) & \( \vdash \neg = (\lambda b. \; b \supset F)  \) & DEFN of $\neg$\\[3mm]
+8) & \( \vdash \neg = \neg  \) & REFL\\[3mm]
+9) & \( \vdash (\lambda b. \; b \supset F) = \neg \) & SUBST 7,8\\[3mm]
+10) & \( \vdash \neg F \) & SUBST 6,9 \\
+\end{tabular}}}
+\espindent
+\vskip 10mm
+\point{The proof uses only primitive inference rules.}
+
+\def\_{\char'137}
+
+% =====================================================================
+\slide{The Proof in HOL}
+
+\point{Apply beta-conversion:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let thm1 = BETA_CONV "(\b. b ==> F) F";;
+thm1 = |- (\b. b ==> F)F = F ==> F
+\end{verbatim}\end{session}
+
+\point{Reverse the equation just derived:}\vskip4mm
+\begin{session}\begin{verbatim}
+#let thm2 = REFL "(\b. b==> F) F";;
+thm2 = |- (\b. b ==> F)F = (\b. b ==> F)F
+
+#let thm3 = SUBST [(thm1,"m:bool")]
+                  "m = (\b. b==>F) F" thm2;;
+thm3 = |- F ==> F = (\b. b ==> F)F
+\end{verbatim}\end{session}
+
+\point{Assume falsity, and discharge the assumption:}\vskip4mm
+\begin{session}\begin{verbatim}
+#let thm4 = ASSUME "F";;
+thm4 = . |- F
+
+#let thm5 = DISCH "F" thm4;;
+thm5 = |- F ==> F
+\end{verbatim}\end{session}
+
+\point{Conclude as follows:}\vskip4mm
+\begin{session}\begin{verbatim}
+#let thm6 = SUBST [(thm3,"m:bool")] "m:bool" thm5;;
+thm6 = |- (\b. b ==> F)F
+\end{verbatim}\end{session}
+
+\slide{The Proof Continued}
+
+\point{The theorem already derived:}\vskip4mm
+\begin{session}\begin{verbatim}
+#thm6;;
+|- (\b. b ==> F)F
+\end{verbatim}\end{session}
+
+\point{Reverse the defining equation for negation:}\vskip4mm
+
+\begin{session}\begin{verbatim}
+#let thm7 = REFL "$~";;
+thm7 = |- $~ = $~
+
+#let thm8 = SUBST [(NOT_DEF,"m:bool->bool")] 
+                   "m = $~" thm7;;
+thm8 = |- (\t. t ==> F) = $~
+\end{verbatim}\end{session}
+
+\point{Substitute with this equation:}\vskip4mm
+\begin{session}\begin{verbatim}
+#let thm = SUBST [(thm8, "m:bool->bool")] 
+                  "(m:bool->bool) F" thm6;;
+thm = |- ~F
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Derived Inference Rules}
+
+\point{In HOL, derived inference rules are just ML programs that call the
+correct sequence of primitive (or derived) inference rules.}
+
+\vskip7mm
+\point{Consider the example we looked at before:}
+\vskip 10mm
+\bspindent\LARGE\bf
+{\Large\bf SYM:\quad}
+\Rule{\Gamma \vdash t_1  =  t_2}
+{\Gamma \vdash t_2  =  t_1}
+\espindent
+
+\vskip7mm
+\point{Derivation:}
+\bspindent\LARGE\bf\vskip7mm
+\begin{tabular}{l l @{\qquad} l}
+1) & \( \Gamma \vdash t_1 \; = \; t_2 \) & {\Large\bf HYPOTHESIS} \\
+2) & \( \vdash t_1 \; = \; t_1  \)       & {\Large\bf REFL}\\
+3) & \( \Gamma \vdash t_2 \; = \; t_1 \) & {\Large\bf SUBST 1,2}
+\end{tabular}
+\espindent
+\vskip7mm
+
+\point{We will now look at the derivation in HOL.}
+
+
+% =====================================================================
+\slide{Deriving the Rule in HOL}
+
+\point{Start by assuming the premise:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th = ASSUME "t1:* = t2:*";;
+th = . |- t1 = t2
+\end{verbatim}\end{session}
+
+\point{We need to know what {\tt t1} and {\tt t2} are:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let t1,t2 = dest_eq(concl th);;
+t1 = "t1" : term
+t2 = "t2" : term
+\end{verbatim}\end{session}
+
+\point{We need a marker variable:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let v = genvar(type_of t1);;
+v = "GEN%VAR%464" : term
+\end{verbatim}\end{session}
+
+\point{The result is then given by:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#SUBST [(th,v)] "^v=^t1" (REFL t1);;
+. |- t2 = t1
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{The Derived Rule}
+
+\point{Since {\tt t1} and {\tt t2} were arbitrary, this derivation suggests
+the following code:}
+
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let SYM th =
+   (let t1,t2 = dest_eq(concl th) in
+    let v = genvar(type_of t1) in
+    SUBST [(th,v)] (mk_eq(v,t1)) (REFL t1)
+   )? failwith `SYM: not an equation`;;
+SYM = - : (thm -> thm)
+\end{verbatim}\end{session}
+
+\point{Test the rule:}
+
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#F_DEF;;
+|- F = (!t. t)
+
+#SYM (F_DEF);;
+|- (!t. t) = F
+
+#SYM(ASSUME "!t. t=F");;
+evaluation failed     SYM: not an equation
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Derived Inference Rules}
+
+\point{There are {\it many\/} derived inference rules built into the system.}
+
+\vskip7mm
+
+\point{We shall introduce the rules only as required, but a full list is given
+in the manual.}
+
+\vskip7mm
+
+\point{To become an `expert' HOL user, you should try to become familiar with
+and use as many of the rules as possible.}
+
+\vskip7mm
+
+\point{The more rules you know, the better your chances of finding the one you
+need.}
+
+\vskip7mm
+
+\point{There are also many pre-proved {\it theorems\/} in the system (see the
+manual).}
+
+% =====================================================================
+\slide{Example of Forward Proof}
+
+\point{We will use forward proof to derive}
+\vskip6mm
+\bspindent\LARGE\bf
+$((\exists x. \: P\;x) \supset Q) = (\forall x. \: P\;x \supset Q) $
+\espindent
+\vskip6mm
+\bpindent\LARGE\bf
+by proving implication in both directions.\epindent
+
+\vskip10mm
+
+\point{Show hypotheses during the proof:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#top_print print_all_thm;;
+- : (thm -> void)
+\end{verbatim}\end{session}
+
+\point{To prove the left-to-right implication, first\\
+ assume the antecedant:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th1 = ASSUME "(?x:*. P(x)) ==> Q";;
+th1 = (?x. P x) ==> Q |- (?x. P x) ==> Q
+\end{verbatim}\end{session}
+
+\point{Assume {\tt P x}, then deduce {\tt ?x.\ P x}:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th2 = ASSUME "P(x:*):bool";;
+th2 = P x |- P x
+
+#let th3 = EXISTS ("?x:*. P(x)", "x:*") th2;;
+th3 = P x |- ?x. P x
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{Now, deduce {\tt Q}:}
+
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#th1;;
+(?x. P x) ==> Q |- (?x. P x) ==> Q
+
+#th3;;
+P x |- ?x. P x
+
+#let th4 = MP th1 th3;;
+th4 = (?x. P x) ==> Q, P x |- Q
+\end{verbatim}\end{session}
+
+\point{Discharge the assumption {\tt P x}:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th5 = DISCH "P(x:*):bool" th4;;
+th5 = (?x. P x) ==> Q |- P x ==> Q
+\end{verbatim}\end{session}
+
+\point{Generalize {\tt x} and discharge the assumption:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th6 = DISCH_ALL (GEN "x:*" th5);;
+th6 = |- ((?x. P x) ==> Q) ==> (!x. P x ==> Q)
+\end{verbatim}\end{session}
+
+
+\point{To prove the reverse implication, again start\\ by
+assuming the antecedant:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th7 = ASSUME "!(x:*).P(x) ==> Q";;
+th7 = !x. P x ==> Q |- !x. P x ==> Q
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{Specialize {\tt x} to {\tt x}:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#th7;;
+!x. P x ==> Q |- !x. P x ==> Q
+
+#let th8 = SPEC "x:*" th7;;
+th8 = !x. P x ==> Q |- P x ==> Q
+\end{verbatim}\end{session}
+
+\point{Move {\tt P x} into the assumptions:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th9 = UNDISCH th8;;
+th9 = !x. P x ==> Q, P x |- Q
+\end{verbatim}\end{session}
+
+\point{Now, assume {\tt ?x.\ P x}:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th10 = ASSUME "?x:*. P(x)";;
+th10 = ?x. P x |- ?x. P x
+\end{verbatim}\end{session}
+
+\point{Use {\tt CHOOSE} to conclude {\tt Q}:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th11 = CHOOSE ("x:*",th10) th9;;
+th11 = ?x. P x, !x. P x ==> Q |- Q
+\end{verbatim}\end{session}
+
+\point{Discharge the assumption {\tt ?x.\ P x}:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th12 = DISCH "?x:*.P(x)" th11;;
+th12 = !x. P x ==> Q |- (?x. P x) ==> Q
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{The Example Concluded}
+
+\point{The results so far:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#th6;;
+|- ((?x. P x) ==> Q) ==> (!x. P x ==> Q)
+
+#th12;;
+!x. P x ==> Q |- (?x. P x) ==> Q
+\end{verbatim}\end{session}
+
+\point{Discharge the remaining assumption:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th13 = DISCH_ALL th12;;
+th13 = |- (!x. P x ==> Q) ==> (?x. P x) ==> Q
+\end{verbatim}\end{session}
+
+\point{Put the two implications together:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let thm = IMP_ANTISYM_RULE th6 th13;;
+thm = |- (?x. P x) ==> Q = (!x. P x ==> Q)
+\end{verbatim}\end{session}
+
+\point{Q.E.D.}
+
+% ===================================================================== 
+\slide{Summary}
+
+\point{Forward proof in HOL}
+\vskip5mm
+\subpoint{Primitive Inference Rules:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\qquad{\tt ASSUME}, {\tt REFL}, {\tt BETA\_CONV}, {\tt SUBST}, 
+\qquad{\tt ABS}, {\tt INST\_TYPE}, {\tt DISCH}, {\tt MP}.
+\espindent
+
+\subpoint{Derived Inference Rules:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\qquad{\tt SYM}, {\tt EXISTS}, {\tt DISCH\_ALL}, {\tt SPEC}, {\tt GEN}
+\qquad{\tt UNDISCH}, {\tt CHOOSE}, {\tt IMP\_ANTISYM\_RULE}, 
+\qquad\dots etc.
+\espindent
+
+
+
+% =====================================================================
+\slide{Rewriting Inference Rules}
+
+\point{A powerful set of built-in inference rules is provided in HOL for 
+rewriting.}
+
+\vskip7mm
+\point{Rewriting is different from substitution:}
+\subpoint{it deals with pattern matching}
+\subpoint{it deals with bound variables}
+\vskip7mm
+
+
+\point{Example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#num_CASES;;
+|- !m. (m = 0) \/ (?n. m = SUC n)
+
+#ADD1;;
+|- !m. SUC m = m + 1
+
+#REWRITE_RULE [ADD1] num_CASES;;
+|- !m. (m = 0) \/ (?n. m = n + 1)
+\end{verbatim}\end{session}
+
+\point{We didn't have to:}
+\subpoint{specialize {\tt m} in {\tt ADD1}}
+\subpoint{deal explicitly with the bound variable {\tt n}}
+
+
+% =====================================================================
+\slide{Basic Rewriting Rules}
+
+\point{There are two basic rules:}
+
+\vskip5mm
+\bspindent\Large\bf
+\verb!REWRITE_RULE : thm list -> thm -> thm!
+\vskip3mm
+\verb!PURE_REWRITE_RULE : thm list -> thm -> thm!
+\espindent
+\vskip5mm
+\subpoint{first argument: a list of equational theorems to be used as
+left-to-right rewrite rules.}
+\subpoint{second argument: the theorem to be rewritten.}
+
+\vskip4mm
+\point{Rewriting is done:}
+\subpoint{with all the supplied equations}
+\subpoint{on all subterms of the theorem to be rewritten}
+\subpoint{repeatedly, until no rewrite rule applies}
+\vskip4mm
+
+\point{In addition to equations, rewrite rules can be:}
+
+\subpoint{Quantified: {\tt |- !x1}\dots{\tt xn}. \meta{lhs} = \meta{rhs}}
+\subpoint{Negations, which become {\tt |- \meta{lhs} = F}}
+\subpoint{Non-equations, which become {\tt |- \meta{lhs} = T}}
+\subpoint{Conjunctions of the above}
+
+% =====================================================================
+\slide{Basic Rewrite Rules}
+
+\point{The difference between
+{\tt REWRITE\_RULE} and\\
+{\tt PURE\_REWRITE\_RULE} is:}
+\vskip5mm
+\subpoint{{\tt PURE\_REWRITE\_RULE} rewrites with only the\\
+supplied list of theorems.}
+
+\subpoint{{\tt REWRITE\_RULE} also rewrites with some standard
+simplifications.}
+
+\vskip7mm
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let th = ASSUME "!x:num.(P /\ (SUC 0=1)) ==> F";;
+th = . |- !x. P /\ (SUC 0 = 1) ==> F
+
+#let one = num_CONV "1";;
+one = |- 1 = SUC 0
+
+#PURE_REWRITE_RULE [one] th;;
+. |- !x. P /\ (SUC 0 = SUC 0) ==> F
+
+#REWRITE_RULE [one] th;;
+. |- ~P
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Standard Simplifications}
+
+\point{{\tt REWRITE\_RULE} uses the simplifications:}
+
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#basic_rewrites;;
+[|- !x. (x = x) = T;
+ |- !t.
+     ((T = t) = t) /\ ((t = T) = t) /\ 
+     ((F = t) = ~t) /\ ((t = F) = ~t);
+ |- (!t. ~~t = t) /\ (~T = F) /\ (~F = T);
+ |- !t. (T /\ t = t) /\ (t /\ T = t) /\ 
+        (F /\ t = F) /\ (t /\ F = F) /\ 
+        (t /\ t = t);
+ |- !t. (T \/ t = T) /\ (t \/ T = T) /\ 
+        (F \/ t = t) /\ (t \/ F = t) /\ 
+        (t \/ t = t);
+ |- !t. (T ==> t = t) /\ (t ==> T = T) /\
+     (F ==> t = T) /\ (t ==> t = T) /\
+     (t ==> F = ~t);
+ |- !t1 t2. ((T => t1 | t2) = t1) /\ 
+            ((F => t1 | t2) = t2);
+ |- !t. (!x. t) = t;
+ |- !t. (?x. t) = t;
+ |- !t1 t2. (\x. t1)t2 = t1;
+ |- !x. FST x,SND x = x;
+ |- !x y. FST(x,y) = x;
+ |- !x y. SND(x,y) = y]
+: thm list
+\end{verbatim}\end{session}
+
+\point{If you do not need these, {\tt PURE\_REWRITE\_RULE} is often much
+faster.}
+
+% =====================================================================
+\slide{Other Rewriting Rules}
+
+\point{Rewriting using the assumptions:}
+
+\vskip7mm
+\bspindent\Large\bf
+\verb!ASM_REWRITE_RULE!
+\vskip3mm
+\verb!ASM_PURE_REWRITE_RULE!
+\espindent
+\vskip7mm
+\bpindent \LARGE\bf
+These add the assumptions of the theorem to be rewritten 
+to the list of rewrites.
+\epindent
+
+
+\vskip7mm
+
+\point{Rewriting only once:}
+
+\vskip7mm
+\bspindent\Large\bf
+\verb!ONCE_REWRITE_RULE!
+\vskip3mm
+\verb!ONCE_ASM_REWRITE_RULE!
+\vskip3mm
+\verb!PURE_ONCE_REWRITE_RULE!
+\vskip3mm
+\verb!PURE_ONCE_ASM_REWRITE_RULE!
+\espindent
+\vskip7mm
+\bpindent \LARGE\bf
+These apply at most one rewrite rule to any subterm.
+\epindent
+
+
+% =====================================================================
+\slide{Summary of Rewriting}
+
+\point{Rewrite using standard simpifications:}
+
+\subpoint{\tt REWRITE\_RULE}
+\subpoint{\tt ASM\_REWRITE\_RULE}
+\subpoint{\tt ONCE\_REWRITE\_RULE}
+\subpoint{\tt ONCE\_ASM\_REWRITE\_RULE}
+
+\point{Rewrite without standard simpifications:}
+
+\subpoint{\tt PURE\_REWRITE\_RULE}
+\subpoint{\tt PURE\_ASM\_REWRITE\_RULE}
+\subpoint{\tt PURE\_ONCE\_REWRITE\_RULE}
+\subpoint{\tt PURE\_ONCE\_ASM\_REWRITE\_RULE}
+
+\point{Rewrite using assumptions:}
+
+\subpoint{\tt ASM\_REWRITE\_RULE}
+\subpoint{\tt PURE\_ASM\_REWRITE\_RULE}
+\subpoint{\tt ONCE\_ASM\_REWRITE\_RULE}
+\subpoint{\tt PURE\_ONCE\_ASM\_REWRITE\_RULE}
+
+\end{document}
+
+
+

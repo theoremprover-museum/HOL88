@@ -1,0 +1,3 @@
+\THEOREM intersect_def TOPOLOGY
+|- !P Q. P intersect Q = (\x. P x /\ Q x)
+\ENDTHEOREM

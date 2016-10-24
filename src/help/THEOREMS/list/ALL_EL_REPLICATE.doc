@@ -1,0 +1,3 @@
+\THEOREM ALL_EL_REPLICATE list
+|- !x n. ALL_EL($= x)(REPLICATE n x)
+\ENDTHEOREM

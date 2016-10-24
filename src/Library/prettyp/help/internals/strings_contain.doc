@@ -1,0 +1,10 @@
+\DOC strings_contain
+
+\TYPE {strings_contain : (string list -> string -> bool)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

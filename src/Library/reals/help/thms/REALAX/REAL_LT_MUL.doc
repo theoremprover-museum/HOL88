@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_MUL REALAX
+|- !x y. r0 < x /\ r0 < y ==> r0 < (x * y)
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM SUP_LEMMA1 REAL
+|- !d.
+    (!y. (?x. (\x. P(x + d))x /\ y < x) = y < s) ==>
+    (!y. (?x. P x /\ y < x) = y < (s + d))
+\ENDTHEOREM

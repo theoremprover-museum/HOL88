@@ -1,0 +1,5 @@
+\THEOREM BUTLASTN_LASTN list
+|- !m n l.
+    m <= n /\ n <= (LENGTH l) ==>
+    (BUTLASTN m(LASTN n l) = LASTN(n - m)(BUTLASTN m l))
+\ENDTHEOREM

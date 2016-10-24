@@ -1,0 +1,34 @@
+\DOC infixes
+
+\TYPE {infixes : (string -> term list)}
+
+\SYNOPSIS
+Lists the infixes in the named theory.
+
+\DESCRIBE
+The function {infixes} should be applied to a string which is the name of an
+ancestor theory (including the current theory; the special string {`-`} is
+always interpreted as the current theory). It returns a list of all the infixes
+declared in that theory.
+
+\FAILURE
+Fails unless the given theory is an ancestor of the current theory.
+
+\EXAMPLE
+The theory {HOL} has no infixes:
+{
+   #infixes `HOL`;;
+   [] : term list
+}
+\noindent but the theory {arithmetic} has several:
+{
+   #infixes `arithmetic`;;
+   ["$DIV"; "$MOD"; "$>="; "$<="; "$>"; "$EXP"; "$*"; "$-"; "$+"]
+   : term list
+}
+\SEEALSO
+ancestors, axioms, binders, constants, definitions, new_infix,
+new_infix_definition, new_infix_list_rec_definition,
+new_infix_prim_rec_definition, parents, types.
+
+\ENDDOC

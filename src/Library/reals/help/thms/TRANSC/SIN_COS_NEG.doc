@@ -1,0 +1,5 @@
+\THEOREM SIN_COS_NEG TRANSC
+|- !x.
+    (((sin(-- x)) + (sin x)) pow 2) + (((cos(-- x)) - (cos x)) pow 2) =
+    & 0
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM Is_ltree ltree
+|- !t l. Is_ltree(t,l) = (Size t = LENGTH l)
+\ENDTHEOREM

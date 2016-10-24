@@ -1,0 +1,4 @@
+\THEOREM SER_ABS SEQ
+|- !f.
+    summable(\n. abs(f n)) ==> (abs(suminf f)) <= (suminf(\n. abs(f n)))
+\ENDTHEOREM

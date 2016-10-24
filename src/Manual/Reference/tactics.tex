@@ -1,0 +1,4404 @@
+\chapter{Tactics and Tacticals}
+\DOC{ACCEPT\_TAC}
+
+\TYPE {\small\verb%ACCEPT_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Solves a goal if supplied with the desired theorem (up to alpha-conversion).
+
+\DESCRIBE
+{\small\verb%ACCEPT_TAC%} maps a given theorem {\small\verb%th%} to a tactic that solves any goal whose
+conclusion is alpha-convertible to the conclusion of {\small\verb%th%}.
+
+\FAILURE
+{\small\verb%ACCEPT_TAC th (A,g)%} fails if the term {\small\verb%g%} is not alpha-convertible to the 
+conclusion of the supplied theorem {\small\verb%th%}.
+
+\EXAMPLE
+{\small\verb%ACCEPT_TAC%} applied to the axiom
+{\par\samepage\setseps\small\begin{verbatim}
+   BOOL_CASES_AX  |- !t. (t = T) \/ (t = F) 
+\end{verbatim}}
+\noindent will solve the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "!x. (x = T) \/ (x = F)")
+\end{verbatim}}
+\noindent but will fail on the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "!x. (x = F) \/ (x = T)")
+\end{verbatim}}
+\USES
+Used for completing proofs by supplying an existing theorem, such as an axiom,
+or a lemma already proved.
+
+\SEEALSO
+MATCH_ACCEPT_TAC.
+
+\ENDDOC
+
+\DOC{ALL\_TAC}
+
+\TYPE {\small\verb%ALL_TAC : tactic%}\egroup
+
+\SYNOPSIS
+{\small\verb%ALL_TAC%} passes on a goal unchanged; it is the identity for the tactical
+{\small\verb%THEN%}.
+
+\DESCRIBE
+{\small\verb%ALL_TAC%} applied to a goal {\small\verb%g%} simply produces the subgoal list {\small\verb%[g]%}.
+
+\FAILURE
+{\small\verb%ALL_TAC%} cannot fail.
+
+\EXAMPLE
+The tactic {\small\verb%INDUCT_TAC THENL [ALL_TAC;tac]%}, applied to a goal {\small\verb%g%}, applies
+{\small\verb%INDUCT_TAC%} to {\small\verb%g%} to give a basis and step subgoal; it then returns the
+basis unchanged, along with the subgoals produced by applying {\small\verb%tac%} to the
+step.
+
+\USES
+Used to write tacticals such as {\small\verb%REPEAT%}.
+Often used as a place-holder in building compound tactics using tacticals
+such as {\small\verb%THENL%}.
+
+\SEEALSO
+NO_TAC, REPEAT, THENL.
+
+\ENDDOC
+
+\DOC{ALL\_THEN}
+
+\TYPE {\small\verb%ALL_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+Identity theorem-tactical: passes a theorem unchanged to a theorem-tactic.
+
+\DESCRIBE
+For any theorem-tactic {\small\verb%ttac%} and theorem {\small\verb%th%}, the application
+{\small\verb%ALL_THEN ttac th%} results simply in {\small\verb%ttac th%}, that is, the
+theorem is passed unchanged to the theorem-tactic.
+
+\FAILURE
+The application of {\small\verb%ALL_THEN%} to a theorem-tactic never fails. The resulting
+theorem-tactic fails under exactly the same conditions as the original one
+
+\USES
+Writing compound tactics or tacticals, e.g. terminating list iterations
+of theorem-tacticals.
+
+\SEEALSO
+ALL_TAC, FAIL_TAC, NO_TAC, NO_THEN, THEN_TCL, ORELSE_TCL.
+
+\ENDDOC
+\DOC{ANTE\_RES\_THEN}
+
+\TYPE {\small\verb%ANTE_RES_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS 
+Resolve implicative assumptions with an antecedent.
+
+\DESCRIBE
+Given a theorem-tactic {\small\verb%ttac%} and a theorem {\small\verb%A |- t%}, the function
+{\small\verb%ANTE_RES_THEN%} produces a tactic that attempts to match {\small\verb%t%} to the antecedent
+of each implication 
+{\par\samepage\setseps\small\begin{verbatim}
+   Ai |- !x1...xn. ui ==> vi
+\end{verbatim}}
+\noindent (where {\small\verb%Ai%} is just {\small\verb%!x1...xn. ui ==> vi%}) that occurs among the
+assumptions of a goal. If the antecedent {\small\verb%ui%} of any implication matches {\small\verb%t%},
+then an instance of {\small\verb%Ai u A |- vi%} is obtained by specialization of the
+variables {\small\verb%x1%}, ..., {\small\verb%xn%} and type instantiation, followed by an application of
+modus ponens.  Because all implicative assumptions are tried, this may result
+in several modus-ponens consequences of the supplied theorem and the
+assumptions.  Tactics are produced using {\small\verb%ttac%} from all these theorems, and
+these tactics are applied in sequence to the goal.  That is,
+{\par\samepage\setseps\small\begin{verbatim}
+   ANTE_RES_THEN ttac (A |- t) g
+\end{verbatim}}
+\noindent has the effect of: 
+{\par\samepage\setseps\small\begin{verbatim}
+   MAP_EVERY ttac [A1 u A |- v1; ...; Am u A |- vm] g
+\end{verbatim}}
+\noindent where the theorems {\small\verb%Ai u A |- vi%} are all the consequences that can
+be drawn by a (single) matching modus-ponens inference from the implications
+that occur among the assumptions of the goal {\small\verb%g%} and the supplied theorem 
+{\small\verb%A |- t%}.  Any negation {\small\verb%~v%} that appears among the assumptions of the goal is
+treated as an implication {\small\verb%v ==> F%}.  The sequence in which the theorems 
+{\small\verb%Ai u A |- vi%} are generated and the corresponding tactics applied is 
+unspecified.
+
+\FAILURE
+{\small\verb%ANTE_RES_THEN ttac (A |- t)%} fails when applied to a goal {\small\verb%g%} if any of the
+tactics produced by {\small\verb%ttac (Ai u A |- vi)%}, where {\small\verb%Ai u A |- vi%} is the {\small\verb%i%}th
+resolvent obtained from the theorem {\small\verb%A |- t%} and the assumptions of {\small\verb%g%}, fails
+when applied in sequence to {\small\verb%g%}.
+
+\SEEALSO
+IMP_RES_TAC, IMP_RES_THEN, MATCH_MP, RES_TAC, RES_THEN.
+
+\ENDDOC
+
+\DOC{AP\_TERM\_TAC}
+
+\TYPE {\small\verb%AP_TERM_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Strips a function application from both sides of an equational goal.
+
+\DESCRIBE
+{\small\verb%AP_TERM_TAC%} reduces a goal of the form {\small\verb%A ?- f x = f y%} by stripping away
+the function applications, giving the new goal {\small\verb%A ?- x = y%}.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- f x = f y
+   ================  AP_TERM_TAC
+     A ?- x = y
+\end{verbatim}}
+\FAILURE
+Fails unless the goal is equational, with both sides being applications
+of the same function.
+
+\SEEALSO
+AP_TERM, AP_THM.
+
+\ENDDOC
+\DOC{ASM\_CASES\_TAC}
+
+\TYPE {\small\verb%ASM_CASES_TAC : term -> tactic%}\egroup
+
+\SYNOPSIS
+Given a term, produces a case split based on whether or not that
+term is true.
+
+\DESCRIBE
+Given a term {\small\verb%u%}, {\small\verb%ASM_CASES_TAC%} applied to a goal produces two
+subgoals, one with {\small\verb%u%} as an assumption and one with {\small\verb%~u%}:
+{\par\samepage\setseps\small\begin{verbatim}
+          t
+    =============
+    {u}t    {~u}t   
+\end{verbatim}}
+\noindent {\small\verb%ASM_CASES_TAC u%} is implemented by
+{\small\verb%DISJ_CASES_TAC(SPEC u EXCLUDED_MIDDLE)%}, where {\small\verb%EXCLUDED_MIDDLE%} is
+the axiom {\small\verb% |- !u. u \/ ~u %}.
+
+\FAILURE
+By virtue of the implementation (see above), the decomposition fails if
+{\small\verb%EXCLUDED_MIDDLE%} cannot be instantiated to {\small\verb%u%}, e.g. if {\small\verb%u%} does not
+have boolean type.
+
+\EXAMPLE
+The tactic {\small\verb%ASM_CASES_TAC "u"%} can be used to produce a case analysis
+on {\small\verb%"u"%}:
+{\par\samepage\setseps\small\begin{verbatim}
+    ASM_CASES_TAC "u:bool" ([],"(P:bool -> bool) u");;
+    ([(["u"], "P u"); (["~u"], "P u")], -) : subgoals
+\end{verbatim}}
+\USES
+Performing a case analysis according to whether a given term is true or false.
+
+\SEEALSO
+COND_CASES_TAC, DISJ_CASES_TAC, SPEC, STRUCT_CASES_TAC.
+
+
+\ENDDOC
+
+
+
+\DOC{ASM\_REWRITE\_TAC}
+
+\TYPE {\small\verb%ASM_REWRITE_TAC : thm list -> tactic%}\egroup
+
+\SYNOPSIS
+Rewrites a goal using {\small\verb%basic_rewrites%}, the assumptions of the goal,
+and a supplied list of theorems.
+
+\DESCRIBE
+{\small\verb%ASM_REWRITE_TAC%} generates rewrites from the basic tautologies, the
+set of assumptions, and a list of theorems supplied by the user. These
+are applied top-down and recursively on the goal, until no more
+matches are found. The order in which the set of rewrite equations is
+applied is an implementation matter and the user should not depend on
+any ordering. Rewriting strategies are described in more detail under
+{\small\verb%GEN_REWRITE_TAC%}. For omitting the common tautologies, see the tactic
+{\small\verb%PURE_ASM_REWRITE_TAC%}. To rewrite with only a subset of the
+assumptions use {\small\verb%FILTER_ASM_REWRITE_TAC%}.
+
+\FAILURE
+{\small\verb%ASM_REWRITE_TAC%} does not fail, but it can diverge in certain
+situations. For rewriting to a limited depth, see
+{\small\verb%ONCE_ASM_REWRITE_TAC%}. The resulting tactic may not be valid if the
+applicable replacement introduces new assumptions into the theorem
+eventually proved.
+
+\EXAMPLE
+The use of assumptions in rewriting, specially when they are not in an
+obvious equational form, is illustrated below:
+{\par\samepage\setseps\small\begin{verbatim}
+   #ASM_REWRITE_TAC[](["P x"],"P x = Q x");;
+   ([(["P x"], "Q x")], -) : subgoals
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+   #ASM_REWRITE_TAC[](["~P x"],"P x = Q x");;
+   ([(["~P x"], "~Q x")], -) : subgoals
+\end{verbatim}}
+
+
+\USES
+To advance or solve a goal by rewriting with the current assumptions.
+
+\SEEALSO
+basic_rewrites, FILTER_ASM_REWRITE_TAC, FILTER_ONCE_ASM_REWRITE_TAC,
+GEN_REWRITE_TAC, ONCE_ASM_REWRITE_TAC, ONCE_REWRITE_TAC,
+PURE_ASM_REWRITE_TAC, PURE_ONCE_ASM_REWRITE_TAC, PURE_REWRITE_TAC,
+REWRITE_TAC, SUBST_TAC.
+
+\ENDDOC
+\DOC{ASSUME\_TAC}
+
+\TYPE {\small\verb%ASSUME_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+To enrich the assumptions of a goal with the conclusion of
+a given theorem. This is not a valid tactic.
+
+\DESCRIBE
+Given a theorem {\small\verb%th%} of the form {\small\verb% A |- u %}, and a goal, {\small\verb%ASSUME_TAC th%} 
+adds {\small\verb%u%} to the assumptions of the goal.
+{\par\samepage\setseps\small\begin{verbatim}
+     t
+    ====
+    {u}t
+\end{verbatim}}
+\FAILURE
+The decomposition cannot fail.  (Note that {\small\verb%ASSUME_TAC%} is not valid.)
+
+\EXAMPLE
+Given a goal {\small\verb%g%} of the form {\small\verb% (["x = y"; "y = z"], "P") %},
+where {\small\verb%"x"%}, {\small\verb%"y"%} and {\small\verb%"z"%} have type {\small\verb%":*"%},
+the theorem {\small\verb% x = y, y = z |- x = z %} can, first, be inferred by
+forward proof
+{\par\samepage\setseps\small\begin{verbatim}
+   TRANS(ASSUME "x = y")(ASSUME "y = z")
+\end{verbatim}}
+\noindent and then added to the assumptions. This process requires
+the explicit text of the assumptions, as well as invocation of
+the rule {\small\verb%ASSUME%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   ASSUME_TAC(TRANS(ASSUME "x = y")(ASSUME "y = z"))g;;
+   ([(["x = z"; "x = y"; "y = z"], "P")], -) : subgoals
+\end{verbatim}}
+\noindent This is the naive way of manipulating assumptions; there are more
+advanced proof styles (more elegant and less transparent) that achieve the
+same effect, but this is a perfectly correct technique in itself.
+
+Alternatively, the axiom {\small\verb%EQ_TRANS%} could be added to the
+assumptions of {\small\verb%g%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   ASSUME_TAC EQ_TRANS g;;
+   ([(["!x y z. (x = y) /\ (y = z) ==> (x = z)"; "x = y"; "y = z"], "P")],
+    -)
+   : subgoals
+\end{verbatim}}
+\noindent A subsequent resolution (see {\small\verb%RES_TAC%}) would then be able to add
+the assumption {\small\verb%"x = z"%} to the subgoal shown above. (Aside from purposes of
+example, it would be more usual to use {\small\verb%IMP_RES_TAC%} than {\small\verb%ASSUME_TAC%}
+followed by {\small\verb%RES_TAC%} in this context.)
+
+\USES
+{\small\verb%ASSUME_TAC%} is the naive way of manipulating assumptions (i.e. without
+recourse to advanced tacticals); and it is useful for enriching the assumption
+list with lemmas as a prelude to resolution ({\small\verb%RES_TAC%}, {\small\verb%IMP_RES_TAC%}),
+rewriting with assumptions ({\small\verb%ASM_REWRITE_TAC%} and so on), and other operations
+involving assumptions.
+
+\SEEALSO
+ACCEPT_TAC, IMP_RES_TAC, RES_TAC, STRIP_ASSUME_TAC.
+
+\ENDDOC
+
+
+
+\DOC{ASSUM\_LIST}
+
+\TYPE {\small\verb%ASSUM_LIST : ((thm list -> tactic) -> tactic)%}\egroup
+
+\SYNOPSIS
+Applies a tactic generated from the goal's assumption list.
+
+\DESCRIBE
+When applied to a function of type {\small\verb%thm list -> tactic%} and a goal,
+{\small\verb%ASSUM_LIST%} constructs a tactic by applying {\small\verb%f%} to a list of {\small\verb%ASSUME%}d
+assumptions of the goal, then applies that tactic to the goal.
+{\par\samepage\setseps\small\begin{verbatim}
+   ASSUM_LIST f ({A1;...;An} ?- t)
+         = f [A1 |- A1; ... ; An |- An] ({A1;...;An} ?- t)
+\end{verbatim}}
+
+\FAILURE
+Fails if the function fails when applied to the list of {\small\verb%ASSUME%}d assumptions,
+or if the resulting tactic fails when applied to the goal.
+
+\COMMENTS
+There is nothing magical about {\small\verb%ASSUM_LIST%}: the same effect can usually be
+achieved just as conveniently by using {\small\verb%ASSUME a%} wherever the
+assumption {\small\verb%a%} is needed. If {\small\verb%ASSUM_LIST%} is used, it is extremely unwise to
+use a function which selects elements from its argument list by number, since
+the ordering of assumptions should not be relied on.
+
+\EXAMPLE
+The tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   ASSUM_LIST SUBST_TAC
+\end{verbatim}}
+\noindent makes a single parallel substitution using all the assumptions,
+which can be useful if the rewriting tactics are too blunt for the required
+task.
+
+\USES
+Making more careful use of the assumption list than simply rewriting or
+using resolution.
+
+\SEEALSO
+ASM_REWRITE_TAC, EVERY_ASSUM, IMP_RES_TAC, POP_ASSUM, POP_ASSUM_LIST,
+REWRITE_TAC.
+
+\ENDDOC
+\DOC{BETA\_TAC}
+
+\TYPE {\small\verb%BETA_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Beta-reduces all the beta-redexes in the conclusion of a goal.
+
+\DESCRIBE
+When applied to a goal {\small\verb%A ?- t%}, the tactic {\small\verb%BETA_TAC%} produces a new goal
+which results from beta-reducing all beta-redexes, at any depth, in {\small\verb%t%}.
+Variables are renamed where necessary to avoid free variable capture.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- ...((\x. s1) s2)...
+   ==========================  BETA_TAC
+     A ?- ...(s1[s2/x])...
+\end{verbatim}}
+
+\FAILURE
+Never fails, but will have no effect if there are no beta-redexes.
+
+\SEEALSO
+BETA_CONV, BETA_TAC.
+
+\ENDDOC
+\DOC{BOOL\_CASES\_TAC}
+
+\TYPE {\small\verb%BOOL_CASES_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Performs boolean case analysis on a (free) term in the goal.
+
+\DESCRIBE
+When applied to a term {\small\verb%x%} (which must be of type {\small\verb%bool%} but need not be simply
+a variable), and a goal {\small\verb%A ?- t%}, the tactic {\small\verb%BOOL_CASES_TAC%} generates the two
+subgoals corresponding to {\small\verb%A ?- t%} but with any free instances of {\small\verb%x%} replaced
+by {\small\verb%F%} and {\small\verb%T%} respectively.
+{\par\samepage\setseps\small\begin{verbatim}
+              A ?- t
+   =============================  BOOL_CASES_TAC "x"
+    A ?- t[F/x]    A ?- t[T/x]
+\end{verbatim}}
+\noindent The term given does not have to be free in the goal, but if it isn't,
+{\small\verb%BOOL_CASES_TAC%} will merely duplicate the original goal twice.
+
+\FAILURE
+Fails unless the term {\small\verb%x%} has type {\small\verb%bool%}.
+
+\EXAMPLE
+The goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- (b ==> ~b) ==> (b ==> a)
+\end{verbatim}}
+\noindent can be completely solved by using {\small\verb%BOOL_CASES_TAC%} on the
+variable {\small\verb%b%}, then simply rewriting the two subgoals, i.e. by applying
+the following tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   BOOL_CASES_TAC "b:bool" THEN REWRITE_TAC[]
+\end{verbatim}}
+\USES
+Avoiding fiddly logical proofs by brute-force case analysis, possibly only
+over a key term as in the above example, possibly over all free boolean
+variables.
+
+\SEEALSO
+ASM_CASES_TAC, COND_CASES_TAC, DISJ_CASES_TAC, STRUCT_CASES_TAC.
+
+\ENDDOC
+\DOC{CASES\_THENL}
+
+\TYPE {\small\verb%CASES_THENL : (thm_tactic list -> thm_tactic)%}\egroup
+
+\SYNOPSIS
+Applies theorem-tactics in the list to the corresponding disjuncts in a theorem.
+
+\DESCRIBE
+When given a list of theorem-tactics {\small\verb%[ttac1;...;ttacn]%} and a theorem whose
+conclusion is a top-level disjunction of {\small\verb%n%} terms, {\small\verb%CASES_THENL%} splits a goal
+into {\small\verb%n%} subgoals resulting from applying to the original goal the {\small\verb%i%}'th
+theorem-tactic applied to the {\small\verb%i%}'th disjunct. This can be represented as
+follows, where the number of existentially quantified variables in a disjunct
+may be zero. If the theorem {\small\verb%th%} has the form:
+{\par\samepage\setseps\small\begin{verbatim}
+   A' |- ?x11..x1m. t1 \/ ... \/ ?xn1..xnp. tn
+\end{verbatim}}
+\noindent where the number of existential quantifiers may be zero,
+and for all {\small\verb%i%} from {\small\verb%1%} to {\small\verb%n%}:
+{\par\samepage\setseps\small\begin{verbatim}
+     A ?- s
+   ========== ttaci (|- ti[xi1'/xi1]..[xim'/xim])
+    Ai ?- si
+\end{verbatim}}
+\noindent where the primed variables have the same type as their unprimed
+counterparts, then:
+{\par\samepage\setseps\small\begin{verbatim}
+             A ?- s
+   =========================  CASES_THENL [ttac1;...;ttacn] th
+    A1 ?- s1  ...  An ?- sn
+\end{verbatim}}
+\noindent Unless {\small\verb%A'%} is a subset of {\small\verb%A%}, this is an invalid tactic.
+
+\FAILURE
+Fails if the given theorem does not, at the top level,
+have the same number of (possibly multiply existentially quantified) disjuncts
+as the length of the theorem-tactic list (this includes the case where the
+theorem-tactic list is empty), or if any of the tactics generated as specified
+above fail when applied to the goal.
+
+\USES
+Performing very general disjunctive case splits.
+
+\SEEALSO
+DISJ_CASES_THENL, X_CASES_THENL.
+
+\ENDDOC
+\DOC{CHANGED\_TAC}
+
+\TYPE {\small\verb%CHANGED_TAC : (tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Makes a tactic fail if it has no effect.
+
+\DESCRIBE
+When applied to a tactic {\small\verb%T%}, the tactical {\small\verb%CHANGED_TAC%} gives a new tactic
+which is the same as {\small\verb%T%} if that has any effect, and otherwise fails.
+
+\FAILURE
+The application of {\small\verb%CHANGED_TAC%} to a tactic never fails. The resulting
+tactic fails if the basic tactic either fails or has no effect.
+
+\SEEALSO
+TRY, VALID.
+
+\ENDDOC
+\DOC{CHECK\_ASSUME\_TAC}
+
+\TYPE {\small\verb%CHECK_ASSUME_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Adds a theorem to the assumption list of goal unless it solves the goal.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A' |- s%} and a goal {\small\verb%A ?- t%}, the tactic
+{\small\verb%CHECK_ASSUME_TAC%} checks whether the theorem will solve the goal (this
+includes the possibility that the theorem is just {\small\verb%A' |- F%}). If so, the goal
+is duly solved. If not, the theorem is added to the assumptions of the goal,
+unless it is already there (up to alpha-conversion).
+{\par\samepage\setseps\small\begin{verbatim}
+       A ?- t
+   ==============  CHECK_ASSUME_TAC (A' |- F)   [special case 1]
+
+
+       A ?- t
+   ==============  CHECK_ASSUME_TAC (A' |- t)   [special case 2]
+
+
+       A ?- t
+   ==============  CHECK_ASSUME_TAC (A' |- s)   [general case]
+    A u {s} ?- t
+\end{verbatim}}
+\noindent Unless {\small\verb%A'%} is a subset of {\small\verb%A%}, the tactic will be invalid, although
+it will not fail.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+ACCEPT_TAC, ASSUME_TAC, CONTR_TAC, DISCARD_TAC, MATCH_ACCEPT_TAC.
+
+\ENDDOC
+\DOC{check\_valid}
+
+\TYPE {\small\verb%check_valid : (goal -> (goal list # proof) -> bool)%}\egroup
+
+\SYNOPSIS
+Check whether a prospective ({\small\verb%goal list%}, {\small\verb%proof%}) is valid.
+
+\DESCRIBE
+{\small\verb%check_valid (A,t) ([A1,t1;...;An,tn],prf)%} checks whether the applying the
+proof {\small\verb%prf%} to the list of theorems {\small\verb%[(A1 |- t1);...;(An |- tn)]%} would produce
+a theorem alpha-equivalent to {\small\verb%A |- t%}. This check is done by creating this
+list of theorems using {\small\verb%chktac%} and then applying the proof {\small\verb%prf%}.
+
+\FAILURE
+Never fails, unless the proof {\small\verb%prf%} fails or the assignable variable {\small\verb%chktac%}
+has been rebound to a function that fails.
+
+\SEEALSO
+chktac, VALID.
+
+\ENDDOC
+\DOC{chktac}
+
+\TYPE {\small\verb%chktac : ((goal list # proof) -> thm)%}\egroup
+
+\SYNOPSIS
+Apply a proof to a list of theorems created using {\small\verb%mk_thm%}.
+
+\DESCRIBE
+Evaluating {\small\verb%chktac ([A1,t1;...;An,tn],prf)%} applies the proof {\small\verb%prf%} to the list
+of theorems {\small\verb%[(A1 |- t1);...;(An |- tn)]%}.  The list is created by mapping
+{\small\verb%mk_thm%} down the supplied list of subgoals.
+
+{\small\verb%chktac%} is, in fact, an assignable variable in ML, bound when the system is
+built to a function that uses {\small\verb%mk_thm%} Its presence therefore introduces a
+potential insecurity into the system.  But the function {\small\verb%chktac%} is used only
+by {\small\verb%check_valid%} to check the validity of tactics, and users worried about
+security can therefore eliminate this insecurity by doing:
+{\par\samepage\setseps\small\begin{verbatim}
+   chktak := \(gl,prf). fail
+\end{verbatim}}
+\noindent This will disable the validity checking of tactics (using {\small\verb%VALID%}),
+but will remove the insecurity.
+
+\FAILURE
+Never fails (unless the proof {\small\verb%prf%} fails).
+
+\SEEALSO
+check_valid, VALID.
+
+\ENDDOC
+\DOC{CHOOSE\_TAC}
+
+\TYPE {\small\verb%CHOOSE_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Adds the body of an existentially quantified theorem to the assumptions of
+a goal.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A' |- ?x. t%} and a goal, {\small\verb%CHOOSE_TAC%} adds
+{\small\verb%t[x'/x]%} to the assumptions of the goal, where {\small\verb%x'%} is a variant of {\small\verb%x%}
+which is not free in the assumption list; normally {\small\verb%x'%} is just {\small\verb%x%}.
+{\par\samepage\setseps\small\begin{verbatim}
+         A ?- u
+   ====================  CHOOSE_TAC (A' |- ?x. t)
+    A u {t[x'/x]} ?- u
+\end{verbatim}}
+\noindent Unless {\small\verb%A'%} is a subset of {\small\verb%A%}, this is not a valid tactic.
+
+\FAILURE
+Fails unless the given theorem is existentially quantified.
+
+\EXAMPLE
+Suppose we have a goal asserting that the output of an electical circuit
+(represented as a boolean-valued function) will become high at some time:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- ?t. output(t)
+\end{verbatim}}
+\noindent and we have the following theorems available:
+{\par\samepage\setseps\small\begin{verbatim}
+   t1 = |- ?t. input(t)
+   t2 = !t. input(t) ==> output(t+1)
+\end{verbatim}}
+\noindent Then the goal can be solved by the application of:
+{\par\samepage\setseps\small\begin{verbatim}
+   CHOOSE_TAC t1 THEN EXISTS_TAC "t+1" THEN
+     UNDISCH_TAC "input (t:num) :bool" THEN MATCH_ACCEPT_TAC t2
+\end{verbatim}}
+
+\SEEALSO
+CHOOSE_THEN, X_CHOOSE_TAC.
+
+\ENDDOC
+\DOC{CHOOSE\_THEN}
+
+\TYPE {\small\verb%CHOOSE_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+Applies tactic generated from body of existentally quantified theorem.
+
+\DESCRIBE
+When applied to a theorem-tactic {\small\verb%ttac%}, an existentially quantified
+theorem {\small\verb%A' |- ?x. t%}, and a goal, {\small\verb%CHOOSE_THEN%} applies the tactic {\small\verb%ttac
+(t[x'/x] |- t[x'/x])%} to the goal, where {\small\verb%x'%} is a variant of {\small\verb%x%} chosen not to
+be free in the assumption list of the goal. Thus if:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- s1
+   =========  ttac (t[x'/x] |- t[x'/x])
+    B ?- s2
+\end{verbatim}}
+\noindent then
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- s1
+   ==========  CHOOSE_THEN ttac (A' |- ?x. t)
+    B ?- s2
+\end{verbatim}}
+\noindent This is invalid unless {\small\verb%A'%} is a subset of {\small\verb%A%}.
+
+\FAILURE
+Fails unless the given theorem is existentially quantified, or if the
+resulting tactic fails when applied to the goal.
+
+\SEEALSO
+CHOOSE_TAC, X_CHOOSE_THEN.
+
+\ENDDOC
+\DOC{COND\_CASES\_TAC}
+
+\TYPE {\small\verb%COND_CASES_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Finds a conditional sub-term in the term of the goal, if there is one, and
+produces a case split on the conditional of that sub-term.  The terms of the
+two cases show the conditional sub-term already reduced to the respective
+conditional branches.
+
+\DESCRIBE
+{\small\verb%COND_CASES_TAC%} searches for a conditional sub-term in the
+term of a goal, i.e. a sub-term of the form {\small\verb% p=>u|v%}, choosing
+one by its own criteria if there is more than one.
+{\par\samepage\setseps\small\begin{verbatim}
+          t[p=>u|v]
+    =====================
+    {p}t[u]   {~p}t[v]
+\end{verbatim}}
+\noindent where {\small\verb%p%} is not a constant, and the term {\small\verb%p=>u|v%} is free in {\small\verb%t%}.
+
+\FAILURE
+{\small\verb%COND_CASES_TAC%} fails if there is no conditional sub-term as described above.
+
+\EXAMPLE
+For {\small\verb%"x"%}, {\small\verb%"y"%}, {\small\verb%"z1"%} and {\small\verb%"z2"%} of type {\small\verb%":*"%}, and {\small\verb%"P:*->bool"%},
+{\par\samepage\setseps\small\begin{verbatim}
+   COND_CASES_TAC ([], "x = (P y => z1 | z2)");;
+   ([(["P y"], "x = z1"); (["~P y"], "x = z2")], -) : subgoals
+\end{verbatim}}
+\noindent but it fails, for example, if {\small\verb%"y"%} is not free in the
+term part of the goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   COND_CASES_TAC ([], "!y. x = (P y => z1 | z2)");;
+   evaluation failed     COND_CASES_TAC
+\end{verbatim}}
+\noindent In contrast, {\small\verb%ASM_CASES_TAC%} does not perform the replacement:
+{\par\samepage\setseps\small\begin{verbatim}
+   ASM_CASES_TAC "P y" ([], "x = (P y => z1 | z2)");;
+   ([(["P y"], "x = (P y => z1 | z2)"); (["~P y"], "x = (P y => z1 | z2)")],
+    -)
+   : subgoals
+\end{verbatim}}
+\USES
+Useful for case analysis and replacement in one step, when there is a
+conditional sub-term in the term part of the goal.  When there is more than
+one such sub-term and one in particular is to be analyzed, {\small\verb%COND_CASES_TAC%}
+cannot be depended on to choose the `desired' one. It can, however, be used
+repeatedly to analyze all conditional sub-terms of a goal.
+
+\SEEALSO
+ASM_CASES_TAC, DISJ_CASES_TAC, STRUCT_CASES_TAC.
+
+\ENDDOC
+\DOC{CONJUNCTS\_THEN}
+
+\TYPE {\small\verb%CONJUNCTS_THEN : thm_tactical%}\egroup
+Apply a tactic-generating function to the conjuncts
+of a theorem and then apply the resulting
+tactics on after the other.
+
+\SYNOPSIS
+{\small\verb%CONJUNCTS_THEN%} takes a {\small\verb%thm_tactic%}, {\small\verb%f%}, and a {\small\verb%theorem%}, {\small\verb%t%}.
+{\small\verb%t%}'s conclusion must be a conjunction.
+{\small\verb%CONJUNCTS_THEN%} breaks {\small\verb%t%} into two new theorems, {\small\verb%t1%} and {\small\verb%t2%} which
+are {\small\verb%CONJUNCT1%} and {\small\verb%CONJUNCT2%} of {\small\verb%t%} respectively, and then returns
+a new tactic: {\small\verb%f t1 THEN f t2%}.
+
+\DESCRIBE
+{\small\verb%CONJUNCTS_THEN f (A |- l /\ r) =  f (A |- l) THEN f (A |- r)%}; that is,
+if
+{\par\samepage\setseps\small\begin{verbatim}
+   A1 ?- t1                    A2 ?- t2    
+  ==========  f (A |- l)      ==========  f (A |- r)
+   A2 ?- t2                    A3 ?- t3
+\end{verbatim}}
+\noindent then
+{\par\samepage\setseps\small\begin{verbatim}
+    A1 ?- t1
+   ==========  CONJUNCTS_THEN f (A |- l /\ r)
+    A3 ?- t3
+\end{verbatim}}
+\FAILURE
+{\small\verb%CONJUNCTS_THEN f%} will fail with {\small\verb%`CONJUNCTS_THEN2`%} if applied to a 
+theorem whose conclusion is not a conjunction.
+
+\COMMENTS
+{\small\verb%CONJUNCTS_THEN f (A |- u1 /\ ... /\ un)%} results in the tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   f (A |- u1) THEN f (A |- u2 /\ ... /\ un)
+\end{verbatim}}
+\noindent Unfortunately, it is more likely that the user had wanted the tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   f (A |- u1) THEN ... THEN f(A |- un)
+\end{verbatim}}
+Such a tactic could be defined as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   let CONJUNCTS_THENL (f:thm_tactic) thm =
+         itlist $THEN (map f (CONJUNCTS thm)) ALL_TAC;;
+\end{verbatim}}
+\SEEALSO
+CONJUNCT1, CONJUNCT2, CONJUNCTS, CONJUNCTS_TAC, CONJUNCTS_THEN2, 
+STRIP_THM_THEN.
+
+\ENDDOC
+\DOC{CONJUNCTS\_THEN2}
+
+\TYPE {\small\verb%CONJUNCTS_THEN2 : (thm_tactic -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Apply tactic-generating functions to the conjuncts
+of a theorem and then apply the resulting
+tactics one after the other.
+
+\DESCRIBE
+{\small\verb%CONJUNCTS_THEN2%} takes two {\small\verb%thm_tactic%}s, {\small\verb%f1%} and {\small\verb%f2%}, and a theorem, {\small\verb%t%}.
+{\small\verb%t%}'s conclusion must be a conjunction.
+{\small\verb%CONJUNCTS_THEN2%} breaks {\small\verb%t%} into two new theorems, {\small\verb%t1%} and {\small\verb%t2%} which
+are {\small\verb%CONJUNCT1%} and {\small\verb%CONJUNCT2%} of {\small\verb%t%} respectively, and then returns
+the tactic {\small\verb%f1 t1 THEN f2 t2%}.
+{\small\verb%CONJUNCTS_THEN2 f1 f2 (A |- l /\ r) =  f1 (A |- l) THEN f2 (A |- r)%}; that is,
+if
+{\par\samepage\setseps\small\begin{verbatim}
+   A1 ?- t1                     A2 ?- t2    
+  ==========  f1 (A |- l)      ==========  f2 (A |- r)
+   A2 ?- t2                     A3 ?- t3
+\end{verbatim}}
+\noindent then
+{\par\samepage\setseps\small\begin{verbatim}
+    A1 ?- t1
+   ==========  CONJUNCTS_THEN2 f1 f2 (A |- l /\ r)
+    A3 ?- t3
+\end{verbatim}}
+\FAILURE
+{\small\verb%CONJUNCTS_THEN f%} will fail if applied to a 
+theorem whose conclusion is not a conjunction.
+
+\COMMENTS
+Some users would find {\small\verb%(thm_tactic -> thm_tactic -> tactical)%} a more 
+illuminating type description for {\small\verb%CONJUNCTS_THEN2%}.
+{\small\verb%CONJUNCTS_THEN%} is defined as:
+{\par\samepage\setseps\small\begin{verbatim}
+CONJUNCTS_THEN f = CONJUNCTS_THEN2 f f
+\end{verbatim}}
+\USES
+The construction of complex {\small\verb%tactical%}s like {\small\verb%CONJUNCTS_THEN%}.
+
+\SEEALSO
+CONJUNCT1, CONJUNCT2, CONJUNCTS, CONJUNCTS_TAC, CONJUNCTS_THEN2, 
+STRIP_THM_THEN.
+
+\ENDDOC
+\DOC{CONJ\_TAC}
+
+\TYPE {\small\verb%CONJ_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Reduces conjunctive goal to two separate subgoals.
+
+\DESCRIBE
+When applied to a goal {\small\verb%A ?- t1 /\ t2%}, the tactic {\small\verb%CONJ_TAC%} reduces it to the
+two subgoals corresponding to each conjunct separately.
+{\par\samepage\setseps\small\begin{verbatim}
+       A ?- t1 /\ t2
+   ======================  CONJ_TAC
+    A ?- t1      A ?- t2
+\end{verbatim}}
+\FAILURE
+Fails unless the conclusion of the goal is a conjunction.
+
+\SEEALSO
+STRIP_TAC.
+
+\ENDDOC
+\DOC{CONTR\_TAC}
+
+\TYPE {\small\verb%CONTR_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Solves any goal from contradictory theorem.
+
+\DESCRIBE
+When applied to a contradictory theorem {\small\verb%A' |- F%}, and a goal {\small\verb%A ?- t%},
+the tactic {\small\verb%CONTR_TAC%} completely solves the goal. This is an invalid
+tactic unless {\small\verb%A'%} is a subset of {\small\verb%A%}.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   ========  CONTR_TAC (A' |- F)
+
+\end{verbatim}}
+\FAILURE
+Fails unless the theorem is contradictory, i.e. has {\small\verb%F%} as its conclusion.
+
+\SEEALSO
+CHECK_ASSUME_TAC, CONTR, CCONTR, CONTRAPOS, NOT_ELIM.
+
+\ENDDOC
+\DOC{CONV\_TAC}
+
+\TYPE {\small\verb%CONV_TAC : (conv -> tactic)%}\egroup
+
+\SYNOPSIS
+Transform a goal by applying a conversion.
+
+\DESCRIBE
+If {\small\verb%c%} is a conversion, then {\small\verb%CONV_TAC c%} is a tactic that applies {\small\verb%c%} to the
+goal.  That is, if {\small\verb%c%} maps a term {\small\verb%"g"%} to the theorem {\small\verb%|- g = g'%}, then the
+tactic {\small\verb%CONV_TAC c%} reduces a goal {\small\verb%g%} to the subgoal {\small\verb%g'%}.  More precisely, if
+{\small\verb%c "g"%} returns {\small\verb%A' |- g = g'%}, then:
+{\par\samepage\setseps\small\begin{verbatim}
+         A ?- g
+     ===============  CONV_TAC c
+         A ?- g'
+\end{verbatim}}
+\noindent Note that the conversion {\small\verb%c%} should return a theorem whose
+assumptions are also among the assumptions of the goal (normally, the
+conversion will returns a theorem with no assumptions). {\small\verb%CONV_TAC%} does not
+fail if this is not the case, but the theorem ultimately proved using this
+tactic will have more assumptions than those of the original goal.
+
+\FAILURE 
+{\small\verb%CONV_TAC c%} applied to a goal {\small\verb%A ?- g%} fails if {\small\verb%c%} fails when applied to the
+term {\small\verb%g%}. The function returned by {\small\verb%CONV_TAC c%} will also fail if the ML
+function {\small\verb%c:term->thm%} is not, in fact, a conversion (i.e. a function that maps
+a term {\small\verb%t%} to a theorem {\small\verb%|- t = t'%}).
+
+\USES
+{\small\verb%CONV_TAC%} is used to apply simplifications that can't be expressed as
+equations (rewrite rules).  For example, a goal can be simplified by
+beta-reduction, which is not expressible as a single equation, using the tactic
+{\par\samepage\setseps\small\begin{verbatim}
+   CONV_TAC(DEPTH_CONV BETA_CONV)
+\end{verbatim}}
+\noindent The conversion {\small\verb%BETA_CONV%} maps a beta-redex {\small\verb%"(\x.u)v"%} to the
+theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (\x.u)v = u[v/x]
+\end{verbatim}}
+\noindent and the ML expression {\small\verb%(DEPTH_CONV BETA_CONV)%} evaluates to a
+conversion that maps a term {\small\verb%"t"%} to the theorem {\small\verb%|- t=t'%} where {\small\verb%t'%} is
+obtained from {\small\verb%t%} by beta-reducing all beta-redexes in {\small\verb%t%}. Thus
+{\small\verb%CONV_TAC(DEPTH_CONV BETA_CONV)%} is a tactic which reduces beta-redexes
+anywhere in a goal.
+
+\SEEALSO
+CONV_RULE.
+
+\ENDDOC
+\DOC{DISCARD\_TAC}
+
+\TYPE {\small\verb%DISCARD_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Discards a theorem already present in a goal's assumptions.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A' |- s%} and a goal, {\small\verb%DISCARD_TAC%}
+checks that {\small\verb%s%} is simply {\small\verb%T%} (true), or already exists (up
+to alpha-conversion) in the assumption list of the goal. In
+either case, the tactic has no effect. Otherwise, it fails.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   ========  DISCARD_TAC (A' |- s)
+    A ?- t
+\end{verbatim}}
+\FAILURE
+Fails if the above conditions are not met, i.e. the theorem's conclusion
+is not {\small\verb%T%} or already in the assumption list (up to alpha-conversion).
+
+\SEEALSO
+POP_ASSUM, POP_ASSUM_LIST.
+
+\ENDDOC
+\DOC{DISCH\_TAC}
+
+\TYPE {\small\verb%DISCH_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Moves the antecedent of an implicative goal into the assumptions.
+
+\DESCRIBE
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- u ==> v
+   ==============  DISCH_TAC
+    A u {u} ?- v
+\end{verbatim}}
+\noindent Note that {\small\verb%DISCH_TAC%} treats {\small\verb%"~u"%} as {\small\verb%"u ==> F"%}.
+
+\FAILURE
+{\small\verb%DISCH_TAC%} will fail for goals which are not implications or negations.
+
+\USES
+Solving goals of the form {\small\verb%"u ==> v"%} by rewriting {\small\verb%"v"%} with {\small\verb%"u"%}.
+
+\COMMENTS
+If the antecedent already appears in the assumptions, it will be duplicated.
+{\small\verb%DISCH_TAC%} is like {\small\verb%DISCH_THEN ASSUME_TAC%}.
+
+\SEEALSO
+DISCH, DISCH_ALL, DISCH_THEN, FILTER_DISCH_TAC, FILTER_DISCH_THEN, NEG_DISCH, 
+STRIP_TAC, UNDISCH, UNDISCH_ALL, UNDISCH_TAC.
+
+\ENDDOC
+\DOC{DISCH\_THEN}
+
+\TYPE {\small\verb%DISCH_THEN : (thm_tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Removes and and may use the antecedent of the conclusion of a goal.
+
+\DESCRIBE
+{\small\verb%DISCH_THEN%} removes the antecedent and then creates a theorem by 
+{\small\verb%ASSUME%}ing it.
+This new theorem is passed to {\small\verb%DISCH_THEN%}'s argument, 
+which is subsequently expanded.
+i.e. {\small\verb%DISCH_THEN f (asl,"t1 ==> t2") = f(ASSUME "t1")(asl,"t2")%}.
+For example, if
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   ========  f (ASSUME "u")
+    B ?- v
+\end{verbatim}}
+\noindent then
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- u ==> t
+   ==============  DISCH_THEN f
+       B ?- v
+\end{verbatim}}
+\noindent Note that {\small\verb%DISCH_THEN%} treats {\small\verb%"~u"%} as {\small\verb%"u ==> F"%}.
+
+\FAILURE
+{\small\verb%DISCH_THEN%} will fail for goals which are not implications or negations.
+
+\USES
+For preprocessing an antecedent before moving it to the assumptions.
+For example:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- (x = y) ==> t
+   ====================  DISCH_THEN (ASSUME_TAC o SYM)
+     A u {\small\verb%y = x%} ?- t 
+\end{verbatim}}
+\noindent Also, for using antecedents and then throwing them away, 
+without adding them to the assumptions.
+For example:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- (x = y) ==> t x
+   ======================  DISCH_THEN (\th:thm. PURE_REWRITE_TAC [th])
+          A ?- t y
+\end{verbatim}}
+\SEEALSO
+DISCH, DISCH_ALL, DISCH_TAC, NEG_DISCH, FILTER_DISCH_TAC, FILTER_DISCH_THEN, 
+STRIP_TAC, UNDISCH, UNDISCH_ALL, UNDISCH_TAC.
+
+\ENDDOC
+\DOC{DISJ1\_TAC}
+
+\TYPE {\small\verb%DISJ1_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Selects the left disjunct of a disjunctive goal.
+
+\DESCRIBE
+{\par\samepage\setseps\small\begin{verbatim}
+   A ?- t1 \/ t2
+  ===============  DISJ1_TAC
+     A ?- t1
+\end{verbatim}}
+
+\FAILURE
+Fails if the goal is not a disjunction.
+
+\SEEALSO
+DISJ1, DISJ2, DISJ2_TAC.
+
+\ENDDOC
+\DOC{DISJ2\_TAC}
+
+\TYPE {\small\verb%DISJ2_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Selects the right disjunct of a disjunctive goal.
+
+\DESCRIBE
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t1 \/ t2
+   ===============  DISJ2_TAC
+       A ?- t2
+\end{verbatim}}
+
+\FAILURE
+Fails if the goal is not a disjunction.
+
+\SEEALSO
+DISJ1, DISJ1_TAC, DISJ2.
+
+\ENDDOC
+\DOC{DISJ\_CASES\_TAC}
+
+\TYPE {\small\verb%DISJ_CASES_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Produces a case split based on a disjunctive theorem.
+
+\DESCRIBE
+Given a theorem {\small\verb%th%} of the form {\small\verb%A |- u \/ v%}, {\small\verb%DISJ_CASES_TAC th%}
+applied to a goal
+produces two subgoals, one with {\small\verb%u%} as an assumption and one with {\small\verb%v%}:
+{\par\samepage\setseps\small\begin{verbatim}
+         t
+    ===========
+    {u}t   {v}t
+\end{verbatim}}
+\noindent {\small\verb%DISJ_CASES_TAC%} is implemented as {\small\verb%DISJ_CASES_THEN ASSUME_TAC%}.
+
+\FAILURE
+{\small\verb%DISJ_CASES_TAC%} does not fail on theorems of the correct form.
+
+\EXAMPLE
+Given the simple fact about arithmetic {\small\verb%th%},
+{\small\verb% |- (m = 0) \/ (?n. m = SUC n)%},
+the tactic {\small\verb%DISJ_CASES_TAC th%} can be used to
+produce a case split:
+{\par\samepage\setseps\small\begin{verbatim}
+   DISJ_CASES_TAC th ([],"(P:num -> bool) m");;
+   ([(["m = 0"], "P m"); 
+     (["?n. m = SUC n"], "P m")], -) : subgoals
+\end{verbatim}}
+\USES
+Performing a case analysis according to a disjunctive theorem.
+
+\SEEALSO
+ASSUME_TAC, ASM_CASES_TAC, COND_CASES_TAC, DISJ_CASES_THEN, STRUCT_CASES_TAC.
+
+\ENDDOC
+
+
+
+\DOC{DISJ\_CASES\_THEN}
+
+\TYPE {\small\verb%DISJ_CASES_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+Split the goal into two cases by applying the same tactic-generating
+function to each disjunct of a given disjunctive theorem and then
+applying the resulting tactics to goal instances.
+
+\DESCRIBE
+If the tactic-generating function {\small\verb%f:thm->tactic%} applied to either
+{\small\verb%ASSUME%}'d disjunct produces results as follows when applied to a goal
+{\small\verb%(A ?- t)%}: 
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t                                A ?- t
+   =========  f (u |- u)      and        =========  f (v |- v)
+    A ?- t1                               A ?- t2
+\end{verbatim}}
+\noindent then applying {\small\verb%DISJ_CASES_THEN f (|- u \/ v)%}
+to the goal {\small\verb%(A ?- t)%} produces two subgoals.
+{\par\samepage\setseps\small\begin{verbatim}
+           A ?- t
+   ======================  DISJ_CASES_THEN f (|- u \/ v)
+    A ?- t1      A ?- t2
+\end{verbatim}}
+
+\FAILURE
+Fails if the theorem is not a disjunction.  An invalid tactic is
+produced if the theorem has any hypothesis which is not
+alpha-convertible to an assumption of the goal.
+
+\EXAMPLE
+Given the theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |- (m = 0) \/ (?n. m = SUC n)
+\end{verbatim}}
+\noindent and a goal of the form {\small\verb%([],"(PRE m = m) = (m = 0)")%},
+applying the tactic 
+{\par\samepage\setseps\small\begin{verbatim}
+   DISJ_CASES_THEN ASSUME_TAC th
+\end{verbatim}}
+\noindent produces two subgoals, each with one disjunct as an added
+assumption:   
+{\par\samepage\setseps\small\begin{verbatim}
+   "(PRE m = m) = (m = 0)"
+       [ "?n. m = SUC n" ]
+
+   "(PRE m = m) = (m = 0)"
+       [ "m = 0" ]
+\end{verbatim}}
+
+\USES
+Building cases tactics. For example, {\small\verb%DISJ_CASES_TAC%} is defined by:
+{\par\samepage\setseps\small\begin{verbatim}
+   let DISJ_CASES_TAC = DISJ_CASES_THEN ASSUME_TAC
+\end{verbatim}}
+
+\COMMENTS
+Use {\small\verb%DISJ_CASES_THEN2%} to apply different tactic generating functions
+to each case.
+
+\SEEALSO
+STRIP_THM_THEN, CHOOSE_THEN, CONJUNCTS_THEN, CONJUNCTS_THEN2, 
+DISJ_CASES_TAC, DISJ_CASES_THEN2, DISJ_CASES_THENL.
+
+\ENDDOC
+\DOC{DISJ\_CASES\_THEN2}
+
+\TYPE {\small\verb%DISJ_CASES_THEN2 : (thm_tactic -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Split the goal into two cases by applying distinct tactic-generating
+functions to the disjuncts of a given disjunctive theorem and then
+applying the resulting tactics to goal instances.
+
+\DESCRIBE
+If the tactic-generating functions {\small\verb%f1:thm->tactic%} and {\small\verb%f2%}, applied to the
+{\small\verb%ASSUME%}'d left and right disjunct of a theorem {\small\verb%|- u \/ v%}
+respectively, produce results as follows when applied to a goal {\small\verb%(A ?- t)%}:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t                                 A ?- t
+   =========  f1 (u |- u)      and        =========  f2 (v |- v)
+    A ?- t1                                A ?- t2
+\end{verbatim}}
+\noindent then applying {\small\verb%DISJ_CASES_THEN2 f1 f2 (|- u \/ v)%} to the
+goal {\small\verb%(A ?- t)%} produces two subgoals.
+{\par\samepage\setseps\small\begin{verbatim}
+           A ?- t
+   ======================  DISJ_CASES_THEN2 f1 f2 (|- u \/ v)
+    A ?- t1      A ?- t2
+\end{verbatim}}
+
+\FAILURE
+Fails if the theorem is not a disjunction.  An invalid tactic is
+produced if the theorem has any hypothesis which is not
+alpha-convertible to an assumption of the goal.
+
+\EXAMPLE
+Given the theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |- (m = 0) \/ (?n. m = SUC n)
+\end{verbatim}}
+\noindent and a goal of the form {\small\verb%([], "(PRE m = m) = (m = 0)")%},
+applying the tactic 
+{\par\samepage\setseps\small\begin{verbatim}
+   DISJ_CASES_THEN2 SUBST1_TAC ASSUME_TAC th
+\end{verbatim}}
+\noindent to the goal will produce two subgoals 
+{\par\samepage\setseps\small\begin{verbatim}
+   "(PRE m = m) = (m = 0)"
+       [ "?n. m = SUC n" ]
+
+   "(PRE 0 = 0) = (0 = 0)"
+\end{verbatim}}
+\noindent The first subgoal has had the disjunct {\small\verb%"(m = 0)"%} used 
+for a substitution, and the second has added the disjunct to the
+assumption list.  Alternatively, applying the tactic
+{\par\samepage\setseps\small\begin{verbatim}
+   DISJ_CASES_THEN2 SUBST1_TAC (CHOOSE_THEN SUBST1_TAC) th
+\end{verbatim}}
+\noindent to the goal produces the subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+   "(PRE(SUC n) = SUC n) = (SUC n = 0)"
+
+   "(PRE 0 = 0) = (0 = 0)"
+\end{verbatim}}
+
+\USES
+Building cases tacticals. For example, {\small\verb%DISJ_CASES_THEN%} is defined by:
+{\par\samepage\setseps\small\begin{verbatim}
+  let DISJ_CASES_THEN f = DISJ_CASES_THEN2 f f
+\end{verbatim}}
+
+\SEEALSO
+STRIP_THM_THEN, CHOOSE_THEN, CONJUNCTS_THEN, CONJUNCTS_THEN2,
+DISJ_CASES_THEN, DISJ_CASES_THENL.
+
+\ENDDOC
+\DOC{DISJ\_CASES\_THENL}
+
+\TYPE {\small\verb%DISJ_CASES_THENL : (thm_tactic list -> thm_tactic)%}\egroup
+
+\SYNOPSIS
+Split the goal into multiple cases by applying separate tactic-generating
+functions to the disjuncts of a given disjunctive theorem and then
+applying the resulting tactics to goal instances. 
+
+\DESCRIBE
+If the tactic-generating functions {\small\verb%f1:thm->tactic%} through {\small\verb%fn%}
+applied to the {\small\verb%ASSUME%}'d disjuncts of a theorem {\small\verb%|- d1 \/ d2 \/...\/ dn%} 
+produce results as follows when applied to a goal {\small\verb%(A ?- t)%}:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t                                A ?- t
+   =========  f1 (d1 |- d1) and ... and =========  fn (dn |- dn)
+    A ?- t1                              A ?- tn
+\end{verbatim}}
+\noindent then applying {\small\verb%DISJ_CASES_THENL [f1;...;fn] (|- d1 \/...\/ dn)%} 
+to the goal {\small\verb%(A ?- t)%} produces n subgoals.
+{\par\samepage\setseps\small\begin{verbatim}
+           A ?- t
+   =======================  DISJ_CASES_THENL [f1;...;fn] (|- d1 \/...\/ dn)
+    A ?- t1  ...  A ?- tn
+\end{verbatim}}
+\noindent {\small\verb%DISJ_CASES_THENL%} is defined using iteration, hence for
+theorems with more than {\small\verb%n%} disjuncts, {\small\verb%dn%} would itself be disjunctive.
+
+\FAILURE
+Fails if the number of tactic generating functions in the list exceeds
+the number of disjuncts in the theorem.  An invalid tactic is
+produced if the theorem has any hypothesis which is not
+alpha-convertible to an assumption of the goal.
+
+\USES
+Used when the goal is to be split into several cases, where a
+different tactic-generating function is to be applied to each case.
+
+\SEEALSO
+CHOOSE_THEN, CONJUNCTS_THEN, CONJUNCTS_THEN2,
+DISJ_CASES_THEN, DISJ_CASES_THEN2, STRIP_THM_THEN.
+
+\ENDDOC
+\DOC{EQ\_TAC}
+
+\TYPE {\small\verb%EQ_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Reduces goal of equality of boolean terms to forward and backward implication.
+
+\DESCRIBE
+When applied to a goal {\small\verb%A ?- t1 = t2%}, where {\small\verb%t1%} and {\small\verb%t2%} have type {\small\verb%bool%},
+the tactic {\small\verb%EQ_TAC%} returns the subgoals {\small\verb%A ?- t1 ==> t2%} and
+{\small\verb%A ?- t2 ==> t1%}.
+{\par\samepage\setseps\small\begin{verbatim}
+             A ?- t1 = t2
+   =================================  EQ_TAC
+    A ?- t1 ==> t2   A ?- t2 ==> t1
+\end{verbatim}}
+\FAILURE
+Fails unless the conclusion of the goal is an equation between boolean terms.
+
+\SEEALSO
+EQ_IMP_RULE, IMP_ANTISYM_RULE.
+
+\ENDDOC
+\DOC{EVERY}
+
+\TYPE {\small\verb%EVERY : (tactic list -> tactic)%}\egroup
+
+\SYNOPSIS
+Sequentially applies all the tactics in a given list of tactics.
+
+\DESCRIBE
+When applied to a list of tactics {\small\verb%[T1; ... ;Tn]%}, and a goal {\small\verb%g%}, the tactical
+{\small\verb%EVERY%} applies each tactic in sequence to every
+subgoal generated by the previous one. This can be represented as:
+{\par\samepage\setseps\small\begin{verbatim}
+   EVERY [T1;...;Tn] = T1 THEN ... THEN Tn
+\end{verbatim}}
+\noindent If the tactic list is empty, the resulting tactic has no effect.
+
+\FAILURE
+The application of {\small\verb%EVERY%} to a tactic list never fails. The resulting
+tactic fails iff any of the component tactics do.
+
+\COMMENTS
+It is possible to use {\small\verb%EVERY%} instead of {\small\verb%THEN%}, but probably
+stylistically inferior. {\small\verb%EVERY%} is more useful when applied to a list of
+tactics generated by a function.
+
+\SEEALSO
+FIRST, MAP_EVERY, THEN.
+
+\ENDDOC
+\DOC{EVERY\_ASSUM}
+
+\TYPE {\small\verb%EVERY_ASSUM : (thm_tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Sequentially applies all tactics given by mapping a function over the
+assumptions of a goal.
+
+\DESCRIBE
+When applied to a theorem-tactic {\small\verb%f%} and a goal {\small\verb%({A1;...;An} ?- C)%}, the
+{\small\verb%EVERY_ASSUM%} tactical maps {\small\verb%f%} over a list of {\small\verb%ASSUME%}d assumptions then
+applies the resulting tactics, in sequence, to the goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   EVERY_ASSUM f ({A1;...;An} ?- C)
+    = (f(A1 |- A1) THEN ... THEN f(An |- An)) ({A1;...;An} ?- C)
+\end{verbatim}}
+\noindent If the goal has no assumptions, then {\small\verb%EVERY_ASSUM%} has no effect.
+
+\FAILURE
+The application of {\small\verb%EVERY_ASSUM%} to a theorem-tactic and a goal fails
+if the theorem-tactic fails when applied to any of the {\small\verb%ASSUME%}d assumptions
+of the goal, or if any of the resulting tactics fail when applied
+sequentially.
+
+\SEEALSO
+ASSUM_LIST, MAP_EVERY, MAP_FIRST, THEN.
+
+\ENDDOC
+\DOC{EVERY\_TCL}
+
+\TYPE {\small\verb%EVERY_TCL : (thm_tactical list -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Composes list of theorem-tacticals.
+
+\DESCRIBE
+When given a list of theorem-tacticals and a theorem, {\small\verb%EVERY_TCL%} simply
+composes their effects on the theorem. The effect is:
+{\par\samepage\setseps\small\begin{verbatim}
+   EVERY_TCL [ttl1;...;ttln] = ttl1 THEN_TCL ... THEN_TCL ttln
+\end{verbatim}}
+\noindent In other words, if:
+{\par\samepage\setseps\small\begin{verbatim}
+   ttl1 ttac th1 = ttac th2  ...  ttln ttac thn = ttac thn'
+\end{verbatim}}
+\noindent then:
+{\par\samepage\setseps\small\begin{verbatim}
+   EVERY_TCL [ttl1;...;ttln] ttac th1 = ttac thn'
+\end{verbatim}}
+\noindent If the theorem-tactical list is empty, the resulting theorem-tactical
+behaves in the same way as {\small\verb%ALL_THEN%}, the identity theorem-tactical.
+
+\FAILURE
+The application to a list of theorem-tacticals never fails.
+
+\SEEALSO
+FIRST_TCL, ORELSE_TCL, THEN_TCL.
+
+\ENDDOC
+\DOC{EXISTS\_TAC}
+
+\TYPE {\small\verb%EXISTS_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Reduces existentially quantified goal to one involving a specific witness.
+
+\DESCRIBE
+When applied to a term {\small\verb%u%} and a goal {\small\verb%?x. t%}, the inference
+rule {\small\verb%EXISTS_TAC%} reduces the goal to {\small\verb%t[u/x]%} (substituting {\small\verb%u%}
+for all free instances of {\small\verb%x%} in {\small\verb%t%}, with variable renaming if
+necessary to avoid free variable capture).
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- ?x. t
+   =============  EXISTS_TAC "u"
+    A ?- t[u/x]
+\end{verbatim}}
+\FAILURE
+Fails unless the goal's conclusion is existentially quantified and the
+term supplied has the same type as the quantified variable in the goal.
+
+\EXAMPLE
+The goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- ?x. x=T
+\end{verbatim}}
+\noindent can be solved by:
+{\par\samepage\setseps\small\begin{verbatim}
+   EXISTS_TAC "T" THEN REFL_TAC
+\end{verbatim}}
+\SEEALSO
+EXISTS.
+
+\ENDDOC
+\DOC{FAIL\_TAC}
+
+\TYPE {\small\verb%FAIL_TAC : (string -> tactic)%}\egroup
+
+\SYNOPSIS
+Tactic which always fails, with the supplied string.
+
+\DESCRIBE
+Whatever goal it is applied to, {\small\verb%FAIL_TAC s%} always fails
+with the string {\small\verb%s%}.
+
+\FAILURE
+{\small\verb%FAIL_TAC s%} is a tactic that always fails.
+
+\EXAMPLE
+The following example uses the fact that if a tactic {\small\verb%t1%} solves
+a goal, then the tactic {\small\verb%t1 THEN t2%} never results in the application
+of {\small\verb%t2%} to anything, because {\small\verb%t1%} produces no subgoals. In attempting
+to solve the following goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- x => T | T
+\end{verbatim}}
+\noindent the tactic
+{\par\samepage\setseps\small\begin{verbatim}
+   REWRITE_TAC[] THEN FAIL_TAC `Simple rewriting failed to solve goal`
+\end{verbatim}}
+\noindent will fail with the message provided, whereas:
+{\par\samepage\setseps\small\begin{verbatim}
+   CONV_TAC COND_CONV THEN FAIL_TAC `Using COND_CONV failed to solve goal`
+\end{verbatim}}
+\noindent will silently solve the goal because {\small\verb%COND_CONV%} reduces it to
+just {\small\verb%?- T%}.
+
+\SEEALSO
+ALL_TAC, NO_TAC.
+
+\ENDDOC
+\DOC{FILTER\_ASM\_REWRITE\_TAC}
+
+\TYPE {\small\verb%FILTER_ASM_REWRITE_TAC : ((term -> bool) -> thm list -> tactic)%}\egroup
+
+\SYNOPSIS
+Tactic for rewriting with {\small\verb%basic_rewrites%}, a given list of theorems,
+and a specified subset of the assumptions of the goal.
+
+\DESCRIBE
+This function implements selective rewriting with a subset of the
+assumptions of the goal. The first argument (a predicate on terms) is
+applied to all assumptions, and the ones which return {\small\verb%true%} are
+used (along with the set of basic tautologies and the given theorem
+list) to rewrite the goal. See {\small\verb%GEN_REWRITE_TAC%} for more information
+on rewriting.
+
+\FAILURE
+{\small\verb%FILTER_ASM_REWRITE_TAC%} does not fail, however it can result in an
+invalid tactic if the rewrite is invalid. This happens when a theorem
+used for rewriting has assumptions which are not alpha-convertible to
+assumptions of the goal. Using {\small\verb%FILTER_ASM_REWRITE_TAC%} may result in
+a diverging sequence of rewrites. In such cases
+{\small\verb%FILTER_ONCE_ASM_REWRITE_TAC%} may be used.
+
+\USES
+This tactic can be applied when rewriting with all assumptions results
+in divergence, or in an undesired proof state. Typically, the 
+predicate can model checks as to whether a certain variable appears on
+the left-hand side of an equational assumption, or whether the
+assumption is in disjunctive form. Thus it allows choice of assumptions
+to rewrite with in a position-independent fashion.
+
+Another use is to improve performance when there are many assumptions
+which are not applicable. Rewriting, though a powerful method of
+proving theorems in HOL, can result in a reduced performance due to
+the pattern matching and the number of primitive inferences involved.
+
+\SEEALSO
+ASM_REWRITE_TAC, FILTER_ONCE_ASM_REWRITE_TAC,
+GEN_REWRITE_TAC, ONCE_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_TAC.
+
+\ENDDOC
+\DOC{FILTER\_DISCH\_TAC}
+
+\TYPE {\small\verb%FILTER_DISCH_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Conditionally moves the antecedent of an implicative goal into the assumptions.
+
+\DESCRIBE
+{\small\verb%FILTER_DISCH_TAC%} will move the antecedent of an implication into the 
+assumptions, providing its parameter, does not occur in the antecedent.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- u ==> v
+   ==============  FILTER_DISCH_TAC "w"
+    A u {u} ?- v
+\end{verbatim}}
+\noindent Note that {\small\verb%DISCH_TAC%} treats {\small\verb%"~u"%} as {\small\verb%"u ==> F"%}.
+
+\FAILURE
+{\small\verb%FILTER_DISCH_TAC%} will fail if a term which is identical, or alpha-equivalent 
+to {\small\verb%"w"%} occurs free in the antecedent.
+{\small\verb%FILTER_DISCH_TAC%} will also fail if the theorem is not 
+an implication or a negation.
+
+\COMMENTS
+Unlike {\small\verb%DISCH_TAC%}, 
+the antecedent will be {\small\verb%STRIP%}ed into its various components 
+before being {\small\verb%ASSUME%}d.
+This stripping includes generating multiple goals for case-analysis of 
+disjunctions.
+Also, unlike {\small\verb%DISCH_TAC%}, should any component of the discharged antecedent 
+directly imply or contradict the goal, 
+then this simplification will also be made.
+Again, unlike {\small\verb%DISCH_TAC%}, {\small\verb%FILTER_DISCH_TAC%} will not duplicate identical
+or alpha-equivalent assumptions.
+{\small\verb%FILTER_DISCH_TAC "w"%} is like {\small\verb%FILTER_DISCH_THEN STRIP_ASSUME_TAC "w"%}.
+
+\SEEALSO
+DISCH, DISCH_ALL, DISCH_TAC, DISCH_THEN, FILTER_DISCH_THEN, NEG_DISCH, 
+STRIP_TAC, UNDISCH, UNDISCH_ALL, UNDISCH_TAC.
+
+\ENDDOC
+\DOC{FILTER\_DISCH\_THEN}
+
+\TYPE {\small\verb%FILTER_DISCH_THEN : (thm_tactic -> term -> tactic)%}\egroup
+
+\SYNOPSIS
+For conditionally removing and using an antecedent of the conclusion of a goal.
+
+\DESCRIBE
+If {\small\verb%FILTER_DISCH_THEN%}'s second argument, a term, 
+does not occur in the antecedent,
+then {\small\verb%FILTER_DISCH_THEN%} removes the antecedent and then creates a theorem by
+{\small\verb%ASSUME%}ing it.
+This new theorem is passed to {\small\verb%FILTER_DISCH_THEN%}'s first argument,
+which is subsequently expanded.
+For example, if
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   ========  f (ASSUME "u")
+    B ?- v
+\end{verbatim}}
+\noindent then
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- u ==> t
+   ==============  FILTER_DISCH_THEN f
+       B ?- v
+\end{verbatim}}
+\noindent Note that {\small\verb%FILTER_DISCH_THEN%} treats {\small\verb%"~u"%} as {\small\verb%"u ==> F"%}.
+
+\FAILURE
+{\small\verb%FILTER_DISCH_THEN%} will fail if a term which is identical, or alpha-equivalent
+to {\small\verb%"w"%} occurs free in the antecedent.
+{\small\verb%FILTER_DISCH_THEN%} will also fail if the theorem is 
+an implication or a negation.
+
+\COMMENTS
+{\small\verb%FILTER_DISCH_THEN%} is most easily understood by first understanding 
+{\small\verb%DISCH_THEN%}.
+
+\USES
+For preprocessing an antecedent before moving it to the assumptions.
+Also, for using antecedents and then throwing them away, 
+without adding them to the assumptions.
+
+\SEEALSO
+DISCH, DISCH_ALL, DISCH_TAC, DISCH_THEN, FILTER_DISCH_TAC, NEG_DISCH, 
+STRIP_TAC, UNDISCH, UNDISCH_ALL, UNDISCH_TAC.
+
+\ENDDOC
+\DOC{FILTER\_GEN\_TAC}
+
+\TYPE {\small\verb%FILTER_GEN_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Strips off a universal quantifier, but fails for a given quantified variable.
+
+\DESCRIBE
+When applied to a term {\small\verb%s%} and a goal {\small\verb%A ?- !x. t%}, the tactic {\small\verb%FILTER_GEN_TAC%}
+fails if the quantified variable {\small\verb%x%} is the same as {\small\verb%s%}, but otherwise
+advances the goal in the same way as {\small\verb%GEN_TAC%}, i.e. returns the goal
+{\small\verb%A ?- t[x'/x]%} where {\small\verb%x'%} is a variant of {\small\verb%x%} chosen to avoid clashing with
+any variables free in the goal's assumption list. Normally {\small\verb%x'%} is just {\small\verb%x%}.
+{\par\samepage\setseps\small\begin{verbatim}
+     A ?- !x. t
+   ==============  FILTER_GEN_TAC "s"
+    A ?- t[x'/x]
+\end{verbatim}}
+\FAILURE
+Fails if the goal's conclusion is not universally quantified or the
+quantified variable is equal to the given term.
+
+\SEEALSO
+GEN, GEN_TAC, GENL, GEN_ALL, SPEC, SPECL, SPEC_ALL, SPEC_TAC, STRIP_TAC.
+
+\ENDDOC
+\DOC{FILTER\_ONCE\_ASM\_REWRITE\_TAC}
+
+\TYPE {\small\verb%FILTER_ONCE_ASM_REWRITE_TAC : ((term -> bool) -> thm list -> tactic)%}\egroup
+
+\SYNOPSIS
+Allows rewriting with a subset of assumptions of the goal, once at
+each matching subterm.
+
+\DESCRIBE
+The first argument is a predicate applied to the assumptions. The goal
+is rewritten with the assumptions for which the predicate returns
+{\small\verb%true%}, the given list of theorems, and the tautologies stored in
+{\small\verb%basic_rewrites%}. It searches the term of the goal once, without
+applying rewrites recursively. Thus it avoids the divergence which can
+result from the application of {\small\verb%FILTER_ASM_REWRITE_TAC%}. For more
+information on rewriting tactics, see {\small\verb%GEN_REWRITE_TAC%}.
+
+\FAILURE
+{\small\verb%FILTER_ONCE_ASM_REWRITE_TAC%} does not fail when given
+arguments of the correct type. Unlike {\small\verb%FILTER_ASM_REWRITE_TAC%}, it
+does not result in divergence.
+
+\USES
+This function is useful when rewriting with a subset of assumptions of
+a goal, allowing control of the number of rewriting passes.
+
+\SEEALSO
+ASM_REWRITE_TAC, FILTER_ASM_REWRITE_TAC, GEN_REWRITE_TAC,
+ONCE_ASM_REWRITE_TAC, ONCE_DEPTH_CONV, PURE_ASM_REWRITE_TAC,
+PURE_ONCE_ASM_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_TAC.
+
+\ENDDOC
+
+
+\DOC{FILTER\_STRIP\_TAC  }
+
+\TYPE {\small\verb%FILTER_STRIP_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Strips apart a goal by eliminating one outermost connective, provided the goal
+does not contain a given term.
+
+\DESCRIBE
+Stripping apart a goal in a more careful way than is done by {\small\verb%STRIP_TAC%} may be
+necessary when dealing with quantified terms and implications.
+{\small\verb%FILTER_STRIP_TAC%} behaves like {\small\verb%STRIP_TAC%}, but it does not strip apart a goal
+if it contains a given term.
+  
+If {\small\verb%u%} is a term, then {\small\verb%FILTER_STRIP_TAC u%} is a tactic that removes one
+outermost occurence of one of the connectives {\small\verb%!%}, {\small\verb%==>%}, {\small\verb%~%} or {\small\verb%/\%} from the
+conclusion of the goal {\small\verb%t%}, provided the term being stripped does not contain
+{\small\verb%u%}.  A negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}. 
+{\small\verb%FILTER_STRIP_TAC u%} also breaks apart conjunctions without applying any
+filtering.
+
+If {\small\verb%t%} is a universally quantified term, {\small\verb%FILTER_STRIP_TAC u%} 
+strips off the quantifier:   
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- !x.v      
+   ================  FILTER_STRIP_TAC "u"  (provided x is not u)  
+     A ?- v[x'/x]    
+\end{verbatim}}
+\noindent where {\small\verb%x'%} is a primed variant that does not appear free in the
+assumptions {\small\verb%A%}.  If {\small\verb%t%} is a conjunction, no filtering is done and       
+{\small\verb%FILTER_STRIP_TAC u%} simply splits the conjunction:    
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- v /\ w     
+   =================  FILTER_STRIP_TAC "u"
+    A ?- v   A ?- w  
+\end{verbatim}}
+\noindent If {\small\verb%t%} is an implication and the antecedent does not contain
+a free instance of {\small\verb%u%}, then {\small\verb%FILTER_STRIP_TAC u%} moves the antecedent into the
+assumptions and recursively splits the antecedent according to the following
+rules (see {\small\verb%STRIP_ASSUME_TAC%}):
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- v1 /\ ... /\ vn ==> v            A ?- v1 \/ ... \/ vn ==> v
+   ============================        =================================
+       A u {v1,...,vn} ?- v             A u {v1} ?- v ... A u {vn} ?- v
+
+
+     A ?- ?x.w ==> v
+   ====================  
+    A u {w[x'/x]} ?- v
+\end{verbatim}}
+\noindent where {\small\verb%x'%} is a variant of {\small\verb%x%}.  
+
+\FAILURE
+{\small\verb%FILTER_STRIP_TAC u (A,t)%} fails if {\small\verb%t%} is not a universally quantified term, 
+an implication, a negation or a conjunction; or if the term being 
+stripped contains {\small\verb%u%} in the sense described above (conjunction excluded).   
+
+\EXAMPLE
+When trying to solve the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"!n. m <= n /\ n <= m ==> (m = n)")
+\end{verbatim}}
+\noindent the universally quantified variable {\small\verb%n%} can be stripped off by using 
+{\par\samepage\setseps\small\begin{verbatim}
+   FILTER_STRIP_TAC "m:num"
+\end{verbatim}}
+\noindent and then the implication can be stripped apart by using 
+{\par\samepage\setseps\small\begin{verbatim}
+   FILTER_STRIP_TAC "m:num = n"
+\end{verbatim}}
+\USES
+{\small\verb%FILTER_STRIP_TAC%} is used when stripping outer connectives from a goal in a 
+more delicate way than {\small\verb%STRIP_TAC%}. A typical application is to keep 
+stripping by using the tactic {\small\verb%REPEAT (FILTER_STRIP_TAC u)%} 
+until one hits the term {\small\verb%u%} at which stripping is to stop.   
+ 
+\SEEALSO
+CONJ_TAC, FILTER_DISCH_TAC, FILTER_DISCH_THEN, FILTER_GEN_TAC, 
+STRIP_ASSUME_TAC, STRIP_TAC.
+
+\ENDDOC
+
+\DOC{FILTER\_STRIP\_THEN  }
+
+\TYPE {\small\verb%FILTER_STRIP_THEN : (thm_tactic -> term -> tactic)%}\egroup
+
+\SYNOPSIS
+{\small\verb%FILTER_STRIP_THEN%} strips apart a goal by removing one outer connective, 
+provided the goal does not contain a given term, and then 
+applies the given theorem-tactic.
+
+\DESCRIBE
+Given a theorem-tactic {\small\verb%ttac%}, a term {\small\verb%u%} and a goal {\small\verb%(A,t)%},   
+{\small\verb%FILTER_STRIP_THEN ttac u%} removes one outer connective 
+({\small\verb%!%}, {\small\verb%==>%}, or {\small\verb%~%}) from {\small\verb%t%}, if the term being stripped does not 
+contain a free instance of {\small\verb%u%}. 
+A negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}. 
+The theorem-tactic {\small\verb%ttac%} is applied only when stripping an implication, 
+by using the antecedent stripped off.   
+{\small\verb%FILTER_STRIP_THEN%} also breaks conjunctions.  
+
+{\small\verb%FILTER_STRIP_THEN%} behaves like {\small\verb%STRIP_GOAL_THEN%}, 
+if the term being stripped does not contain a free instance of {\small\verb%u%}. 
+In particular, {\small\verb%FILTER_STRIP_THEN STRIP_ASSUME_TAC%} behaves like 
+{\small\verb%FILTER_STRIP_TAC%}. 
+
+\FAILURE
+{\small\verb%FILTER_STRIP_THEN ttac u (A,t)%} fails if {\small\verb%t%} is not a universally 
+quantified term, an implication, a negation or a conjunction;  
+or if the term being stripped contains the term {\small\verb%u%} (conjunction excluded);  
+or if the application of {\small\verb%ttac%} fails, after stripping the goal. 
+ 
+\EXAMPLE
+When solving the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"(n = 1) ==> (n * n = n)") 
+\end{verbatim}}
+\noindent the application of {\small\verb%FILTER_STRIP_THEN SUBST1_TAC "m:num"%} 
+results in the goal   
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "1 * 1 = 1") 
+\end{verbatim}}
+\USES
+{\small\verb%FILTER_STRIP_THEN%} is used when manipulating intermediate results 
+using theorem-tactics, after stripping outer connectives   
+from a goal in a more delicate way than {\small\verb%STRIP_GOAL_THEN%}.  
+
+\SEEALSO
+CONJ_TAC, FILTER_DISCH_TAC, FILTER_DISCH_THEN, FILTER_GEN_TAC, 
+FILTER_STRIP_TAC, STRIP_ASSUME_TAC, STRIP_GOAL_THEN.   
+
+\ENDDOC
+
+\DOC{FIRST}
+
+\TYPE {\small\verb%FIRST : (tactic list -> tactic)%}\egroup
+
+\SYNOPSIS
+Applies the first tactic in a tactic list which succeeds.
+
+\DESCRIBE
+When applied to a list of tactics {\small\verb%[T1;...;Tn]%}, and a goal {\small\verb%g%}, the tactical
+{\small\verb%FIRST%} tries applying the tactics to the goal until one succeeds. If the
+first tactic which succeeds is {\small\verb%Tm%}, then the effect is the same as just {\small\verb%Tm%}.
+Thus {\small\verb%FIRST%} effectively behaves as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   FIRST [T1;...;Tn] = T1 ORELSE ... ORELSE Tn
+\end{verbatim}}
+\FAILURE
+The application of {\small\verb%FIRST%} to a tactic list never fails. The resulting
+tactic fails iff all the component tactics do when applied to the goal,
+or if the tactic list is empty.
+
+\SEEALSO
+EVERY, ORELSE.
+
+\ENDDOC
+\DOC{FIRST\_ASSUM}
+
+\TYPE {\small\verb%FIRST_ASSUM : thm_tactic -> tactic%}\egroup
+
+\SYNOPSIS
+A searching tactical; maps tactic generating function over assumptions.
+
+\DESCRIBE
+The tactic
+{\par\samepage\setseps\small\begin{verbatim}
+   FIRST_ASSUM thtac ([A1; ...; An], B)
+\end{verbatim}}
+\noindent has the effect of
+{\par\samepage\setseps\small\begin{verbatim}
+   FIRST [thtac (A1|-A1);  ...;  thtac (An|-An)]
+\end{verbatim}}
+\FAILURE
+If {\small\verb%FIRST%} fails; i.e. if the argument function fails on all the assumptions,
+or if it succeeds on an assumption but the resulting tactic fails.
+
+\EXAMPLE
+The tactic
+{\par\samepage\setseps\small\begin{verbatim}
+   FIRST_ASSUM (\asm. CONTR_TAC asm  ORELSE  ACCEPT_TAC asm)
+\end{verbatim}}
+\noindent searches the assumptions for either a contradiction or the desired
+conclusion.
+
+\USES
+Using assumptions as inputs to tactic generating functions.
+
+\SEEALSO
+ASSUM_LIST, EVERY, EVERY_ASSUM, FIRST, MAP_EVERY, MAP_FIRST. 
+
+\ENDDOC
+
+        
+
+\DOC{FIRST\_TCL}
+
+\TYPE {\small\verb%FIRST_TCL : (thm_tactical list -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Applies first theorem-tactical in a list which succeeds.
+
+\DESCRIBE
+When applied to a list of theorem-tacticals, a theorem-tactic and a theorem,
+{\small\verb%FIRST_TCL%} returns the tactic resulting from the application of the first
+theorem-tactical to the theorem-tactic and theorem which succeeds. The effect
+is the same as:
+{\par\samepage\setseps\small\begin{verbatim}
+   FIRST_TCL [ttl1;...;ttln] = ttl1 ORELSE_TCL ... ORELSE_TCL ttln
+\end{verbatim}}
+\FAILURE
+{\small\verb%FIRST_TCL%} fails iff each tactic in the list fails when applied to the
+theorem-tactic and theorem. This is trivially the case if the list is empty.
+
+\SEEALSO
+EVERY_TCL, ORELSE_TCL, THEN_TCL.
+
+\ENDDOC
+\DOC{FREEZE\_THEN}
+
+\TYPE {\small\verb%FREEZE_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+`Freeze' a theorem to prevent instantiation of its free variables.
+
+\DESCRIBE
+{\small\verb%FREEZE_THEN%} expects a tactic-generating function {\small\verb%f:thm->tactic%}
+and a theorem {\small\verb%(A1 |- w)%} as arguments.  The tactic-generating function {\small\verb%f%}
+is applied to the theorem {\small\verb%(w |- w)%}.  If this tactic generates the subgoal:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   =========  f (w |- w)
+    A ?- t1
+\end{verbatim}}
+\noindent then applying {\small\verb%FREEZE_THEN f (A1 |- w)%}
+to the goal {\small\verb%(A ?- t)%} produces the subgoal:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   =========  FREEZE_THEN f (A1 |- w)
+    A ?- t1 
+\end{verbatim}}
+\noindent Since the term {\small\verb%w%} is a hypothesis of the argument to the
+function {\small\verb%f%}, none of the free variables present in {\small\verb%w%} may be
+instantiated or generalized.  The hypothesis is discharged by
+{\small\verb%PROVE_HYP%} upon the completion of the proof of the subgoal.  
+
+\FAILURE
+Failures may arise from the tactic-generating function.  An invalid
+tactic arises if the hypotheses of the theorem are not
+alpha-convertible to assumptions of the goal.   
+
+\EXAMPLE
+Given the goal {\small\verb%([ "b < c"; "a < b" ], "(SUC a) <= c")%}, and the
+specialized variant of the theorem {\small\verb%LESS_TRANS%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |- !p. a < b /\ b < p ==> a < p
+\end{verbatim}}
+\noindent {\small\verb%IMP_RES_TAC th%} will generate several unneeded assumptions:
+{\par\samepage\setseps\small\begin{verbatim}
+   "(SUC a) <= c"
+       [ "b < c" ]
+       [ "a < b" ]
+       [ "a < c" ]
+       [ "!p. c < p ==> b < p" ]
+       [ "!a'. a' < a ==> a' < b" ]
+\end{verbatim}}
+\noindent which can be avoided by first `freezing' the theorem, using
+the tactic 
+{\par\samepage\setseps\small\begin{verbatim}
+   FREEZE_THEN IMP_RES_TAC th
+\end{verbatim}}
+\noindent This prevents the variables {\small\verb%a%} and {\small\verb%b%} from being instantiated.
+{\par\samepage\setseps\small\begin{verbatim}
+   "(SUC a) <= c"
+       [ "b < c" ]
+       [ "a < b" ]
+       [ "a < c" ]
+\end{verbatim}}
+
+\USES
+Used in serious proof hacking to limit the matches achievable by
+resolution and rewriting.  
+
+\SEEALSO
+ASSUME, IMP_RES_TAC, PROVE_HYP, RES_TAC, REWRITE_CONV.
+
+\ENDDOC
+\DOC{GEN\_REWRITE\_TAC}
+
+\TYPE {\small\verb%GEN_REWRITE_TAC : ((conv -> conv) -> thm list -> thm list -> tactic)%}\egroup
+
+\SYNOPSIS
+General rewriting tool for goals. Allows the user to generate a
+rewriting tactic geared to a specific replacement strategy.
+
+\DESCRIBE
+Distinct rewriting tactics differ in the search strategies used in
+finding subterms on which to apply substitutions, and the
+built-in theorems used in rewriting. In the case of {\small\verb%REWRITE_TAC%},
+this is a recursive traversal starting from the body of the goal's
+conclusion part, while in the case of {\small\verb%ONCE_REWRITE_TAC%}, for example,
+the search stops as soon as a term on which a substitution is possible
+is found. {\small\verb%GEN_REWRITE_TAC%} allows a user to specify a more complex
+strategy for rewriting.
+
+The basis of pattern-matching for rewriting is the notion of
+conversions, through the application of {\small\verb%REWRITE_CONV%}.  Conversions
+are rules for mapping terms with theorems equating the given terms to
+other semantically equivalent ones.
+
+When attempting to rewrite subterms recursively, the use of
+conversions (and therefore rewrites) can be automated further by using
+functions which take a conversion and search for instances at which
+they are applicable. Examples of these functions are {\small\verb%ONCE_DEPTH_CONV%}
+and {\small\verb%RAND_CONV%}. The first argument to {\small\verb%GEN_REWRITE_TAC%} is such a
+function, which specifies a search strategy; i.e. it specifies how
+subterms (on which substitutions are allowed) should be searched for.
+
+The second and third arguments are lists of theorems used for
+rewriting. The order in which these are used is not specified. The
+theorems need not be in equational form: negated terms, say {\small\verb%"~ t"%},
+are transformed into the equivalent equational form {\small\verb%"t = F"%}, while
+other non-equational theorems with conclusion of form {\small\verb%"t"%} are cast
+as the corresponding equations {\small\verb%"t = T"%}. Conjunctions are separated
+into the individual components, which are used as distinct rewrites.
+
+\FAILURE
+{\small\verb%GEN_REWRITE_TAC%} fails if the search strategy fails. It may also
+cause a non-terminating sequence of rewrites, depending on the search
+strategy used. The resulting tactic is invalid when a theorem which
+matches the goal (and which is thus used for rewriting it with) has a
+hypothesis which is not alpha-convertible to any of the assumptions of
+the goal. Applying such an invalid tactic may result in a proof of
+a theorem which does not correspond to the original goal.
+
+\USES
+Detailed control of rewriting strategy, allowing a user to specify a
+search strategy.
+
+\EXAMPLE
+Given a goal such as:
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "a - (b + c) = a - (c + b)")
+\end{verbatim}}
+\noindent we may want to rewrite only one side of it with a theorem,
+say {\small\verb%ADD_SYM%}. Rewriting tactics which operate recursively result in
+divergence; the tactic {\small\verb%ONCE_REWRITE_TAC [ADD_SYM]%} rewrites on both
+sides to produce the following goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "a - (c + b) = a - (b + c)")
+\end{verbatim}}
+\noindent as {\small\verb%ADD_SYM%} matches at two positions. To rewrite on
+only one side of the equation, the following tactic can be used:
+{\par\samepage\setseps\small\begin{verbatim}
+   GEN_REWRITE_TAC (RAND_CONV o ONCE_DEPTH_CONV) [] [ADD_SYM]
+\end{verbatim}}
+\noindent which produces the desired goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "a - (c + b) = a - (c + b)")
+\end{verbatim}}
+
+As another example, one can write a tactic which will behave similarly
+to {\small\verb%REWRITE_TAC%} but will also include {\small\verb%ADD_CLAUSES%} in the set of
+theorems to use always:
+{\par\samepage\setseps\small\begin{verbatim}
+   let ADD_REWRITE_TAC = GEN_REWRITE_TAC TOP_DEPTH_CONV
+                             (ADD_CLAUSES . basic_rewrites) ;;
+\end{verbatim}}
+
+\SEEALSO
+ASM_REWRITE_TAC, GEN_REWRITE_RULE, ONCE_REWRITE_TAC, PURE_REWRITE_TAC,
+REWRITE_CONV, REWRITE_TAC,  
+
+\ENDDOC
+
+
+
+
+
+\DOC{GEN\_TAC}
+
+\TYPE {\small\verb%GEN_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Strips the outermost universal quantifier from the conclusion of a goal.
+
+\DESCRIBE
+When applied to a goal {\small\verb%A ?- !x. t%}, the tactic {\small\verb%GEN_TAC%} reduces it to
+{\small\verb%A ?- t[x'/x]%} where {\small\verb%x'%} is a variant of {\small\verb%x%} chosen to avoid clashing with any
+variables free in the goal's assumption list. Normally {\small\verb%x'%} is just {\small\verb%x%}.
+{\par\samepage\setseps\small\begin{verbatim}
+     A ?- !x. t
+   ==============  GEN_TAC
+    A ?- t[x'/x]
+\end{verbatim}}
+\FAILURE
+Fails unless the goal's conclusion is universally quantified.
+
+\USES
+The tactic {\small\verb%REPEAT GEN_TAC%} strips away any universal quantifiers, and
+is commonly used before tactics using the underlying term structure.
+
+\SEEALSO
+FILTER_GEN_TAC, GEN, GENL, GEN_ALL, SPEC, SPECL, SPEC_ALL, SPEC_TAC, STRIP_TAC,
+X_GEN_TAC.
+
+\ENDDOC
+\DOC{GSUBST\_TAC }
+
+\TYPE {\small\verb%GSUBST_TAC : (((term # term) list -> term -> term) -> thm list -> tactic)%} \egroup
+
+\SYNOPSIS
+Makes term substitutions in a goal using a list of theorems, according to a
+supplied substitution function.
+
+\DESCRIBE
+{\small\verb%GSUBST_TAC%} is the basic substitution tactic by means of which other tactics
+such as {\small\verb%SUBST_OCCS_TAC%} and {\small\verb%SUBST_TAC%} are defined.  Given a list
+{\small\verb%[(v1,w1);...;(vk,wk)]%} of pairs of terms and a term {\small\verb%w%}, a substitution
+function replaces occurrences of {\small\verb%wj%} in {\small\verb%w%} with {\small\verb%vj%} according to a specific
+substitution criterion. Such a criterion may be, for example, to substitute all
+the occurrences or only some selected ones of each {\small\verb%wj%} in {\small\verb%w%}.
+
+Given a substitution function {\small\verb%sfn%}, {\small\verb%GSUBST_TAC sfn [A1|-t1=u1;...;An|-tn=un]
+(A,t)%} replaces occurrences of {\small\verb%ti%} in {\small\verb%t%} with {\small\verb%ui%} according to {\small\verb%sfn%}.
+{\par\samepage\setseps\small\begin{verbatim}
+              A ?- t
+   =============================  GSUBST_TAC sfn [A1|-t1=u1;...;An|-tn=un]
+    A ?- t[u1,...,un/t1,...,tn]
+\end{verbatim}}
+\noindent The assumptions of the theorems used to substitute with are not added
+to the assumptions {\small\verb%A%} of the goal, while they are recorded in the proof.  If
+any {\small\verb%Ai%} is not a subset of {\small\verb%A%} (up to alpha-conversion), then {\small\verb%GSUBST_TAC sfn
+[A1|-t1=u1;...;An|-tn=un]%} results in an invalid tactic.
+
+{\small\verb%GSUBST_TAC%} automatically renames bound variables to prevent
+free variables in {\small\verb%ui%} becoming bound after substitution.
+
+\FAILURE
+{\small\verb%GSUBST_TAC sfn [th1;...;thn] (A,t)%} fails if the 
+conclusion of each theorem in the list is not an equation. 
+No change is made to the goal if the occurrences to be substituted 
+according to the substitution function {\small\verb%sfn%} do not appear in {\small\verb%t%}.  
+
+\USES
+{\small\verb%GSUBST_TAC%} is used to define substitution tactics such as 
+{\small\verb%SUBST_OCCS_TAC%} and {\small\verb%SUBST_TAC%}. It may also provide the user with  
+a tool for tailoring substitution tactics.  
+
+\SEEALSO
+SUBST1_TAC, SUBST_OCCS_TAC, SUBST_TAC.
+
+\ENDDOC 
+
+\DOC{IMP\_RES\_TAC}
+
+\TYPE {\small\verb%IMP_RES_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Repeately resolve an implication with the assumptions of a goal, adding the
+final results to the assumptions.
+
+\DESCRIBE
+Given a theorem {\small\verb%th%}, the theorem-tactic {\small\verb%IMP_RES_TAC%} uses {\small\verb%RES_CANON%} to
+derive a canonical list of implications, each of which has the form:
+{\par\samepage\setseps\small\begin{verbatim}
+   A |- u1 ==> u2 ==> ... ==> un ==> v
+\end{verbatim}}
+\noindent {\small\verb%IMP_RES_TAC%} then tries to repeatedly `resolve' these theorems
+against the assumptions of a goal by attepting to match the antecedents {\small\verb%u1%},
+{\small\verb%u2%}, ..., {\small\verb%un%} (in that order) to some assumption of the goal (i.e. to some
+candidate antecedents among the assumptions).  If all the antecedents can be
+matched to assumptions of the goal, then an instance of the theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   A u {a1,...,an} |- v 
+\end{verbatim}}
+\noindent called a `final resolvent' is obtained by repeated specialization of
+the variables in the implicative theorem, type instantiation, and applications
+of modus ponens.  If only the first {\small\verb%i%} antecedents {\small\verb%u1%}, ..., {\small\verb%ui%} can be
+matched to assumptions and then no further matching is possible, then the final
+resolvent is an instance of the theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   A u {a1,...,ai} |- u(i+1) ==> ... ==> v 
+\end{verbatim}}
+\noindent All the final resolvents obtained in this way (there may be several,
+since an antecedent {\small\verb%ui%} may match several assumptions) are added to the
+assumptions of the goal, in the stripped form produced by using
+{\small\verb%STRIP_ASSUME_TAC%}.  If the conclusion of any final resolvent is a
+contradiction `{\small\verb%F%}' or is alpha-equivalent to the conclusion of the goal, then
+{\small\verb%IMP_RES_TAC%} solves the goal.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+IMP_RES_THEN, RES_CANON, RES_TAC, RES_THEN.
+
+\ENDDOC
+
+
+
+\DOC{IMP\_RES\_THEN}
+
+\TYPE {\small\verb%IMP_RES_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS 
+Resolve an implication with the assumptions of a goal.
+
+\DESCRIBE
+The function {\small\verb%IMP_RES_THEN%} is the basic building block for resolution in HOL.
+This is not full higher-order, or even first-order, resolution with
+unification, but simply one way simultaneous pattern-matching (resulting in
+term and type instantiation) of the antecedent of an implicative theorem to the
+conclusion of another theorem (the candidate antecedent).
+
+Given a theorem-tactic {\small\verb%ttac%} and a theorem {\small\verb%th%}, the theorem-tactical
+{\small\verb%IMP_RES_THEN%} uses {\small\verb%RES_CANON%} to derive a canonical list of implications from
+{\small\verb%th%}, each of which has the form:
+{\par\samepage\setseps\small\begin{verbatim}
+   Ai |- !x1...xn. ui ==> vi
+\end{verbatim}}
+\noindent {\small\verb%IMP_RES_THEN%} then produces a tactic that, when applied to a goal
+{\small\verb%A ?- g%} attempts to match each antecedent {\small\verb%ui%} to each assumption {\small\verb%aj |- aj%}
+in the assumptions {\small\verb%A%}.  If the antecedent {\small\verb%ui%} of any implication matches the
+conclusion {\small\verb%aj%} of any assumption, then an instance of the theorem {\small\verb%Ai u {aj}
+|- vi%}, called a `resolvent', is obtained by specialization of the variables
+{\small\verb%x1%}, ..., {\small\verb%xn%} and type instantiation, followed by an application of modus
+ponens.  There may be more than one canonical implication and each implication
+is tried against every assumption of the goal, so there may be several
+resolvents (or, indeed, none).
+
+Tactics are produced using the theorem-tactic {\small\verb%ttac%} from all these resolvents
+(failures of {\small\verb%ttac%} at this stage are filtered out) and these tactics are then
+applied in an unspecified sequence to the goal.  That is,
+{\par\samepage\setseps\small\begin{verbatim}
+   IMP_RES_THEN ttac th  (A ?- g)
+\end{verbatim}}
+\noindent has the effect of: 
+{\par\samepage\setseps\small\begin{verbatim}
+   MAP_EVERY (mapfilter ttac [... ; (Ai u {aj} |- vi) ; ...]) (A ?- g)
+\end{verbatim}}
+\noindent where the theorems {\small\verb%Ai u {aj} |- vi%} are all the consequences that
+can be drawn by a (single) matching modus-ponens inference from the
+assumptions of the goal {\small\verb%A ?- g%} and the implications derived from the supplied
+theorem {\small\verb%th%}.  The sequence in which the theorems {\small\verb%Ai u {aj} |- vi%} are
+generated and the corresponding tactics applied is unspecified.
+
+\FAILURE 
+Evaluating {\small\verb%IMP_RES_THEN ttac th%} fails with `{\small\verb%no implication%}' if the supplied
+theorem {\small\verb%th%} is not an implication, or if no implications can be derived from
+{\small\verb%th%} by the tranformation process described under the entry for {\small\verb%RES_CANON%}.
+Evaluating {\small\verb%IMP_RES_THEN ttac th (A ?- g)%} fails with `{\small\verb%no resolvents%}' if no
+assumption of the goal {\small\verb%A ?- g%} can be resolved with the implication or
+implications derived from {\small\verb%th%}. Evaluation also fails, with `{\small\verb%no tactics%}', if
+there are resolvents, but for every resolvent {\small\verb%Ai u {aj} |- vi%} evaluating
+the application {\small\verb%ttac (Ai u {aj} |- vi)%} fails---that is, if for every
+resolvent {\small\verb%ttac%} fails to produce a tactic. Finally, failure is propogated if
+any of the tactics that are produced from the resolvents by {\small\verb%ttac%} fails when
+applied in sequence to the goal.
+
+\EXAMPLE
+The following example shows a straightforward use of {\small\verb%IMP_RES_THEN%} to
+infer an equational consequence of the assumptions of a goal, use it
+once as a substitution in the conclusion of goal, and then `throw it away'.
+Suppose the goal is:
+{\par\samepage\setseps\small\begin{verbatim}
+   a + n = a  ?- !k. k - n = k
+\end{verbatim}}
+\noindent By the built-in theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   ADD_INV_0 = |- !m n. (m + n = m) ==> (n = 0)
+\end{verbatim}}
+\noindent the assumption of this goal implies that {\small\verb%n%} equals {\small\verb%0%}.  A 
+single-step resolution with this theorem followed by substitution:
+{\par\samepage\setseps\small\begin{verbatim}
+   IMP_RES_THEN SUBST1_TAC ADD_INV_0
+\end{verbatim}}
+\noindent can therefore be used to reduce the goal to:
+{\par\samepage\setseps\small\begin{verbatim}
+   a + n = a  ?- !k. k - 0 = m
+\end{verbatim}}
+\noindent Here, a single resolvent {\small\verb%a + n = a |- n = 0%} is obtained by
+matching the antecedent of {\small\verb%ADD_INV_0%} to the assumption of the goal.  This is
+then used to substitute {\small\verb%0%} for {\small\verb%n%} in the conclusion of the goal.
+
+\SEEALSO
+IMP_RES_TAC, MATCH_MP, RES_CANON, RES_TAC, RES_THEN.
+
+\ENDDOC
+
+\DOC{INDUCT\_TAC}
+
+\TYPE {\small\verb%INDUCT_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Tactic for proof by mathematical induction on the natural numbers.
+
+\DESCRIBE
+{\small\verb%INDUCT_TAC%} reduces a goal {\small\verb%!n.P[n]%}, where {\small\verb%n%} has type {\small\verb%num%}, to two
+subgoals corresponding to the base and step cases in a proof by mathematical
+induction on {\small\verb%n%}. The induction hypothesis appears among the assumptions of the
+subgoal for the step case.  The specification of {\small\verb%INDUCT_TAC%} is:
+{\par\samepage\setseps\small\begin{verbatim}
+                     A ?- !n. P[n]
+    =============================================   INDUCT_TAC
+      A ?- P[0]     A u {P[n'/n]} ?- P[SUC n'/n] 
+\end{verbatim}}
+\noindent where {\small\verb%n'%} is a primed variant of {\small\verb%n%} that does not appear free in
+the assumptions {\small\verb%A%} (usually, {\small\verb%n'%} just equals {\small\verb%n%}). When {\small\verb%INDUCT_TAC%} is
+applied to a goal of the form {\small\verb%!n.P%}, where {\small\verb%n%} does not appear free in {\small\verb%P%},
+the subgoals are just {\small\verb%A ?- P%} and {\small\verb%A u {P} ?- P%}.
+
+\FAILURE
+{\small\verb%INDUCT_TAC g%} fails unless the conclusion of the goal {\small\verb%g%} has the form {\small\verb%!n.t%},
+where the variable {\small\verb%n%} has type {\small\verb%num%}.
+
+\SEEALSO
+INDUCT.
+
+\ENDDOC
+\DOC{INDUCT\_THEN}
+
+\TYPE {\small\verb%INDUCT_THEN : (thm -> thm_tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Structural induction tactic for automatically-defined concrete types.
+
+\DESCRIBE
+The function {\small\verb%INDUCT_THEN%} implements structural induction tactics for
+arbitrary concrete recursive types of the kind definable by {\small\verb%define_type%}.  The
+first argument to {\small\verb%INDUCT_THEN%} is a structural induction theorem for the
+concrete type in question. This theorem must have the form of an induction
+theorem of the kind returned by {\small\verb%prove_induction_thm%}. When applied to such a
+theorem, the function {\small\verb%INDUCT_THEN%} constructs specialized tactic for
+doing structural induction on the concrete type in question.
+
+The second argument to {\small\verb%INDUCT_THEN%} is a function that determines what is be
+done with the induction hypotheses in the goal-directed proof by structural
+induction.  Suppose that {\small\verb%th%} is a structural induction theorem for a concrete
+data type {\small\verb%ty%}, and that {\small\verb%A ?- !x.P%} is a universally-quantified goal in which
+the variable {\small\verb%x%} ranges over values of type {\small\verb%ty%}. If the type {\small\verb%ty%} has {\small\verb%n%}
+constructors {\small\verb%C1%}, ..., {\small\verb%Cn%} and `{\small\verb%Ci(vs)%}' represents a (curried) application
+of the {\small\verb%i%}th constructor to a sequence of variables, then if {\small\verb%ttac%} is a
+function that maps the induction hypotheses {\small\verb%hypi%} of the {\small\verb%i%}th subgoal
+to the tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+      A  ?- P[Ci(vs)/x]
+   ======================   MAP_EVERY ttac hypi
+         A1 ?- Gi
+\end{verbatim}}
+\noindent then {\small\verb%INDUCT_THEN th ttac%} is an induction tactic that decomposes 
+the goal {\small\verb%A ?- !x.P%} into a set of {\small\verb%n%} subgoals, one for each constructor,
+as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+            A ?- !x.P
+  ================================  INDUCT_THEN th ttac 
+     A1 ?- G1  ...   An ?- Gn
+\end{verbatim}}
+\noindent The resulting subgoals correspond to the cases in a structural
+induction on the variable {\small\verb%x%} of type {\small\verb%ty%}, with induction hypotheses treated
+as determined by {\small\verb%ttac%}.
+
+\FAILURE 
+{\small\verb%INDUCT_THEN th ttac g%} fails if {\small\verb%th%} is not a structural induction theorem of
+the form returned by {\small\verb%prove_induction_thm%}, or if the goal does not have the
+form {\small\verb%A ?- !x:ty.P%} where {\small\verb%ty%} is the type for which {\small\verb%th%} is the induction
+theorem, or if {\small\verb%ttac%} fails for any subgoal in the induction.
+
+\EXAMPLE
+The built-in structural induction theorem for lists is:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !P. P[] /\ (!t. P t ==> (!h. P(CONS h t))) ==> (!l. P l)
+\end{verbatim}}
+\noindent When {\small\verb%INDUCT_THEN%} is applied to this theorem, it constructs
+and returns a specialized induction tactic (parameterized by a thm-tactic)
+for doing induction on lists:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let LIST_INDUCT_THEN = INDUCT_THEN list_INDUCT;;
+   LIST_INDUCT_THEN = - : (thm_tactic -> tactic)
+\end{verbatim}}
+\noindent The resulting function, when supplied with the thm-tactic
+{\small\verb%ASSUME_TAC%}, returns a tactic that decomposes a goal {\small\verb%?- !l.P[l]%} into the
+base case {\small\verb%?- P[NIL]%} and a step case {\small\verb%P[l] ?- !h. P[CONS h l]%}, where the
+induction hypothesis {\small\verb%P[l]%} in the step case has been put on the assumption
+list.  That is, the tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   LIST_INDUCT_THEN ASSUME_TAC
+\end{verbatim}}
+\noindent does structural induction on lists, putting any induction hypotheses
+that arise onto the assumption list:
+{\par\samepage\setseps\small\begin{verbatim}
+                      A ?- !l. P[l]
+   ==========================================================   
+      A |- P[NIL]   A u {P[l'/l]} ?- !h. P[(CONS h l')/l]
+\end{verbatim}}
+\noindent Likewise {\small\verb%LIST_INDUCT_THEN STRIP_ASSUME_TAC%} will also do induction
+on lists, but will strip induction hypotheses apart before adding them to the
+assumptions (this may be useful if P is a conjunction ora disjunction, or is
+existentially quantified).  By contrast, the tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   LIST_INDUCT_THEN MP_TAC
+\end{verbatim}}
+\noindent will decompose the goal as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+                      A ?- !l. P[l]
+   =======================================================   
+      A |- P[NIL]   A ?- P[l'/l] ==> !h. P[(CONS h l)/l]
+\end{verbatim}}
+\noindent That is, the induction hypothesis becomes the antecedent of an
+implication expressing the step case in the induction, rather than an
+assumption of the step-case subgoal.
+
+
+\SEEALSO
+define_type, new_recursive_definition, prove_cases_thm,
+prove_constructors_distinct, prove_constructors_one_one, prove_induction_thm,
+prove_rec_fn_exists.
+
+
+\ENDDOC
+\DOC{LIST\_INDUCT\_TAC}
+
+\TYPE {\small\verb%LIST_INDUCT_TAC : ((thm # thm) -> thm)%}\egroup
+
+\SYNOPSIS
+Tactic for proof by structural induction on lists.
+
+\DESCRIBE
+{\small\verb%LIST_INDUCT_TAC%} reduces a goal {\small\verb%!l.P[l]%}, where {\small\verb%l%} ranges over lists, to two
+subgoals corresponding to the base and step cases in a proof by structural
+induction on {\small\verb%l%}. The induction hypothesis appears among the assumptions of the
+subgoal for the step case.  The specification of {\small\verb%LIST_INDUCT_TAC%} is:
+{\par\samepage\setseps\small\begin{verbatim}
+                      A ?- !l. P[l]
+   ==========================================================  LIST_INDUCT_TAC
+      A |- P[NIL]   A u {P[l'/l]} ?- !h. P[(CONS h l')/l]
+\end{verbatim}}
+\noindent where {\small\verb%l'%} is a primed variant of {\small\verb%l%} that does not appear free in
+the assumptions {\small\verb%A%} (usually, {\small\verb%l'%} just equals {\small\verb%l%}). When {\small\verb%LIST_INDUCT_TAC%} is
+applied to a goal of the form {\small\verb%!l.P%}, where {\small\verb%l%} does not appear free in {\small\verb%P%},
+the subgoals are just {\small\verb%A ?- P%} and {\small\verb%A u {P} ?- !h.P%}.
+
+\FAILURE
+{\small\verb%LIST_INDUCT_TAC g%} fails unless the conclusion of the goal {\small\verb%g%} has the form
+{\small\verb%!l.t%}, where the variable {\small\verb%l%} has type {\small\verb%(ty)list%} for some type {\small\verb%ty%}.
+
+\SEEALSO
+LIST_INDUCT.
+
+\ENDDOC
+\DOC{MAP\_EVERY}
+
+\TYPE {\small\verb%MAP_EVERY : ((* -> tactic) -> * list -> tactic)%}\egroup
+
+\SYNOPSIS
+Sequentially applies all tactics given by mapping a function over a list.
+
+\DESCRIBE
+When applied to a tactic-producing function {\small\verb%f%} and an operand list
+{\small\verb%[x1;...;xn]%}, the elements of which have the same type as {\small\verb%f%}'s domain type,
+{\small\verb%MAP_EVERY%} maps the function {\small\verb%f%} over the list, producing a list of
+tactics, then applies these tactics in sequence as in the case of {\small\verb%EVERY%}.
+The effect is:
+{\par\samepage\setseps\small\begin{verbatim}
+   MAP_EVERY f [x1;...;xn] = (f x1) THEN ... THEN (f xn)
+\end{verbatim}}
+\noindent If the operand list is empty, then {\small\verb%MAP_EVERY%} has no effect.
+
+\FAILURE
+The application of {\small\verb%MAP_EVERY%} to a function and operand list fails iff
+the function fails when appplied to any element in the list. The
+resulting tactic fails iff any of the resulting tactics fails.
+
+\EXAMPLE
+A convenient way of doing case analysis over several boolean variables is:
+{\par\samepage\setseps\small\begin{verbatim}
+   MAP_EVERY BOOL_CASES_TAC ["var1:bool";...;"varn:bool"]
+\end{verbatim}}
+\SEEALSO
+EVERY, FIRST, MAP_FIRST, THEN.
+
+\ENDDOC
+\DOC{MAP\_FIRST}
+
+\TYPE {\small\verb%MAP_FIRST : ((* -> tactic) -> * list -> tactic)%}\egroup
+
+\SYNOPSIS
+Applies first tactic that succeeds in a list given by mapping a function over a
+list.
+
+\DESCRIBE
+When applied to a tactic-producing function {\small\verb%f%} and an operand list
+{\small\verb%[x1;...;xn]%}, the elements of which have the same type as {\small\verb%f%}'s domain
+type, {\small\verb%MAP_FIRST%} maps the function {\small\verb%f%} over the list, producing a list of
+tactics, then tries applying these tactics to the goal till one succeeds.
+If {\small\verb%f(xm)%} is the first to succeed, then the overall effect is the same
+as applying {\small\verb%f(xm)%}. Thus:
+{\par\samepage\setseps\small\begin{verbatim}
+   MAP_FIRST f [x1;...;xn] = (f x1) ORELSE ... ORELSE (f xn)
+\end{verbatim}}
+\FAILURE
+The application of {\small\verb%MAP_FIRST%} to a function and tactic list fails iff
+the function does when appplied to any of the elements of the list. The
+resulting tactic fails iff all the resulting tactics fail when
+applied to the goal.
+
+\SEEALSO
+EVERY, FIRST, MAP_EVERY, ORELSE.
+
+\ENDDOC
+\DOC{MATCH\_ACCEPT\_TAC}
+
+\TYPE {\small\verb%MATCH_ACCEPT_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Solves a goal which is an instance of the supplied theorem.
+
+\DESCRIBE
+When given a theorem {\small\verb%A' |- t%} and a goal {\small\verb%A ?- t'%} where {\small\verb%t%} can be matched
+to {\small\verb%t'%} by instantiating variables which are either free or
+universally quantified at the outer level, including appropriate type
+instantiation, {\small\verb%MATCH_ACCEPT_TAC%} completely solves the goal.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t'
+   =========  MATCH_ACCEPT_TAC (A' |- t)
+
+\end{verbatim}}
+\noindent Unless {\small\verb%A'%} is a subset of {\small\verb%A%}, this is an invalid tactic.
+
+\FAILURE
+Fails unless the theorem has a conclusion which is instantiable to match that
+of the goal.
+
+\EXAMPLE
+The following example shows variable and type instantiation at work. We can use
+the polymorphic list theorem {\small\verb%HD%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   HD = |- !h t. HD(CONS h t) = h
+\end{verbatim}}
+\noindent to solve the goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- HD (CONS 1 [2]) = 1
+\end{verbatim}}
+\noindent simply by:
+{\par\samepage\setseps\small\begin{verbatim}
+   MATCH_ACCEPT_TAC HD
+\end{verbatim}}
+\SEEALSO
+ACCEPT_TAC.
+
+\ENDDOC
+\DOC{MATCH\_MP\_TAC}
+
+\TYPE {\small\verb%MATCH_MP_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Advances the goal using a given implication, with matching.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A' |- !x1...xn. s ==> t%} and a goal {\small\verb%t'%}
+which is an instance of {\small\verb%t%}, the theorem-tactic {\small\verb%MATCH_MP_TAC%} advances the
+goal by instantiating free or universally quantified variables in the theorem
+such that its consequent matches {\small\verb%t'%}, giving a new goal {\small\verb%s'%}, which is a
+correspondingly instantiated version of {\small\verb%s%}. Polymorphic types will also
+be instantiated if necessary.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t'
+   =========  MATCH_MP_TAC (A' |- !x1...xn. s ==> t)
+    A ?- s'
+\end{verbatim}}
+\noindent This is not a valid tactic unless {\small\verb%A'%} is a subset of {\small\verb%A%}.
+
+\FAILURE
+Fails unless the theorem is a (possibly repeatedly universally
+quantified) implication whose consequent can be instantiated to match the goal.
+
+\SEEALSO
+EQ_MP, MATCH_MP, MP, MP_TAC.
+
+\ENDDOC
+\DOC{MP\_TAC}
+
+\TYPE {\small\verb%MP_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Reduces a goal to implication from a known theorem.
+
+\DESCRIBE
+When applied to the theorem {\small\verb%A' |- s%} and the goal {\small\verb%A ?- t%}, the tactic
+{\small\verb%MP_TAC%} reduces the goal to {\small\verb%A ?- s ==> t%}. Unless {\small\verb%A'%} is a subset of
+{\small\verb%A%}, this is an invalid tactic.
+{\par\samepage\setseps\small\begin{verbatim}
+       A ?- t
+   ==============  MP_TAC (A' |- s)
+    A ?- s ==> t
+\end{verbatim}}
+\FAILURE
+Never fails.
+
+\SEEALSO
+MATCH_MP_TAC, MP, UNDISCH_TAC.
+
+\ENDDOC
+\DOC{NO\_TAC}
+
+\TYPE {\small\verb%NO_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Tactic which always fails.
+
+\DESCRIBE
+Whatever goal it is applied to, {\small\verb%NO_TAC%} always fails
+with string {\small\verb%`NO_TAC`%}.
+
+\FAILURE
+Always fails.
+
+\SEEALSO
+ALL_TAC, ALL_THEN, FAIL_TAC, NO_THEN.
+
+\ENDDOC
+\DOC{NO\_THEN}
+
+\TYPE {\small\verb%NO_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+Theorem-tactical which always fails.
+
+\DESCRIBE
+When applied to a theorem-tactic and a theorem, the theorem-tactical
+{\small\verb%NO_THEN%} always fails with string {\small\verb%`NO_THEN`%}.
+
+\FAILURE
+Always fails when applied to a theorem-tactic and a theorem (note that it
+never gets as far as being applied to a goal!)
+
+\USES
+Writing compound tactics or tacticals.
+
+\SEEALSO
+ALL_TAC, ALL_THEN, FAIL_TAC, NO_TAC.
+
+\ENDDOC
+\DOC{ONCE\_ASM\_REWRITE\_TAC}
+
+\TYPE {\small\verb%ONCE_ASM_REWRITE_TAC : thm list -> tactic%}\egroup
+
+\SYNOPSIS
+Rewrites the goal once only with each given rewrite theorem,
+{\small\verb%basic_rewrites%}, and the assumptions of the goal.
+
+\DESCRIBE
+{\small\verb%ONCE_ASM_REWRITE_TAC%} behaves in the same way as {\small\verb%ASM_REWRITE_TAC%},
+but makes one pass only through the term of the goal. The order in
+which the given theorems are applied is an implementation matter and
+the user should not depend on any ordering. See {\small\verb%GEN_REWRITE_TAC%} for
+more information on rewriting a goal in HOL.
+
+\FAILURE
+{\small\verb%ONCE_ASM_REWRITE_TAC%} does not fail and, unlike {\small\verb%ASM_REWRITE_TAC%},
+does not diverge. The resulting tactic may not be valid, if the
+rewrites performed add new assumptions to the theorem eventually
+proved.
+
+\EXAMPLE
+The use of {\small\verb%ONCE_ASM_REWRITE_TAC%} to control the amount of rewriting
+performed is illustrated below:
+{\par\samepage\setseps\small\begin{verbatim}
+   #ONCE_ASM_REWRITE_TAC []
+   #             (["(a:*) = b"; "(b:*) = c"], "P (a:*): bool") ;;
+   ([(["a = b"; "b = c"], "P b")], -) : subgoals
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+   #(ONCE_ASM_REWRITE_TAC [] THEN ONCE_ASM_REWRITE_TAC [])
+   #             (["(a:*) = b"; "(b:*) = c"], "P (a:*): bool") ;;
+   ([(["a = b"; "b = c"], "P c")], -) : subgoals
+\end{verbatim}}
+
+\USES
+{\small\verb%ONCE_ASM_REWRITE_TAC%} can be applied once or iterated as required to
+give the effect of {\small\verb%ASM_REWRITE_TAC%}, either to avoid divergence or to
+save inference steps.
+
+\SEEALSO
+basic_rewrites, ASM_REWRITE_TAC, FILTER_ASM_REWRITE_TAC,
+FILTER_ONCE_ASM_REWRITE_TAC, GEN_REWRITE_TAC, ONCE_ASM_REWRITE_TAC,
+ONCE_REWRITE_TAC, PURE_ASM_REWRITE_TAC, PURE_ONCE_ASM_REWRITE_TAC,
+PURE_ONCE_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_TAC, SUBST_TAC.
+
+\ENDDOC
+
+
+
+\DOC{ORELSE}
+
+\TYPE {\small\verb%$ORELSE : (tactic -> tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Applies first tactic, and iff it fails, applies the second instead.
+
+\DESCRIBE
+If {\small\verb%T1%} and {\small\verb%T2%} are tactics, {\small\verb%T1 ORELSE T2%} is a tactic which applies {\small\verb%T1%} to
+a goal, and iff it fails, applies {\small\verb%T2%} to the goal instead.
+
+\FAILURE
+The application of {\small\verb%ORELSE%} to a pair of tactics never fails.
+The resulting tactic fails if both {\small\verb%T1%} and {\small\verb%T2%} fail when applied to the
+relevant goal.
+
+\SEEALSO
+FIRST, THEN.
+
+\ENDDOC
+\DOC{ORELSE\_TCL}
+
+\TYPE {\small\verb%$ORELSE_TCL : (thm_tactical -> thm_tactical -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Applies a theorem-tactical, and if it fails, tries a second.
+
+\DESCRIBE
+When applied to two theorem-tacticals, {\small\verb%ttl1%} and {\small\verb%ttl2%}, a theorem-tactic
+{\small\verb%ttac%}, and a theorem {\small\verb%th%}, if {\small\verb%ttl1 ttac th%} succeeds, that gives the
+result. If it fails, the result is {\small\verb%ttl2 ttac th%}, which may itself fail.
+
+\FAILURE
+{\small\verb%ORELSE_TCL%} fails if both the theorem-tacticals fail when applied to the
+given theorem-tactic and theorem.
+
+\SEEALSO
+EVERY_TCL, FIRST_TCL, THEN_TCL.
+
+\ENDDOC
+\DOC{POP\_ASSUM}
+
+\TYPE {\small\verb%POP_ASSUM : (thm_tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Applies tactic generated from the first element of a goal's assumption list.
+
+\DESCRIBE
+When applied to a theorem-tactic and a goal, {\small\verb%POP_ASSUM%} applies
+the theorem-tactic to the {\small\verb%ASSUME%}d first element of the assumption list,
+and applies the resulting tactic to the goal without the first
+assumption in its assumption list:
+{\par\samepage\setseps\small\begin{verbatim}
+    POP_ASSUM f ({A1;...;An} ?- t) = f (A1 |- A1) ({A2;...;An} ?- t)
+\end{verbatim}}
+
+\FAILURE
+Fails if the assumption list of the goal is empty, or the theorem-tactic
+fails when applied to the popped assumption, or if the resulting tactic
+fails when applied to the goal (with depleted assumption list).
+
+\COMMENTS
+It is possible simply to use the theorem {\small\verb%ASSUME A1%} as required rather than
+use {\small\verb%POP_ASSUM%}; this will also maintain {\small\verb%A1%} in the assumption list,
+which is generally useful. In addition, this approach can equally well be
+applied to assumptions other than the first.
+
+There are admittedly times when {\small\verb%POP_ASSUM%} is convenient, but it is most
+unwise to use it if there is more than one assumption in the assumption
+list, since this introduces a dependency on the ordering, which is vulnerable
+to changes in the HOL system.
+
+\EXAMPLE
+The goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   {4 = SUC x} ?- x = 3
+\end{verbatim}}
+\noindent can be solved by:
+{\par\samepage\setseps\small\begin{verbatim}
+   POP_ASSUM (\th. REWRITE_TAC[REWRITE_RULE[num_CONV "4"; INV_SUC_EQ] th]))
+\end{verbatim}}
+\USES
+Making more delicate use of an assumption than rewriting or resolution
+using it.
+
+\SEEALSO
+ASSUM_LIST, EVERY_ASSUM, IMP_RES_TAC, POP_ASSUM_LIST, REWRITE_TAC.
+
+\ENDDOC
+\DOC{POP\_ASSUM\_LIST}
+
+\TYPE {\small\verb%POP_ASSUM_LIST : ((thm list -> tactic) -> tactic)%}\egroup
+
+\SYNOPSIS
+Generates a tactic from the assumptions, discards the assumptions and
+applies the tactic.
+
+\DESCRIBE
+When applied to a function and a goal, {\small\verb%POP_ASSUM_LIST%} applies
+the function to a list of theorems corresponding to the {\small\verb%ASSUME%}d
+assumptions of the goal, then applies the resulting tactic to the goal
+with an empty assumption list.
+{\par\samepage\setseps\small\begin{verbatim}
+    POP_ASSUM_LIST f ({A1;...;An} ?- t) = f [A1 |- A1; ... ; An |- An] (?- t)
+\end{verbatim}}
+
+\FAILURE
+Fails if the function fails when applied to the list of {\small\verb%ASSUME%}d assumptions,
+or if the resulting tactic fails when applied to the goal with no
+assumptions.
+
+\COMMENTS
+There is nothing magical about {\small\verb%POP_ASSUM_LIST%}: the same effect can be
+achieved by using {\small\verb%ASSUME a%} explicitly wherever the assumption {\small\verb%a%} is
+used. If {\small\verb%POP_ASSUM_LIST%} is used, it is unwise to select elements by
+number from the {\small\verb%ASSUME%}d-assumption list, since this introduces a dependency
+on ordering.
+
+\EXAMPLE
+Suppose we have a goal of the following form:
+{\par\samepage\setseps\small\begin{verbatim}
+   {a /\ b, c, (d /\ e) /\ f} ?- t
+\end{verbatim}}
+\noindent Then we can split the conjunctions in the assumption list apart by
+applying the tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   POP_ASSUM_LIST (MAP_EVERY STRIP_ASSUME_TAC)
+\end{verbatim}}
+\noindent which results in the new goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   {a, b, c, d, e, f} ?- t
+\end{verbatim}}
+
+\USES
+Making more delicate use of the assumption list than simply rewriting or
+using resolution.
+
+\SEEALSO
+ASSUM_LIST, EVERY_ASSUM, IMP_RES_TAC, POP_ASSUM, REWRITE_TAC.
+
+\ENDDOC
+\DOC{PROVE}
+
+\TYPE {\small\verb%PROVE : ((term # tactic) -> thm)%}\egroup
+
+\SYNOPSIS
+Attempts to prove a boolean term using the supplied tactic.
+
+\DESCRIBE
+When applied to a term-tactic pair {\small\verb%(tm,tac)%}, the function {\small\verb%PROVE%} attempts to
+prove the goal {\small\verb%?- tm%}, that is, the term {\small\verb%tm%} with no assumptions, using the
+tactic {\small\verb%tac%}. If {\small\verb%PROVE%} succeeds, it returns the corresponding theorem
+{\small\verb%A |- tm%}, where the assumption list {\small\verb%A%} may not be empty if the tactic is
+invalid; {\small\verb%PROVE%} has no inbuilt validity-checking.
+
+\FAILURE
+Fails if the term is not of type {\small\verb%bool%} (and so cannot possibly be
+the conclusion of a theorem), or if the tactic cannot solve the goal.
+In the latter case {\small\verb%PROVE%} will list the unsolved goals to help the user.
+
+\SEEALSO
+TAC_PROOF, prove, prove_thm, VALID.
+
+\ENDDOC
+\DOC{PURE\_ASM\_REWRITE\_TAC}
+
+\TYPE {\small\verb%PURE_ASM_REWRITE_TAC : thm list -> tactic%}\egroup
+
+\SYNOPSIS
+Rewrites a goal recursively with the given list of theorems and the
+current assumptions.
+
+\DESCRIBE
+{\small\verb%PURE_ASM_REWRITE_TAC%} generates a set of rewrites from the supplied
+theorems and the assumptions of the goal, and applies these in a
+top-down recursive manner until no match is found. See
+{\small\verb%GEN_REWRITE_TAC%} for more information on the group of rewriting
+tactics.
+
+\FAILURE
+{\small\verb%PURE_ASM_REWRITE_TAC%} does not fail, but it can diverge in certain
+situations. For limited depth rewriting, see
+{\small\verb%PURE_ONCE_ASM_REWRITE_TAC%}. It can also result in an invalid tactic.
+
+\USES
+To advance or solve a goal when the current assumptions are expected
+to be useful in reducing the goal.
+
+\SEEALSO
+ASM_REWRITE_TAC, GEN_REWRITE_TAC, FILTER_ASM_REWRITE_TAC,
+FILTER_ONCE_ASM_REWRITE_TAC, ONCE_ASM_REWRITE_TAC, ONCE_REWRITE_TAC,
+PURE_ONCE_ASM_REWRITE_TAC, PURE_ONCE_REWRITE_TAC, PURE_REWRITE_TAC,
+REWRITE_TAC, SUBST_TAC.
+
+\ENDDOC
+
+
+
+\DOC{PURE\_ONCE\_ASM\_REWRITE\_TAC}
+
+\TYPE {\small\verb%PURE_ONCE_ASM_REWRITE_TAC : thm list -> tactic%}\egroup
+
+\SYNOPSIS
+Rewrites a goal in one pass using the current assumptions and a list
+of theorems.
+
+\DESCRIBE
+A set of rewrites generated from the assumptions of the goal and the
+supplied theorems is used to rewrite the term part of the goal, making
+only one pass over the goal. The basic tautologies are not included as 
+rewrite theorems. The order in which the given theorems are applied is
+an implementation matter and the user should not depend on any
+ordering. See {\small\verb%GEN_REWRITE_TAC%} for more information on rewriting
+tactics in general.
+
+\FAILURE
+{\small\verb%PURE_ONCE_ASM_REWRITE_TAC%} does not fail and does not diverge.
+
+\USES
+Manipulation of the goal by rewriting with its assumptions, in
+instances where rewriting with tautologies and recursive rewriting is
+undesirable.
+
+\SEEALSO
+ASM_REWRITE_TAC, GEN_REWRITE_TAC, FILTER_ASM_REWRITE_TAC,
+FILTER_ONCE_ASM_REWRITE_TAC, ONCE_ASM_REWRITE_TAC, ONCE_REWRITE_TAC,
+PURE_ASM_REWRITE_TAC, PURE_ONCE_REWRITE_TAC, PURE_REWRITE_TAC,
+REWRITE_TAC, SUBST_TAC.
+
+\ENDDOC
+
+\DOC{PURE\_REWRITE\_TAC}
+
+\TYPE {\small\verb%PURE_REWRITE_TAC : thm list -> tactic%}\egroup
+
+\SYNOPSIS
+Rewrites a goal recursively using a supplied list of theorems and
+{\small\verb%basic_rewrites%}.
+
+\DESCRIBE
+{\small\verb%PURE_REWRITE_TAC%} behaves in the same way as {\small\verb%REWRITE_TAC%}, but
+without the effects of the built-in tautologies.  The order in which
+the given theorems are applied is an implementation matter and the user
+should not depend on any ordering. For more information on rewriting
+strategies see {\small\verb%GEN_REWRITE_TAC%}.
+
+\FAILURE
+{\small\verb%PURE_REWRITE_TAC%} does not fail, but it can diverge in certain
+situations; in such cases {\small\verb%PURE_ONCE_REWRITE_TAC%} may be used.
+
+\USES
+This tactic is useful when the built-in tautologies are not required as
+rewrite equations. It is sometimes useful in making more time-efficient
+replacements according to equations for which it is clear that no extra
+reduction via tautology will be needed. (The difference in efficiency
+is only apparent, however, in quite large examples.) 
+
+{\small\verb%PURE_REWRITE_TAC%} advances goals but solves them less frequently than
+{\small\verb%REWRITE_TAC%}; to be precise, {\small\verb%PURE_REWRITE_TAC%} only solves goals
+which are rewritten to {\small\verb%"T"%} (i.e. {\small\verb%TRUTH%}) without recourse to any
+other tautologies.
+
+\EXAMPLE
+It might be necessary, say for subsequent application of an induction
+hypothesis, to resist reducing a term {\small\verb%"b = T"%} to {\small\verb%"b"%}.
+{\par\samepage\setseps\small\begin{verbatim}
+  #PURE_REWRITE_TAC[]([],"b = T");;
+  ([([], "b = T")], -) : subgoals
+
+  #REWRITE_TAC[]([],"b = T");;
+  ([([], "b")], -) : subgoals
+\end{verbatim}}
+\SEEALSO
+ASM_REWRITE_TAC, FILTER_ASM_REWRITE_TAC, FILTER_ONCE_ASM_REWRITE_TAC, 
+GEN_REWRITE_TAC, ONCE_ASM_REWRITE_TAC, ONCE_REWRITE_TAC,
+PURE_ASM_REWRITE_TAC, PURE_ONCE_ASM_REWRITE_TAC,
+PURE_ONCE_REWRITE_TAC, REWRITE_TAC, SUBST_TAC.
+
+\ENDDOC
+
+
+
+\DOC{REFL\_TAC}
+
+\TYPE {\small\verb%REFL_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Solves a goal which is an equation between alpha-equivalent terms.
+
+\DESCRIBE
+When applied to a goal {\small\verb%A ?- t = t'%}, where {\small\verb%t%} and {\small\verb%t'%} are alpha-equivalent,
+{\small\verb%REFL_TAC%} completely solves it.
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t = t'
+   =============  REFL_TAC
+
+\end{verbatim}}
+\FAILURE
+Fails unless the goal is an equation between alpha-equivalent terms.
+
+\SEEALSO
+ACCEPT_TAC, MATCH_ACCEPT_TAC, REWRITE_TAC.
+
+\ENDDOC
+\DOC{REPEAT}
+
+\TYPE {\small\verb%REPEAT : (tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Repeatedly applies a tactic until it fails.
+
+\DESCRIBE
+The tactic {\small\verb%REPEAT T%} is a tactic which applies {\small\verb%T%} to a goal, and while it
+succeeds, continues applying it to all subgoals generated.
+
+\FAILURE
+The application of {\small\verb%REPEAT%} to a tactic never fails, and neither does the
+composite tactic, even if the basic tactic fails immediately.
+
+\SEEALSO
+EVERY, FIRST, ORELSE, THEN, THENL.
+
+\ENDDOC
+\DOC{REPEAT\_GTCL}
+
+\TYPE {\small\verb%REPEAT_GTCL : (thm_tactical -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Applies a theorem-tactical till it fails when applied to a goal.
+
+\DESCRIBE
+When applied to a theorem-tactical, a theorem-tactic, a theorem and a goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   REPEAT_GTCL ttl ttac th goal
+\end{verbatim}}
+\noindent {\small\verb%REPEAT_GTCL%} repeatedly modifies the theorem according to
+{\small\verb%ttl%} till the result of handing it to {\small\verb%ttac%} and applying it to the goal
+fails (this may be no times at all).
+
+\FAILURE
+Fails iff the theorem-tactic fails immediately when applied to the theorem
+and the goal.
+
+\EXAMPLE
+The following tactic matches {\small\verb%th%}'s antecedents against the assumptions
+of the goal until it can do so no longer, then puts the resolvents
+onto the assumtion list:
+{\par\samepage\setseps\small\begin{verbatim}
+   REPEAT_GTCL (IMP_RES_THEN ASSUME_TAC) th
+\end{verbatim}}
+\SEEALSO
+REPEAT_TCL, THEN_TCL.
+
+\ENDDOC
+\DOC{REPEAT\_TCL}
+
+\TYPE {\small\verb%REPEAT_TCL : (thm_tactical -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Repeatedly applies a theorem-tactical till it fails when applied to the
+theorem.
+
+\DESCRIBE
+When applied to a theorem-tactical, a theorem-tactic and a theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   REPEAT_TCL ttl ttac th
+\end{verbatim}}
+\noindent {\small\verb%REPEAT_TCL%} repeatedly modifies the theorem according to {\small\verb%ttl%}
+until it fails when given to the theorem-tactic {\small\verb%ttac%}.
+
+\FAILURE
+Fails iff the theorem-tactic fails immediately when applied to the theorem.
+
+\EXAMPLE
+Suppose we have the following goal, for some property {\small\verb%P%} of the integers:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- P n
+\end{verbatim}}
+\noindent Then given the following theorem, which can easily be derived
+by specializing the theorem {\small\verb%num_CASES%} from theory {\small\verb%arithmetic%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |- (n = 0) \/ (?n'. n = SUC n')
+\end{verbatim}}
+\noindent we can induce a useful case split by the following tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   REPEAT_TCL STRIP_THM_THEN SUBST1_TAC th
+\end{verbatim}}
+\noindent giving the following two subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- P(SUC n')
+   ?- P 0
+\end{verbatim}}
+\SEEALSO
+REPEAT_GTCL, THEN_TCL.
+
+\ENDDOC
+\DOC{RES\_TAC}
+
+\TYPE {\small\verb%RES_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Repeately resolve an implicative assumptions with the assumptions of a goal,
+adding the final results to the assumptions.
+
+\DESCRIPTION
+{\small\verb%RES_TAC%} searches for pairs of assumed assumptions of a goal (that is, for a
+candidate implication and a candidate antecedent, respectively) which can be
+`resolved' to yield new results. The conclusions of all the new results are
+returned as additional assumptions of the subgoal(s).  The effect of {\small\verb%RES_TAC%}
+on a goal is to enrich the assumptions set with some of its collective
+consequences.
+
+When applied to a goal {\small\verb%A ?- g%}, the tactic {\small\verb%RES_TAC%} uses {\small\verb%RES_CANON%} to
+obtain a set of implicative theorems in canonical form from the assumptions {\small\verb%A%}
+of the goal. Each of the resulting theorems (if there are any) will have the
+form:
+{\par\samepage\setseps\small\begin{verbatim}
+   A |- u1 ==> u2 ==> ... ==> un ==> v
+\end{verbatim}}
+\noindent {\small\verb%RES_TAC%} then tries to repeatedly `resolve' these theorems
+against the assumptions of a goal by attepting to match the antecedents {\small\verb%u1%},
+{\small\verb%u2%}, ..., {\small\verb%un%} (in that order) to some assumption of the goal (i.e. to some
+candidate antecedents among the assumptions).  If all the antecedents can be
+matched to assumptions of the goal, then an instance of the theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   A u {a1,...,an} |- v 
+\end{verbatim}}
+\noindent called a `final resolvent' is obtained by repeated specialization of
+the variables in the implicative theorem, type instantiation, and applications
+of modus ponens.  If only the first {\small\verb%i%} antecedents {\small\verb%u1%}, ..., {\small\verb%ui%} can be
+matched to assumptions and then no further matching is possible, then the final
+resolvent is an instance of the theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   A u {a1,...,ai} |- u(i+1) ==> ... ==> v 
+\end{verbatim}}
+\noindent All the final resolvents obtained in this way (there may be several,
+since an antecedent {\small\verb%ui%} may match several assumptions) are added to the
+assumptions of the goal, in the stripped form produced by using
+{\small\verb%STRIP_ASSUME_TAC%}.  If the conclusion of any final resolvent is a
+contradiction `{\small\verb%F%}' or is alpha-equivalent to the conclusion of the goal, then
+{\small\verb%RES_TAC%} solves the goal.
+
+
+\FAILURE
+{\small\verb%RES_TAC%} cannot fail and so should not be repeated. However, since the final
+resolvents added to the original assumptions are never used as `candidate
+antecedents' it is sometimes necessary to apply {\small\verb%RES_TAC%} more than once to
+derive the desired result.
+
+\SEEALSO
+IMP_RES_TAC, IMP_RES_THEN, RES_CANON, RES_THEN.
+
+\ENDDOC
+
+\DOC{RES\_THEN}
+
+\TYPE {\small\verb%RES_THEN : (thm_tactic -> tactic)%}\egroup
+
+\SYNOPSIS 
+Resolve all implicative assumptions against the rest.
+
+\DESCRIBE
+Like the basic resolution function {\small\verb%IMP_RES_THEN%}, the resolution tactic
+{\small\verb%RES_THEN%} performs a single-step resolution of an implication and the
+assumptions of a goal. {\small\verb%RES_THEN%} differs from {\small\verb%IMP_RES_THEN%} only in that the
+implications used for resolution are taken from the assumptions of the goal
+itself, rather than supplied as an argument.
+
+When applied to a goal {\small\verb%A ?- g%}, the tactic {\small\verb%RES_THEN ttac%} uses {\small\verb%RES_CANON%} to
+obtain a set of implicative theorems in canonical form from the assumptions {\small\verb%A%}
+of the goal. Each of the resulting theorems (if there are any) will have the
+form:
+{\par\samepage\setseps\small\begin{verbatim}
+   ai |- !x1...xn. ui ==> vi
+\end{verbatim}}
+\noindent where {\small\verb%ai%} is one of the assumptions of the goal. Having obtained
+these implications, {\small\verb%RES_THEN%} then attempts to match each antecedent {\small\verb%ui%} to
+each assumption {\small\verb%aj |- aj%} in the assumptions {\small\verb%A%}.  If the antecedent {\small\verb%ui%} of
+any implication matches the conclusion {\small\verb%aj%} of any assumption, then an instance
+of the theorem {\small\verb%ai, aj |- vi%}, called a `resolvent', is obtained by
+specialization of the variables {\small\verb%x1%}, ..., {\small\verb%xn%} and type instantiation,
+followed by an application of modus ponens.  There may be more than one
+canonical implication derivable from the assumptions of the goal and each
+such implication is tried against every assumption, so there may be several
+resolvents (or, indeed, none).
+
+Tactics are produced using the theorem-tactic {\small\verb%ttac%} from all these resolvents
+(failures of {\small\verb%ttac%} at this stage are filtered out) and these tactics are then
+applied in an unspecified sequence to the goal.  That is,
+{\par\samepage\setseps\small\begin{verbatim}
+   RES_THEN ttac (A ?- g)
+\end{verbatim}}
+\noindent has the effect of: 
+{\par\samepage\setseps\small\begin{verbatim}
+   MAP_EVERY (mapfilter ttac [... ; (ai,aj |- vi) ; ...]) (A ?- g)
+\end{verbatim}}
+\noindent where the theorems {\small\verb%ai,aj |- vi%} are all the consequences that can be
+drawn by a (single) matching modus-ponens inference from the assumptions {\small\verb%A%}
+and the implications derived using {\small\verb%RES_CANON%} from the assumptions.  The
+sequence in which the theorems {\small\verb%ai,aj |- vi%} are generated and the
+corresponding tactics applied is unspecified.
+
+\FAILURE 
+Evaluating {\small\verb%RES_THEN ttac th%} fails with `{\small\verb%no implication%}' if no
+implication(s) can be derived from the assumptions of the goal by the
+tranformation process described under the entry for {\small\verb%RES_CANON%}.  Evaluating
+{\small\verb%RES_THEN ttac (A ?- g)%} fails with `{\small\verb%no resolvents%}' if no assumption of the
+goal {\small\verb%A ?- g%} can be resolved with the derived implication or implications.
+Evaluation also fails, with `{\small\verb%no tactics%}', if there are resolvents, but for
+every resolvent {\small\verb%ai,aj |- vi%} evaluating the application {\small\verb%ttac (ai,aj |- vi)%}
+fails---that is, if for every resolvent {\small\verb%ttac%} fails to produce a tactic.
+Finally, failure is propogated if any of the tactics that are produced from the
+resolvents by {\small\verb%ttac%} fails when applied in sequence to the goal.
+
+\SEEALSO
+IMP_RES_TAC, IMP_RES_THEN, MATCH_MP, RES_CANON, RES_TAC.
+
+\ENDDOC
+
+\DOC{REWRITE\_TAC}
+
+\TYPE {\small\verb%REWRITE_TAC: thm list -> tactic%}\egroup
+
+\SYNOPSIS
+Rewrites a goal recursively with a given list of theorems and the
+built-in common tautologies.
+
+\DESCRIBE
+Rewriting tactics in HOL provide a recursive left-to-right matching
+and rewriting facility that automatically decomposes subgoals and
+justifies segments of proof in which equational theorems are used,
+singly or collectively.  These include the unfolding of definitions,
+and the substitution of equals for equals.  Rewriting is used either
+to advance or to complete the decomposition of subgoals.
+
+{\small\verb%REWRITE_TAC%} transforms (or solves) a goal by using as rewrite rules
+(i.e. as left-to-right replacement rules) the conclusions of the given
+list of (equational) theorems, as well as a set of built-in theorems
+(common tautologies) held in the ML variable {\small\verb%basic_rewrites%}.
+Recognition of a tautology often terminates the subgoaling process
+(i.e. solves the goal).
+
+The equational rewrites generated are applied recursively and to
+arbitrary depth, with matching and instantiation of variables and type
+variables.  A list of rewrites can set off an infinite rewriting
+process, and it is not, of course, decidable in general whether a
+rewrite set has that property. The order in which the rewrite theorems
+are applied is unspecified, and the user should not depend on any
+ordering.
+
+See {\small\verb%GEN_REWRITE_TAC%} for more details on the rewriting process.
+Variants of {\small\verb%REWRITE_TAC%} allow the use of a different set of
+rewrites. Some of them, such as {\small\verb%PURE_REWRITE_TAC%}, exclude the basic
+tautologies from the possible transformations. {\small\verb%ASM_REWRITE_TAC%} and
+others include the assumptions at the goal in the set of possible
+rewrites.
+
+Still other tactics allow greater control over the search for
+rewritable subterms. Several of them such as {\small\verb%ONCE_REWRITE_TAC%} do not
+apply rewrites recursively. {\small\verb%GEN_REWRITE_TAC%} allows a rewrite to be
+applied at a particular subterm.
+
+\FAILURE
+{\small\verb%REWRITE_TAC%} does not fail. Certain sets of rewriting theorems on
+certain goals may cause a non-terminating sequence of rewrites.
+Divergent rewriting behaviour results from a term {\small\verb%t%} being
+immediately or eventually rewritten to a term containing {\small\verb%t%} as a
+sub-term. The exact behaviour depends on the {\small\verb%HOL%} implementation; it
+may be possible (unfortunately) to fall into Lisp in this event.
+
+\EXAMPLE
+The arithmetic theorem {\small\verb%GREATER%}, {\small\verb%|- !m n. m > n = n < m%}, is used
+below to advance a goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   #REWRITE_TAC[GREATER]([],"5 > 4");;
+   ([([], "4 < 5")], -) : subgoals
+\end{verbatim}}
+\noindent It is used below with the theorem {\small\verb%LESS_0%},
+{\small\verb%|- !n. 0 < (SUC n)%}, to solve a goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let gl,p = REWRITE_TAC[GREATER;LESS_0]([],"(SUC n) > 0");;
+   gl = [] : goal list
+   p = - : proof
+
+   #p[];;
+   |- (SUC n) > 0
+\end{verbatim}}
+\USES
+Rewriting is a powerful and general mechanism in HOL, and an
+important part of many proofs.  It relieves the user of the burden of
+directing and justifying a large number of minor proof steps.  
+{\small\verb%REWRITE_TAC%} fits a forward proof sequence smoothly into the general
+goal-oriented framework. That is, (within one subgoaling step) it
+produces and justifies certain forward inferences, none of which are
+necessarily on a direct path to the desired goal.
+
+{\small\verb%REWRITE_TAC%} may be more powerful a tactic than is needed in certain
+situations; if efficiency is at stake, alternatives might be
+considered. 
+
+\SEEALSO
+ASM_REWRITE_TAC, GEN_REWRITE_TAC, FILTER_ASM_REWRITE_TAC,
+FILTER_ONCE_ASM_REWRITE_TAC, ONCE_ASM_REWRITE_TAC, ONCE_REWRITE_TAC,
+PURE_ASM_REWRITE_TAC, PURE_ONCE_ASM_REWRITE_TAC,
+PURE_ONCE_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_CONV, SUBST_TAC.
+
+\ENDDOC
+
+
+
+\DOC{RULE\_ASSUM\_TAC}
+
+\TYPE {\small\verb%RULE_ASSUM_TAC : ((thm -> thm) -> tactic)%}\egroup
+
+\SYNOPSIS
+Maps an inference rule over the assumptions of a goal.
+
+\DESCRIBE
+When applied to an inference rule {\small\verb%f%} and a goal {\small\verb%({A1;...;An} ?- t)%},
+the {\small\verb%RULE_ASSUM_TAC%} tactical applies the inference rule to each of the
+{\small\verb%ASSUME%}d assumptions to give a new goal.
+{\par\samepage\setseps\small\begin{verbatim}
+             {A1,...,An} ?- t
+   ====================================  RULE_ASSUM_TAC f
+    {f(A1 |- A1),...,f(An |- An)} ?- t
+\end{verbatim}}
+\FAILURE
+The application of {\small\verb%RULE_ASSUM_TAC f%} to a goal fails iff {\small\verb%f%} fails when
+applied to any of the assumptions of the goal.
+
+\COMMENTS
+It does not matter if the goal has no assumptions, but in this case
+{\small\verb%RULE_ASSUM_TAC%} has no effect.
+
+\SEEALSO
+ASSUM_LIST, MAP_EVERY, MAP_FIRST, POP_ASSUM_LIST.
+
+\ENDDOC
+\DOC{SPEC\_TAC}
+
+\TYPE {\small\verb%SPEC_TAC : ((term # term) -> tactic)%}\egroup
+
+\SYNOPSIS
+Generalizes a goal.
+
+\DESCRIBE
+When applied to a pair of terms {\small\verb%(u,x)%}, where {\small\verb%x%} is just a variable,
+and a goal {\small\verb%A ?- t%}, the tactic {\small\verb%SPEC_TAC%} generalizes the goal to
+{\small\verb%A ?- !x. t[x/u]%}, that is, all instances of {\small\verb%u%} are turned into {\small\verb%x%}.
+{\par\samepage\setseps\small\begin{verbatim}
+        A ?- t
+   =================  SPEC_TAC ("u","x")
+    A ?- !x. t[x/u]
+\end{verbatim}}
+\FAILURE
+Fails unless {\small\verb%x%} is a variable with the same type as {\small\verb%u%}.
+
+\USES
+Removing unnecessary speciality in a goal, particularly as a prelude to
+an inductive proof.
+
+\SEEALSO
+GEN, GENL, GEN_ALL, GEN_TAC, SPEC, SPECL, SPEC_ALL, STRIP_TAC.
+
+\ENDDOC
+\DOC{STRIP\_ASSUME\_TAC  }
+
+\TYPE {\small\verb%STRIP_ASSUME_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Splits a theorem into a list of theorems and then adds them to the assumptions.
+
+\DESCRIBE
+Given a theorem {\small\verb%th%} and a goal {\small\verb%(A,t)%}, {\small\verb%STRIP_ASSUME_TAC th%} splits {\small\verb%th%} into
+a list of theorems. This is done by recursively breaking conjunctions into
+separate conjuncts, cases-splitting disjunctions, and eliminating existential
+quantifiers by choosing arbitrary variables.  Schematically, the following
+rules are applied:
+{\par\samepage\setseps\small\begin{verbatim}
+           A ?- t
+   ======================  STRIP_ASSUME_TAC (A' |- v1 /\ ... /\ vn)  
+    A u {v1,...,vn} ?- t
+               
+ 
+                A ?- t                     
+   =================================  STRIP_ASSUME_TAC (A' |- v1 \/ ... \/ vn)  
+    A u {v1} ?- t ... A u {vn} ?- t
+
+
+          A ?- t
+   ====================  STRIP_ASSUME_TAC (A' |- ?x.v) 
+    A u {v[x'/x]} ?- t        
+\end{verbatim}}
+\noindent where {\small\verb%x'%} is a variant of {\small\verb%x%}.   
+
+If the conclusion of {\small\verb%th%} is not a conjunction, a disjunction or an
+existentially quantified term, the whole theorem {\small\verb%th%} is added to the
+assumptions.
+
+As assumptions are generated, they are examined to see if they solve the goal
+(either by being alpha-equivalent to the conclusion of the goal or by deriving
+a contradiction).
+
+The assumptions of the theorem being split are not added to the assumptions of
+the goal(s), but they are recorded in the proof.  This means that if {\small\verb%A'%} is
+not a subset of the assumptions {\small\verb%A%} of the goal (up to alpha-conversion),
+{\small\verb%STRIP_ASSUME_TAC (A'|-v)%} results in an invalid tactic.
+
+
+ 
+\FAILURE
+Never fails.
+
+\EXAMPLE
+When solving the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"m = 0 + m") 
+\end{verbatim}}
+\noindent assuming the clauses for addition with    
+{\small\verb%STRIP_ASSUME_TAC ADD_CLAUSES%} results in the goal  
+{\par\samepage\setseps\small\begin{verbatim}
+   (["m + (SUC n) = SUC(m + n)";
+     "(SUC m) + n = SUC(m + n)";
+     "m + 0 = m";
+     "0 + m = m"],
+    "m = 0 + m") 
+\end{verbatim}}
+\noindent while the same tactic directly solves the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"0 + m = m") 
+\end{verbatim}}
+\USES
+{\small\verb%STRIP_ASSUME_TAC%} is used when applying a previously proved theorem to solve 
+a goal, or
+when enriching its assumptions so that resolution, rewriting with assumptions 
+and other operations involving assumptions have more to work with.  
+
+\SEEALSO
+ASSUME_TAC, CHOOSE_TAC, CHOOSE_THEN, CONJUNCTS_THEN, DISJ_CASES_TAC, 
+DISJ_CASES_THEN. 
+
+\ENDDOC
+
+\DOC{STRIP\_GOAL\_THEN }
+
+\TYPE {\small\verb%STRIP_GOAL_THEN : (thm_tactic -> tactic)%} \egroup
+
+\SYNOPSIS
+Splits a goal by eliminating one outermost connective, applying the
+given theorem-tactic to the antecedents of implications.
+
+\DESCRIBE
+Given a theorem-tactic {\small\verb%ttac%} and a goal {\small\verb%(A,t)%}, {\small\verb%STRIP_GOAL_THEN%} removes one
+outermost occurence of one of the connectives {\small\verb%!%}, {\small\verb%==>%}, {\small\verb%~%} or {\small\verb%/\%} from the
+conclusion of the goal {\small\verb%t%}.  If {\small\verb%t%} is a universally quantified term, then
+{\small\verb%STRIP_GOAL_THEN%} strips off the quantifier:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- !x.u 
+   ==============  STRIP_GOAL_THEN ttac
+     A ?- u[x'/x]  
+\end{verbatim}}
+\noindent where {\small\verb%x'%} is a primed variant that does not appear free in the
+assumptions {\small\verb%A%}.  If {\small\verb%t%} is a conjunction, then {\small\verb%STRIP_GOAL_THEN%} simply splits
+the conjunction into two subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- v /\ w    
+   =================  STRIP_GOAL_THEN 
+    A ?- v   A ?- w  
+\end{verbatim}}
+\noindent If {\small\verb%t%} is an implication {\small\verb%"u ==> v"%} and if:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- v
+  ===============  ttac (u |- u)
+     A' ?- v'
+\end{verbatim}}
+\noindent then:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- u ==> v
+  ====================  STRIP_GOAL_THEN ttac 
+        A' ?- v'
+\end{verbatim}}
+\noindent Finally, a negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}.
+
+\FAILURE
+{\small\verb%STRIP_GOAL_THEN ttac (A,t)%} fails if {\small\verb%t%} is not a universally quantified term,
+an implication, a negation or a conjunction.  Failure also occurs if the
+application of {\small\verb%ttac%} fails, after stripping the goal.
+ 
+\EXAMPLE
+When solving the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"(n = 1) ==> (n * n = n)") 
+\end{verbatim}}
+\noindent a possible initial step is to apply 
+{\par\samepage\setseps\small\begin{verbatim}
+   STRIP_GOAL_THEN SUBST1_TAC 
+\end{verbatim}}
+\noindent thus obtaining the goal
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "1 * 1 = 1")
+\end{verbatim}}
+\USES
+{\small\verb%STRIP_GOAL_THEN%} is used when manipulating intermediate results (obtained by
+stripping outer connectives from a goal) directly, rather than as assumptions.
+
+\SEEALSO
+CONJ_TAC, DISCH_THEN, FILTER_STRIP_THEN, GEN_TAC, STRIP_ASSUME_TAC, STRIP_TAC. 
+
+\ENDDOC
+
+\DOC{STRIP\_TAC}
+
+\TYPE {\small\verb%STRIP_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Splits a goal by eliminating one outermost connective.
+
+\DESCRIBE
+Given a goal {\small\verb%(A,t)%}, {\small\verb%STRIP_TAC%} removes one outermost occurence of one of the
+connectives {\small\verb%!%}, {\small\verb%==>%}, {\small\verb%~%} or {\small\verb%/\%} from the conclusion of the goal {\small\verb%t%}.  If
+{\small\verb%t%} is a universally quantified term, then {\small\verb%STRIP_TAC%} strips off the
+quantifier:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- !x.u 
+   ==============  STRIP_TAC    
+     A ?- u[x'/x]  
+\end{verbatim}}
+\noindent where {\small\verb%x'%} is a primed variant that does not appear free in the
+assumptions {\small\verb%A%}.  If {\small\verb%t%} is a conjunction, then {\small\verb%STRIP_TAC%} simply splits the
+conjunction into two subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- v /\ w    
+   =================  STRIP_TAC 
+    A ?- v   A ?- w  
+\end{verbatim}}
+\noindent If {\small\verb%t%} is an implication, {\small\verb%STRIP_TAC%} moves the antecedent into the
+assumptions, stripping conjunctions, disjunctions and existential
+quantifiers according to the following rules:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- v1 /\ ... /\ vn ==> v            A ?- v1 \/ ... \/ vn ==> v     
+   ============================        =================================  
+       A u {v1,...,vn} ?- v             A u {v1} ?- v ... A u {vn} ?- v
+
+
+     A ?- ?x.w ==> v  
+   ====================     
+    A u {w[x'/x]} ?- v 
+\end{verbatim}}
+\noindent where {\small\verb%x'%} is a primed variant of {\small\verb%x%} that does not appear free in
+{\small\verb%A%}. Finally, a negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}.
+
+\FAILURE
+{\small\verb%STRIP_TAC (A,t)%} fails if {\small\verb%t%} is not a universally quantified term, 
+an implication, a negation or a conjunction.    
+
+\EXAMPLE
+Applying {\small\verb%STRIP_TAC%} twice to the goal:
+{\par\samepage\setseps\small\begin{verbatim}
+    ?- !n. m <= n /\ n <= m ==> (m = n)
+\end{verbatim}}
+\noindent results in the subgoal:
+{\par\samepage\setseps\small\begin{verbatim}
+   {n <= m, m <= n} ?- m = n
+\end{verbatim}}
+\USES
+When trying to solve a goal, often the best thing to do first 
+is {\small\verb%REPEAT STRIP_TAC%} to split the goal up into manageable pieces.
+
+\SEEALSO
+CONJ_TAC, DISCH_TAC, DISCH_THEN, GEN_TAC, STRIP_ASSUME_TAC, STRIP_GOAL_THEN.
+
+\ENDDOC
+
+\DOC{STRIP\_THM\_THEN  }
+
+\TYPE {\small\verb%STRIP_THM_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+{\small\verb%STRIP_THM_THEN%} applies the given theorem-tactic using the result of 
+stripping off one outer connective from the given theorem.   
+  
+\DESCRIBE
+Given a theorem-tactic {\small\verb%ttac%}, a theorem {\small\verb%th%} whose conclusion is a
+conjunction, a disjunction or an existentially quantified term, and a goal
+{\small\verb%(A,t)%}, {\small\verb%STRIP_THM_THEN ttac th%} first strips apart the conclusion of {\small\verb%th%},
+next applies {\small\verb%ttac%} to the theorem(s) resulting from the stripping and then
+applies the resulting tactic to the goal.
+  
+In particular, when stripping a conjunctive theorem {\small\verb%A'|- u /\ v%}, the tactic 
+{\par\samepage\setseps\small\begin{verbatim}
+   ttac(u|-u) THEN ttac(v|-v)
+\end{verbatim}}
+\noindent resulting from applying {\small\verb%ttac%} to the conjuncts, is applied to the
+goal.  When stripping a disjunctive theorem {\small\verb%A'|- u \/ v%}, the tactics
+resulting from applying {\small\verb%ttac%} to the disjuncts, are applied to split the goal
+into two cases. That is, if
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t                           A ?- t
+   =========  ttac (u|-u)    and    =========  ttac (v|-v)
+    A ?- t1                          A ?- t2
+\end{verbatim}}
+\noindent then:
+{\par\samepage\setseps\small\begin{verbatim}
+         A ?- t       
+   ==================  STRIP_THM_THEN ttac (A'|- u \/ v) 
+    A ?- t1  A ?- t2 
+\end{verbatim}}
+\noindent When stripping an existentially quantified theorem {\small\verb%A'|- ?x.u%}, the
+tactic {\small\verb%ttac(u|-u)%}, resulting from applying {\small\verb%ttac%} to the body of the
+existential quantification, is applied to the goal.  That is, if:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t                  
+   =========  ttac (u|-u)
+    A ?- t1 
+\end{verbatim}}
+\noindent then:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- t       
+   =============  STRIP_THM_THEN ttac (A'|- ?x. u) 
+      A ?- t1  
+\end{verbatim}}
+  
+The assumptions of the theorem being split are not added to the assumptions of
+the goal(s) but are recorded in the proof.  If {\small\verb%A'%} is not a subset of the
+assumptions {\small\verb%A%} of the goal (up to alpha-conversion), {\small\verb%STRIP_THM_THEN ttac th%}
+results in an invalid tactic.
+
+\FAILURE
+{\small\verb%STRIP_THM_THEN ttac th%} fails if the conclusion of {\small\verb%th%} is not a conjunction,
+a disjunction or an existentially quantified term.  Failure also occurs if the
+application of {\small\verb%ttac%} fails, after stripping the outer connective from the
+conclusion of {\small\verb%th%}.
+
+\USES
+{\small\verb%STRIP_THM_THEN%} is used enrich the assumptions of a goal with a stripped
+version of a previously-proved theorem.
+
+\SEEALSO
+CHOOSE_THEN, CONJUNCTS_THEN, DISJ_CASES_THEN, STRIP_ASSUME_TAC.  
+
+\ENDDOC
+
+
+
+
+
+
+\DOC{STRUCT\_CASES\_TAC}
+
+\TYPE {\small\verb%STRUCT_CASES_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Performs very general structural case analysis.
+
+\DESCRIBE
+When it is applied to a theorem of the form:
+{\par\samepage\setseps\small\begin{verbatim}
+   th = A' |- ?y11...y1m. (x=t1) /\ (B11 /\ ... /\ B1k) \/ ... \/
+                ?yn1...ynp. (x=tn) /\ (Bn1 /\ ... /\ Bnp)
+\end{verbatim}}
+\noindent in which there may be no existential quantifiers where a `vector' of
+them is shown above, {\small\verb%STRUCT_CASES_TAC th%} splits a goal {\small\verb%A ?- s%} into {\small\verb%n%}
+subgoals as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+                             A ?- s
+   ===============================================================
+    A u {B11,...,B1k} ?- s[t1/x] ... A u {Bn1,...,Bnp} ?- s[tn/x]
+\end{verbatim}}
+\noindent that is, performs a case split over the possible constructions (the
+{\small\verb%ti%}) of a term, providing as assumptions the given constraints, having
+split conjoined constraints into separate assumptions. Note that unless {\small\verb%A'%}
+is a subset of {\small\verb%A%}, this is an invalid tactic.
+
+\FAILURE
+Fails unless the theorem has the above form, namely a conjunction of
+(possibly multiply existentially quantified) terms which assert the equality
+of the same variable {\small\verb%x%} and the given terms.
+
+\EXAMPLE
+Suppose we have the goal:
+{\par\samepage\setseps\small\begin{verbatim}
+  ?- ~(l:(*)list = []) ==> (LENGTH l) > 0
+\end{verbatim}}
+\noindent then we can get rid of the universal quantifier from the
+inbuilt list theorem {\small\verb%list_CASES%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   list_CASES = !l. (l = []) \/ (?t h. l = CONS h t)
+\end{verbatim}}
+\noindent and then use {\small\verb%STRUCT_CASES_TAC%}. This amounts to applying the
+following tactic:
+{\par\samepage\setseps\small\begin{verbatim}
+   STRUCT_CASES_TAC (SPEC_ALL list_CASES)
+\end{verbatim}}
+\noindent which results in the following two subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+   ?- ~(CONS h t = []) ==> (LENGTH(CONS h t)) > 0
+
+   ?- ~([] = []) ==> (LENGTH[]) > 0
+\end{verbatim}}
+\noindent Note that this is a rather simple case, since there are no
+constraints, and therefore the resulting subgoals have no assumptions.
+
+\USES
+Generating a case split from the axioms specifying a structure.
+
+\SEEALSO
+ASM_CASES_TAC, BOOL_CASES_TAC, COND_CASES_TAC, DISJ_CASES_TAC.
+
+\ENDDOC
+\DOC{SUBGOAL\_THEN}
+
+\TYPE {\small\verb%SUBGOAL_THEN : (term -> thm_tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+{\small\verb%SUBGOAL_THEN%} allows the user to introduce a lemma.
+This tactic introduces a subgoal that the lemma follows from the assumptions.
+
+\DESCRIBE
+The user proposes a lemma and is then invited to prove it under
+the current assumptions.
+The lemma is then used with the {\small\verb%thm_tactic%} to simplify the goal.
+That is, if
+{\par\samepage\setseps\small\begin{verbatim}
+    A1 ?- t1
+   ==========   f (u |- u)
+    A2 ?- t2
+\end{verbatim}}
+\noindent then
+{\par\samepage\setseps\small\begin{verbatim}
+         A1 ?- t1
+   ====================  SUBGOAL_THEN "u" f
+    A1 ?- u   A2 ?- t2
+\end{verbatim}}
+\FAILURE
+{\small\verb%SUBGOAL_THEN%} will fail with {\small\verb%`ASSUME`%} if an attempt is made to use a 
+nonboolean term as a lemma.
+
+\USES
+When combined with {\small\verb%rotate%}, {\small\verb%SUBGOAL_THEN%} allows the user to defer some
+part of a proof and to continue with another part.
+{\small\verb%SUBGOAL_THEN%} is most convenient when the tactic solves the original goal,
+leaving only the subgoal.
+For example, suppose the user wishes top prove the goal
+{\par\samepage\setseps\small\begin{verbatim}
+   [n = SUC m],  (0 = n) ==> t
+\end{verbatim}}
+Using {\small\verb%SUBGOAL_THEN%} to focus on the case in which {\small\verb%~(n = 0)%}, 
+rewriting establishes it truth, leaving only the proof that {\small\verb%~(n = 0)%}.
+That is, 
+{\par\samepage\setseps\small\begin{verbatim}
+   SUBGOAL_THEN "~(0 = n)" (\th:thm. REWRITE_TAC [th])
+\end{verbatim}}
+\noindent generates the following subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+   [[n = SUC m],  ~(0 = n); T]
+\end{verbatim}}
+\COMMENTS
+Some users may expect the generated tactic to be: {\small\verb%f (A1 |- u)%},
+rather than: {\small\verb%f (u |- u)%}.
+
+\ENDDOC
+\DOC{SUBST1\_TAC }
+
+\TYPE {\small\verb%SUBST1_TAC : thm_tactic%} \egroup
+
+\SYNOPSIS
+Makes a simple term substitution in a goal using a single equational theorem. 
+
+\DESCRIBE
+Given a theorem {\small\verb%A'|-u=v%} and a goal {\small\verb%(A,t)%}, the tactic 
+{\small\verb%SUBST1_TAC (A'|-u=v)%} rewrites the term {\small\verb%t%} into {\small\verb%t[v/u]%}, by substituting 
+{\small\verb%v%} for each free occurrence of {\small\verb%u%} in {\small\verb%t%}:
+{\par\samepage\setseps\small\begin{verbatim}
+      A ?- t
+   =============  SUBST1_TAC (A'|-u=v)    
+    A ?- t[v/u]
+\end{verbatim}}
+\noindent The assumptions of the theorem used to substitute with are not added
+to the assumptions of the goal but are recorded in the proof.  If {\small\verb%A'%} is not a
+subset of the assumptions {\small\verb%A%} of the goal (up to alpha-conversion), then
+{\small\verb%SUBST1_TAC (A'|-u=v)%} results in an invalid tactic.
+   
+{\small\verb%SUBST1_TAC%} automatically renames bound variables to prevent free variables in
+{\small\verb%v%} becoming bound after substitution.
+  
+\FAILURE 
+{\small\verb%SUBST1_TAC th (A,t)%} fails if the conclusion of {\small\verb%th%} is not an equation.  
+No change is made to the goal if no free occurrence of the left-hand side 
+of {\small\verb%th%} appears in {\small\verb%t%}.  
+
+\EXAMPLE
+When trying to solve the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"m * n = (n * (m - 1)) + n")
+\end{verbatim}}
+\noindent substituting with the commutative law for multiplication  
+{\par\samepage\setseps\small\begin{verbatim}
+   SUBST1_TAC (SPECL ["m:num"; "n:num"] MULT_SYM) 
+\end{verbatim}}
+\noindent results in the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "n * m = (n * (m - 1)) + n")  
+\end{verbatim}}
+\USES
+{\small\verb%SUBST1_TAC%} is used when rewriting with a single theorem using tactics such as
+{\small\verb%REWRITE_TAC%} is too extensive or would diverge. Applying {\small\verb%SUBST1_TAC%} is also
+much faster than using rewriting tactics.
+
+\SEEALSO
+ONCE_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_TAC, SUBST_ALL_TAC, SUBST_TAC. 
+
+\ENDDOC
+
+\DOC{SUBST\_ALL\_TAC}
+
+\TYPE {\small\verb%SUBST_ALL_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Substitutes using a single equational theorem in both the assumptions and the
+conclusion of a goal.
+
+\DESCRIBE
+{\small\verb%SUBST_ALL_TAC%} breaches the style of natural deduction, where the assumptions
+are kept fixed.  Given a theorem {\small\verb%A|-u=v%} and a goal {\small\verb%([t1;...;tn], t)%},
+{\small\verb%SUBST_ALL_TAC (A|-u=v)%} transforms the assumptions {\small\verb%t1%},...,{\small\verb%tn%} and the term
+{\small\verb%t%} into {\small\verb%t1[v/u]%},...,{\small\verb%tn[v/u]%} and {\small\verb%t[v/u]%} respectively, by substituting {\small\verb%v%}
+for each free occurrence of {\small\verb%u%} in both the assumptions and the conclusion of
+the goal.
+{\par\samepage\setseps\small\begin{verbatim}
+           {t1,...,tn} ?- t            
+   =================================  SUBST_ALL_TAC (A|-u=v)
+    {t1[v/u],...,tn[v/u]} ?- t[v/u]
+\end{verbatim}}
+\noindent The assumptions of the theorem used to substitute with are not added
+to the assumptions of the goal, but they are recorded in the proof.  If {\small\verb%A%} is
+not a subset of the assumptions of the goal (up to alpha-conversion), then
+{\small\verb%SUBST_ALL_TAC (A|-u=v)%} results in an invalid tactic.
+  
+{\small\verb%SUBST_ALL_TAC%} automatically renames bound variables to prevent
+free variables in {\small\verb%v%} becoming bound after substitution.    
+
+\FAILURE
+{\small\verb%SUBST_ALL_TAC th (A,t)%} fails if the conclusion of {\small\verb%th%} is not an equation. 
+No change is made to the goal if no occurrence of the left-hand side of 
+{\small\verb%th%} appears free in {\small\verb%(A,t)%}.  
+
+\EXAMPLE
+Simplifying both the assumption and the term in the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   (["0 + m = n"], "0 + (0 + m) = n") 
+\end{verbatim}}
+\noindent by substituting with the theorem {\small\verb%|- 0 + m = m%} for addition  
+{\par\samepage\setseps\small\begin{verbatim}
+   SUBST_ALL_TAC (CONJUNCT1 ADD_CLAUSES) 
+\end{verbatim}}
+\noindent results in the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   (["m = n"], "0 + m = n")
+\end{verbatim}}
+\SEEALSO
+ONCE_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_TAC, SUBST1_TAC, SUBST_TAC. 
+
+\ENDDOC
+
+\DOC{SUBST\_OCCS\_TAC }
+
+\TYPE {\small\verb%SUBST_OCCS_TAC : ((int list # thm) list -> tactic)%} \egroup
+
+\SYNOPSIS
+{\small\verb%SUBST_OCCS_TAC%} makes substitutions in a goal at specific 
+occurrences of a term, using a list of theorems.  
+
+\DESCRIBE
+Given a list {\small\verb%(l1,A1|-t1=u1),...,(ln,An|-tn=un)%} and a goal {\small\verb%(A,t)%}, 
+{\small\verb%SUBST_OCCS_TAC%} replaces each {\small\verb%ti%} in {\small\verb%t%} with {\small\verb%ui%}, simultaneously, 
+at the occurrences specified by the integers in the list {\small\verb%li = [o1;...;ok]%} 
+for each theorem {\small\verb%Ai|-ti=ui%}.  
+{\par\samepage\setseps\small\begin{verbatim}
+              A ?- t         
+   =============================  SUBST_OCCS_TAC [(l1,A1|-t1=u1);...; 
+    A ?- t[u1,...,un/t1,...,tn]                                (ln,An|-tn=un)] 
+\end{verbatim}}
+\noindent The assumptions of the theorems used to substitute with are not
+added to the assumptions {\small\verb%A%} of the goal, but they are recorded in the proof.
+If any {\small\verb%Ai%} is not a subset of {\small\verb%A%} (up to alpha-conversion),   
+{\small\verb%SUBST_OCCS_TAC [(l1,A1|-t1=u1);...;(ln,An|-tn=un)]%}
+results in an invalid tactic. 
+  
+{\small\verb%SUBST_OCCS_TAC%} automatically renames bound variables to prevent 
+free variables in {\small\verb%ui%} becoming bound after substitution. 
+
+\FAILURE
+{\small\verb%SUBST_OCCS_TAC [(l1,th1);...;(ln,thn)] (A,t)%} fails if the conclusion of any
+theorem in the list is not an equation.  No change is made to the goal if the
+supplied occurrences {\small\verb%li%} of the left-hand side of the conclusion of {\small\verb%thi%} do
+not appear in {\small\verb%t%}.
+
+\EXAMPLE
+When trying to solve the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"(m + n) + (n + m) = (m + n) + (m + n)") 
+\end{verbatim}}
+\noindent applying the commutative law for addition on the third occurrence of 
+the subterm {\small\verb%m + n%}  
+{\par\samepage\setseps\small\begin{verbatim}
+   SUBST_OCCS_TAC [([3],SPECL ["m:num"; "n:num"] ADD_SYM)]
+\end{verbatim}}
+\noindent results in the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "(m + n) + (n + m) = (m + n) + (n + m)")
+\end{verbatim}}
+\USES
+{\small\verb%SUBST_OCCS_TAC%} is used when rewriting a goal at specific occurrences 
+of a term,
+and rewriting tactics such as {\small\verb%REWRITE_TAC%}, {\small\verb%PURE_REWRITE_TAC%}, 
+{\small\verb%ONCE_REWRITE_TAC%}, {\small\verb%SUBST_TAC%}, etc. are too extensive or would diverge. 
+ 
+\SEEALSO
+ONCE_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_TAC, SUBST1_TAC, SUBST_TAC. 
+
+\ENDDOC
+
+
+\DOC{SUBST\_TAC}
+
+\TYPE {\small\verb%SUBST_TAC : (thm list -> tactic)%} \egroup
+
+\SYNOPSIS
+Makes term substitutions in a goal using a list of theorems. 
+
+\DESCRIBE 
+
+Given a list of theorems {\small\verb%A1|-u1=v1,...,An|-un=vn%} and a goal {\small\verb%(A,t)%},
+{\small\verb%SUBST_TAC%} rewrites the term {\small\verb%t%} into the term {\small\verb%t[v1,...,vn/u1,...,un]%} by
+simultaneously substituting {\small\verb%vi%} for each occurrence of {\small\verb%ui%} in {\small\verb%t%} with {\small\verb%vi%}:
+{\par\samepage\setseps\small\begin{verbatim}
+              A ?- t
+   =============================  SUBST_TAC [A1|-u1=v1;...;An|-un=vn]       
+    A ?- t[v1,...,vn/u1,...,un]
+\end{verbatim}}
+\noindent The assumptions of the theorems used to substitute with are not added
+to the assumptions {\small\verb%A%} of the goal, while they are recorded in the proof.  If
+any {\small\verb%Ai%} is not a subset of {\small\verb%A%} (up to alpha-conversion), then {\small\verb%SUBST_TAC
+[A1|-u1=v1;...;An|-un=vn]%} results in an invalid tactic.
+  
+{\small\verb%SUBST_TAC%} automatically renames bound variables to prevent free variables in
+{\small\verb%vi%} becoming bound after substitution.
+ 
+\FAILURE
+{\small\verb%SUBST_TAC [th1;...;thn] (A,t)%} fails if the conclusion of any theorem in the
+list is not an equation.  No change is made to the goal if no occurrence of the
+left-hand side of the conclusion of {\small\verb%thi%} appears in {\small\verb%t%}.
+ 
+\EXAMPLE
+When trying to solve the goal 
+{\par\samepage\setseps\small\begin{verbatim}
+   ([],"(n + 0) + (0 + m) = m + n") 
+\end{verbatim}}
+\noindent by substituting with the theorems  
+{\par\samepage\setseps\small\begin{verbatim}
+   #let thm1 = SPECL ["m:num"; "n:num"] ADD_SYM 
+   #and thm2 = CONJUNCT1 ADD_CLAUSES;;
+   thm1 = |- m + n = n + m
+   thm2 = |- 0 + m = m
+\end{verbatim}}
+\noindent applying {\small\verb%SUBST_TAC [thm1; thm2]%} results in the goal  
+{\par\samepage\setseps\small\begin{verbatim}
+   ([], "(n + 0) + m = n + m")
+\end{verbatim}}
+
+\USES 
+{\small\verb%SUBST_TAC%} is used when rewriting (for example, with {\small\verb%REWRITE_TAC%}) is
+extensive or would diverge.  Substituting is also much faster than rewriting.
+
+\SEEALSO
+ONCE_REWRITE_TAC, PURE_REWRITE_TAC, REWRITE_TAC, SUBST1_TAC, SUBST_ALL_TAC.
+
+\ENDDOC
+
+
+\DOC{TAC\_PROOF}
+
+\TYPE {\small\verb%TAC_PROOF : ((goal # tactic) -> thm)%}\egroup
+
+\SYNOPSIS
+Attempts to prove a goal using a given tactic.
+
+\DESCRIBE
+When applied to a goal-tactic pair {\small\verb%(A ?- t,tac)%}, the {\small\verb%TAC_PROOF%} function
+attempts to prove the goal {\small\verb%A ?- t%}, using the tactic {\small\verb%tac%}. If it succeeds, it
+returns the theorem {\small\verb%A' |- t%} corresponding to the goal, where the assumption
+list {\small\verb%A'%} may be a proper superset of {\small\verb%A%} unless the tactic is valid; there
+is no inbuilt validity checking.
+
+\FAILURE
+Fails unless the goal has hypotheses and conclusions all of type {\small\verb%bool%},
+and the tactic can solve the goal.
+
+\SEEALSO
+PROVE, prove_thm, VALID.
+
+\ENDDOC
+\DOC{THEN}
+
+\TYPE {\small\verb%$THEN : (tactic -> tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Applies two tactics in sequence.
+
+\DESCRIBE
+If {\small\verb%T1%} and {\small\verb%T2%} are tactics, {\small\verb%T1 THEN T2%} is a tactic which applies {\small\verb%T1%} to a
+goal, then applies the tactic {\small\verb%T2%} to all the subgoals generated. If {\small\verb%T1%}
+solves the goal then {\small\verb%T2%} is never applied.
+
+\FAILURE
+The application of {\small\verb%THEN%} to a pair of tactics never fails.
+The resulting tactic fails if {\small\verb%T1%} fails when applied to the goal, or if
+{\small\verb%T2%} does when applied to any of the resulting subgoals.
+
+\COMMENTS
+Although normally used to sequence tactics which generate a single subgoal,
+it is worth remembering that it is sometimes useful to apply the same tactic
+to multiple subgoals; sequences like the following:
+{\par\samepage\setseps\small\begin{verbatim}
+   EQ_TAC THENL [ASM_REWRITE_TAC[]; ASM_REWRITE_TAC[]]
+\end{verbatim}}
+\noindent can be replaced by the briefer:
+{\par\samepage\setseps\small\begin{verbatim}
+   EQ_TAC THEN ASM_REWRITE_TAC[]
+\end{verbatim}}
+\SEEALSO
+EACH, ORELSE, THENL.
+
+\ENDDOC
+\DOC{THENL}
+
+\TYPE {\small\verb%$THENL : (tactic -> tactic list -> tactic)%}\egroup
+
+\SYNOPSIS
+Applies a list of tactics to the corresponding subgoals generated by a tactic.
+
+\DESCRIBE
+If {\small\verb%T,T1,...,Tn%} are tactics, {\small\verb%T THENL [T1;...;Tn]%} is a tactic which applies
+{\small\verb%T%} to a goal, and if it does not fail, applies the tactics {\small\verb%T1,...,Tn%} to the
+corresponding subgoals, unless {\small\verb%T%} completely solves the goal.
+
+\FAILURE
+The application of {\small\verb%THENL%} to a tactic and tactic list never fails.
+The resulting tactic fails if {\small\verb%T%} fails when applied to the goal, or if
+the goal list is not empty and its length is not the same as that of the
+tactic list, or finally if {\small\verb%Ti%} fails when applied to the {\small\verb%i%}'th subgoal
+generated by {\small\verb%T%}.
+
+\USES
+Applying different tactics to different subgoals.
+
+\SEEALSO
+EACH, ORELSE, THEN.
+
+\ENDDOC
+\DOC{THEN\_TCL}
+
+\TYPE {\small\verb%$THEN_TCL : (thm_tactical -> thm_tactical -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Composes two theorem-tacticals.
+
+\DESCRIBE
+If {\small\verb%ttl1%} and {\small\verb%ttl2%} are two theorem-tacticals, {\small\verb%ttl1 THEN_TCL ttl2%} is
+a theorem-tactical which composes their effect; that is, if:
+{\par\samepage\setseps\small\begin{verbatim}
+   ttl1 ttac th1 = ttac th2
+\end{verbatim}}
+\noindent and
+{\par\samepage\setseps\small\begin{verbatim}
+   ttl2 ttac th2 = ttac th3
+\end{verbatim}}
+\noindent then
+{\par\samepage\setseps\small\begin{verbatim}
+   (ttl1 THEN_TCL ttl2) ttac th1 = ttac th3
+\end{verbatim}}
+\FAILURE
+The application of {\small\verb%THEN_TCL%} to a pair of theorem-tacticals never fails.
+
+\SEEALSO
+EVERY_TCL, FIRST_TCL, ORELSE_TCL.
+
+\ENDDOC
+\DOC{TRY}
+
+\TYPE {\small\verb%TRY : (tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Makes a tactic have no effect rather than fail.
+
+\DESCRIBE
+For any tactic {\small\verb%T%}, the application {\small\verb%TRY T%} gives a new tactic
+which has the same effect as {\small\verb%T%} if that succeeds, and otherwise has
+no effect.
+
+\FAILURE
+The application of {\small\verb%TRY%} to a tactic never fails. The resulting
+tactic never fails.
+
+\SEEALSO
+CHANGED_TAC, VALID.
+
+\ENDDOC
+\DOC{UNDISCH\_TAC}
+
+\TYPE {\small\verb%UNDISCH_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Undischarges an assumption.
+
+\DESCRIBE
+{\par\samepage\setseps\small\begin{verbatim}
+          A ?- t
+   ====================  UNDISCH "v"
+    A - {\small\verb%v%} ?- v ==> t
+\end{verbatim}}
+
+\FAILURE
+{\small\verb%UNDISCH_TAC%} will fail if {\small\verb%"v"%} is not an assumption.
+
+\COMMENTS
+{\small\verb%UNDISCH%}arging {\small\verb%"v"%} will remove all assumptions which are identical to {\small\verb%"v"%},
+but those which are alpha-equivalent will remain.
+
+\SEEALSO
+DISCH, DISCH_ALL, DISCH_TAC, DISCH_THEN, NEG_DISCH, FILTER_DISCH_TAC, 
+FILTER_DISCH_THEN, STRIP_TAC,  UNDISCH, UNDISCH_ALL.
+
+\ENDDOC
+\DOC{VALID}
+
+\TYPE {\small\verb%VALID : (tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Tries to ensure that a tactic is valid.
+
+\DESCRIBE
+For any tactic {\small\verb%T%}, the application {\small\verb%VALID T%} gives a new tactic
+which when applied to a goal, checks that {\small\verb%T%} as applied
+to that goal is valid, i.e. the subgoals produced, if proved,
+can be used by the justification function given by {\small\verb%T%} to
+construct a theorem corresponding to the original goal.
+
+This check is performed by actually creating, using {\small\verb%mk_thm%}
+theorems corresponding to the subgoals, and seeing if the result of applying
+the justification function to them gives a theorem corresponding to the
+original goal. If it does, then {\small\verb%VALID T%} simply applies {\small\verb%T%}, and if not
+it fails.
+
+The method by which theorems are created from goals can be changed by rebinding
+the assignable variable {\small\verb%chktac%} - see its documentation entry for details.
+
+\FAILURE
+The application of {\small\verb%VALID%} to a tactic never fails. The resulting
+tactic fails either if the original tactic fails or is invalid.
+
+\COMMENTS
+The use of {\small\verb%mk_thm%} is a possible, though improbable, loophole
+in the general security of the theorem abstract type, since it does
+create possibly spurious theorems; however these should remain anonymous
+in the absence of other bugs in the system.
+
+By default the same validity checking procedure, {\small\verb%check_valid%}, is
+invoked by the subgoal package, but it can be switched off.
+
+It is not checked whether the tactic is strongly valid, i.e. the
+subgoals are provable; clearly this is not possible in general.
+
+\SEEALSO
+CHANGED_TAC, check_valid, chktac, e, expand, TRY.
+
+\ENDDOC
+\DOC{X\_CASES\_THEN}
+
+\TYPE {\small\verb%X_CASES_THEN : (term list list -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Split the goal into multiple cases by applying a tactic-generating
+function to the disjuncts of a disjunctive theorem, after first
+introducing witnesses for the quantified variables of each disjunct.
+
+\DESCRIBE
+Let {\small\verb%[yl1;...;yln]%} represent a list of variable lists,
+each of length zero or more, and {\small\verb%xl1,...,xln%} each represent a
+vector of zero or more variables, so that the variables in each of
+{\small\verb%yl1...yln%} have the same types as the corresponding {\small\verb%xli%}.  
+{\small\verb%X_CASES_THEN%} expects such a list of variable lists, {\small\verb%[yl1;...;yln]%}, a tactic
+generating function {\small\verb%f:thm->tactic%}, and a disjunctive theorem,
+where each disjunct may be existentially quantified:  
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |-(?xl1.B1)  \/...\/  (?xln.Bn)
+\end{verbatim}}
+\noindent each disjunct having the form {\small\verb%(?xi1 ... xim. Bi)%}. If
+applying {\small\verb%f%} to the theorem obtained by introducing witness variables {\small\verb%yli%}
+for the objects {\small\verb%xli%} whose existence is asserted by each disjunct, typically
+{\small\verb%({Bi[yli/xli]} |- Bi[yli/xli])%}, produce the following results when
+applied to a goal {\small\verb%(A ?- t)%}:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t                           
+   ========= f ({B1[yl1/xl1]} |- B1[yl1/xl1])
+    A ?- t1                            
+
+    ...
+
+    A ?- t
+   =========  f ({Bn[yln/xln]} |- Bn[yln/xln])
+    A ?- tn
+\end{verbatim}}
+\noindent then applying {\small\verb%(X_CHOOSE_THEN [yl1;...;yln] f th)%} 
+to the goal {\small\verb%(A ?- t)%} produces {\small\verb%n%} subgoals.
+{\par\samepage\setseps\small\begin{verbatim}
+           A ?- t
+   =======================  X_CHOOSE_THEN [yl1;...;yln] f th
+    A ?- t1  ...  A ?- tn
+\end{verbatim}}
+
+\FAILURE
+Fails (with {\small\verb%X_CHOOSE_THEN%}) if any {\small\verb%yli%} has more variables than the
+corresponding {\small\verb%xli%}, or (with {\small\verb%SUBST%}) if corresponding variables have
+different types.  Failures may arise in the tactic-generating
+function.  An invalid tactic is produced if any variable in any of the
+{\small\verb%yli%} is free in the corresponding {\small\verb%Bi%} or in {\small\verb%t%}, or if the theorem
+has any hypothesis which is not alpha-convertible to an assumption of
+the goal.
+
+\EXAMPLE
+Given the goal {\small\verb%([], "(x MOD 2) <= 1")%}, the following theorem may be
+used to split into 2 cases:
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |- (?m. x = 2 * m) \/ (?m. x = (2 * m) + 1)
+\end{verbatim}}
+\noindent by the tactic {\small\verb%X_CASES_THEN [["n:num"];["n:num"]] ASSUME_TAC th%}
+to produce the subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+   "(x MOD 2) <= 1"
+       [ "x = (2 * n) + 1" ]
+
+   "(x MOD 2) <= 1"
+       [ "x = 2 * n" ]
+\end{verbatim}}
+
+\SEEALSO
+DISJ_CASES_THENL, X_CASES_THENL, X_CHOOSE_THEN.
+
+\ENDDOC
+\DOC{X\_CASES\_THENL}
+
+\TYPE {\small\verb%X_CASES_THENL : (term list list -> thm_tactic list -> thm_tactic)%}\egroup
+
+\SYNOPSIS
+Split the goal into n cases by applying distinct tactic-generating functions
+to the disjuncts of a disjunctive theorem, after first
+introducing witnesses for the quantified variables of each disjunct.
+
+\DESCRIBE
+Let {\small\verb%[yl1;...;yln]%} represent a list of variable lists,
+each of length zero or more, and {\small\verb%xl1,...,xln%} each represent a
+vector of zero or more variables, so that the variables in each of
+{\small\verb%yl1...yln%} have the same types as the corresponding {\small\verb%xli%}.  
+The function {\small\verb%X_CASES_THENL%} expects a list of variable lists,
+{\small\verb%[yl1;...;yln]%}, a list of tactic-generating functions
+{\small\verb%[f1;...;fn]:(thm->tactic)list%}, and a disjunctive theorem, where each
+disjunct may be existentially quantified:   
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |-(?xl1.B1)  \/...\/  (?xln.Bn)
+\end{verbatim}}
+\noindent each disjunct having the form {\small\verb%(?xi1 ... xim. Bi)%}. If
+applying each {\small\verb%fi%} to the theorem obtained by introducing witness variables {\small\verb%yli%}
+for the objects {\small\verb%xli%} whose existence is asserted by the {\small\verb%i%}th disjunct, 
+{\small\verb%({Bi[yli/xli]} |- Bi[yli/xli])%}, produces the following results when
+applied to a goal {\small\verb%(A ?- t)%}:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t                           
+   =========  f1 ({B1[yl1/xl1]} |- B1[yl1/xl1])
+    A ?- t1                            
+
+    ...
+
+    A ?- t
+   =========  fn ({Bn[yln/xln]} |- Bn[yln/xln])
+    A ?- tn
+\end{verbatim}}
+\noindent then applying {\small\verb%X_CHOOSE_THENL [yl1;...;yln] [f1;...;fn] th%} 
+to the goal {\small\verb%(A ?- t)%} produces {\small\verb%n%} subgoals.
+{\par\samepage\setseps\small\begin{verbatim}
+           A ?- t
+   =======================  X_CHOOSE_THENL [yl1;...;yln] [f1;...;fn] th
+    A ?- t1  ...  A ?- tn
+\end{verbatim}}
+
+\FAILURE
+Fails (with {\small\verb%X_CHOOSE_THEN%}) if any {\small\verb%yli%} has more variables than the
+corresponding {\small\verb%xli%}, or (with {\small\verb%SUBST%}) if corresponding variables have
+different types, or (with {\small\verb%combine%}) if the number of theorem tactics
+differs from the number of disjuncts.  Failures may arise in the
+tactic-generating function.  An invalid tactic is produced if any
+variable in any of the {\small\verb%yli%} is free in the corresponding {\small\verb%Bi%} or in
+{\small\verb%t%}, or if the theorem has any hypothesis which is not
+alpha-convertible to an assumption of the goal.
+
+\EXAMPLE
+Given the goal {\small\verb%([], "(x MOD 2) <= 1")%}, the following theorem may be
+used to split into 2 cases:
+{\par\samepage\setseps\small\begin{verbatim}
+   th = |- (?m. x = 2 * m) \/ (?m. x = (2 * m) + 1)
+\end{verbatim}}
+\noindent by the tactic 
+{\small\verb%X_CASES_THENL [["n:num"];["n:num"]] [ASSUME_TAC; SUBST1_TAC] th%}
+to produce the subgoals:
+{\par\samepage\setseps\small\begin{verbatim}
+   "(((2 * n) + 1) MOD 2) <= 1"
+
+   "(x MOD 2) <= 1"
+       [ "x = 2 * n" ]
+\end{verbatim}}
+
+\SEEALSO
+DISJ_CASES_THEN, X_CASES_THENL, X_CHOOSE_THEN.
+
+\ENDDOC
+\DOC{X\_CHOOSE\_TAC}
+
+\TYPE {\small\verb%X_CHOOSE_TAC : (term -> thm_tactic)%}\egroup
+
+\SYNOPSIS
+Strip an existentially quantified variable off a theorem by
+introducing a specified witness variable, and add it as an assumption.
+
+\DESCRIBE
+{\small\verb%X_CHOOSE_TAC%} expects a variable {\small\verb%y%} and theorem with an existentially
+quantified conclusion.  When applied to a goal, it adds a new
+assumption obtained by introducing the variable {\small\verb%y%} as a witness for
+the object {\small\verb%x%} whose existence is asserted in the theorem.
+{\par\samepage\setseps\small\begin{verbatim}
+           A ?- t
+   ===================  X_CHOOSE_TAC "y" (A1 |- ?x. w)
+    A u {w[y/x]} ?- t         ("y" not free anywhere)
+\end{verbatim}}
+
+\FAILURE
+Fails if the theorem conclusion is not existentially quantified, or if
+the first argument is not a variable.  Failures may arise in the
+tactic-generating function.  An invalid tactic is produced if the
+introduced variable is free in {\small\verb%w%} or {\small\verb%t%}, or if the theorem has any
+hypothesis which is not alpha-convertible to an assumption of the
+goal.
+
+\EXAMPLE
+Given a goal of the form 
+{\par\samepage\setseps\small\begin{verbatim}
+   "?x. m = n + (x + 1)"
+       [ "n < m" ] 
+\end{verbatim}}
+\noindent the following theorem may be applied:
+{\par\samepage\setseps\small\begin{verbatim}
+   th = ["n < m"] |- ?p. m = n + p
+\end{verbatim}}
+\noindent by the tactic {\small\verb%(X_CHOOSE_TAC "q:num" th)%} giving
+the subgoal:
+{\par\samepage\setseps\small\begin{verbatim}
+   "?x. m = n + (x + 1)"
+       [ "n < m" ]
+       [ "m = n + q" ]
+\end{verbatim}}
+
+\SEEALSO
+CHOOSE, CHOOSE_THEN, X_CHOOSE_THEN.  
+
+\ENDDOC
+\DOC{X\_CHOOSE\_THEN}
+
+\TYPE {\small\verb%X_CHOOSE_THEN : (term -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Strip an existentially quantified variable off a theorem by
+introducing a specified witness variable, and generate a tactic by
+applying a tactic-generating function.
+
+\DESCRIBE
+{\small\verb%X_CHOOSE_THEN%} expects a variable {\small\verb%y%}, a tactic-generating function
+{\small\verb%f:thm->tactic%}, and a theorem of the form {\small\verb%(A1 |- ?x. w)%} as
+arguments.  A new theorem is created by introducing the given variable
+{\small\verb%y%} as a witness for the object {\small\verb%x%} whose existence is asserted in the original
+theorem, {\small\verb%(w[y/x] |- w[y/x])%}.  If the tactic-generating function {\small\verb%f%}
+applied to this theorem produces results as follows when applied to a
+goal {\small\verb%(A ?- t)%}: 
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   =========  f ({w[y/x]} |- w[y/x])
+    A ?- t1
+\end{verbatim}}
+\noindent then applying {\small\verb%(X_CHOOSE_THEN "y" f (A1 |- ?x. w))%} to the 
+goal {\small\verb%(A ?- t)%} produces the subgoal:
+{\par\samepage\setseps\small\begin{verbatim}
+    A ?- t
+   =========  X_CHOOSE_THEN "y" f (A1 |- ?x. w)
+    A ?- t1         ("y" not free anywhere)
+\end{verbatim}}
+
+\FAILURE
+Fails if the theorem conclusion is not existentially quantified, or if
+the first argument is not a variable.  Failures may arise in the
+tactic-generating function.  An invalid tactic is produced if the
+introduced variable is free in {\small\verb%w%} or {\small\verb%t%}, or if the theorem has any
+hypothesis which is not alpha-convertible to an assumption of the
+goal.
+
+\EXAMPLE
+Given a goal of the form 
+{\par\samepage\setseps\small\begin{verbatim}
+   "?x. m = n + (x + 1)"
+       [ "n < m" ] 
+\end{verbatim}}
+\noindent the following theorem may be applied:
+{\par\samepage\setseps\small\begin{verbatim}
+   th = ["n < m"] |- ?p. m = n + p
+\end{verbatim}}
+\noindent by the tactic {\small\verb%(X_CHOOSE_THEN "q:num" SUBST1_TAC th)%} giving
+the subgoal:
+{\par\samepage\setseps\small\begin{verbatim}
+   "?x. n + q = n + (x + 1)"
+       [ "n < m" ]
+\end{verbatim}}
+
+\SEEALSO
+CHOOSE, CHOOSE_THEN, CONJUNCTS_THEN, CONJUNCTS_THEN2, DISJ_CASES_THEN,
+DISJ_CASES_THEN2, DISJ_CASES_THENL, STRIP_THM_THEN, X_CHOOSE_TAC.  
+
+\ENDDOC
+\DOC{X\_GEN\_TAC}
+
+\TYPE {\small\verb%X_GEN_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Specializes a goal with the given variable.
+
+\DESCRIBE
+When applied to a term {\small\verb%x'%}, which should be a variable, and a goal
+{\small\verb%!x. t%}, the tactic {\small\verb%X_GEN_TAC%} returns the goal {\small\verb%t[x'/x]%}. If necessary,
+bound variables are renamed in the goal prior to the specialization to
+ensure that {\small\verb%x'%} is not free in the assumption list.
+{\par\samepage\setseps\small\begin{verbatim}
+     !x. t
+   =========  X_GEN_TAC "x'"
+    t[x'/x]
+\end{verbatim}}
+\FAILURE
+Fails unless the goal's conclusion is universally quantified and the term
+a variable of the appropriate type.
+
+\SEEALSO
+FILTER_GEN_TAC, GEN, GENL, GEN_ALL, SPEC, SPECL, SPEC_ALL, SPEC_TAC, STRIP_TAC.
+
+\ENDDOC

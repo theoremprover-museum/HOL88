@@ -1,0 +1,3 @@
+\THEOREM SELECT_UNIQUE \none
+|- !P x. (!y. P y = (y = x)) ==> ($@ P = x)
+\ENDTHEOREM

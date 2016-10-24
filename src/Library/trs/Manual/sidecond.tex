@@ -1,0 +1,252 @@
+\section{Side-conditions}
+
+Sometimes pattern matching is not sufficiently expressive. In this session,
+side-condition tests are used to express complex queries. The tools for
+generating side-conditions are also illustrated here.
+
+\setcounter{sessioncount}{1}
+
+\begin{session}\begin{verbatim}
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 2
+
+#load_library `trs`;;
+Loading library `trs` ...
+Updating help search path
+.............................................................................
+......................
+Library `trs` loaded.
+() : void
+
+#let s = Paths [Theory `arithmetic`];;
+s = Paths[Theory `arithmetic`] : source
+\end{verbatim}\end{session}
+
+Having bound \ml{s} to a {\small\verb%source%} consisting of the theory
+{\small\verb%arithmetic%}, we search for theorems with an equation as body,
+such that the right-hand side of the equation is a variable.
+
+\begin{session}\begin{verbatim}
+#find_theorems ((conc "x:bool") Where ("x:bool" has_body "(a:*) = b")
+#                               Where (test1term is_var "b:*")) s;;
+Searching theory arithmetic
+Step([((Theorem), `arithmetic`, `ADD_SUB`, |- !a c. (a + c) - c = a);
+      ((Theorem), `arithmetic`, `MULT_RIGHT_1`, |- !m. m * 1 = m);
+      ((Theorem), `arithmetic`, `MULT_LEFT_1`, |- !m. 1 * m = m);
+      ((Theorem), `arithmetic`, `SUC_SUB1`, |- !m. (SUC m) - 1 = m);
+      ((Theorem), `arithmetic`, `ADD_0`, |- !m. m + 0 = m)],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+
+\index{side-conditions!abbreviation}
+\noindent
+Since matching the {\small\verb%"x:bool"%} against the conclusion serves no
+purpose, the above search can be abbreviated as follows:
+
+\begin{session}\begin{verbatim}
+#find_theorems (("conc:bool" has_body "(a:*) = b")
+#                  Where (test1term is_var "b:*")) s;;
+Searching theory arithmetic
+Step([((Theorem), `arithmetic`, `ADD_SUB`, |- !a c. (a + c) - c = a);
+      ((Theorem), `arithmetic`, `MULT_RIGHT_1`, |- !m. m * 1 = m);
+      ((Theorem), `arithmetic`, `MULT_LEFT_1`, |- !m. 1 * m = m);
+      ((Theorem), `arithmetic`, `SUC_SUB1`, |- !m. (SUC m) - 1 = m);
+      ((Theorem), `arithmetic`, `ADD_0`, |- !m. m + 0 = m)],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+
+\noindent
+The function \ml{test1term}\index{test1term@{\ptt test1term}} obtains the term
+bound to the variable {\small\verb%b%}. It then applies the function
+\ml{is\_var} to the term. The Boolean result determines the outcome of the
+side-condition.
+
+We now search for theorems with an equation as body, such that the right-hand
+side of the equation is a variable or the number {\small\verb%0%}.
+
+\begin{session}\begin{verbatim}
+#find_theorems (("conc:bool" has_body "(a:*) = b")
+#                  Where (("b:*" matches "0")
+#                     Orelse (test1term is_var "b:*"))) s;;
+Searching theory arithmetic
+Step([((Theorem), `arithmetic`, `SUB_EQUAL_0`, |- !c. c - c = 0);
+      ((Theorem), `arithmetic`, `ADD_SUB`, |- !a c. (a + c) - c = a);
+      ((Theorem), `arithmetic`, `MOD_ONE`, |- !k. k MOD (SUC 0) = 0);
+      ((Theorem), `arithmetic`, `MULT_RIGHT_1`, |- !m. m * 1 = m);
+      ((Theorem), `arithmetic`, `MULT_LEFT_1`, |- !m. 1 * m = m);
+      ((Theorem), `arithmetic`, `MULT_0`, |- !m. m * 0 = 0);
+      ((Theorem), `arithmetic`, `SUC_SUB1`, |- !m. (SUC m) - 1 = m);
+      ((Theorem), `arithmetic`, `ADD_0`, |- !m. m + 0 = m)],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+
+\index{side-conditions!user functions}
+In the next example, we search the theory {\small\verb%bool%} for theorems
+with a conclusion containing exactly two conjunctions. To do this, we first
+define a function which counts the number of conjunctions in a term. We then
+form a function which yields \ml{true} of a term if it contains exactly two
+conjunctions. This is used as an argument to \ml{test1term}.
+
+\vfill
+\begin{session}\begin{verbatim}
+#letrec cnt_conj t =
+#   let n = if (is_conj t) then 1 else 0
+#   in  (n + (cnt_conj (snd (dest_abs t)))) ?
+#       (n + (cnt_conj (rator t)) + (cnt_conj (rand t))) ?
+#       n;;
+cnt_conj = - : (term -> int)
+
+#find_theorems (test1term (\t. (cnt_conj t) = 2) "conc:bool")
+#              (Paths [Theory `bool`]);;
+Searching theory bool
+Step([((Definition),
+       `bool`,
+       `EXISTS_UNIQUE_DEF`,
+       |- $?! = (\P. $? P /\ (!x y. P x /\ P y ==> (x = y))))],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+\vfill
+
+\index{side-conditions!abbreviation}
+\noindent
+The use of {\small\verb%"conc:bool"%} as the second argument to \ml{test1term}
+allows only the side-condition to be given as the pattern. The variable
+{\small\verb%"conc:bool"%} is always bound to the conclusion of the theorem
+being tested.
+
+We now define a side-condition for comparing the number of distinct free
+variables in two terms, and use it to search for equations in which there are
+more variables on the left-hand side than on the right. The function
+\ml{test2terms}\index{test2terms@{\ptt test2terms}} behaves in a similar
+manner to \ml{test1term}, except that it deals with two variables rather than
+one. By defining a suitable infix function, the pattern can be written in a
+syntactically pleasant way.
+
+\vfill
+\begin{session}\begin{verbatim}
+#let has_more_vars term1 term2 =
+#   (length (frees (term1))) > (length (frees (term2)));;
+has_more_vars = - : (term -> term -> bool)
+
+#let has_more_vars_than = test2terms (has_more_vars);;
+has_more_vars_than = - : (term -> term -> thmpattern)
+
+#ml_curried_infix `has_more_vars_than`;;
+() : void
+\end{verbatim}\end{session}
+
+\begin{session}\begin{verbatim}
+#find_theorems (("conc:bool" has_body "(a:*) = b")
+#                  Where ("a:*" has_more_vars_than "b:*")) s;;
+Searching theory arithmetic
+Step([((Theorem), `arithmetic`, `SUB_EQUAL_0`, |- !c. c - c = 0);
+      ((Theorem), `arithmetic`, `ADD_SUB`, |- !a c. (a + c) - c = a);
+      ((Theorem),
+       `arithmetic`,
+       `MULT_MONO_EQ`,
+       |- !m i n. ((SUC n) * m = (SUC n) * i) = (m = i));
+      ((Theorem),
+       `arithmetic`,
+       `LESS_MULT_MONO`,
+       |- !m i n. ((SUC n) * m) < ((SUC n) * i) = m < i);
+      ((Theorem), `arithmetic`, `MOD_ONE`, |- !k. k MOD (SUC 0) = 0);
+      ((Theorem),
+       `arithmetic`,
+       `MULT_EXP_MONO`,
+       |- !p q n m.
+           (n * ((SUC q) EXP p) = m * ((SUC q) EXP p)) = (n = m));
+      ((Theorem),
+       `arithmetic`,
+       `MULT_SUC_EQ`,
+       |- !p m n. (n * (SUC p) = m * (SUC p)) = (n = m));
+      ((Theorem),
+       `arithmetic`,
+       `LESS_EQ_MONO_ADD_EQ`,
+       |- !m n p. (m + p) <= (n + p) = m <= n);
+      ((Theorem),
+       `arithmetic`,
+       `EQ_MONO_ADD_EQ`,
+       |- !m n p. (m + p = n + p) = (m = n));
+      ((Theorem),
+       `arithmetic`,
+       `LESS_MONO_ADD_EQ`,
+       |- !m n p. (m + p) < (n + p) = m < n);
+      ((Theorem),
+       `arithmetic`,
+       `ADD_INV_0_EQ`,
+       |- !m n. (m + n = m) = (n = 0));
+      ((Theorem), `arithmetic`, `MULT_0`, |- !m. m * 0 = 0)],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+\vfill
+
+\index{patterns!type information}
+Note that one does not have to know complete type information to do a search
+because polymorphic types are treated as pattern variables. The types must
+however be consistent, e.g., {\small\verb%y%} below must have a
+{\small\verb%sum%} type.
+
+\begin{session}\begin{verbatim}
+#find_theorems (conc "!(x:*). (y:**+***) = (ABS_sum z)")
+#              (Paths [Theory `sum`]);;
+Searching theory sum
+Step([((Definition),
+       `sum`,
+       `INR_DEF`,
+       |- !e. INR e = ABS_sum(\b x y. (y = e) /\ ~b));
+      ((Definition),
+       `sum`,
+       `INL_DEF`,
+       |- !e. INL e = ABS_sum(\b x y. (x = e) /\ b))],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+
+\index{errors!at run-time}
+Unfortunately, inconsistent types may lead to run-time errors. In the next
+example, the {\small\verb%z%} appearing in the side-condition has a different
+type to the {\small\verb%z%} appearing in the main clause, and so they are
+considered to be different variables
+({\em Variables\index{patterns!distinct variables} are identified by both
+name and type}.). The error only shows up if the side-condition is tested. It
+is not possible to test for unknown variables in side-conditions prior to the
+search, because side-conditions can be arbitrary functions. An informative
+failure message is the best that can be achieved.
+
+\begin{session}\begin{verbatim}
+#find_theorems ((conc "!(x:*). (y:**+***) = (ABS_sum z)")
+#                  Where (Not ("z:****" contains "$~")))
+#              (Paths [Theory `sum`]);;
+Searching theory sum
+evaluation failed     match_of_var -- unknown wildvar (variable)
+\end{verbatim}\end{session}
+
+\noindent
+The types are given correctly in the following example.
+
+\begin{session}\begin{verbatim}
+#find_theorems
+#   ((conc "!(x:*). (y:**+***) = (ABS_sum z)")
+#       Where (Not ("z:bool->(**->(***->bool))" contains "$~")))
+#   (Paths [Theory `sum`]);;
+Searching theory sum
+Step([((Definition),
+       `sum`,
+       `INL_DEF`,
+       |- !e. INL e = ABS_sum(\b x y. (x = e) /\ b))],
+     -)
+: searchstep
+
+#quit();;
+$
+\end{verbatim}\end{session}
+

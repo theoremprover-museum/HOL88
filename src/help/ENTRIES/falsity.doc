@@ -1,0 +1,8 @@
+\DOC falsity
+
+\TYPE {falsity : term}
+
+\SYNOPSIS
+Contains the constant {"F:bool"}.
+
+\ENDDOC

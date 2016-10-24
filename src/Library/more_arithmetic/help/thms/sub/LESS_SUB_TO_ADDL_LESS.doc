@@ -1,0 +1,3 @@
+\THEOREM LESS_SUB_TO_ADDL_LESS sub
+|- !m n p. n <= m ==> (p < (m - n) = (n + p) < m)
+\ENDTHEOREM

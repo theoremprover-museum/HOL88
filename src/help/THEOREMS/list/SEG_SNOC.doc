@@ -1,0 +1,3 @@
+\THEOREM SEG_SNOC list
+|- !n m l. (n + m) <= (LENGTH l) ==> (!x. SEG n m(SNOC x l) = SEG n m l)
+\ENDTHEOREM

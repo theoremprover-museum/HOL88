@@ -1,0 +1,8 @@
+\THEOREM isacut HREAL
+|- !C.
+    isacut C =
+    (?x. C x) /\
+    (?x. ~C x) /\
+    (!x y. C x /\ y hrat_lt x ==> C y) /\
+    (!x. C x ==> (?y. C y /\ x hrat_lt y))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM LAST list
+|- !x l. LAST(SNOC x l) = x
+\ENDTHEOREM

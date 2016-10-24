@@ -1,0 +1,5 @@
+\THEOREM TAN_DOUBLE TRANSC
+|- !x.
+    ~(cos x = & 0) /\ ~(cos((& 2) * x) = & 0) ==>
+    (tan((& 2) * x) = ((& 2) * (tan x)) / ((& 1) - ((tan x) pow 2)))
+\ENDTHEOREM

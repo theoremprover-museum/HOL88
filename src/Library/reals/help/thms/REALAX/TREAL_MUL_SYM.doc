@@ -1,0 +1,3 @@
+\THEOREM TREAL_MUL_SYM REALAX
+|- !x y. x treal_mul y = y treal_mul x
+\ENDTHEOREM

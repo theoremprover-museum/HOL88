@@ -1,0 +1,168 @@
+% Copyright 1991 by Norman Ramsey.  All rights reserved.
+% See file COPYRIGHT for more information.
+@ A cheap imitation of tangle.
+The idea is a very cheap implementation of tangle.
+The markup of the file is described in file markup.ow.
+@
+The structure of the program is as follows: first we accumulate all of
+the module definitions, then we write out the definition of the
+root module (normally [["*"]]).
+The module definition information will be stored statically
+in a table supplied by [[modtrees.h]]; we'll cover the
+details later.
+<<header>>=
+void notangle (FILE* in, FILE *out, char *rootname, char *locformat);
+<<*>>=
+#define MAX_MODNAME 255
+#define MAX_EXPANSION_LEVEL 50
+@
+<<*>>=
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "strsave.h"
+#include "getline.h"
+#include "modules.h"
+#include "modtrees.h"
+#include "errors.h"
+
+<<Function declarations>>
+
+void notangle (FILE* in, FILE *out, char *rootname, char *locformat) {
+    Module root = NULL; /* ptr to root module */
+
+    read_defs(in);              /* read all the definitions */
+
+    apply_each_module(remove_final_newline);
+                                /* pretty up the module texts */
+
+    root = lookup(rootname);
+    <<quit if we couldn't find the root>>
+    (void) expand(root,0,0,MAX_EXPANSION_LEVEL,locformat,out);
+    putc('\n',out);                     /* make output end with newline */
+}
+@
+We recognize the input using matching functions, which can find [[@begin]],
+[[@end]], and other useful information.
+<<matching functions>>=
+static matches(char *line, char *search) {
+    return !strncmp(line,search,strlen(search));
+}
+static is_keyword(char *line, char *keyword) {
+    static char low_at_sign = '@';
+    return *line==low_at_sign && matches(line+1,keyword) && 
+           (line[strlen(keyword)+1]==' ' || line[strlen(keyword)+1]=='\n');
+}
+static is_begin(char *line, char *type) {
+    return is_keyword(line,"begin") && matches(line+1+6,type);
+}
+static is_end(char *line, char *type) {
+    return is_keyword(line,"end") && matches (line+1+4,type);
+}
+@
+We loop looking for the start of a code chunk.
+When we find one, we get the name of the module in which the code
+is to appear.  
+Then we just keep adding lines to that module until
+we see a terminator.
+After we see the terminator we start all over again looking for another code
+chunk.
+<<*>>=
+<<matching functions>>
+
+void read_defs(FILE *in) {
+    char modname[MAX_MODNAME+1] = ""; /* name of module currently being read, 
+                                         [[""]] if no module is being read */ 
+    Module modptr = NULL;       /* ptr to current module, or NULL */
+    char *line = NULL;          /* buffer for input */
+    Location loc;
+
+    while ((line = getline(in)) != NULL) {
+        if (is_keyword(line,"file")) {
+            <<save name from [[line]] ([[@file ...]]) into [[loc.filename]]>>
+            loc.lineno = 1;
+            continue;
+        } else if (is_keyword(line,"nl")) {
+            loc.lineno++;
+            continue;
+        } else if (!is_begin(line,"code"))
+	    continue;
+        do { /* skip until EOF, @defn, or @text */
+                line = getline(in);
+        } while (line != NULL && !is_keyword(line,"defn") && !is_keyword(line,"text"));
+	insist(line,"defn","code chunk had no definition line");
+        <<copy module name into [[modname]]>>
+        warn_dots(modname);       /* names ending in ... aren't like web */
+        modptr = insert(modname); /* find or add module in table */
+
+	line = getline(in);
+	insist(line,"nl","definition line not followed by newline");
+	loc.lineno++;
+        line = getline(in);
+        while (line != NULL && !is_end(line,"code")) {
+	    if (is_keyword(line,"nl")) {
+		addnewline(modptr);
+	        loc.lineno++;
+	    } else if (is_keyword(line,"text")) {
+		addstring(modptr,line+1+4+1,loc);
+	    } else if (is_keyword(line,"use")) {
+                warn_dots(line+1+3+5);
+		addmodule(modptr,line+1+3+1);
+            } else
+                <<complain of botched code chunk>>
+            line = getline(in);
+        }
+        <<if [[line==NULL]] die of premature end of file>>
+    }
+}
+@ When copying the module name or a file name,
+we have to strip the trailing newline.
+<<copy module name into [[modname]]>>=
+strcpy(modname,line+strlen("@defn "));
+modname[strlen(modname)-1]='\0';
+<<save name from [[line]] ([[@file ...]]) into [[loc.filename]]>>=
+{ char temp[MAX_MODNAME+1];
+  if (strlen(line) >= MAX_MODNAME + strlen("@file "))
+    overflow("file name size");
+  strcpy(temp,line+strlen("@file "));
+  temp[strlen(temp)-1]='\0';
+  loc.filename = strsave(temp);
+}
+@
+In {\tt WEB}, module names ending in ``...'' may be prefixes
+for other names.
+We don't do anything like that here, but we do warn the user about
+``...'' in case he's got a file converted from {\tt WEB}.
+<<*>>=
+static
+void warn_dots(char *modname) {
+  if (!strcmp(modname+strlen(modname)-3,"...")) 
+    errormsg(Warning, "Module name @<<%s@>> isn't completed as in web", 
+             modname);
+}
+@
+This nuisance shows up because functions must be declared before use.
+<<Function declarations>>=
+void read_defs (FILE *in);              /* read module definitions */
+static void warn_dots(char *modname);          /* warn about names ending in ... */
+@ Error checking is perenially dull.
+<<quit if we couldn't find the root>>=
+if (root==NULL) {
+    errormsg(Fatal, "The root module @<<%s@>> was not defined.", rootname);
+    return;
+}
+<<*>>=
+void insist(char *line, char *keyword, char *msg) {
+  <<if [[line==NULL]] die of premature end of file>>
+  if (!is_keyword(line,keyword))
+    impossible(msg);
+}
+<<if [[line==NULL]] die of premature end of file>>=
+if (line==NULL) {
+    impossible("End of file occurred in mid-module");
+}
+<<Function declarations>>=
+void insist(char *line, char *keyword, char *msg);
+<<complain of botched code chunk>>=
+errormsg(Error, "Code chunk is botched in `%s', line %d:\n\t`%s'", 
+	 loc.filename, loc.lineno, line);

@@ -1,0 +1,12 @@
+\DOC copy_chars
+
+\BLTYPE
+copy_chars : (int -> (string -> string) -> string -> (string -> void) -> void)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

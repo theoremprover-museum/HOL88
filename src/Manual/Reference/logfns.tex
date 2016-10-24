@@ -1,0 +1,5191 @@
+\chapter{Logic Functions}
+\DOC{abs\_goals}
+
+\TYPE {\small\verb%abs_goals : (subgoals list -> goalstack)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{achieves}
+
+\TYPE {\small\verb%achieves : (thm -> goal -> bool)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{achieve\_first}
+
+\TYPE {\small\verb%achieve_first : (subgoals -> thm -> subgoals)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{aconv}
+
+\TYPE {\small\verb%aconv : (term -> term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests for alpha-convertibility of terms.
+
+\DESCRIBE
+When applied to two terms, {\small\verb%aconv%} returns {\small\verb%true%} if they are
+alpha-convertible, and {\small\verb%false%} otherwise.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+A simple case of alpha-convertibility is the renaming of a quantified variable:
+{\par\samepage\setseps\small\begin{verbatim}
+   #aconv "?x. x=T" "?y. y=T";;
+   true : bool
+\end{verbatim}}
+\SEEALSO
+ALPHA, ALPHA_CONV.
+
+\ENDDOC
+\DOC{ancestors}
+
+\TYPE {\small\verb%ancestors : (string -> string list)%}\egroup
+
+\SYNOPSIS
+Get a list of the (proper) ancestors of a theory.
+
+\DESCRIBE
+A call to {\small\verb%ancestors `th`%} returns a list of all the proper ancestors (i.e.
+parents, parents of parents, etc.) of the theory `th`. 
+
+\FAILURE
+Fails if `th` is not an ancestor of the current theory.
+
+\SEEALSO
+ancestry, parents.
+
+\ENDDOC
+\DOC{ancestry}
+
+\TYPE {\small\verb%ancestry : (void -> string list)%}\egroup
+
+\SYNOPSIS
+Get a list of the (proper) ancestors of the current theory.
+
+\DESCRIBE
+A call to {\small\verb%ancestors ()%} returns a list of all the proper ancestors (i.e.
+parents, parents of parents, etc.) of the current theory.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+ancestors, parents.
+
+\ENDDOC
+\DOC{apply\_proof}
+
+\TYPE {\small\verb%apply_proof : (subgoals -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{arb\_term}
+
+\TYPE {\small\verb%arb_term : term%}\egroup
+
+\SYNOPSIS
+This identifier is bound for implementation reasons only.
+
+\DESCRIBE
+{\small\verb%arb_term%} is the term {\small\verb%"arb:*"%}, i.e. it is a variable named {\small\verb%arb%} of logical
+type {\small\verb%":*"%}.
+
+\ENDDOC
+\DOC{arity}
+
+\TYPE {\small\verb%arity : (string -> int)%}\egroup
+
+\SYNOPSIS
+Tests whether a string is the name of a type operator, returning the arity of
+the operator if it is.
+
+\DESCRIBE
+{\small\verb%arity `op`%} returns {\small\verb%n%} if {\small\verb%op%} is the name of an {\small\verb%n%}-ary type operator ({\small\verb%n%}
+can be 0).
+
+\FAILURE
+{\small\verb%arity st%} fails if {\small\verb%st%} is not the name of a type constant or type operator.
+
+\SEEALSO
+is_type.
+
+\ENDDOC
+\DOC{assignable\_print\_term}
+
+\TYPE {\small\verb%assignable_print_term : term -> void%}\egroup
+
+\SYNOPSIS
+Assignable variable that allows a user-specified term-printing function to be
+used for printing goals.
+
+\DESCRIBE
+The printing of terms can be modified using the ML directive {\small\verb%top_print%}.
+However the term printing functions used for printing goals are not affected
+by {\small\verb%top_print%}. To make use of user-defined print functions in goals, the
+assignable variable {\small\verb%assignable_print_term%} must be changed.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#let my_print_term tm =
+# do (print_string `<<`;print_term tm;print_string `>>`);;
+my_print_term = - : (term -> void)
+
+#"x ==> y";;
+"x ==> y" : term
+
+#top_print my_print_term;;
+- : (term -> void)
+
+#"x ==> y";;
+<<"x ==> y">> : term
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+#g "(x ==> y) /\ (y ==> x) ==> (x = y)";;
+"(x ==> y) /\ (y ==> x) ==> (x = y)"
+
+() : void
+
+#expand (REPEAT STRIP_TAC);;
+OK..
+"x = y"
+    [ "x ==> y" ]
+    [ "y ==> x" ]
+
+() : void
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+#assignable_print_term := my_print_term;;
+- : (term -> void)
+
+#expand ALL_TAC;;
+OK..
+<<"x = y">>
+    [ <<"x ==> y">> ]
+    [ <<"y ==> x">> ]
+
+() : void
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+#assignable_print_term := print_term;;
+- : (term -> void)
+
+#expand ALL_TAC;;
+OK..
+"x = y"
+    [ "x ==> y" ]
+    [ "y ==> x" ]
+
+() : void
+\end{verbatim}}
+
+\SEEALSO
+print_term, top_print.
+
+\ENDDOC
+\DOC{attempt\_first}
+
+\TYPE {\small\verb%attempt_first : (subgoals -> tactic -> subgoals)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{axiom}
+
+\TYPE {\small\verb%axiom : (string -> string -> thm)%}\egroup
+
+\SYNOPSIS
+Reads an axiom from a given theory segment of the current theory. 
+
+\DESCRIBE
+A call of {\small\verb%axiom `thy` `ax`%} returns axiom {\small\verb%`ax`%} from
+the theory segment {\small\verb%`thy`%}. The theory segment {\small\verb%`thy`%} must be
+part of the current theory. The name {\small\verb%`ax`%} is the name given to the axiom by
+the user when it was originally added to the theory segment (by a  
+call to {\small\verb%new_axiom%}).  The name of the current theory segment can be abbreviated
+by {\small\verb%`-`%}. 
+
+\FAILURE
+The call {\small\verb%axiom `thy` `ax`%} will fail if the theory segment {\small\verb%`thy`%} is
+not part of the current theory.
+It will fail if there does not exist an axiom of name {\small\verb%`ax`%} in
+theory segment {\small\verb%`thy`%}. 
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#axiom `bool` `BOOL_CASES_AX`;;
+|- !t. (t = T) \/ (t = F)
+\end{verbatim}}
+\SEEALSO
+axioms, definition, load_axiom, load_axioms, new_axiom, print_theory, theorem.
+
+\ENDDOC
+\DOC{axioms}
+
+\TYPE {\small\verb%axioms : (string -> (string # thm) list)%}\egroup
+
+\SYNOPSIS
+Returns the axioms of a given theory segment of the current theory.
+
+\DESCRIBE
+A call of {\small\verb%axioms `thy`%} returns the axioms of the
+theory segment {\small\verb%`thy`%} together with their names. The theory segment {\small\verb%`thy`%}
+must be part of the current 
+theory. The names are those given to the axioms by the user when they
+were originally added to the theory segment (by a call to
+{\small\verb%new_axiom%}). The name of the current theory segment can be abbreviated by
+{\small\verb%`-`%}.   
+
+\FAILURE
+The call {\small\verb%axioms `thy`%} will fail if the theory segment {\small\verb%`thy`%} is not
+part of the current theory.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#axioms `bool`;;
+[(`SELECT_AX`, |- !P x. P x ==> P($@ P));
+ (`ETA_AX`, |- !t. (\x. t x) = t);
+ (`IMP_ANTISYM_AX`,
+  |- !t1 t2. (t1 ==> t2) ==> (t2 ==> t1) ==> (t1 = t2));
+ (`BOOL_CASES_AX`, |- !t. (t = T) \/ (t = F));
+ (`ARB_THM`, |- $= = $=)]
+: (string # thm) list
+\end{verbatim}}
+\SEEALSO
+axiom, definitions, load_axiom, load_axioms, new_axiom, print_theory, theorems.
+
+\ENDDOC
+\DOC{b}
+
+\TYPE {\small\verb%b : (void -> void)%}\egroup
+
+\SYNOPSIS
+Restores the proof state undoing the effects of a  previous call to {\small\verb%expand%}, {\small\verb%expandf%}, {\small\verb%set_goal%}, {\small\verb%rotate%} or 
+{\small\verb%set_state%}.
+
+\DESCRIBE
+The function {\small\verb%b%} is part of the subgoal package. It is an abbreviation for the
+function {\small\verb%backup%}. For a description of the subgoal package, see 
+{\small\verb%set_goal%}.
+
+\FAILURE
+As for {\small\verb%backup%}.
+
+\USES
+Back tracking in a goal-directed proof to undo errors or try different tactics.
+
+\SEEALSO
+backup, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{backup}
+
+\TYPE {\small\verb%backup : (void -> void)%}\egroup
+
+\SYNOPSIS
+Restores the proof state, undoing the effects of a  previous call to {\small\verb%expand%}, {\small\verb%expandf%}, {\small\verb%set_goal%}, {\small\verb%rotate%} or
+{\small\verb%set_state%}.
+
+\DESCRIBE
+The function {\small\verb%backup%} is part of the subgoal package.  It allows backing up from
+the last state change (caused by calls to {\small\verb%expand%}, {\small\verb%set_goal%}, {\small\verb%rotate%} and their
+abbreviations, or to {\small\verb%set_state%}).
+The package maintains a backup list of previous proof states. A call to
+{\small\verb%backup%}  restores the state to the previous state (which was on top of the
+backup list). The current state and the state on top of the backup list are
+discarded. 
+The maximum number of proof states saved on the backup list is one greater
+than the value of the assignable variable {\small\verb%backup_limit%}. This variable is initially set to 12.
+Adding new proof states after the maximum is reached causes the earliest
+proof state on the list to be discarded. The user may backup repeatedly until
+the list is exhausted.
+The state restored includes all unproven subgoals or, if a goal had  been
+proved in the previous state, the corresponding theorem. 
+{\small\verb%backup%} is abbreviated by the function {\small\verb%b%}.
+For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\FAILURE
+The function {\small\verb%backup%} will fail if the backup list is empty.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+() : void
+
+#e CONJ_TAC;;
+OK..
+2 subgoals
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+
+#backup();;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+() : void
+
+#e (REWRITE_TAC[HD;TL]);;
+OK..
+goal proved
+|- (HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}}
+\USES
+Back tracking in a goal-directed proof to undo errors or try different tactics.
+
+\SEEALSO
+b, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{backup\_limit}
+
+\TYPE {\small\verb%backup_limit : int%}\egroup
+
+\SYNOPSIS
+This variable is used to limit the number of proof states saved on the subgoal
+package backup list.
+
+\DESCRIBE
+The assignable variable {\small\verb%backup_limit%} is initially set to 12. Its value is one less than the 
+maximum number of proof states that may be saved on the backup list. Adding a
+new proof state (by, for example, a call to {\small\verb%expand%}) after the maximum
+is reached causes the earliest proof state on the list to be discarded. 
+For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#backup_limit := 0;;
+0 : int
+
+#g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+() : void
+
+#e CONJ_TAC;;
+OK..
+2 subgoals
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+
+#e (REWRITE_TAC[HD]);;
+OK..
+goal proved
+|- HD[1;2;3] = 1
+
+Previous subproof:
+"TL[1;2;3] = [2;3]"
+
+() : void
+
+#b();;
+2 subgoals
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+
+#b();;
+evaluation failed     backup:  backup list is empty
+\end{verbatim}}
+\SEEALSO
+b, backup, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{backup\_list}
+
+\TYPE {\small\verb%backup_list : goalstack list%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{bndvar}
+
+\TYPE {\small\verb%bndvar : term -> term%}\egroup
+
+\SYNOPSIS
+Returns the bound variable of an abstraction.
+
+\DESCRIBE
+{\small\verb%bndvar("\var. t")%} returns {\small\verb%"var"%}.
+
+\FAILURE
+Fails with {\small\verb%bndvar%} if term is not an abstraction.
+
+\SEEALSO
+body, dest_abs.
+
+\ENDDOC
+\DOC{body}
+
+\TYPE {\small\verb%body : term -> term%}\egroup
+
+\SYNOPSIS
+Returns the body of an abstraction.
+
+\DESCRIBE
+{\small\verb%bndvar("\var. t")%} returns {\small\verb%"t"%}.
+
+\FAILURE
+Fails with {\small\verb%body%} if term is not an abstraction.
+
+\SEEALSO
+bndvar, dest_abs.
+
+\ENDDOC
+\DOC{bool\_ty}
+
+\TYPE {\small\verb%bool_ty : type%}\egroup
+
+\SYNOPSIS
+The logical type {\small\verb%":bool"%}.
+
+\ENDDOC
+\DOC{change\_state}
+
+\TYPE {\small\verb%change_state : (goalstack -> void)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{check\_lhs}
+
+\TYPE {\small\verb%check_lhs : (term -> term list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{check\_specification}
+
+\TYPE {\small\verb%check_specification : (* -> (string # string) list -> thm -> goal)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{check\_varstruct}
+
+\TYPE {\small\verb%check_varstruct : (term -> term list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{close\_theory}
+
+\TYPE {\small\verb%close_theory : (void -> void)%}\egroup
+
+\SYNOPSIS
+Finishes a session in draft mode. Writes changes in the current theory segment
+to a theory file on disk.   
+
+\DESCRIBE
+Executing {\small\verb%close_theory()%} finishes a session in draft mode. It switches the
+system to proof mode. Changes made to the current 
+theory segment are written to the theory file associated with it. For a theory
+segment named {\small\verb%`thy`%}, the associated file will be {\small\verb%thy.th%} in the directory
+from which HOL was called.
+If the theory file does not exist, it will be created.
+ If HOL is quitted before {\small\verb%close_theory%} is invoked,
+the additions made to the segment may not persist to future HOL sessions.
+Whilst in proof mode, the only changes which may be made to the theory are the
+addition of theorems. The theory segment may later be extended with
+{\small\verb%extend_theory%}.
+
+\FAILURE
+A call to {\small\verb%close_theory%} will fail if the system is not in draft mode.
+Since it involves writing to the file system, if the write fails for
+any reason {\small\verb%close_theory%} will fail.
+
+\SEEALSO
+extend_theory, new_theory, print_theory.  
+
+\ENDDOC
+\DOC{concl}
+
+\TYPE {\small\verb%concl : (thm -> term)%}\egroup
+
+\SYNOPSIS
+Returns the conclusion of a theorem: {\small\verb%concl (A |- t)%} returns {\small\verb%t%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+dest_thm, hyp.
+
+\ENDDOC
+\DOC{conjuncts}
+
+\TYPE {\small\verb%conjuncts : term -> term list%}\egroup
+
+\SYNOPSIS
+Iterated term destructor for conjunctions.
+
+\DESCRIBE
+{\small\verb%conjuncts("t1 /\ ... /\ tn")%} returns {\small\verb%["t1";...;"tn"]%}.
+The argument term may be any tree of conjunctions.
+It need not have the form {\small\verb%"t1 /\ (t2 /\ ( ... /\ tn)...)"%}.
+A term that is not a conjunction is simply returned as the sole element of a
+list. Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   conjuncts(list_mk_conj(["t1";...;"tn"]))
+\end{verbatim}}
+\noindent will not return {\small\verb%["t1";...;"tn"]%} if any of {\small\verb%t1%},...,{\small\verb%tn%} are conjunctions.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_conj ["a /\ b";"c /\ d";"e /\ f"];;
+"(a /\ b) /\ (c /\ d) /\ e /\ f" : term
+
+#conjuncts it;;
+["a"; "b"; "c"; "d"; "e"; "f"] : term list
+
+#list_mk_conj it;;
+"a /\ b /\ c /\ d /\ e /\ f" : term
+
+#conjuncts "1";;
+["1"] : term list
+\end{verbatim}}
+
+\COMMENTS
+Because {\small\verb%conjuncts%} splits both the left and right sides of a conjunction,
+this operation is not the inverse of {\small\verb%list_mk_conj%}. It may be useful to
+introduce {\small\verb%list_dest_conj%} for splitting only the right tails of a conjunction.
+
+\SEEALSO
+list_mk_conj, dest_conj.
+
+\ENDDOC
+\DOC{current\_theory}
+
+\TYPE {\small\verb%current_theory : (void -> string)%}\egroup
+
+\SYNOPSIS
+Returns the name of the current theory.
+
+\DESCRIBE
+Within a HOL session there is always a current theory. It is the theory
+represented by the current theory segment together with its ancestry. A call
+of {\small\verb%current_theory()%} returns the name of the current theory. Initially HOL
+has current theory {\small\verb%HOL%}. 
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+close_theory, extend_theory, load_theory, new_theory, print_theory. 
+
+\ENDDOC
+\DOC{definition}
+
+\TYPE {\small\verb%definition : (string -> string -> thm)%}\egroup
+
+\SYNOPSIS
+Reads a constant definition from a given theory segment of the current theory.
+
+
+\DESCRIBE
+A call of {\small\verb%definition `thy` `def`%} returns constant definition {\small\verb%`def`%} from
+the theory segment {\small\verb%`thy`%}. The theory segment {\small\verb%`thy`%} must be
+part of the current theory. The name {\small\verb%`def`%} is the name given to the
+definition by the
+user when it was originally added to the theory segment (by a
+call to {\small\verb%new_definition%}).  The name of the current theory segment can be
+abbreviated by {\small\verb%`-`%}. 
+
+\FAILURE
+The call {\small\verb%definition `thy` `def`%} will fail if the theory segment {\small\verb%`thy`%} is
+not part of the current theory.
+It will fail if there does not exist a constant definition of name {\small\verb%`def`%} in
+theory segment {\small\verb%`thy`%}. 
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#definition `bool` `ONTO_DEF`;;
+|- !f. ONTO f = (!y. ?x. y = f x)
+\end{verbatim}}
+\SEEALSO
+axiom, definitions, load_definition, load_definitions, new_definition, print_theory, theorem.
+
+\ENDDOC
+\DOC{definitions}
+
+\TYPE {\small\verb%definitions : (string -> (string # thm) list)%}\egroup
+
+\SYNOPSIS
+Returns the constant definitions, type definitions and constant specifications
+of a given theory segment of the current theory.
+
+\DESCRIBE
+A call of {\small\verb%definitions `thy`%} returns the definitions of the
+theory segment {\small\verb%`thy`%} together with their names. 
+Constant definitions, type definitions and constant specifications are all retrieved by the function {\small\verb%definitions%}.
+The theory segment {\small\verb%`thy`%}
+must be part of the current 
+theory. The names are those given to the definitions by the user when they
+were originally added to the theory segment (by a call, for example, to
+{\small\verb%new_definition%}). The name of the current theory segment can be abbreviated by
+{\small\verb%`-`%}.   
+
+\FAILURE
+The call {\small\verb%definitions `thy`%} will fail if the theory segment {\small\verb%`thy`%} is not
+part of the current theory.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#definitions `num`;;
+[(`SUC_DEF`, |- !m. SUC m = ABS_num(SUC_REP(REP_num m)));
+ (`ZERO_DEF`, |- 0 = ABS_num ZERO_REP);
+ (`num_ISO_DEF`,
+  |- (!a. ABS_num(REP_num a) = a) /\
+     (!r. IS_NUM_REP r = (REP_num(ABS_num r) = r)));
+ (`num_TY_DEF`, |- ?rep. TYPE_DEFINITION IS_NUM_REP rep);
+ (`IS_NUM_REP`,
+  |- !m.
+      IS_NUM_REP m =
+      (!P. P ZERO_REP /\ (!n. P n ==> P(SUC_REP n)) ==> P m));
+ (`ZERO_REP_DEF`, |- ZERO_REP = (@x. !y. ~(x = SUC_REP y)));
+ (`SUC_REP_DEF`, |- SUC_REP = (@f. ONE_ONE f /\ ~ONTO f))]
+: (string # thm) list
+\end{verbatim}}
+\SEEALSO
+axioms, definition, load_definition, load_definitions, new_definition, print_theory, theorems.
+
+\ENDDOC
+\DOC{dest\_abs}
+
+\TYPE {\small\verb%dest_abs : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for abstractions.
+
+\DESCRIBE
+{\small\verb%dest_abs("\var. t")%} returns {\small\verb%("var","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_abs%} if term is not an abstraction.
+
+\SEEALSO
+mk_abs, is_abs, dest_var, dest_const, dest_comb.
+
+\ENDDOC
+\DOC{dest\_comb}
+
+\TYPE {\small\verb%dest_comb : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for combinations (function applications).
+
+\DESCRIBE
+{\small\verb%dest_comb("t1 t2")%} returns {\small\verb%("t1","t2")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_comb%} if term is not a combination.
+
+\SEEALSO
+mk_comb, is_comb, dest_var, dest_const, dest_abs.
+
+\ENDDOC
+\DOC{dest\_cond}
+
+\TYPE {\small\verb%dest_cond : term -> (term # term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for conditionals.
+
+\DESCRIBE
+{\small\verb%dest_cond("t => t1 | t2")%} returns {\small\verb%("t","t1","t2")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_cond%} if term is not a conditional.
+
+\SEEALSO
+mk_cond, is_cond.
+
+\ENDDOC
+\DOC{dest\_conj}
+
+\TYPE {\small\verb%dest_conj : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for conjunctions.
+
+\DESCRIBE
+{\small\verb%dest_conj("t1 /\ t2")%} returns {\small\verb%("t1","t2")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_conj%} if term is not a conjunction.
+
+\SEEALSO
+mk_conj, is_conj.
+
+\ENDDOC
+\DOC{dest\_cons}
+
+\TYPE {\small\verb%dest_cons : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for {\small\verb%CONS%}.
+
+\DESCRIBE
+{\small\verb%dest_cons("[t;t1;...;tn]")%} returns {\small\verb%("t","[t1;...;tn]")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_cons%} if the term is not a non-empty list.
+
+\SEEALSO
+mk_cons, is_cons, mk_list, dest_list, is_list.
+
+\ENDDOC
+\DOC{dest\_const}
+
+\TYPE {\small\verb%dest_const : term -> (string # type)%}\egroup
+
+\SYNOPSIS
+Term destructor for constants.
+
+\DESCRIBE
+{\small\verb%dest_const("const:ty")%} returns {\small\verb%(`const`,":ty")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_const%} if term is not a constant.
+
+\SEEALSO
+mk_const, is_const, dest_var, dest_comb, dest_abs.
+
+\ENDDOC
+\DOC{dest\_definition}
+
+\TYPE {\small\verb%dest_definition : (term -> term)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{dest\_disj}
+
+\TYPE {\small\verb%dest_disj : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for disjunctions.
+
+\DESCRIBE
+{\small\verb%dest_disj("t1 \/ t2")%} returns {\small\verb%("t1","t2")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_disj%} if term is not a disjunction.
+
+\SEEALSO
+mk_disj, is_disj.
+
+\ENDDOC
+\DOC{dest\_eq}
+
+\TYPE {\small\verb%dest_eq : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for equality.
+
+\DESCRIBE
+{\small\verb%dest_eq("t1 = t2")%} returns {\small\verb%("t1","t2")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_eq%} if term is not an equality.
+
+\SEEALSO
+mk_eq, is_eq.
+
+\ENDDOC
+\DOC{dest\_exists}
+
+\TYPE {\small\verb%dest_exists : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for existential quantification.
+
+\DESCRIBE
+{\small\verb%dest_exists("?var. t")%} returns {\small\verb%("var","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_exists%} if term is not an existential quantification.
+
+\SEEALSO
+mk_exists, is_exists.
+
+\ENDDOC
+\DOC{dest\_forall}
+
+\TYPE {\small\verb%dest_forall : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for universal quantification.
+
+\DESCRIBE
+{\small\verb%dest_forall("!var. t")%} returns {\small\verb%("var","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_forall%} if term is not a universal quantification.
+
+\SEEALSO
+mk_forall, is_forall.
+
+\ENDDOC
+\DOC{dest\_form}
+
+\TYPE {\small\verb%dest_form : (form -> term)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{dest\_imp}
+
+\TYPE {\small\verb%dest_imp : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for implications. Also destructs negations.
+
+\DESCRIBE
+{\small\verb%dest_imp("t1 ==> t2")%} returns {\small\verb%("t1","t2")%}.
+{\small\verb%dest_imp("~t")%} returns {\small\verb%("t","F")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_imp%} if term is neither an implication nor a negation.
+
+\COMMENTS
+Destructs negations for compatibility with PPLAMBDA code.
+Treats {\small\verb%"~t"%} as {\small\verb%"t ==> F"%}.
+
+\SEEALSO
+mk_imp, is_imp.
+
+\ENDDOC
+\DOC{dest\_let}
+
+\TYPE {\small\verb%dest_let : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for {\small\verb%let%}-expressions.
+
+\DESCRIBE
+{\small\verb%dest_let("LET f x")%} returns {\small\verb%("f","x")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_let%} if term is not a {\small\verb%let%}-expression or of the more general
+{\small\verb%"LET f x"%} form.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#dest_let "LET ($= 1) 2";;
+("$= 1", "2") : (term # term)
+
+#dest_let "let x = 2 in (x = 1)";;
+("\x. x = 1", "2") : (term # term)
+\end{verbatim}}
+
+\SEEALSO
+mk_let, is_let.
+
+\ENDDOC
+\DOC{dest\_list}
+
+\TYPE {\small\verb%dest_list : term -> (term list # type)%}\egroup
+
+\SYNOPSIS
+Term destructor for lists.
+
+\DESCRIBE
+{\small\verb%dest_list("[t1;...;tn]:(ty)list")%} returns {\small\verb%(["t1";...;"tn"],":ty")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_list%} if the term is not a list.
+
+\SEEALSO
+mk_list, is_list, mk_cons, dest_cons, is_cons.
+
+\ENDDOC
+\DOC{dest\_neg}
+
+\TYPE {\small\verb%dest_neg : term -> term%}\egroup
+
+\SYNOPSIS
+Term destructor for negations.
+
+\DESCRIBE
+{\small\verb%dest_neg("~t")%} returns {\small\verb%"t"%}.
+
+\FAILURE
+Fails with {\small\verb%dest_neg%} if term is not a negation.
+
+\SEEALSO
+mk_neg, is_neg.
+
+\ENDDOC
+\DOC{dest\_pair}
+
+\TYPE {\small\verb%dest_pair : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for pairs.
+
+\DESCRIBE
+{\small\verb%dest_pair("(t1,t2)")%} returns {\small\verb%("t1","t2")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_pair%} if term is not a pair.
+
+\SEEALSO
+mk_pair, is_pair.
+
+\ENDDOC
+\DOC{dest\_select}
+
+\TYPE {\small\verb%dest_select : term -> (term # term)%}\egroup
+
+\SYNOPSIS
+Term destructor for choice (Hilbert's epsilon-operator).
+
+\DESCRIBE
+{\small\verb%dest_select("@var. t")%} returns {\small\verb%("var","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_select%} if term is not an epsilon-term.
+
+\SEEALSO
+mk_select, is_select.
+
+\ENDDOC
+\DOC{dest\_thm}
+
+\TYPE {\small\verb%dest_thm : thm -> goal%}\egroup
+
+\SYNOPSIS
+Theorem destructor.
+
+\DESCRIBE
+{\small\verb%dest_thm (t1,...,tn |- t)%} returns {\small\verb%(["t1";...;"tn"],"t")%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#dest_thm (ASSUME "p=T");;
+(["p = T"], "p = T") : goal
+\end{verbatim}}
+
+\SEEALSO
+concl, hyp.
+
+\ENDDOC
+\DOC{dest\_type}
+
+\TYPE {\small\verb%dest_type : type -> (string # type list)%}\egroup
+
+\SYNOPSIS
+Destructor for types (other than variable types).
+
+\DESCRIBE
+{\small\verb%dest_type(":(ty1,...,tyn)op")%} returns {\small\verb%(`op`,[":ty1";...;":tyn"])%}.
+
+\FAILURE
+Fails with {\small\verb%dest_type%} if the type is a type variable.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#dest_type ":bool";;
+(`bool`, []) : (string # type list)
+
+#dest_type ":(bool)list";;
+(`list`, [":bool"]) : (string # type list)
+
+#dest_type ":num -> bool";;
+(`fun`, [":num"; ":bool"]) : (string # type list)
+\end{verbatim}}
+
+\SEEALSO
+mk_type, dest_vartype.
+
+\ENDDOC
+\DOC{dest\_var}
+
+\TYPE {\small\verb%dest_var : term -> (string # type)%}\egroup
+
+\SYNOPSIS
+Term destructor for variables.
+
+\DESCRIBE
+{\small\verb%dest_var("var:ty")%} returns {\small\verb%(`var`,":ty")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_var%} if term is not a variable.
+
+\SEEALSO
+mk_var, is_var, dest_const, dest_comb, dest_abs.
+
+\ENDDOC
+\DOC{dest\_vartype}
+
+\TYPE {\small\verb%dest_vartype : type -> string%}\egroup
+
+\SYNOPSIS
+Destructor for type variables.
+
+\DESCRIBE
+{\small\verb%dest_vartype(":*...")%} returns {\small\verb%`*...`%}.
+
+\FAILURE
+Fails with {\small\verb%dest_vartype%} if the type is not a type variable.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#dest_vartype ":*test";;
+`*test` : string
+
+#dest_vartype ":bool";;
+evaluation failed     dest_vartype
+
+#dest_vartype ":* -> bool";;
+evaluation failed     dest_vartype
+\end{verbatim}}
+
+\SEEALSO
+mk_vartype, is_vartype, dest_type.
+
+\ENDDOC
+\DOC{disjuncts}
+
+\TYPE {\small\verb%disjuncts : term -> term list%}\egroup
+
+\SYNOPSIS
+Iterated term destructor for disjunctions.
+
+\DESCRIBE
+{\small\verb%disjuncts("t1 \/ ... \/ tn")%} returns {\small\verb%["t1";...;"tn"]%}.
+The argument term may be any tree of disjunctions.
+It need not have the form {\small\verb%"t1 \/ (t2 \/ ( ... \/ tn)...)"%}.
+A term that is not a disjunction is simply returned as the sole element of a
+list. Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   disjuncts(list_mk_disj(["t1";...;"tn"]))
+\end{verbatim}}
+\noindent will not return {\small\verb%["t1";...;"tn"]%} if any of {\small\verb%t1%},...,{\small\verb%tn%} are disjunctions.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_disj ["a \/ b";"c \/ d";"e \/ f"];;
+"(a \/ b) \/ (c \/ d) \/ e \/ f" : term
+
+#disjuncts it;;
+["a"; "b"; "c"; "d"; "e"; "f"] : term list
+
+#list_mk_disj it;;
+"a \/ b \/ c \/ d \/ e \/ f" : term
+
+#disjuncts "1";;
+["1"] : term list
+\end{verbatim}}
+
+\COMMENTS
+Because {\small\verb%disjuncts%} splits both the left and right sides of a disjunction,
+this operation is not the inverse of {\small\verb%list_mk_disj%}. It may be useful to
+introduce {\small\verb%list_dest_disj%} for splitting only the right tails of a disjunction.
+
+\SEEALSO
+list_mk_disj, dest_disj.
+
+\ENDDOC
+\DOC{e}
+
+\TYPE {\small\verb%e : (tactic -> void)%}\egroup
+
+\SYNOPSIS
+Applies a tactic to the current goal pushing the resulting subgoals onto the
+goal stack.
+
+\DESCRIBE
+The function {\small\verb%e%} is part of the subgoal package. It is an abbreviation for
+{\small\verb%expand%}.
+For a description of the subgoal package, see {\small\verb%set_goal%}.
+
+\FAILURE 
+As for {\small\verb%expand%}.
+
+\USES
+Doing a step in an interactive goal-directed proof.
+
+\SEEALSO
+b, backup, backup_limit, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm, VALID.
+
+\ENDDOC
+\DOC{enter\_form\_rep}
+
+\TYPE {\small\verb%enter_form_rep : ((* # form # * list) -> * list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{enter\_term}
+
+\TYPE {\small\verb%enter_term : ((term # *) -> * term_net -> * term_net)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{enter\_term\_rep}
+
+\TYPE {\small\verb%enter_term_rep : ((* # term # * list) -> * list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{expand}
+
+\TYPE {\small\verb%expand : (tactic -> void)%}\egroup
+
+\SYNOPSIS
+Applies a tactic to the current goal pushing the resulting subgoals onto the
+goal stack. A validated version of the tactic is used.
+
+\DESCRIBE
+The function {\small\verb%expand%} is part of the subgoal package.  It may be abbreviated
+by the  
+function {\small\verb%e%}.  It applies a tactic to the current goal to give a new proof
+state. The previous state is stored on the backup list. If the tactic produces
+subgoals, the new proof state is formed from the old one by removing the
+current goal from the goal stack and adding a new level consisting of its
+subgoals. The corresponding justification is placed on the justification
+stack. The new subgoals are printed. If more than one subgoal is produced, they are printed from the bottom of the stack so that the new current goal is  printed last. 
+
+If a tactic solves the current goal (returns an empty subgoal list), then
+its justification is used to prove a corresponding theorem. This theorem is
+incorporated into the justification of the parent goal and printed. If
+the subgoal 
+was the last subgoal of the level, the level is removed and the parent
+goal is proved using  its (new) justification. This process is repeated
+until a level with unproven subgoals is reached.
+The next goal on the goal stack then becomes the current goal. This goal is
+printed. 
+If all the subgoals are proved, the resulting proof state consists
+of the theorem proved by the justifications. 
+
+
+The tactic applied is a validating version of the tactic given. It
+ensures that the justification of the tactic does provide a proof of the goal
+from the subgoals generated by the tactic. It will cause failure if this is not so. The tactical {\small\verb%VALID%} performs this
+validation.
+
+For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\FAILURE 
+{\small\verb%expand tac%} fails if the tactic {\small\verb%tac%} fails for the top goal. It will diverge if
+the tactic diverges for the goal.
+It will fail if there are no unproven goals. This could be
+because no goal has been set using {\small\verb%set_goal%} or because the last goal set has
+been completely proved.
+It will also fail in cases when the tactic is invalid.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+   #expand CONJ_TAC;;
+   OK..
+   evaluation failed     no goals to expand
+   
+   #g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+   
+   () : void
+   
+   #expand CONJ_TAC;;
+   OK..
+   2 subgoals
+   "TL[1;2;3] = [2;3]"
+   
+   "HD[1;2;3] = 1"
+   
+   () : void
+   
+   #expand (REWRITE_TAC[HD]);;
+   OK..
+   goal proved
+   |- HD[1;2;3] = 1
+   
+   Previous subproof:
+   "TL[1;2;3] = [2;3]"
+   
+   () : void
+   
+   #expand (REWRITE_TAC[TL]);;
+   OK..
+   goal proved
+   |- TL[1;2;3] = [2;3]
+   |- (HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])
+   
+   Previous subproof:
+   goal proved
+   () : void
+\end{verbatim}}
+\noindent In the following example an invalid tactic is used. It is invalid
+because it assumes something that is not on the assumption list of the goal.
+The justification adds this assumption to the assumption list so the
+justification would not prove the goal that was set.
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_goal([],"1=2");;
+   "1 = 2"
+   
+   () : void
+   
+   #expand (REWRITE_TAC[ASSUME "1=2"]);;
+   OK..
+   evaluation failed     Invalid tactic
+\end{verbatim}}
+\USES
+Doing a step in an interactive goal-directed proof.
+
+\SEEALSO
+b, backup, backup_limit, e, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm, VALID.
+
+\ENDDOC
+\DOC{expandf}
+
+\TYPE {\small\verb%expandf : (tactic -> void)%}\egroup
+
+\SYNOPSIS
+Applies a tactic to the current goal pushing the resulting
+subgoals onto the goal stack.  A validated version of the tactic is not used.
+
+\DESCRIBE
+The function {\small\verb%expandf%} is a faster version of {\small\verb%expand%}. It does not use a
+validated version of
+the tactic. That is, no check is made that the justification of the tactic
+does prove the goal from the subgoals it generates.
+ If an invalid tactic is used, the theorem 
+ultimately proved  may not match the goal originally set. Alternatively,
+ failure may occur
+when the justifications are applied in which case the theorem would not be
+proved.
+For a description of the subgoal package, see under {\small\verb%set_goal%}.
+
+\FAILURE 
+Calling {\small\verb%expandf tac%} fails if the tactic {\small\verb%tac%} fails for the top goal. It will diverge
+if the tactic diverges for the goal. It will fail if there are no unproven goals.
+This could be because no goal has been set using {\small\verb%set_goal%} or because the
+last goal set has been completely proved. If an invalid tactic, whose
+justification actually fails, has been used earlier in the proof, {\small\verb%expandf
+tac%} may succeed in applying {\small\verb%tac%} and apparently prove the current goal. It
+may then fail as it applies the justifications of the tactics applied earlier.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+   #g "HD[1;2;3] = 1";;
+   "HD[1;2;3] = 1"
+   
+   () : void
+   
+   #expandf (REWRITE_TAC[HD;TL]);;
+   OK..
+   goal proved
+   |- HD[1;2;3] = 1
+   
+   Previous subproof:
+   goal proved
+   () : void
+\end{verbatim}}
+\noindent The following example shows how the use of an invalid tactic can
+yield a  theorem which does not correspond to the  goal set.
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_goal([],"1=2");;
+   "1 = 2"
+   
+   () : void
+   
+   #expandf (REWRITE_TAC[ASSUME "1=2"]);;
+   OK..
+   goal proved
+   . |- 1 = 2
+   
+   Previous subproof:
+   goal proved
+   () : void
+\end{verbatim}}
+\noindent The proof assumed something which was not on the assumption list.
+This assumption appears in the assumption list of the theorem proved, even
+though it was not in the goal. An attempt to perform the proof using {\small\verb%expand%}
+fails. The validated version of the tactic detects that the justification
+produces a theorem which does not correspond to the goal set. It therefore
+fails. 
+
+\USES
+Saving CPU time when doing goal-directed proofs, since the extra validation is
+not done. Redoing proofs quickly that are already known to work.
+
+
+\COMMENTS
+The CPU time saved may cause  misery later. If an invalid tactic is used, this
+will only be discovered when the proof has apparently been finished and the
+justifications are applied.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm, VALID.
+
+\ENDDOC
+\DOC{extend\_theory}
+
+\TYPE {\small\verb%extend_theory : (string -> void)%}\egroup
+
+\SYNOPSIS
+Allows an existing theory to be extended. 
+
+\DESCRIBE
+Calling {\small\verb%extend_theory `thy`%} loads the existing theory {\small\verb%`thy`%} into the
+system and makes it the current theory. 
+The message `{\small\verb%Theory thy loaded%}' is printed.
+The theory is entered in draft mode.
+This allows new axioms, constants, types, constant specifications, infix
+constants, binders and parents to be added to the theory segment.
+Inconsistencies may be introduced to the theory if inconsistent
+axioms are asserted.  New theorems can also be added as when in proof mode.
+If new type or constant names are added to theory {\small\verb%`thy`%} which clash with
+names in any of its descendants, later attempts to load those
+descendants will fail. 
+The extensions to the theory segment might  not
+be written to the theory file until the session is finished with a call to
+{\small\verb%close_theory%}. If HOL is quitted without closing the session with
+{\small\verb%close_theory%}, parts of the theory segment created during the session may be
+lost. 
+If the system is in draft mode when a call to {\small\verb%extend_theory%} is made, the
+previous session is closed; all changes made in it will
+be written to the associated theory file. 
+
+
+\FAILURE
+A call to {\small\verb%extend_theory `thy`%} will fail if theory {\small\verb%`thy`%} does not appear on
+the current search path. 
+It will fail unless theory {\small\verb%`thy`%} is either the current theory or a descendant of it.
+It will fail if any of the theory files of the theory {\small\verb%`thy`%} have been
+damaged. 
+It will also fail if an ancestor of theory {\small\verb%`thy`%} has been extended with
+either new types or constants which clash with names in theory {\small\verb%`thy`%}.
+Since it could involve writing to the file system, if a write fails for
+any reason {\small\verb%extend_theory%} will fail.
+On failure, the system recovers cleanly, unloading any theory segments it had
+loaded before the failure was detected.
+It will diverge if the theory hierarchy within theory {\small\verb%`thy`%} contains loops,
+so that a theory segment is its own ancestor.
+
+\USES
+The normal way to build upon a theory is to use it as a parent. You should
+only use {\small\verb%extend_theory%} to add declarations, etc., that were mistakenly
+omitted from a theory.
+
+\COMMENTS
+It would be difficult to implement the necessary checks to ensure that added
+types, constants, etc., did not invalidate declarations in the descendant
+theories.  
+
+\SEEALSO
+load_theory, new_parent, new_theory, print_theory, search_path.  
+
+\ENDDOC
+\DOC{falsity}
+
+\TYPE {\small\verb%falsity : term%}\egroup
+
+\SYNOPSIS
+{\small\verb%falsity%} is the term {\small\verb%"F:bool"%}, i.e. it is the constant {\small\verb%F%} of logical type
+{\small\verb%":bool"%}.
+
+\ENDDOC
+\DOC{frees}
+
+\TYPE {\small\verb%frees : (term -> term list)%}\egroup
+
+\SYNOPSIS
+Returns a list of the variables which are free in a term.
+
+\DESCRIBE
+When applied to a term, {\small\verb%frees%} returns a list of the free variables in
+that term. There are no repetitions in the list produced even if there are
+multiple free instances of some variables.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+Clearly in the following term, {\small\verb%x%} and {\small\verb%y%} are free, whereas {\small\verb%z%} is bound:
+{\par\samepage\setseps\small\begin{verbatim}
+   #frees "(x=1) /\ (y=2) /\ (!z. z >= 0)";;
+   ["x"; "y"] : term list
+\end{verbatim}}
+\SEEALSO
+freesl, free_in, thm_frees.
+
+\ENDDOC
+\DOC{freesl}
+
+\TYPE {\small\verb%freesl : (term list -> term list)%}\egroup
+
+\SYNOPSIS
+Returns a list of the free variables in a list of terms.
+
+\DESCRIBE
+When applied to a list of terms, {\small\verb%freesl%} returns a list of the variables which
+are free in any of those terms. There are no repetitions in the list produced
+even if several terms contain the same free variable.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+In the following example there are two free instances each of {\small\verb%x%} and {\small\verb%y%},
+whereas the only instances of {\small\verb%z%} are bound:
+{\par\samepage\setseps\small\begin{verbatim}
+   #freesl ["x+y=2"; "!z. z >= (x-y)"];;
+   ["x"; "y"] : term list
+\end{verbatim}}
+\SEEALSO
+frees, free_in, thm_frees.
+
+\ENDDOC
+\DOC{free\_in}
+
+\TYPE {\small\verb%free_in : (term -> term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests if one term is free in another.
+
+\DESCRIBE
+When applied to two terms {\small\verb%t1%} and {\small\verb%t2%}, the function {\small\verb%free_in%} returns
+{\small\verb%true%} if {\small\verb%t1%} is free in {\small\verb%t2%}, and {\small\verb%false%} otherwise. It is not necessary
+that {\small\verb%t1%} be simply a variable.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+In the following example {\small\verb%free_in%} returns {\small\verb%false%} because the {\small\verb%x%} in {\small\verb%SUC x%}
+in the second term is bound:
+{\par\samepage\setseps\small\begin{verbatim}
+   #free_in "SUC x" "!x. SUC x = x + 1";;
+   false : bool
+\end{verbatim}}
+\noindent whereas the following call returns {\small\verb%true%} because the first instance
+of {\small\verb%x%} in the second term is free, even though there is also a bound instance:
+{\par\samepage\setseps\small\begin{verbatim}
+   #free_in "x:bool" "x /\ (?x. x=T)";;
+   true : bool
+\end{verbatim}}
+\SEEALSO
+frees, freesl, thm_frees.
+
+\ENDDOC
+\DOC{g}
+
+\TYPE {\small\verb%g : (term -> void)%}\egroup
+
+\SYNOPSIS
+Initializes the subgoal package with a new goal which has no assumptions.
+
+\DESCRIBE
+The function {\small\verb%g%} initializes the subgoal package.
+It is an abbreviation of {\small\verb%set_goal%} for use when the new goal has no
+assumptions. Only the conclusion term is given as an argument.
+{\par\samepage\setseps\small\begin{verbatim}
+   let g t = set_goal([], t)
+\end{verbatim}}
+\noindent For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+() : void
+\end{verbatim}}
+\USES
+Starting  an interactive proof session with the subgoal package.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{genvar}
+
+\TYPE {\small\verb%genvar : (type -> term)%}\egroup
+
+\SYNOPSIS
+Returns a variable whose name has not been used previously.
+
+\DESCRIBE
+When given a type, {\small\verb%genvar%} returns a variable of that type whose name has
+not been used for a variable or constant in the HOL session so far.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The following indicates the typical stylized form of the names (this should
+not be relied on, of course):
+{\par\samepage\setseps\small\begin{verbatim}
+   #genvar ":bool";;
+   "GEN%VAR%357" : term
+
+   #genvar ":num";;
+   "GEN%VAR%358" : term
+\end{verbatim}}
+\noindent Trying to anticipate {\small\verb%genvar%} doesn't work:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let v = mk_var(`GEN%VAR%359`,":bool");;
+   v = "GEN%VAR%359" : term
+
+   #genvar ":bool";;
+   "GEN%VAR%360" : term
+\end{verbatim}}
+\USES
+The unique variables are useful in writing derived rules, for specializing
+terms without having to worry about such things as free variable capture.
+If the names are to be visible to a typical user, the function {\small\verb%variant%} can
+provide rather more meaningful names.
+
+\SEEALSO
+GSPEC, variant.
+
+\ENDDOC
+\DOC{get\_const\_type}
+
+\TYPE {\small\verb%get_const_type : (string -> type)%}\egroup
+
+\SYNOPSIS
+Gets the generic type of a constant from the name of the constant.
+
+\DESCRIBE
+{\small\verb%get_const_type `c`%} returns the generic type of {\small\verb%"c"%}, if {\small\verb%"c"%} is a constant.
+
+\FAILURE
+{\small\verb%get_const_type st%} fails if {\small\verb%st%} is not the name of a constant.
+
+\SEEALSO
+is_constant.
+
+\ENDDOC
+\DOC{get\_state}
+
+\TYPE {\small\verb%get_state : (void -> goalstack)%}\egroup
+
+\SYNOPSIS
+Returns the current proof state of the subgoal package, which can then be
+saved by assigning it to a variable.
+
+\DESCRIBE
+The function {\small\verb%get_state%} is part of the subgoal package. It returns the current proof state.
+A proof state of the package consists of either  goal and justification stacks if a proof is in 
+progress or a theorem if a proof has just been completed.
+For a description of the subgoal package, see {\small\verb%set_goal%}.
+
+\USES
+Providing additional backup. Pausing in the proof of a goal whilst lemmas
+required for its completion are proved. 
+{\small\verb%get_state%} is used in conjunction with {\small\verb%set_state%}. 
+The current state may be bound to an ML variable using {\small\verb%get_state%} and later
+restored using {\small\verb%set_state%}. 
+
+\EXAMPLE
+In this example, a proof state is bound to the ML variable {\small\verb%main_proof%}.
+{\par\samepage\setseps\small\begin{verbatim}
+   #g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+   
+   () : void
+
+   #let main_proof = get_state();;
+   main_proof = - : goalstack
+\end{verbatim}}
+\noindent Other goals may now be set and proved. The proof state may later be restored
+using {\small\verb%set_state%} and the original proof continued.
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_state main_proof;;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+   
+   () : void
+\end{verbatim}}
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{get\_type}
+
+\TYPE {\small\verb%get_type : (term -> type -> type)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{goals}
+
+\TYPE {\small\verb%goals : goalstack%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{hyp}
+
+\TYPE {\small\verb%hyp : (thm -> term list)%}\egroup
+
+\SYNOPSIS
+Returns the hypotheses of a theorem: {\small\verb%concl (A |- t)%} returns {\small\verb%A%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+dest_thm, concl.
+
+\ENDDOC
+\DOC{hyp\_union}
+
+\TYPE {\small\verb%hyp_union : (thm list -> term list)%}\egroup
+
+\SYNOPSIS
+Returns union of assumption lists of the given theorems.
+
+\DESCRIBE
+When applied to a list of theorems, {\small\verb%hyp_union%} returns the union (see
+{\small\verb%union%}) of their assumption lists. Straight repetitions only arise if there
+were multiple instances of an assumption in a single assumption list. There is
+no elimination of alpha-equivalent pairs of assumptions, only ones which are
+actually equal.
+{\par\samepage\setseps\small\begin{verbatim}
+   hyp_union [A1 |- t1; ... ; An |- tn] = A1 u...u An
+\end{verbatim}}
+\FAILURE
+Never fails.
+
+\USES
+Designed for internal use, in writing primitive inference rules.
+
+\SEEALSO
+union.
+
+\ENDDOC
+\DOC{is\_abs}
+
+\TYPE {\small\verb%is_abs : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is an abstraction.
+
+\DESCRIBE
+{\small\verb%is_abs("\var. t")%} returns {\small\verb%true%}. If the term is not an abstraction the
+result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_abs, dest_abs, is_var, is_const, is_comb.
+
+\ENDDOC
+\DOC{is\_comb}
+
+\TYPE {\small\verb%is_comb : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a combination (function application).
+
+\DESCRIBE
+{\small\verb%is_comb("t1 t2")%} returns {\small\verb%true%}. If the term is not a combination the result
+is {\small\verb%false%}.
+
+\FAILURE
+Never fails
+
+\SEEALSO
+mk_comb, dest_comb, is_var, is_const, is_abs.
+
+\ENDDOC
+\DOC{is\_cond}
+
+\TYPE {\small\verb%is_cond : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a conditional.
+
+\DESCRIBE
+{\small\verb%is_cond("t => t1 | t2")%} returns {\small\verb%true%}. If the term is not a conditional the
+result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_cond, dest_cond.
+
+\ENDDOC
+\DOC{is\_conj}
+
+\TYPE {\small\verb%is_conj : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a conjunction.
+
+\DESCRIBE
+{\small\verb%is_conj("t1 /\ t2")%} returns {\small\verb%true%}. If the term is not a conjunction the
+result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_conj, dest_conj.
+
+\ENDDOC
+\DOC{is\_cons}
+
+\TYPE {\small\verb%is_cons : term -> bool%}\egroup
+
+\SYNOPSIS
+Term discriminator for {\small\verb%CONS%}.
+
+\DESCRIBE
+{\small\verb%is_cons%} returns {\small\verb%true%} of a term representing a non-empty list. Otherwise it
+returns {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_cons, dest_cons, mk_list, dest_list, is_list.
+
+\ENDDOC
+\DOC{is\_const}
+
+\TYPE {\small\verb%is_const : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a constant.
+
+\DESCRIBE
+{\small\verb%is_const("const:ty")%} returns {\small\verb%true%}. If the term is not a constant the
+result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_const, dest_const, is_var, is_comb, is_abs.
+
+\ENDDOC
+\DOC{is\_definition}
+
+\TYPE {\small\verb%is_definition : (term -> bool)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{is\_disj}
+
+\TYPE {\small\verb%is_disj : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a disjunction.
+
+\DESCRIBE
+{\small\verb%is_disj("t1 \/ t2")%} returns {\small\verb%true%}. If the term is not a disjunction the
+result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_disj, dest_disj.
+
+\ENDDOC
+\DOC{is\_eq}
+
+\TYPE {\small\verb%is_eq : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is an equality.
+
+\DESCRIBE
+{\small\verb%is_eq("t1 = t2")%} returns {\small\verb%true%}. If the term is not an equality the result
+is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_eq, dest_eq.
+
+\ENDDOC
+\DOC{is\_exists}
+
+\TYPE {\small\verb%is_exists : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it as an existential quantification.
+
+\DESCRIBE
+{\small\verb%is_exists("?var. t")%} returns {\small\verb%true%}. If the term is not an existential
+quantification the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_exists, dest_exists.
+
+\ENDDOC
+\DOC{is\_forall}
+
+\TYPE {\small\verb%is_forall : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a universal quantification.
+
+\DESCRIBE
+{\small\verb%is_forall("!var. t")%} returns {\small\verb%true%}. If the term is not a universal
+quantification the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_forall, dest_forall.
+
+\ENDDOC
+\DOC{is\_imp}
+
+\TYPE {\small\verb%is_imp : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is an implication (or a negation).
+
+\DESCRIBE
+{\small\verb%is_imp("t1 ==> t2")%} returns {\small\verb%true%}. {\small\verb%is_imp("~t")%} returns {\small\verb%true%}.
+If the term is neither an implication nor a negation the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+Yields true of negations because {\small\verb%dest_imp%} destructs negations (for
+compatibility with PPLAMBDA code).
+
+\SEEALSO
+mk_imp, dest_imp.
+
+\ENDDOC
+\DOC{is\_let}
+
+\TYPE {\small\verb%is_let : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a {\small\verb%let%}-expression.
+
+\DESCRIBE
+{\small\verb%is_let("LET f x")%} returns {\small\verb%true%}. If the term is not a {\small\verb%let%}-expression (or
+of the more general {\small\verb%"LET f x"%} form) the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#is_let "LET ($= 1) 2";;
+true : bool
+
+#is_let "let x = 2 in (x = 1)";;
+true : bool
+\end{verbatim}}
+
+\SEEALSO
+mk_let, dest_let.
+
+\ENDDOC
+\DOC{is\_list}
+
+\TYPE {\small\verb%is_list : term -> bool%}\egroup
+
+\SYNOPSIS
+Term discriminator for lists.
+
+\DESCRIBE
+{\small\verb%is_list%} returns {\small\verb%true%} of a term representing a list. Otherwise it returns
+{\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_list, dest_list, mk_cons, dest_cons, is_cons.
+
+\ENDDOC
+\DOC{is\_neg}
+
+\TYPE {\small\verb%is_neg : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a negation.
+
+\DESCRIBE
+{\small\verb%is_neg("~t")%} returns {\small\verb%true%}. If the term is not a negation the result is
+{\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_neg, dest_neg.
+
+\ENDDOC
+\DOC{is\_pair}
+
+\TYPE {\small\verb%is_pair : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a pair.
+
+\DESCRIBE
+{\small\verb%is_pair("(t1,t2)")%} returns {\small\verb%true%}. If the term is not a pair the result is
+{\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_pair, dest_pair.
+
+\ENDDOC
+\DOC{is\_select}
+
+\TYPE {\small\verb%is_select : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a choice (an application of Hilbert's
+epsilon-operator to an abstraction).
+
+\DESCRIBE
+{\small\verb%is_select("@var. t")%} returns {\small\verb%true%}. If the term is not an epsilon-term the
+result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_select, dest_select.
+
+\ENDDOC
+\DOC{is\_type}
+
+\TYPE {\small\verb%is_type : (string -> bool)%}\egroup
+
+\SYNOPSIS
+Tests whether a string is the name of a type.
+
+\DESCRIBE
+{\small\verb%is_type `op`%} returns {\small\verb%true%} if {\small\verb%`op'%} is the name of a type or type operator 
+and {\small\verb%false%} otherwise.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+arity.
+
+\ENDDOC
+\DOC{is\_var}
+
+\TYPE {\small\verb%is_var : term -> bool%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a variable.
+
+\DESCRIBE
+{\small\verb%is_var("var:ty")%} returns {\small\verb%true%}. If the term is not a variable the result
+is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mk_var, dest_var, is_const, is_comb, is_abs.
+
+\ENDDOC
+\DOC{is\_vartype}
+
+\TYPE {\small\verb%is_vartype : type -> bool%}\egroup
+
+\SYNOPSIS
+Tests for type variables.
+
+\DESCRIBE
+{\small\verb%is_vartype(":*...")%} returns {\small\verb%true%}. For types which are not type variables
+it returns {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#is_vartype ":*test";;
+true : bool
+
+#is_vartype ":bool";;
+false : bool
+
+#is_vartype ":* -> bool";;
+false : bool
+\end{verbatim}}
+
+\SEEALSO
+mk_vartype, dest_vartype.
+
+\ENDDOC
+\DOC{lhs}
+
+\TYPE {\small\verb%lhs : term -> term%}\egroup
+
+\SYNOPSIS
+Returns the left-hand side of an equality.
+
+\DESCRIBE
+{\small\verb%lhs("t1 = t2")%} returns {\small\verb%"t1"%}.
+
+\FAILURE
+Fails with {\small\verb%lhs%} if term is not an equality.
+
+\SEEALSO
+rhs, dest_eq.
+
+\ENDDOC
+\DOC{list\_mk\_abs}
+
+\TYPE {\small\verb%list_mk_abs : goal -> term%}\egroup
+
+\SYNOPSIS
+Iterated term constructor for abstractions.
+
+\DESCRIBE
+{\small\verb%list_mk_abs(["x1";...;"xn"],"t")%} returns {\small\verb%"\x1 ... xn. t"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_abs%} if the terms in the list are not variables.
+
+\SEEALSO
+strip_abs, mk_abs.
+
+\ENDDOC
+\DOC{list\_mk\_comb}
+
+\TYPE {\small\verb%list_mk_comb : (term # term list) -> term%}\egroup
+
+\SYNOPSIS
+Iterated term constructor for combinations (function applications).
+
+\DESCRIBE
+{\small\verb%list_mk_comb("t",["t1";...;"tn"])%} returns {\small\verb%"t t1 ... tn"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_comb%} if the types of {\small\verb%t1%},...,{\small\verb%tn%} are not equal to the
+argument types of {\small\verb%t%}. It is not necessary for all the arguments of {\small\verb%t%} to be
+given. In particular the list of terms {\small\verb%t1%},...,{\small\verb%tn%} may be empty.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_comb("1",[]);;
+"1" : term
+
+#list_mk_comb("$/\",["T"]);;
+"$/\ T" : term
+
+#list_mk_comb("$/\",["1"]);;
+evaluation failed     list_mk_comb
+\end{verbatim}}
+
+\SEEALSO
+strip_comb, mk_comb.
+
+\ENDDOC
+\DOC{list\_mk\_conj}
+
+\TYPE {\small\verb%list_mk_conj : term list -> term%}\egroup
+
+\SYNOPSIS
+Constructs the conjunction of a list of terms.
+
+\DESCRIBE
+{\small\verb%list_mk_conj(["t1";...;"tn"])%} returns {\small\verb%"t1 /\ ... /\ tn"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_conj%} if the list is empty or if the list has more than
+one element, one or more of which are not of type {\small\verb%":bool"%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_conj ["T";"F";"T"];;
+"T /\ F /\ T" : term
+
+#list_mk_conj ["T";"1";"F"];;
+evaluation failed     list_mk_conj
+
+#list_mk_conj ["1"];;
+"1" : term
+\end{verbatim}}
+
+\SEEALSO
+conjuncts, mk_conj.
+
+\ENDDOC
+\DOC{list\_mk\_disj}
+
+\TYPE {\small\verb%list_mk_disj : term list -> term%}\egroup
+
+\SYNOPSIS
+Constructs the disjunction of a list of terms.
+
+\DESCRIBE
+{\small\verb%list_mk_disj(["t1";...;"tn"])%} returns {\small\verb%"t1 \/ ... \/ tn"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_disj%} if the list is empty or if the list has more than
+one element, one or more of which are not of type {\small\verb%":bool"%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_disj ["T";"F";"T"];;
+"T \/ F \/ T" : term
+
+#list_mk_disj ["T";"1";"F"];;
+evaluation failed     list_mk_disj
+
+#list_mk_disj ["1"];;
+"1" : term
+\end{verbatim}}
+
+\SEEALSO
+disjuncts, mk_disj.
+
+\ENDDOC
+\DOC{list\_mk\_exists}
+
+\TYPE {\small\verb%list_mk_exists : goal -> term%}\egroup
+
+\SYNOPSIS
+Iterated term constructor for existential quantification.
+
+\DESCRIBE
+{\small\verb%list_mk_exists(["x1";...;"xn"],"t")%} returns {\small\verb%"?x1 ... xn. t"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_exists%} if the terms in the list are not variables or if
+{\small\verb%t%} is not of type {\small\verb%":bool"%} and the list of terms is non-empty. If the list
+of terms is empty the type of {\small\verb%t%} can be anything.
+
+\SEEALSO
+strip_exists, mk_exists.
+
+\ENDDOC
+\DOC{list\_mk\_forall}
+
+\TYPE {\small\verb%list_mk_forall : goal -> term%}\egroup
+
+\SYNOPSIS
+Iterated term constructor for universal quantification.
+
+\DESCRIBE
+{\small\verb%list_mk_forall(["x1";...;"xn"],"t")%} returns {\small\verb%"!x1 ... xn. t"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_forall%} if the terms in the list are not variables or if
+{\small\verb%t%} is not of type {\small\verb%":bool"%} and the list of terms is non-empty. If the list
+of terms is empty the type of {\small\verb%t%} can be anything.
+
+\SEEALSO
+strip_forall, mk_forall.
+
+\ENDDOC
+\DOC{list\_mk\_imp}
+
+\TYPE {\small\verb%list_mk_imp : goal -> term%}\egroup
+
+\SYNOPSIS
+Iterated term constructor for implications.
+
+\DESCRIBE
+{\small\verb%list_mk_imp(["t1";...;"tn"],"t")%} returns {\small\verb%"t1 ==> ( ... (tn ==> t)...)"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_imp%} if any of {\small\verb%t1%},...,{\small\verb%tn%} are not of type {\small\verb%":bool"%} or
+if the list of terms is non-empty and {\small\verb%t%} is not of type {\small\verb%":bool"%}. If the
+list of terms is empty the type of {\small\verb%t%} can be anything.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_imp (["T";"F"],"T");;
+"T ==> F ==> T" : term
+
+#list_mk_imp (["T";"1"],"T");;
+evaluation failed     list_mk_imp
+
+#list_mk_imp (["T";"F"],"1");;
+evaluation failed     list_mk_imp
+
+#list_mk_imp ([],"1");;
+"1" : term
+\end{verbatim}}
+
+\SEEALSO
+strip_imp, mk_imp.
+
+\ENDDOC
+\DOC{list\_mk\_pair}
+
+\TYPE {\small\verb%list_mk_pair : term list -> term%}\egroup
+
+\SYNOPSIS
+Constructs a tuple from a list of terms.
+
+\DESCRIBE
+{\small\verb%list_mk_pair(["t1";...;"tn"])%} returns {\small\verb%"(t1,...,tn)"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_pair%} if the list is empty.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_pair ["1";"T";"2"];;
+"1,T,2" : term
+
+#list_mk_pair ["1"];;
+"1" : term
+\end{verbatim}}
+
+\SEEALSO
+strip_pair, mk_pair.
+
+\ENDDOC
+\DOC{load\_theory}
+
+\TYPE {\small\verb%load_theory : (string -> void)%}\egroup
+
+\SYNOPSIS
+Loads an existing theory into the system.
+
+\DESCRIBE
+A call to {\small\verb%load_theory `thy`%} loads the existing theory {\small\verb%`thy`%} into the
+system and makes it the current theory. 
+The message `{\small\verb%Theory thy loaded%}' is printed.
+The theory is entered in proof mode.
+Whilst in this mode only theorems may be added to the theory segment.
+
+\FAILURE
+A call to {\small\verb%load_theory `thy`%} will fail if theory {\small\verb%`thy`%} does not appear on
+the current search path. 
+It will fail if theory {\small\verb%`thy`%} is not a descendant of the current theory.
+It will fail if an ancestor of theory {\small\verb%`thy`%} has been extended with
+either new types or constants which clash with names in theory {\small\verb%`thy`%}.
+It will also fail if any of the theory files of the theory {\small\verb%`thy`%} have been
+damaged.
+On failure, the system recovers cleanly, unloading any theory segments it had
+loaded before the failure was detected.
+It will diverge if the theory hierarchy within theory {\small\verb%`thy`%} contains loops,
+so that a theory segment is its own ancestor.
+
+\SEEALSO
+extend_theory, new_parent, new_theory, print_theory, search_path.  
+
+\ENDDOC
+\DOC{lookup\_form\_rep}
+
+\TYPE {\small\verb%lookup_form_rep : ((* list # form) -> * list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{lookup\_term}
+
+\TYPE {\small\verb%lookup_term : (* term_net -> term -> * list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{lookup\_term\_rep}
+
+\TYPE {\small\verb%lookup_term_rep : ((* list # term) -> * list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{merge\_nets\_rep}
+
+\TYPE {\small\verb%merge_nets_rep : ((* list # * list) -> * list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{merge\_term\_nets}
+
+\TYPE {\small\verb%merge_term_nets : (* term_net -> * term_net -> * term_net)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{mk\_abs}
+
+\TYPE {\small\verb%mk_abs : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for abstractions.
+
+\DESCRIBE
+{\small\verb%mk_abs("var","t")%} returns the abstraction {\small\verb%"\var. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_abs%} if first term is not a variable.
+
+\SEEALSO
+dest_abs, is_abs, mk_var, mk_const, mk_comb.
+
+\ENDDOC
+\DOC{mk\_comb}
+
+\TYPE {\small\verb%mk_comb : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for combinations (function applications).
+
+\DESCRIBE
+{\small\verb%mk_comb("t1","t2")%} returns the combination {\small\verb%"t1 t2"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_comb%} unless {\small\verb%t1%} is a function whose first argument has the
+same type as {\small\verb%t2%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#mk_comb("$~","T");;
+"~T" : term
+
+#mk_comb("T","T");;
+evaluation failed     mk_comb
+\end{verbatim}}
+
+\SEEALSO
+dest_comb, is_comb, mk_var, mk_const, mk_abs.
+
+\ENDDOC
+\DOC{mk\_cond}
+
+\TYPE {\small\verb%mk_cond : (term # term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for conditionals.
+
+\DESCRIBE
+{\small\verb%mk_cond("t","t1","t2")%} returns {\small\verb%"t => t1 | t2"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_cond%} if {\small\verb%t%} is not of type {\small\verb%":bool"%} or if {\small\verb%t1%} and {\small\verb%t2%} are
+of different types.
+
+\SEEALSO
+dest_cond, is_cond.
+
+\ENDDOC
+\DOC{mk\_conj}
+
+\TYPE {\small\verb%mk_conj : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for conjunctions.
+
+\DESCRIBE
+{\small\verb%mk_conj("t1","t2")%} returns {\small\verb%"t1 /\ t2"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_conj%} if either {\small\verb%t1%} or {\small\verb%t2%} are not of type {\small\verb%":bool"%}.
+
+\SEEALSO
+dest_conj, is_conj.
+
+\ENDDOC
+\DOC{mk\_cons}
+
+\TYPE {\small\verb%mk_cons : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for {\small\verb%CONS%}.
+
+\DESCRIBE
+{\small\verb%mk_cons("t","[t1;...;tn]")%} returns {\small\verb%"[t;t1;...;tn]"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_cons%} if second term is not a list or if the first term is not
+of the same type as the elements of the list.
+
+\SEEALSO
+dest_cons, is_cons, mk_list, dest_list, is_list.
+
+\ENDDOC
+\DOC{mk\_const}
+
+\TYPE {\small\verb%mk_const : (string # type) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for constants.
+
+\DESCRIBE
+{\small\verb%mk_const(`const`,":ty")%} returns the constant {\small\verb%"const:ty"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_const: ...%} if the string supplied is not the name of a known
+constant, or if it is known but the type supplied is not the correct type for
+the constant.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#mk_const (`T`,":bool");;
+"T" : term
+
+#mk_const (`T`,":num");;
+evaluation failed     mk_const: wrong type for T supplied
+
+#mk_const (`test`,":bool");;
+evaluation failed     mk_const: test not a constant
+\end{verbatim}}
+
+\SEEALSO
+dest_const, is_const, mk_var, mk_comb, mk_abs.
+
+\ENDDOC
+\DOC{mk\_conv\_net}
+
+\TYPE {\small\verb%mk_conv_net : (thm list -> conv term_net)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{mk\_definition}
+
+\TYPE {\small\verb%mk_definition : (term -> term)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{mk\_disj}
+
+\TYPE {\small\verb%mk_disj : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for disjunctions.
+
+\DESCRIBE
+{\small\verb%mk_disj("t1","t2")%} returns {\small\verb%"t1 \/ t2"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_disj%} if either {\small\verb%t1%} or {\small\verb%t2%} are not of type {\small\verb%":bool"%}.
+
+\SEEALSO
+dest_disj, is_disj.
+
+\ENDDOC
+\DOC{mk\_eq}
+
+\TYPE {\small\verb%mk_eq : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for equality.
+
+\DESCRIBE
+{\small\verb%mk_eq("t1","t2")%} returns {\small\verb%"t1 = t2"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_eq%} if {\small\verb%t1%} and {\small\verb%t2%} have different types.
+
+\SEEALSO
+dest_eq, is_eq.
+
+\ENDDOC
+\DOC{mk\_exists}
+
+\TYPE {\small\verb%mk_exists : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for existential quantification.
+
+\DESCRIBE
+{\small\verb%mk_exists("var","t")%} returns {\small\verb%"?var. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_exists%} if first term is not a variable or if {\small\verb%t%} is not of
+type {\small\verb%":bool"%}.
+
+\SEEALSO
+dest_exists, is_exists.
+
+\ENDDOC
+\DOC{mk\_forall}
+
+\TYPE {\small\verb%mk_forall : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for universal quantification.
+
+\DESCRIBE
+{\small\verb%mk_forall("var","t")%} returns {\small\verb%"!var. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_forall%} if first term is not a variable or if {\small\verb%t%} is not of
+type {\small\verb%":bool"%}.
+
+\SEEALSO
+dest_forall, is_forall.
+
+\ENDDOC
+\DOC{mk\_form}
+
+\TYPE {\small\verb%mk_form : (term -> form)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{mk\_imp}
+
+\TYPE {\small\verb%mk_imp : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for implications.
+
+\DESCRIBE
+{\small\verb%mk_imp("t1","t2")%} returns {\small\verb%"t1 ==> t2"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_imp%} if either {\small\verb%t1%} or {\small\verb%t2%} are not of type {\small\verb%":bool"%}.
+
+\SEEALSO
+dest_imp, is_imp.
+
+\ENDDOC
+\DOC{mk\_let}
+
+\TYPE {\small\verb%mk_let : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for {\small\verb%let%}-expressions.
+
+\DESCRIBE
+{\small\verb%mk_let("f","x")%} returns {\small\verb%"LET f x"%}. If {\small\verb%f%} is of the form {\small\verb%"\y. t"%} then
+the result will be pretty-printed as {\small\verb%"let y=x in t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_let%} if the types of {\small\verb%f%} and {\small\verb%x%} are such that {\small\verb%"LET f x"%} is
+not well-typed. {\small\verb%"LET"%} has most general type:
+{\par\samepage\setseps\small\begin{verbatim}
+   ":(* -> **) -> * -> **"
+\end{verbatim}}
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#mk_let("$= 1","2");;
+"LET($= 1)2" : term
+
+#mk_let("\x. x = 1","2");;
+"let x = 2 in (x = 1)" : term
+\end{verbatim}}
+
+\SEEALSO
+dest_let, is_let.
+
+\ENDDOC
+\DOC{mk\_list}
+
+\TYPE {\small\verb%mk_list : (term list # type) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for lists.
+
+\DESCRIBE
+{\small\verb%mk_list(["t1";...;"tn"],":ty")%} returns {\small\verb%"[t1;...;tn]:(ty)list"%}.
+The type argument is required so that empty lists can be constructed.
+
+\FAILURE
+Fails with {\small\verb%mk_list%} if any term in the list is not of the type specified as
+the second argument.
+
+\SEEALSO
+dest_list, is_list, mk_cons, dest_cons, is_cons.
+
+\ENDDOC
+\DOC{mk\_neg}
+
+\TYPE {\small\verb%mk_neg : term -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for negations.
+
+\DESCRIBE
+{\small\verb%mk_neg("t")%} returns {\small\verb%"~t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_neg%} if {\small\verb%t%} is not of type {\small\verb%":bool"%}.
+
+\SEEALSO
+dest_neg, is_neg.
+
+\ENDDOC
+\DOC{mk\_pair}
+
+\TYPE {\small\verb%mk_pair : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for pairs.
+
+\DESCRIBE
+{\small\verb%mk_pair("t1","t2")%} returns {\small\verb%"(t1,t2)"%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+dest_pair, is_pair.
+
+\ENDDOC
+\DOC{mk\_pp\_thm}
+
+\TYPE {\small\verb%mk_pp_thm : ((form list # form) -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{mk\_select}
+
+\TYPE {\small\verb%mk_select : (term # term) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for choice (Hilbert's epsilon-operator).
+
+\DESCRIBE
+{\small\verb%mk_select("var","t")%} returns {\small\verb%"@var. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_select%} if first term is not a variable or if {\small\verb%t%} is not of
+type {\small\verb%":bool"%}.
+
+\SEEALSO
+dest_select, is_select.
+
+\ENDDOC
+\DOC{mk\_thm}
+
+\TYPE {\small\verb%mk_thm : ((term list # term) -> thm)%}\egroup
+
+\SYNOPSIS
+Primitive theorem constructor.
+
+\DESCRIBE
+The function {\small\verb%mk_thm%} can be used to construct an arbitrary theorem. It is
+applied to a pair consisting of the desired assumption list (possibly empty)
+and conclusion. All the terms therein should be of type {\small\verb%bool%}.
+{\par\samepage\setseps\small\begin{verbatim}
+   mk_thm(["a1";...;"an"],"c") = ({a1,...,an} |- c)
+\end{verbatim}}
+\FAILURE
+Fails unless all the terms provided for assumptions and conclusion are of type
+{\small\verb%bool%}.
+
+\EXAMPLE
+The following shows how to create a simple contradiction:
+{\par\samepage\setseps\small\begin{verbatim}
+   #mk_thm([],"F");;
+   |- F
+\end{verbatim}}
+\COMMENTS
+Although {\small\verb%mk_thm%} can be useful for experimentation or temporarily plugging
+gaps, its use should be avoided if at all possible in important proofs, because
+it can be used to create theorems leading to contradictions. The example above
+is a trivial case, but it is all too easy to create a contradiction by
+asserting `obviously sound' theorems.
+
+All theorems which are likely to be needed can be derived using only HOL's
+inbuilt 5 axioms and 8 primitive inference rules, which are provably sound (see
+the DESCRIPTION). Basing all proofs, normally via derived rules and tactics, on
+just these axioms and inference rules gives proofs which are (apart from bugs
+in HOL or the underlying system) completely secure. This is one of the great
+strengths of HOL, and it is foolish to sacrifice it to save a little work.
+
+\SEEALSO
+new_axiom.
+
+\ENDDOC
+\DOC{mk\_type}
+
+\TYPE {\small\verb%mk_type : (string # type list) -> type%}\egroup
+
+\SYNOPSIS
+Constructor for types (other than variable types).
+
+\DESCRIBE
+{\small\verb%mk_type(`op`,[":ty1";...;":tyn"])%} returns {\small\verb%":(ty1,...,tyn)op"%} where {\small\verb%op%}
+is the name of a known {\small\verb%n%}-ary type constructor.
+
+\FAILURE
+Fails with {\small\verb%mk_type%} if the string is not the name of a known type, or if the
+type is known but the length of the list of argument types is not equal to
+the arity of the type constructor.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#mk_type (`bool`,[]);;
+":bool" : type
+
+#mk_type (`list`,[":bool"]);;
+":(bool)list" : type
+
+#mk_type (`fun`,[":num";":bool"]);;
+":num -> bool" : type
+\end{verbatim}}
+
+\SEEALSO
+dest_type, mk_vartype.
+
+\ENDDOC
+\DOC{mk\_var}
+
+\TYPE {\small\verb%mk_var : (string # type) -> term%}\egroup
+
+\SYNOPSIS
+Term constructor for variables.
+
+\DESCRIBE
+{\small\verb%mk_var(`var`,":ty")%} returns the variable {\small\verb%"var:ty"%}.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+{\small\verb%mk_var%} can be used to construct variables with names which are not
+acceptable to the term parser. In particular, a variable with the name of a
+known constant can be constructed using {\small\verb%mk_var%}.
+
+\SEEALSO
+dest_var, is_var, mk_const, mk_comb, mk_abs.
+
+\ENDDOC
+\DOC{mk\_vartype}
+
+\TYPE {\small\verb%mk_vartype : string -> type%}\egroup
+
+\SYNOPSIS
+Constructor for type variables.
+
+\DESCRIBE
+{\small\verb%mk_vartype(`*...`)%} returns {\small\verb%":*..."%}.
+
+\FAILURE
+Fails with {\small\verb%mk_vartype%} if the string does not begin with {\small\verb%`*`%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#mk_vartype `*test`;;
+":*test" : type
+
+#mk_vartype `test`;;
+evaluation failed     mk_vartype
+\end{verbatim}}
+
+\COMMENTS
+{\small\verb%mk_vartype%} can be used to create type variables with names which will not
+parse, i.e. they cannot be entered by quotation.
+
+\SEEALSO
+dest_vartype, is_vartype, mk_type.
+
+\ENDDOC
+\DOC{new\_alphanum}
+
+\TYPE {\small\verb%new_alphanum : (string -> void)%}\egroup
+
+\SYNOPSIS
+Defines a character to be alphanumeric.
+
+\DESCRIBE
+When given a string, which should be of length 1, {\small\verb%new_alphanum%} extends
+the scope of the definition of `alphanumeric' as used by {\small\verb%is_alphanum%}.
+(If the supplied string is null ({\small\verb%``%}) then {\small\verb%new_alphanum%} has no effect.)
+
+The term `alphanumeric' initially means one of the following:
+{\small\verb%a..z A..Z 0..9 _ '%}. A call to {\small\verb%new_alphanum%} can affect ML lexical analysis
+dynamically, because the function {\small\verb%is_alphanum%} is called by the lexical
+analyzer to check for characters beyond the first in an identifier.
+
+\EXAMPLE
+Suppose we set a variable {\small\verb%y%} as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let y = 2;;
+   y = 2 : int
+\end{verbatim}}
+\noindent then {\small\verb%y-1%} is a numeric expression:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let x = y-1;;
+   x = 1 : int
+\end{verbatim}}
+\noindent but after defining {\small\verb%-%} to be alphanumeric:
+{\par\samepage\setseps\small\begin{verbatim}
+   #new_alphanum `-`;;
+   () : void
+\end{verbatim}}
+\noindent {\small\verb%y-1%} counts as a single token (which is undefined).
+{\par\samepage\setseps\small\begin{verbatim}
+   #let x = y-1;;
+   unbound or non-assignable variable y-1
+\end{verbatim}}
+\FAILURE
+Fails if the string has length greater than 1.
+
+\SEEALSO
+ascii, ascii_code, is_alphanum, is_letter, new_alphanum.
+
+\ENDDOC
+\DOC{new\_definition}
+
+\TYPE {\small\verb%new_definition : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+Declare a new constant and install a definitional axiom in the current theory.
+
+\DESCRIBE
+The function {\small\verb%new_definition%} provides a facility for definitional
+extensions to the current theory.  It takes a pair argument consisting
+of the name under which the resulting definition will be saved 
+in the current theory segment, and a term giving the desired definition.  The
+value returned by {\small\verb%new_definition%} is a theorem which states the definition
+requested by the user.
+
+Let {\small\verb%v_1%},...,{\small\verb%v_n%} be tuples of distinct variables, containing the variables
+{\small\verb%x_1,...,x_m%}.  Evaluating {\small\verb%new_definition (`name`, "c v_1 ... v_n = t")%},
+where {\small\verb%c%} is not already a constant, declares the sequent {\small\verb%({},"\v_1  ...
+v_n. t")%} to be a definition in the current theory, and declares {\small\verb%c%} to be 
+a new constant in the current theory with this definition as its specification.
+This constant specification is returned as a theorem with the form 
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !x_1 ... x_m. c v_1 ... v_n = t
+\end{verbatim}}
+\noindent and is saved in the current theory under
+(the name) {\small\verb%name%}.  Optionally, the definitional term argument
+may have any of its variables universally quantified.
+
+\FAILURE 
+{\small\verb%new_definition%} fails if called when HOL is not in draft mode.  It also
+fails if there is already an axiom, definition or specification of the given
+name in the current theory segment; if {\small\verb%`c`%} is already a constant in the
+current theory or is not an allowed name for a constant; if {\small\verb%t%} contains free
+variables that are not in any of the variable structures {\small\verb%v_1%}, ..., {\small\verb%v_n%}
+(this is equivalent to requiring {\small\verb%\v_1 ... v_n. t%} to be a closed term); or if
+any variable occurs more than once in {\small\verb%v_1, ..., v_n%}.  Finally, failure occurs
+if there is a type variable in {\small\verb%v_1%}, ..., {\small\verb%v_n%} or {\small\verb%t%} that does not occur in
+the type of {\small\verb%c%}.
+
+\EXAMPLE
+A NAND relation can be defined as follows. 
+{\par\samepage\setseps\small\begin{verbatim}
+   #new_definition
+    (`NAND2`, "NAND2 (in_1,in_2) out = !t:num. out t = ~(in_1 t /\ in_2 t)");;
+   |- !in_1 in_2 out.
+       NAND2 (in_1,in_2)out = (!t. out t = ~(in_1 t /\ in_2 t))
+\end{verbatim}}
+
+\SEEALSO
+new_binder_definition, new_gen_definition, new_infix_definition,
+new_infix_list_rec_definition, new_prim_rec_definition,
+new_list_rec_definition, new_prim_rec_definition, new_recursive_definition,
+new_specification.
+
+\ENDDOC
+\DOC{new\_gen\_definition}
+
+\TYPE {\small\verb%new_gen_definition : (string -> (string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+Define a new constant, infix constant, or binder constant.
+
+\DESCRIBE
+The function {\small\verb%new_gen_definition%} provides a facility for definitional
+extensions to the current theory.  It takes two arguments.  The first is a flag
+which can have one of three values: {\small\verb%`constant`%}, {\small\verb%`infix`%}, or {\small\verb%`binder`%},
+indicating the status of the object being defined.  The second argument is a
+pair consisting of the name under which the resulting definition will be saved
+in the current theory segment, and a term giving the desired definition.  The
+value returned by {\small\verb%new_gen_definition%} is a theorem which states the definition
+requested by the user.
+
+Let {\small\verb%v_1%},...,{\small\verb%v_n%} be tuples of distinct variables, containing the variables
+{\small\verb%x_1,...,x_m%}.  Evaluating {\small\verb%new_gen_definition flag (`name`, "c v_1 ... v_n =
+t")%}, where {\small\verb%c%} is not already a constant, declares the sequent {\small\verb%({},"\v_1
+... v_n. t")%} to be a definition in the current theory, and declares {\small\verb%c%} to be
+a new constant in the current theory with this definition as its specification.
+This constant specification is returned as a theorem, generally of the form {\small\verb%|-
+!x_1 ... x_m. c v_1 ... v_n = t%} , and is saved in the current theory under
+(the name) {\small\verb%name%}.  If {\small\verb%flag%} is {\small\verb%`infix`%} or {\small\verb%`binder`%}, the constant is given
+infix or binder status accordingly.  Optionally, the definitional term argument
+may have any of its variables universally quantified.
+
+\FAILURE
+{\small\verb%new_gen_definition%} fails if called when HOL is not in draft mode.  It also
+fails if there is already an axiom, definition or specification of the given
+name in the current theory segment; if {\small\verb%`c`%} is already a constant in the
+current theory or is not an allowed name for a constant; if {\small\verb%t%} contains free
+variables that are not in any of the variable structures {\small\verb%v_1%}, ..., {\small\verb%v_n%}
+(this is equivalent to requiring {\small\verb%\v_1 ... v_n. t%} to be a closed term); or if
+any variable occurs more than once in {\small\verb%v_1, ..., v_n%}.  Failure also occurs if
+{\small\verb%flag%} is not one of {\small\verb%`constant`%}, {\small\verb%`infix`%} or {\small\verb%`binder`%} or if the type of {\small\verb%c%}
+is not suitable for a constant with the syntactic status specified by {\small\verb%flag%}.
+Finally, failure occurs if there is a type variable in {\small\verb%v_1%}, ..., {\small\verb%v_n%} or {\small\verb%t%}
+that does not occur in the type of {\small\verb%c%}.
+
+\USES
+Used to define the special purpose functions {\small\verb%new_definition%},
+{\small\verb%new_infix_definition%}, and {\small\verb%new_binder_definition%}, which are used for
+defining objects with a particular status.
+
+\SEEALSO
+DEF_EXISTS_RULE, new_binder_definition, new_definition, new_infix_definition,
+new_specification.
+
+\ENDDOC
+\DOC{new\_infix\_definition}
+
+\TYPE {\small\verb%new_infix_definition : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS 
+Declare a new infix constant and install a definitional axiom in the current
+theory.
+
+\DESCRIBE
+The function {\small\verb%new_infix_definition%} provides a facility for definitional
+extensions to the current theory.  It takes a pair argument consisting
+of the name under which the resulting definition will be saved 
+in the current theory segment, and a term giving the desired definition.  The
+value returned by {\small\verb%new_infix_definition%} is a theorem which states the definition
+requested by the user.
+
+Let {\small\verb%v_1%} and {\small\verb%v_2%} be tuples of distinct variables, containing the variables
+{\small\verb%x_1,...,x_m%}.  Evaluating {\small\verb%new_definition (`name`, "ix v_1 v_2 = t")%},
+where {\small\verb%ix%} is not already a constant, declares the sequent {\small\verb%({},"\v_1 v_2.
+t")%} to be a definition in the current theory, and declares {\small\verb%ix%} to be 
+a new constant in the current theory with this definition as its specification.
+This constant specification is returned as a theorem with the form 
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !x_1 ... x_m. v_1 ix v_2 = t
+\end{verbatim}}
+\noindent and is saved in the current theory under
+(the name) {\small\verb%name%}.  Optionally, the definitional term argument
+may have any of its variables universally quantified.
+The constant {\small\verb%ix%} has infix status only after the infix
+declaration has been processed.  It is therefore necessary to use
+the constant in normal prefix position when making the definition.
+
+\FAILURE
+{\small\verb%new_infix_definition%} fails if called when HOL is not in draft mode.  It also
+fails if there is already an axiom, definition or specification of the given
+name in the current theory segment; if {\small\verb%`ix`%} is already a constant in the
+current theory or is not an allowed name for a constant; if {\small\verb%t%} contains free
+variables that are not in either of the variable structures {\small\verb%v_1%} and {\small\verb%v_2%}
+(this is equivalent to requiring {\small\verb%\v_1 v_2. t%} to be a closed term); or if any
+variable occurs more than once in {\small\verb%v_1, v_2%}.  Failure also occurs if the type
+of {\small\verb%ix%} is not of the form {\small\verb%:ty_1->ty_2->ty_3%}.  Finally, failure occurs if
+there is a type variable in {\small\verb%v_1%}, ..., {\small\verb%v_n%} or {\small\verb%t%} that does not occur in the
+type of {\small\verb%ix%}.
+
+\EXAMPLE
+The nand function can be defined as follows. 
+{\par\samepage\setseps\small\begin{verbatim}
+   #new_infix_definition
+    (`nand`, "$nand in_1 in_2 = ~(in_1 /\ in_2)");;
+   |- !in_1 in_2. in_1 nand in_2 = ~(in_1 /\ in_2)
+\end{verbatim}}
+
+\COMMENTS
+It is a common practice among HOL users to write a {\small\verb%$%} before
+the constant being defined as an infix to indicate that after the
+definition is made, it will have a special syntactic status; ie. to
+write: 
+{\par\samepage\setseps\small\begin{verbatim}
+   new_infix_definition(`ix_DEF`, "$ix m n = ... ")
+\end{verbatim}}
+\noindent This use of {\small\verb%$%} is not necessary; but after the definition
+has been made {\small\verb%$%} must, of course, be used if the syntactic status
+needs to be suppressed. 
+
+\SEEALSO
+new_binder_definition, new_definition, new_gen_definition,
+new_infix_list_rec_definition, ew_prim_rec_definition, new_list_rec_definition,
+new_prim_rec_definition.
+
+\ENDDOC
+\DOC{new\_infix\_list\_rec\_definition}
+
+\TYPE {\small\verb%new_infix_list_rec_definition : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+Define an infix primitive recursive function over the type of lists.
+
+\DESCRIBE
+The function {\small\verb%new_infix_list_rec_definition%} provides the facility for defining
+primitive recursive functions with infix status on the type of lists. It
+takes a pair argument, consisting of the name under which the resulting
+definition will be saved in the current theory segment, and a term giving the
+desired definition.  The value returned by {\small\verb%new_infix_list_rec_definition%} is
+a theorem which states the definition requested by the user.  This theorem is
+derived by formal proof from an instance of the theorem {\small\verb%list_Axiom%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+\end{verbatim}}
+
+Evaluating
+{\par\samepage\setseps\small\begin{verbatim}
+   new_infix_list_rec_definition
+    (`fun_DEF`,
+     "(fun [] x = f_1[x] /\
+      (fun (CONS h t) x = f_2[fun t x, h, t, x]");;
+\end{verbatim}}
+\noindent automatically proves the theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |-  ?fun. !x. fun x = f_1[x] /\
+             !x. fun (CONS h t) x = f_2[fun t x, h, t, x]
+\end{verbatim}}
+\noindent and then declares a new constant {\small\verb%fun%} with this property as its
+specification. This constant specification is returned as a theorem by 
+{\small\verb%new_infix_list_rec_definition%} and is saved with name {\small\verb%fun_DEF%} in the
+current theory segment. 
+
+The ML function {\small\verb%new_infix_list_rec_definition%} is, in fact, slightly
+more general than is indicated above.  In particular, a curried
+primitive recursive function can be defined by primitive recursion on
+either one of its arguments using this ML function.  The ML function
+{\small\verb%new_infix_list_rec_definition%} also allows the user to partially
+specify the value of a function defined (possibly recursively) on
+lists by giving its value for only one of {\small\verb%[]%} or {\small\verb%CONS h t%}.
+
+\FAILURE
+Failure occurs if: HOL cannot prove there is a function satisfying the
+specification (i.e. if the term supplied to {\small\verb%new_infix_list_rec_definition%}
+is not a well-formed primitive recursive definition), or if
+any other condition for making a constant specification is violated
+(see the failure conditions for {\small\verb%new_specification%}).
+
+\EXAMPLE
+An infix append function on polymorphic lists can be defined by
+{\par\samepage\setseps\small\begin{verbatim}
+   new_infix_list_rec_definition
+   (`app_i`, "($app_i [] l = l) /\
+              ($app_i (CONS (h:*) t) l = CONS h ($app_i t l))");;
+\end{verbatim}}
+\noindent The {\small\verb%$%}'s are there (as documentation) to indicate that the constant
+{\small\verb%app_i%} is being declared to be an infix.  Evaluating this ML expression will
+create the following constant specification in the current theory segment: 
+{\par\samepage\setseps\small\begin{verbatim}
+    |- (!l. [] app_i l = l) /\ (!h t l. (CONS h t) app_i l = CONS h(t app_i l))
+\end{verbatim}}
+
+\SEEALSO
+new_definition, new_infix_definition, new_infix_prim_rec_definition,
+new_list_rec_definition, new_prim_rec_definition, new_recursive_definition,
+new_type_definition, new_specification, list_Axiom.
+
+\ENDDOC
+\DOC{new\_infix\_prim\_rec\_definition}
+
+\TYPE {\small\verb%new_infix_prim_rec_definition : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+Define an infix primitive recursive function over the type {\small\verb%:num%}.
+
+\DESCRIBE
+The function {\small\verb%new_infix_prim_rec_definition%} provides the facility for defining
+primitive recursive functions with infix status on the type {\small\verb%:num%}. It takes a
+pair argument, consisting of the name under which the resulting definition will
+be saved in the current theory segment, and a term giving the desired
+definition.  The value returned by {\small\verb%new_infix_prim_rec_definition%} is a theorem
+which states the definition requested by the user.  This theorem is derived by
+formal proof from an instance of the theorem {\small\verb%num_Axiom%}: 
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !e f. ?! fn. (fn 0 = e) /\ (!n. fn(SUC n) = f(fn n)n)
+\end{verbatim}}
+
+Evaluating
+{\par\samepage\setseps\small\begin{verbatim}
+   new_infix_prim_rec_definition
+    (`fun_DEF`,
+     "(fun 0 x = f_1[x] /\
+      (fun (SUC n) x = f_2[fun n t, n, x]");;
+\end{verbatim}}
+\noindent automatically proves the theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |-  ?fun. !x. fun 0 x = f_1[x] /\
+             !x. fun (SUC n) x = f_2[fun n t, n, x]
+\end{verbatim}}
+\noindent and then declares a new constant {\small\verb%fun%} with this property and infix
+status as its specification. This constant specification is returned as a
+theorem and is saved with name {\small\verb%fun_DEF%} in the current theory segment.
+
+The ML function {\small\verb%new_infix_prim_rec_definition%} is, in fact, slightly more
+general than is indicated above.  In particular, a curried primitive recursive
+function can be defined by primitive recursion on either one of its arguments
+using this ML function.  The ML function {\small\verb%new_infix_prim_rec_definition%} also
+allows the user to partially specify the value of a function defined (possibly
+recursively) on the natural numbers by giving its value for only one of {\small\verb%0%} or
+{\small\verb%SUC n%}.
+
+\FAILURE
+Failure occurs if HOL cannot prove there is a function satisfying the
+specification (ie. if the term supplied to ml{\small\verb%new_prim_rec_definition%}
+is not a well-formed primitive recursive definition); if the type
+of {\small\verb%fun%} is not of the form {\small\verb%:ty_1->ty_2->ty_3%}, or if
+any other condition for making a constant specification is violated
+(see the failure conditions for {\small\verb%new_specification%}.
+
+\EXAMPLE
+Here is the recursive definition of the constant {\small\verb%+%} used by the system:
+{\par\samepage\setseps\small\begin{verbatim}
+   new_infix_prim_rec_definition
+    (`ADD`,
+     "($+ 0 n = n) /\
+      ($+ (SUC m) n = SUC($+ m n))")
+\end{verbatim}}
+\noindent The {\small\verb%$%}'s are there (as documentation) to indicate that the constant
+{\small\verb%+%} is being declared to be an infix.  Evaluating this ML expression will
+create the following constant specification in the current theory segment: 
+{\par\samepage\setseps\small\begin{verbatim}
+   ADD   |- (!n. 0 + n = n) /\ (!m n. (SUC m) + n = SUC(m + n))
+\end{verbatim}}
+
+\SEEALSO
+new_definition, new_infix_definition, new_infix_list_rec_definition,
+new_prim_rec_definition, new_list_rec_definition, new_recursive_definition,
+new_type_definition, new_specification, num_Axiom.
+
+\ENDDOC
+\DOC{new\_letter}
+
+\TYPE {\small\verb%new_letter : (string -> void)%}\egroup
+
+\SYNOPSIS
+Defines a character to be a letter.
+
+\DESCRIBE
+When given a string, which should be of length 1, {\small\verb%new_letter%} extends
+the scope of the definition of `letter' as used by {\small\verb%is_letter%}.
+(If the supplied string is null ({\small\verb%``%}) {\small\verb%new_letter%} has no effect.)
+
+The definition of a `letter' by default includes (only)
+{\small\verb%a..z A..Z%}. A call to {\small\verb%new_letter%} can affect ML lexical analysis dynamically,
+because the function {\small\verb%is_letter%} is called by the lexical analyzer to check for
+the start of an identifier.
+
+\EXAMPLE
+In the default state, {\small\verb%-1%} is parsed as the application of {\small\verb%-%} to {\small\verb%1%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let x = -1 ;;
+   x = -1 : int
+\end{verbatim}}
+\noindent but if we make {\small\verb%-%} into a letter:
+{\par\samepage\setseps\small\begin{verbatim}
+   #new_letter(`-`);;
+   () : void
+\end{verbatim}}
+\noindent then {\small\verb%-1%} parses as an (undefined) identifier.
+{\par\samepage\setseps\small\begin{verbatim}
+   #let x = -1;;
+   unbound or non-assignable variable -1
+\end{verbatim}}
+\FAILURE
+Fails if the string has length greater than 1.
+
+\SEEALSO
+ascii, ascii_code, is_alphanum, is_letter, new_alphanum.
+
+\ENDDOC
+\DOC{new\_list\_rec\_definition}
+
+\TYPE {\small\verb%new_list_rec_definition : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+Define a primitive recursive function over the type of lists.
+
+\DESCRIBE
+The function {\small\verb%new_list_rec_definition%} provides the facility for defining
+primitive recursive functions on the type of lists. It takes a pair argument,
+consisting of the name under which the resulting definition will be saved in
+the current theory segment, and a term giving the desired definition.  The
+value returned by {\small\verb%new_list_rec_definition%} is a theorem which states the
+definition requested by the user.  This theorem is derived by formal proof from
+an instance of the theorem {\small\verb%list_Axiom%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+\end{verbatim}}
+
+Evaluating
+{\par\samepage\setseps\small\begin{verbatim}
+   new_list_rec_definition
+    (`fun_DEF`,
+     "(fun x_1 ... [] ... x_i = f_1[x_1, ..., x_i] /\
+      (fun x_1 ... (CONS h t) ... x_i = 
+               f_2[fun t_1 ... t ... t_i, x_1, ..., h, t, ..., x_i]");;
+\end{verbatim}}
+\noindent automatically proves the theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |-  ?fun. !x_1 ... x_i. fun x_1 ... [] ... x_i = f_1[x_1, ..., x_i] /\
+             !x_1 ... x_i. fun (CONS h t) x_1 ... x_i = 
+                            f_2[fun t_1 ... t ... t_i, x_1, ..., h, t, ...,x_i]
+\end{verbatim}}
+\noindent and then declares a new constant {\small\verb%fun%} with this property as its
+specification. This constant specification is returned as a theorem by 
+{\small\verb%new_list_rec_definition%} and is saved with name {\small\verb%fun_DEF%} in the
+current theory segment. 
+
+The ML function {\small\verb%new_list_rec_definition%} also allows the user to
+partially specify the value of a function defined (possibly recursively) on 
+lists by giving its value for only one of {\small\verb%[]%} or {\small\verb%CONS h t%}.  See the
+example below.
+
+\FAILURE
+Failure occurs if HOL cannot prove there is a function satisfying the
+specification (ie. if the term supplied to ml{\small\verb%new_list_rec_definition%}
+is not a well-formed primitive recursive definition), or if
+any other condition for making a constant specification is violated
+(see the failure conditions for {\small\verb%new_specification%}).
+
+\EXAMPLE
+The HOL system defines a length function, {\small\verb%LENGTH%}, on lists by the
+primitive recursive definition on lists shown below: 
+{\par\samepage\setseps\small\begin{verbatim}
+   new_list_rec_definition
+     (`LENGTH`,
+     "(LENGTH NIL = 0) /\
+      (!h:*. !t. LENGTH (CONS h t) = SUC (LENGTH t))")
+\end{verbatim}}
+\noindent When this ML expression is evaluated, HOL uses {\small\verb%list_Axiom%}
+to prove existence of a function that satisfies the given primitive
+recursive definition, introduces a constant to name this function
+using a constant specification, and stores the resulting theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+    LENGTH   |- (LENGTH[] = 0) /\ (!h t. LENGTH(CONS h t) = SUC(LENGTH t))
+\end{verbatim}}
+\noindent in the current theory segment (in this case, the theory {\small\verb%list%}).  
+
+Using  {\small\verb%new_list_rec_definition%},   the  predicate   {\small\verb%NULL%}  and  the
+selectors {\small\verb%HD%} and  {\small\verb%TL%} are  defined
+ in  the theory  {\small\verb%list%} by the
+specifications:
+{\par\samepage\setseps\small\begin{verbatim}
+   NULL |- NULL[] /\ (!h t. ~NULL(CONS h t))
+ 
+   HD   |- !(h:*) t. HD(CONS h t) = h
+
+   TL   |- !(h:*) t. TL(CONS h t) = t
+\end{verbatim}}
+
+\SEEALSO
+new_definition, new_infix_definition, new_infix_list_rec_definition,
+new_infix_prim_rec_definition, new_prim_rec_definition,
+new_recursive_definition, new_type_definition, new_specification, list_Axiom.
+
+\ENDDOC
+\DOC{new\_open\_axiom}
+
+\TYPE {\small\verb%new_open_axiom : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{new\_parent}
+
+\TYPE {\small\verb%new_parent : (string -> void)%}\egroup
+
+\SYNOPSIS
+Extends the current theory with a new parent theory.
+
+\DESCRIBE
+Executing {\small\verb%new_parent `thy`%} extends the current theory by making
+the existing theory named {\small\verb%`thy`%} a parent of the current theory segment. The
+extended theory contains the theory segments of both constituent theories. The
+theory {\small\verb%`thy`%} is loaded into the system. The message `{\small\verb%Theory thy loaded%}' is printed.  The
+effect of the call may not be written to the theory file of the segment until
+{\small\verb%close_theory%} is invoked.  If HOL is quitted before this, the effect may not
+persist to future HOL sessions.
+
+\FAILURE
+Executing {\small\verb%new_parent `thy`%} will fail if the system is not in draft mode. It
+will fail if {\small\verb%`thy`%} is not a theory on the current search path. It will fail
+if there is a type in theory {\small\verb%`thy`%} with the same name as a type in the
+current theory. It will fail if there is a constant in theory {\small\verb%`thy`%} with the
+same name as a constant in the current theory.
+It will fail if an ancestor of theory {\small\verb%`thy`%} has been extended with
+either new types or constants which clash with names in theory {\small\verb%`thy`%}.
+ It will also fail if any of the theory files of theory {\small\verb%`thy`%} have been damaged.
+On failure, the system recovers cleanly, unloading any theory segments it had
+loaded before the failure was detected.
+
+\SEEALSO
+close_theory, extend_theory, new_theory, print_theory, search_path.  
+
+\ENDDOC
+\DOC{new\_prim\_rec\_definition}
+
+\TYPE {\small\verb%new_prim_rec_definition : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+Define a primitive recursive function over the type {\small\verb%:num%}.
+
+\DESCRIBE
+The function {\small\verb%new_prim_rec_definition%} provides the facility for defining
+primitive recursive functions on the type {\small\verb%:num%}. It takes a pair argument,
+consisting of the name under which the resulting definition will be saved in
+the current theory segment, and a term giving the desired definition.  The
+value returned by {\small\verb%new_prim_rec_definition%} is a theorem which states the
+definition requested by the user.  This theorem is derived by formal proof from
+an instance of the theorem {\small\verb%num_Axiom%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !e f. ?! fn. (fn 0 = e) /\ (!n. fn(SUC n) = f(fn n)n)
+\end{verbatim}}
+
+Evaluating
+{\par\samepage\setseps\small\begin{verbatim}
+   new_prim_rec_definition
+    (`fun_DEF`,
+     "(fun x_1 ... 0 ... x_i = f_1[x_1, ..., x_i] /\
+      (fun x_1 ... (SUC n) ... x_i = 
+               f_2[fun t_1 ... n ... t_i, x_1, ..., n, ..., x_i]");;
+\end{verbatim}}
+\noindent automatically proves the theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |-  ?fun. !x_1 ... x_i. fun x_1 ... 0 ... x_i = f_1[x_1, ..., x_i] /\
+             !x_1 ... x_i. fun (SUC n) x_1 ... x_i = 
+                               f_2[fun t_1 ... n ... t_i, x_1, ..., n, ...,x_i]
+\end{verbatim}}
+\noindent and then declares a new constant {\small\verb%fun%} with this property as its
+specification. This constant specification is returned as a theorem by 
+{\small\verb%new_prim_rec_definition%} and is saved with name {\small\verb%fun_DEF%} in the
+current theory segment. 
+
+The ML function {\small\verb%new_prim_rec_definition%} also allows the user to
+partially specify the value of a function defined (possibly recursively) on the
+natural numbers by giving its value for only one of {\small\verb%0%} or {\small\verb%SUC n%}.  See the
+example below.
+
+\FAILURE
+Failure occurs if HOL cannot prove there is a function satisfying the
+specification (ie. if the term supplied to {\small\verb%new_prim_rec_definition%}
+is not a well-formed primitive recursive definition), or if
+any other condition for making a constant specification is violated
+(see the failure conditions for {\small\verb%new_specification%}).
+
+\EXAMPLE
+A curried addition function {\small\verb%plus:num->num->num%} can be defined by primitive
+recursion on its first argument:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let PLUS = new_prim_rec_definition           
+   #           (`PLUS`,
+   #            "(plus 0 n = n) /\                     
+   #             (plus (SUC m) n = SUC(plus m n))");;
+   PLUS = |- (!n. plus 0 n = n) /\ (!m n. plus(SUC m)n = SUC(plus m n))
+\end{verbatim}}
+\noindent or by primitive recursion on its second argument:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let PLUS = new_prim_rec_definition
+   #            (`PLUS`,
+   #             "(plus m 0 = m) /\
+   #              (plus m (SUC n) = SUC(plus m n))");;
+   PLUS = |- (!m. plus m 0 = m) /\ (!m n. plus m(SUC n) = SUC(plus m n))
+\end{verbatim}}
+\noindent A decrement function {\small\verb%DEC%}, whose value is specified for only
+positive natural numbers, can be defined using {\small\verb%new_prim_rec_definition%}
+as follows
+{\par\samepage\setseps\small\begin{verbatim}
+   #let DEC = new_prim_rec_definition
+   #            (`DEC`, "DEC (SUC n) = n");;
+   DEC = |- !n. DEC(SUC n) = n
+\end{verbatim}}
+\noindent This definition specifies the value of the function {\small\verb%DEC%} only for
+positive natural numbers. In particular, the value of {\small\verb%DEC 0%} is left
+unspecified, and the only non-trivial property that can be proved to hold of
+the constant {\small\verb%DEC%} is the property stated by the theorem returned by the 
+call to {\small\verb%new_prim_rec_definition%} shown in the session above.
+
+\SEEALSO 
+new_definition, new_infix_definition, new_infix_list_rec_definition,
+new_infix_prim_rec_definition, new_list_rec_definition,
+new_recursive_definition, new_type_definition, new_specification, num_Axiom.
+
+\ENDDOC
+\DOC{new\_special\_symbol}
+
+\TYPE {\small\verb%new_special_symbol : (string -> void)%}\egroup
+
+\SYNOPSIS
+Adds new string to the list of special symbols.
+
+\DESCRIBE
+An identifier, at the ML or object level, is either alphanumeric, e.g. {\small\verb%true%}
+or {\small\verb%T%}, or consists of a special symbol which starts with a non-alphanumeric
+character, e.g. {\small\verb%==>%} or {\small\verb%+%}. It is a consequence of the non-backtracking
+implementation of lexical analysis that any (non-null) initial segment of a
+special symbol is also a special symbol, so from the above we know that {\small\verb%==%}
+and {\small\verb%=%} are. The function {\small\verb%new_special_symbol%} makes the given string and its
+non-null initial segments into special symbols, provided the string does not
+start with an alphanumeric character (according to {\small\verb%is_alphanum%}).
+
+\FAILURE
+Fails if the string provided starts with an alphanumeric character. The test is
+performed using the function {\small\verb%is_alphanum%}, so this may include some unexpected
+characters if {\small\verb%new_alphanum%} has been used.
+
+\EXAMPLE
+The call:
+{\par\samepage\setseps\small\begin{verbatim}
+   new_special_symbol `.EQ.`;;
+\end{verbatim}}
+\noindent makes the following three strings special symbols:
+{\par\samepage\setseps\small\begin{verbatim}
+   .E  .EQ  .EQ.
+\end{verbatim}}
+\SEEALSO
+is_alphanum, new_alphanum, special_symbols.
+
+\ENDDOC
+\DOC{new\_stack}
+
+\TYPE {\small\verb%new_stack : (goal -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{new\_theory}
+
+\TYPE {\small\verb%new_theory : (string -> void)%}\egroup
+
+\SYNOPSIS
+Creates a new theory by extending the current theory with a new theory segment.
+
+\DESCRIBE
+A theory consists of a hierarchy of named parts called theory segments. The
+theory segment at the top of the hierarchy tree in each theory is said to be
+current. All theory segments have a theory of the same name  associated with
+them consisting of the theory segment itself and all its ancestors.
+Each axiom,
+definition, specification and theorem belongs to a particular theory segment.
+
+Calling {\small\verb%new_theory `thy`%} creates a new theory segment and associated
+theory having name {\small\verb%`thy`%}. The theory segment which was current before the
+call becomes a parent of the new theory segment.
+The new theory therefore 
+consists of the current theory extended with the new theory segment.
+The new theory segment replaces its parent as the current theory segment.
+The call switches the system into draft
+mode. This allows new axioms, constants, types, constant specifications, infix
+constants, binders and parents to be added to the theory segment.
+Inconsistencies will be introduced into the theory if inconsistent
+axioms are asserted.  New theorems can also be added as when in proof mode.
+The theory file in which the data of the new theory segment is ultimately
+stored will have name 
+{\small\verb%thy.th%} in the directory from which HOL was called. The theory segment might
+not be written to this file until the session is finished with a call to
+{\small\verb%close_theory%}. If HOL is quitted without closing the session with 
+{\small\verb%close_theory%}, parts of the theory segment created during the session may be
+lost. If the system is in draft mode when a call to {\small\verb%new_theory%} is made,
+the previous session is closed; all changes made in it will
+be written to the associated theory file.
+
+\FAILURE
+The call {\small\verb%new_theory `thy`%} will fail if there already exists a file {\small\verb%thy.th%}
+in the current search path. It will also fail if the name {\small\verb%thy.th%} is
+unsuitable for a filename. Since it could involve writing to the file system,
+if a write fails for any reason {\small\verb%new_theory%} will fail.
+
+\USES
+Hierarchically extending the current theory.
+By splitting a theory into theory segments using {\small\verb%new_theory%}, the work
+required if definitions, etc., need to be changed is minimized. Only the
+associated segment and its descendants need be redefined. 
+
+\SEEALSO
+close_theory, current_theory, extend_theory, load_theory, new_axiom,
+new_binder, new_constant, new_definition, new_infix, new_parent,
+new_specification, new_type, print_theory, save_thm, search_path.
+
+\ENDDOC
+\DOC{nil\_term\_net}
+
+\TYPE {\small\verb%nil_term_net : * term_net%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{n\_strip\_quant}
+
+\TYPE {\small\verb%n_strip_quant : ((* -> (** # *)) -> int -> * -> (** list # *))%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{p}
+
+\TYPE {\small\verb%p : (int -> void)%}\egroup
+
+\SYNOPSIS
+Prints the top levels of the subgoal package goal stack.
+
+\DESCRIBE
+The function {\small\verb%p%} is part of the subgoal package. It is an abbreviation for the function {\small\verb%print_state%}.
+For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\FAILURE
+Never fails.
+
+\USES
+Examining the proof state during an interactive proof session.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{paired\_delete\_thm}
+
+\TYPE {\small\verb%paired_delete_thm : ((string # string) -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{paired\_new\_type}
+
+\TYPE {\small\verb%paired_new_type : ((int # string) -> void)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{paired\_theorem}
+
+\TYPE {\small\verb%paired_theorem : ((string # string) -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{pop\_proofs}
+
+\TYPE {\small\verb%pop_proofs : (subgoals list -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{pop\_proofs\_print}
+
+\TYPE {\small\verb%pop_proofs_print : (subgoals list -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{pp\_axiom}
+
+\TYPE {\small\verb%pp_axiom : (string -> string -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{preterm\_abs}
+
+\TYPE {\small\verb%preterm_abs : (preterm # preterm) -> preterm%}\egroup
+
+\SYNOPSIS
+Abstraction constructor for preterms.
+
+\DESCRIBE
+{\small\verb%preterm_abs%} is analogous to the oft-used ML function {\small\verb%mk_abs%}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {\small\verb%mk_abs%} are not encountered until the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#let x = preterm_typed(preterm_var `x`,":bool");;
+x = preterm_typed((preterm_var `x`), ":bool") : preterm
+
+#let y = preterm_const `T`;;
+y = preterm_const `T` : preterm
+
+#preterm_abs(x,y);;
+preterm_abs((preterm_typed((preterm_var `x`), ":bool")),
+            preterm_const `T`)
+: preterm
+
+#preterm_to_term it;;
+"\x. T" : term
+
+#preterm_abs(y,x);;
+preterm_abs((preterm_const `T`),
+            preterm_typed((preterm_var `x`), ":bool"))
+: preterm
+
+#preterm_to_term it;;
+evaluation failed     mk_abs
+\end{verbatim}}
+
+\SEEALSO
+mk_abs, preterm_antiquot, preterm_comb, preterm_const, preterm_typed, 
+preterm_var, preterm_to_term.
+
+\ENDDOC
+
+\DOC{preterm\_antiquot}
+
+\TYPE {\small\verb%preterm_antiquot : term -> preterm%}\egroup
+
+\SYNOPSIS
+Antiquotation constructor for preterms.
+
+\DESCRIBE
+{\small\verb%preterm_antiquot%} is analogous to the oft-used HOL strategy of antiquotation.
+Since, however, preterms are untypechecked terms, the restrictions imposed 
+when using antiquotation are not encountered until the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#preterm_antiquot "T";;
+preterm_antiquot"T" : preterm
+
+#preterm_comb(preterm_const `~`,it);;
+preterm_comb((preterm_const `~`), preterm_antiquot"T") : preterm
+
+#preterm_to_term it;;
+"~T" : term
+\end{verbatim}}
+
+\SEEALSO
+preterm_abs, preterm_comb, preterm_const, preterm_typed, preterm_var,
+preterm_to_term.
+
+\ENDDOC
+
+\DOC{preterm\_comb}
+
+\TYPE {\small\verb%preterm_comb : (preterm # preterm) -> preterm%}\egroup
+
+\SYNOPSIS
+Combination constructor for preterms (function applications).
+
+\DESCRIBE
+{\small\verb%preterm_comb%} is analogous to the oft-used ML function {\small\verb%mk_comb%}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {\small\verb%mk_comb%} are not encountered until the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#preterm_comb(preterm_comb(preterm_const `+`,preterm_var `x`),
+              preterm_const `1`);;
+preterm_comb((preterm_comb((preterm_const `+`), preterm_var `x`)),
+             preterm_const `1`)
+: preterm
+
+#preterm_to_term it;;
+"x + 1" : term
+\end{verbatim}}
+
+\SEEALSO
+mk_comb, preterm_abs, preterm_antiquot, preterm_const, preterm_typed,
+preterm_var, preterm_to_term.
+
+\ENDDOC
+
+\DOC{preterm\_const}
+
+\TYPE {\small\verb%preterm_const : string -> preterm%}\egroup
+
+\SYNOPSIS
+Constant constructor for preterms.
+
+\DESCRIBE
+{\small\verb%preterm_const%} is analogous to the oft-used ML function {\small\verb%mk_var%}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {\small\verb%mk_const%} (i.e. that the constant must be either implicitly or
+explicitly associated with a specific type) are not encountered until the 
+preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#preterm_const `T`;;
+preterm_const `T` : preterm
+
+#preterm_to_term it;;
+"T" : term
+
+#type_of it;;
+":bool" : type
+\end{verbatim}}
+
+\SEEALSO
+mk_const, preterm_abs, preterm_antiquot, preterm_comb, preterm_typed, 
+preterm_var, preterm_to_term.
+
+\ENDDOC
+
+\DOC{preterm\_to\_term}
+
+\TYPE {\small\verb%preterm_to_term : preterm -> term%}\egroup
+
+\SYNOPSIS
+Convert a preterm to a HOL term.
+
+\DESCRIBE
+Preterms are untypechecked terms, and are included in the HOL system
+to allow embedding of special purpose parsers, and to provide a way
+of experimenting with other forms of type checking.  {\small\verb%preterm_to_term%} is
+the hook for pushing preterms through the standard HOL typechecker.
+
+\FAILURE
+Fails with the appropriate HOL error message.
+
+\SEEALSO
+preterm_abs, preterm_antiquot, preterm_comb, preterm_const, preterm_typed,
+preterm_var.
+
+\ENDDOC
+
+\DOC{preterm\_typed}
+
+\TYPE {\small\verb%preterm_typed : (preterm # type) -> preterm%}\egroup
+
+\SYNOPSIS
+Constructor for typed preterms.
+
+\DESCRIBE
+{\small\verb%preterm_typed%} allows type information to be associated with various
+substructures of a given preterm.  One can, therefore, construct improperly
+typed preterms that will fail to typecheck when {\small\verb%preterm_to_term%} is
+invoked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#preterm_typed(preterm_const `T`,":bool");;
+preterm_typed((preterm_const `T`), ":bool") : preterm
+
+#preterm_to_term it;;
+"T" : term
+
+#preterm_typed(preterm_const `T`,":num");;
+preterm_typed((preterm_const `T`), ":num") : preterm
+
+#preterm_to_term it;;
+evaluation failed     types
+\end{verbatim}}
+
+\SEEALSO
+preterm_abs, preterm_antiquot, preterm_comb, preterm_const, preterm_var,
+preterm_to_term.
+
+\ENDDOC
+
+\DOC{preterm\_var}
+
+\TYPE {\small\verb%preterm_var : string -> preterm%}\egroup
+
+\SYNOPSIS
+Variable constructor for preterms.
+
+\DESCRIBE
+{\small\verb%preterm_var%} is analogous to the oft-used ML function {\small\verb%mk_var%}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {\small\verb%mk_var%} (i.e. that the variable must be either implicitly or
+explicitly associated with a specific type) are not encountered until 
+the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#preterm_var `x`;;
+preterm_var `x` : preterm
+
+#preterm_to_term it;;
+Indeterminate types:  "x:?"
+
+evaluation failed     types indeterminate
+
+#preterm_typed(preterm_var `x`,":bool");;
+preterm_typed((preterm_var `x`), ":bool") : preterm
+
+#preterm_to_term it;;
+"x" : term
+\end{verbatim}}
+
+\SEEALSO
+mk_var, preterm_abs, preterm_antiquot, preterm_comb, preterm_const, 
+preterm_typed, preterm_to_term.
+
+\ENDDOC
+
+\DOC{print\_all\_thm }
+
+\TYPE {\small\verb%print_all_thm : (thm -> void)%}\egroup
+
+\SYNOPSIS 
+Prints a theorem in full.
+
+\DESCRIBE 
+The function {\small\verb%print_all_thm%} will cause the system to print a
+theorem with its hypotheses. 
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+As a simple example of the use of {\small\verb%print_all_thm%} we assume the
+follwing two theorems:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let a = ASSUME "A:bool";;
+   a = . |- A
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+   #let b = ASSUME "A ==> B";;
+   b = . |- A ==> B
+\end{verbatim}}
+\noindent Using Modus Ponens (MP) as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let r = MP b a;;
+\end{verbatim}}
+\noindent The system responds with:
+{\par\samepage\setseps\small\begin{verbatim}
+   r = .. |- B
+\end{verbatim}}
+\noindent By using {\small\verb%print_all_thm%} as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   #print_all_thm r;;
+\end{verbatim}}
+\noindent The system then pretty prints:
+{\par\samepage\setseps\small\begin{verbatim}
+   A ==> B, A |- B() : void
+\end{verbatim}}
+\noindent This shows all the assumptions of the theorem in a comma separated
+list.
+
+\SEEALSO
+print_thm
+
+\ENDDOC
+\DOC{print\_goal }
+
+\TYPE {\small\verb%print_goal : (goal -> void)%}\egroup
+
+\SYNOPSIS 
+The function prints the goal and assumptions.
+
+\DESCRIBE 
+The function {\small\verb%print_goal%} takes a goal as argument and prints the goal
+and its list of assumptions. 
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+If we define a goal in the following manner:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let goal = ([],"!a. a /\ T ==> a");;
+   goal = ([], "!a. a /\ T ==> a") : (* list # term)
+
+\end{verbatim}}
+\noindent We then do:
+{\par\samepage\setseps\small\begin{verbatim}
+   #print_goal goal;;
+\end{verbatim}}
+\noindent The system responds with:
+{\par\samepage\setseps\small\begin{verbatim}
+   "!a. a /\ T ==> a"
+
+   () : void
+\end{verbatim}}
+\noindent If there were assumptions these would also have been printed.
+
+\SEEALSO
+print_thm
+
+\ENDDOC
+\DOC{print\_hyps}
+
+\TYPE {\small\verb%print_hyps : (term list -> void)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{print\_stack}
+
+\TYPE {\small\verb%print_stack : (subgoals list -> int -> void)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{print\_state}
+
+\TYPE {\small\verb%print_state : (int -> void)%}\egroup
+
+\SYNOPSIS
+Prints the top levels of  the subgoal package goal stack.
+
+\DESCRIBE
+The function {\small\verb%print_state%} is part of the subgoal package. Calling {\small\verb%print_state n%} prints the top {\small\verb%n%} levels of the goal stack of the current proof state (that is, the top
+{\small\verb%n%} levels of unproven subgoals). 
+If more than one subgoal is produced, they are printed from the bottom of the stack so that the current goal is printed last. 
+If {\small\verb%n%} is negative or is greater than the
+number of levels on the goal stack, the whole stack is printed. If no goal has
+been set or {\small\verb%n%} is zero, nothing will be printed. If the original goal has
+just been proved so that the proof state consists of a theorem, and 
+{\small\verb%n%} is non-zero, {\small\verb%goal proved%} is printed.
+For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+() : void
+
+#e CONJ_TAC;;
+OK..
+2 subgoals
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+
+#print_state 2;;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+2 subgoals
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+\end{verbatim}}
+\USES
+Examining the proof state during an interactive proof session.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{print\_subgoals}
+
+\TYPE {\small\verb%print_subgoals : (subgoals -> void)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{print\_term}
+
+\TYPE {\small\verb%print_term : term -> void%}\egroup
+
+\SYNOPSIS
+Prints a HOL term to the terminal.
+
+\DESCRIBE
+{\small\verb%print_term tm%} returns {\small\verb%():void%} with the side-effect of printing the value
+of {\small\verb%tm%} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#print_term "x /\ y";;
+"x /\ y"() : void
+\end{verbatim}}
+\SEEALSO
+print_begin, print_end, print_newline, show_types, print_type, print_thm.
+
+\ENDDOC
+\DOC{print\_theory}
+
+\TYPE {\small\verb%print_theory : string -> void%}\egroup
+
+\SYNOPSIS
+Prints the contents of a HOL theory to the terminal.
+
+\DESCRIBE
+{\small\verb%print_theory `name`%} returns {\small\verb%():void%} with the side-effect of printing the
+contents of the theory called {\small\verb%name%}. {\small\verb%print_theory `-`%} prints the current
+theory. The following information is displayed: the parents of the theory,
+types defined within the theory, type abbreviations defined within the theory,
+constants of the theory, the binders and infixes (subsets of the constants),
+the axioms, the definitions, and the derived theorems.
+
+\FAILURE
+Fails if the named theory does not exist or is not an ancestor of the current
+theory.
+
+\EXAMPLE
+To obtain an example, type {\small\verb%print_theory `bool`;;%} to the system.
+
+\SEEALSO
+print_type, print_term, print_thm.
+
+\ENDDOC
+\DOC{print\_thm}
+
+\TYPE {\small\verb%print_thm : thm -> void%}\egroup
+
+\SYNOPSIS
+Prints a HOL theorem to the terminal (abbreviating assumptions).
+
+\DESCRIBE
+{\small\verb%print_thm th%} returns {\small\verb%():void%} with the side-effect of printing the value
+of {\small\verb%th%} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+Each assumption of the theorem is printed as one dot (period, full stop).
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#print_thm CONJ_SYM;;
+|- !t1 t2. t1 /\ t2 = t2 /\ t1() : void
+\end{verbatim}}
+\SEEALSO
+print_all_thm, print_begin, print_end, print_newline, show_types, print_type,
+print_term.
+
+\ENDDOC
+\DOC{print\_type}
+
+\TYPE {\small\verb%print_type : type -> void%}\egroup
+
+\SYNOPSIS
+Prints a HOL type to the terminal.
+
+\DESCRIBE
+{\small\verb%print_type ty%} returns {\small\verb%():void%} with the side-effect of printing the value
+of {\small\verb%ty%} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#print_type ":bool";;
+":bool"() : void
+\end{verbatim}}
+\SEEALSO
+print_begin, print_end, print_newline, print_term, print_thm.
+
+\ENDDOC
+\DOC{prove}
+
+\TYPE {\small\verb%prove : ((term # tactic) -> thm)%}\egroup
+
+\SYNOPSIS
+Attempts to prove a boolean term using the supplied tactic.
+
+\DESCRIBE
+When applied to a term-tactic pair {\small\verb%(tm,tac)%}, the function {\small\verb%prove%} attempts to
+prove the goal {\small\verb%?- tm%}, that is, the term {\small\verb%tm%} with no assumptions, using the
+tactic {\small\verb%tac%}. If {\small\verb%prove%} succeeds, it returns the corresponding theorem
+{\small\verb%A |- tm%}, where the assumption list {\small\verb%A%} may not be empty if the tactic is
+invalid; {\small\verb%prove%} has no inbuilt validity-checking.
+
+\FAILURE
+Fails if the term is not of type {\small\verb%bool%} (and so cannot possibly be
+the conclusion of a theorem), or if the tactic cannot solve the goal.
+
+\COMMENTS
+The function {\small\verb%PROVE%} provides almost identical functionality, and will
+also list unsolved goals if the tactic fails. It is therefore preferable
+for most purposes.
+
+\SEEALSO
+PROVE, prove_thm, TAC_PROOF, VALID.
+
+\ENDDOC
+\DOC{prove\_thm}
+
+\TYPE {\small\verb%prove_thm : ((string # term # tactic) -> thm)%}\egroup
+
+\SYNOPSIS
+Attempts to prove a boolean term using the supplied tactic then save the
+theorem.
+
+\DESCRIBE
+When applied to a triple {\small\verb%(s,tm,tac)%}, giving the name to
+save the theorem under, the term to prove (with no assumptions) and the tactic
+to perform the proof, the function {\small\verb%prove_thm%} attempts to prove the goal
+{\small\verb%?- tm%}, that is, the term {\small\verb%tm%} with no assumptions, using the tactic {\small\verb%tac%}. If
+{\small\verb%prove_thm%} succeeds, it attempts to save the resulting theorem in the current
+theory segment, and if this succeeds, the saved theorem is returned.
+
+\FAILURE
+Fails if the term is not of type {\small\verb%bool%} (and so cannot possibly be
+the conclusion of a theorem), or if the tactic cannot solve the goal.
+In the latter case {\small\verb%prove_thm%} will list the unsolved goals to help the user.
+In addition, {\small\verb%prove_thm%} will fail if the theorem cannot be saved, e.g. because
+there is already a theorem of that name in the current theory segment, or if
+the resulting theorem has assumptions - clearly this can only happen if the
+tactic was invalid, so this gives some measure of validity checking.
+
+\SEEALSO
+prove, PROVE, TAC_PROOF, VALID.
+
+\ENDDOC
+\DOC{push\_fsubgoals}
+
+\TYPE {\small\verb%push_fsubgoals : (subgoals list -> tactic -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{push\_print}
+
+\TYPE {\small\verb%push_print : (subgoals -> subgoals list -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{push\_subgoals}
+
+\TYPE {\small\verb%push_subgoals : (subgoals list -> tactic -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{r}
+
+\TYPE {\small\verb%r : (int -> void)%}\egroup
+
+\SYNOPSIS
+Reorders the subgoals on top of the subgoal package goal stack.
+
+\DESCRIBE
+The function {\small\verb%r%} is part of the subgoal package. It  is an abbreviation for {\small\verb%rotate%}. For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\FAILURE
+As for {\small\verb%rotate%}.
+
+\USES
+Proving subgoals in a different order to that generated by the subgoal package.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, print_state,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{rand}
+
+\TYPE {\small\verb%rand : term -> term%}\egroup
+
+\SYNOPSIS
+Returns the operand from a combination (function application).
+
+\DESCRIBE
+{\small\verb%rand("t1 t2")%} returns {\small\verb%"t2"%}.
+
+\FAILURE
+Fails with {\small\verb%rand%} if term is not a combination.
+
+\SEEALSO
+rator, dest_comb.
+
+\ENDDOC
+\DOC{rator}
+
+\TYPE {\small\verb%rator : term -> term%}\egroup
+
+\SYNOPSIS
+Returns the operator from a combination (function application).
+
+\DESCRIBE
+{\small\verb%rator("t1 t2")%} returns {\small\verb%"t1"%}.
+
+\FAILURE
+Fails with {\small\verb%rator%} if term is not a combination.
+
+\SEEALSO
+rand, dest_comb.
+
+\ENDDOC
+\DOC{rep\_goals}
+
+\TYPE {\small\verb%rep_goals : (goalstack -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{rhs}
+
+\TYPE {\small\verb%rhs : term -> term%}\egroup
+
+\SYNOPSIS
+Returns the right-hand side of an equality.
+
+\DESCRIBE
+{\small\verb%rhs("t1 = t2")%} returns {\small\verb%"t2"%}.
+
+\FAILURE
+Fails with {\small\verb%rhs%} if term is not an equality.
+
+\SEEALSO
+lhs, dest_eq.
+
+\ENDDOC
+\DOC{root\_goal}
+
+\TYPE {\small\verb%root_goal : tactic%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{rotate}
+
+\TYPE {\small\verb%rotate : (int -> void)%}\egroup
+
+\SYNOPSIS
+Reorders the subgoals on top of the subgoal package goal stack.
+
+\DESCRIBE
+
+The function {\small\verb%rotate%} is part of the subgoal package. Calling {\small\verb%rotate n%} forms a new proof state. It
+rotates, by {\small\verb%n%} steps, the subgoals in the top level of the
+goal stack of the current proof state (i.e., those resulting from the
+application of the most recent tactic). 
+Goals are rotated upwards on the stack, with the top goals being moved to the bottom of the level.
+If {\small\verb%n%} is greater than the number of goals on the level, the rotation is
+performed modulo the number of subgoals. The previous proof state is stored on
+the backup list, so may be restored by a call to {\small\verb%backup%}. The subgoals of the
+level are printed from the bottom of the stack.
+ The function {\small\verb%rotate%} is abbreviated by the function {\small\verb%r%}.
+For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\FAILURE
+{\small\verb%rotate%} will fail if no goal has been set or if the last goal set has been completely proved. It will diverge if given a
+negative argument.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#rotate 1;;
+evaluation failed     rotate_goals
+
+#g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3]) /\ (HD (TL[1;2;3]) = 2)";;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3]) /\ (HD(TL[1;2;3]) = 2)"
+
+() : void
+
+#e (REPEAT CONJ_TAC);;
+OK..
+3 subgoals
+"HD(TL[1;2;3]) = 2"
+
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+
+#rotate 1;;
+3 subgoals
+"HD[1;2;3] = 1"
+
+"HD(TL[1;2;3]) = 2"
+
+"TL[1;2;3] = [2;3]"
+
+() : void
+\end{verbatim}}
+\USES
+Proving subgoals in a different order to that generated by  the subgoal package.
+The subgoals of a goal may be considered in any order.  However,
+subgoals deeper in the stack cannot be worked on, nor can subgoals higher in
+the proof tree.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{rotate\_goals}
+
+\TYPE {\small\verb%rotate_goals : (subgoals -> subgoals)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{rotate\_top}
+
+\TYPE {\small\verb%rotate_top : (int -> subgoals list -> subgoals list)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{save\_thm}
+
+\TYPE {\small\verb%save_thm : ((string # thm) -> thm)%}\egroup
+
+\SYNOPSIS
+Stores a theorem in the current theory segment.
+
+\DESCRIBE
+The call {\small\verb%save_thm(`name`, th)%} adds the theorem {\small\verb%th%} to the
+current theory segment under the name {\small\verb%`name`%}.
+The theorem is returned as a value.
+The call can be made
+in both proof and draft mode.
+The name {\small\verb%`name`%} must be a distinct name within the theory segment, but may
+be the same as for items within other theory segments of the theory.
+ If the current theory segment
+is named {\small\verb%`thy`%}, the theorem will be written to the file {\small\verb%thy.th%} in the
+directory from which HOL was called. 
+If the system is in draft mode, other changes made to the current theory
+segment  during the session will also be written to the theory file. If the
+theory file does not exist, it will be created. 
+
+\FAILURE
+A call to {\small\verb%save_thm%} will fail if  the name given is the same as
+the name of an existing fact in the current theory segment.
+Saving the theorem involves writing to the file system. If the write fails for
+any reason {\small\verb%save_thm%} will fail. For example, on start up the initial
+theory is {\small\verb%HOL%}. The associated theory files are read-only so an attempt to
+save a theorem in that theory segment will fail.
+
+\USES
+Adding theorems to the current theory. Saving theorems for retrieval
+in  later sessions. The theorem may be retrieved using the function
+{\small\verb%theorem%}. Binding the result of {\small\verb%save_thm%} to an ML variable makes it easy to
+access the theorem in the current terminal session.
+
+\SEEALSO
+new_theory, prove_thm, save_top_thm, theorem.
+
+\ENDDOC
+\DOC{save\_top\_thm}
+
+\TYPE {\small\verb%save_top_thm : (string -> thm)%}\egroup
+
+\SYNOPSIS
+Stores the theorem just proved with the subgoal package in the current theory segment.
+
+\DESCRIBE
+The function {\small\verb%save_top_thm%} is part of the subgoal package.  A proof state of
+the package consists of either goal and justification stacks if a proof is in
+progress or a theorem if a proof has just been completed. If the proof state
+consists of a theorem, the call {\small\verb%save_top_thm `name`%} adds that theorem to
+the current theory segment under the name {\small\verb%`name`%}. 
+ The theorem is returned as a value.
+The name {\small\verb%`name`%} must be a distinct name within the theory segment, but may
+be the same as for items within other theory segments of the theory.
+ If the current theory
+segment is named {\small\verb%`thy`%}, the theorem will be written to the file {\small\verb%thy.th%} in
+the directory from which HOL was called.
+If the system is in draft mode, other changes made to the current theory
+segment  during the session will also be written to the theory file. If the
+theory file does not exist, it will be created.
+The call can be made in both proof and draft mode.  For a description of the
+subgoal package, see {\small\verb%set_goal%}.
+
+\FAILURE
+A call to {\small\verb%save_top_thm%} will fail if the proof state does not hold a theorem.
+This will be so either because no goal has been set or because a proof is in
+progress with unproven subgoals. It will fail if the name given is the same as
+the name of an existing fact in the current theory segment.
+Storing the theorem involves writing to the file system. If the write fails for
+any reason {\small\verb%save_top_thm%} will fail. For example, on start up the initial
+theory is {\small\verb%HOL%}. The associated theory files are read-only so an attempt to
+store a theorem in that theory segment will fail.
+
+\USES
+Adding theorems to the current theory. Saving theorems for retrieval
+in later sessions. The theorem may be retrieved using the function
+{\small\verb%theorem%}.  Binding the result of {\small\verb%save_top_thm%} to an ML variable makes it
+easy to access the theorem in the current terminal session.
+
+
+\SEEALSO
+get_state, new_theory, print_state, prove_thm, save_thm, set_goal, set_state,
+theorem, top_thm.
+
+\ENDDOC
+\DOC{set\_goal}
+
+\TYPE {\small\verb%set_goal : (goal -> void)%}\egroup
+
+\SYNOPSIS
+Initializes the subgoal package with a new goal.
+
+\DESCRIBE 
+The function {\small\verb%set_goal%} initializes the subgoal management package. A  proof
+state of the 
+package consists of either a goal stack and a justification stack if a proof is in   
+progress, or a theorem if a proof has just been completed.  {\small\verb%set_goal%} sets a
+new proof state consisting of an empty justification stack and a goal stack
+with the given goal as its sole goal. The goal is printed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#set_goal([], "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])");;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+() : void
+\end{verbatim}}
+\USES
+Starting  an interactive proof session with the subgoal package.
+
+The subgoal package implements a simple framework for interactive goal-directed
+ proof.  When conducting a proof that involves many subgoals and
+tactics, the user must keep track of all the justifications and compose them
+in the correct order.  While this is feasible even in large proofs, it is
+tedious.  The subgoal package provides a way of building and traversing the
+tree of subgoals top-down, stacking the justifications and applying them
+properly.
+
+The package maintains a proof state consisting of either a goal stack of
+outstanding goals and a justification stack, or a theorem.  Tactics are used
+to expand the current goal (the one on the top of the goal stack) into
+subgoals and justifications. These are pushed onto the goal stack and
+justification stack, respectively, to form a new proof state. Several
+preceding proof states are saved and can be returned to if a mistake is made
+in the proof.  The goal stack is divided into levels, a new level being
+created each time a tactic is successfully applied to give new subgoals.  The
+subgoals of the current level may be considered in any order.
+
+If a tactic solves the current goal (returns an empty subgoal list), then
+its justification is used to prove a corresponding theorem. This theorem is
+then incorporated into the justification of the parent goal. If the subgoal
+was the last subgoal of the level, the level is removed and the parent
+goal is proved using  its (new) justification. This process is repeated
+until a level with unproven subgoals is reached.
+The next goal on the goal stack then becomes the current goal.
+If all the subgoals are proved, the resulting proof state consists
+of the theorem proved by the justifications. This theorem may be accessed and
+saved.
+
+
+\COMMENTS
+A more sophisticated subgoal management package will be implemented in the
+future.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_state, top_goal, top_thm.
+
+\ENDDOC
+\DOC{set\_lambda}
+
+\TYPE {\small\verb%set_lambda : (string -> string)%}\egroup
+
+\SYNOPSIS
+Sets the `lambda' symbol used in printing terms.
+
+\DESCRIBE
+If {\small\verb%s%} is a string, then {\small\verb%set_lambda s%} sets to {\small\verb%s%} the `lambda' symbol (by
+default `{\small\verb%\%}') which is used to represent lambda-abstraction in terms.
+The call returns the previous string used for this purpose. The call affects
+the printing of terms, but the original symbol is still expected by the
+quotation parser.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+In the following, the lambda symbol is set to `{\small\verb%fn%}', and the effect on the
+printing of a typical term is illustrated.
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_lambda `fn`;;
+   `\` : string
+
+   #"\x. SUC x";;
+   "fn x. SUC x" : term
+\end{verbatim}}
+\SEEALSO
+set_prompt, set_turnstile.
+
+\ENDDOC
+\DOC{set\_state}
+
+\TYPE {\small\verb%set_state : (goalstack -> void)%}\egroup
+
+\SYNOPSIS
+Sets the current proof state of the subgoal package to the one given.
+
+\DESCRIBE
+The function {\small\verb%set_state%} is part of the subgoal package. It restores the current proof
+state to one previously saved (using {\small\verb%get_state%}).
+The restored state will include all unproven subgoals or, if the original goal
+had been proved before the state was saved, the corresponding theorem. The old proof state is placed on the backup list.
+For a description of the subgoal package, see  {\small\verb%set_goal%}.
+
+\USES
+Providing additional backup. Pausing in the proof of a goal to allow  lemmas
+to be proved. 
+{\small\verb%set_state%} is used in conjunction with {\small\verb%get_state%}.
+
+\EXAMPLE
+The current state may be  bound to an ML variable ({\small\verb%main_proof%} in this example) using {\small\verb%get_state%}.  
+{\par\samepage\setseps\small\begin{verbatim}
+   #g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+   
+   () : void
+
+   #let main_proof = get_state();;
+   main_proof = - : goalstack
+\end{verbatim}}
+\noindent Other goals may now be set and proved. The proof state may later be restored
+using {\small\verb%set_state%} and the original proof continued.
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_state main_proof;;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+   
+   () : void
+\end{verbatim}}
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, top_goal, top_thm.
+
+\ENDDOC
+\DOC{set\_turnstile}
+
+\TYPE {\small\verb%set_turnstile : (string -> string)%}\egroup
+
+\SYNOPSIS
+Sets the `turnstile' symbol used in printing theorems.
+
+\DESCRIBE
+If {\small\verb%s%} is a string, then {\small\verb%set_turnstile s%} sets to {\small\verb%s%} the `turnstile' symbol
+(by default `{\small\verb%|- %}') which is used to represent entailment, i.e. to separate
+assumptions from conclusion when printing a theorem. The call returns the
+previous string used for the turnstile.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The following shows the turnstile being set to `{\small\verb%|= %}'. A space is necessary
+at the end to separate the conclusion neatly, but not at the beginning.
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_turnstile `|= `;;
+   `|- ` : string
+
+   #ASSUME "F";;
+   . |= F
+\end{verbatim}}
+\SEEALSO
+set_lambda, set_prompt.
+
+\ENDDOC
+\DOC{show\_types}
+
+\TYPE {\small\verb%show_types : bool -> bool%}\egroup
+
+\SYNOPSIS
+Turns printing of HOL types (in terms) on/off.
+
+\DESCRIBE
+Normally HOL types in terms are not printed, since this makes terms hard to
+read. Type printing is enabled by {\small\verb%show_types true%}, and disabled by
+{\small\verb%show_types false%}. When printing of types is enabled, not all variables and
+constants are annotated with a type. The intention is to provide sufficient
+type information to remove any ambiguities without swamping the term with type
+information.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#EQ_EXT;;
+|- !f g. (!x. f x = g x) ==> (f = g)
+
+#show_types true;;
+false : bool
+
+#EQ_EXT;;
+|- !(f:* -> **) (g:* -> **).
+    (!(x:*). (f:* -> **) x = (g:* -> **) x) ==> (f = g)
+\end{verbatim}}
+\COMMENTS
+When {\small\verb%show_types%} is set to {\small\verb%true%}, type information is given for bound
+variables, provided the bound variable is not part of a tuple in a
+tupled-abstraction such as {\small\verb%"\(x,y). x /\ y"%}. Free variables are only
+annotated with a type if they form the whole of the body of an abstraction.
+Partial function applications are given a type if the type is polymorphic
+(contains a type variable).
+
+It is possible to construct an abstraction in which the bound variable has the
+same name but a different type to a variable in the body. In such a case the
+two variables are considered to be distinct. Without type information such a
+term can be very misleading, so it might be a good idea to provide type
+information for the free variable whether or not printing of types is enabled.
+
+\SEEALSO
+print_term.
+
+\ENDDOC
+\DOC{special\_symbols}
+
+\TYPE {\small\verb%special_symbols : (void -> string list)%}\egroup
+
+\SYNOPSIS
+Returns a list of special symbols.
+
+\DESCRIBE
+An identifier, at the ML or object level, is either alphanumeric, e.g. {\small\verb%true%}
+or {\small\verb%T%}, or consists of a special symbol which starts with a non-alphanumeric
+character, e.g. {\small\verb%==>%} or {\small\verb%+%}. It is a consequence of the non-backtracking
+implementation of lexical analysis that any (non-null) initial segment of a
+special symbol is also a special symbol, so from the above we know that {\small\verb%==%}
+and {\small\verb%=%} are. The function {\small\verb%special_symbols%} returns a list of special symbols;
+all non-null initial prefixes of them are also special symbols.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+new_special_symbol.
+
+\ENDDOC
+\DOC{store\_binders}
+
+\TYPE {\small\verb%store_binders : (term list -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{store\_definition}
+
+\TYPE {\small\verb%store_definition : ((string # term) -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{strip\_abs}
+
+\TYPE {\small\verb%strip_abs : term -> goal%}\egroup
+
+\SYNOPSIS
+Iterated term destructor for abstractions.
+
+\DESCRIBE
+{\small\verb%strip_abs("\x1 ... xn. t")%} returns {\small\verb%(["x1";...;"xn"],"t")%}. Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   strip_abs(list_mk_abs(["x1";...;"xn"],"t"))
+\end{verbatim}}
+\noindent will not return {\small\verb%(["x1";...;"xn"],"t")%} if {\small\verb%t%} is an abstraction.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+list_mk_abs, dest_abs.
+
+\ENDDOC
+\DOC{strip\_comb}
+
+\TYPE {\small\verb%strip_comb : term -> (term # term list)%}\egroup
+
+\SYNOPSIS
+Iterated term destructor for combinations (function applications).
+
+\DESCRIBE
+{\small\verb%strip_comb("t t1 ... tn")%} returns {\small\verb%("t",["t1";...;"tn"])%}. Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   strip_comb(list_mk_comb("t",["t1";...;"tn"]))
+\end{verbatim}}
+\noindent will not return {\small\verb%("t",["t1";...;"tn"])%} if {\small\verb%t%} is a combination.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#strip_comb "x /\ y";;
+("$/\", ["x"; "y"]) : (term # term list)
+
+#strip_comb "T";;
+("T", []) : (term # term list)
+\end{verbatim}}
+
+\SEEALSO
+list_mk_comb, dest_comb.
+
+\ENDDOC
+\DOC{strip\_exists}
+
+\TYPE {\small\verb%strip_exists : term -> goal%}\egroup
+
+\SYNOPSIS
+Iterated term destructor for existential quantification.
+
+\DESCRIBE
+{\small\verb%strip_exists("?x1 ... xn. t")%} returns {\small\verb%(["x1";...;"xn"],"t")%}. Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   strip_exists(list_mk_exists(["x1";...;"xn"],"t"))
+\end{verbatim}}
+\noindent will not return {\small\verb%(["x1";...;"xn"],"t")%} if {\small\verb%t%} is an existential
+quantification.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+list_mk_exists, dest_exists.
+
+\ENDDOC
+\DOC{strip\_forall}
+
+\TYPE {\small\verb%strip_forall : term -> goal%}\egroup
+
+\SYNOPSIS
+Iterated term destructor for universal quantification.
+
+\DESCRIBE
+{\small\verb%strip_forall("!x1 ... xn. t")%} returns {\small\verb%(["x1";...;"xn"],"t")%}. Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   strip_forall(list_mk_forall(["x1";...;"xn"],"t"))
+\end{verbatim}}
+\noindent will not return {\small\verb%(["x1";...;"xn"],"t")%} if {\small\verb%t%} is a universal quantification.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+list_mk_forall, dest_forall.
+
+\ENDDOC
+\DOC{strip\_imp}
+
+\TYPE {\small\verb%strip_imp : term -> goal%}\egroup
+
+\SYNOPSIS
+Iterated term destructor for implications.
+
+\DESCRIBE
+{\small\verb%strip_imp("t1 ==> ( ... (tn ==> t)...)")%} returns {\small\verb%(["t1";...;"tn"],"t")%}.
+Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   strip_imp(list_mk_imp(["t1";...;"tn"],"t"))
+\end{verbatim}}
+\noindent will not return {\small\verb%(["t1";...;"tn"],"t")%} if {\small\verb%t%} is an implication.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#strip_imp "(T ==> F) ==> (T ==> F)";;
+(["T ==> F"; "T"], "F") : goal
+\end{verbatim}}
+
+\SEEALSO
+list_mk_imp, dest_imp.
+
+\ENDDOC
+\DOC{strip\_pair}
+
+\TYPE {\small\verb%strip_pair : term -> term list%}\egroup
+
+\SYNOPSIS
+Destructor for terms representing tuples.
+
+\DESCRIBE
+{\small\verb%strip_pair("(t1,...,tn)")%} returns {\small\verb%["t1";...;"tn"]%}.
+A term that is not a tuple is simply returned as the sole element of a list.
+Note that
+{\par\samepage\setseps\small\begin{verbatim}
+   strip_pair(list_mk_pair(["t1";...;"tn"]))
+\end{verbatim}}
+\noindent will not return {\small\verb%["t1";...;"tn"]%} if {\small\verb%tn%} is a pair or a tuple.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#list_mk_pair ["(1,2)";"(3,4)";"(5,6)"];;
+"(1,2),(3,4),5,6" : term
+
+#strip_pair it;;
+["1,2"; "3,4"; "5"; "6"] : term list
+
+#strip_pair "1";;
+["1"] : term list
+\end{verbatim}}
+
+\SEEALSO
+list_mk_pair, dest_pair.
+
+\ENDDOC
+\DOC{theorem}
+
+\TYPE {\small\verb%theorem : (string -> string -> thm)%}\egroup
+
+\SYNOPSIS
+Reads a derived theorem from a given theory segment of the current theory.
+
+\DESCRIBE
+A call of {\small\verb%theorem `thy` `th`%} returns the theorem named {\small\verb%`th`%} from the
+theory segment {\small\verb%`thy`%}. The theory segment {\small\verb%`thy`%} must be part of the current
+theory. The name {\small\verb%`th`%} is the name given to the theorem by the user when it
+was originally added to the theory segment (by, for example, a call to
+{\small\verb%save_thm%}). The name of the current theory segment can be abbreviated by {\small\verb%`-`%}.
+
+\FAILURE
+The call {\small\verb%theorem `thy` `th`%} will fail if the theory segment {\small\verb%`thy`%} is not
+part of the current theory.
+It will fail if there does not exist a derived theorem {\small\verb%`th`%} in theory
+segment {\small\verb%`thy`%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#theorem `arithmetic` `ADD_SYM`;;
+|- !m n. m + n = n + m
+\end{verbatim}}
+\SEEALSO
+axiom, definition, load_theorem, load_theorems, print_theory, save_thm, theorems.
+
+\ENDDOC
+\DOC{theorems}
+
+\TYPE {\small\verb%theorems : (string -> (string # thm) list)%}\egroup
+
+\SYNOPSIS
+Returns the derived theorems of a given theory segment of the current theory.
+
+\DESCRIBE
+A call of {\small\verb%theorems `thy`%} returns the derived theorems of the
+theory segment {\small\verb%`thy`%} together with their names. The theory segment {\small\verb%`thy`%}
+must be part of the current 
+theory. The names are those given to the theorems by the user when they
+were originally added to the theory segment (by, for example, a call to
+{\small\verb%save_thm%}). The name of the current theory segment can be abbreviated by
+{\small\verb%`-`%}.   
+
+\FAILURE
+The call {\small\verb%theorems `thy`%} will fail if the theory segment {\small\verb%`thy`%} is not
+part of the current theory.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#theorems `bool`;;
+[(`PAIR_EQ`, |- !x y a b. (x,y = a,b) = (x = a) /\ (y = b));
+ (`SND`, |- !x y. SND(x,y) = y);
+ (`FST`, |- !x y. FST(x,y) = x);
+ (`PAIR`, |- !x. FST x,SND x = x);
+ (`PAIR_EXISTS`, |- ?p. IS_PAIR p)]
+: (string # thm) list
+\end{verbatim}}
+\SEEALSO
+axioms, definitions, load_theorem, load_theorems, print_theory, save_thm, theorem.
+
+\ENDDOC
+\DOC{thm\_frees}
+
+\TYPE {\small\verb%thm_frees : (thm -> term list)%}\egroup
+
+\SYNOPSIS
+Returns a list of the variables free in a theorem's assumptions and conclusion.
+
+\DESCRIBE
+When applied to a theorem, {\small\verb%A |- t%}, the function {\small\verb%thm_frees%} returns a list,
+without repetitions, of those variables which are free either in {\small\verb%t%} or in
+some member of the assumption list {\small\verb%A%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+When applied to the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   (SUC m) < (SUC n) |- m < n
+\end{verbatim}}
+\noindent {\small\verb%thm_frees%} returns the list {\small\verb%["m"; "n"]%}. The term {\small\verb%SUC%} is a
+constant, not a variable, so that is not included.
+
+\SEEALSO
+frees, freesl, free_in.
+
+\ENDDOC
+\DOC{top\_goal}
+
+\TYPE {\small\verb%top_goal : (void -> goal)%}\egroup
+
+\SYNOPSIS
+Returns the current goal of the subgoal package.
+
+\DESCRIBE
+The function {\small\verb%top_goal%} is part of the subgoal package. It returns the top goal of the goal
+stack in the current proof state.  For a description of the subgoal package, see  {\small\verb%set_goal%}. 
+
+\FAILURE
+A call to {\small\verb%top_goal%} will fail if there are no unproven goals. This could be
+because no goal has been set using {\small\verb%set_goal%} or because the last goal set has
+been completely proved.
+
+\USES
+Examining the proof state after a proof fails.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_thm.
+
+\ENDDOC
+\DOC{top\_proof}
+
+\TYPE {\small\verb%top_proof : (subgoals list -> thm)%}\egroup
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC
+\DOC{top\_thm}
+
+\TYPE {\small\verb%top_thm : (void -> thm)%}\egroup
+
+\SYNOPSIS
+Returns the theorem just proved using the subgoal package.
+
+\DESCRIBE
+The function {\small\verb%top_thm%} is part of the subgoal package.
+A proof state of the package consists of either  goal and justification stacks if a proof is in 
+progress or a theorem if a proof has just been completed. If the proof state
+consists of a theorem, {\small\verb%top_thm%} returns that theorem.
+For a description of the subgoal package, see {\small\verb%set_goal%}. 
+
+\FAILURE
+{\small\verb%top_thm%} will fail if the proof state does not hold a theorem. This will be
+so either because no goal has been set or because a proof is in progress with
+unproven subgoals.
+
+\USES
+Accessing the result of an interactive proof session with the subgoal package.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal.
+
+\ENDDOC
+\DOC{type\_of}
+
+\TYPE {\small\verb%type_of : term -> type%}\egroup
+
+\SYNOPSIS
+Returns the type of a term.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#type_of "T";;
+":bool" : type
+\end{verbatim}}
+
+\ENDDOC
+\DOC{variant}
+
+\TYPE {\small\verb%variant : (term list -> term -> term)%}\egroup
+
+\SYNOPSIS
+Modifies a variable name to avoid clashes.
+
+\DESCRIBE
+When applied to a list of variables to avoid clashing with, and a variable to
+modify, {\small\verb%variant%} returns a variant of the variable to modify, that is, it
+changes the name as intuitively as possible to make it distinct from any
+variables in the list, or any (non-hidden) constants. This is normally done by
+adding primes to the name.
+
+The exact form of the variable name should not be relied on, except that the
+original variable will be returned unmodified unless it is itself in the list
+to avoid clashing with.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The following shows a couple of typical cases:
+{\par\samepage\setseps\small\begin{verbatim}
+   #variant ["y:bool"; "z:bool"] "x:bool";;
+   "x" : term
+
+   #variant ["x:bool"; "x':num"; "x'':num"] "x:bool";;
+   "x'''" : term
+\end{verbatim}}
+\noindent while the following shows that clashes with the names of constants
+are also avoided:
+{\par\samepage\setseps\small\begin{verbatim}
+   #variant [] (mk_var(`T`,":bool"));;
+   "T'" : term
+\end{verbatim}}
+\USES
+The function {\small\verb%variant%} is extremely useful for complicated derived rules which
+need to rename variables to avoid free variable capture etc., while still
+making the role of the variable obvious to the user.
+
+\SEEALSO
+genvar, hide_constant.
+
+\ENDDOC

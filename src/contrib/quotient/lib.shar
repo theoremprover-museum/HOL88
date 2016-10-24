@@ -1,0 +1,550 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  READ-ME Makefile mk_quotient.ml quotientfns.ml quotient.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 11:39:00 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'READ-ME' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'READ-ME'\"
+else
+echo shar: Extracting \"'READ-ME'\" \(2130 characters\)
+sed "s/^X//" >'READ-ME' <<'END_OF_FILE'
+X+ =====================================================================	+
+X|									|
+X| LIBRARY	: quotient						|
+X|									|
+X| DESCRIPTION   : Definition of quotient types.                          |
+X|									|
+X| AUTHOR	: T. kalker						|
+X| DATE		: 8 JUNE 1989  			         		|
+X|									|
+X+ =====================================================================	+
+X
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| FILES:								|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X    mk_quotient.ml    creates the theory of quotients.
+X
+X    quotientfns.ml    functions for creating quotient types,
+X                      and some associated tactics.
+X
+X    quotient.ml       loads the library into hol.
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| DOCUMENTATION:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X 
+XGiven an equivalence relation, the function 'new_quotient_definition'
+Xcreates the type of equivalence classes. 
+X
+XExample: defining the constant "EQUI_POTENT:(*->bool)->(*->bool)->bool"
+X         in some natural way, one proves
+X
+X         EQUIVALENCE_THM = |- EQUIVALENCE EQUI_POTENT
+X
+X         The call 'new_quotient_definition(`card`,EQUIVALENCE_THM)'
+X
+X         creates the type (*)card of cardinals of type *.
+X
+X         The call returns 3 theorems, asserting that the
+X         canonical projection is surjective and universal for
+X         the equivalence relation.
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO REBUILD THE LIBRARY:						|
+X|									|
+X+ --------------------------------------------------------------------- +
+X    
+X   0) necessary libraries: auxiliary
+X
+X   1) edit the pathnames in the Makefile (if necessary)
+X
+X   2) type "make clean"
+X
+X   3) type "make all"
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO USE THE LIBRARY:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X   load_library `quotient`;;
+X
+X
+END_OF_FILE
+if test 2130 -ne `wc -c <'READ-ME'`; then
+    echo shar: \"'READ-ME'\" unpacked with wrong size!
+fi
+chmod +x 'READ-ME'
+# end of 'READ-ME'
+fi
+if test -f 'Makefile' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Makefile'\"
+else
+echo shar: Extracting \"'Makefile'\" \(1339 characters\)
+sed "s/^X//" >'Makefile' <<'END_OF_FILE'
+X# =====================================================================
+X#
+X# 		 MAKEFILE FOR THE HOL LIBRARY: quotient
+X#
+X# =====================================================================
+X
+X# =====================================================================
+X#
+X# MAIN ENTRIES:
+X#
+X# make all	    : create theories and compile code
+X#
+X# make clean	    : remove theories and compiled code
+X#	
+X# =====================================================================
+X
+X# =====================================================================
+X# MACROS:
+X#
+X# Hol	    : the pathname of the version of hol used
+X# =====================================================================
+X
+XHol=~/com/hol
+X
+Xclean:
+X	rm -f *_ml.o *_ml.l *.th 
+X	@echo "===> library quotient: all object code and theory files deleted"
+X          
+Xquotient.th: mk_quotient.ml 
+X	      rm -f quotient.th
+X	      echo 'set_flag(`abort_when_fail`,true);;'\
+X	      'loadt `mk_quotient`;;' | ${Hol} 
+X
+Xquotientfns_ml.o: quotientfns.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'load_library `auxiliary`;;'\
+X             'autoload_defs_and_thms `bool`;;'\
+X	     'load_theory `quotient`;;'\
+X             'autoload_defs_and_thms `quotient`;;'\
+X	     'compilet `quotientfns`;;'\
+X	     'quit();;' | ${Hol}
+X
+X
+Xall:   	quotient.th quotientfns_ml.o
+X	@echo "===> library quotient rebuilt"
+END_OF_FILE
+if test 1339 -ne `wc -c <'Makefile'`; then
+    echo shar: \"'Makefile'\" unpacked with wrong size!
+fi
+chmod +x 'Makefile'
+# end of 'Makefile'
+fi
+if test -f 'mk_quotient.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'mk_quotient.ml'\"
+else
+echo shar: Extracting \"'mk_quotient.ml'\" \(6392 characters\)
+sed "s/^X//" >'mk_quotient.ml' <<'END_OF_FILE'
+Xnew_theory `quotient`;; 
+X
+Xload_library `auxiliary`;; 
+X
+Xautoload_defs_and_thms `bool`;;
+X
+Xlet REFLEX =
+X     new_definition
+X         (`REFLEX`,
+X          "REFLEX = \p. !x:*.p x x");;
+X               
+Xlet SYMMETRY =
+X     new_definition
+X         (`SYMMETRY`,
+X          "SYMMETRY = \p:*->*->bool.!x y:*.(p x y) = (p y x)");;
+X
+Xlet TRANSITIVITY =
+X     new_definition
+X         (`TRANSITIVITY`,
+X           "TRANSITIVITY = \p.!x y z:*.(p x y) /\ (p y z) ==> p x z");;
+X
+Xlet EQUIVALENCE =
+X     new_definition
+X         (`EQUIVALENCE`,
+X          "EQUIVALENCE = \p:*->*->bool.(REFLEX p) /\ (SYMMETRY p) /\ (TRANSITIVITY p)");;
+X
+Xlet IS_CLASS =
+X    new_definition
+X        (`IS_CLASS`,
+X          "IS_CLASS = \p:*->*->bool.\dom:*->bool.(?x.dom x) /\
+X                             (!x y.dom x ==>( dom y = p x y))");;
+X                      
+Xlet MK_CLASS =
+X    new_definition
+X        (`MK_CLASS`,
+X         "MK_CLASS = \p:*->*->bool.\x:*.\y:*.p x y");;  
+X
+Xlet P =
+X    new_infix_definition
+X        (`P`,
+X         "P = \f:*1->*2.\g:**1->**2.\x.((f (FST x)),(g (SND x)))");;
+X
+Xlet IS_MK_CLASS = 
+X    save_thm
+X    (`IS_MK_CLASS`,
+X    TAC_PROOF(
+X    (["EQUIVALENCE (Q:*->*->bool)"],"!x:*.IS_CLASS Q (MK_CLASS Q x)"),
+X        FILTER_ASSUM_TAC [1] UNDISCH_TAC THEN
+X        REWRITE_TAC [EQUIVALENCE;REFLEX;SYMMETRY;TRANSITIVITY;IS_CLASS;MK_CLASS] THEN
+X        BETA_TAC THEN  
+X        BETA_TAC THEN
+X        REPEAT STRIP_TAC THENL
+X             [EXISTS_TAC "x:*" THEN
+X              SUB_ASSUM_TAC [3] THEN
+X              ASM_REWRITE_TAC[];
+X              EQ_TAC THEN
+X              STRIP_TAC THENL
+X                  [ASSUM_LIST 
+X                                (\asl. FILTER_RULE_ASSUM_TAC [2] 
+X                                (ONCE_REWRITE_RULE  [el 4 asl])) THEN 
+X                   RES_TAC;
+X                   RES_TAC]
+X             ]));; 
+X
+Xlet EXISTS_CLASS =
+X     save_thm
+X     (`EXISTS_CLASS`,
+X     TAC_PROOF(
+X          (["EQUIVALENCE (Q:*->*->bool)"],"?p:*->bool.IS_CLASS Q p"),
+X          EXISTS_TAC "MK_CLASS (Q:*->*->bool) p" THEN            
+X          REWRITE_TAC [IS_MK_CLASS]));;
+X
+X
+X 
+Xlet SURJECTIVE_LEMMA =
+X    save_thm(
+X     `SURJECTIVE_LEMMA`,
+X      TAC_PROOF(
+X      (["EQUIVALENCE (Q:*->*->bool)"],"(IS_CLASS (Q:*->*->bool) p) ==>
+X                                          (?x:*.p = MK_CLASS Q x)"),
+X      FILTER_ASSUM_TAC [1] UNDISCH_TAC THEN
+X      REWRITE_TAC [EQUIVALENCE;REFLEX;SYMMETRY;
+X                   TRANSITIVITY;IS_CLASS;MK_CLASS] THEN
+X      BETA_TAC THEN
+X      REPEAT STRIP_TAC THEN
+X      EXISTS_TAC "x:*" THEN
+X      CONV_TAC FUN_EQ_CONV THEN 
+X      BETA_TAC THEN
+X      STRIP_TAC THEN
+X      FILTER_RULE_ASSUM_TAC [1] ((SPEC "x':*") o (SPEC "x:*")) THEN
+X      RES_TAC));;
+X
+X
+Xlet UNIVERSAL_LEMMA = 
+X     save_thm
+X     (`UNIVERSAL_LEMMA`,
+X     TAC_PROOF(
+X         (["EQUIVALENCE (Q:*->*->bool)"],"(MK_CLASS Q (x:*) = MK_CLASS Q y) = Q x y"),
+X          FILTER_ASSUM_TAC [1] UNDISCH_TAC THEN
+X          REWRITE_TAC [EQUIVALENCE;MK_CLASS;REFLEX;SYMMETRY;TRANSITIVITY] THEN
+X          CONV_TAC (REDEPTH_CONV FUN_EQ_CONV) THEN
+X          BETA_TAC THEN
+X          REPEAT STRIP_TAC THEN
+X          EQ_TAC THEN
+X          REPEAT STRIP_TAC THENL 
+X             [RULE_ASSUM_TAC (SPEC "x:*") THEN
+X              FILTER_RULE_ASSUM_TAC [2;3] (SPEC "y:*") THEN
+X              FILTER_RULE_ASSUM_TAC [1] SYM THEN
+X              ASM_REWRITE_TAC[];
+X              EQ_TAC THEN
+X              STRIP_TAC THENL
+X                   [ASSUM_LIST 
+X                                (\asl. FILTER_RULE_ASSUM_TAC [2] 
+X                                (ONCE_REWRITE_RULE  [el 4 asl])) THEN 
+X                    RES_TAC;
+X                    RES_TAC
+X                   ]
+X               ]));;
+X
+Xlet FACTOR_THM =
+X      save_thm
+X      (`FACTOR_THM`,
+X      TAC_PROOF(
+X       ([],"!f:*->**.!g:*->***.((ONTO g) /\ (!x y.(g x = g y) ==> (f x = f y)))
+X                              ==>
+X                            ?!h.f = (h o g)"),
+X       REWRITE_TAC[ONTO_DEF;o_DEF] THEN
+X       CONV_TAC (REDEPTH_CONV FUN_EQ_CONV) THEN 
+X       BETA_TAC THEN
+X       REPEAT STRIP_TAC THEN   
+X       EXP_UNIQUE_TAC THEN
+X       REPEAT STRIP_TAC THENL
+X            [EXISTS_TAC "\x:***.(let y = (@z:*.g z = x) in (f y:**))"  THEN
+X             REWRITE_TAC[LET_DEF] THEN 
+X             BETA_TAC THEN
+X             STRIP_TAC THEN
+X             ASSUM_LIST (\asl.(MATCH_MP_TAC (hd asl))) THEN
+X             CONV_TAC SYM_CONV THEN
+X             REWRITE_TAC[(SYM o BETA_CONV) 
+X                        "(\z:*.g z = (g x:***))(@z.g z = (g x))"] THEN
+X             REWRITE_TAC[(BETA_RULE o 
+X                         (CONV_RULE FUN_EQ_CONV) o SYM) EXISTS_DEF] THEN
+X             EXISTS_TAC "x:*" THEN
+X             REFL_TAC;
+X             CONV_TAC FUN_EQ_CONV THEN 
+X             BETA_TAC THEN
+X             STRIP_TAC THEN
+X             RULE_ASSUM_TAC (REWRITE_RULE[EXISTS_DEF]) THEN
+X             RULE_ASSUM_TAC BETA_RULE THEN 
+X             ONCE_ASM_REWRITE_TAC[] THEN
+X             SUB_ASSUM_TAC [1;2;3] THEN
+X             FILTER_RULE_ASSUM_TAC [1;2] (GEN_ALL o SYM o SPEC_ALL) THEN
+X             ASM_REWRITE_TAC[]
+X            ]));;            
+X
+Xlet ONTO_SURJ_THM =
+X         save_thm
+X         (`ONTO_SURJ_THM`,
+X         TAC_PROOF(
+X          ([],"!f:*1->*2.!g:**1->**2.(ONTO (f P g)) =           
+X                                     ((ONTO f) /\ (ONTO g)) "),
+X         REWRITE_TAC[ONTO_DEF;P] THEN
+X         BETA_TAC THEN
+X         REPEAT STRIP_TAC THEN
+X         EQ_TAC THEN
+X         REPEAT STRIP_TAC THENL
+X            [RULE_ASSUM_TAC (SPEC "y:*2,z:**2") THEN
+X             (POP_ASSUM_LIST o MAP_EVERY) STRIP_ASSUME_TAC THEN
+X             RULE_ASSUM_TAC (AP_TERM "FST:*2#**2->*2") THEN
+X             RULE_ASSUM_TAC (REWRITE_RULE[]) THEN
+X             EXISTS_TAC "FST (x:*1#**1)" THEN
+X             ASM_REWRITE_TAC[];
+X             RULE_ASSUM_TAC (SPEC "z:*2,y:**2") THEN
+X             (POP_ASSUM_LIST o MAP_EVERY) STRIP_ASSUME_TAC THEN
+X             RULE_ASSUM_TAC (AP_TERM "SND:*2#**2->**2") THEN
+X             RULE_ASSUM_TAC (REWRITE_RULE[]) THEN
+X             EXISTS_TAC "SND (x:*1#**1)" THEN
+X             ASM_REWRITE_TAC[];
+X             FILTER_RULE_ASSUM_TAC [1]  (SPEC "SND (y:*2#**2)") THEN
+X             FILTER_RULE_ASSUM_TAC [2]  (SPEC "FST (y:*2#**2)") THEN
+X             (POP_ASSUM_LIST o MAP_EVERY) STRIP_ASSUME_TAC  THEN
+X             EXISTS_TAC "x':*1,x:**1" THEN
+X             ONCE_REWRITE_TAC[(SYM o SPEC_ALL) PAIR] THEN
+X             PURE_ASM_REWRITE_TAC[] THEN
+X             ASM_REWRITE_TAC[]
+X            ]));;  
+X
+X
+END_OF_FILE
+if test 6392 -ne `wc -c <'mk_quotient.ml'`; then
+    echo shar: \"'mk_quotient.ml'\" unpacked with wrong size!
+fi
+chmod +x 'mk_quotient.ml'
+# end of 'mk_quotient.ml'
+fi
+if test -f 'quotientfns.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'quotientfns.ml'\"
+else
+echo shar: Extracting \"'quotientfns.ml'\" \(5697 characters\)
+sed "s/^X//" >'quotientfns.ml' <<'END_OF_FILE'
+X%
+XThis file defines functions needed for constructing
+Xquotient types.
+X%
+X
+X%
+XAUTHOR: TON KALKER
+XDATE  : 2 JUNE 1989
+X%
+X%
+X
+Xlet check_quotient_def =
+X   set_fail_prefix `not equivalence theorem!: `
+X   (\thm. 
+X   let asl,w = dest_thm thm in
+X   let t1,t2 = dest_comb w in
+X   let name,ty = (dest_const t1 ? failwith `operator`) in 
+X   let base_type = ((hd o snd o dest_type o
+X                     hd o snd o dest_type) ty ? failwith `types`) in
+X   if not (asl = []) then failwith `assumptions`
+X   if not (name = `EQUIVALENCE`) then failwith `not EQUIVALENCE`
+X   if not (is_const t2) then failwith `operand` 
+X   else t2,base_type);;
+X
+Xlet construct_quot_ty(name,thm) = 
+X             let equi, base_type = check_quotient_def thm in
+X             let exists_thm = MATCH_MP (DISCH_ALL EXISTS_CLASS) thm and 
+X                 is_mk_class_thm = MATCH_MP (DISCH_ALL IS_MK_CLASS) thm in
+X             let w = concl exists_thm in
+X             let tm = (fst o dest_comb o snd o dest_exists) w in  
+X             let thm1 = new_type_definition(name,tm,exists_thm) in
+X             let thml = sublist [3;4] 
+X                      ((define_new_type_isomorphisms o EXPAND_TY_DEF) thm1) in
+X             let thm3 = ( GEN_ALL o
+X                         (REWRITE_RULE[is_mk_class_thm]) o
+X                         (SPEC "MK_CLASS ^equi (x':^base_type)") o
+X                         (SPEC "MK_CLASS ^equi (x:^base_type)")) (el 1 thml)  in
+X             let thm4 = (el 2 thml) in 
+X             let current = current_theory() in
+X             let [ABS_name] = filter 
+X                            (\tm.((fst o dest_const) tm) = (`ABS_` ^ name))
+X                            (constants current) in
+X             let quot_ty = ((el 2) o snd o dest_type o type_of) ABS_name in
+X             let PROJ_name = mk_var(`PROJ_` ^ name,":^base_type ->^quot_ty") in
+X             let proj = new_definition(`PROJ_` ^name, 
+X                        "^PROJ_name x = ^ABS_name (MK_CLASS ^equi x)") in
+X             proj,thm3,thm4,base_type,quot_ty,equi;;           
+X                                    
+Xlet prove_proj_onto name thm proj thm4 base_type quot_ty= 
+X            let surjective_thm = MATCH_MP (DISCH_ALL SURJECTIVE_LEMMA) thm in 
+X            let PROJ_name = mk_const(`PROJ_` ^ name,":^base_type ->^quot_ty") in 
+X            let tm = "ONTO ^PROJ_name" in         
+X            TAC_PROOF(
+X             ([],tm),
+X             REWRITE_TAC[ONTO_DEF;proj] THEN 
+X             STRIP_TAC THEN
+X             STRIP_ASSUME_TAC (SPEC "y:^quot_ty" thm4) THEN
+X             ASSUM_LIST
+X              (\asl.STRIP_ASSUME_TAC (MATCH_MP surjective_thm (hd asl))) THEN
+X             EXISTS_TAC "x:^base_type" THEN
+X             ASM_REWRITE_TAC[]);;   
+X
+Xlet prove_proj_universal name thm proj thm3 base_type quot_ty equi =
+X            let universal_thm = MATCH_MP (DISCH_ALL UNIVERSAL_LEMMA) thm in
+X            let PROJ_name = mk_const(`PROJ_` ^ name,":^base_type ->^quot_ty") in 
+X            let tm = "!x y.((^PROJ_name x = ^PROJ_name y) = (^equi x y))" in
+X            TAC_PROOF(
+X             ([],tm),
+X             REWRITE_TAC[proj;thm3;universal_thm]);;  
+X
+Xlet prove_proj_factor name base_type quot_ty  thml = 
+X            let thm1 = INST_TYPE[(base_type,":*");(quot_ty,":***")] FACTOR_THM in
+X            let thm2 = SPEC "f:^base_type -> **" thm1 in 
+X            let PROJ_name = mk_const(`PROJ_` ^ name,":^base_type ->^quot_ty") in       
+X            let thm3 = SPEC "^PROJ_name" thm2 in
+X            let thm4 = GEN_ALL thm3 in
+X            REWRITE_RULE thml thm4;;
+X
+Xlet define_quotient_type(name,thm) =
+X             let proj,thm3,thm4,base_type,quot_ty,equi = construct_quot_ty(name,thm)
+X             in
+X             let string1 = `SURJ_PROJ_` ^ name ^ `_THM` and
+X                 string2 = `UNIV_PROJ_` ^ name ^ `_THM` and
+X                 string3 = `FACTOR_PROJ_` ^ name ^ `_THM`
+X             in
+X             let thm1 = save_thm(string1,
+X                        prove_proj_onto name thm proj thm4 base_type quot_ty) and
+X                 thm2 = save_thm(string2,
+X                        prove_proj_universal name thm proj thm3 base_type quot_ty equi) 
+X             in
+X             let thm3 = save_thm(string3,
+X                        prove_proj_factor name base_type quot_ty [thm1;thm2])
+X             in [thm1;thm2;thm3];;
+X
+Xlet FACTOR_TAC surj_thml univ_thml =
+X      MATCH_MP_TAC FACTOR_THM THEN
+X      REWRITE_TAC([ONTO_SURJ_THM;P;]@surj_thml) THEN
+X      CONV_TAC (RAND_CONV (ABS_CONV PROD_CONV)) THEN
+X      CONV_TAC PROD_CONV THEN
+X      BETA_TAC THEN
+X      REWRITE_TAC([PAIR_EQ_THM]@univ_thml);;
+X
+Xlet new_unique_specification = 
+X      set_fail_prefix `new_unique_specification`
+X      (\name [flag,c] thm.
+X      (
+X      let thm1 = (BETA_RULE o (CONV_RULE EXISTS_UNIQUE_CONV)) thm
+X      in                                                         
+X      let ex_thm,uniq_thm = CONJ_PAIR thm1
+X      in      
+X      let thm2 = (new_specification name [flag,c] ex_thm ?
+X                  (print_string (name ^ ` already defined`);
+X                   print_newline();
+X                   definition (current_theory()) name))
+X      in
+X      let [newconst] = 
+X               filter
+X               (\d.(c = (fst o dest_const) d))
+X               (constants (current_theory()))
+X      in
+X      let thm3 = SPEC newconst uniq_thm 
+X      in 
+X      let thm4 = REWRITE_RULE[thm2] thm3
+X      in
+X      let x = fst(dest_forall(concl thm4)) 
+X      in  
+X      let thm5 = CONV_RULE (GEN_ALPHA_CONV "f:^(type_of x)") thm4 
+X      in
+X      let thm6 = (save_thm((name ^ `_UNIQUE`), thm5) ?
+X                  (print_string (name ^ `_UNIQUE already present`);
+X                   print_newline();
+X                   theorem (current_theory()) (name ^ `_UNIQUE`)))
+X      in
+X      [thm2;thm6]
+X      ));;
+X
+X
+X
+X
+END_OF_FILE
+if test 5697 -ne `wc -c <'quotientfns.ml'`; then
+    echo shar: \"'quotientfns.ml'\" unpacked with wrong size!
+fi
+chmod +x 'quotientfns.ml'
+# end of 'quotientfns.ml'
+fi
+if test -f 'quotient.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'quotient.ml'\"
+else
+echo shar: Extracting \"'quotient.ml'\" \(945 characters\)
+sed "s/^X//" >'quotient.ml' <<'END_OF_FILE'
+X% FILE		: quotient.ml						%
+X% DESCRIPTION   : loads the library quotient into hol.			%
+X%									%
+X% AUTHOR        : T. Kalker						%
+X% DATE		: 7 June 1989						%
+X
+X
+Xif draft_mode() 
+X then (if not(mem `quotient` (parents (current_theory()))) 
+X         then
+X            (print_newline();
+X             print_string `quotient declared a new parent`;
+X             print_newline();
+X             new_parent `quotient`)
+X         else 
+X            (print_newline();
+X             print_string `quotient is parent`;
+X             print_newline())
+X       )
+X else (load_theory`quotient` ? print_newline());;
+X
+Xautoload_theory(`definition`,`quotient`,`REFLEX`);;
+X
+Xautoload_theory(`definition`,`quotient`,`SYMMETRY`);;
+X                                                
+Xautoload_theory(`definition`,`quotient`,`TRANSITIVITY`);;
+X
+Xautoload_theory(`definition`,`quotient`,`EQUIVALENCE`);;
+X
+Xmap 
+X loadx 
+X (words `quotientfns`);;
+X
+Xlet goal = g
+Xand apply  = expandf;;
+X
+END_OF_FILE
+if test 945 -ne `wc -c <'quotient.ml'`; then
+    echo shar: \"'quotient.ml'\" unpacked with wrong size!
+fi
+chmod +x 'quotient.ml'
+# end of 'quotient.ml'
+fi
+echo shar: End of shell archive.
+exit 0

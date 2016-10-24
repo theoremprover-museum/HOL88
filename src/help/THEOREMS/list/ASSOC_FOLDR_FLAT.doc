@@ -1,0 +1,7 @@
+\THEOREM ASSOC_FOLDR_FLAT list
+|- !f.
+    ASSOC f ==>
+    (!e.
+      LEFT_ID f e ==>
+      (!l. FOLDR f e(FLAT l) = FOLDR f e(MAP(FOLDR f e)l)))
+\ENDTHEOREM

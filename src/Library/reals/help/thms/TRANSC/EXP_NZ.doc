@@ -1,0 +1,3 @@
+\THEOREM EXP_NZ TRANSC
+|- !x. ~(exp x = & 0)
+\ENDTHEOREM

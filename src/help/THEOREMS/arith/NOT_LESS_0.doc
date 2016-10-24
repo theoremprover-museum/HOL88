@@ -1,0 +1,3 @@
+\THEOREM NOT_LESS_0 prim_rec
+|- !n. ~n < 0
+\ENDTHEOREM

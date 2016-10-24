@@ -1,0 +1,3 @@
+\THEOREM SUM list
+|- (SUM[] = 0) /\ (!h t. SUM(CONS h t) = h + (SUM t))
+\ENDTHEOREM

@@ -1,0 +1,22 @@
+\DOC dom
+
+\TYPE {dom : (term -> type)}
+
+\SYNOPSIS
+Finds the domain of a function.
+
+\LIBRARY window
+
+\FAILURE
+Fails if the argument is not a function.
+
+\EXAMPLE
+{
+   #dom "f:*->**";;
+   ":*" : type
+}
+
+\SEEALSO
+is_fun, ran
+
+\ENDDOC

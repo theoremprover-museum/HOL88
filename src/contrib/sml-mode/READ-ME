@@ -1,0 +1,20 @@
+Directory:   sml-mode
+
+Description:
+   SML mode for gnuemacs Version 19.XX
+
+   These files were distributed with SML/NJ Version 0.93. They worked
+   with gnuemacs Version 18.xx. The main file, sml-mode.el has be modified
+   to work in gnuemacs version 19. It has been tested with version 19.15 
+   and 19.19.
+ 
+Modified by:
+   Wai Wong
+   University of Cambridge Computer Laboratory
+   Pembroke Street,
+   Cambridge CB2 3QG
+   E-mail: ww@cl.cam.ac.uk
+
+Date:
+   16 Sept. 1993
+   24 Sept. 93 Revised based on Matthew Morley's <morley@gmd.de> suggestion.

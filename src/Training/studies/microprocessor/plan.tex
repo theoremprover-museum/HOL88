@@ -1,0 +1,204 @@
+\section{Verification plan and methodology}
+\label{sec-plan}
+
+This section describes the logical form used to
+state correctness results for \Tamarack,
+a plan to achieve these results and
+some of the basic proof techniques which are used to
+carry out this plan in the \HOL\ system.
+
+\subsection{Stating correctness results}
+
+Although
+the terms `correctness' and `verification' may be understood
+in an informal context to mean
+different things to different people,
+these terms have a precise, technical meaning when formal logic
+is used to verify a hardware design.
+The formal verification (or proof of correctness) for \Tamarack\
+refers to the derivation of a theorem by formal proof in
+the \HOL\ formulation of higher-order logic.
+This theorem
+relates the specification of the internal architecture, given
+by the predicate \verb"TamarackImp", to the specification of
+its intended behaviour, given by the predicate \verb"TamarackBeh".
+
+We actually give three different versions of the top level
+correctness theorem but they are all the same basic form:
+that the constraints imposed by the implementation predicate
+\verb"TamarackImp" satisfy the requirements expressed by
+the behaviour predicate \verb"TamarackBeh".
+The general form of this theorem is a logical implication:
+
+\begin{quote}
+\verb"|- Implementation Specification ==> Behaviour Specification"
+\end{quote}
+
+The precise form of this theorem (in each of the three cases)
+depends on a formally established relationship between the
+two different granularities of time used to specify
+register-transfer level behaviour and the programming level model.
+The correctness theorems also include a behavioural model of
+external memory and a description of how memory is interfaced
+to the microprocessor.
+
+For readers curious at this point
+in the appearance of these correctness results,
+the following theorem
+is (a slightly expanded form of) the result obtained
+by the procedure outlined in Section~\ref{sec-verf}.
+
+\begintt
+|- \(\forall\)datain pwr dataout wmem dreq addr.
+     Val3_CASES_ASM (rep:^rep_ty) \(\wedge\)
+     Val4Word4_ASM rep \(\wedge\)
+     TamarackImp rep (
+       datain,pwr,pwr,ireq,mpc,mar,pc,
+       acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr) \(\wedge\)
+     SynMemory rep (wmem,addr,dataout,mem,datain) \(\wedge\)
+     PWR pwr \(\wedge\)
+     (((val4 rep) o mpc) 0 = 0)
+     ==>
+     let f = TimeOfCycle rep (ireq,mem,pc,acc,rtn,iack) in
+     TamarackBeh rep (ireq o f,mem o f,pc o f,acc o f,rtn o f,iack o f)
+\endtt
+
+\subsection{Multi-level verification}
+
+Although most of the low level tedious work of theorem-proving
+can be done mechanically by the \HOL\ system,
+the formal verification of non-trivial hardware
+(and other kinds of proofs) requires a considerable
+amount of guidance from the user.
+More powerful (and more specialized) proof procedures could
+be programmed in ML to increase the degree of automation,
+\footnote{
+Although guidance may be required from the user,
+every step in the proof is mechanically checked by the system.
+The design and implementation
+of the \HOL\ theorem generation kernel (inherited from \LCF\_LSM)
+ensures that user defined proof procedures cannot compromise
+proof security.}
+but complete automation for non-trivial designs is
+not a foreseeable possibility (in \HOL\ or in any other verification
+system).
+Furthermore, we suggest that complete automation
+would undermine the true purpose of formal verification
+\cite{Joyce:integration,Joyce:thesis}.
+
+Much of the creative work in using the \HOL\ system
+centers upon the problem of discovering high-level proof strategies
+when routine \HOL\ interactions
+like \mbox{\verb"STRIP\_TAC"},
+\mbox{\verb"BOOL\_CASES\_TAC"} and
+\mbox{\verb"ASM\_REWRITE\_TAC"} are not enough
+to complete a proof.
+Theorem-proving experience or mathematical insight is sometimes
+the source of a successful proof strategy.
+However, an equally important source for hardware verification,
+and more specifically, the verification of microprocessor systems is
+conventional design methodology
+where many useful strategies for controlling the complexity of
+reasoning informally about computer architecture
+are already well-known.
+
+In particular, we have found
+that the concept of multiple interpretation levels,
+used by architects to achieve a
+``progressive translation of functions in several stages'' \cite{Anceau}
+is a very effective strategy for controlling the complexity
+of verifying the correctness of \Tamarack.
+As explained earlier in Section~\ref{sec-multi},
+\Tamarack\ has two levels of interpretation
+beneath the programming
+level: the microprogramming level and phase level.
+We use this structured view of the internal operation of the
+microprocessor to organize the bulk of the
+formal proof into two main steps:
+
+\begin{enumerate}
+\item[1.] Prove that each microinstruction is correctly interpreted at the
+phase level.
+\item[2.] Prove that each programming level operation is correctly interpreted
+at the\\
+microprogramming level.
+\end{enumerate}
+
+The proof is completed in a third (and relatively short) step
+by establishing a formally defined relationship between
+the two different granularities of discrete time used to specify
+the internal architecture and programming level model.
+
+\begin{enumerate}
+\item[3.]
+Relate clock cycles view of behaviour to instruction cycle view of behaviour.
+\end{enumerate}
+
+Verifying the phase level operation of \Tamarack\ in Step (1)
+does not depend on a behavioural model for external memory.
+However, different versions of Steps (2) and (3) are needed
+for fully synchronous mode and fully asynchronous mode.
+
+\subsection{Symbolic execution}
+\label{sec-symbolic}
+
+Many different kinds of computation systems are implemented by a hierarchy of
+interpretation levels.
+Showing that one level correctly implements the next higher level
+is equivalent to showing that the higher level is an abstract
+view of the lower level.
+Each operation at a given level in the hierarchy is typically interpreted
+(directly or indirectly) by one or more operations at the next lower level.
+To demonstrate that this level is correctly implemented by the next
+lower level,
+each operation is shown to be correctly
+implemented by the corresponding sequence
+of lower level operations.
+This is established by deriving the
+cumulative effect of each sequence and comparing
+it to the intended effect of the corresponding higher level operation.
+
+It is relatively straightforward to reason about a fixed sequence
+(or a finite set of fixed sequences) of lower level operations.
+To derive the cumulative effect of a sequence of lower level operations,
+we use inference rules of
+higher-order logic to {\it symbolically execute} this sequence.
+The term
+`symbolic execution' is used here in a purely descriptive sense
+for a proof technique
+which is actually nothing more than
+repeatedly unfolding various parts of the
+specification (or consequences of this specification derived
+at lower levels).
+
+It is natural
+to use forward proof to symbolically execute a sequence of operations
+starting with assumptions
+about the initial state and applying inference rules
+to derive subsequent states in the computation.
+Similar techniques were also used to verify the \Viper\ microprocessor.
+As Cohn remarks \cite{Cohn:banff87},
+forward proofs of this kind
+are a rather unsophisticated use of the \HOL\ system
+which may produce unforeseen results.
+However, the use of formal proof in this
+case is indicated by the nature of the problem.
+
+Even though forward proof lies at the heart of
+symbolic execution,
+it is very convenient (in the \HOL\ system)
+to carry out these forward proofs
+in the overall
+context of a backward (or goal-oriented) proof using
+the built-in sub-goals package.
+\footnote{
+Backward proof and the sub-goal package are described
+in {\it Getting Started with HOL} under
+{\it Goal oriented proof: tactics and tacticals}.}
+After an initial bit of backward proof,
+forward inference steps are achieved by repeated use of resolution
+tactics with some direct manipulation of the intermediate results.
+
+The following section
+illustrates the general concept of symbolic execution and
+the mechanics of using this proof technique in the \HOL\ system.

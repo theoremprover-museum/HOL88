@@ -1,0 +1,3 @@
+\THEOREM SUB_RIGHT_SUB arithmetic
+|- !m n p. (m - n) - p = m - (n + p)
+\ENDTHEOREM

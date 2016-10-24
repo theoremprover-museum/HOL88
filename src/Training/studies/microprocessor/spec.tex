@@ -1,0 +1,956 @@
+\section{Formal specification}
+\label{sec-spec}
+
+The formal specification of \Tamarack\
+is based on the informal descriptions given earlier
+in Sections~\ref{sec-progmodel}, \ref{sec-memory} and~\ref{sec-internal}.
+It consists of three main parts:
+
+\begin{itemize}
+\item The design of the internal architecture in terms of its
+structural organization and behavioural models for primitive
+components.
+\item The programming level model
+based on the semantics of the instruction set and the processing
+of hardware interrupts.
+\item A specification of the external environment,
+in particular, a behavioural model for external memory.
+\end{itemize}
+
+We begin by describing how structure and behaviour are
+represented in the formal specification.
+Following these preliminaries,
+we present the three main parts of the formal specification
+of \Tamarack.
+
+\subsection{Specifying structure and behaviour}
+
+The specification of \Tamarack\ models devices at all
+levels of the specification hierarchy by predicates which
+express relations on time-dependent signals.
+These predicate are parameterized, in part, by variables representing
+physical input and output signals.
+They may also be parameterized by other signals representing
+the internal state or external conditions governing
+the behaviour of the device.
+Time-dependent signals are modelled
+as functions from discrete time to signal values.
+As shown in the following
+type abbreviation,
+discrete time is represented by the natural numbers.
+
+\begintt
+new_type_abbrev (`time`,":num");;
+\endtt
+
+The behaviour of a primitive device is specified directly
+in terms of defined operators such as
+logical connectives and arithmetic functions.
+The uninterpreted primitives just described in Section~\ref{sec-basis}
+may also be used to directly specify the behaviour of a device.
+Typically, the behaviour of a primitive component is expressed
+by an equation for output signals in terms of input signals,
+internal state, and external conditions.
+Universal quantification over explicit time variables is
+used to state that the behaviour holds at all points in discrete time.
+
+The behaviour of a non-primitive device is specified indirectly
+by composing behaviours for simpler devices.
+The interconnection of components
+through similarly-named ports
+is expressed by logical conjunction.  Existential quantification
+is used to hide internal signals.
+This can be viewed as a structural specification of the device.
+
+\subsection{Internal architecture}
+
+The formal specification
+of the internal architecture
+of \Tamarack\ begins with behaviour models for primitive
+components such as the ALU and the registers.
+Higher up the specification hierarchy, non-primitive devices such
+as the control unit and datapath
+are specified structurally as the composition of simpler devices.
+
+As explained earlier in Section~\ref{sec-bottom},
+the internal operation of
+\Tamarack\ is described at a relatively
+abstract level where functional elements such as the ALU are modelled
+without delay and the update of a storage element is an atomic action.
+The formal specifications in this section are based on this abstract view
+of behaviour.
+
+\subsubsection{Primitive components of the datapath}
+
+The ALU implements four different operations:
+the operation performed by the ALU is determined by the two ALU control
+signals \verb"f0" and \verb"f1".
+The operation selected
+from the representation variable \verb"rep"
+by the selector function \verb"inc" takes a single full-size word
+as an argument and returns a full-size word as a result.
+The operations selected by \verb"add" and \verb"sub"
+take two full-size words as arguments and return a single full-size word
+as a result.
+The fourth operation implemented by the ALU takes no arguments:
+it yields a constant result, namely,
+the full-size word representation of the number zero.
+
+\begintt
+let ALU = new_definition (
+  `ALU`,
+  "ALU (rep:^rep_ty) (f0,f1,inp1,inp2,out) =
+    \(\forall\)t:time.
+      out t =
+        (((f0 t,f1 t) = (T,T)) => ((inc rep) (inp2 t)) |
+         ((f0 t,f1 t) = (T,F)) => ((add rep) (inp1 t,inp2 t)) |
+         ((f0 t,f1 t) = (F,T)) => ((sub rep) (inp1 t,inp2 t)) |
+                                  ((wordn rep) 0))");;
+\endtt
+
+Definitions for \verb"OpcField" and \verb"AddrField"
+specify devices which implement the operations
+selected by \verb"opcode" and \verb"address"
+respectively for
+extracting the opcode and address fields from a full-size word.
+Depending on how the opcode and address fields are represented,
+the implementation of these two devices could be nothing more than some
+wiring connections to appropriate bits.
+
+\begintt
+let OpcField = new_definition (
+  `OpcField`,
+  "OpcField (rep:^rep_ty) (inp,out) =
+    \(\forall\)t:time. out t = (opcode rep) (inp t)");;
+
+let AddrField = new_definition (
+  `AddrField`,
+  "AddrField (rep:^rep_ty) (inp,out) =
+    \(\forall\)t:time. out t = (address rep) (inp t)");;
+\endtt
+
+The definition of \verb"TestZero" specifies a device which implements
+the operation selected by \verb"testzero".
+
+\begintt
+let TestZero = new_definition (
+  `TestZero`,
+  "TestZero (rep:^rep_ty) (inp,out) =
+    \(\forall\)t:time. out t = (iszero rep) (inp t)");;
+\endtt
+
+\subsubsection{Modelling system bus operation}
+
+The system bus of the \Tamarack\ datapath is used to transfer
+data between various devices in the datapath.
+Modelling the operation of this bus presents some special problems
+because control over the bus signal is decentralized.
+A correct design will never allow more than one device at a time
+to read a value onto the system bus.
+Some very simple models of the datapath bus
+(e.g., modelling a bus as a many-input multiplexor)
+are based on the informal assumption that
+this aspect of the design is correct.
+However, we would like to establish this fact as part of our formal proof.
+
+One possibility is to invent an extra value called `bottom' or Z
+to denote the floating (or high-impedance) state.
+The tri-state word types built into the \HOL\ system
+(but not used here) are an example of this approach
+\cite{Gordon:tech41,Gordon:tech42,Joyce:calgary86}.
+The value of bus is determined by a function
+which combines the outputs
+of all the bus drivers.
+If more than one driver has a non-floating output,
+then the result returned by the combining function is either
+an `error' value or unknown.
+This scheme is appealing partly because it is
+familiar from switch level simulation models such as MOSSIM
+\cite{Bryant:thesis}.
+It is also similar in concept to {\it resolution functions} in
+the VHDL hardware description language
+\cite{Armstrong}.
+
+We have chosen to model the datapath in a different way which
+takes advantage of our relationship style of formal specification.
+In this approach,
+the behavioural model of a bus device is regulated
+by a time-dependent condition on its environment.
+This condition only allows the device to assert a value
+onto the system bus if no other device is also attempting to
+assert a value onto the bus.
+This condition may be thought of as an
+additional control signal to the device
+although it does not correspond to any physical signal.
+
+At the register-transfer level,
+each bus device has a `read' signal which controls when
+the device attempts to assert a value onto the system bus.
+In \Tamarack, these `read' signals are:
+
+\begin{quote}
+\verb"rmem", \verb"rpc", \verb"racc", \verb"rir", \verb"rrtn",
+and \verb"rbuf"
+\end{quote}
+
+The time-dependent condition regulating the behaviour of bus drivers
+in the \Tamarack\ datapath
+can be defined in terms of these signals:
+a value can be successfully read onto the system bus if and only if
+at most one of these signals is equal to \verb"T".
+This condition is expressed by the following definition of
+\verb"BusOkay".
+
+\begintt
+let BusOkay = new_definition (
+  `BusOkay`,
+  "BusOkay (rmem,rpc,racc,rir,rrtn,rbuf,busokay) =
+    \(\forall\)t:time.
+      busokay t =
+        ((rmem t)  => (\(\neg\)(rpc t \(\vee\) racc t \(\vee\) rir t \(\vee\) rrtn t \(\vee\) rbuf t)) |
+        ((rpc t)  => (\(\neg\)(racc t \(\vee\) rir t \(\vee\) rrtn t \(\vee\) rbuf t)) |
+        ((racc t)  => (\(\neg\)(rir t \(\vee\) rrtn t \(\vee\) rbuf t)) |
+        ((rir t)  => (\(\neg\)(rrtn t \(\vee\) rbuf t)) |
+        ((rrtn t)  => (\(\neg\)(rbuf t)) |
+                     T)))))");;
+\endtt
+
+\verb"BusOkay" may be thought of as a virtual device in the datapath.
+Although it does not correspond to a physical component of the datapath,
+its specification can be derived directly
+from a structural description of the datapath by determining which
+devices share the system bus as a common output port.
+
+\subsubsection{More primitive components of the datapath}
+
+The definition of \verb"Interface" specifies a device which provides
+a two-way interface between the system bus and the memory data pins.
+The device attempts to read
+data received from memory onto the system bus when the
+read signal \verb"r" is equal to \verb"T".
+In the output direction,
+the current value of the system bus is connected to the output pins
+when the write signal \verb"w" is equal to \verb"T"; otherwise,
+the machine representation of zero is assigned to the output pins
+as a default value.
+
+\begintt
+let Interface = new_definition (
+  `Interface`,
+  "Interface (rep:^rep_ty) (busokay,w,r,bus,datain,dataout) =
+    \(\forall\)t:time.
+      ((busokay t) ==> (r t) ==> (bus t = datain t)) \(\wedge\)
+      (dataout t = ((w t) => (bus t) | ((wordn rep) 0)))");;
+\endtt
+
+Following our scheme for modelling the operation of the system bus,
+the predicate \verb"Interface" is parameterized by
+the virtual signal \verb"busokay" which is the
+time-dependent condition specified in the definition of \verb"BusOkay".
+When data is being read from memory and no other device is attempting to
+assert a value onto the system bus, then the memory data will be successfully
+read onto the bus.
+
+The basic storage element in the datapath of \Tamarack\ is a
+selectively loadable register for storing full-size words.
+If the `write' signal is equal to \verb"T", then
+the current input will be loaded into the register;
+otherwise, the contents of the register are unchanged.
+The \verb"out" signal serves as both an output signal and
+a signal representing the internal state of the register.
+The register can also be interfaced to the system bus:
+the register attempts to read its contents onto the system bus
+when its `read' signal is equal to \verb"T".
+Like the definition of \verb"Interface",
+the definition of \verb"Register" is parameterized by the virtual
+signal \verb"busokay" which determines when the register can successfully
+assert its contents onto the system bus.
+
+\begintt
+let Register = new_definition (
+  `Register`,
+  "Register (busokay,w,r,inp,bus,out:time->*wordn) =
+    \(\forall\)t:time.
+      ((busokay t) ==> (r t) ==> (bus t = out t)) \(\wedge\)
+      (out (t+1) = ((w t) => (inp t) | (out t)))");;
+\endtt
+
+A set of fifteen individual control signals runs from the control
+unit to the datapath.
+It is convenient to view these fifteen control signals collectively
+as a single input to the datapath.
+Once inside the datapath, this bundle of control signals is separated
+into the fifteen individual control signals.
+
+In the formal specification,
+this bundle can be represented as
+a signal whose value at any discrete point in time is
+an n-tuple with fifteen elements.
+The following definition of \verb"DecodeCntls" specifies
+a block of wiring which separates this bundle
+of control signals into fifteen individual signals by `assigning'
+elements of n-tuple representation to corresponding control signals.
+This definition is expressed in terms of an equation where the left and
+right hand sides of the equation are n-tuples.
+Two n-tuples are equal if and only if
+they have exactly the same number of elements and matching elements of each
+n-tuple are equal both in type and in value.
+In effect, we are using properties of \mbox{n-tuples}
+to model bit manipulation operations,
+in particular, the extraction of individual bits from a group of bits.
+
+\begintt
+new_type_abbrev (
+  `cntls_ty`,
+  ":bool#bool#bool#bool#bool#bool#bool#
+    bool#bool#bool#bool#bool#bool#bool#bool");;
+
+let DecodeCntls = new_definition (
+  `DecodeCntls`,
+  "DecodeCntls (
+    cntls:time->cntls_ty,
+    wmem,rmem,wmar,wpc,rpc,wacc,racc,
+    wir,rir,wrtn,rrtn,warg,alu0,alu1,rbuf) =
+    \(\forall\)t:time.
+      (wmem t,rmem t,wmar t,wpc t,rpc t,wacc t,racc t,
+       wir t,rir t,wrtn t,rrtn t,warg t,alu0 t,alu1 t,rbuf t) =
+      (cntls t)");;
+\endtt
+
+The remaining three components needed to implement the datapath
+are a JK flip-flop,
+a two-input OR gate and voltages sources, i.e, `power' and `ground'.
+
+\begintt
+let JKFF = new_definition (
+  `JKFF`,
+  "JKFF (j,k,out) =
+    \(\forall\)t:time. out (t+1) = (((j t) \(\wedge\) \(\neg\)(out t))  \(\vee\) (\(\neg\)(k t) \(\wedge\) (out t)))");;
+
+let OR = new_definition (
+  `OR`,
+  "OR (inp1,inp2,out) = \(\forall\)t:time. out t = ((inp1 t) \(\vee\) (inp2 t))");;
+
+let PWR = new_definition (`PWR`,"PWR out = \(\forall\)t:time. out t = T");;
+
+let GND = new_definition (`GND`,"GND out = \(\forall\)t:time. out t = F");;
+\endtt
+
+\subsubsection{Datapath implementation}
+
+The register-transfer level implementation of the datapath
+is formally specified by the definition of \verb"Datapath"
+in terms of the above-mentioned primitive components.
+
+\begintt
+let DataPath = new_definition (
+  `DataPath`,
+  "DataPath (rep:^rep_ty)
+    (cntls,datain,mar,pc,acc,ir,rtn,iack,
+     arg,buf,dataout,wmem,dreq,addr,zeroflag,opc) =
+    \(\exists\)bus busokay alu pwr gnd rmem wmar wpc rpc
+     wacc racc wir rir wrtn rrtn warg alu0 alu1 rbuf.
+      DecodeCntls (
+        cntls,
+        wmem,rmem,wmar,wpc,rpc,wacc,racc,
+        wir,rir,wrtn,rrtn,warg,alu0,alu1,rbuf) \(\wedge\)
+      BusOkay (rmem,rpc,racc,rir,rrtn,rbuf,busokay) \(\wedge\)
+      Interface rep (busokay,wmem,rmem,bus,datain,dataout) \(\wedge\)
+      OR (wmem,rmem,dreq) \(\wedge\)
+      Register (busokay,wmar,gnd,bus,bus,mar) \(\wedge\)
+      AddrField rep (mar,addr) \(\wedge\)
+      Register (busokay,wpc,rpc,bus,bus,pc) \(\wedge\)
+      Register (busokay,wacc,racc,bus,bus,acc) \(\wedge\)
+      TestZero rep (acc,zeroflag) \(\wedge\)
+      Register (busokay,wir,rir,bus,bus,ir) \(\wedge\)
+      OpcField rep (ir,opc) \(\wedge\)
+      Register (busokay,wrtn,rrtn,bus,bus,rtn) \(\wedge\)
+      JKFF (wrtn,rrtn,iack) \(\wedge\)
+      Register (busokay,warg,gnd,bus,bus,arg) \(\wedge\)
+      ALU rep (alu0,alu1,arg,bus,alu) \(\wedge\)
+      Register (busokay,pwr,rbuf,alu,bus,buf) \(\wedge\)
+      PWR pwr \(\wedge\)
+      GND gnd");;
+\endtt
+
+The predicate \verb"Datapath" is parameterized by a number of signals.
+Some of these signals,
+
+\begin{quote}
+\verb"cntls", \verb"datain", \verb"iack dataout", \verb"wmem",
+\verb"dreq", \verb"addr", \verb"zeroflag" and \verb"opc"
+\end{quote}
+
+\noindent
+correspond to physical inputs and outputs of the datapath.
+Other signals,
+
+\begin{quote}
+\verb"mar", \verb"pc", \verb"acc", \verb"ir", \verb"rtn",
+\verb"arg" and \verb"buf"
+\end{quote}
+
+\noindent
+only exists as physical signals within the datapath.
+Outside the datapath, they are virtual signals representing
+various parts of the internal state of the datapath.
+
+\subsubsection{Microcode source and micro-assembler}
+\label{sec-microcode}
+
+We use a straightforward representation for each microinstruction word
+as a n-tuple where each element corresponds to one of the sub-fields
+described earlier in Section~\ref{sec-phase}.
+For example, the n-tuple,
+
+\begin{quote}
+\verb"((F,F,T,F,T,F,F,F,F,F,F,F,F,F,F),(T,F),(T,F),(addr1,addr2))"
+\end{quote}
+
+\noindent
+is the representation of a typical microinstruction word.
+The first three elements of this representation are also n-tuples;
+they represent sub-fields which consist of individual bits.
+The fourth element is a pair of microcode addresses
+belonging to the type \verb":*word4".
+
+\newpage % PBHACK
+
+Instead of specifying the microcode directly in terms of bit patterns,
+a simple micro-assembler allows the microcode to be
+specified in a more readable form.
+The micro-assembler consists of the following definitions.
+
+\begintt
+let waitdack = new_definition (`waitdack`,"waitdack = (T,T)");;
+let waitidle = new_definition (`waitidle`,"waitidle = (T,F)");;
+let continue = new_definition (`continue`,"continue = (F,F)");;
+
+let jump = new_definition (`jump`,"jump = (T,T)");;
+let jireq = new_definition (`jireq`,"jireq = (T,F)");;
+let jzero = new_definition (`jzero`,"jzero = (F,T)");;
+let jopcode = new_definition (`jopcode`,"jopcode = (F,F)");;
+
+let Cntls = new_definition (
+  `Cntls`,
+  "Cntls (tok1,tok2,tok3) =
+    ((tok2 = `wmem`),
+     (tok1 = `rmem`),
+     (tok2 = `wmar`),
+     (tok2 = `wpc`),
+     (tok1 = `rpc`),
+     (tok2 = `wacc`),
+     (tok1 = `racc`),
+     (tok2 = `wir`),
+     (tok1 = `rir`),
+     (tok2 = `wrtn`),
+     (tok1 = `rrtn`),
+     (tok2 = `warg`),
+     ((tok3 = `inc`) \(\vee\) (tok3 = `add`)),
+     ((tok3 = `inc`) \(\vee\) (tok3 = `sub`)),
+     (tok1 = `rbuf`))");;
+
+let rom_ty = ":cntls_ty#(bool#bool)#(bool#bool)#(*word4#*word4)";;
+
+let CompileMicroCode = new_definition (
+  `CompileMicroCode`,
+  "CompileMicroCode (rep:^rep_ty) (cntl,wcode,jcode,(n,m)) =
+    ((Cntls cntl,wcode,jcode,((word4 rep) n,(word4 rep) m)):^rom_ty)");;
+\endtt
+
+\newpage % PBHACK
+
+The microcode source is specified by the definition of \verb"MicroCode".
+This function is a mapping from natural numbers
+to specifications of individual microinstructions.
+
+\begintt
+let MicroCode = new_definition (
+  `MicroCode`,
+  "MicroCode n =
+    ((n = 0) => ((`rpc`,`wmar`,`none`), waitidle, jireq, (1,2)) |
+     (n = 1) => ((`rpc`,`wrtn`,`zero`), continue, jump, (12,0)) |
+     (n = 2) => ((`rmem`,`wir`,`none`), waitdack, jump, (3,0)) |
+     (n = 3) => ((`rir`,`wmar`,`none`), waitidle, jopcode, (4,0)) |
+     (n = 4) => ((`none`,`none`,`none`), continue, jzero, (5,11)) |
+     (n = 5) => ((`rir`,`wpc`,`none`), continue, jump, (0,0)) |
+     (n = 6) => ((`racc`,`warg`,`none`), waitidle, jump, (13,0)) |
+     (n = 7) => ((`racc`,`warg`,`none`), waitidle, jump, (14,0)) |
+     (n = 8) => ((`rmem`,`wacc`,`none`), waitdack, jump, (11,0)) |
+     (n = 9) => ((`racc`,`wmem`,`none`), waitdack, jump, (11,0)) |
+     (n = 10) => ((`rrtn`,`wpc`,`none`), continue, jump, (0,0)) |
+     (n = 11) => ((`rpc`,`none`,`inc`), continue, jump, (12,0)) |
+     (n = 12) => ((`rbuf`,`wpc`,`none`), continue, jump, (0,0)) |
+     (n = 13) => ((`rmem`,`none`,`add`), waitdack, jump, (15,0)) |
+     (n = 14) => ((`rmem`,`none`,`sub`), waitdack, jump, (15,0)) |
+                 ((`rbuf`,`wacc`,`none`), continue, jump, (11,0)))");;
+\endtt
+
+The formal specification of the microcode source is based on the
+informal description of the FSM given earlier in Section~\ref{sec-micro},
+in particular, the flow graph in Figure~\ref{fig-flow} and the mapping from
+FSM states to actions in Figure~\ref{fig-map}.
+Each line of the microcode specification
+consists of four parts corresponding
+to the four sub-fields of the microinstruction word.
+For example,
+the term,
+
+\begin{quote}
+\verb"((`rpc`,`wmar`,`none`),waitidle,jireq,(1,2))"
+\end{quote}
+
+\noindent
+specifies the microinstruction at location~0 in the microcode.
+
+The first part specifies the
+action to be performed by the datapath in terms of a data transfer
+from a source to a destination and an ALU operation.
+In this case,
+the contents of the program counter \verb"pc" are read onto the bus and
+written into the memory address register \verb"mar".
+The string \verb"`none`" indicates that no specific ALU operation is
+required.
+
+The second part of each microinstruction specifies one of three
+wait conditions,
+
+\begin{center}
+\begin{tabular}{ll}
+\verb"waitidle"& - repeat if $\neg$(\verb"idle" or $\neg$\verb"dack")\\
+\verb"waitdack"& - repeat if $\neg$\verb"dack"\\
+\verb"continue"& - do not repeat
+\end{tabular}
+\end{center}
+
+\noindent
+which may cause this particular microinstruction to
+be repeated.
+
+The third part of the microinstruction specifies how to compute
+the address of the next microinstruction
+(when not waiting in a repeat-loop).
+
+\begin{center}
+\begin{tabular}{ll}
+\verb"jump"& - use \verb"addr1"\\
+\verb"jireq"& - use \verb"addr1" if \verb"ireq" is \verb"T", else use \verb"addr2"\\
+\verb"jzero"& - use \verb"addr1" if \verb"acc" is zero, else use \verb"addr2"\\
+\verb"jopcode"& - add opcode to offset in \verb"addr1"
+\end{tabular}
+\end{center}
+
+The last part of the microinstruction specifies two
+microinstruction addresses or, in the case of \verb"jopcode",
+the offset to be added to the opcode field in computing
+the address of the next microinstruction.
+
+Microinstruction specifications are individually assembled by
+the micro-assembler function \verb"CompileMicroCode".
+For example, the result of applying
+\verb"CompileMicroCode" to the microinstruction at location~0
+is described by the following theorem
+(after unfolding with definitions for the micro-assembler functions).
+
+\begintt
+|- CompileMicroCode rep(MicroCode 0) =
+   ((F,F,T,F,T,F,F,F,F,F,F,F,F,F,F),(T,F),(T,F),word4 rep 1,word4 rep 2)
+\endtt
+
+Specifying the microcode source in pure logic and using
+a theorem prover to unfold this specification is
+a very secure way (at least as secure as theorem-proving)
+to assemble a microcode code source into bit patterns.
+The result of assembling the \Tamarack\ microcode source
+is shown below (where a let-expression has been introduced
+for pretty-printing purposes).
+
+\begintt
+|- CompileMicroCode rep(MicroCode n) =
+   let addrs (p,q) = (word4 rep p,word4 rep q) in
+   ((n = 0) => ((F,F,T,F,T,F,F,F,F,F,F,F,F,F,F),(T,F),(T,F),addrs(1,2)) |
+    (n = 1) => ((F,F,F,F,T,F,F,F,F,T,F,F,F,F,F),(F,F),(T,T),addrs(12,0)) |
+    (n = 2) => ((F,T,F,F,F,F,F,T,F,F,F,F,F,F,F),(T,T),(T,T),addrs(3,0)) |
+    (n = 3) => ((F,F,T,F,F,F,F,F,T,F,F,F,F,F,F),(T,F),(F,F),addrs(4,0)) |
+    (n = 4) => ((F,F,F,F,F,F,F,F,F,F,F,F,F,F,F),(F,F),(F,T),addrs(5,11)) |
+    (n = 5) => ((F,F,F,T,F,F,F,F,T,F,F,F,F,F,F),(F,F),(T,T),addrs(0,0)) |
+    (n = 6) => ((F,F,F,F,F,F,T,F,F,F,F,T,F,F,F),(T,F),(T,T),addrs(13,0)) |
+    (n = 7) => ((F,F,F,F,F,F,T,F,F,F,F,T,F,F,F),(T,F),(T,T),addrs(14,0)) |
+    (n = 8) => ((F,T,F,F,F,T,F,F,F,F,F,F,F,F,F),(T,T),(T,T),addrs(11,0)) |
+    (n = 9) => ((T,F,F,F,F,F,T,F,F,F,F,F,F,F,F),(T,T),(T,T),addrs(11,0)) |
+    (n = 10) => ((F,F,F,T,F,F,F,F,F,F,T,F,F,F,F),(F,F),(T,T),addrs(0,0)) |
+    (n = 11) => ((F,F,F,F,T,F,F,F,F,F,F,F,T,T,F),(F,F),(T,T),addrs(12,0)) |
+    (n = 12) => ((F,F,F,T,F,F,F,F,F,F,F,F,F,F,T),(F,F),(T,T),addrs(0,0)) |
+    (n = 13) => ((F,T,F,F,F,F,F,F,F,F,F,F,T,F,F),(T,T),(T,T),addrs(15,0)) |
+    (n = 14) => ((F,T,F,F,F,F,F,F,F,F,F,F,F,T,F),(T,T),(T,T),addrs(15,0)) |
+                ((F,F,F,F,F,T,F,F,F,F,F,F,F,F,T),(F,F),(T,T),addrs(11,0)))
+\endtt
+
+A proof procedure for assembling the \Tamarack\ microcode is given in:
+
+\begin{quote}
+\verb"hol/Training/studies/microprocessor/proof/example1.ml"
+\end{quote}
+
+\subsubsection{Primitive components of the control unit}
+
+Section~\ref{sec-phase} outlined the implementation of the
+control unit FSM by a microcode program
+counter, microcode ROM,
+ROM output decoder and next address logic.
+
+The microcode program counter \verb"mpc" is
+modelled as a register which is
+unconditionally updated each clock cycle with its current input.
+
+\begintt
+let MPC = new_definition (
+  `MPC`,
+  "MPC (inp,out:time->*word4) = \(\forall\)t:time. out (t+1) = inp t");;
+\endtt
+
+The microcode ROM is specified as a
+combinational device which takes a FSM state
+as input and returns a microinstruction word as a result.
+The actual contents of the ROM have already been specified
+by the earlier definition of \verb"MicroCode".
+
+\begintt
+let ROM = new_definition (
+  `ROM`,
+  "ROM (rep:^rep_ty) (inp,out) =
+    \(\forall\)t:time.
+      out t = (CompileMicroCode rep) (MicroCode ((val4 rep) (inp t)))");;
+\endtt
+
+The output of the ROM is an n-tuple with elements corresponding
+to microinstruction sub-fields.
+The definition of \verb"DecodeROM" specifies a device which
+separates the output of the ROM into various microinstruction sub-fields.
+The specification of this device is similar to the
+earlier definition of \verb"DecodeCntls".
+
+\begintt
+let DecodeROM = new_definition (
+  `DecodeROM`,
+  "DecodeROM (rom:time->^rom_ty,f0,f1,f2,f3,addr1,addr2,cntls) =
+    \(\forall\)t:time. (cntls t,(f0 t,f1 t),(f2 t,f3 t),(addr1 t,addr2 t)) = rom t");;
+\endtt
+
+The definition of \verb"NextMPC" specifies the computation of FSM
+states according to the flow graph in Figure~\ref{fig-flow}.
+Although the definition of \verb"NextMPC" looks rather complex
+for a primitive component, it is just a block of combinational logic
+which could be implemented by a set of logic gates, some multiplexors and
+an adder.
+The formal verification of \Tamarack\ could be extended by
+proving that a particular implementation of the next address logic
+satisfies the behavioural specification shown below
+(see suggested exercise in Section~\ref{sec-exer}).
+
+\begintt
+let NextMPC = new_definition (
+  `NextMPC`,
+  "NextMPC (rep:^rep_ty)
+    (f0,f1,f2,f3,dack,idle,ireq,iack,
+     zeroflag,opc,addr1,addr2,mpc,next) =
+    \(\forall\)t:time.
+      let waitcond =
+        ((((f0 t,f1 t) = waitdack) \(\wedge\) \(\neg\)(dack t)) \(\vee\)
+         (((f0 t,f1 t) = waitidle) \(\wedge\) \(\neg\)((idle t) \(\vee\) \(\neg\)(dack t)))) in
+      (next t =
+        (waitcond => (mpc t) |
+         ((f2 t,f3 t) = jump) => (addr1 t) |
+         ((f2 t,f3 t) = jireq) =>
+           (((ireq t) \(\wedge\) \(\neg\)(iack t)) => (addr1 t) | (addr2 t)) |
+         ((f2 t,f3 t) = jzero) =>
+           ((zeroflag t) => (addr1 t) | (addr2 t)) |
+           ((word4 rep)
+             (((val3 rep) (opc t)) + ((val4 rep) (addr1 t))))))");;
+\endtt
+
+\subsubsection{Control unit implementation}
+
+The register-transfer level implementation of the control unit FSM
+is formally specified by the definition of \verb"CntlUnit".
+
+\begintt
+let CntlUnit = new_definition (
+  `CntlUnit`,
+  "CntlUnit (rep:^rep_ty) (dack,idle,ireq,iack,zeroflag,opc,mpc,cntls) =
+    \(\exists\)f0 f1 f2 f3 addr1 addr2 next rom.
+      NextMPC rep (
+        f0,f1,f2,f3,dack,idle,ireq,iack,
+        zeroflag,opc,addr1,addr2,mpc,next) \(\wedge\)
+      MPC (next,mpc) \(\wedge\)
+      ROM rep (mpc,rom) \(\wedge\)
+      DecodeROM (rom,f0,f1,f2,f3,addr1,addr2,cntls)");;
+\endtt
+
+With the sole exception of \verb"mpc",
+all the signal names in the parameter list of \verb"CntlUnit"
+correspond to physical inputs and outputs of the control unit FSM.
+The microcode program counter \verb"mpc"
+is a physical signal only within the implementation of the control unit.
+Outside the control unit, the microcode program counter \verb"mpc"
+is a virtual signal representing the internal state of the FSM.
+
+\subsubsection{Top level structure}
+
+The control unit and datapath are combined to implement the
+internal architecture of \Tamarack.
+The control signals, \verb"cntl", and feedback signals,
+\verb"zeroflag" and \verb"opc", are internal connections
+between the control unit and datapath.
+
+\begintt
+let TamarackImp = new_definition (
+  `TamarackImp`,
+  "TamarackImp (rep:^rep_ty)
+    (datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr) =
+    \(\exists\)zeroflag opc cntls.
+      CntlUnit rep (dack,idle,ireq,iack,zeroflag,opc,mpc,cntls) \(\wedge\)
+      DataPath rep (
+        cntls,datain,mar,pc,acc,ir,rtn,iack,
+        arg,buf,dataout,wmem,dreq,addr,zeroflag,opc)");;
+\endtt
+
+The signals,
+
+\begin{quote}
+\verb"datain", \verb"dack", \verb"idle", \verb"ireq", \verb"iack",
+\verb"dataout", \verb"wmem", \verb"dreq" and \verb"addr"
+\end{quote}
+
+\noindent
+correspond to physical input and output pins of the microprocessor.
+The remaining signals in the parameter list of \verb"TamarackImp",
+
+\begin{quote}
+\verb"mpc", \verb"mar", \verb"pc", \verb"acc", \verb"ir", \verb"rtn",
+\verb"arg" and \verb"buf"
+\end{quote}
+
+\noindent
+only exists as physical signals within the internal architecture.
+They appear in the parameter list as
+virtual signals representing
+the internal state of the microprocessor.
+
+\subsection{Programming level model}
+\label{sec-formsem}
+
+The formal specification of the programming level model is
+based on the informal descriptions given
+in Section~\ref{sec-semantics} and~\ref{sec-ireq}
+of the instruction set semantics and the hardware interrupt facility.
+
+The semantics of each instruction is given individually by the
+definition of a function which returns
+the next (externally visible) state of the microprocessor,
+i.e., the next values of the memory state \verb"mem",
+program counter \verb"pc",
+accumulator \verb"acc",
+return address register \verb"rtn"
+and interrupt acknowledge flag \verb"iack".
+The following definitions specify how these values are computed
+from the current state of the microprocessor.
+
+\begintt
+let JZR_SEM = new_definition (
+  `JZR_SEM`,
+  "JZR_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    let inst = (fetch rep) (mem,(address rep) pc) in
+    let nextpc = ((iszero rep) acc) => inst | ((inc rep) pc) in
+      (mem,nextpc,acc,rtn,iack)");;
+
+let JMP_SEM = new_definition (
+  `JMP_SEM`,
+  "JMP_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    let inst = (fetch rep) (mem,(address rep) pc) in
+      (mem,inst,acc,rtn,iack)");;
+
+let ADD_SEM = new_definition (
+  `ADD_SEM`,
+  "ADD_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    let inst = (fetch rep) (mem,(address rep) pc) in
+    let operand = (fetch rep) (mem,(address rep) inst) in
+      (mem,(inc rep) pc,(add rep) (acc,operand),rtn,iack)");;
+
+let SUB_SEM = new_definition (
+  `SUB_SEM`,
+  "SUB_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    let inst = (fetch rep) (mem,(address rep) pc) in
+    let operand = (fetch rep) (mem,(address rep) inst) in
+      (mem,(inc rep) pc,(sub rep) (acc,operand),rtn,iack)");;
+
+let LDA_SEM = new_definition (
+  `LDA_SEM`,
+  "LDA_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    let inst = (fetch rep) (mem,(address rep) pc) in
+    let operand = (fetch rep) (mem,(address rep) inst) in
+      (mem,(inc rep) pc,operand,rtn,iack)");;
+
+let STA_SEM = new_definition (
+  `STA_SEM`,
+  "STA_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    let inst = (fetch rep) (mem,(address rep) pc) in
+    let newmem = (store rep) (mem,(address rep) inst,acc) in
+      (newmem,(inc rep) pc,acc,rtn,iack)");;
+\endtt
+
+\begintt
+let RFI_SEM = new_definition (
+  `RFI_SEM`,
+  "RFI_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    (mem,rtn,acc,rtn,F)");;
+
+let NOP_SEM = new_definition (
+  `NOP_SEM`,
+  "NOP_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    (mem,(inc rep) pc,acc,rtn,iack)");;
+\endtt
+
+The processing of a hardware interrupt is described in a similar way
+by the definition of a function which computes the next
+state of the microprocessor from its current state.
+
+\begintt
+let IRQ_SEM = new_definition (
+  `IRQ_SEM`,
+  "IRQ_SEM (rep:^rep_ty)
+    (mem:*memory,pc:*wordn,acc:*wordn,rtn:*wordn,iack:bool) =
+    (mem,((wordn rep) 0),acc,pc,T)");;
+\endtt
+
+The opcode of the current instruction word determines which
+instruction is executed during a particular instruction cycle.
+The following set of definitions specify the opcode value for
+each instruction.
+
+\begintt
+let JZR_OPC = new_definition (`JZR_OPC`,"JZR_OPC = 0");;
+let JMP_OPC = new_definition (`JMP_OPC`,"JMP_OPC = 1");;
+let ADD_OPC = new_definition (`ADD_OPC`,"ADD_OPC = 2");;
+let SUB_OPC = new_definition (`SUB_OPC`,"SUB_OPC = 3");;
+let LDA_OPC = new_definition (`LDA_OPC`,"LDA_OPC = 4");;
+let STA_OPC = new_definition (`STA_OPC`,"STA_OPC = 5");;
+let RFI_OPC = new_definition (`RFI_OPC`,"RFI_OPC = 6");;
+let NOP_OPC = new_definition (`NOP_OPC`,"NOP_OPC = 7");;
+\endtt
+
+The opcode value of the current instruction is obtained by fetching
+the memory word addressed by the program counter, extracting
+the value of its opcode field and interpreting the opcode as
+a number between 0 and 7.  This procedure is specified in the
+definition of \verb"OpcVal"
+
+\begintt
+let OpcVal = new_definition (
+    `OpcVal`,
+    "OpcVal (rep:^rep_ty) (mem,pc) =
+      (val3 rep) ((opcode rep) ((fetch rep) (mem,(address rep) pc)))");;
+\endtt
+
+Every instruction cycle results in the execution of an
+programming level instruction
+unless a hardware interrupt is
+detected and processed during this cycle.
+The following definition of \verb"NextState"
+specifies the overall control mechanism for determining what
+happens during a particular instruction cycle.
+
+\begintt
+let NextState = new_definition (
+  `NextState`,
+  "NextState (rep:^rep_ty) (ireq,mem,pc,acc,rtn,iack) =
+    let opcval = OpcVal rep (mem,pc) in
+    ((ireq \(\wedge\) \(\neg\)iack)    => IRQ_SEM rep (mem,pc,acc,rtn,iack) |
+     (opcval = JZR_OPC) => JZR_SEM rep (mem,pc,acc,rtn,iack) |
+     (opcval = JMP_OPC) => JMP_SEM rep (mem,pc,acc,rtn,iack) |
+     (opcval = ADD_OPC) => ADD_SEM rep (mem,pc,acc,rtn,iack) |
+     (opcval = SUB_OPC) => SUB_SEM rep (mem,pc,acc,rtn,iack) |
+     (opcval = LDA_OPC) => LDA_SEM rep (mem,pc,acc,rtn,iack) |
+     (opcval = STA_OPC) => STA_SEM rep (mem,pc,acc,rtn,iack) |
+     (opcval = RFI_OPC) => RFI_SEM rep (mem,pc,acc,rtn,iack) |
+                           NOP_SEM rep (mem,pc,acc,rtn,iack))");;
+\endtt
+
+Finally, we use the function \verb"NextState" to define the predicate
+\verb"TamarackBeh" which specifies the intended behaviour of the
+microprocessor as a relation on the time-dependent signals
+\verb"mem",
+\verb"pc",
+\verb"acc",
+\verb"rtn" and
+\verb"iack".
+
+\begintt
+let TamarackBeh = new_definition (
+  `TamarackBeh`,
+  "TamarackBeh (rep:^rep_ty) (ireq,mem,pc,acc,rtn,iack) =
+    \(\forall\)u:time.
+      (mem (u+1),pc (u+1),acc (u+1),rtn (u+1),iack (u+1)) =
+      NextState rep (ireq u,mem u,pc u,acc u,rtn u,iack u)");;
+\endtt
+
+The programming level model
+not only hides structural details of the internal architecture
+but also timing details about the number of
+microinstructions executed for each instruction.
+To be more precise, the programming level model describes
+the operation of the microprocessor in terms of an abstract time scale
+where each instruction is uniformly executed in a single unit of time.
+This abstract time scale is different than the time scale
+used to specify the behaviour of register-transfer level components
+where a single unit of time corresponds to a single clock cycle.
+To emphasize this difference,
+we have used the explicit time variable \verb"u" instead of \verb"t"
+in the above definition of \verb"TamarackBeh"
+(but there is logical
+distinction between these two variable names).
+As we will see in Section~\ref{sec-plan},
+part of the verification task is to establish
+a formal relationship between these two granularities of discrete time.
+
+\subsection{External memory specification}
+\label{sec-formmem}
+
+A behavioural model for fully synchronous memory
+expressed by the predicate \verb"SynMemory".
+The definition of this predicate is shown below.
+
+\begintt
+let SynMemory = new_definition (
+  `SynMemory`,
+  "SynMemory (rep:^rep_ty) (w,addr,dataout,mem,datain) =
+    \(\forall\)t:time.
+      (\(\neg\)(w t) ==> (datain t = (fetch rep) (mem t,addr t))) \(\wedge\)
+      (mem (t+1) =
+        ((w t) => ((store rep) (mem t,addr t,dataout t)) | (mem t)))");;
+\endtt
+
+External memory implements the
+uninterpreted operations selected by \verb"fetch" and \verb"store".
+The write signal \verb"w" controls which operations are performed
+by the memory each clock cycle.
+Data is sent to external memory on the \verb"dataout" bus and received
+from external memory on the \verb"datain" bus.
+Memory addresses are sent to external memory on the \verb"addr" bus.
+The internal state of memory is represented by the virtual signal \verb"mem".
+
+A fully asynchronous version of external memory also implements the
+uninterpreted operations selected by \verb"fetch" and \verb"store"
+but uses handshaking signals to synchronize its interaction with the
+microprocessor.
+A formal specification for a fully asynchronous memory device is
+deferred until Section~\ref{sec-asyn}.

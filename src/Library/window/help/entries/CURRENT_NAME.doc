@@ -1,0 +1,16 @@
+\DOC CURRENT_NAME
+
+\TYPE {CURRENT_NAME : (void -> string)}
+
+\SYNOPSIS
+Returns the name of the current window stack.
+
+\LIBRARY window
+
+\FAILURE
+Fails if there is no current window stack.
+
+\SEEALSO
+create_win, BEGIN_STACK, END_STACK, SET_STACK, ALL_STACKS
+
+\ENDDOC

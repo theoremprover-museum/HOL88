@@ -1,0 +1,3 @@
+\THEOREM MAP_o list
+|- !f g. MAP(f o g) = (MAP f) o (MAP g)
+\ENDTHEOREM

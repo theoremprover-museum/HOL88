@@ -1,0 +1,25 @@
+\DOC best
+
+\TYPE {best : (((* # *) -> bool) -> * list -> *)}
+
+\SYNOPSIS
+Choses the best elemet from a list using a given ordering relation.
+
+\LIBRARY window
+
+\DESCRIBE
+{best f l} choses the best element in {l} according to the ordering {f}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+   #best (uncurry $ge) [1;10;2;9;3;8;4;7;5;6];;
+   10 : int
+}
+
+\SEEALSO
+sort, merge.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM NOT_0_AND_MORE zero_ineq
+|- !x. ~((x = 0) /\ 0 < x)
+\ENDTHEOREM

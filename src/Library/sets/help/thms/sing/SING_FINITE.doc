@@ -1,0 +1,3 @@
+\THEOREM SING_FINITE sets
+|- !s. SING s ==> FINITE s
+\ENDTHEOREM

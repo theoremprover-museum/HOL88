@@ -1,0 +1,3 @@
+\THEOREM LENGTH_BUTLASTN list
+|- !n l. n <= (LENGTH l) ==> (LENGTH(BUTLASTN n l) = (LENGTH l) - n)
+\ENDTHEOREM

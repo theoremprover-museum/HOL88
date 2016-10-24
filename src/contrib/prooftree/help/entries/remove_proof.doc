@@ -1,0 +1,27 @@
+\DOC remove_proof
+
+\TYPE {remove_proof : (string -> void)}
+
+\SYNOPSIS
+Removes a proof tree from the set of proof trees.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Removes a proof tree from the set of proofs being
+manipulated, whether it has been completed or not. Used to help
+control space used by the set of proof trees. The argument is the name
+of the proof tree to be removed.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails if there is no proof tree named by the argument to the function.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

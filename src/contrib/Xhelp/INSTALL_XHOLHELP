@@ -1,0 +1,56 @@
+
+# GUIDE FOR INSTALLING XHOLHELP - BROWSER FOR HOL DOCUMENTATION
+
+
+# There are two steps in installing xholhelp: the first one is to set up
+# paths to shell-scripts and documentation files. The second one is to
+# compile the C program.
+
+# STEP 1. Author: Phillip J. Windley, University of Idaho
+
+#
+# Change the variables XHOLHELP_PATH and NEW_HELP_PATH in the
+# following lines to reflect the location of the xholhelp
+# directory and the HOL help directories, respectively.
+#
+
+XHOLHELP_PATH=/usr/groups/hol/HOL21/src/contrib/Xhelp
+NEW_HELP_PATH=/usr/groups/hol/HOL21/src/help
+
+
+# Then run the following script (by executing this file):
+
+
+for f in xholhelp.h hol_apro hol_ref hol_thm
+do 
+   sed -e "s:ORIG_DIR:$XHOLHELP_PATH:g;\
+           s:ORIG_HELP_PATH:$NEW_HELP_PATH:g" $f.orig >$f
+   chmod 755 $f
+done
+chmod 644 xholhelp.h
+
+
+
+# STEP2: USING IMAKE
+
+# Imake is a "C preprocessor interface to the make utility".
+# This directory contains a file called Imakefile. It is a template
+# to create a Makefile. "xmkmf" sets parameters regarding the X
+# installation and calls Imake.
+# This step is accomplished by executing this file.
+
+xmkmf
+make clean
+make all
+
+
+
+# The script "xmkmf" should exist in most installations running X11
+# (and OpenWindows). If you cannot find it consult the local Xpert.
+
+# Also feel free to contact me if you still have problems.
+
+
+#						- Sara Kalvala
+#						sk@cl.cam.ac.uk
+

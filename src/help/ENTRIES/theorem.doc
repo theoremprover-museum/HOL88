@@ -1,0 +1,30 @@
+\DOC theorem
+
+\TYPE {theorem : (string -> string -> thm)}
+
+\SYNOPSIS
+Reads a derived theorem from a given theory segment of the current theory.
+
+\DESCRIBE
+A call of {theorem `thy` `th`} returns the theorem named {th} from the
+theory segment {thy}. The theory segment {thy} must be part of the current
+theory. The name {th} is the name given to the theorem by the user when it
+was originally added to the theory segment (by, for example, a call to
+{save_thm}). The name of the current theory segment can be abbreviated by {`-`}.
+
+\FAILURE
+The call {theorem `thy` `th`} will fail if the theory segment {thy} is not
+part of the current theory.
+It will fail if there does not exist a derived theorem {th} in theory
+segment {thy}.
+
+\EXAMPLE
+{
+#theorem `arithmetic` `ADD_SYM`;;
+|- !m n. m + n = n + m
+}
+\SEEALSO
+axiom, definition, load_theorem, load_theorems, print_theory, save_thm,
+theorems.
+
+\ENDDOC

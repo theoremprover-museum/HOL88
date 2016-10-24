@@ -1,0 +1,12 @@
+\DOC TOP_WIN
+
+\TYPE {TOP_WIN :  (void -> window)}
+
+\SYNOPSIS
+Return the window on top of the window stack.
+
+\LIBRARY window
+
+\FAILURE
+
+\ENDDOC

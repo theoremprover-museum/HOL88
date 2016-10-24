@@ -1,0 +1,3 @@
+\THEOREM SNOC_CASES list
+|- !l. (l = []) \/ (?l' x. l = SNOC x l')
+\ENDTHEOREM

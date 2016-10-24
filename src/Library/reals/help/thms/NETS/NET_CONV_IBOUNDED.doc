@@ -1,0 +1,5 @@
+\THEOREM NET_CONV_IBOUNDED NETS
+|- !g x x0.
+    (x tends x0)(mtop mr1,g) /\ ~(x0 = real_of_num 0) ==>
+    bounded(mr1,g)(\n. real_inv(x n))
+\ENDTHEOREM

@@ -1,0 +1,112 @@
+\newpage
+\section{Appendix: Some Modular Arithmetic from Group Theory}
+
+Included there is a portion the modular arithmetic developed in HOL.  It
+provides us with another example of the application of group theory. 
+
+\begin{verbatim}
+print_theory `int_mod`;;
+The Theory int_mod
+Parents --  HOL     integer     more_gp     
+Constants --
+  int_mult_set ":integer -> (integer -> bool)"
+  int_mod ":integer -> ((integer -> bool) -> bool)"
+  mod ":integer -> (integer -> (integer -> bool))"
+  plus_mod
+    ":integer ->
+      ((integer -> bool) -> ((integer -> bool) -> (integer -> bool)))"
+  minus_mod
+    ":integer ->
+      ((integer -> bool) -> ((integer -> bool) -> (integer -> bool)))"
+  
+Definitions --
+  INT_MULT_SET_DEF  |- !n. int_mult_set n = (\m. ?p. m = p times n)
+  INT_MOD_DEF  |- !n. int_mod n = quot_set((\N. T),$plus)(int_mult_set n)
+  MOD_DEF  |- !n m. mod n m = LEFT_COSET((\N. T),$plus)(int_mult_set n)m
+  PLUS_MOD_DEF 
+    |- !n. plus_mod n = quot_prod((\N. T),$plus)(int_mult_set n)
+  MINUS_MOD_DEF
+    |- !m n p. minus_mod n m p = plus_mod n m(INV(int_mod n,plus_mod n)p)
+  
+Theorems --
+  INT_SBGP_NORMAL
+    |- SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+  INT_MULT_SET_NORMAL  |- !n. NORMAL((\N. T),$plus)(int_mult_set n)
+  INT_MOD_MOD_LEMMA
+    |- (!m. int_mod n(mod n m)) /\ (int_mod n q ==> (?m. q = mod n m))
+  int_mod_as_GROUP  |- GROUP(int_mod n,plus_mod n)
+  MOD_NAT_HOM_LEMMA  |- NAT_HOM((\N. T),$plus)(int_mult_set n) = mod n
+  PLUS_MOD_LEMMA
+    |- !x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)
+  ID_EQ_MOD_0  |- ID(int_mod n,plus_mod n) = mod n(INT 0)
+  INV_EQ_MOD_NEG
+    |- !m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)
+  MINUS_MOD_LEMMA
+    |- !m p. minus_mod n(mod n m)(mod n p) = mod n(m minus p)
+\end{verbatim}
+\newpage
+From here we just instantiate group theory.
+\begin{verbatim}
+  INT_MOD_CLOSURE  |- !m1 m2. int_mod n(plus_mod n(mod n m1)(mod n m2))
+  INT_MOD_GROUP_ASSOC
+    |- !m1 m2 m3.
+        plus_mod n(plus_mod n(mod n m1)(mod n m2))(mod n m3) =
+        plus_mod n(mod n m1)(plus_mod n(mod n m2)(mod n m3))
+  INT_MOD_ID_LEMMA
+    |- !m1.
+        (plus_mod n(mod n(INT 0))(mod n m1) = mod n m1) /\
+        (plus_mod n(mod n m1)(mod n(INT 0)) = mod n m1) /\
+        (?y. int_mod n y /\ (plus_mod n y(mod n m1) = mod n(INT 0)))
+  INT_MOD_LEFT_RIGHT_INV
+    |- !m2 m1.
+        (plus_mod n(mod n m2)(mod n m1) = mod n(INT 0)) ==>
+        (plus_mod n(mod n m1)(mod n m2) = mod n(INT 0))
+  INT_MOD_INV_LEMMA
+    |- !m1.
+        (plus_mod n(mod n(neg m1))(mod n m1) = mod n(INT 0)) /\
+        (minus_mod n(mod n m1)(mod n m1) = mod n(INT 0))
+  INT_MOD_LEFT_CANCELLATION
+    |- !m1 m2 m3.
+        (plus_mod n(mod n m1)(mod n m2) =
+         plus_mod n(mod n m1)(mod n m3)) ==>
+        (mod n m2 = mod n m3)
+  INT_MOD_RIGHT_CANCELLATION
+    |- !m2 m1 m3.
+        (plus_mod n(mod n m2)(mod n m1) =
+         plus_mod n(mod n m3)(mod n m1)) ==>
+        (mod n m2 = mod n m3)
+  INT_MOD_RIGHT_ONE_ONE_ONTO
+    |- !m1 m2.
+        ?z.
+         int_mod n z /\
+         (plus_mod n(mod n m1)z = mod n m2) /\
+         (!u.
+           int_mod n u /\ (plus_mod n(mod n m1)u = mod n m2) ==> (u = z))
+  INT_MOD_LEFT_ONE_ONE_ONTO
+    |- !m1 m2.
+        ?z.
+         int_mod n z /\
+         (plus_mod n z(mod n m1) = mod n m2) /\
+         (!u.
+           int_mod n u /\ (plus_mod n u(mod n m1) = mod n m2) ==>
+           (u = z))
+  INT_MOD_UNIQUE_ID
+    |- !e m1.
+        (int_mod n e ==>
+         (plus_mod n e(mod n m1) = mod n m1) ==>
+         (e = mod n(INT 0))) /\
+        (int_mod n e ==>
+         (plus_mod n(mod n m1)e = mod n m1) ==>
+         (e = mod n(INT 0)))
+  INT_MOD_UNIQUE_INV
+    |- !u m1.
+        int_mod n u ==>
+        (plus_mod n u(mod n m1) = mod n(INT 0)) ==>
+        (u = mod n(neg m1))
+  INT_MOD_INV_INV_LEMMA  |- !m1. mod n(neg(neg m1)) = mod n m1
+  INT_MOD_DIST_INV_LEMMA
+    |- !m1 m2.
+        minus_mod n(mod n(neg m1))(mod n m2) =
+        INV(int_mod n,plus_mod n)(plus_mod n(mod n m2)(mod n m1))
+\end{verbatim} 
+

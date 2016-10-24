@@ -1,0 +1,28 @@
+\DOC instantiate_abstract_definition
+
+\TYPE {instantiate_abstract_definition : string -> string -> thm -> (term # term) list -> thm}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS 
+Instantiates a definition that is made in terms of a definition
+from an abstract theory.
+
+\DESCRIBE 
+A call of {instantiate_abstract_definition `thy` `th` def
+tpl} retrieves the abstract definition {th} from the abstract theory
+{thy} rewrites {def} with it and instantiates the result using
+{tpl}, where {tpl} is a list of paired terms where the first term is
+the variable to be instantiated and the second term is the instantiation.
+The abstract theory {thy} must be an ancestor of the current theory.
+
+\FAILURE 
+The call will fail if the theory {thy} is not an ancestor of the
+current theory.  It will fail if there does not exist a definition {th}
+in theory segment {thy}.
+
+
+\SEEALSO
+instantiate_abstract_theorem
+
+\ENDDOC

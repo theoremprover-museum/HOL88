@@ -1,0 +1,36 @@
+\DOC bound
+
+\TYPE {bound : (window -> term list)}
+
+\SYNOPSIS
+The list of variables bound by a window.
+
+\LIBRARY window
+
+\DESCRIBE
+{bound w} returns the list of variables which are said to be bound by
+the window {w}.   This is list list of variables which appear to be
+free in {w}, but are bound in the its parent window.
+
+\EXAMPLE
+{
+    #letref b = [] : term list;;
+    b = [] : term list
+    
+    #open_win
+       [BODY]
+       (\w. b:=bound w; w)
+	   (create_win "= (\x:num.x + y)" [] []) ;;
+    (|- (\x. x + y) = (\x. x + y), [], [], [], ["x"]) : window
+    
+    #b;;
+    ["x"] : term list
+}
+
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+
+\ENDDOC

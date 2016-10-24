@@ -1,0 +1,3 @@
+\THEOREM SUM_CMUL REAL
+|- !f c m n. Sum(m,n)(\n'. c * (f n')) = c * (Sum(m,n)f)
+\ENDTHEOREM

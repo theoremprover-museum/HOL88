@@ -1,0 +1,3 @@
+\THEOREM APPEND_NIL list
+|- (!l. APPEND l[] = l) /\ (!l. APPEND[]l = l)
+\ENDTHEOREM

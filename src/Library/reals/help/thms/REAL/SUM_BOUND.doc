@@ -1,0 +1,5 @@
+\THEOREM SUM_BOUND REAL
+|- !f K m n.
+    (!p. m num_le p /\ p num_lt (m num_add n) ==> (f p) <= K) ==>
+    (Sum(m,n)f) <= ((& n) * K)
+\ENDTHEOREM

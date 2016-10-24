@@ -1,0 +1,11 @@
+\thispagestyle {empty}
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Files}{3}
+\contentsline {section}{\numberline {3}Informal specification}{4}
+\contentsline {section}{\numberline {4}Specification}{7}
+\contentsline {section}{\numberline {5}Verification}{13}
+\contentsline {subsection}{\numberline {5.1}Safety theorems}{14}
+\contentsline {subsection}{\numberline {5.2}Liveness theorems}{25}
+\contentsline {subsection}{\numberline {5.3}Total correctness theorem}{34}
+\contentsline {section}{\numberline {6}References}{36}
+\contentsline {section}{\numberline {A}Supporting theories}{37}

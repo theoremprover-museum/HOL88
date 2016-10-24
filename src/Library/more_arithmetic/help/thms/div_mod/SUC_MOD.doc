@@ -1,0 +1,3 @@
+\THEOREM SUC_MOD div_mod
+|- !n m. (SUC n) < m ==> ((SUC n) MOD m = SUC(n MOD m))
+\ENDTHEOREM

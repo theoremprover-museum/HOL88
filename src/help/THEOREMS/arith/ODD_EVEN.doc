@@ -1,0 +1,3 @@
+\THEOREM ODD_EVEN arithmetic
+|- !n. ODD n = ~EVEN n
+\ENDTHEOREM

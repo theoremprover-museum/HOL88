@@ -1,0 +1,28 @@
+\DOC load_theory
+
+\TYPE {load_theory : (string -> void)}
+
+\SYNOPSIS
+Loads an existing theory into the system.
+
+\DESCRIBE
+A call {load_theory `thy`} loads the existing theory {thy} into the system
+and makes it the current theory. The message `{Theory thy loaded}' is printed.
+The theory is entered in proof mode. Whilst in this mode only theorems may be
+added to the theory segment.
+
+\FAILURE
+A call to {load_theory `thy`} will fail if theory {thy} does not appear on
+the current search path. It will fail if theory {thy} is not a descendant of
+the current theory. It will fail if an ancestor of theory {thy} has been
+extended with either new types or constants which clash with names in theory
+{thy}. It will also fail if any of the theory files of the theory {thy}
+have been damaged. On failure, the system recovers cleanly, unloading any
+theory segments it had loaded before the failure was detected. It will diverge
+if the theory hierarchy within theory {thy} contains loops, so that a theory
+segment is its own ancestor.
+
+\SEEALSO
+extend_theory, new_parent, new_theory, print_theory, search_path.
+
+\ENDDOC

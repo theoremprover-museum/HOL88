@@ -1,0 +1,3 @@
+\THEOREM LENGTH_EQ list
+|- !x y. (x = y) ==> (LENGTH x = LENGTH y)
+\ENDTHEOREM

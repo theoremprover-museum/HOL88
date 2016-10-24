@@ -1,0 +1,3 @@
+\THEOREM MIN_DEF min_max
+|- !n p. MIN n p = (n <= p => n | p)
+\ENDTHEOREM

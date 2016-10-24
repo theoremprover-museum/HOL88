@@ -1,0 +1,3 @@
+\THEOREM EQ_REFL \none
+|- !x:*. x = x
+\ENDTHEOREM

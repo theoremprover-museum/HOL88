@@ -1,0 +1,38 @@
+\DOC BASEN_DIV_CONV
+
+\TYPE {BASEN_DIV_CONV : term -> thm}
+
+\SYNOPSIS
+Proves the result of dividing one numeral by another.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} and {n} are lists of digits in base {r}, and {p} is the list of digits
+in the base {r} numeral representing the sum of {m} and {n}, then
+{BASEN_DIV_CONV} returns the theorem:
+{
+        |- (BASEN r m DIV BASEN r n) = BASEN r p
+}
+\FAILURE
+The argument term must be of the form {"BASEN r [...] DIV BASEN r [...]"}, and
+the radix of the two numerals must be the same, and the radix must be a numeric
+constant that is at least 2, and all elements of the digit lists must be
+numeric constants, and must be less than the radix, and the divisor must be
+nonzero.
+
+\EXAMPLE
+{
+#BASEN_DIV_CONV "BASEN 10 [3;4;5] DIV BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] DIV BASEN 10 [3;4;5] = BASEN 10 [1]
+
+#BASEN_DIV_CONV "BASEN 2 [1;1;1;1] DIV BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] DIV BASEN 2 [1;1;1;0]) = BASEN 2 [1]
+
+#BASEN_DIV_CONV "BASEN 16 [8;10;14] DIV BASEN 16 [12;4]";;
+|- BASEN 16 [8;10;14] DIV BASEN 16 [12;4]) = BASEN 16 [11]
+}
+\SEEALSO
+BASEN_MOD_CONV
+
+\ENDDOC

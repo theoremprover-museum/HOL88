@@ -1,0 +1,4 @@
+\THEOREM SNOC list
+|- (!x. SNOC x[] = [x]) /\
+   (!x x' l. SNOC x(CONS x' l) = CONS x'(SNOC x l))
+\ENDTHEOREM

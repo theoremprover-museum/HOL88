@@ -1,0 +1,42 @@
+\begin{theindex}
+
+  \item {\ptt ACCEPT\_TAC}, 7
+  \item {\ptt ALL\_TAC}, 7
+  \item {\ptt ASM\_CASES\_TAC}, 8
+  \item {\ptt ASM\_REWRITE\_TAC}, 9
+  \item {\ptt ASSUME\_TAC}, 10
+
+  \indexspace
+
+  \item {\ptt COND\_CASES\_TAC}, 12
+
+  \indexspace
+
+  \item {\ptt DISJ\_CASES\_TAC}, 14
+
+  \indexspace
+
+  \item {\ptt FIRST\_ASSUM}, 15
+
+  \indexspace
+
+  \item {\ptt IMP\_RES\_TAC}, 15
+
+  \indexspace
+
+  \item {\ptt ONCE\_ASM\_REWRITE\_TAC}, 20
+  \item {\ptt ONCE\_REWRITE\_TAC}, 21
+
+  \indexspace
+
+  \item {\ptt PURE\_ASM\_REWRITE\_TAC}, 22
+  \item {\ptt PURE\_ONCE\_ASM\_REWRITE\_TAC}, 23
+  \item {\ptt PURE\_ONCE\_REWRITE\_TAC}, 24
+  \item {\ptt PURE\_REWRITE\_TAC}, 25
+
+  \indexspace
+
+  \item {\ptt RES\_TAC}, 27
+  \item {\ptt REWRITE\_TAC}, 31
+
+\end{theindex}

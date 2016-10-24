@@ -1,0 +1,4 @@
+\THEOREM trat_eq HRAT
+|- !x y x' y'.
+    (x,y) trat_eq (x',y') = ((SUC x) * (SUC y') = (SUC x') * (SUC y))
+\ENDTHEOREM

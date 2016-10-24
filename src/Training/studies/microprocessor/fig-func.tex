@@ -1,0 +1,87 @@
+% ===== Functional View ================================================
+% ======================================================================
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,80)(0,0)
+
+  {\thicklines {\put(20,0){\framebox(60,80)[c]{\Large TAMARACK-3}}}}
+
+%\put(0,66){
+\put(-1.9,66){
+  \begin{picture}(14,8)
+  \put(0,1.5){\line(1,0){16}}
+  \put(16,1.5){\line(0,-1){1.5}}
+  \put(16,0){\line(1,1){4}}
+  \put(20,4){\line(-1,1){4}}
+  \put(16,8){\line(0,-1){1.5}}
+  \put(16,6.5){\line(-1,0){16}}
+  \put(0,6.5){\line(0,-1){5}}
+  \end{picture}}
+
+  { {\put(0,50){\vector(1,0){20}}}}
+  { {\put(0,30){\vector(1,0){20}}}}
+  { {\put(0,10){\vector(1,0){20}}}}
+
+  \put(17,70){\makebox(0,0)[r]{\small{\verb"datain"}}}
+  \put(17,53){\makebox(0,0)[r]{\small{\verb"dack"}}}
+  \put(17,33){\makebox(0,0)[r]{\small{\verb"idle"}}}
+  \put(17,13){\makebox(0,0)[r]{\small{\verb"ireq"}}}
+
+  { {\put(80,72){\vector(1,0){20}}}}
+
+%\put(80,52){
+\put(78.7,52){
+  \begin{picture}(14,8)
+  \put(0,1.5){\line(1,0){16}}
+  \put(16,1.5){\line(0,-1){1.5}}
+  \put(16,0){\line(1,1){4}}
+  \put(20,4){\line(-1,1){4}}
+  \put(16,8){\line(0,-1){1.5}}
+  \put(16,6.5){\line(-1,0){16}}
+  \put(0,6.5){\line(0,-1){5}}
+  \end{picture}}
+
+  { {\put(80,40){\vector(1,0){20}}}}
+
+\put(78.7,20){
+  \begin{picture}(14,8)
+  \put(0,1.5){\line(1,0){16}}
+  \put(16,1.5){\line(0,-1){1.5}}
+  \put(16,0){\line(1,1){4}}
+  \put(20,4){\line(-1,1){4}}
+  \put(16,8){\line(0,-1){1.5}}
+  \put(16,6.5){\line(-1,0){16}}
+  \put(0,6.5){\line(0,-1){5}}
+  \end{picture}}
+
+  { {\put(80,8){\vector(1,0){20}}}}
+
+  \put(83,75){\makebox(0,0)[l]{\small{\verb"wmem"}}}
+  \put(83,56){\makebox(0,0)[l]{\small{\verb"dataout"}}}
+  \put(83,43){\makebox(0,0)[l]{\small{\verb"dreq"}}}
+  \put(83,24){\makebox(0,0)[l]{\small{\verb"addr"}}}
+  \put(83,11){\makebox(0,0)[l]{\small{\verb"iack"}}}
+
+\end{picture}
+
+\vspace*{.35in}
+
+\begin{tabular}{ll@{\hspace{1cm}}ll}
+
+\verb"datain"& - data from memory&
+\verb"wmem"& - read/write select\\
+
+\verb"dack"& - data acknowledge&
+\verb"dataout"& - data to memory\\
+
+\verb"idle"& - extended cycle mode&
+\verb"dreq"& - data request\\
+
+\verb"ireq"& - interrupt request&
+\verb"addr"& - address to memory\\
+
+ & &
+\verb"iack"& - interrupt acknowledge
+
+\end{tabular}
+
+\vspace*{.15in}

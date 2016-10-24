@@ -1,0 +1,5 @@
+\THEOREM NET_CONV_NZ NETS
+|- !g x x0.
+    (x tends x0)(mtop mr1,g) /\ ~(x0 = real_of_num 0) ==>
+    (?N. g N N /\ (!n. g n N ==> ~(x n = real_of_num 0)))
+\ENDTHEOREM

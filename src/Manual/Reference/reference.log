@@ -1,0 +1,2260 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  16 MAR 1994 12:03
+**reference.tex
+(reference.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../LaTeX/alltt.sty) (../LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+) (../LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+)
+(../LaTeX/ref-macros.tex)
+\@indexfile=\write3
+
+Writing index file reference.idx 
+(reference.aux (title.aux) (preface.aux) (../LaTeX/ack.aux) (contents.aux)
+(entries.aux) (theorems.aux) (index.aux)) (title.tex (../LaTeX/cover_info.tex
+
+     The title page being created is a LaTeX approximation of a fancy
+     PostScript cover page. All the fancy cover pages for the HOL
+     Manual may be generated if you have (1) a PostScript printer,
+     (2) the "psfig" TeX macros, and (3) a DVI to PostScript converter
+     that understands these macros. The cover pages may be found in
+     ../LaTeX/Covers, and shoud be made pursuant to the instructions
+     given in ../LaTeX/Covers/READ-ME.
+
+) [1
+
+
+] [2]) (preface.tex) [3
+
+
+
+] (../LaTeX/ack.tex [4
+
+
+
+]) [5] (contents.tex [6
+
+
+
+]
+(reference.toc)
+\tf@toc=\write4
+) [7] [8
+
+
+] (entries.tex
+Chapter 1.
+(entries-intro.tex)
+Typesetting: \#
+Typesetting: *
+Typesetting: +
+[1
+
+
+]
+Typesetting: -
+Typesetting: \char '056
+Typesetting: /
+[2]
+Typesetting: \char '136
+Typesetting: <
+[3]
+Typesetting: <<
+Typesetting: =
+[4]
+Typesetting: >
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 44.74428
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.96053fil
+..\frtnbf S
+..\frtnbf y
+..\frtnbf n
+..\frtnbf o
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [5]
+Typesetting: \char '100
+[6]
+Typesetting: ABS
+Typesetting: ABS_CONV
+[7]
+Typesetting: abs_goals
+[8]
+Typesetting: ACCEPT_TAC
+Typesetting: achieves
+[9]
+Typesetting: achieve_first
+Typesetting: aconv
+Typesetting: activate_binders
+[10]
+Typesetting: AC_CONV
+[11]
+Typesetting: ADD_ASSUM
+[12]
+Typesetting: ADD_CONV
+Typesetting: allowed_constant
+[13]
+Typesetting: ALL_CONV
+[14]
+Typesetting: ALL_EL_CONV
+[15]
+Typesetting: ALL_TAC
+[16]
+Typesetting: ALL_THEN
+Typesetting: ALPHA
+[17]
+Typesetting: ALPHA_CONV
+Typesetting: ancestors
+[18]
+Typesetting: ancestry
+Typesetting: AND_EXISTS_CONV
+[19]
+Typesetting: AND_FORALL_CONV
+[20]
+Typesetting: ANTE_CONJ_CONV
+Typesetting: ANTE_RES_THEN
+[21]
+Typesetting: append
+[22]
+Typesetting: APPEND_CONV
+Typesetting: append_openw
+[23]
+Typesetting: apply_proof
+Typesetting: AP_TERM
+[24]
+Typesetting: AP_TERM_TAC
+Typesetting: AP_THM
+[25]
+Typesetting: AP_THM_TAC
+[26]
+Typesetting: arb_term
+Typesetting: arity
+Typesetting: ascii
+[27]
+Typesetting: ascii_code
+Typesetting: ASM_CASES_TAC
+[28]
+Typesetting: ASM_REWRITE_RULE
+[29]
+Typesetting: ASM_REWRITE_TAC
+[30]
+Typesetting: assert
+Typesetting: assignable_print_term
+
+Underfull \vbox (badness 5741) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.85873
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [31]
+Typesetting: assoc
+
+Underfull \vbox (badness 6078) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.93413
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+ [32]
+Overfull \vbox (57.81328pt too high) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set - 1.0
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+
+[33]
+Typesetting: associate_restriction
+[34]
+Typesetting: ASSUME
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 8.18471
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+0.0)x455.24408, glue set 0.2965
+..\hbox(0.0+0.0)x11.38109
+..\twlrm A
+..\twlrm s
+..\twlrm s
+..\twlrm o
+..etc.
+.\penalty 300
+.\glue(\baselineskip) 7.0
+.\hbox(9.0+3.0)x455.24408, glue set 25.80399fil
+..\twlrm t
+..\twlrm h
+..\twlrm e
+..\twlrm o
+..\twlrm r
+..etc.
+.etc.
+
+ [35]
+[36]
+Typesetting: ASSUME_TAC
+[37]
+Typesetting: ASSUM_LIST
+[38]
+Typesetting: attempt_first
+Typesetting: autoload
+[39]
+Typesetting: autoload_theory
+[40]
+Typesetting: axiom
+[41]
+Typesetting: axioms
+Typesetting: axiom_lfn
+[42]
+Typesetting: axiom_msg_lfn
+[43]
+Typesetting: B
+Typesetting: b
+[44]
+Typesetting: backup
+[45]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 88.0374
+.\glue(\topskip) 3.0
+.\hbox(9.0+3.0)x455.24408, glue set 0.30833
+..\twlrm t
+..\twlrm o
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\hbox(0.0+0.0)x0.0
+..\elvtt s
+..etc.
+.\glue(\baselineskip) 4.0
+.\hbox(9.0+3.0)x455.24408, glue set - 0.33055
+..\hbox(0.0+0.0)x0.0
+..\elvtt b
+..\elvtt a
+..\elvtt c
+..\elvtt k
+..etc.
+.\glue(\baselineskip) 4.66669
+.etc.
+
+ [46]
+Typesetting: backup_limit
+[47]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 548.187
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 371.92262fil
+..\frtnbf D
+..\frtnbf e
+..\frtnbf s
+..\frtnbf c
+..\frtnbf r
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [48]
+Typesetting: backup_list
+
+Underfull \vbox (badness 5548) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.81557
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+ [49]
+Typesetting: basic_rewrites
+[50]
+Typesetting: BETA_CONV
+[51]
+Typesetting: BETA_RULE
+[52]
+Typesetting: BETA_TAC
+[53]
+Typesetting: binders
+Typesetting: bndvar
+[54]
+Typesetting: body
+Typesetting: BODY_CONJUNCTS
+[55]
+Typesetting: BOOL_CASES_TAC
+[56]
+Typesetting: bool_EQ_CONV
+[57]
+Typesetting: bool_ty
+Typesetting: BUTFIRSTN_CONV
+[58]
+Typesetting: butlast
+Typesetting: BUTLASTN_CONV
+[59]
+Typesetting: BUTLAST_CONV
+Typesetting: C
+[60]
+Typesetting: cached_theories
+Typesetting: can
+Typesetting: CASES_THENL
+[61] [62]
+Typesetting: CB
+Typesetting: CCONTR
+[63]
+Typesetting: CHANGED_CONV
+Typesetting: CHANGED_TAC
+[64]
+Typesetting: change_state
+Typesetting: CHECK_ASSUME_TAC
+[65]
+Typesetting: check_lhs
+Typesetting: check_specification
+[66]
+Typesetting: check_valid
+Typesetting: check_varstruct
+Typesetting: chktac
+[67]
+Typesetting: CHOOSE
+[68]
+Typesetting: CHOOSE_TAC
+Typesetting: CHOOSE_THEN
+
+Underfull \vbox (badness 1852) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.64708
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+0.0)x455.24408, glue set 405.34442fil
+..\frtnbf F
+..\kern-1.38
+..\frtnbf a
+..\frtnbf i
+..\frtnbf l
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 7.0
+.etc.
+
+ [69]
+[70]
+Typesetting: chop_list
+Typesetting: close
+[71]
+Typesetting: close_theory
+[72]
+Typesetting: Co
+Typesetting: com
+[73]
+Typesetting: combine
+Typesetting: compile
+[74] [75]
+Typesetting: compilef
+[76]
+Typesetting: compilet
+Typesetting: compiling
+[77]
+Typesetting: compiling_stack
+[78]
+Typesetting: concat
+Typesetting: concatl
+Typesetting: concl
+[79]
+Typesetting: COND_CASES_TAC
+[80]
+Typesetting: COND_CONV
+[81]
+Typesetting: CONJ
+Typesetting: CONJUNCT1
+[82]
+Typesetting: CONJUNCT2
+Typesetting: CONJUNCTS
+[83]
+Typesetting: conjuncts
+[84]
+Typesetting: CONJUNCTS_CONV
+[85]
+Typesetting: CONJUNCTS_THEN
+[86]
+Typesetting: CONJUNCTS_THEN2
+[87]
+Typesetting: CONJ_DISCH
+[88]
+Typesetting: CONJ_DISCHL
+Typesetting: CONJ_LIST
+[89]
+Typesetting: CONJ_PAIR
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 5.48135
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+0.0)x455.24408, glue set 397.88248fil
+..\frtnbf S
+..\frtnbf e
+..\frtnbf e
+..\glue 5.51996 plus 2.75998 minus 1.83998
+..\frtnbf a
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 6.90834
+.etc.
+
+ [90]
+Typesetting: CONJ_SET_CONV
+[91]
+Typesetting: CONJ_TAC
+[92]
+Typesetting: constants
+Typesetting: CONTR
+[93]
+Typesetting: CONTRAPOS
+Typesetting: CONTRAPOS_CONV
+[94]
+Typesetting: CONTR_TAC
+Typesetting: CONV_RULE
+[95]
+Typesetting: CONV_TAC
+[96]
+Typesetting: current_theory
+[97]
+Typesetting: curry
+Typesetting: define_finite_set_syntax
+[98]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 4.5744
+.\mark{{{Chapter\ 1. \ Pre-defined ML Identifiers}}{{\bf define\unhbox \voidb@x
+ \ETC.}
+.\glue(\topskip) 12.0
+.\hbox(0.0+0.0)x455.24408, glue set 455.24408fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\glue(\rightskip) 0.0 plus 1.0fil
+.\penalty 10300
+.\glue(\lineskip) 1.0
+.etc.
+
+ [99]
+Typesetting: define_load_lib_function
+[100]
+Typesetting: define_new_type_bijections
+[101]
+Typesetting: define_set_abstraction_syntax
+[102]
+Typesetting: define_type
+[103] [104]
+Typesetting: definition
+[105]
+Typesetting: definitions
+[106]
+Typesetting: definition_lfn
+Typesetting: definition_msg_lfn
+[107]
+Typesetting: DEF_EXISTS_RULE
+[108]
+Typesetting: delete_cache
+Typesetting: delete_thm
+[109] [110]
+Typesetting: DEPTH_CONV
+[111]
+Typesetting: dest_abs
+Typesetting: dest_comb
+[112]
+Typesetting: dest_cond
+Typesetting: dest_conj
+[113]
+Typesetting: dest_cons
+Typesetting: dest_const
+[114]
+Typesetting: dest_definition
+Typesetting: dest_disj
+[115]
+Typesetting: dest_eq
+Typesetting: dest_exists
+[116]
+Typesetting: dest_forall
+Typesetting: dest_form
+Typesetting: dest_imp
+[117]
+Typesetting: dest_let
+Typesetting: dest_list
+[118]
+Typesetting: dest_neg
+[119]
+Typesetting: dest_neg_imp
+Typesetting: dest_pabs
+[120]
+Typesetting: dest_pair
+Typesetting: dest_pred
+[121]
+Typesetting: dest_select
+Typesetting: dest_thm
+[122]
+Typesetting: dest_type
+Typesetting: dest_var
+[123]
+Typesetting: dest_vartype
+[124]
+Typesetting: DISCARD_TAC
+Typesetting: DISCH
+[125]
+Typesetting: disch
+Typesetting: DISCH_ALL
+[126]
+Typesetting: DISCH_TAC
+[127]
+Typesetting: DISCH_THEN
+[128]
+Typesetting: DISJ1
+[129]
+Typesetting: DISJ1_TAC
+Typesetting: DISJ2
+[130]
+Typesetting: DISJ2_TAC
+[131]
+Typesetting: disjuncts
+
+Underfull \vbox (badness 1540) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.49136
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 371.92262fil
+..\frtnbf D
+..\frtnbf e
+..\frtnbf s
+..\frtnbf c
+..\frtnbf r
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+ [132]
+Typesetting: DISJ_CASES
+[133]
+Typesetting: DISJ_CASES_TAC
+[134]
+Typesetting: DISJ_CASES_THEN
+[135]
+Typesetting: DISJ_CASES_THEN2
+[136]
+Typesetting: DISJ_CASES_THENL
+[137]
+Typesetting: DISJ_CASES_UNION
+[138]
+Typesetting: DISJ_IMP
+[139]
+Typesetting: distinct
+Typesetting: do
+[140]
+Typesetting: draft_mode
+[141]
+Typesetting: dropout
+[142]
+Typesetting: e
+[143]
+Typesetting: el
+Typesetting: ELL_CONV
+[144]
+Typesetting: EL_CONV
+[145]
+Typesetting: end_itlist
+Typesetting: enter_form_rep
+[146]
+Typesetting: enter_term
+Typesetting: enter_term_rep
+Typesetting: EQF_ELIM
+[147]
+Typesetting: EQF_INTRO
+Typesetting: EQT_ELIM
+[148]
+Typesetting: EQT_INTRO
+Typesetting: EQ_IMP_RULE
+[149]
+Typesetting: EQ_LENGTH_INDUCT_TAC
+[150]
+Typesetting: EQ_LENGTH_SNOC_INDUCT_TAC
+Typesetting: EQ_MP
+[151]
+Typesetting: EQ_TAC
+[152]
+Typesetting: ETA_CONV
+Typesetting: EVERY
+[153]
+Typesetting: EVERY_ASSUM
+Typesetting: EVERY_CONV
+[154]
+Typesetting: EVERY_TCL
+[155]
+Typesetting: EXISTENCE
+Typesetting: EXISTS
+[156]
+Typesetting: exists
+[157]
+Typesetting: EXISTS_AND_CONV
+Typesetting: EXISTS_EQ
+[158]
+Typesetting: EXISTS_GREATEST_CONV
+[159]
+Typesetting: EXISTS_IMP
+Typesetting: EXISTS_IMP_CONV
+[160]
+Typesetting: EXISTS_LEAST_CONV
+[161]
+Typesetting: EXISTS_NOT_CONV
+Typesetting: EXISTS_OR_CONV
+[162]
+Typesetting: EXISTS_TAC
+Typesetting: EXISTS_UNIQUE_CONV
+[163]
+Typesetting: expand
+[164]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 37.02338
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.09099
+..\twlrm s
+..\twlrm t
+..\twlrm o
+..\twlrm r
+..\twlrm e
+..etc.
+.\glue(\baselineskip) 5.33337
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.35875
+..\twlrm f
+..\twlrm r
+..\twlrm o
+..\twlrm m
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..etc.
+.\glue(\baselineskip) 5.33337
+.etc.
+
+ [165]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 8.62335
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+ [166]
+Typesetting: expandf
+[167] [168]
+Typesetting: explode
+Typesetting: EXT
+[169]
+Typesetting: extend_theory
+[170]
+Typesetting: FAIL_TAC
+[171]
+Typesetting: falsity
+Typesetting: fast_arith
+[172]
+Typesetting: filter
+Typesetting: FILTER_ASM_REWRITE_RULE
+[173]
+Typesetting: FILTER_ASM_REWRITE_TAC
+[174]
+Typesetting: FILTER_CONV
+[175]
+Typesetting: FILTER_DISCH_TAC
+[176]
+Typesetting: FILTER_DISCH_THEN
+[177]
+Typesetting: FILTER_GEN_TAC
+[178]
+Typesetting: FILTER_ONCE_ASM_REWRITE_RULE
+Typesetting: FILTER_ONCE_ASM_REWRITE_TAC
+[179]
+Typesetting: FILTER_PURE_ASM_REWRITE_RULE
+[180]
+Overfull \hbox (11.18983pt too wide) in paragraph at lines 8122--8126
+\twlrm re-sult in a di-verg-ing se-quence of rewrites. In such cases []\elvtt F
+ILTER_PURE_ONCE_ASM_REWRITE_RULE
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm r
+.\twlrm e
+.\discretionary
+..\twlrm -
+.\twlrm s
+.\twlrm u
+.etc.
+
+Typesetting: FILTER_PURE_ASM_REWRITE_TAC
+
+Overfull \hbox (29.59367pt too wide) in paragraph at lines 8157--8164
+\twlrm may re-sult in a di-verg-ing se-quence of rewrites. In such cases []\elv
+tt FILTER_PURE_ONCE_ASM_REWRITE_TAC
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm m
+.\twlrm a
+.\kern-0.32639
+.\twlrm y
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[181]
+Typesetting: FILTER_PURE_ONCE_ASM_REWRITE_RULE
+
+Overfull \hbox (19.17981pt too wide) in paragraph at lines 8191--8198
+\twlrm avoids the di-ver-gence which can re-sult from the ap-pli-ca-tion of []\
+elvtt FILTER_PURE_ASM_REWRITE_RULE\twlrm .
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm a
+.\kern-0.32639
+.\twlrm v
+.\kern-0.32639
+.\twlrm o
+.etc.
+
+[182]
+Typesetting: FILTER_PURE_ONCE_ASM_REWRITE_TAC
+Typesetting: FILTER_STRIP_TAC
+[183] [184]
+Typesetting: FILTER_STRIP_THEN
+[185]
+Typesetting: find
+Typesetting: find_file
+[186]
+Typesetting: find_match
+Typesetting: find_ml_file
+[187] [188]
+Typesetting: find_term
+Typesetting: find_terms
+[189]
+Typesetting: find_theory
+Typesetting: FIRST
+[190]
+Typesetting: FIRSTN_CONV
+[191]
+Typesetting: FIRST_ASSUM
+[192]
+Typesetting: FIRST_CONV
+Typesetting: FIRST_TCL
+[193]
+Typesetting: flags
+Typesetting: flat
+[194]
+Typesetting: FLAT_CONV
+Typesetting: FOLDL_CONV
+[195] [196]
+Typesetting: FOLDR_CONV
+[197]
+Typesetting: forall
+Typesetting: FORALL_AND_CONV
+[198]
+Typesetting: FORALL_EQ
+[199]
+Typesetting: FORALL_IMP_CONV
+Typesetting: FORALL_NOT_CONV
+[200]
+Typesetting: FORALL_OR_CONV
+[201]
+Typesetting: frees
+Typesetting: freesl
+[202]
+Typesetting: FREEZE_THEN
+[203]
+Typesetting: free_in
+[204]
+Typesetting: FRONT_CONJ_CONV
+[205]
+Typesetting: fst
+Typesetting: funpow
+[206]
+Typesetting: FUN_EQ_CONV
+[207]
+Typesetting: g
+[208]
+Typesetting: GEN
+Typesetting: GENL
+[209]
+Typesetting: genvar
+[210]
+Typesetting: GEN_ALL
+[211]
+Typesetting: GEN_ALPHA_CONV
+
+Overfull \hbox (40.70583pt too wide) in paragraph at lines 9627--9632
+[]\elvtt "\y.t" \twlrm or []\elvtt "B y.t"\twlrm , where []\elvtt B \twlrm is a
+ binder (that is, []\elvtt is_binder `B` \twlrm re-turns []\elvtt true\twlrm ).
+ []\elvtt GEN_ALPHA_CONV x tm
+
+\hbox(9.0+3.0)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\elvtt "
+.\elvtt \
+.\elvtt y
+.\elvtt .
+.etc.
+
+[212]
+Typesetting: GEN_BETA_CONV
+Typesetting: GEN_REWRITE_CONV
+[213] [214]
+Typesetting: GEN_REWRITE_RULE
+[215] [216]
+Typesetting: GEN_REWRITE_TAC
+[217] [218]
+Typesetting: GEN_TAC
+Typesetting: getenv
+[219]
+Typesetting: get_const_type
+Typesetting: get_flag_value
+[220]
+Typesetting: get_state
+[221]
+Typesetting: get_steps
+[222]
+Typesetting: get_type
+[223]
+Typesetting: goals
+Typesetting: GSPEC
+[224]
+Typesetting: GSUBST_TAC
+Typesetting: GSYM
+[225]
+Typesetting: HALF_MK_ABS
+[226]
+Typesetting: hd
+Typesetting: help
+[227]
+Typesetting: help_search_path
+Typesetting: hide_constant
+[228]
+Typesetting: hol_pathname
+Typesetting: host_name
+[229]
+Typesetting: hyp
+
+Underfull \vbox (badness 2343) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.86203
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+0.0)x455.24408, glue set 405.34442fil
+..\frtnbf F
+..\kern-1.38
+..\frtnbf a
+..\frtnbf i
+..\frtnbf l
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 7.66669
+.etc.
+
+ [230]
+Typesetting: hyp_union
+[231]
+Typesetting: I
+Typesetting: implode
+[232]
+Typesetting: IMP_ANTISYM_RULE
+Typesetting: IMP_CANON
+[233]
+Typesetting: IMP_CONJ
+[234]
+Typesetting: IMP_ELIM
+Typesetting: IMP_RES_TAC
+[235]
+Typesetting: IMP_RES_THEN
+[236] [237]
+Typesetting: IMP_TRANS
+[238]
+Typesetting: INDUCT
+Typesetting: INDUCT_TAC
+[239]
+Typesetting: INDUCT_THEN
+[240] [241]
+Typesetting: infixes
+[242]
+Typesetting: infix_variable
+Typesetting: inject_input
+[243]
+Typesetting: inl
+[244]
+Typesetting: inr
+Typesetting: INST
+[245]
+Typesetting: inst
+[246]
+Typesetting: install
+[247]
+Typesetting: inst_check
+[248]
+Typesetting: inst_rename_list
+[249]
+Typesetting: INST_TYPE
+[250]
+Typesetting: inst_type
+Typesetting: INST_TY_TERM
+[251]
+Typesetting: interface_map
+[252]
+Typesetting: intersect
+Typesetting: int_of_string
+[253]
+Typesetting: int_of_term
+Typesetting: isl
+[254]
+Typesetting: ISPEC
+Typesetting: ISPECL
+[255]
+Typesetting: is_abs
+[256]
+Typesetting: is_alphanum
+Typesetting: is_axiom
+Typesetting: is_binder
+[257]
+Typesetting: is_binder_type
+[258]
+Typesetting: is_comb
+[259]
+Typesetting: is_cond
+Typesetting: is_conj
+Typesetting: is_cons
+[260]
+Typesetting: is_const
+Typesetting: is_constant
+[261]
+Typesetting: is_definition
+Typesetting: is_disj
+[262]
+Typesetting: IS_EL_CONV
+Typesetting: is_eq
+[263]
+Typesetting: is_exists
+Typesetting: is_forall
+[264]
+Typesetting: is_hidden
+Typesetting: is_imp
+[265]
+Typesetting: is_infix
+[266]
+Typesetting: is_infix_type
+Typesetting: is_let
+[267]
+Typesetting: is_letter
+[268]
+Typesetting: is_list
+Typesetting: is_ml_curried_infix
+[269]
+Typesetting: is_ml_infix
+Typesetting: is_ml_paired_infix
+[270]
+Typesetting: is_neg
+Typesetting: is_neg_imp
+[271]
+Typesetting: is_pabs
+Typesetting: is_pair
+[272]
+Typesetting: is_pred
+Typesetting: is_recording_proof
+[273]
+Typesetting: is_select
+[274]
+Typesetting: is_type
+Typesetting: is_var
+Typesetting: is_vartype
+[275]
+Typesetting: it
+[276]
+Typesetting: itlist
+Typesetting: itlist2
+[277]
+Typesetting: K
+Typesetting: KI
+[278]
+Typesetting: last
+Typesetting: LASTN_CONV
+[279]
+Typesetting: LAST_CONV
+Typesetting: LEFT_AND_EXISTS_CONV
+[280]
+Typesetting: LEFT_AND_FORALL_CONV
+[281]
+Typesetting: LEFT_IMP_EXISTS_CONV
+Typesetting: LEFT_IMP_FORALL_CONV
+[282]
+Typesetting: LEFT_OR_EXISTS_CONV
+Typesetting: LEFT_OR_FORALL_CONV
+[283]
+Typesetting: length
+Typesetting: LENGTH_CONV
+[284]
+Typesetting: let_after
+[285]
+Typesetting: let_before
+[286]
+Typesetting: let_CONV
+[287]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 7.11139
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.43333)x455.24408, glue set 0.32188
+..\twlrm a
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\twlrm s
+..\twlrm t
+..\twlrm r
+..etc.
+.\penalty 150
+.\glue(\baselineskip) 5.23335
+.\hbox(8.33331+2.33331)x455.24408, glue set 294.71048fil
+..\twlrm f
+..\twlrm o
+..\twlrm r
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\twlrm s
+..etc.
+.etc.
+
+ [288]
+Typesetting: lhs
+Typesetting: libraries
+[289]
+Typesetting: library_loader
+[290] [291]
+Typesetting: library_pathname
+[292]
+Typesetting: library_search_path
+Typesetting: link
+[293]
+Typesetting: lisp
+[294]
+Typesetting: lisp_dir_pathname
+[295]
+Typesetting: LIST_BETA_CONV
+Typesetting: LIST_CONJ
+[296]
+Typesetting: list_EQ_CONV
+[297]
+Typesetting: list_FOLD_CONV
+[298]
+Typesetting: LIST_INDUCT
+[299]
+Typesetting: LIST_INDUCT_TAC
+[300]
+Typesetting: list_mk_abs
+Typesetting: list_mk_comb
+Typesetting: list_mk_conj
+[301]
+Typesetting: list_mk_disj
+
+Underfull \vbox (badness 1117) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.23724
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+0.0)x455.24408, glue set 405.34442fil
+..\frtnbf F
+..\kern-1.38
+..\frtnbf a
+..\frtnbf i
+..\frtnbf l
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 7.66669
+.etc.
+
+ [302]
+Typesetting: LIST_MK_EXISTS
+[303]
+Typesetting: list_mk_exists
+Typesetting: list_mk_forall
+[304]
+Typesetting: list_mk_imp
+Typesetting: list_mk_pair
+[305]
+Typesetting: LIST_MP
+[306]
+Typesetting: list_of_binders
+[307]
+Typesetting: load
+Typesetting: loadf
+[308]
+Typesetting: loadt
+Typesetting: load_axiom
+[309] [310]
+Typesetting: load_axioms
+Typesetting: load_definition
+[311] [312]
+Typesetting: load_definitions
+Typesetting: load_library
+[313]
+Underfull \vbox (badness 1052) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.19374
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+ [314]
+Typesetting: load_theorem
+[315]
+Typesetting: load_theorems
+[316]
+Typesetting: load_theory
+[317]
+Typesetting: lookup_form_rep
+Typesetting: lookup_term
+Typesetting: lookup_term_rep
+Typesetting: lsp
+[318]
+Typesetting: map
+[319]
+Typesetting: map2
+Typesetting: MAP2_CONV
+[320]
+Typesetting: mapfilter
+[321]
+Typesetting: maptok
+[322]
+Typesetting: MAP_CONV
+[323]
+Typesetting: MAP_EVERY
+[324]
+Typesetting: MAP_FIRST
+[325]
+Typesetting: match
+[326]
+Typesetting: MATCH_ACCEPT_TAC
+[327]
+Typesetting: MATCH_MP
+[328]
+Typesetting: MATCH_MP_TAC
+[329]
+Typesetting: max_print_depth
+[330]
+Typesetting: mem
+Typesetting: merge_nets_rep
+Typesetting: merge_term_nets
+[331]
+Typesetting: message
+Typesetting: MK_ABS
+[332]
+Typesetting: mk_abs
+Typesetting: MK_COMB
+[333]
+Typesetting: mk_comb
+Typesetting: mk_cond
+[334]
+Typesetting: mk_conj
+Typesetting: mk_cons
+[335]
+Typesetting: mk_const
+Typesetting: mk_conv_net
+[336]
+Typesetting: mk_definition
+Typesetting: mk_disj
+[337]
+Typesetting: mk_eq
+Typesetting: MK_EXISTS
+[338]
+Typesetting: mk_exists
+Typesetting: mk_forall
+[339]
+Typesetting: mk_form
+Typesetting: mk_imp
+Typesetting: mk_let
+[340]
+Typesetting: mk_list
+Typesetting: mk_neg
+[341]
+Typesetting: mk_pabs
+Typesetting: mk_pair
+[342]
+Typesetting: mk_pp_thm
+Typesetting: mk_pred
+Typesetting: mk_primed_var
+[343]
+Typesetting: mk_select
+[344]
+Typesetting: mk_thm
+[345]
+Typesetting: mk_type
+Typesetting: mk_var
+[346]
+Typesetting: mk_vartype
+[347]
+Typesetting: ml_curried_infix
+Typesetting: ml_dir_pathname
+[348]
+Typesetting: ML_eval
+[349]
+Typesetting: ml_paired_infix
+Typesetting: MP
+[350]
+Typesetting: MP_TAC
+[351]
+Typesetting: NEG_DISCH
+Typesetting: new_alphanum
+[352]
+Typesetting: new_axiom
+[353]
+Typesetting: new_binder
+[354]
+Typesetting: new_binder_definition
+[355]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 6.4085
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 371.92262fil
+..\frtnbf D
+..\frtnbf e
+..\frtnbf s
+..\frtnbf c
+..\frtnbf r
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [356]
+Typesetting: new_constant
+[357]
+Typesetting: new_definition
+[358]
+Typesetting: new_flag
+Typesetting: new_gen_definition
+[359] [360]
+Typesetting: new_infix
+
+Underfull \vbox (badness 1472) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.45308
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.10263
+..\twlrm s
+..\twlrm e
+..\twlrm g
+..\twlrm m
+..\twlrm e
+..etc.
+.\glue(\baselineskip) 5.33337
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.39088
+..\twlrm c
+..\twlrm o
+..\twlrm n
+..\twlrm s
+..\twlrm t
+..etc.
+.\glue(\baselineskip) 4.66669
+.etc.
+
+ [361]
+Typesetting: new_infix_definition
+[362]
+Typesetting: new_infix_list_rec_definition
+[363] [364]
+Typesetting: new_infix_prim_rec_definition
+[365]
+Typesetting: new_letter
+[366]
+Typesetting: new_list_rec_definition
+[367] [368]
+Typesetting: new_open_axiom
+Typesetting: new_parent
+[369]
+Typesetting: new_predicate
+Typesetting: new_prim_rec_definition
+[370] [371]
+Typesetting: new_recursive_definition
+[372] [373] [374]
+Typesetting: new_special_symbol
+[375]
+Typesetting: new_specification
+[376]
+Typesetting: new_stack
+Typesetting: new_syntax_block
+[377]
+Typesetting: new_theory
+[378] [379]
+Typesetting: new_type
+Typesetting: new_type_abbrev
+[380]
+Underfull \vbox (badness 1655) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.54999
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [381]
+Typesetting: new_type_definition
+[382]
+Typesetting: nil_term_net
+Typesetting: not
+[383]
+Typesetting: NOT_ELIM
+Typesetting: NOT_EQ_SYM
+[384]
+Typesetting: NOT_EXISTS_CONV
+Typesetting: NOT_FORALL_CONV
+[385]
+Typesetting: NOT_INTRO
+Typesetting: NOT_MP
+[386]
+Typesetting: NO_CONV
+[387]
+Typesetting: NO_TAC
+Typesetting: NO_THEN
+[388]
+Typesetting: null
+Typesetting: num_CONV
+[389]
+Typesetting: num_EQ_CONV
+[390]
+Typesetting: n_strip_quant
+Typesetting: o
+Typesetting: ONCE_ASM_REWRITE_RULE
+[391]
+Typesetting: ONCE_ASM_REWRITE_TAC
+[392]
+Typesetting: ONCE_DEPTH_CONV
+[393]
+Typesetting: ONCE_REWRITE_CONV
+[394]
+Typesetting: ONCE_REWRITE_RULE
+[395]
+Typesetting: ONCE_REWRITE_TAC
+
+Underfull \vbox (badness 1189) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.2844
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.21933
+..\twlrm S
+..\twlrm e
+..\twlrm e
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\hbox(0.0+0.0)x0.0
+..etc.
+.\penalty 250
+.\glue(\baselineskip) 8.50002
+.\hbox(5.16667+0.0)x455.24408, glue set 426.52216fil
+..\twlrm o
+..\discretionary
+...\twlrm -
+..\twlrm r
+..\twlrm e
+..\twlrm m
+..etc.
+.etc.
+
+ [396]
+Typesetting: ONCE_REW_DEPTH_CONV
+[397]
+Overfull \hbox (5.36761pt too wide) in paragraph at lines 18203--18208
+\twlrm The fol-low-ing ex-am-ple il-lus-trates the dif-fer-ence be-tween the fu
+nc-tions []\elvtt ONCE_REW_DEPTH_CONV
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm f
+.etc.
+
+Typesetting: oo
+[398]
+Typesetting: openi
+Typesetting: openw
+[399]
+Typesetting: ORELSE
+Typesetting: ORELSEC
+[400]
+Typesetting: ORELSE_TCL
+Typesetting: OR_EXISTS_CONV
+[401]
+Typesetting: OR_FORALL_CONV
+Typesetting: outl
+[402]
+Typesetting: outr
+[403]
+Typesetting: p
+[404]
+Typesetting: pair
+Typesetting: PAIRED_BETA_CONV
+[405] [406]
+Typesetting: paired_delete_thm
+Typesetting: PAIRED_ETA_CONV
+[407]
+Typesetting: paired_new_type
+Typesetting: paired_theorem
+Typesetting: parents
+[408]
+Typesetting: parse_as_binder
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 8.6198
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.96053fil
+..\frtnbf S
+..\frtnbf y
+..\frtnbf n
+..\frtnbf o
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [409]
+[410]
+Typesetting: partition
+[411]
+Typesetting: PART_MATCH
+[412]
+Typesetting: POP_ASSUM
+[413]
+Typesetting: POP_ASSUM_LIST
+[414]
+Typesetting: pop_proofs
+Typesetting: pop_proofs_print
+[415]
+Typesetting: pp_axiom
+Typesetting: preterm_abs
+[416]
+Typesetting: preterm_antiquot
+[417]
+Typesetting: preterm_comb
+Typesetting: preterm_const
+[418]
+Typesetting: preterm_to_term
+[419]
+Typesetting: preterm_typed
+
+Underfull \vbox (badness 2253) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.82599
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.96053fil
+..\frtnbf S
+..\frtnbf y
+..\frtnbf n
+..\frtnbf o
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 5.00002
+.etc.
+
+ [420]
+Typesetting: preterm_var
+
+Underfull \vbox (badness 1184) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.28027
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+ [421]
+Typesetting: print_all_thm
+
+Underfull \vbox (badness 1975) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.70651
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\penalty 10000
+.etc.
+
+ [422]
+Typesetting: print_begin
+[423]
+Typesetting: print_bool
+[424]
+Typesetting: print_break
+[425]
+Typesetting: print_defined_types
+[426]
+Typesetting: print_end
+Typesetting: print_goal
+[427]
+Typesetting: print_hyps
+[428]
+Typesetting: print_ibegin
+
+Underfull \vbox (badness 6157) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.95244
+.\mark{{{Chapter\ 1. \ Pre-defined ML Identifiers}}{{\bf print\unhbox \voidb@x 
+\ETC.}
+.\glue(\topskip) 12.0
+.\hbox(0.0+0.0)x455.24408, glue set 455.24408fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\glue(\rightskip) 0.0 plus 1.0fil
+.\penalty 10300
+.\glue(\lineskip) 1.0
+.etc.
+
+ [429]
+Typesetting: print_int
+[430]
+Typesetting: print_list
+Typesetting: print_newline
+[431]
+Typesetting: print_stack
+[432]
+Typesetting: print_state
+[433]
+Typesetting: print_string
+[434]
+Typesetting: print_subgoals
+Typesetting: print_term
+[435]
+Typesetting: print_theory
+Typesetting: print_thm
+[436]
+Typesetting: print_tok
+[437]
+Typesetting: print_type
+Typesetting: print_unquoted_term
+[438]
+Typesetting: print_unquoted_type
+[439]
+Typesetting: print_void
+Typesetting: prompt
+[440]
+Typesetting: PROVE
+Typesetting: prove
+[441]
+Typesetting: prove_abs_fn_one_one
+[442]
+Typesetting: prove_abs_fn_onto
+Typesetting: prove_cases_thm
+[443]
+Typesetting: prove_constructors_distinct
+[444]
+Typesetting: prove_constructors_one_one
+[445]
+Typesetting: PROVE_HYP
+[446]
+Typesetting: prove_induction_thm
+[447]
+Typesetting: prove_rec_fn_exists
+Typesetting: prove_rep_fn_one_one
+[448]
+Typesetting: prove_rep_fn_onto
+[449]
+Typesetting: prove_thm
+Typesetting: PURE_ASM_REWRITE_RULE
+[450]
+Typesetting: PURE_ASM_REWRITE_TAC
+[451]
+Typesetting: PURE_ONCE_ASM_REWRITE_RULE
+Typesetting: PURE_ONCE_ASM_REWRITE_TAC
+[452]
+Typesetting: PURE_ONCE_REWRITE_CONV
+Typesetting: PURE_ONCE_REWRITE_RULE
+[453]
+Typesetting: PURE_ONCE_REWRITE_TAC
+[454]
+Typesetting: PURE_REWRITE_CONV
+Typesetting: PURE_REWRITE_RULE
+[455]
+Typesetting: PURE_REWRITE_TAC
+[456]
+Typesetting: push_fsubgoals
+Typesetting: push_print
+Typesetting: push_subgoals
+[457]
+Typesetting: quit
+Typesetting: r
+Typesetting: rand
+[458]
+Typesetting: RAND_CONV
+Typesetting: rator
+[459]
+Typesetting: RATOR_CONV
+[460]
+Typesetting: read
+Typesetting: RecordStep
+[461] [462]
+Typesetting: record_proof
+
+Overfull \hbox (35.74004pt too wide) in paragraph at lines 21174--21177
+[]\twlrm The cur-rent state of the proof recorder can in-ter-ro-gated us-ing th
+e func-tion []\elvtt is_recording_proof\twlrm .
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[463]
+Typesetting: REDEPTH_CONV
+[464]
+Typesetting: REFL
+[465]
+Typesetting: REFL_TAC
+Typesetting: remove
+[466]
+Typesetting: remove_sticky_type
+Typesetting: REPEAT
+[467]
+Typesetting: REPEATC
+Typesetting: REPEAT_GTCL
+[468]
+Typesetting: REPEAT_TCL
+[469]
+Typesetting: replicate
+Typesetting: rep_goals
+Typesetting: resume_recording
+[470]
+Overfull \hbox (35.74004pt too wide) in paragraph at lines 21537--21540
+[]\twlrm The cur-rent state of the proof recorder can in-ter-ro-gated us-ing th
+e func-tion []\elvtt is_recording_proof\twlrm .
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+Typesetting: RES_CANON
+[471]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 43.02338
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.96053fil
+..\frtnbf S
+..\frtnbf y
+..\frtnbf n
+..\frtnbf o
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [472]
+[473]
+Typesetting: RES_TAC
+[474]
+Typesetting: RES_THEN
+[475] [476]
+Typesetting: rev
+Typesetting: REVERSE_CONV
+Typesetting: rev_assoc
+[477]
+Typesetting: rev_itlist
+[478]
+Typesetting: REWRITE_CONV
+
+Overfull \hbox (2.5708pt too wide) in paragraph at lines 21941--21944
+[]\twlrm Variants of this con-ver-sion al-low changes in the set of equa-tions 
+used: []\elvtt PURE_REWRITE_CONV
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm V
+.\kern-0.97916
+.\twlrm a
+.\twlrm r
+.etc.
+
+[479]
+Typesetting: REWRITE_RULE
+[480]
+Typesetting: REWRITE_TAC
+[481]
+Typesetting: REWR_CONV
+[482] [483] [484]
+Typesetting: REW_DEPTH_CONV
+[485] [486]
+Typesetting: rhs
+Typesetting: RIGHT_AND_EXISTS_CONV
+Typesetting: RIGHT_AND_FORALL_CONV
+[487]
+Typesetting: RIGHT_BETA
+[488]
+Typesetting: RIGHT_CONV_RULE
+Typesetting: RIGHT_IMP_EXISTS_CONV
+[489]
+Typesetting: RIGHT_IMP_FORALL_CONV
+Typesetting: RIGHT_LIST_BETA
+[490]
+Typesetting: RIGHT_OR_EXISTS_CONV
+[491]
+Typesetting: RIGHT_OR_FORALL_CONV
+Typesetting: root_goal
+Typesetting: rotate
+[492]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 6.00862
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.96053fil
+..\frtnbf S
+..\frtnbf y
+..\frtnbf n
+..\frtnbf o
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [493]
+Typesetting: rotate_goals
+[494]
+Typesetting: rotate_top
+Typesetting: RULE_ASSUM_TAC
+Typesetting: S
+[495]
+Typesetting: save
+Typesetting: save_thm
+[496]
+Typesetting: save_top_thm
+[497]
+Typesetting: SCANL_CONV
+[498]
+Typesetting: SCANR_CONV
+[499] [500]
+Typesetting: search_path
+[501]
+Typesetting: SEG_CONV
+Typesetting: SELECT_CONV
+[502]
+Typesetting: SELECT_ELIM
+[503] [504]
+Typesetting: SELECT_EQ
+[505]
+Typesetting: SELECT_INTRO
+Typesetting: SELECT_RULE
+[506]
+Underfull \vbox (badness 1028) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.17819
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 374.95325fil
+..\twlrm o
+..\twlrm f
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\twlrm t
+..\twlrm h
+..etc.
+.\penalty 10000
+.\glue 12.0 plus 3.0 minus 2.0
+.\glue 0.0 plus 1.0
+.etc.
+
+ [507]
+Typesetting: setify
+Typesetting: set_equal
+[508]
+Typesetting: set_fail
+[509]
+Typesetting: set_fail_prefix
+[510]
+Typesetting: set_flag
+Typesetting: set_goal
+[511] [512]
+Typesetting: set_help
+Typesetting: set_help_search_path
+[513]
+Typesetting: set_interface_map
+[514]
+Typesetting: set_lambda
+[515]
+Typesetting: set_library_search_path
+[516]
+Typesetting: set_margin
+Typesetting: set_pretty_mode
+[517]
+Typesetting: set_prompt
+Typesetting: set_search_path
+
+Underfull \vbox (badness 1259) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.32896
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 371.92262fil
+..\frtnbf D
+..\frtnbf e
+..\frtnbf s
+..\frtnbf c
+..\frtnbf r
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [518]
+[519]
+Typesetting: set_state
+[520]
+Typesetting: set_sticky_type
+
+Underfull \vbox (badness 1484) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.458
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 230.52158fil
+..\hbox(0.0+0.0)x0.0
+..\elvtt s
+..\elvtt e
+..\elvtt t
+..\elvtt _
+..etc.
+.\penalty 10000
+.\glue 12.0 plus 3.0 minus 2.0
+.\glue 0.0 plus 1.0
+.etc.
+
+ [521]
+Typesetting: set_string_escape
+Typesetting: set_thm_count
+[522]
+Typesetting: set_turnstile
+Typesetting: show_types
+[523]
+Underfull \vbox (badness 3525) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.28043
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.3845fil
+..\frtnbf E
+..\frtnbf x
+..\frtnbf a
+..\frtnbf m
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [524]
+Typesetting: SKOLEM_CONV
+Typesetting: snd
+[525]
+Typesetting: SNOC_CONV
+Typesetting: SNOC_INDUCT_TAC
+[526]
+Typesetting: SOME_EL_CONV
+[527]
+Typesetting: sort
+[528]
+Typesetting: SPEC
+[529]
+Typesetting: special_symbols
+[530]
+Typesetting: SPECL
+[531]
+Typesetting: SPEC_ALL
+[532]
+Typesetting: SPEC_TAC
+[533]
+Typesetting: SPEC_VAR
+Typesetting: split
+[534]
+Typesetting: splitp
+Typesetting: sticky_list
+[535]
+Typesetting: store_binders
+Typesetting: store_definition
+Typesetting: string_of_int
+[536]
+Typesetting: strip_abs
+Typesetting: STRIP_ASSUME_TAC
+[537]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 7.55176
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.96053fil
+..\frtnbf S
+..\frtnbf y
+..\frtnbf n
+..\frtnbf o
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [538]
+Typesetting: strip_comb
+Typesetting: strip_exists
+[539]
+Typesetting: strip_forall
+[540]
+Typesetting: STRIP_GOAL_THEN
+
+Underfull \vbox (badness 1859) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.65065
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 371.92262fil
+..\frtnbf D
+..\frtnbf e
+..\frtnbf s
+..\frtnbf c
+..\frtnbf r
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [541]
+Typesetting: strip_imp
+[542]
+Typesetting: strip_pair
+Typesetting: STRIP_TAC
+[543] [544]
+Typesetting: STRIP_THM_THEN
+[545] [546]
+Typesetting: STRUCT_CASES_TAC
+[547]
+Typesetting: SUBGOAL_THEN
+[548]
+Typesetting: SUBS
+[549]
+Typesetting: SUBST
+[550] [551]
+Typesetting: subst
+[552]
+Typesetting: SUBST1_TAC
+[553]
+Typesetting: SUBST_ALL_TAC
+[554]
+Typesetting: SUBST_CONV
+[555] [556]
+Typesetting: SUBST_MATCH
+
+Underfull \vbox (badness 3375) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.23338
+.\glue(\topskip) 3.0
+.\hbox(9.0+3.0)x455.24408, glue set 280.95422fil
+..\twlrm r
+..\twlrm u
+..\twlrm l
+..\twlrm e
+..\twlrm s
+..etc.
+.\glue 12.0 plus 4.0 minus 4.0
+.\glue 0.0
+.\glue(\baselineskip) 3.00002
+.etc.
+
+ [557]
+Typesetting: subst_occs
+Typesetting: SUBST_OCCS_TAC
+[558] [559]
+Typesetting: SUBST_TAC
+[560]
+Typesetting: SUBS_OCCS
+[561]
+Typesetting: subtract
+[562]
+Typesetting: SUB_CONV
+[563]
+Typesetting: suspend_recording
+
+Overfull \hbox (35.74004pt too wide) in paragraph at lines 25920--25923
+[]\twlrm The cur-rent state of the proof recorder can in-ter-ro-gated us-ing th
+e func-tion []\elvtt is_recording_proof\twlrm .
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+Typesetting: SWAP_EXISTS_CONV
+[564]
+Typesetting: SYM
+Typesetting: SYM_CONV
+[565]
+Typesetting: syserror
+Typesetting: system
+[566]
+Typesetting: TAC_PROOF
+[567]
+Typesetting: term_of_int
+Typesetting: THEN
+[568]
+Typesetting: THENC
+Typesetting: THENL
+[569]
+Typesetting: THEN_TCL
+[570]
+Typesetting: theorem
+[571]
+Typesetting: theorems
+Typesetting: theorem_lfn
+[572]
+Typesetting: theorem_msg_lfn
+[573]
+Typesetting: thm_count
+Typesetting: thm_frees
+[574]
+Typesetting: timer
+[575]
+Typesetting: tl
+[576]
+Typesetting: TOP_DEPTH_CONV
+Typesetting: top_goal
+[577]
+Typesetting: top_print
+[578]
+Typesetting: top_proof
+[579]
+Typesetting: top_thm
+Typesetting: TRANS
+[580]
+Typesetting: TRY
+Typesetting: tryfind
+[581]
+Typesetting: TRY_CONV
+Typesetting: tty_read
+[582]
+Typesetting: tty_write
+[583]
+Typesetting: types
+
+Underfull \vbox (badness 3039) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.12186
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 392.96053fil
+..\frtnbf S
+..\frtnbf y
+..\frtnbf n
+..\frtnbf o
+..\frtnbf p
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [584]
+Typesetting: type_abbrevs
+Typesetting: type_in
+[585]
+Typesetting: type_in_type
+[586]
+Typesetting: type_of
+Typesetting: type_tyvars
+[587]
+Typesetting: tyvars
+[588]
+Typesetting: tyvarsl
+[589]
+Typesetting: uncurry
+Typesetting: UNDISCH
+[590]
+Typesetting: UNDISCH_ALL
+Typesetting: UNDISCH_TAC
+[591]
+Typesetting: undo_autoload
+Typesetting: unhide_constant
+[592]
+Typesetting: union
+Typesetting: unlink
+[593]
+Typesetting: VALID
+[594]
+Typesetting: variant
+[595]
+Typesetting: vars
+Typesetting: varsl
+[596]
+Typesetting: version
+[597]
+Typesetting: W
+Typesetting: words
+[598]
+Typesetting: words2
+Typesetting: word_separators
+[599]
+Typesetting: write
+[600]
+Typesetting: X_CASES_THEN
+[601]
+Typesetting: X_CASES_THENL
+[602] [603]
+Typesetting: X_CHOOSE_TAC
+[604]
+Typesetting: X_CHOOSE_THEN
+[605]
+Typesetting: X_FUN_EQ_CONV
+[606]
+Typesetting: X_GEN_TAC
+[607]
+Typesetting: X_SKOLEM_CONV
+) [608] (theorems.tex
+Chapter 2.
+(theorems-intro.tex) [609
+
+
+
+] [610] [611] [612] [613] [614] [615] [616] [617]
+[618] [619] [620] [621] [622] [623] [624] [625] [626] [627] [628] [629]
+[630] [631] [632] [633] [634] [635] [636] [637] [638] [639] [640] [641]
+[642] [643] [644] [645] [646] [647] [648] [649] [650] [651] [652] [653]
+[654] [655] [656] [657] [658] [659] [660]) [661] [662
+
+
+] (index.tex [663
+
+
+]
+[664] [665] [666] [667] [668]
+Overfull \hbox (8.5078pt too wide) in paragraph at lines 483--484
+[]\twltt FILTER[]PURE[]ONCE[]ASM[]REWRITE[]RULE\twlrm , 182 
+
+\hbox(7.73332+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twltt F
+.\twltt I
+.\twltt L
+.\twltt T
+.etc.
+
+
+Overfull \hbox (2.3328pt too wide) in paragraph at lines 484--485
+[]\twltt FILTER[]PURE[]ONCE[]ASM[]REWRITE[]TAC\twlrm , 183 
+
+\hbox(7.73332+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twltt F
+.\twltt I
+.\twltt L
+.\twltt T
+.etc.
+
+[669] [670] [671] [672] [673] [674] [675] [676] [677] [678] [679] [680]
+[681] [682]) (reference.aux (title.aux) (preface.aux) (../LaTeX/ack.aux)
+(contents.aux) (entries.aux) (theorems.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 492 strings out of 11977
+ 3935 string characters out of 87025
+ 38901 words of memory out of 262141
+ 2288 multiletter control sequences out of 9500
+ 20249 words of font info for 77 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 19i,10n,19p,261b,403s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on reference.dvi (690 pages, 1202560 bytes).

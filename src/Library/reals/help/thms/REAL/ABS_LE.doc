@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_LE REAL
+|- !x. x <= (abs x)
+\ENDTHEOREM

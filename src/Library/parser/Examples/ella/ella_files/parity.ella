@@ -1,0 +1,38 @@
+TYPE bit = NEW(t | f).
+
+FN PARITY_SPEC = (bit: in) -> bit:
+ BEGIN SEQ
+    STATE VAR parity INIT t;
+    CASE in
+    OF t: op := f,
+       f: op := t
+    ESAC;
+    OUTPUT parity
+END.
+
+FN NOT = (bit: in) -> bit:
+ CASE in
+ OF f: t,
+    t: f
+ ESAC.
+
+FN MUX = (bit: cntl in1 in2) -> bit:
+ CASE cntl
+ OF t: in1,
+    f: in2
+ ESAC.
+
+FN REG = (bit) -> bit: DELAY(f, 1).
+
+FN PARITY_IMP = (bit: in) -> bit:
+BEGIN
+   MAKE NOT: l1,
+        MUX: l3 out,
+        REG: l2 l5.
+   JOIN (in,l1,l2) -> l3,
+        t            -> l5,
+        (l5, l3, l4) -> out,
+        out          -> l2,
+        l2           -> l1.
+OUTPUT out
+END.

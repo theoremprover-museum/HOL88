@@ -1,0 +1,26 @@
+FIRST_CHARS  `a b`.
+CHARS `a b c d`.
+
+term --> [CONJ] {mk_conj(term,term)}
+       | [DISJ] {mk_disj(term,term)}
+       | [NEG] {mk_neg(term)}
+       | [IMP] {mk_imp(term,term)}
+       | {mk_var(TOKEN,":bool")}.
+
+eof --> [EOF].
+
+conj --> [CONJ] {mk_conj(term,term)} eof.
+
+disj --> [DISJ] {mk_disj(term,term)} eof.
+
+neg --> [NEG] {mk_neg(term)} eof.
+
+imp --> [IMP] {mk_imp(term,term)} eof.
+
+MAIN_LOOP --> conj
+            | disj
+            | neg
+            | imp.
+
+
+

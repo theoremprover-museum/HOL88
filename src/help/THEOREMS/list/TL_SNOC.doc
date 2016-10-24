@@ -1,0 +1,3 @@
+\THEOREM TL_SNOC list
+|- !x l. TL(SNOC x l) = (NULL l => [] | SNOC x(TL l))
+\ENDTHEOREM

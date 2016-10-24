@@ -1,0 +1,3 @@
+\THEOREM REAL_EQ_RADD REAL
+|- !x y z. (x + z = y + z) = (x = y)
+\ENDTHEOREM

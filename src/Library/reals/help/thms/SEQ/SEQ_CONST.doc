@@ -1,0 +1,3 @@
+\THEOREM SEQ_CONST SEQ
+|- !k. (\x. k) --> k
+\ENDTHEOREM

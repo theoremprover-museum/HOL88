@@ -1,0 +1,21 @@
+\section{The Theory {\tt suc}}
+
+The theory \ml{suc}\index{suc, theory@{\ptt suc}, theory} contains an
+\adhoc\ collection of 
+theorems about \ml{SUC}. It contains no new definitions.
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+\begin{hol}
+\index{NOT\_SUC\_LESS\_EQ\_0@{\ptt NOT\_SUC\_LESS\_EQ\_0}}
+\index{SUC\_GREATER\_EQ\_SUC@{\ptt SUC\_GREATER\_EQ\_SUC}}
+\index{NOT\_SUC\_LESS\_EQ\_SELF@{\ptt NOT\_SUC\_LESS\_EQ\_SELF}}
+\index{SUC\_NOT\_0@{\ptt SUC\_NOT\_0}}
+\begin{verbatim}
+  NOT_SUC_LESS_EQ_0     |- !n. ~(SUC n) <= 0
+
+  SUC_GREATER_EQ_SUC    |- !n m. (SUC m) >= (SUC n) = m >= n
+
+  NOT_SUC_LESS_EQ_SELF  |- !n. ~(SUC n) <= n
+
+  SUC_NOT_0             |- !n. ~(SUC n = 0)
+\end{verbatim}\end{hol}

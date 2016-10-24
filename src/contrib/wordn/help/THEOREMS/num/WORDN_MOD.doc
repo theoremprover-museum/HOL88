@@ -1,0 +1,3 @@
+\THEOREM WORDN_MOD wordn_num
+|- !m n. WORDN n m = WORDN n(m MOD (2 EXP n))
+\ENDTHEOREM

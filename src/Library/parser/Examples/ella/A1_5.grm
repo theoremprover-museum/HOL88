@@ -1,0 +1,57 @@
+%-------------------------------------------------------------------------%
+% A1.5 INTEGERS                                                           %
+%                                                                         %
+% NOTE: The formula1 production has been optimised away.                  %
+%-------------------------------------------------------------------------%
+
+intdec --> name [=] {MK_two(`intdec`,POP,int)}.
+
+int --> {MK_one(`int`,formula)}.
+
+formula --> [+] {MK_unary(formula,`+`)}
+          | [-] {MK_unary(formula,`-`)}
+          | [INOT] {MK_unary(formula,`INOT`)} 
+          | [ABS] {MK_unary(formula,`ABS`)}
+          | [SQRT] {MK_unary(formula,`SQRT`)}
+          | [NOT] {MK_unary(formula,`NOT`)}
+          | {MK_one(`formula1`,formula2)} {MK_one(`formula`,POP)} poss_ibinop.
+
+formula1 --> [+] {MK_unary(formula1,`+`)}
+           | [-] {MK_unary(formula1,`-`)} {MK_one(`formula`,POP)}
+           | [INOT] {MK_unary(formula1,`INOT`)} {MK_one(`formula`,POP)}
+           | [ABS] {MK_unary(formula1,`ABS`)} {MK_one(`formula`,POP)}
+           | [SQRT] {MK_unary(formula1,`SQRT`)} {MK_one(`formula`,POP)}
+           | [NOT] {MK_unary(formula1,`NOT`)} {MK_one(`formula`,POP)}
+           | {MK_one(`formula1`,formula2)} poss_ibinop.
+
+poss_ibinop --> [+] {MK_binary(POP,formula1,`+`)} 
+              | [-] {MK_binary(POP,formula1,`-`)}
+              | [IDIV] {MK_binary(POP,formula1,`IDIV`)}
+              | [%] {MK_binary(POP,formula1,`%`)}
+              | [*] {MK_binary(POP,formula1,`*`)}
+              | [MOD] {MK_binary(POP,formula1,`MOD`)}
+              | [SL] {MK_binary(POP,formula1,`SL`)}
+              | [SR] {MK_binary(POP,formula1,`SR`)}
+              | [IAND] {MK_binary(POP,formula1,`IAND`)}
+              | [IOR] {MK_binary(POP,formula1,`IOR`)}
+              | [=] {MK_binary(POP,formula1,`=`)}
+              | [/=] {MK_binary(POP,formula1,`/=`)}
+              | [>] {MK_binary(POP,formula1,`>`)}
+              | [<] {MK_binary(POP,formula1,`<`)}
+              | [>=] {MK_binary(POP,formula1,`>=`)}
+              | [<=] {MK_binary(POP,formula1,`<=`)}
+              | [AND] {MK_binary(POP,formula1,`AND`)}
+              | [OR] {MK_binary(POP,formula1,`OR`)}
+              | [].
+
+formula2 --> [IF] boolean [THEN] int [ELSE] int [FI] 
+             {MK_three(`formula2_cond`,POP,POP,POP)} {MK_one(`formula2`,POP)}
+           | [(] int [)] {MK_one(`formula2_int`,POP)} {MK_one(`formula2`,POP)}
+           | {MK_one(`formula2`,name)}
+           | {MK_one(`formula2`,integer)}.
+
+boolean --> {MK_one(`boolean`,formula)}.
+
+
+
+

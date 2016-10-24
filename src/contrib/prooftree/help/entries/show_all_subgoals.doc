@@ -1,0 +1,44 @@
+\DOC show_all_subgoals
+
+\TYPE {show_all_subgoals : (string -> void)}
+
+\SYNOPSIS
+Shows the goals of all unexplored nodes in a proof tree.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {show_all_subgoals} lists all the
+subgoals which still remain to be proved in the current default proof,
+from the  bottom of the stack to the top. Also gives their access
+path, which can be used in other function calls such as {do_tac}.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails if the given name does not denote a proof tree.
+
+\EXAMPLE
+{
+# show_all_subgoals `myproof` ;;
+
+1.1.1
+"b /\ a"
+      ["b"]
+      ["a"]
+
+1.2.1
+"a /\ b"
+      ["a"]
+      ["b"]
+
+() : void
+}
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs, show_tac,
+show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC

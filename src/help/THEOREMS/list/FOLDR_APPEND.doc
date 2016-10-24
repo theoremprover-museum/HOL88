@@ -1,0 +1,3 @@
+\THEOREM FOLDR_APPEND list
+|- !f e l1 l2. FOLDR f e(APPEND l1 l2) = FOLDR f(FOLDR f e l2)l1
+\ENDTHEOREM

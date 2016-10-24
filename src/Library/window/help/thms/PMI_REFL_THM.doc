@@ -1,0 +1,3 @@
+\THEOREM PMI_REFL_THM win
+|- !x. x <== x
+\ENDTHEOREM

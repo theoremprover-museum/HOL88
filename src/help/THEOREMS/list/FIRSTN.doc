@@ -1,0 +1,4 @@
+\THEOREM FIRSTN list
+|- (!l. FIRSTN 0 l = []) /\
+   (!n x l. FIRSTN(SUC n)(CONS x l) = CONS x(FIRSTN n l))
+\ENDTHEOREM

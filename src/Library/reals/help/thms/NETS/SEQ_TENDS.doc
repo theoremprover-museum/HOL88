@@ -1,0 +1,7 @@
+\THEOREM SEQ_TENDS NETS
+|- !d x x0.
+    (x tends x0)(mtop d,$>=) =
+    (!e.
+      (real_of_num 0) real_lt e ==>
+      (?N. !n. n >= N ==> (dist d(x n,x0)) real_lt e))
+\ENDTHEOREM

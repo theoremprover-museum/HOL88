@@ -1,0 +1,3 @@
+\THEOREM set_TY_DEF sets
+|- ?rep. TYPE_DEFINITION(\p. T)rep
+\ENDTHEOREM

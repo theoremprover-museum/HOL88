@@ -1,0 +1,3 @@
+\THEOREM EQUAL_SING sets
+|- !x y. ({{x}} = {{y}}) = (x = y)
+\ENDTHEOREM

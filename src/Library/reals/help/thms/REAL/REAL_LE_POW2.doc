@@ -1,0 +1,3 @@
+\THEOREM REAL_LE_POW2 REAL
+|- !x. (& 0) <= (x pow 2)
+\ENDTHEOREM

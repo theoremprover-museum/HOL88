@@ -1,0 +1,3 @@
+\THEOREM LESS_0_0 prim_rec
+|- 0 < (SUC 0)
+\ENDTHEOREM

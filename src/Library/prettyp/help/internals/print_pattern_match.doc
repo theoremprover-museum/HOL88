@@ -1,0 +1,16 @@
+\DOC print_pattern_match
+
+\BLTYPE
+print_pattern_match : (print_pattern ->
+                       string ->
+                       (string # int) list ->
+                       print_tree ->
+                       print_binding)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM INTERVAL_LEMMA LIM
+|- !a b x.
+    a < x /\ x < b ==>
+    (?d. (& 0) < d /\ (!y. (abs(x - y)) < d ==> a <= y /\ y <= b))
+\ENDTHEOREM

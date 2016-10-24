@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_SIGN2 REAL
+|- !x y. (abs(x - y)) < (-- y) ==> x < (& 0)
+\ENDTHEOREM

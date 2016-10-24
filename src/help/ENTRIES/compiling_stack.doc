@@ -1,0 +1,21 @@
+\DOC compiling_stack
+
+\TYPE {compiling_stack : bool list}
+
+\SYNOPSIS
+Keeps track of the value of the assignable variable {compiling}.
+
+\DESCRIBE
+The identifier {compiling_stack} is an assignable ML variable of type
+{bool list} which used internally by the system to keep track of the value of
+the assignable variable {compiling} during nested calls to {compile} and {load}
+(and their variants).  The {compiling_stack} is not intended for general use,
+and no value should be assigned by users to this variable.
+
+\FAILURE
+Evaluation of the variable {compiling_stack} never fails.
+
+\SEEALSO
+compiling.
+
+\ENDDOC

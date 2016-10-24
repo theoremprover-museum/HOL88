@@ -1,0 +1,5 @@
+\THEOREM FIRSTN_APPEND2 list
+|- !l1 n.
+    (LENGTH l1) <= n ==>
+    (!l2. FIRSTN n(APPEND l1 l2) = APPEND l1(FIRSTN(n - (LENGTH l1))l2))
+\ENDTHEOREM

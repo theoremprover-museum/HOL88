@@ -1,0 +1,3 @@
+\THEOREM union_def TOPOLOGY
+|- !P Q. P union Q = (\x. P x \/ Q x)
+\ENDTHEOREM

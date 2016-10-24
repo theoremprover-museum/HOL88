@@ -1,0 +1,38 @@
+\DOC open_win
+
+\TYPE {open_win : (path -> (window -> window) -> window -> window)}
+
+\SYNOPSIS
+Apply some transformation to a subwindow of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+{open_win path fn win} opens a subwindow in the focus of {win} at the
+position described by {path}.
+The window transforming function {fn} is then applied to the resulting
+subwindow.
+The subwindow is then closed and the transformed parent window returned as
+the result.
+
+\FAILURE
+{open_win path fn win} will fail if {path} describes a position which
+is not present in the focus of {win}.
+
+\EXAMPLE
+{
+   # transform "(==>) (A /\ (B /\ F))" [] []
+   # (
+   #       open_win [RAND]
+   #       (
+   #               rewrite_win []
+   #       )
+   # );;
+   |- A /\ F ==> A /\ B /\ F
+}
+
+\SEEALSO
+OPEN_WIN, CLOSE_WIN, open_context, OPEN_CONTEXT, establish, ESTABLISH,
+gen_open_win, GEN_OPEN_WIN
+
+\ENDDOC

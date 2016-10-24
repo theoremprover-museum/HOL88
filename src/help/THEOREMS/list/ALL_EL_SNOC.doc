@@ -1,0 +1,3 @@
+\THEOREM ALL_EL_SNOC list
+|- !P x l. ALL_EL P(SNOC x l) = ALL_EL P l /\ P x
+\ENDTHEOREM

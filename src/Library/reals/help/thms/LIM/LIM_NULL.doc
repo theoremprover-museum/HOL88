@@ -1,0 +1,3 @@
+\THEOREM LIM_NULL LIM
+|- !f l x. (f --> l)x = ((\x. (f x) - l) --> (& 0))x
+\ENDTHEOREM

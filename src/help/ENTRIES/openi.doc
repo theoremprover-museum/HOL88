@@ -1,0 +1,25 @@
+\DOC openi
+
+\TYPE {openi : (string -> string)}
+
+\SYNOPSIS
+Opens a named port for input from a named file.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+Given a string argument {`foo`}, {openi} returns a string (a port identifier)
+that can be used by the function {read} to read characters from the file {foo}.
+The port identifier is also used as an argument to the function {close};
+{close} terminates input.
+
+\FAILURE
+Fails if the file cannot be found with the current search path or if
+read permission on the named file
+is disabled.
+
+\SEEALSO
+close, openw, read, write
+
+\ENDDOC

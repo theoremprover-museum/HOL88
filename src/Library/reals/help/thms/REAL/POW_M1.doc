@@ -1,0 +1,3 @@
+\THEOREM POW_M1 REAL
+|- !n. abs((--(& 1)) pow n) = & 1
+\ENDTHEOREM

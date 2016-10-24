@@ -1,0 +1,29 @@
+\DOC new_flag
+
+\TYPE {new_flag : ((string # bool) -> void)}
+
+\SYNOPSIS
+Creates a new settable flag.
+
+\DESCRIBE
+A call {new_flag(`flagname`,init)} declares a new settable flag called
+{flagname}, with an initial setting of {init} (either {true} or {false}).
+Like a system flag, it can be read and written to with {get_flag_value} and
+{set_flag_value} respectively, and will be listed along with the others by
+{flags()}.
+
+\FAILURE
+Fails if there is already a flag of the given name.
+
+\EXAMPLE
+{
+#new_flag(`parser hacked`,false);;
+() : void
+
+#get_flag_value `parser hacked`;;
+false : bool
+}
+\SEEALSO
+flags, get_flag_value, set_flag_value.
+
+\ENDDOC

@@ -1,0 +1,53 @@
+\chapter{ML Functions in the wellorder Library}
+\label{entries}
+\input{entries-intro}
+\DOC{set\_wo\_map}
+
+\TYPE {\small\verb%set_wo_map : (void -> void)%}\egroup
+
+\SYNOPSIS
+Sets interface map for constants in the ``wellorder'' library.
+
+\DESCRIBE
+To increase flexibility, the constants used in the wellorder library are
+declared with a {\small\verb%wo_%} prefix. The {\small\verb%set_wo_map%} function sets up an interface
+map to eliminate them from view. Any existing interface map is preserved
+alongside. The constants which have their prefixes hidden are: {\small\verb%subset%},
+{\small\verb%Union%}, {\small\verb%fl%}, {\small\verb%poset%}, {\small\verb%chain%}, {\small\verb%woset%} and {\small\verb%inseg%}.
+
+\FAILURE
+Fails if an entry in the new interface map clashes with an existing one.
+
+\COMMENTS
+The interface map is not set up by default when the library is loaded.
+
+\SEEALSO
+interface_map, set_interface_map, unset_wo_map.
+
+\ENDDOC
+\DOC{unset\_wo\_map}
+
+\TYPE {\small\verb%unset_wo_map : (void -> void)%}\egroup
+
+\SYNOPSIS
+Removes interface map for constants in the ``wellorder'' library.
+
+\DESCRIBE
+To increase flexibility, the constants used in the wellorder library are
+declared with a {\small\verb%wo_%} prefix. The {\small\verb%unset_wo_map%} function cancels the effect of
+{\small\verb%set_wo_map%}, which sets up an interface map to eliminate them from view. Any
+existing interface map is preserved when the wellorder-related entries are
+eliminated. The constants which have their prefixes hidden are: {\small\verb%subset%},
+{\small\verb%Union%}, {\small\verb%fl%}, {\small\verb%poset%}, {\small\verb%chain%}, {\small\verb%woset%} and {\small\verb%inseg%}.
+
+\FAILURE
+Fails only if some entries in the interface map matching the above have been
+set by other means, so if subtracted, a constant would be hidden.
+
+\COMMENTS
+The interface map is not set up by default when the library is loaded.
+
+\SEEALSO
+interface_map, set_interface_map, set_wo_map.
+
+\ENDDOC

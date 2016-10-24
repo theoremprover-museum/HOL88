@@ -1,0 +1,3 @@
+\THEOREM TREAL_10 REALAX
+|- ~treal_1 treal_eq treal_0
+\ENDTHEOREM

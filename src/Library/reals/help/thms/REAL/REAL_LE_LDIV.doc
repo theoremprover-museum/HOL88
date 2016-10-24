@@ -1,0 +1,3 @@
+\THEOREM REAL_LE_LDIV REAL
+|- !x y z. (& 0) < x /\ y <= (z * x) ==> (y / x) <= z
+\ENDTHEOREM

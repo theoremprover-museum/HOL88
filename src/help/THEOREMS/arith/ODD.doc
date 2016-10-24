@@ -1,0 +1,3 @@
+\THEOREM ODD arithmetic
+|- (ODD 0 = F) /\ (!n. ODD(SUC n) = ~ODD n)
+\ENDTHEOREM

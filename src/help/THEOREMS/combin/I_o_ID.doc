@@ -1,0 +1,3 @@
+\THEOREM I_o_ID combin
+|- !f. (I o f = f) /\ (f o I = f)
+\ENDTHEOREM

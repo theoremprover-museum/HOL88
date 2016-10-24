@@ -1,0 +1,17 @@
+\DOC No_address
+
+\TYPE {No_address : address}
+
+\SYNOPSIS
+Type constructor for sub-tree addresses.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{No_address} is used to indicate that there is no valid address information
+for a sub-tree.
+
+\SEEALSO
+Address.
+
+\ENDDOC

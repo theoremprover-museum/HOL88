@@ -1,0 +1,25 @@
+\DOC pp_print_theory
+
+\TYPE {pp_print_theory : (string -> void)}
+
+\SYNOPSIS
+Print function for HOL theories.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{pp_print_theory} simulates the HOL system function {print_theory} using the
+pretty-printer library. The function takes a theory-segment name as argument.
+The following information is displayed: the parents of the theory, types
+defined within the theory, constants of the theory, the binders and infixes
+(subsets of the constants), the axioms, the definitions, and the derived
+theorems.
+
+\FAILURE
+Fails if the named theory does not exist or is not an ancestor of the current
+theory.
+
+\SEEALSO
+pp_print_type, pp_print_term, pp_print_thm, pp_print_all_thm.
+
+\ENDDOC

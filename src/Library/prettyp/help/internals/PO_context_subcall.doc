@@ -1,0 +1,16 @@
+\DOC PO_context_subcall
+
+\BLTYPE
+PO_context_subcall :
+   ((string #
+     (string # ((print_tree # address) list -> (print_tree # address) list)) #
+     (string # print_int_exp) list) ->
+    print_object)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

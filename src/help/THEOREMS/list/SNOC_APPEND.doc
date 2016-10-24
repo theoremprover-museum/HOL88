@@ -1,0 +1,3 @@
+\THEOREM SNOC_APPEND list
+|- !x l. SNOC x l = APPEND l[x]
+\ENDTHEOREM

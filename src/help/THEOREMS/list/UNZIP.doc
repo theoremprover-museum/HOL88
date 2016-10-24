@@ -1,0 +1,6 @@
+\THEOREM UNZIP list
+|- (UNZIP[] = [],[]) /\
+   (!x l.
+     UNZIP(CONS x l) =
+     CONS(FST x)(FST(UNZIP l)),CONS(SND x)(SND(UNZIP l)))
+\ENDTHEOREM

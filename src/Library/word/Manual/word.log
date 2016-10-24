@@ -1,0 +1,191 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:31
+**word.tex
+(word.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (/usr/lib/tex/macros/latex/makeidx.sty
+Document style option `makeidx' - released 21 Oct 91
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+(macros.tex
+\HDRULEBOX=\box25
+ (holmacs.tex) (tokmac.tex))
+\@indexfile=\write3
+
+Writing index file word.idx 
+No auxiliary output files.
+
+No file word.aux.
+(title.tex
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 16.
+[1
+
+
+] [2])
+No file word.toc.
+[3
+
+
+] [4
+
+] (description.tex
+Chapter 1.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 19.
+(model_word.tex [1
+
+
+] [2] (thy_hier.tex)
+LaTeX Warning: Reference `fig-thy_hier' on page 3 undefined on input line 109.
+[3]
+LaTeX Warning: Reference `sec-abs' on page 4 undefined on input line 128.
+LaTeX Warning: Reference `tab-base-const' on page 4 undefined on input line 133
+.
+LaTeX Warning: Reference `tab-other-const' on page 4 undefined on input line 13
+6.
+[4] [5] [6]
+LaTeX Warning: Reference `tab-shift' on page 7 undefined on input line 314.
+
+Underfull \hbox (badness 10000) in paragraph at lines 318--319
+
+
+\hbox(0.0+0.0)x425.86938
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 327--328
+
+
+\hbox(0.0+0.0)x425.86938
+.\glue(\rightskip) 0.0
+
+[7] [8]
+LaTeX Warning: Reference `sec-word_num' on page 9 undefined on input line 472.
+
+Underfull \hbox (badness 5817) in paragraph at lines 485--489
+[][] \twlmi n m$ \twlrm re-turns a $\twlmi n$\twlrm -bit word rep-re-sent-ing t
+he value of $\twlmi m$\twlrm .
+
+\hbox(8.33331+2.33331)x425.86938, glue set 3.87624
+.\hbox(8.33331+0.0)x51.41603
+..\sfc N
+..\sfc B
+..\sfc W
+..\kern-0.32639
+..\sfc O
+..etc.
+.\write3{\indexentry{NBWORD@\idxname{\sfc }{NBWORD}}{\thepage }}
+.\glue 3.33328 plus 3.33328
+.\twlmi n
+.\glue 3.33328 plus 3.33328
+.etc.
+
+[9] [10] [11]
+Overfull \hbox (1.16455pt too wide) in paragraph at lines 675--681
+[] [][]\twltt :(term list -> tactic) \twlrm When ap-plied to a goal of the form
+ [][]
+
+\hbox(8.33331+2.33331)x425.86938, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\glue 0.0
+.\hbox(7.33333+0.0)x48.87128
+..\glue -29.3747
+..\glue 0.0
+..\glue -5.87494
+..\hbox(7.33333+0.0)x78.24597
+...\glue 5.87494
+...\twltt P
+...\twltt W
+...\twltt O
+...\twltt R
+...etc.
+..\glue 5.87494
+.\penalty 0
+.\hbox(0.0+0.0)x0.0
+.etc.
+
+LaTeX Warning: Reference `sec-bword_num' on page 12 undefined on input line 694
+.
+[12]
+LaTeX Warning: Citation `WW:res_quan-manual' on page 13 undefined on input line
+ 764.
+LaTeX Warning: Reference `fig-WSEG_NBWORD_SUC' on page 13 undefined on input li
+ne 765.
+)) [13] [14] (entries.tex
+Chapter 2.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 1.
+(entries-intro.tex) [15
+
+
+
+] [16]
+Overfull \hbox (11.32455pt too wide) in paragraph at lines 108--112
+\twlrm the words to be con-cate-nated. The as-sump-tion will be []\elvtt PWORDL
+EN n1 tm', PWORDLEN n2 tm''\twlrm .
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm t
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm w
+.etc.
+
+[17]
+Overfull \hbox (12.9914pt too wide) in paragraph at lines 207--210
+[]\elvtt WSEG_WSEG_CONV tm \twlrm fails if []\elvtt tm \twlrm is not of the for
+m de-scribed above, or the re-la-tions []\elvtt k1 + m1 <= n
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\elvtt W
+.\elvtt S
+.\elvtt E
+.\elvtt G
+.etc.
+
+) [18] (theorems.tex
+Chapter 3.
+(theorems-intro.tex) [19
+
+
+
+] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29]
+[30] [31] [32] [33] [34] [35]) [36] (word.bbl) (word.ind [37
+
+
+] [38
+
+] [39]
+[40]) ) 
+Here is how much of TeX's memory you used:
+ 512 strings out of 11977
+ 4197 string characters out of 87025
+ 45302 words of memory out of 262141
+ 2405 multiletter control sequences out of 9500
+ 21079 words of font info for 80 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 18i,14n,20p,189b,410s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on word.dvi (44 pages, 88264 bytes).

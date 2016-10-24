@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_SUC_REFL arithmetic
+|- !m. m <= (SUC m)
+\ENDTHEOREM

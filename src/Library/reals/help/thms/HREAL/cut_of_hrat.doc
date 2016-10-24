@@ -1,0 +1,3 @@
+\THEOREM cut_of_hrat HREAL
+|- !x. cut_of_hrat x = (\y. y hrat_lt x)
+\ENDTHEOREM

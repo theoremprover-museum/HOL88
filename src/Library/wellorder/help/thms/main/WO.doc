@@ -1,0 +1,3 @@
+\THEOREM WO WELLORDER
+|- !P. ?l. woset l /\ (fl l = P)
+\ENDTHEOREM

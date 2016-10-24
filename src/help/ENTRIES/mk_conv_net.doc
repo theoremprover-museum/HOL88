@@ -1,0 +1,12 @@
+\DOC mk_conv_net
+
+\TYPE {mk_conv_net : (thm list -> conv term_net)}
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\KEYWORDS
+conversion.
+
+\ENDDOC

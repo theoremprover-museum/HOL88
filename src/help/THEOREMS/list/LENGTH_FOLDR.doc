@@ -1,0 +1,3 @@
+\THEOREM LENGTH_FOLDR list
+|- !l. LENGTH l = FOLDR(\x l'. SUC l')0 l
+\ENDTHEOREM

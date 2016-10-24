@@ -1,0 +1,3 @@
+\THEOREM BOOL_CASES_AX bool
+|- !t. (t = T) \/ (t = F)
+\ENDTHEOREM

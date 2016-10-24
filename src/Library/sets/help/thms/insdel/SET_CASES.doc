@@ -1,0 +1,3 @@
+\THEOREM SET_CASES sets
+|- !s. (s = {{}}) \/ (?x t. (s = x INSERT t) /\ ~x IN t)
+\ENDTHEOREM

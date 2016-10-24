@@ -1,0 +1,3 @@
+\THEOREM EXISTS_DEF bool
+|- $? = (\P. P($@ P))
+\ENDTHEOREM

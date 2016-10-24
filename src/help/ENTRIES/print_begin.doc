@@ -1,0 +1,60 @@
+\DOC print_begin
+
+\TYPE {print_begin : (int -> void)}
+
+\SYNOPSIS
+Initiates a pretty printing block.
+
+\DESCRIBE
+The function {print_begin} initiates a consistent printing block. Consistent
+breaks cause uniform indentation at each break. This means that if a list is
+printed and the total list is wider than the margin then the list will be
+broken at every possible breaking point. The argument is the offset of the
+block that {print_begin} initiates. This offset is added to the indentation
+of any lines broken inside. This offset is virtually never used and should
+preferably be avoided.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+\noindent The first step is to set the margin to be 13 characters wide:
+{
+   #set_margin 13;;
+}
+\noindent The second is to initialize the block using {print_begin}:
+{
+   #let  example =
+      (print_newline();
+       print_begin 0;
+       print_string `first`;
+       print_break (1,2);
+       print_string `second`;
+       print_break (1,2);
+       print_string `third`;
+       print_end();
+       print_newline());;
+}
+\noindent After initialization of the block three strings `first',`second'
+and `third' are printed each with a break between them. The total
+width of the three strings is more than 13 (margin) but the first two (`first'
+and `second') combined with the space between them is less than 13. From the
+result of consistent formatting shown below it is clear that if any wrapping
+takes place everything will be wrapped. To clearly
+see what consistent breaking means contrast the above with {print_ibegin}
+where the same example is used but with inconsistent formatting.
+
+\noindent The output we obtain is the following:
+{
+   first
+     second
+     third
+   example =
+   ()
+   : void
+}
+\SEEALSO
+print_ibegin, print_break, print_end, max_print_depth, set_margin,
+print_newline
+
+\ENDDOC

@@ -1,0 +1,209 @@
+#define		TRUE		1
+#define		FALSE		0
+
+#define		HEIGHT		10
+
+#define		EMPTY_COUNT	6
+
+#define		CLEAR		"^L"
+#define		BOLD_ON		"\e[7m"
+#define		BOLD_OFF	"\e[m"
+
+application "/bin/cat"
+   label "<< Print Queue Monitor >>"
+   size HEIGHT by 80 characters
+   icon "laserwriter.icon"
+   font "/usr/lib/fonts/fixedwidthfonts/screen.r.14"
+   initialize {
+      interval = active_interval;	/* set the timer rate for queue checking		*/
+      active = TRUE;			/* start out in active mode				*/
+      active_count = EMPTY_COUNT;	/* successive empty queues before we switch to idle	*/
+      delimiters = "\n";		/* to tokenize the output of lpq			*/
+      pr_name[0] = "lw";		/* define the printers we can access			*/
+      pr_name[1] = "lp";
+      pr_name[2] = "versatec";
+      close_on_idle = TRUE;		/* initial option choices				*/
+      close_option = 0;
+      open_on_active = FALSE;
+      open_option = 1;
+      remove idle_light;		/* initialize the main window display			*/
+      remove check_light;
+      remove remove_options_button;
+      display display_options_button;
+      }
+   open {
+      active = TRUE;
+      interval = active_interval;
+      display active_light;
+      remove idle_light;
+      active_count = EMPTY_COUNT;
+      }
+   close {
+      active = FALSE;
+      interval = idle_interval;
+      display idle_light;
+      remove active_light;
+      active_count = 0;
+      }
+   timer {
+      remove active_light;
+      remove idle_light;
+      display check_light;
+      queue = tokenize(output_of(format("lpq -P%s", pr_name[printer])));
+      remove check_light;
+      send CLEAR, BOLD_ON, queue[0], BOLD_OFF, "\n\n";
+      if (queue[0] == "no entries")
+         if (active)
+            if (--active_count == 0) {
+               active = FALSE;
+               display idle_light;
+               interval = idle_interval;
+               if (close_on_idle && is_open())
+                  close;
+               }
+            else
+               display active_light;
+         else
+            display idle_light;
+      else {
+         active = TRUE;
+         active_count = EMPTY_COUNT;
+         display active_light;
+         interval = active_interval;
+         if (open_on_active && !is_open())
+            open;
+         for (i = 1; i < HEIGHT - 1 && i < cardinality(queue); i++)
+            if (index(queue[i], user()))
+               send BOLD_ON, queue[i], BOLD_OFF, "\n";
+            else
+               send queue[i], "\n";
+         }
+      }
+
+gadgets
+   top
+   align middle
+   font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+   label active_light
+      at 49 4
+      "Active"
+   end_label
+   label idle_light
+      at 303 4
+      "Idle"
+   end_label
+   label check_light
+      at 529 4
+      "Checking"
+   end_label
+   button
+      at 4 24
+      normal "   Go Active   " /* spaces set size of all buttons */
+         { active = TRUE;
+     	   interval = active_interval;
+     	   remove idle_light;
+     	   display active_light;
+      	   active_count = EMPTY_COUNT;
+      	 }
+   end_button
+   button
+      at 249 24
+      normal "Go Idle"
+         { active = FALSE;
+      	   interval = idle_interval;
+      	   remove active_light;
+      	   display idle_light;
+      	   active_count = 0;
+      	   if (close_on_idle)
+      	      close;
+      	 }
+   end_button
+   button display_options_button
+      at 493 24
+      normal "Options"
+         display option_dialog;
+   end_button
+   button remove_options_button
+      at 493 24
+      normal "Remove Options"
+         remove option_dialog;
+   end_button
+end_gadgets
+
+dialog option_dialog
+   label "<< Print Queue Monitor Options >>"
+   size 24 by 92 characters
+   open {
+         remove display_options_button;
+         display remove_options_button;
+         }
+   close {
+         remove remove_options_button;
+         display display_options_button;
+         }
+   gadgets
+      align middle
+      font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+      slider active_interval
+         at 4 78
+         label "Active Interval:"
+         value on 
+         range off
+         minimum 5
+         maximum 300
+         initial 10
+         width 100
+         action {
+            if (active)
+               interval = active_interval;
+            }
+      end_slider
+      slider idle_interval
+         at 4 116
+         label "Idle Interval:  "
+         value on 
+         range off
+         minimum 5
+         maximum 300
+         initial 60
+         width 100
+         action {
+            if (!active)
+               interval = idle_interval;
+            }
+      end_slider
+      choice printer
+         at 4 4
+         display vertical
+         label "Printer:"
+         "LaserWriter"		nothing;
+         "Line Printer"		nothing;
+         "Versatec Plotter"	nothing;
+      end_choice
+      label
+         at 320 4
+         "When the queue becomes active..."
+      end_label
+      choice open_option
+         at 345 24
+         display vertical
+         "Open the window"			open_on_active = TRUE;
+         "Do not change the window's status"	open_on_active = FALSE;
+      end_choice
+      label
+         at 320 78
+         "When the queue becomes idle..."
+      end_label
+      choice close_option
+         at 345 98
+         display vertical
+         "Close the window"			close_on_idle = TRUE;
+         "Do not change the window's status"	close_on_idle = FALSE;
+      end_choice
+   end_gadgets
+end_dialog
+
+keys
+   disable normal_keys
+   disable function_keys
+end_keys

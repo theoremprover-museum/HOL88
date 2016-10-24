@@ -1,0 +1,406 @@
+\documentstyle[halfzed,a4]{article}
+
+\parskip=0.5\baselineskip
+\parindent=0pt
+
+\title{HOL convert library}
+\author{David Shepherd\\(des@inmos.co.uk)}
+\date{27th September, 1989}
+
+\begin{document}
+\maketitle
+
+\section*{Files}
+
+The contents of the library are as follows.
+
+\begin{tabular}{lp{3in}}
+conv\_package.ml & a package for handling conversions in a similar way to sub goal package for tactics\\
+more\_conv.ml    & some extra useful conversions\\
+unfold.ml & unfolding rules and conversions\\
+unwind.ml & unwinding rules and conversions\\
+prune.ml & pruning rules and conversions
+\end{tabular}
+
+
+\section*{conv\_package.ml}
+
+This works in a similar way to the sub goal package. You first select the term to be converted
+by using the \verb!set_conv! function. For example type
+
+\verb!set_conv "? x . (SUC x) = 1";;!
+
+This sets up a referrence variable to contain the term. Most of the operations in the package are
+functions of type \verb!:*->void! that side effect on this term.
+At any point the function \verb!show_conv! shows you the part of the term you are currently looking at.
+So here
+
+\verb!show_conv()!
+
+will return
+
+\verb!"?x.(SUC x)=1"!
+
+Seven functions are provided for moving round the term. These are
+
+\begin{verbatim}
+inrat
+inran
+inabs
+inleft
+inright
+inbody
+out
+\end{verbatim}
+
+These have the effect indicated by their name. \verb!out! reverses the movement of the last \verb!in!
+move.
+
+So in the example above typing
+
+\verb!inbody();;!
+
+then
+
+\verb!inright();;!
+
+then
+
+\verb!show_conv();;!
+
+would return
+
+\verb!"1"!
+
+At any point a conversion may be applied to the current subterm. This is dne using the function \verb!apply!.
+So we can convert the trem \verb!1! by typing
+
+\verb!apply num_CONV;;!
+
+and now typing
+
+\verb!show_conv();;!
+
+results in
+
+\verb!SUC 0!.
+
+We can move out a level and look at the term there by
+
+\begin{verbatim}
+out();;
+show_conv();;
+\end{verbatim}
+
+and get
+
+\verb!"(SUC x) = (SUC 0)"!
+
+Some rewriting conversions are provided. These are
+
+\begin{verbatim}
+pure_rewrite_CONV
+rewrite_CONV
+pure_once_rewrite_CONV
+once_rewrite_CONV
+\end{verbatim}
+
+This have effects similar to the equivalent \verb!REWRITE_RULES! --- the lower case names are used
+as there is already a \verb!REWRITE_CONV! in HOL88.
+(the HOL \verb!REWRITE_CONV! has been nenamed to \verb!REWR_CONV!,
+ and the functions
+ \verb!REWRITE_CONV!, \verb!PURE_REWRITE_CONV!, \verb!PURE_ONCE_REWRITE_CONV!
+ and \verb!ONCE_REWRITE_CONV! added to the core system from version 2.01
+ onward [Jim Grundy])
+So now executing
+
+\begin{verbatim}
+apply(rewrite_CONV[INV_SUC_EQ]);;
+show_conv();;
+\end{verbatim}
+
+we get
+
+\verb!x = 0!
+
+Finally the function \verb!convert! applies the current series of conversions and returns the relevant
+theorem. So here
+
+\verb!convert()!
+
+
+results in
+
+\verb!"|- (?x.(SUC x)=1)=(?x.x=0)"!
+
+Most proofs in HOL are done via the sub goal package. Some simple
+interfacing between this and the conversion package is provided. The
+new tactic \verb!SET_CONVERT_TAC! is \verb!ALL_TAC! but side effects by
+setting the convert term to the current top goal conclusion. You can
+then use the conversion package to build up a conversion you want to
+apply to the goal. If you are not saving a proof script just build up
+the conversion and when you've got the right result use
+\verb!CONVERT_TAC! which tactically applies the conversion. If you are
+building up a proof script then each time you \verb!apply! a conversion
+use the command \verb!whereami();;! to get the ``director string'' of
+the current sub-term. Then put the tactic
+
+\verb!dir_CONV_TAC `!{\em director string}\verb!` !{\em conv}
+
+in your proof script. \verb!dir_CONV_TAC! applies a conversion at a
+position specified by the director string.
+
+
+In addition there are a set of extra tactics at the end of the file to
+allow similar things to be done directly in interactive goal proof. 
+However these tactics do {\em NOT\/} work in proof scripts as they
+depend on side-effects that get evaluated at parse time in a proof
+script.  These tactics should only be used to find the proof and should
+the be changed into the appropriate conversions and \verb!dir_CONV_TAC!s
+for use as a script. 
+
+You may wish to work out the director string for yourself while using
+the
+subgoal package. The strings read left to right with each letter
+selecting:
+
+\begin{description}
+\item[f] function -- the operator of a term
+\item[a] argument -- the argument of a term
+\item[b] body -- the body of an abstraction
+\item[l] left -- the left hand side of a binary operator
+\item[r] right  -- the right hand side of a binary operator
+\item[q] quantification -- the body of a binder quantifier
+\end{description}
+
+\verb!whereami! only uses the `a', `f' and `b' as the other three are 
+made from these.
+
+The conversion package is based on ideas gained from use of the occam
+transformation system produced by the PRG at Oxford. 
+
+\section*{more\_conv.ml}
+
+\verb!distinct_ALPHA_term:term->term!
+
+This is a function that primes binding variables until all variables (free and bound) have unique names.
+This is often useful when you need to \verb!STRIP! an existentially quantified implicand which contains enclosing
+occurences of the same existentially quantified variable.
+
+\verb!distinct_ALPHA_CONV:conv!
+
+This implements a conversion to prove the equivalence of the renamed term to the original one.
+
+\verb!UP_CONV:conv->conv! and \verb!DOWN_CONV:conv->conv!
+
+These are two conversionals that apply their conversion once on each subterm of a term. \verb!UP_CONV! applies
+the conversion from the bottom up and \verb!DOWN_CONV! from the top down. These are useful in places where
+a looping conversion would cause \verb!DEPTH_CONV! to loop.
+
+\verb!DOWN_CONV_THEN:conv->conv->conv!
+
+This acts like \verb!DOWN_CONV! applying its first arguement to each term util that conversion fails. Then
+it applies the second one once. This has its uses, for example, if you want to move one subterm as far
+as possible into a term and then apply another conversion to eliminate it.
+
+\verb!B_UP_CONV!, \verb!B_DOWN_CONV! and \verb!B_DOWN_CONV_THEN!
+
+These are similar to the previous 3 conversionals except that they treat the body of a binder term as
+being its only subterm --- this is a more ``intuitive'' view of the subterms of a binder variable.
+This is because since 
+
+\verb!?x.P(x) = $? (\x.P(x)!
+
+then the normal conversionals use \verb!$?! and \verb!\x.P(x)! as the subterms which is not always what is wanted.
+
+\verb!unnum_CONV:conv!
+
+\begin{infrule}
+unnum\_CONV (SUC n)
+\derive
+\vdash (SUC n) = \mbox{\lt ``n+1''}
+\end{infrule}
+
+Inverse of \verb!num_CONV!
+
+
+\verb!pair_abs_CONV!
+
+\begin{infrule}
+pair\_abs\_CONV \lambda (z:*\cross**) . f z
+\derive
+\vdash \lambda (z:*\cross**) . f z =  UNCURRY (\lambda x y. f(x,y))
+\end{infrule}
+
+\verb!term_EXISTS_CONV tm!
+
+\begin{infrule}
+term\_EXISTS\_CONV tm (? x . f x)
+\derive[\mbox{where v1 ... vn are the variables in tm}]
+? x . f x = ? v1 ... vn . f tm
+\end{infrule}
+
+\verb!term_FORALL_CONV tm!
+
+\begin{infrule}
+term\_FORALL\_CONV tm (! x . f x)
+\derive[\mbox{where v1 ... vn are the variables in tm}]
+! x . f x = ? v1 ... vn . f tm
+\end{infrule}
+
+\section*{prune.ml}
+
+\verb!EXISTS_AND_LEFT:conv!
+
+\begin{infrule}
+\exists x . t_1 \land t_2
+\derive[\mbox{$x$ not free in $t_1$}]
+\vdash \exists x . t_1 \land t_2 = t_1 \land (\exists x . t_2)
+\end{infrule}
+
+moves and existential quantification over the left term of a conjunction.
+
+\verb!EXISTS_AND_RIGHT:conv!
+
+\begin{infrule}
+\exists x . t_1 \land t_2
+\derive[\mbox{$x$ not free in $t_2$}]
+\vdash \exists x . t_1 \land t_2 = (\exists x . t_1) \land t_2
+\end{infrule}
+
+moves and existential quantification over the right term of a conjunction.
+
+\verb!EXISTS_AND_BOTH:conv!
+
+\begin{infrule}
+\exists x . t_1 \land t_2
+\derive[\mbox{$x$ not free in $t_1$ or $t_2$}]
+\vdash \exists x . t_1 \land t_2 = t_1 \land t_2)
+\end{infrule}
+
+removes existential quantification from conjunction
+
+\verb!EXISTS_AND:conv!
+
+\verb!EXISTS_AND =!\\
+\verb!    EXISTS_AND_BOTH ORELSEC EXISTS_AND_LEFT ORELSEC EXISTS_AND_RIGHT!
+
+moves existential quantification in one level of conjunction if possible.
+
+\verb!EXISTS_EQN:conv!
+
+\begin{infrule}
+\exists l . l x_1 \ldots x_n = t
+\derive[\mbox{$l$ not free in $t$}]
+\vdash (\exists l . l x_1 \ldots x_n = t) = T
+\end{infrule}
+
+Used in old pruning rules, but not any more.
+
+\verb!EXISTS_EQNF:conv!
+
+\begin{infrule}
+\exists l . \forall x_1 \ldots x_n . l x_1 \ldots x_n = t
+\derive[\mbox{$l$ not free in $t$}]
+\vdash (\exists l . \forall x_1 \ldots x_n . l x_1 \ldots x_n = t) = T
+\end{infrule}
+
+Used in old pruning rules, but not any more.
+
+\verb!EXISTS_DEL!
+
+\begin{infrule}
+\exists x_1 \ldots x_n . t
+\derive[\mbox{$x_i$ not free in $t$}]
+\vdash (\exists x_1 \ldots x_n . t) = t
+\end{infrule}
+
+Deletes redundant existentials quantifier. Current version uses \verb!mk_thm! but ``safe'' version
+is in file commented out.
+
+\verb!PRUNE_ONCE_CONV:conv!
+
+\begin{infrule}
+\exists x . eqn_1 \land \ldots \land (x=t) \land \ldots \land eqn_n
+\derive
+\vdash (\exists x . eqn_1 \land \ldots \land (x=t) \land \ldots \land eqn_n)\\
+\qquad = (eqn_1[t/x] \land \ldots \land eqn_n[t/x])
+\end{infrule}
+
+Removes an existentially quantified variable that is equated to a term having substituted that term
+for all occurrences of that variable. If $x$ is free in body then just deletes the quantifier. Fails
+if $x$ not free but not equated anywhere.
+
+\verb!PRUNE_CONV:conv!
+
+Takes a term of the form
+
+\[\exists x_1 \ldots x_n . eqn_1 \land \ldots eqn_m\]
+
+and uses \verb!SYM_EXISTS_CONV! and \verb!PRUNE_ONCE_CONV! to remove as many of the existentially quantified
+variables as possible. Does not demand that all the quantifiers will disappear like the old \verb!PRUNE! did.
+It doesn't even (explicitly) use \verb!mk_thm!!
+
+\verb!PRUNE_RULE:thm->thm!
+
+\verb!PRUNE_CONV!s the right hand side of an equation.
+
+\section*{unfold.ml}
+
+Provides \verb!UNFOLD:(thm list)->conv! and \verb!UNFOLD_RULE:(thm list)->thm->thm! as in the old unwind library.
+Gives more efficient implementation of these rules than using general rewriting.
+
+
+\section*{unwind.ml}
+
+\verb!AND_FORALL_CONV:conv!
+
+\begin{infrule}
+(\forall x . t_1) \land \ldots \land (\forall x . t_n)
+\derive
+\vdash ((\forall x . t_1) \land \ldots \land (\forall x . t_n))\\
+\qquad =(\forall x . t_1 \land \ldots \land t_n)
+\end{infrule}
+
+Moves an existential quantification out of a conjunction. Current version uses \verb!mk_thm! but
+a ``safe'' version is commented out in the file.
+
+\verb!FORALL_AND_CONV:conv!
+
+\begin{infrule}
+\forall x . t_1 \land \ldots \land t_n
+\derive
+\vdash (\forall x . t_1 \land \ldots \land t_n)\\
+\qquad = (\forall x . t_1) \land \ldots \land (\forall x . t_n)
+\end{infrule}
+
+Moves an existential quantification into a conjunction. Current version uses \verb!mk_thm! but
+a ``safe'' version is commented out in the file.
+
+\verb!EXISTS_FORALL_CONV:conv!
+
+\begin{infrule}
+\exists s . \forall t . P(s\; t)
+\derive
+\forall t . \exists st . P(st)
+\end{infrule}
+
+where $st$ is a name derived by concatenating the two quantifying variables, after removing any primes, and
+then priming this until the name is not free in $P$. N.b. $P(x)$ here is a ``meta-term'' --- i.e. it renames
+any occurrences of $(s\; t)$ in the body to $st$.
+This is useful when moving quantification over all time out of sub modules over local wire hiding in 
+hardware unwinding. The conversion would fail in this case if the sub modules behaviour was dependent on previous
+(or future) values of a local wire --- a more general version of this conversion could handle this.
+
+\verb!UNWIND_ONCE_CONV:(term->bool)->conv! and {\tt UNWIND\_CONV:\-(term->bool)\-->conv}
+are supplied as in the old unwind library.
+
+\verb!UNWIND_EXISTS_ONCE_CONV:conv! and \verb!UNWIND_EXISTS_CONV! unwind the body of a existentially quantified
+term using conjuncts specifying the values of the quantified variables as the rewriting terms. These are all
+probably redundant now that \verb!PRUNE_ONCE_CONV! performs rewriting.
+
+\verb!UNWIND_RULE:(term->bool)->thm->thm! and 
+{\tt UNWIND\_ALL\_RULE:\-(string~list)\-->thm\-->thm} are provided as in the old unwind
+library.
+
+\end{document}

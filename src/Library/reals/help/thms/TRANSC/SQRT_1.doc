@@ -1,0 +1,3 @@
+\THEOREM SQRT_1 TRANSC
+|- sqrt(& 1) = & 1
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_MONO_DIV div_mod
+|- !n. 0 < n ==> (!p q. p <= q ==> (p DIV n) <= (q DIV n))
+\ENDTHEOREM

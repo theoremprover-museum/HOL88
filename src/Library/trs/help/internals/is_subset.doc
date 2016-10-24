@@ -1,0 +1,10 @@
+\DOC is_subset
+
+\TYPE {is_subset : (* list -> * list -> bool)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

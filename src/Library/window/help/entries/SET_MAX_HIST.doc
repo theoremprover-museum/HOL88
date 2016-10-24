@@ -1,0 +1,16 @@
+\DOC SET_MAX_HIST
+
+\TYPE {SET_MAX_HIST: (int -> void)}
+
+\SYNOPSIS
+Sets the maximum history size of all the window stacks.
+
+\LIBRARY window
+
+\FAILURE
+Fails if given a history size less than 1.
+
+\SEEALSO
+UNDO, REDO, GET_MAX_HIST
+
+\ENDDOC

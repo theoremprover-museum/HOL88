@@ -1,0 +1,3 @@
+\THEOREM LESS_MONO_MULT1 mult
+|- !m n p. m <= n ==> (p * m) <= (p * n)
+\ENDTHEOREM

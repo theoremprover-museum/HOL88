@@ -1,0 +1,10 @@
+\DOC Test1type
+
+\TYPE {Test1type : ((type -> bool) -> wildtype -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

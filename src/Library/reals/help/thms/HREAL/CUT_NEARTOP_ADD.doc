@@ -1,0 +1,3 @@
+\THEOREM CUT_NEARTOP_ADD HREAL
+|- !X e. ?x. cut X x /\ ~cut X(x hrat_add e)
+\ENDTHEOREM

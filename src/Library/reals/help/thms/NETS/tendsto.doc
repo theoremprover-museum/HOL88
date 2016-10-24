@@ -1,0 +1,6 @@
+\THEOREM tendsto NETS
+|- !m x y z.
+    tendsto(m,x)y z =
+    (real_of_num 0) real_lt (dist m(x,y)) /\
+    (dist m(x,y)) real_le (dist m(x,z))
+\ENDTHEOREM

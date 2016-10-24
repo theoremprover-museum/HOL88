@@ -1,0 +1,531 @@
+\section{Construction of Basic Definitions and First Order Theories}
+
+An algebraic structure is a collection of sets of objects, a
+collection of operations on those objects and a collection of rules
+governing those elements and objects.  But from the perspective of
+simple type theory, what do we mean by set, object, operation, rule?
+In formulating the notion of an algebraic structure, it is important
+that three criteria be met.  Namely, we should be able to express the
+notion of a substructure and reason about its properties relative to
+the original structure, we should be able to reason about
+homomorphisms between structures, and homomorphic images and quotient
+structures, and we should be able to apply the abstract theory of our
+algebraic structures to concrete examples.  In this paper, we wish to
+propose a particular philosophy for doing algebra within simple type
+theory and to demonstrate its appropriateness by example with group
+theory.  The proposed philosophy is the following: view a type in
+simple type theory as providing a universe of elements or objects
+({\it i.e.}~all the terms of that type); a set then is the collection of
+elements from a given universe which satisfy the defining property
+of the set, ({\it i.e.}~we equate a set with the predicate describing the
+elements of the set); and finally, an operation is a function which is
+totally defined on the whole type, but which is constrained to satisfy
+the necessary conditions on the elements which satisfy the predicate
+defining our set.
+
+So, let us see what all this means for the theory of groups.
+Traditionally (see \cite{Huppert,Herstein}), a group has been defined
+as follows:
+\begin{display}{Definition:}
+A set $G$ together with a binary operation {\sf prod} (usually written
+as an infix dot) is a {\it group\/} if
+\begin{enumerate}
+\item for every pair of elements $x$, $y\in G$, the element
+${\sf prod}\,x\,y\in G$ ( $G$ is closed under {\sf prod});
+\item for every $x$, $y$, $z\in G$, we have
+$$({\sf prod}\,({\sf prod}\,x\,y)\,z = {\sf prod}\,x\,({\sf prod}\,y\,z)))$$
+  ({\sf prod} is associative on $G$);
+\item there exists an element $e\in G$ such that
+\begin{enumerate}
+  \item for every $x\in G$, we have $({\sf prod}\,e\,x) = x$ ($e$ is a
+    left identity for {\sf prod});
+  \item for every $x\in G$, there exists a $y\in G$ such that
+    $({\sf prod}\,y\,x) = e$ ($G$ has left inverses with respect to $e$ ).
+\end{enumerate}
+\end{enumerate}
+\end{display}
+Notice that condition 1 constraints the result of the operation {\sf prod}
+to be in $G$, but only when {\sf prod} is applied to a pair of elements
+which themselves are in $G$.  Similarly, conditions 2 and 3, place constraints
+on the operation {\sf prod}, but again only when {\sf prod} is being applied
+to elements of $G$.
+
+Translating the above definition into HOL, we get 
+\begin{verbatim}
+GROUP_DEF = 
+|- !G prod. 
+    GROUP(G,prod)=
+    (!x y. G x /\ G y ==> G(prod x y)) /\
+    (!x y z. 
+      G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y z))) /\
+    (?e.
+      G e /\
+      (!x. G x ==> (prod e x = x)) /\
+      (!x. G x ==> (?y. G y /\ (prod y x = e))))
+\end{verbatim}
+Thus, we define the constant {\tt GROUP} which is a predicate on a pair,
+$$\mbox{\tt (G:* -> bool, prod:* -> (* -> *))},$$
+and the conditions on this pair are the group theory axioms.
+
+Once we know that a pair {\tt (G,prod)} forms a group, we know
+that there exists a left identity in {\tt G} and for each element of {\tt G}
+there exists a left inverse.  But we want to be able to get at these
+elements.  Using the Hilbert $\varepsilon$-operator, we can do so with
+the following definitions:
+\begin{verbatim}
+ID_DEF = 
+|- !G prod.
+    ID(G,prod) =
+    (@e.
+      G e /\
+      (!x. G x ==> (prod e x = x)) /\
+      (!x. G x ==> (?y. G y /\ (prod y x = e))))
+
+INV_DEF = 
+|- !G prod x. INV(G,prod)x = (@y. G y /\ (prod y x = ID(G,prod)))
+\end{verbatim}
+
+Notice that both {\tt ID} and {\tt INV} are defined for all pairs
+$$\mbox{\tt (G:* -> bool, prod:* -> (* -> *))}.$$
+However, {\tt ID(G,prod)} is a left identity for {\tt (G,prod)} if and
+only if a left identity exists.  Otherwise, {\tt ID(G,prod)} is an
+unknown element of type {\tt *}, and we know nothing particular about
+it.  Similarly, {\tt INV(G,prod)x} is a left inverse for {\tt x} in
+{\tt (G,prod)} if and only if one such exists.  Since the group theory
+axioms assure us of the existence of a left inverse and a left
+identity, we have the following theorems:
+\begin{verbatim}
+|- GROUP(G,prod) ==>
+   G(ID(G,prod)) /\
+   (!x. G x ==> (prod(ID(G,prod))x = x)) /\
+   (!x. G x ==> (?y. G y /\ (prod y x = ID(G,prod))))
+
+|- GROUP(G,prod) ==>
+   (!x. G x ==> G(INV(G,prod)x) /\ (prod(INV(G,prod)x)x = ID(G,prod)))
+\end{verbatim}
+An alternative approach to using the Hilbert choice operator is to
+redefine {\tt GROUP} as a predicate on quadruples {\tt (G,prod,id,inv)}
+({\it i.e.}~we can change the signature).
+
+We are now in a position to do the standard first order group theory
+(not involving any number theoretic considerations).  Appendix B
+contains a listing of the first order theorems which were proven in
+HOL from these definitions.
+
+In our approach to algebra in simple type theory, we chose to
+interpret sets as predicates on a type.  As a result, we must add to
+the statements of our theorems the conditions that the elements about
+which we are making assertions satisfy the set predicate.  And whenever
+we use a theorem, we have the burden of proving that the elements about
+which we are reasoning satisfy the set predicate.  Had we chosen to
+interpret sets as types instead of predicates, then the routine proofs
+of set membership would fall to the type checker of HOL.  By routine
+we mean those proofs which are a consequence of the closure properties
+of the various functions involved in building the element in question.
+If the set is an entire type, then closure is automatic; the function
+has no place else to go.  In our more general setting, this is not the
+case and subgoals of set membership do arise and need to be dealt
+with.  However, it is possible to write a procedure in HOL which, in
+our setting, when given a list of closure theorems such as
+\begin{verbatim}
+CLOSURE = |- GROUP(G,prod) ==> (!x y. G x /\ G y ==> G(prod x y))
+\end{verbatim}	
+will return a tactic to automatically solve routine goals of set
+membership.  Since we have such a tactic, little has been lost here
+by the use of predicates to represent sets instead of full types.
+
+\section{Substructures}
+
+Associated with the notion of an algebraic structure is that of a
+substructure.  A substructure is a collection of sets, each of which
+is a subset of a corresponding set in the superstructure, such that
+under the operations of the superstructure the substructure forms a
+structure itself of the same kind as the superstructure.  If we had
+chosen to use types as our representation of sets, then the subsets
+would need to also be represented by types.  However, simple type
+theory has no notion of a subtype.  We can only express the idea that
+one type can be injected into another ({\it i.e.}~that there is a
+one-to-one function from one type into the other).  But many types can
+be injected into a particular type, all having the same image in that
+type.  There is no natural way of designating one such injected type as
+{\it the\/} subset corresponding to that image.
+
+In simple type theory we do have however a notion of one predicate
+containing another given to us by logical implication and functional
+extensionality.  One predicate is ``contained in'' another if the
+first predicate is true of an element implies that the second
+predicate is also true of that element.  If two predicates are true of
+exactly the same elements, then they are false on exactly the same
+elements, and hence they have exactly the values on all elements.
+Thus, by extensionality, they are equal.  So, if we use predicates to
+represent sets, then a substructure of a given structure is a
+collection of predicates, one for each predicate of the given
+structure, such that each predicate of the substructure implies
+elementwise the corresponding predicate of the given structure, and
+such that these predicates, when combined with the functions (or
+operations) of the given structure, form a structure of the same kind
+as the given one.
+
+So, once again, let us see what this means in the case of group
+theory.  The classical definition of a subgroup is as follows:
+\begin{display}{Definition:}
+A subset $H$ of a group $G$ is said to be a {\it subgroup\/} of $G$ if,
+under the product of $G$, it forms a group itself.
+\end{display}
+Using the reasoning described above, this translates into HOL as
+\begin{verbatim}
+SUBGROUP_DEF =
+|- !G prod H.
+    SUBGROUP(G,prod)H =
+    GROUP(G,prod) /\ (!x. H x ==> G x) /\ GROUP(H,prod)
+\end{verbatim}
+With this definition we can easily state and prove facts such as a
+group is a subgroup of itself and the set consisting only of the
+identity element is a subgroup of a group.  The way we specify the
+subset of {\tt G} consisting only of the identity element is by the
+predicate \mbox{\tt {\l}x.~(x = ID(G,prod))}.
+
+Using predicates, it is straightforward to talk about unions and
+intersections (both of pairs of sets and of arbitrary collections).
+By an arbitrary intersection we mean the intersection of an indexed
+family of set, where the indexing set is arbitrary.  An indexed family
+of sets is a function from the indexing set into the power set of the
+universe of which the target sets are all subsets.  The intersection
+of an indexed family of sets is the set of all elements which are in
+every set in the indexed family.  Let {\tt Ind} be the predicate that
+describes an indexing set, and let {\tt H} be be indexing function
+from {\tt Ind} into a family of predicates (sets) indexed by {\tt Ind}.
+If {\tt i} satisfies the predicate {\tt Ind} ({\it i.e.}~it is in the
+indexing set), then {\tt (H i)} is a predicate.  The intersection of
+the sets represented by the various predicates {\tt (H i)} is
+described by the predicate \mbox{\tt\l x.(!i. Ind i ==> (H i) x)}.
+When the indexing set consists only of the numbers {\tt 1} and {\tt 2},
+this can be simplified to \mbox{\tt\l x.((H 1) x /\ (H 2) x)}.
+The following two theorems state that the arbitrary non-empty
+intersection of subgroups is again a subgroup, and the intersection of
+a pair of subgroups is again a subgroup.
+
+\begin{verbatim}
+SBGP_INTERSECTION =
+|- (?j:**. Ind j) ==>
+   (!i:**. Ind i ==> SUBGROUP(G,prod)((H:** -> (* -> bool)) i)) ==>
+   SUBGROUP(G,prod)(\x:*. !i:**. Ind i ==> (H i) x)
+
+COR_SBGP_INT =
+|- SUBGROUP(G,prod)H /\ SUBGROUP(G,prod)K1 ==>
+   SUBGROUP(G,prod)(\x. H x /\ K1 x)
+\end{verbatim}
+
+The type information was added to the first theorem to indicate that
+the type of the indexing set is independent of the type of the
+elements of the group.  Notice that, if {\tt **} is the type of the
+elements of the indexing set, and {\tt *} is the type of the elements
+of the target sets, then {\tt H} is a function from {\tt **} to
+{\tt (* -> bool)}, which is total, but where, just as with {\tt prod},
+we only draw conclusions when the function is applied to an element
+of type {\tt **} which actually is in the indexing set.  Unions are
+handle in much the same manner as intersections, only with relacing
+universal quantifiers by existential quantifiers and disjunctions by
+conjunctions.
+
+In addition to being readily able to talk about set-theoretic
+constructs, like union and intersection, we are also readily able to
+talk about constructs arising from algebraic considerations of the
+structure.  An example of such a construct is that of a left coset
+of a subgroup in a group.
+\begin{display}{Definition:}
+If $H$ is a subgroup of a group $G$ and $x$ is an element
+of $G$, then the {\it left coset\/} of $H$ by $x$ in $G$ is
+$$\{y\in G\mid\mbox{there exists $h\in H$ such that $y={\sf prod}\,x\,h$}\}.$$
+\end{display}
+This is stated in HOL as
+\begin{verbatim}
+LEFT_COSET_DEF = 
+|- !G prod H x y.
+    LEFT_COSET(G,prod)H x y = 
+    GROUP(G,prod) /\ SUBGROUP(G,prod)H /\ G x /\ G y /\
+    (?h. H h /\ (y = prod x h))
+\end{verbatim}
+
+The predicate, or set, that is being described is
+{\tt LEFT\_COSET(G,prod)H x}. This predicate determines which
+{\tt y}'s are in
+the left coset.  It is parametrized by the group and its
+product, the subgroup, and the selected element.  In this particular
+phrasing of the definition, the predicate is non-empty only in the
+instance that we actually have a group {\tt (G,prod)} that we are
+taking the left coset within and that we are taking the coset of a
+subgroup of this group.  (Actually, the clause {\tt GROUP(G,prod)} is
+redundant and it could have been omitted since it is implied by the
+clause {\tt SUBGROUP(G,prod)H}.)  Notice that {\tt LEFT\_COSET(G,prod)H x}
+is still defined in the case that either {\tt (G,prod)} does not form
+a group or {\tt H} is not a subgroup of {\tt (G,prod)}; it simply
+describes the empty set.  If we want the definition to be expanded to
+apply to arbitrary subsets of {\tt (G,prod)} instead of only subgroups,
+then we should replace the clause {\tt SUBGROUP(G,prod)H} by the
+clause {\tt !x.~H x ==> G x}.
+
+\section{Equivalence Relations and Quotient Structures}
+
+An equivalence relation on a set is a function from the cross product
+of the set with itself to the booleans satisfying three properties:
+reflexivity, symmetry, and transitivity.  Expressing this in simple
+type theory in the same manner as we have been doing, this yields the
+following:
+\begin{verbatim}
+EQUIV_REL_DEF =
+|- !G R.
+    EQUIV_REL G R =
+    (!x. G x ==> R x x) /\
+    (!x y. G x /\ G y ==> (R x y ==> R y x)) /\
+    (!x y z. G x /\ G y /\ G z ==> (R x y /\ R y z ==> R x z))
+\end{verbatim}
+
+We have already seen an example of a relation, namely
+{\tt LEFT\_COSET(G,prod)H}.  In fact, this is an example of an
+equivalence relation, and this is one of the theorems stated in
+Appendix C.  Once we have an equivalence relation {\tt R}, we also
+have a description of the equivalence classes which it yields.  If
+{\tt G} is the underlying set and {\tt x} is an element of {\tt G},
+then the equivalence class of {\tt x} in {\tt G} under {\tt R} is
+{\tt {\l}y.~G y /{\l} R x y}, the set of all {\tt y} in {\tt G} such that
+{\tt x} is related to {\tt y}.  If we have {\tt R x y ==> G y}, then
+the clause {\tt G y} may be omitted, and this simplifies to {\tt R x}.
+
+A quotient structure of an algebraic structure is arrived at in the
+following manner.  For each set in the collection making up the
+algebraic structure, there is an equivalence relation on that set.  The
+collection of sets associated with the quotient structure is the
+collection of sets of all equivalence classes from each of these
+equivalence relations, one set of equivalence classes per set from the
+original algebraic structure.  For each operation of the original
+algebraic structure, there must be a corresponding operation on the
+quotient structure such that if we compute the quotient operation,
+the result is always the same as if we choose a representative from
+each equivalence class, compute the original operation on these
+representatives, and then reflect back into the quotient structure by
+taking the equivalence class associated with each element in the
+result.  Once we have such quotient operations, then we require that
+the collection of sets of equivalence classes together with these
+quotient operations should form an algebraic structure of the same
+kind as the original structure.  In terms of simple type theory,
+however, the {\it type\/} of quotient structure will be different from
+(of a higher order than) the type of the original structure.  That is,
+the quotient structure lives in a different universe than the
+structure with which we began.
+
+In the group theory we have discussed so far, we have seen that any
+subgroup of a group gives rise to an equivalence relation on the
+original group via left cosets.  The equivalence classes associated
+with this equivalence relation can not, in general, be completed to a
+group.  In general, there is no way to define a quotient product.
+However, if the subgroup satisfies the property of being normal in the
+whole group, then it is possible to define a quotient product.  (In
+fact, it is possible to define a quotient product if and only if the
+subgroup is normal.)
+
+\begin{display}{Definition:}
+A subgroup $N$ of a group $G$ is said to be {\it normal} in $G$
+provided that for all $x$ in $G$ and $n$ in $N$, we have that 
+${\sf prod}\,(x^{-1})\,({\sf prod}\,n\,x)$ is again an element of $N$.  If
+$N$ is a normal subgroup of $G$, then we can define a quotient product
+on the left cosets of $N$ in $G$ by
+$\overline{\sf prod}\,(xN)\,(yN)=({\sf prod}\,x\,y)N$ where $zN$ is notation
+for the left coset of $N$ by $z$ in $G$.  (It remains to be shown that
+$\overline{\sf prod}$ is a well defined operation, independent of the
+choice of coset representative.)
+\end{display}
+
+What we are saying is, to define the quotient product, take your two
+left cosets which are to be multiplied, choose a representative from
+each, take the product of these two choices, and then return the left
+coset of which the product is a member.  Using the Hilbert choice
+operator, these definitions in HOL become
+\begin{verbatim}
+NORMAL_DEF =
+|- !G prod N.
+    NORMAL(G,prod)N =
+    SUBGROUP(G,prod)N /\
+    (!x n. G x /\ N n ==> N(prod(INV(G,prod)x)(prod n x)))
+
+QUOTIENT_SET_DEF =
+|- !G prod N q.
+    quot_set(G,prod)N q =
+    NORMAL(G,prod)N /\ (?x. G x /\ (q = LEFT_COSET(G,prod)N x))
+
+QUOTIENT_PROD_DEF =
+|- !G prod N q r.
+    quot_prod(G,prod)N q r =
+    LEFT_COSET
+    (G,prod)
+    N
+    (prod
+     (@x. G x /\ (q = LEFT_COSET(G,prod)N x))
+     (@y. G y /\ (r = LEFT_COSET(G,prod)N y)))
+\end{verbatim}
+With these definitions we can prove the following theorems, which
+express that in the case where {\tt N} is a normal subgroup of {\tt G}
+we have indeed defined a quotient structure.
+\begin{verbatim}
+QUOT_PROD =
+|- NORMAL(G,prod)N ==>
+   (!x y.
+     G x /\ G y ==>
+     (quot_prod
+      (G,prod)
+      N
+      (LEFT_COSET(G,prod)N x)
+      (LEFT_COSET(G,prod)N y) =
+      LEFT_COSET(G,prod)N(prod x y)))
+
+QUOTIENT_GROUP =
+|- NORMAL(G,prod)N ==> GROUP(quot_set(G,prod)N,quot_prod(G,prod)N)
+\end{verbatim}
+If the type of {\tt (G,prod)} is 
+$${\tt (* -> bool) {\#} (* -> * -> *)},$$
+then the type of {\tt (quot\_set(G,prod)N,quot\_prod(G,prod)N)} is
+$$\mbox{\tt ((* -> bool) -> bool) {\#}
+ ((* -> bool) -> (* -> bool) -> (* -> bool))}.$$
+
+One way of avoiding the use of the Hilbert choice operator would be to
+define the quotient product relative to a given set of left coset
+representatives, and then to prove a theorem which would show that any
+two different sets of left coset representatives give rise to the same
+quotient product.  This approach would work in general when making a
+definition which only superficially depends on a choice.  Another
+approach that would work in this instance, would be to define the
+product of two subsets of a group as the set of products of any
+element from the first subset with any other element of the second
+subset.  Then we would need to prove that this setwise product of any
+two left cosets of a normal subgroup was again a left coset of that
+normal subgroup.
+
+\section{Homomorphisms and Isomorphisms}
+
+As we saw with groups and quotient groups, different examples of an
+algebraic structure will live in different types.  Therefore,
+homomorphisms must be functions between these types.  Beyond that,
+they are required to satisfy certain properties on the sets that make
+up the algebraic structures in question.  Usually, the required
+properties imply that the homomorphism preserve, in some sense, the
+structure, {\it i.e.}~the operations and special elements.  In the
+example of group theory, the requirement is that a homomorphism should
+preserve the product.  In fact, it follows from this that a
+homomorphism also preserves the identity element and inverses.  To
+state the definition more formally,
+\begin{display}{Definition:}
+If $G_1$ is a group with product ${\sf prod}_1$ and $G_2$ is group
+with product ${\sf prod}_2$, then a function $f$ from $G_1$ to $G_2$
+is a homomorphism provided that for all $x$ and $y$ in $G_1$ we have
+that $f({\sf prod}_1 x\,y) = {\sf prod}_2(f(x))(f(y))$.
+\end{display}
+Our definition in HOL is
+\begin{verbatim}
+GP_HOMO_DEF =
+|- !G1 prod1 G2 prod2 f.
+    GP_HOM(G1,prod1)(G2,prod2)f =
+    GROUP(G1,prod1) /\ GROUP(G2,prod2) /\
+    (!x. G1 x ==> G2 (f x)) /\
+    (!x y. G1 x /\ G1 y /\ (f(prod1 x y) = prod2 (f x) (f y)))
+\end{verbatim}
+
+An important subclass of homomorphisms is that of isomorphisms.  An
+isomorphism is a homomorphism which has an inverse homomorphism.  For
+groups, this is said in the following definition.
+\begin{display}{Definition:}
+A homomorphism $f$ from a group $G_1$ to a group $G_2$ is an
+{\it isomorphism\/} provided that there exists a homomorphism $g$ from
+$G_2$ to $G_1$ such that $g(f(x))=x$ for all $x\in G_1$, and
+$f(g(y))=y$ for all $y\in G_2$.
+\end{display}
+\begin{verbatim}
+GP_ISO_DEF =
+|- !G1 prod1 G2 prod2 f.
+    GP_ISO(G1,prod1)(G2,prod2)f =
+    GP_HOM(G1,prod1)(G2,prod2)f /\
+    (?g. GP_HOM(G2,prod2)(G1,prod1)g /\
+         (!x. G1 x ==> g (f x) = x) /\
+         (!y. G2 y ==> f (g y) = y))
+\end{verbatim}
+
+The notion of when two examples of a structure are isomorphic is very
+important in the study of any algebraic structure.  In fact, in most
+instances the question of when two structures are isomorphic is more
+significant than the question of when two are equal.  If we have a
+group that is defined in terms of permutations of a set of objects, and
+we have a group which is defined as a collection of matrices, if these
+two groups are isomorphic, then they are the same in terms of their
+algebraic properties.  The only time that we would be interested in
+actual equality is when we were considering these groups in the
+larger context in which they arose.
+
+If we require of our homomorphism that they preserve all of the
+operations of the structure, then we are guaranteed to have a
+collection of theorems relating substructures, quotient structures,
+homomorphisms and isomorphisms.  The homomorphic image of a
+substructure is a substructure, as is the inverse image.  The
+composition of two homomorphisms is again a homomorphism.  A quotient
+structure gives rise to a homomorphism (the natural homomorphism) of
+the original structure onto the quotient structure.  Any homomorphism
+from an algebraic structure gives rise (via inverse images of
+elements) to a quotient structure to which the image of the original
+structure under the original homomorphism is isomorphic.
+
+In Appendix C there is a collection of theorems that have been proven
+in HOL which involve the notions of subgroup, quotient group,
+homomorphism and isomorphism.  They include the theorems mentioned
+above.  They are included, in part, to provide the reader with extra
+examples of how various concepts are stated in simple type theory.
+
+
+\section{Examples: Instantiating a Theory}
+
+There would be little point, besides curiosity, in doing algebra in an
+automated theorem prover such as HOL, unless we had the ability to
+instantiate the abstract theory with concrete examples and thereby
+extract facts about these examples.  The theory of an algebraic
+structure is applicable to an example provided it can be shown that the
+example satisfies the properties of the algebraic structure.
+Ultimately, the logical tools that we have available to use in
+applying a theory to an example are the specialization of universally
+quantified variables, the instantiation of free variables and type
+variables, and modus ponens.  In developing some portion of the theory
+of an algebraic structure, if the same free variable names and type
+variable names are used consistently to represent the same sets,
+operations, and elements throughout, then the work of instantiating
+this portion can be accomplished all at once by mapping a function
+over all the theorems in this portion, where the function first
+instantiates the type variables appropriately, then instantiates the
+free variables appropriately, and then uses modus ponens, together
+with a theorem saying that the example is an example of the algebraic
+structure in question, to remove the hypotheses that state this fact.
+When viewed from the right level, we are abstracting the appropriate
+free variables from the theory, and we are abstracting the appropriate
+hypotheses, and then applying this abstracted theory to the
+appropriate values and theorems.  In future work we anticipate
+formalizing this notion by expanding the notion of a theory to include
+a list of universal variable declarations ({\it i.e.}~variable
+bindings), and a list of terms of type bool, which externally are
+hypotheses of every theorem in the theory, but which internally are
+viewed as axioms.
+
+In Appendix B is a collection of first order facts that are true of
+groups in general.  In Appendix D is the necessary theory to show that
+the integers (positive and negative) form a group, followed by the
+result of instantiating the first order group theory of Appendix B
+with the particular example of the integers, followed by some
+additional definitions and theorems to give us much of the  basic algebraic
+and order-theoretic structure of the integers.  By developing only the
+minimal amount of theory necessary to demonstrate the integers as a
+group, and then instantiating the group theory in the case of the
+integers, we then have at our disposal a considerable battery of
+arithmetic facts about the integers to be used in the subsequent
+development of the remainder of the theory.  Once having developed the
+remainder of the basic algebraic structure of the integers, we are
+then in a position, using the higher order group theory found in
+Appendix C, to define the integers mod $n$ for given $n$, to prove
+that they form a group, and to instantiate the first order group
+theory of Appendix B with this theory.  The definitions and theorems
+used in this process are recorded in Appendix E.
+
+

@@ -1,0 +1,7 @@
+\THEOREM WOSET_WELL_CONTRAPOS WELLORDER
+|- !l.
+    woset l ==>
+    (!P.
+      (!x. P x ==> fl l x) /\ (?x. P x) ==>
+      (?y. P y /\ (!z. less l(z,y) ==> ~P z)))
+\ENDTHEOREM

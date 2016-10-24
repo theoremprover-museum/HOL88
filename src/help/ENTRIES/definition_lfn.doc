@@ -1,0 +1,31 @@
+\DOC definition_lfn
+
+\TYPE {definition_lfn : (string list -> thm)}
+
+\SYNOPSIS
+Loads a given definition from a given theory.
+
+\DESCRIBE
+If {thy} is an ancestor theory, and {def} one of its definitions, then the
+call
+{
+   definition_lfn [`thy`;`def`]
+}
+\noindent will return that definition.
+
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {def} is not one of its
+definitions.
+
+\EXAMPLE
+{
+#definition_lfn [`bool`; `EXISTS_DEF`];;
+|- $? = (\P. P($@ P))
+}
+\COMMENTS
+This call has the same effect as {definition `thy` `def`}.
+
+\SEEALSO
+definition, definitions, definition_msg_lfn, load_definition, load_definitions.
+
+\ENDDOC

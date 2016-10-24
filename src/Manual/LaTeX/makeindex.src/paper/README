@@ -1,0 +1,26 @@
+PreScript:
+I have replaced the PostScript figure, fig1.ps, with a LaTeX picture
+mode equivalent that will permit this document to be formatted and
+printed at any TeX installation.
+							Nelson H.F. Beebe
+							Beebe@math.utah.edu
+							[08-Jul-1991]
+
+This directory contains a paper which describes design tradeoffs of
+MakeIndex.  It is written in LaTeX and contains a figure in PostScript
+specifed in the psfig format.  Run LaTeX on the file ind.tex to obtain
+a DVI file.  All style files involved are included in this directory.
+To print it, you need to have a PostScript-based printer and the
+DVI-to-PostScript driver must understand the psfig format.  A
+PostScipt version of this paper, ind.ps, can be printed directly to a
+PostScript printer.
+
+This paper appears in Software: Practice and Experience, Vol 19, No.
+9, Sep. 1988, pp. 897-915.  A more complete version is available as
+Computer Science Tech. Report 87/347, University of California,
+Berkeley, March 1987.
+
+
+							Pehong Chen
+							phc@renoir.berkeley.edu
+							10/1/1988

@@ -1,0 +1,3 @@
+\THEOREM MAX_REFL min_max
+|- !n. MAX n n = n
+\ENDTHEOREM

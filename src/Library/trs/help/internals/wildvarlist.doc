@@ -1,0 +1,10 @@
+\DOC wildvarlist
+
+\TYPE {wildvarlist : (term list -> wildvar list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

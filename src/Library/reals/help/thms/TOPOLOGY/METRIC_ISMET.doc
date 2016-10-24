@@ -1,0 +1,3 @@
+\THEOREM METRIC_ISMET TOPOLOGY
+|- !m. ismet(dist m)
+\ENDTHEOREM

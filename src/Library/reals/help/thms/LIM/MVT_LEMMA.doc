@@ -1,0 +1,5 @@
+\THEOREM MVT_LEMMA LIM
+|- !f a b.
+    (\x. (f x) - ((((f b) - (f a)) / (b - a)) * x))a =
+    (\x. (f x) - ((((f b) - (f a)) / (b - a)) * x))b
+\ENDTHEOREM

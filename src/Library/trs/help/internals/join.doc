@@ -1,0 +1,14 @@
+\DOC join
+
+\BLTYPE
+join : (((term # term) list # (type # type) list) ->
+        ((term # term) list # (type # type) list) ->
+        ((term # term) list # (type # type) list))
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

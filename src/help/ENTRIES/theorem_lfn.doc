@@ -1,0 +1,30 @@
+\DOC theorem_lfn
+
+\TYPE {theorem_lfn : (string list -> thm)}
+
+\SYNOPSIS
+Loads a given theorem from a given theory.
+
+\DESCRIBE
+If {thy} is an ancestor theory, and {th} one of its theorems, then the call
+{
+   theorem_lfn [`thy`;`th`]
+}
+\noindent will return that theorem.
+
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {th} is not one of its
+theorems.
+
+\EXAMPLE
+{
+#theorem_lfn [`num`;`NOT_SUC`];;
+|- !n. ~(SUC n = 0)
+}
+\COMMENTS
+This call has the same effect as {theorem `thy` `th`}.
+
+\SEEALSO
+theorem, theorems, theorem_msg_lfn, load_theorem, load_theorems.
+
+\ENDDOC

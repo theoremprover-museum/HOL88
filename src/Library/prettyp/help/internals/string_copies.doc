@@ -1,0 +1,10 @@
+\DOC string_copies
+
+\TYPE {string_copies : (string -> int -> string)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

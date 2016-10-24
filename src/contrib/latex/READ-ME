@@ -1,0 +1,43 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: latex							%
+%									%
+% DESCRIPTION: LaTeX macros for typesetting HOL.			%
+%									%
+% AUTHOR: Jim Alves-Foss						%
+%									%
+% ADDRESS: University of California Davis,				%
+%	   Davis, CA 95616, U.S.A.					%
+%									%
+%	   email: foss@iris.eecs.ucdavis.edu				%
+%									%
+% DATE: 90.12.14							%
+% --------------------------------------------------------------------- %
+
+The file hol_macros.tex is a collection of macros developed at UC Davis to be
+used in placing HOL code in papers. These macros take the (almost) standard
+HOL output and convert it into the LaTeX logic symbols (ie. ! is \forall, ? is
+\exists, etc.) This is the BETA VERSION (so check the outputs to be safe).
+
+You should redefine '\' as '\\' by "set_lambda`\\.`;; " so LaTeX does not
+get confused (HOL still works fine).
+
+We have the following environments:
+
+ \begin{hol} ... \end{hol} Defines an environment for HOL theorems and
+                definitions. This environment it identical to alltt except
+                that it places a box around the text and ~ still works
+
+ \begin{holnb} ... \end{holnb} Same as ``hol'' but no box
+
+We have the following macros:
+
+ \holthm{defn}  Which takes defn (cut directly from HOL output
+                and converts all the symbols (ie. |- ==>) to their
+                mathematical equivalents.
+
+ \holdef{defn}  Same as holthm except that the turnstile is subscripted
+                by ``def''
+
+I hope you can use these, please send me any comments:
+
+-Jim Alves-Foss (foss@iris.eecs.ucdavis.edu) [128.120.57.20]

@@ -1,0 +1,24 @@
+\DOC search_n_theories
+
+\TYPE {search_n_theories : (int -> searchstep -> searchstep)}
+
+\SYNOPSIS
+Function to continue a search for a specified number of steps.
+
+\LIBRARY trs
+
+\DESCRIBE
+{search_n_theories} continues a search for a specified number of steps or
+until there are no more steps to be performed. It takes an integer and a step
+of a search as arguments, and returns a new step.
+
+\FAILURE
+The function may fail for a number of obscure reasons. Since the user may
+supply his/her own side-condition functions at the beginning of the search, an
+exhaustive list of possible failures cannot be given.
+
+\SEEALSO
+continue_search, CS, search_until_find, search_n_until_find, find_theorems,
+FT, show_step, run_search, full_search.
+
+\ENDDOC

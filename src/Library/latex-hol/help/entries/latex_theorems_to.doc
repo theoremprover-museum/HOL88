@@ -1,0 +1,54 @@
+\DOC latex_theorems_to
+
+\TYPE {latex_theorems_to : (string -> (string -> thm) -> string list -> void)}
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+This function converts a list of theorems into \LaTeX\ format. The
+result is written into a file whose name is specified as the first
+argument. The second argument is a function which maps a string to a
+theorem. It is used to fetch the theorem given its name as a string.
+The last argument is a list of strings which are the names of the
+theorems to be converted to \LaTeX. Each theorem in the output file is
+enclosed by two lines. The line before the theorem contains the string
+value of the assignable ML identifier {latex_thm_tag} appended with
+the name string of the theorem. the line after the theorem contains
+the string value of the assignable ML identifier {latex_thm_end}. The
+values of these ML identifiers can be changed by the user to suit his/her
+requirements. The example below creates a file named {foo.i} which
+contains two theorems in \LaTeX\ format:
+{
+# latex_theorems_to `foo.i` (\s. theorem `list` s)
+# [`LENGTH_NIL`; `LENGTH_MAP`];;
+() : void
+}
+Provided {latex_thm_tag} has been bound to the string {`@t `} and
+{latex_thm_end} to {`@e`}, the file {foo.i} looks like:
+{
+@t LENGTH_NIL
+\THM \FORALL l\DOT (\CONST{LENGTH} \,l = \CONST{0}) = (l = \NIL )
+@e
+@t LENGTH_MAP
+\THM \FORALL l \,f\DOT
+        \CONST{LENGTH} \,(\CONST{MAP} \,f \,l) = \CONST{LENGTH} \,l
+@e
+}
+The purpose of this file is to create a file containing all the
+theorems required in a document. This file can then be processed
+automatically to incorporate the theorems into the document.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to}, {latex_term_add_to},
+{latex_thm}, {latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to}
+{latex_theorems_add_to} and {latex_theory_to}
+
+\ENDDOC

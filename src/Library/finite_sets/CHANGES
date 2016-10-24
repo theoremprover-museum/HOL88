@@ -1,0 +1,126 @@
+NOTE CONCERNING REVISIONS TO THE finite_sets LIBRARY
+----------------------------------------------------
+
+The finite_sets library has been completely rewritten for HOL88
+version 2.01.  In particular, the library has been made as exactly
+parallel as possible to the sets and pred_sets libraries, with the
+same names for theorems, the same form of definitions, and a similar
+manual.
+
+Users of older versions of the library should note that:
+
+   * the MK_SET mechanism has been deleted 
+   * some of the function constants have been made infixes
+   * the constant INTERSECT is now called INTER
+   * there are the following rough correspondences between
+     the old and new theorems and definitions
+
+
+OLD			     NEW 
+===========================  ==============================
+
+EMPTY_REP_DEF  		     obsolete
+INSERT_REP_DEF               obsolete
+IS_SET_REP                   slightly modified
+set_ISO_DEF		     obsolete
+EMPTY_DEF  		     obsolete
+IN 			     obsolete
+INSERT_DEF 		     obsolete
+UNION_P			     obsolete
+UNION_DEF  		     obsolete
+INTERSECT_P		     obsolete
+INTERSECT_DEF  		     obsolete
+DISJOINT  		     see DISJOINT_DEF
+DELETE_P		     obsolete
+DELETE_DEF  		     obsolete
+CHOICE  		     obsolete
+REST  			     see REST_DEF
+DIFF_P			     obsolete
+DIFF_DEF  		     obsolete
+SUBSET_MEMBER                see SUBSET_DEF
+PSUBSET  		     see PSUBSET_DEF
+MK_SET_P  		     *********
+MK_SET_DEF  		     *********
+SING  			     see SING_DEF
+HAS_CARD		     obsolete
+CARD_DEF  		     obsolete
+INSERT_MULTIPLICITY   	     see INSERT_INSERT
+INSERT_ASSOC  	             see INSERT_COMM
+SET_EQ  		     see EXTENSION
+IN			     see NOT_IN_EMPTY, IN_INSERT
+set_induction		     see FINITE_SET_DEF
+SET_CASES_THM  	             see SET_CASES
+SET_DISTINCT  	             see NOT_EMPTY_INSERT
+NONEMPTY_MEMBER  	     see MEMBER_NOT_EMPTY
+set_induction_2		     see SET_INDUCT
+MEMBER_DECOMP  		     see DECOMPOSITION
+UNION			     see UNION_EMPTY, INSERT_UNION
+UNION_IDENT  		     see UNION_IDEMPOT
+UNION_SYM  		     see UNION_COMM
+INTERSECT		     see INTER_EMPTY, INSERT_INTER
+INTERSECT_ASSOC		     see INTER_ASSOC
+INTERSECT_IDENT  	     see INTER_IDEMPOT
+INTERSECT_SYM  		     see INTER_COMM
+UNION_OVER_INTERSECT  	     see UNION_OVER_INTER
+INTERSECT_OVER_UNION  	     see INTER_OVER_UNION
+DISJOINT_MEMBER  	     see IN_DISJOINT
+DELETE_MEMBER  		     see IN_DELETE
+DELETE			     see EMPTY_DELETE, DELETE_INSERT
+DELETE_DECOMPOSITION         see INSERT_DELETE
+DELETE_ABSORPTION     	     see DELETE_NON_ELEMENT
+CHOICE_MEMBER  		     see CHOICE_DEF
+CHOICE_DECOMPOSITION	     see CHOICE_INSERT_REST
+CHOICE_NON_MEMBER     	     see CHOICE_NOT_IN_REST
+DIFF                  	     see DIFF_EMPTY, DIFF_INSERT
+SUBSET			     see EMPTY_SUBSET, INSERT_SUBSET
+SUBSET_INTERSECT	     see INTER_SUBSET
+SUBSET_DELETE  	             obsolete
+SUBSET_INTERSECT_ABSORPTION  see SUBSET_INTER_ABSORPTION
+PSUBSET_TRANS		     see PSUBSET_DEF
+PSUBSET_REFL  		     see PSUBSET_IRREFL
+PSUBSET_REST  		     see REST_PSUBSET
+IN_MK_SET  		     **********
+MK_SET		     	     **********
+MK_SET_TRUE  		     **********
+MK_SET_FALSE  	             **********
+MK_SET_INTERSECT  	     **********
+MK_SET_DELETE  	             **********
+MK_SET_DIFF  		     **********
+MK_SET_OR	             **********
+MK_SET_AND		     **********
+SING_CHOICE  		     see CHOICE_SING
+SING_REST  		     see SING_IFF_EMPTY_REST
+SELECT_0  		     obsolete
+DELETE_ABS  		     see DELETE_NON_ELEMENT
+MEMBER_IMP_NONEMPTY   	     see MEMBER_NOT_EMPTY
+IN_DEL_IMP  		     see IN_DELETE
+lemme3		     	     obsolete
+IN_INSERT  		     see IN_INSERT
+NOT_IN_SAME_SET  	     obsolete
+lemme3a			     obsolete
+NOT_SYM  		     obsolete
+DEL_DEL  		     see DELETE_DELETE
+DISTINCT_SET  		     see NOT_INSERT_EMPTY
+CARD_EMPTY_lem  	     obsolete
+CARD_DEL		     obsolete
+CARD_DEL_THM		     obsolete
+HAS_CARD_INDUCT		     obsolete
+UNIQUE_CARD  		     obsolete
+CARD_EX  		     obsolete
+CARD_EMPTY  		     see CARD_EMPTY, CARD_DEF
+EMPTY_0_EQ  		     see CARD_EQ_0
+INSERT_CARD  		     obsolete
+EX_SUC_CARD  		     obsolete
+CARD_INDUCT_THM  	     obsolete
+CARD			     see CARD_DEF
+CARD_ABSORPTION  	     see CARD_INSERT
+CARD_INTERSECT		     see CARD_INTER_LESS_EQ
+SING_CARD  		     see SING_IFF_CARD1
+
+
+
+The old version of finite_sets is contained in the directory OLD,
+which will eventually be deleted.
+
+T. Melham
+February 1992

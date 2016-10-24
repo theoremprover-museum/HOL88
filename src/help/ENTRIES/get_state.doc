@@ -1,0 +1,43 @@
+\DOC get_state
+
+\TYPE {get_state : (void -> goalstack)}
+
+\SYNOPSIS
+Returns the current proof state of the subgoal package.
+
+\DESCRIBE
+The function {get_state} is part of the subgoal package. It returns the current
+proof state. A proof state of the package consists of either  goal and
+justification stacks if a proof is in progress or a theorem if a proof has just
+been completed. For a description of the subgoal package, see {set_goal}.
+
+\USES
+Providing additional backup. Pausing in the proof of a goal whilst lemmas
+required for its completion are proved. {get_state} is used in conjunction with
+{set_state}. The current state may be bound to an ML variable using {get_state}
+and later restored using {set_state}.
+
+\EXAMPLE
+In this example, a proof state is bound to the ML variable {main_proof}.
+{
+   #g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+   () : void
+
+   #let main_proof = get_state();;
+   main_proof = - : goalstack
+}
+\noindent Other goals may now be set and proved. The proof state may later be
+restored using {set_state} and the original proof continued.
+{
+   #set_state main_proof;;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+   () : void
+}
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, p, print_state, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC

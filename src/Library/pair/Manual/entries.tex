@@ -1,0 +1,4026 @@
+\chapter{ML Functions in the pair Library}
+\input{entries-intro}
+\DOC{AND\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%AND_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification outwards through a conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(?p. t) /\ (?p. u)%}, where no
+variables in {\small\verb%p%} are free in either {\small\verb%t%} or {\small\verb%u%}, {\small\verb%AND_PEXISTS_CONV%} returns
+the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t) /\ (?p. u) = (?p. t /\ u)
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%AND_PEXISTS_CONV%} fails if it is applied to a term not of the form
+{\small\verb%(?p. t) /\ (?p. u)%}, or if it is applied to a term {\small\verb%(?p. t) /\ (?p. u)%}
+in which variables from {\small\verb%p%} are free in either {\small\verb%t%} or {\small\verb%u%}.
+
+\SEEALSO
+AND_EXISTS_CONV, PEXISTS_AND_CONV, LEFT_AND_PEXISTS_CONV,
+RIGHT_AND_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{AND\_PFORALL\_CONV}
+
+\TYPE {\small\verb%AND_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification outwards through a conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(!p. t) /\ (!p. t)%}, the conversion
+{\small\verb%AND_PFORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t) /\ (!p. u) = (!p. t /\ u)
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(!p. t) /\ (!p. t)%}.
+
+\SEEALSO
+AND_FORALL_CONV, PFORALL_AND_CONV, LEFT_AND_PFORALL_CONV,
+RIGHT_AND_PFORALL_CONV.
+
+\ENDDOC
+\DOC{bndpair}
+
+\TYPE {\small\verb%bndpair : (term -> term)%}\egroup
+
+\SYNOPSIS
+Returns the bound pair of a paired abstraction.
+
+\DESCRIBE
+{\small\verb%bndpair "\pair. t"%} returns {\small\verb%"pair"%}.
+
+\FAILURE
+Fails unless the term is a paired abstraction.
+
+\SEEALSO
+bndvar, pbody, dest_pabs.
+
+\ENDDOC
+\DOC{CURRY\_CONV}
+
+\TYPE {\small\verb%CURRY_CONV : conv%}\egroup
+
+\SYNOPSIS
+Currys an application of a paired abstraction.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#CURRY_CONV "(\(x,y). x + y) (1,2)";;
+|- (\(x,y). x + y)(1,2) = (\x y. x + y)1 2
+
+#CURRY_CONV "(\(x,y). x + y) z";;
+|- (\(x,y). x + y)z = (\x y. x + y)(FST z)(SND z)
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%CURRY_CONV tm%} fails if {\small\verb%tm%} is not an application of a paired abstraction.
+
+\SEEALSO
+UNCURRY_CONV.
+
+\ENDDOC
+\DOC{CURRY\_EXISTS\_CONV}
+
+\TYPE {\small\verb%CURRY_EXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Currys paired existential quantifications into
+consecutive existential quantifications.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#CURRY_EXISTS_CONV "?(x,y). x + y = y + x";;
+|- (?(x,y). x + y = y + x) = (?x y. x + y = y + x)
+
+#CURRY_EXISTS_CONV "?((w,x),(y,z)). w+x+y+z = z+y+x+w";;
+|- (?((w,x),y,z). w + (x + (y + z)) = z + (y + (x + w))) =
+   (?(w,x) (y,z). w + (x + (y + z)) = z + (y + (x + w)))
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%CURRY_EXISTS_CONV tm%} fails if {\small\verb%tm%} is not a paired existential quantification.
+
+\SEEALSO
+CURRY_CONV, UNCURRY_CONV, UNCURRY_EXISTS_CONV, CURRY_FORALL_CONV, 
+UNCURRY_FORALL_CONV.
+
+\ENDDOC
+\DOC{CURRY\_FORALL\_CONV}
+
+\TYPE {\small\verb%CURRY_FORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Currys paired universal quantifications into
+consecutive universal quantifications.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#CURRY_FORALL_CONV "!(x,y). x + y = y + x";;
+|- (!(x,y). x + y = y + x) = (!x y. x + y = y + x)
+
+#CURRY_FORALL_CONV "!((w,x),(y,z)). w+x+y+z = z+y+x+w";;
+|- (!((w,x),y,z). w + (x + (y + z)) = z + (y + (x + w))) =
+   (!(w,x) (y,z). w + (x + (y + z)) = z + (y + (x + w)))
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%CURRY_FORALL_CONV tm%} fails if {\small\verb%tm%} is not a paired universal quantification.
+
+\SEEALSO
+CURRY_CONV, UNCURRY_CONV, UNCURRY_FORALL_CONV, CURRY_EXISTS_CONV, 
+UNCURRY_EXISTS_CONV.
+
+\ENDDOC
+\DOC{dest\_pabs}
+
+\TYPE {\small\verb%dest_pabs : (term -> (term # term))%}\egroup
+
+\SYNOPSIS
+Breaks apart a paired abstraction into abstracted pair and body.
+
+\DESCRIBE
+{\small\verb%dest_pabs%} is a term destructor for paired abstractions:
+{\small\verb%dest_abs "\pair. t"%} returns {\small\verb%("pair","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_pabs%} if term is not a paired abstraction.
+
+\SEEALSO
+dest_abs, mk_pabs, is_pabs, strip_pabs.
+
+\ENDDOC
+\DOC{dest\_pexists}
+
+\TYPE {\small\verb%dest_pexists : (term -> (term # term))%}\egroup
+
+\SYNOPSIS
+Breaks apart paired existential quantifiers into the bound pair and the body.
+
+\DESCRIBE
+{\small\verb%dest_pexists%} is a term destructor for paired existential quantification.
+The application of {\small\verb%dest_pexists%} to {\small\verb%"?pair. t"%} returns {\small\verb%("pair","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_pexists%} if term is not a paired existential quantification.
+
+\SEEALSO
+dest_exists, mk_pexists, is_pexists, strip_pexists.
+
+\ENDDOC
+\DOC{dest\_pforall}
+
+\TYPE {\small\verb%dest_pforall : (term -> (term # term))%}\egroup
+
+\SYNOPSIS
+Breaks apart paired universal quantifiers into the bound pair and the body.
+
+\DESCRIBE
+{\small\verb%dest_pforall%} is a term destructor for paired universal quantification.
+The application of {\small\verb%dest_pforall%} to {\small\verb%"!pair. t"%} returns {\small\verb%("pair","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_pforall%} if term is not a paired universal quantification.
+
+\SEEALSO
+dest_forall, mk_pforall, is_pforall, strip_pforall.
+
+\ENDDOC
+\DOC{dest\_prod}
+
+\TYPE {\small\verb%dest_prod : (type -> (type # type))%}\egroup
+
+\SYNOPSIS
+Breaks apart a product type into its component types.
+
+\DESCRIBE
+{\small\verb%dest_prod%} is a type destructor for products:
+{\small\verb%dest_pair ":t1#t2"%} returns {\small\verb%(":t1",":t2")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_prod%} if the argument is not a product type.
+
+\SEEALSO
+is_prod, mk_prod.
+
+\ENDDOC
+\DOC{dest\_pselect}
+
+\TYPE {\small\verb%dest_pselect : (term -> (term # term))%}\egroup
+
+\SYNOPSIS
+Breaks apart a paired choice-term into the selected pair and the body.
+
+\DESCRIBE
+{\small\verb%dest_pselect%} is a term destructor for paired choice terms.
+The application of {\small\verb%dest_select%} to {\small\verb%"@pair. t"%} returns {\small\verb%("pair","t")%}.
+
+\FAILURE
+Fails with {\small\verb%dest_pselect%} if term is not a paired choice-term.
+
+\SEEALSO
+dest_select, mk_pselect, is_pselect.
+
+\ENDDOC
+\DOC{FILTER\_PGEN\_TAC}
+
+\TYPE {\small\verb%FILTER_PGEN_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Strips off a paired universal quantifier,
+but fails for a given quantified pair.
+
+\DESCRIBE
+When applied to a term {\small\verb%q%} and a goal {\small\verb%A ?- !p. t%},
+the tactic {\small\verb%FILTER_PGEN_TAC%} fails if the quantified pair {\small\verb%p%} is the same as
+{\small\verb%p%}, but otherwise advances the goal in the same way as {\small\verb%PGEN_TAC%},
+i.e. returns the goal {\small\verb%A ?- t[p'/p]%} where {\small\verb%p'%} is a variant of {\small\verb%p%} chosen to
+avoid clashing with any variables free in the goal's assumption list.
+Normally {\small\verb%p'%} is just {\small\verb%p%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A ?- !p. t
+   ==============  FILTER_PGEN_TAC "q"
+    A ?- t[p'/p]
+\end{verbatim}
+}
+\FAILURE
+Fails if the goal's conclusion is not a paired universal quantifier or the
+quantified pair is equal to the given term.
+
+\SEEALSO
+FILTER_GEN_TAC, PGEN, PGEN_TAC, PGENL, PGEN_ALL, PSPEC, PSPECL, PSPEC_ALL,
+PSPEC_TAC, PSTRIP_TAC.
+
+\ENDDOC
+\DOC{FILTER\_PSTRIP\_TAC}
+
+\TYPE {\small\verb%FILTER_PSTRIP_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Conditionally strips apart a goal by eliminating the outermost connective.
+
+\DESCRIBE
+Stripping apart a goal in a more careful way than is done by {\small\verb%PSTRIP_TAC%} may
+be necessary when dealing with quantified terms and implications.
+{\small\verb%FILTER_PSTRIP_TAC%} behaves like {\small\verb%PSTRIP_TAC%}, but it does not strip apart a
+goal if it contains a given term.
+
+If {\small\verb%u%} is a term, then {\small\verb%FILTER_PSTRIP_TAC u%} is a tactic that removes one
+outermost occurrence of one of the connectives {\small\verb%!%}, {\small\verb%==>%}, {\small\verb%~%} or {\small\verb%/\%} from the
+conclusion of the goal {\small\verb%t%}, provided the term being stripped does not contain
+{\small\verb%u%}.  {\small\verb%FILTER_PSTRIP_TAC%} will strip paired universal quantifications.
+A negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}.
+{\small\verb%FILTER_PSTRIP_TAC%} also breaks apart conjunctions without applying any
+filtering.
+
+If {\small\verb%t%} is a universally quantified term, {\small\verb%FILTER_PSTRIP_TAC u%}
+strips off the quantifier:
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- !p. v
+   ================  FILTER_PSTRIP_TAC "u"       [where p is not u]
+     A ?- v[p'/p]
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not contain
+any variables that appear free in the assumptions {\small\verb%A%}.  
+If {\small\verb%t%} is a conjunction, no filtering is done and {\small\verb%FILTER_PSTRIP_TAC%} simply
+splits the conjunction:
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- v /\ w
+   =================  FILTER_PSTRIP_TAC "u"
+    A ?- v   A ?- w
+\end{verbatim}
+}
+\noindent If {\small\verb%t%} is an implication and the antecedent does not contain
+a free instance of {\small\verb%u%}, then {\small\verb%FILTER_PSTRIP_TAC u%} moves the antecedent into the
+assumptions and recursively splits the antecedent according to the following
+rules (see {\small\verb%PSTRIP_ASSUME_TAC%}):
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- v1 /\ ... /\ vn ==> v            A ?- v1 \/ ... \/ vn ==> v
+   ============================        =================================
+       A u {v1,...,vn} ?- v             A u {v1} ?- v ... A u {vn} ?- v
+
+     A ?- (?p. w) ==> v
+   ====================
+    A u {w[p'/p]} ?- v
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a variant of the pair {\small\verb%p%}.
+
+\FAILURE
+{\small\verb%FILTER_PSTRIP_TAC u (A,t)%} fails if {\small\verb%t%} is not a universally quantified term,
+an implication, a negation or a conjunction; or if the term being
+stripped contains {\small\verb%u%} in the sense described above (conjunction excluded).
+
+\USES
+{\small\verb%FILTER_PSTRIP_TAC%} is used when stripping outer connectives from a goal in a
+more delicate way than {\small\verb%PSTRIP_TAC%}. A typical application is to keep
+stripping by using the tactic {\small\verb%REPEAT (FILTER_PSTRIP_TAC u)%}
+until one hits the term {\small\verb%u%} at which stripping is to stop.
+
+\SEEALSO
+PGEN_TAC, PSTRIP_GOAL_THEN, FILTER_PSTRIP_THEN, PSTRIP_TAC, FILTER_STRIP_TAC.
+
+\ENDDOC
+\DOC{FILTER\_PSTRIP\_THEN}
+
+\TYPE {\small\verb%FILTER_PSTRIP_THEN : (thm_tactic -> term -> tactic)%}\egroup
+
+\SYNOPSIS
+Conditionally strips a goal, handing an antecedent to the theorem-tactic.
+
+\DESCRIBE
+Given a theorem-tactic {\small\verb%ttac%}, a term {\small\verb%u%} and a goal {\small\verb%(A,t)%},
+{\small\verb%FILTER_STRIP_THEN ttac u%} removes one outer connective ({\small\verb%!%}, {\small\verb%==>%}, or {\small\verb%~%})
+from {\small\verb%t%}, if the term being stripped does not contain a free instance of {\small\verb%u%}.
+Note that {\small\verb%FILTER_PSTRIP_THEN%} will strip paired universal quantifiers.
+A negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}. The theorem-tactic
+{\small\verb%ttac%} is applied only when stripping an implication, by using the antecedent
+stripped off. {\small\verb%FILTER_PSTRIP_THEN%} also breaks conjunctions.
+
+{\small\verb%FILTER_PSTRIP_THEN%} behaves like {\small\verb%PSTRIP_GOAL_THEN%}, if the term being stripped
+does not contain a free instance of {\small\verb%u%}. In particular, {\small\verb%FILTER_PSTRIP_THEN
+PSTRIP_ASSUME_TAC%} behaves like {\small\verb%FILTER_PSTRIP_TAC%}.
+
+\FAILURE
+{\small\verb%FILTER_PSTRIP_THEN ttac u (A,t)%} fails if {\small\verb%t%} is not a paired universally
+quantified term, an implication, a negation or a conjunction;
+or if the term being stripped contains the term {\small\verb%u%} (conjunction excluded);
+or if the application of {\small\verb%ttac%} fails, after stripping the goal.
+
+\USES
+{\small\verb%FILTER_PSTRIP_THEN%} is used to manipulate intermediate results
+using theorem-tactics, after stripping outer connectives
+from a goal in a more delicate way than {\small\verb%PSTRIP_GOAL_THEN%}.
+
+\SEEALSO
+PGEN_TAC, PSTRIP_GOAL_THEN, FILTER_STRIP_THEN, PSTRIP_TAC, FILTER_PSTRIP_TAC.
+
+\ENDDOC
+\DOC{genlike}
+
+\TYPE {\small\verb%genlike : (term -> term)%}\egroup
+
+\SYNOPSIS
+Returns a pair structure of variables whose names have not been previously used.
+
+\DESCRIBE
+When given a pair structure,
+{\small\verb%genlike%} returns a paired structure of variables whose names have not been 
+used for variables or constants in the HOL session so far.
+The structure of the term returned will be identical to the structure of the
+argument.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The following example illustrates the behaviour of {\small\verb%genlike%}:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #genlike "((1,2),(x:*,x:*))";;
+   "(GEN%VAR%487,GEN%VAR%488),GEN%VAR%489,GEN%VAR%490" : term
+\end{verbatim}
+}
+
+\USES
+Unique variables are useful in writing derived rules, for specializing
+terms without having to worry about such things as free variable capture.
+It is often important in such rules to keep the same structure.
+If not, {\small\verb%genvar%} will be adequate.
+If the names are to be visible to a typical user, the function {\small\verb%pvariant%} can
+provide rather more meaningful names.
+
+\SEEALSO
+genvar, GPSPEC, pvariant.
+
+\ENDDOC
+\DOC{GEN\_PALPHA\_CONV}
+
+\TYPE {\small\verb%GEN_PALPHA_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Renames the bound pair of a paired abstraction, quantified term,
+or other binder.
+
+\DESCRIBE
+The conversion {\small\verb%GEN_PALPHA_CONV%} provides alpha conversion for lambda
+abstractions of the form {\small\verb%"\p.t"%}, quantified terms of the forms {\small\verb%"!p.t"%},
+{\small\verb%"?p.t"%} or {\small\verb%"?!p.t"%}, and epsilon terms of the form {\small\verb%"@p.t"%}.  In general,
+if {\small\verb%B%} is a binder constant, then {\small\verb%GEN_ALPHA_CONV%} implements alpha
+conversion for applications of the form {\small\verb%"B p.t"%}.  
+The function {\small\verb%is_binder%} determines what is regarded as a binder in this 
+context.
+
+The renaming of pairs is as described for {\small\verb%PALPHA_CONV%}.
+
+\FAILURE
+{\small\verb%GEN_PALPHA_CONV q tm%} fails if {\small\verb%q%} is not a variable,
+or if {\small\verb%tm%} does not have one of the forms {\small\verb%"\p.t"%} or {\small\verb%"B p.t"%},
+where {\small\verb%B%} is a binder (that is, {\small\verb%is_binder `B`%} returns {\small\verb%true%}).
+{\small\verb%GEN_ALPHA_CONV q tm%} also fails if {\small\verb%tm%} does have one of these forms,
+but types of the variables {\small\verb%p%} and {\small\verb%q%} differ.
+
+\SEEALSO
+GEN_ALPHA_CONV, PALPHA, PALPHA_CONV, is_binder.
+
+\ENDDOC
+\DOC{GPSPEC}
+
+\TYPE {\small\verb%GPSPEC : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Specializes the conclusion of a theorem with unique pairs.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p1...pn. t%}, where the number of universally
+quantified variables may be zero, {\small\verb%GPSPEC%} returns {\small\verb%A |- t[g1/p1]...[gn/pn]%},
+where the {\small\verb%gi%} is paired structures of the same structure as {\small\verb%pi%} and
+made up of distinct variables , chosen by {\small\verb%genvar%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+        A |- !p1...pn. t
+   -------------------------  GPSPEC
+    A |- t[g1/p1]...[gn/pn]
+\end{verbatim}
+}
+\FAILURE
+Never fails.
+
+\USES
+{\small\verb%GPSPEC%} is useful in writing derived inference rules which need to specialize
+theorems while avoiding using any variables that may be present elsewhere.
+
+\SEEALSO
+GSPEC, PGEN, PGENL, genvar, PGEN_ALL, PGEN_TAC, PSPEC, PSPECL, PSPEC_ALL,
+PSPEC_TAC, PSPEC_PAIR.
+
+\ENDDOC
+\DOC{HALF\_MK\_PABS}
+
+\TYPE {\small\verb%HALF_MK_PABS : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Converts a function definition to lambda-form.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p. t1 p = t2%}, whose conclusion is a
+universally quantified equation, {\small\verb%HALF_MK_PABS%} returns the theorem
+{\small\verb%A |- t1 = (\p. t2)%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- !p. t1 p = t2
+   --------------------  HALF_MK_PABS            [where p is not free in t1]
+    A |- t1 = (\p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is a singly paired universally quantified equation 
+whose left-hand side is a function applied to the quantified pair,
+or if any of the the variables in the quantified pair is free in that function.
+
+\SEEALSO
+HALF_MK_ABS, PETA_CONV, MK_PABS, MK_PEXISTS.
+
+\ENDDOC
+\DOC{IPSPEC}
+
+\TYPE {\small\verb%IPSPEC : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Specializes a theorem, with type instantiation if necessary.
+
+\DESCRIBE
+This rule specializes a paired quantification as does {\small\verb%PSPEC%};
+it differs from it in also instantiating the type if needed:
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A |- !p:ty.tm
+  -----------------------  IPSPEC "q:ty'"
+      A |- tm[q/p]
+\end{verbatim}
+}
+\noindent (where {\small\verb%q%} is free for {\small\verb%p%} in {\small\verb%tm%}, and {\small\verb%ty'%} is an instance
+of {\small\verb%ty%}).
+
+\FAILURE
+{\small\verb%IPSPEC%} fails if the input theorem is not universally quantified, if
+the type of the given term is not an instance of the type of the
+quantified variable, or if the type variable is free in the
+assumptions.
+
+\SEEALSO
+ISPEC, INST_TY_TERM, INST_TYPE, IPSPECL, PSPEC, match.
+
+\ENDDOC
+\DOC{IPSPECL}
+
+\TYPE {\small\verb%IPSPECL : (term list -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Specializes a theorem zero or more times, with type instantiation if necessary.
+
+\DESCRIBE
+{\small\verb%IPSPECL%} is an iterative version of {\small\verb%IPSPEC%}
+{\par\samepage\setseps\small
+\begin{verbatim}
+         A |- !p1...pn.tm
+   ----------------------------  IPSPECL ["q1",...,"qn"]
+    A |- t[q1,...qn/p1,...,pn]
+\end{verbatim}
+}
+\noindent (where {\small\verb%qi%} is free for {\small\verb%pi%} in {\small\verb%tm%}).
+
+\FAILURE
+{\small\verb%IPSPECL%} fails if the list of terms is longer than the number of
+quantified variables in the term, if the type instantiation fails, or
+if the type variable being instantiated is free in the assumptions.
+
+\SEEALSO
+ISPECL, INST_TYPE, INST_TY_TERM, IPSPEC, MATCH, SPEC, PSPECL.
+
+\ENDDOC
+\DOC{is\_pabs}
+
+\TYPE {\small\verb%is_pabs : (term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a paired abstraction.
+
+\DESCRIBE
+{\small\verb%is_pabs "\pair. t"%} returns {\small\verb%true%}.
+If the term is not a paired abstraction the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_abs, mk_pabs, dest_pabs.
+
+\ENDDOC
+\DOC{is\_pexists}
+
+\TYPE {\small\verb%is_pexists : (term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it as a paired existential quantification.
+
+\DESCRIBE
+{\small\verb%is_pexists "?pair. t"%} returns {\small\verb%true%}.
+If the term is not a paired existential quantification the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_exists, mk_pexists, dest_pexists.
+
+\ENDDOC
+\DOC{is\_pforall}
+
+\TYPE {\small\verb%is_pforall : (term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a paired universal quantification.
+
+\DESCRIBE
+{\small\verb%is_pforall "!pair. t"%} returns {\small\verb%true%}.
+If the term is not a a paired universal quantification the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_forall, mk_pforall, dest_pforall.
+
+\ENDDOC
+\DOC{is\_prod}
+
+\TYPE {\small\verb%is_prod : (type -> bool)%}\egroup
+
+\SYNOPSIS
+Tests a type to see if it is a product type.
+
+\DESCRIBE
+{\small\verb%is_prod ":t1#t2"%} returns {\small\verb%true%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+dest_prod, mk_prod.
+
+\ENDDOC
+\DOC{is\_pselect}
+
+\TYPE {\small\verb%is_pselect : (term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a paired choice-term.
+
+\DESCRIBE
+{\small\verb%is_select "@pair. t"%} returns {\small\verb%true%}.
+If the term is not a paired choice-term the result is {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_select, mk_pselect, dest_pselect.
+
+\ENDDOC
+\DOC{is\_pvar}
+
+\TYPE {\small\verb%is_pvar : (term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests a term to see if it is a paired structure of variables.
+
+\DESCRIBE
+{\small\verb%is_pvar "pvar"%} returns {\small\verb%true%} iff {\small\verb%pvar%} is a paired structure of variables.
+For example, {\small\verb%((a:*,b:*),(d:*,e:*))%} is a paired structure of variables,
+{\small\verb%(1,2)%} is not.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_var.
+
+\ENDDOC
+\DOC{LEFT\_AND\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%LEFT_AND_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification of the left conjunct outwards
+through a conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(?p. t) /\ u%}, the conversion
+{\small\verb%LEFT_AND_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t) /\ u = (?p'. t[p'/p] /\ u)
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not 
+contains variables free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(?p. t) /\ u%}.
+
+\SEEALSO
+LEFT_AND_EXISTS_CONV, AND_PEXISTS_CONV, PEXISTS_AND_CONV,
+RIGHT_AND_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{LEFT\_AND\_PFORALL\_CONV}
+
+\TYPE {\small\verb%LEFT_AND_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification of the left conjunct outwards through
+a conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(!p. t) /\ u%}, the conversion
+{\small\verb%LEFT_AND_PFORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t) /\ u = (!p'. t[p'/p] /\ u)
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of {\small\verb%p%} that does not appear free in
+the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(!p. t) /\ u%}.
+
+\SEEALSO
+LEFT_AND_FORALL_CONV, AND_PFORALL_CONV, PFORALL_AND_CONV,
+RIGHT_AND_PFORALL_CONV.
+
+\ENDDOC
+\DOC{LEFT\_IMP\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%LEFT_IMP_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification of the antecedent outwards through
+an implication.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(?p. t) ==> u%}, the conversion
+{\small\verb%LEFT_IMP_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t) ==> u = (!p'. t[p'/p] ==> u)
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not
+contain any variables that appear free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(?p. t) ==> u%}.
+
+\SEEALSO
+LEFT_IMP_EXISTS_CONV, PFORALL_IMP_CONV, RIGHT_IMP_PFORALL_CONV.
+
+\ENDDOC
+\DOC{LEFT\_IMP\_PFORALL\_CONV}
+
+\TYPE {\small\verb%LEFT_IMP_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification of the antecedent outwards through an
+implication.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(!p. t) ==> u%}, the conversion
+{\small\verb%LEFT_IMP_PFORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t) ==> u = (?p'. t[p'/p] ==> u)
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not
+contain any variables that appear free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(!p. t) ==> u%}.
+
+\SEEALSO
+LEFT_IMP_FORALL_CONV, PEXISTS_IMP_CONV, RIGHT_IMP_PFORALL_CONV.
+
+\ENDDOC
+\DOC{LEFT\_LIST\_PBETA}
+
+\TYPE {\small\verb%LEFT_LIST_PBETA : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Iteratively beta-reduces a top-level paired beta-redex on the left-hand side
+of an equation.
+
+\DESCRIBE
+When applied to an equational theorem, {\small\verb%LEFT_LIST_PBETA%} applies paired 
+beta-reduction over a top-level chain of beta-redexes to the left-hand side
+(only).
+Variables are renamed if necessary to avoid free variable capture.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- (\p1...pn. t) q1 ... qn = s
+   ----------------------------------  LEFT_LIST_BETA
+       A |- t[q1/p1]...[qn/pn] = s
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is equational, with its left-hand side being
+a top-level paired beta-redex.
+
+\SEEALSO
+RIGHT_LIST_BETA, PBETA_CONV, PBETA_RULE, PBETA_TAC, LIST_PBETA_CONV,
+LEFT_PBETA, RIGHT_PBETA, RIGHT_LIST_PBETA.
+
+\ENDDOC
+\DOC{LEFT\_OR\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%LEFT_OR_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification of the left disjunct outwards
+through a disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(?p. t) \/ u%}, the conversion
+{\small\verb%LEFT_OR_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t) \/ u = (?p'. t[p'/p] \/ u)
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not 
+contain any variables free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(?p. t) \/ u%}.
+
+\SEEALSO
+LEFT_OR_EXISTS_CONV, PEXISTS_OR_CONV, OR_PEXISTS_CONV, RIGHT_OR_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{LEFT\_OR\_PFORALL\_CONV}
+
+\TYPE {\small\verb%LEFT_OR_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification of the left disjunct outwards through
+a disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(!p. t) \/ u%}, the conversion
+{\small\verb%LEFT_OR_FORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t) \/ u = (!p'. t[p'/p] \/ u)
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not
+contain any variables that appear free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(!p. t) \/ u%}.
+
+\SEEALSO
+LEFT_OR_FORALL_CONV, OR_PFORALL_CONV, PFORALL_OR_CONV, RIGHT_OR_PFORALL_CONV.
+
+\ENDDOC
+\DOC{LEFT\_PBETA}
+
+\TYPE {\small\verb%LEFT_PBETA : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Beta-reduces a top-level paired beta-redex on the left-hand side of an equation.
+
+\DESCRIBE
+When applied to an equational theorem, {\small\verb%LEFT_PBETA%} applies paired
+beta-reduction at top level to the left-hand side (only).
+Variables are renamed if necessary to avoid free variable capture.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- (\x. t1) t2 = s
+   ----------------------  LEFT_PBETA
+     A |- t1[t2/x] = s
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is equational, with its left-hand side being
+a top-level paired beta-redex.
+
+\SEEALSO
+RIGHT_BETA, PBETA_CONV, PBETA_RULE, PBETA_TAC, RIGHT_PBETA, RIGHT_LIST_PBETA,
+LEFT_LIST_PBETA.
+
+\ENDDOC
+\DOC{list\_mk\_pabs}
+
+\TYPE {\small\verb%list_mk_pabs : ((term list # term) -> term)%}\egroup
+
+\SYNOPSIS
+Iteratively constructs paired abstractions.
+
+\DESCRIBE
+{\small\verb%list_mk_pabs(["p1";...;"pn"],"t")%} returns {\small\verb%"\p1 ... pn. t"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_pabs%} if the terms in the list are not paired 
+structures of variables.
+
+\COMMENTS
+The system shows the type as {\small\verb%goal -> term%}.
+
+\SEEALSO
+list_mk_abs, strip_pabs, mk_pabs.
+
+\ENDDOC
+\DOC{LIST\_MK\_PEXISTS}
+
+\TYPE {\small\verb%LIST_MK_PEXISTS : (term list -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Multiply existentially quantifies both sides of an equation using the given
+pairs.
+
+\DESCRIBE
+When applied to a list of terms {\small\verb%[p1;...;pn]%}, where the {\small\verb%pi%} are all
+paired structures of variables, and a theorem {\small\verb%A |- t1 = t2%},
+the inference rule {\small\verb%LIST_MK_PEXISTS%} existentially quantifies both sides
+of the equation using the pairs given, none of the variables in the pairs
+should be free in the assumption list.
+{\par\samepage\setseps\small
+\begin{verbatim}
+                A |- t1 = t2
+   --------------------------------------  LIST_MK_PEXISTS ["x1";...;"xn"]
+    A |- (?x1...xn. t1) = (?x1...xn. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails if any term in the list is not a paired structure of variables,
+or if any variable is free in the assumption list,
+or if the theorem is not equational.
+
+\SEEALSO
+LIST_MK_EXISTS, PEXISTS_EQ, MK_PEXISTS.
+
+\ENDDOC
+\DOC{list\_mk\_pexists}
+
+\TYPE {\small\verb%list_mk_pexists : ((term list # term) -> term)%}\egroup
+
+\SYNOPSIS
+Iteratively constructs paired existential quantifications.
+
+\DESCRIBE
+{\small\verb%list_mk_pexists(["p1";...;"pn"],"t")%} returns {\small\verb%"?p1 ... pn. t"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_pexists%} if the terms in the list are not paired structures
+of variables or if {\small\verb%t%} is not of type {\small\verb%":bool"%} and the list of terms is 
+nonempty.
+If the list of terms is empty the type of {\small\verb%t%} can be anything.
+
+\COMMENTS
+The system shows the type as {\small\verb%(goal -> term)%}.
+
+\SEEALSO
+list_mk_exists, strip_pexists, mk_pexists.
+
+\ENDDOC
+\DOC{LIST\_MK\_PFORALL}
+
+\TYPE {\small\verb%LIST_MK_PFORALL : (term list -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Multiply universally quantifies both sides of an equation using the given
+pairs.
+
+\DESCRIBE
+When applied to a list of terms {\small\verb%[p1;...;pn]%}, where the {\small\verb%pi%} are all
+paired structures of variables, and a theorem {\small\verb%A |- t1 = t2%},
+the inference rule {\small\verb%LIST_MK_PFORALL%} universally quantifies both sides
+of the equation using the pairs given, none of the variables in the pairs
+should be free in the assumption list.
+{\par\samepage\setseps\small
+\begin{verbatim}
+                A |- t1 = t2
+   --------------------------------------  LIST_MK_PFORALL ["x1";...;"xn"]
+    A |- (!x1...xn. t1) = (!x1...xn. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails if any term in the list is not a paired structure of variables,
+or if any variable is free in the assumption list,
+or if the theorem is not equational.
+
+\SEEALSO
+LIST_MK_EXISTS, PFORALL_EQ, MK_PFORALL.
+
+\ENDDOC
+\DOC{list\_mk\_pforall}
+
+\TYPE {\small\verb%list_mk_pforall : ((term list # term) -> term)%}\egroup
+
+\SYNOPSIS
+Iteratively constructs a paired universal quantification.
+
+\DESCRIBE
+{\small\verb%list_mk_pforall(["p1";...;"pn"],"t")%} returns {\small\verb%"!p1 ... pn. t"%}.
+
+\FAILURE
+Fails with {\small\verb%list_mk_pforall%} if the terms in the list are not paired structures
+of variables or if {\small\verb%t%} is not of type {\small\verb%":bool"%} and the list of terms is 
+nonempty.
+If the list of terms is empty the type of {\small\verb%t%} can be anything.
+
+\COMMENTS
+The system shows the type as {\small\verb%(goal -> term)%}.
+
+\SEEALSO
+list_mk_forall, strip_pforall, mk_pforall.
+
+\ENDDOC
+\DOC{LIST\_PBETA\_CONV}
+
+\TYPE {\small\verb%LIST_PBETA_CONV : conv%}\egroup
+
+\SYNOPSIS
+Performs an iterated paired beta-conversion.
+
+\DESCRIBE
+The conversion {\small\verb%LIST_PBETA_CONV%} maps terms of the form
+{\par\samepage\setseps\small
+\begin{verbatim}
+   "(\p1 p2 ... pn. t) q1 q2 ... qn"
+\end{verbatim}
+}
+\noindent to the theorems of the form
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (\p1 p2 ... pn. t) q1 q2 ... qn = t[q1/p1][q2/p2] ... [qn/pn]
+\end{verbatim}
+}
+\noindent where {\small\verb%t[qi/pi]%} denotes the result of substituting {\small\verb%qi%} for all free
+occurrences of {\small\verb%pi%} in {\small\verb%t%}, after renaming sufficient bound variables to avoid
+variable capture.
+
+\FAILURE
+{\small\verb%LIST_PBETA_CONV tm%} fails if {\small\verb%tm%} does not have the form
+{\small\verb%"(\p1 ... pn. t) q1 ... qn"%} for {\small\verb%n%} greater than 0.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#LIST_PBETA_CONV "(\(a,b) (c,d) . a + b + c + d) (1,2) (3,4)";;
+|- (\(a,b) (c,d). a + (b + (c + d)))(1,2)(3,4) = 1 + (2 + (3 + 4))
+\end{verbatim}
+}
+
+\SEEALSO
+LIST_BETA_CONV, PBETA_CONV, BETA_RULE, BETA_TAC, RIGHT_PBETA, RIGHT_LIST_PBETA,
+LEFT_PBETA, LEFT_LIST_PBETA.
+
+\ENDDOC
+\DOC{MK\_PABS}
+
+\TYPE {\small\verb%MK_PABS : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Abstracts both sides of an equation.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p. t1 = t2%}, whose conclusion is a
+paired universally quantified equation, {\small\verb%MK_PABS%} returns the theorem
+{\small\verb%A |- (\p. t1) = (\p. t2)%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+        A |- !p. t1 = t2
+   --------------------------  MK_PABS
+    A |- (\p. t1) = (\p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is a (singly) paired universally quantified equation.
+
+\SEEALSO
+MK_ABS, PABS, HALF_MK_PABS, MK_PEXISTS.
+
+\ENDDOC
+\DOC{mk\_pabs}
+
+\TYPE {\small\verb%mk_pabs : ((term # term) -> term)%}\egroup
+
+\SYNOPSIS
+Constructs a paired abstraction.
+
+\DESCRIBE
+{\small\verb%mk_pabs "pair","t"%} returns the abstraction {\small\verb%"\pair. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_pabs%} if first term is not a pair structure of variables.
+
+\SEEALSO
+mk_abs, dest_pabs, is_pabs, list_mk_pabs.
+
+\ENDDOC
+\DOC{MK\_PAIR}
+
+\TYPE {\small\verb%MK_PAIR : (thm -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Proves equality of pairs constructed from equal components.
+
+\DESCRIBE
+When applied to theorems {\small\verb%A1 |- a = x%} and {\small\verb%A2 |- b = y%}, the inference
+rule {\small\verb%MK_PAIR%} returns the theorem {\small\verb%A1 u A2 |- (a,b) = (x,y)%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A1 |- a = x   A2 |- b = y
+   ---------------------------  MK_PAIR
+    A1 u A2 |- (a,b) = (x,y)
+\end{verbatim}
+}
+\FAILURE
+Fails unless both theorems are equational.
+
+\SEEALSO
+
+\ENDDOC
+\DOC{MK\_PEXISTS}
+
+\TYPE {\small\verb%MK_PEXISTS : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Existentially quantifies both sides of a universally quantified
+equational theorem.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p. t1 = t2%}, the inference rule {\small\verb%MK_PEXISTS%}
+returns the theorem {\small\verb%A |- (?x. t1) = (?x. t2)%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+       A |- !p. t1 = t2
+   --------------------------  MK_PEXISTS
+    A |- (?p. t1) = (?p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is a singly paired universally quantified equation.
+
+\SEEALSO
+PEXISTS_EQ, PGEN, LIST_MK_PEXISTS, MK_PABS.
+
+\ENDDOC
+\DOC{mk\_pexists}
+
+\TYPE {\small\verb%mk_pexists : ((term # term) -> term)%}\egroup
+
+\SYNOPSIS
+Constructs a paired existential quantification.
+
+\DESCRIBE
+{\small\verb%mk_pexists("pair","t")%} returns {\small\verb%"?pair. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_exists%} if first term is not a paired structure of variables or
+if {\small\verb%t%} is not of type {\small\verb%":bool"%}.
+
+\SEEALSO
+mk_exists, dest_pexists, is_pexists, list_mk_pexists.
+
+\ENDDOC
+\DOC{MK\_PFORALL}
+
+\TYPE {\small\verb%MK_PFORALL : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Universally quantifies both sides of a universally quantified
+equational theorem.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p. t1 = t2%}, the inference rule {\small\verb%MK_PFORALL%}
+returns the theorem {\small\verb%A |- (!x. t1) = (!x. t2)%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+       A |- !p. t1 = t2
+   --------------------------  MK_PFORALL
+    A |- (!p. t1) = (!p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is a singly paired universally quantified equation.
+
+\SEEALSO
+PFORALL_EQ, LIST_MK_PFORALL, MK_PABS.
+
+\ENDDOC
+\DOC{mk\_pforall}
+
+\TYPE {\small\verb%mk_pforall : ((term # term) -> term)%}\egroup
+
+\SYNOPSIS
+Constructs a paired universal quantification.
+
+\DESCRIBE
+{\small\verb%mk_pforall("pair","t")%} returns {\small\verb%"!pair. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_pforall%} if first term is not a a paired structure of variables
+or if {\small\verb%t%} is not of type {\small\verb%":bool"%}.
+
+\SEEALSO
+mk_forall, dest_pforall, is_pforall, list_mk_pforall.
+
+\ENDDOC
+\DOC{mk\_prod}
+
+\TYPE {\small\verb%mk_prod : ((type # type) -> type)%}\egroup
+
+\SYNOPSIS
+Constructs a product type from two constituent types.
+
+\DESCRIBE
+{\small\verb%mk_prod(":t1",":t2")%} returns {\small\verb%":t1#t2"%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_prod, dest_prod.
+
+\ENDDOC
+\DOC{MK\_PSELECT}
+
+\TYPE {\small\verb%MK_PSELECT : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Quantifies both sides of a universally quantified equational theorem with
+the choice quantifier.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p. t1 = t2%}, the inference rule {\small\verb%MK_PSELECT%}
+returns the theorem {\small\verb%A |- (@x. t1) = (@x. t2)%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+       A |- !p. t1 = t2
+   --------------------------  MK_PSELECT
+    A |- (@p. t1) = (@p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is a singly paired universally quantified equation.
+
+\SEEALSO
+PSELECT_EQ, MK_PABS.
+
+\ENDDOC
+\DOC{mk\_pselect}
+
+\TYPE {\small\verb%mk_pselect : ((term # term) -> term)%}\egroup
+
+\SYNOPSIS
+Constructs a paired choice-term.
+
+\DESCRIBE
+{\small\verb%mk_pselect("pair","t")%} returns {\small\verb%"@pair. t"%}.
+
+\FAILURE
+Fails with {\small\verb%mk_select%} if first term is not a paired structure of variables or
+if {\small\verb%t%} is not of type {\small\verb%":bool"%}.
+
+\SEEALSO
+mk_select, dest_pselect, is_pselect.
+
+\ENDDOC
+\DOC{NOT\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%NOT_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves negation inwards through a paired existential quantification.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%~(?p. t)%}, the conversion
+{\small\verb%NOT_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- ~(?p. t) = (!p. ~t)
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%~(?p. t)%}.
+
+\SEEALSO
+NOT_EXISTS_CONV, PEXISTS_NOT_CONV, PFORALL_NOT_CONV, NOT_PFORALL_CONV.
+
+\ENDDOC
+\DOC{NOT\_PFORALL\_CONV}
+
+\TYPE {\small\verb%NOT_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves negation inwards through a paired universal quantification.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%~(!p. t)%}, the conversion
+{\small\verb%NOT_PFORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- ~(!p. t) = (?p. ~t)
+\end{verbatim}
+}
+\noindent It is irrelevant whether any variables in {\small\verb%p%} occur free in {\small\verb%t%}.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%~(!p. t)%}.
+
+\SEEALSO
+NOT_FORALL_CONV, PEXISTS_NOT_CONV, PFORALL_NOT_CONV, NOT_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{occs\_in}
+
+\TYPE {\small\verb%occs_in : (term -> term -> bool)%}\egroup
+
+\SYNOPSIS
+Occurrence check for bound variables.
+
+\DESCRIBE
+When applied to two terms {\small\verb%p%} and {\small\verb%t%},
+where {\small\verb%p%} is a paired structure of variables,
+the function {\small\verb%occs_in%} returns {\small\verb%true%} if and of the constituent variables of
+{\small\verb%p%} occurs free in {\small\verb%t%},
+and {\small\verb%false%} otherwise.
+
+\FAILURE
+Fails of {\small\verb%p%} is not a paired structure of variables.
+
+\SEEALSO
+free_in, frees, freesl, thm_frees.
+
+\ENDDOC
+\DOC{OR\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%OR_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification outwards through a disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(?p. t) \/ (?p. u)%}, the conversion
+{\small\verb%OR_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t) \/ (?p. u) = (?p. t \/ u)
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%(?p. t) \/ (?p. u)%}.
+
+\SEEALSO
+OR_EXISTS_CONV, PEXISTS_OR_CONV, LEFT_OR_PEXISTS_CONV, RIGHT_OR_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{OR\_PFORALL\_CONV}
+
+\TYPE {\small\verb%OR_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification outwards through a disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%(!p. t) \/ (!p. u)%}, where no variables
+from {\small\verb%p%} are free in either {\small\verb%t%} nor {\small\verb%u%}, {\small\verb%OR_PFORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t) \/ (!p. u) = (!p. t \/ u)
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%OR_PFORALL_CONV%} fails if it is applied to a term not of the form
+{\small\verb%(!p. t) \/ (!p. u)%}, or if it is applied to a term {\small\verb%(!p. t) \/ (!p. u)%}
+in which the variables from {\small\verb%p%} are free in either {\small\verb%t%} or {\small\verb%u%}.
+
+\SEEALSO
+OR_FORALL_CONV, PFORALL_OR_CONV, LEFT_OR_PFORALL_CONV, RIGHT_OR_PFORALL_CONV.
+
+\ENDDOC
+\DOC{PABS}
+
+\TYPE {\small\verb%PABS : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Paired abstraction of both sides of an equation.
+
+\DESCRIBE
+{\par\samepage\setseps\small
+\begin{verbatim}
+         A |- t1 = t2
+   ------------------------  ABS "p"            [Where p is not free in A]
+    A |- (\p.t1) = (\p.t2)
+\end{verbatim}
+}
+\FAILURE
+If the theorem is not an equation, or if any variable in the paired structure
+of variables {\small\verb%p%} occurs free in the assumptions {\small\verb%A%}.
+
+EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#PABS "(x:*,y:**)" (REFL "(x:*,y:**)");;
+|- (\(x,y). (x,y)) = (\(x,y). (x,y))
+\end{verbatim}
+}
+\SEEALSO
+ABS, PABS_CONV, PETA_CONV, PEXT, MK_PABS.
+
+\ENDDOC
+\DOC{PABS\_CONV}
+
+\TYPE {\small\verb%PABS_CONV : (conv -> conv)%}\egroup
+
+\SYNOPSIS
+Applies a conversion to the body of a paired abstraction.
+
+\DESCRIBE
+If {\small\verb%c%} is a conversion that maps a term {\small\verb%"t"%} to the theorem {\small\verb%|- t = t'%}, then
+the conversion {\small\verb%PABS_CONV c%} maps abstractions of the form {\small\verb%"\p.t"%} to theorems
+of the form:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (\p.t) = (\p.t')
+\end{verbatim}
+}
+\noindent That is, {\small\verb%ABS_CONV c "\p.t"%} applies {\small\verb%p%} to the body of the paired
+abstraction {\small\verb%"\p.t"%}.
+
+\FAILURE
+{\small\verb%PABS_CONV c tm%} fails if {\small\verb%tm%} is not a paired abstraction or if {\small\verb%tm%} has the
+form {\small\verb%"\p.t"%} but the conversion {\small\verb%c%} fails when applied to the term {\small\verb%t%}.
+The function returned by {\small\verb%ABS_CONV p%} may also fail if the ML function
+{\small\verb%c:term->thm%} is not, in fact, a conversion (i.e. a function that maps a term
+{\small\verb%t%} to a theorem {\small\verb%|- t = t'%}).
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#PABS_CONV SYM_CONV "\(x,y). (1,2) = (x,y)";;
+|- (\(x,y). 1,2 = x,y) = (\(x,y). x,y = 1,2)
+\end{verbatim}
+}
+\SEEALSO
+ABS_CONV, PSUB_CONV.
+
+\ENDDOC
+\DOC{paconv}
+
+\TYPE {\small\verb%paconv : (term -> term -> bool)%}\egroup
+
+\SYNOPSIS
+Tests for alpha-equivalence of terms.
+
+\DESCRIBE
+When applied to a pair of terms {\small\verb%t1%} and {\small\verb%t2%}, {\small\verb%paconv%} returns true
+if the terms are alpha-equivalent.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+{\small\verb%paconv%} is implemented as {\small\verb%curry (can (uncurry PALPHA))%}.
+
+\SEEALSO
+PALPHA, aconv.
+
+\ENDDOC
+\DOC{PAIR\_CONV}
+
+\TYPE {\small\verb%PAIR_CONV : (conv -> conv)%}\egroup
+
+\SYNOPSIS
+Applies a conversion to all the components of a pair structure.
+
+\DESCRIBE
+For any conversion {\small\verb%c%}, the function returned by {\small\verb%PAIR_CONV c%} is a conversion
+that applies {\small\verb%c%} to all the components of a pair.
+If the term {\small\verb%t%} is not a pair, them {\small\verb%PAIR_CONV c t%} applies {\small\verb%c%} to {\small\verb%t%}.
+If the term {\small\verb%t%} is the pair {\small\verb%(t1,t2)%} then {\small\verb%PAIR c t%} recursively applies
+{\small\verb%PAIR_CONV c%} to {\small\verb%t1%} and {\small\verb%t2%}.
+
+\FAILURE
+The conversion returned by {\small\verb%PAIR_CONV c%} will fail for the pair structure {\small\verb%t%}
+if the conversion {\small\verb%c%} would fail for any of the components of {\small\verb%t%}.
+
+\SEEALSO
+RAND_CONV, RATOR_CONV.
+
+\ENDDOC
+\DOC{PALPHA}
+
+\TYPE {\small\verb%PALPHA : (term -> term -> thm)%}\egroup
+
+\SYNOPSIS
+Proves equality of paired alpha-equivalent terms.
+
+\DESCRIBE
+When applied to a pair of terms {\small\verb%t1%} and {\small\verb%t1'%} which are
+alpha-equivalent, {\small\verb%ALPHA%} returns the theorem {\small\verb%|- t1 = t1'%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+
+   -------------  PALPHA "t1" "t1'"
+    |- t1 = t1'
+\end{verbatim}
+}
+The difference between {\small\verb%PALPHA%} and {\small\verb%ALPHA%} is that 
+{\small\verb%PALPHA%} is prepared to consider pair structures of different
+structure to be alpha-equivalent.
+In its most trivial case this means that {\small\verb%PALPHA%} can consider
+a variable and a pair to alpha-equivalent.
+
+\FAILURE
+Fails unless the terms provided are alpha-equivalent.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#PALPHA "\(x:*,y:*). (x,y)" "\xy:*#*.xy";;
+|- (\(x,y). (x,y)) = (\xy. xy)
+\end{verbatim}
+}
+\COMMENTS
+The system shows the type of {\small\verb%PALPHA%} as {\small\verb%term -> conv%}.
+
+Alpha-converting a paired abstraction to a nonpaired abstraction 
+can introduce instances of the terms {\small\verb%"FST"%} and {\small\verb%"SND"%}.
+A paired abstraction and a nonpaired abstraction will be considered
+equivalent by {\small\verb%PALPHA%} if the nonpaired abstraction contains all
+those instances of {\small\verb%"FST"%} and {\small\verb%"SND"%} present in the paired
+abstraction, plus the minimum additional instances of {\small\verb%"FST"%} and {\small\verb%"SND"%}.
+For example:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PALPHA
+      "\(x:*,y:**). (f x y (x,y)):***"
+      "\xy:*#**. (f (FST xy) (SND xy) xy):***";;
+   |- (\(x,y). f x y(x,y)) = (\xy. f(FST xy)(SND xy)xy)
+
+   #PALPHA
+      "\(x:*,y:**). (f x y (x,y)):***"
+      "\xy:*#**. (f (FST xy) (SND xy) (FST xy, SND xy)):***";;
+   evaluation failed     PALPHA
+\end{verbatim}
+}
+
+\SEEALSO
+ALPHA, aconv, PALPHA_CONV, GEN_PALPHA_CONV.
+
+\ENDDOC
+\DOC{PALPHA\_CONV}
+
+\TYPE {\small\verb%PALPHA_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Renames the bound variables of a paired lambda-abstraction.
+
+\DESCRIBE
+If {\small\verb%"q"%} is a variable of type {\small\verb%ty%} and {\small\verb%"\p.t"%} is a paired abstraction in
+which the bound pair {\small\verb%p%} also has type {\small\verb%ty%}, then {\small\verb%ALPHA_CONV "q" "\p.t"%}
+returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (\p.t) = (\q'. t[q'/p])
+\end{verbatim}
+}
+\noindent where the pair {\small\verb%q':ty%} is a primed variant of {\small\verb%q%} chosen so
+that none of its components are free in {\small\verb%"\p.t"%}.
+The pairs {\small\verb%p%} and {\small\verb%q%} need not have the same structure, but they must
+be of the same type.
+
+\EXAMPLE
+{\small\verb%PALPHA_CONV%} renames the variables in a bound pair:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PALPHA_CONV
+     "((w:*,x:*),(y:*,z:*))"
+     "\((a:*,b:*),(c:*,d:*)). (f a b c d):*";;
+   |- (\((a,b),c,d). f a b c d) = (\((w,x),y,z). f w x y z)
+\end{verbatim}
+}
+The new bound pair and the old bound pair need not have the same structure.
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PALPHA_CONV
+     "((wx:*#*),(y:*,z:*))"
+     "\((a:*,b:*),(c:*,d:*)). (f a b c d):*";;
+   |- (\((a,b),c,d). f a b c d) = (\(wx,y,z). f(FST wx)(SND wx)y z)
+\end{verbatim}
+}
+{\small\verb%PALPHA_CONV%} recognises subpairs of a pair as variables and preserves
+structure accordingly.
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PALPHA_CONV
+     "((wx:*#*),(y:*,z:*))"
+     "\((a:*,b:*),(c:*,d:*)). (f (a,b) c d):*";;
+   |- (\((a,b),c,d). f(a,b)c d) = (\(wx,y,z). f wx y z)
+\end{verbatim}
+}
+
+\COMMENTS
+{\small\verb%PALPHA_CONV%} will only ever add the terms {\small\verb%"FST"%} and {\small\verb%"SND"%}.
+(i.e. it will never remove them).
+This means that while {\small\verb%"\(x,y). x + y"%} can be converted to
+{\small\verb%"\xy. (FST xy) + (SND xy)"%}, it can not be converted back again.
+
+\FAILURE
+{\small\verb%PALPHA_CONV "q" "tm"%} fails if {\small\verb%q%} is not a variable,
+if {\small\verb%tm%} is not an abstraction,
+or if {\small\verb%q%} is a variable and {\small\verb%tm%} is the lambda abstraction
+{\small\verb%\p.t%} but the types of {\small\verb%p%} and {\small\verb%q%} differ.
+
+\SEEALSO
+ALPHA_CONV, PALPHA, GEN_PALPHA_CONV.
+
+\ENDDOC
+\DOC{PART\_PMATCH}
+
+\TYPE {\small\verb%PART_PMATCH : ((term -> term) -> thm -> term -> thm)%}\egroup
+
+\SYNOPSIS
+Instantiates a theorem by matching part of it to a term.
+
+\DESCRIBE
+When applied to a `selector' function of type {\small\verb%term -> term%}, a theorem and a
+term:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   PART_MATCH fn (A |- !p1...pn. t) tm
+\end{verbatim}
+}
+\noindent the function {\small\verb%PART_PMATCH%} applies {\small\verb%fn%} to {\small\verb%t'%} (the result
+of specializing universally quantified pairs in the conclusion of
+the theorem), and attempts to match the resulting term to the argument term
+{\small\verb%tm%}. If it succeeds, the appropriately instantiated version of the theorem is
+returned.
+
+\FAILURE
+Fails if the selector function {\small\verb%fn%} fails when applied to the instantiated
+theorem, or if the match fails with the term it has provided.
+
+\SEEALSO
+PART_MATCH.
+
+\ENDDOC
+\DOC{PBETA\_CONV}
+
+\TYPE {\small\verb%PBETA_CONV : conv%}\egroup
+
+\SYNOPSIS
+Performs a general beta-conversion.
+
+\DESCRIBE
+The conversion {\small\verb%PBETA_CONV%} maps a paired beta-redex {\small\verb%"(\p.t)q"%} to the theorem
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (\p.t)q = t[q/p]
+\end{verbatim}
+}
+\noindent where {\small\verb%u[q/p]%} denotes the result of substituting {\small\verb%q%} for all free
+occurrences of {\small\verb%p%} in {\small\verb%t%}, after renaming sufficient bound variables to avoid
+variable capture.
+Unlike {\small\verb%PAIRED_BETA_CONV%}, {\small\verb%PBETA_CONV%} does not require that the structure
+of the argument match the structure of the pair bound by the abstraction.
+However, if the structure of the argument does match the structure of the
+pair bound by the abstraction, then {\small\verb%PAIRED_BETA_CONV%} will do the job
+much faster.
+
+\FAILURE
+{\small\verb%PBETA_CONV tm%} fails if {\small\verb%tm%} is not a paired beta-redex.
+
+\EXAMPLE
+{\small\verb%PBETA_CONV%} will reduce applications with arbitrary structure.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    #PBETA_CONV "((\((a:*,b:*),(c:*,d:*)). f a b c d) ((w,x),(y,z))):*";;
+    |- (\((a,b),c,d). f a b c d)((w,x),y,z) = f w x y z
+\end{verbatim}
+}
+{\small\verb%PBETA_CONV%} does not require the structure of the argument and the bound
+pair to match.
+{\par\samepage\setseps\small
+\begin{verbatim}
+	#PBETA_CONV "((\((a:*,b:*),(c:*,d:*)). f a b c d) ((w,x),yz)):*";;
+	|- (\((a,b),c,d). f a b c d)((w,x),yz) = f w x(FST yz)(SND yz)
+\end{verbatim}
+}
+{\small\verb%PBETA_CONV%} regards component pairs of the bound pair as variables in their
+own right and preserves structure accordingly:
+{\par\samepage\setseps\small
+\begin{verbatim}
+	#PBETA_CONV "((\((a:*,b:*),(c:*,d:*)). f (a,b) (c,d)) (wx,(y,z))):*";;
+	|- (\((a,b),c,d). f(a,b)(c,d))(wx,y,z) = f wx(y,z)
+\end{verbatim}
+}
+
+\SEEALSO
+BETA_CONV, PAIRED_BETA_CONV, PBETA_RULE, PBETA_TAC, LIST_PBETA_CONV, 
+RIGHT_PBETA, RIGHT_LIST_PBETA, LEFT_PBETA, LEFT_LIST_PBETA.
+
+\ENDDOC
+\DOC{PBETA\_RULE}
+
+\TYPE {\small\verb%PBETA_RULE : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Beta-reduces all the paired beta-redexes in the conclusion of a theorem.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- t%}, the inference rule {\small\verb%PBETA_RULE%} beta-reduces
+all beta-redexes, at any depth, in the conclusion {\small\verb%t%}. Variables are renamed
+where necessary to avoid free variable capture.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- ....((\p. s1) s2)....
+   ----------------------------  BETA_RULE
+      A |- ....(s1[s2/p])....
+\end{verbatim}
+}
+\FAILURE
+Never fails, but will have no effect if there are no paired beta-redexes.
+
+\SEEALSO
+BETA_RULE, PBETA_CONV, PBETA_TAC, RIGHT_PBETA, LEFT_PBETA.
+
+\ENDDOC
+\DOC{PBETA\_TAC}
+
+\TYPE {\small\verb%PBETA_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Beta-reduces all the paired beta-redexes in the conclusion of a goal.
+
+\DESCRIBE
+When applied to a goal {\small\verb%A ?- t%}, the tactic {\small\verb%PBETA_TAC%} produces a new goal
+which results from beta-reducing all paired beta-redexes, at any depth, in {\small\verb%t%}.
+Variables are renamed where necessary to avoid free variable capture.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- ...((\p. s1) s2)...
+   ==========================  PBETA_TAC
+     A ?- ...(s1[s2/p])...
+\end{verbatim}
+}
+\FAILURE
+Never fails, but will have no effect if there are no paired beta-redexes.
+
+\SEEALSO
+BETA_TAC, PBETA_CONV, PBETA_RULE.
+
+\ENDDOC
+\DOC{pbody}
+
+\TYPE {\small\verb%pbody : (term -> term)%}\egroup
+
+\SYNOPSIS
+Returns the body of a paired abstraction.
+
+\DESCRIBE
+{\small\verb%pbody "\pair. t"%} returns {\small\verb%"t"%}.
+
+\FAILURE
+Fails unless the term is a paired abstraction.
+
+\SEEALSO
+body, bndpair, dest_pabs.
+
+\ENDDOC
+\DOC{PCHOOSE}
+
+\TYPE {\small\verb%PCHOOSE : ((term # thm) -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Eliminates paired existential quantification using deduction from a
+particular witness.
+
+\DESCRIBE
+When applied to a term-theorem pair {\small\verb%(q,A1 |- ?p. s)%} and a second
+theorem of the form {\small\verb%A2 u {s[q/p]} |- t%}, the inference rule {\small\verb%PCHOOSE%}
+produces the theorem {\small\verb%A1 u A2 |- t%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A1 |- ?p. s   A2 u {s[q/p]} |- t
+   ------------------------------------  PCHOOSE ("q",(A1 |- ?q. s))
+               A1 u A2 |- t
+\end{verbatim}
+}
+\noindent Where no variable in the paired variable structure {\small\verb%q%} is free in
+{\small\verb%A1%}, {\small\verb%A2%} or {\small\verb%t%}.
+
+\FAILURE
+Fails unless the terms and theorems correspond as indicated above; in
+particular {\small\verb%q%} must have the same type as the pair existentially
+quantified over, and must not contain any variable free in {\small\verb%A1%}, {\small\verb%A2%} or {\small\verb%t%}.
+
+\SEEALSO
+CHOOSE, PCHOOSE_TAC, PEXISTS, PEXISTS_TAC, PSELECT_ELIM.
+
+\ENDDOC
+\DOC{PCHOOSE\_TAC}
+
+\TYPE {\small\verb%PCHOOSE_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Adds the body of a paired existentially quantified theorem to the assumptions
+of a goal.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A' |- ?p. t%} and a goal, {\small\verb%CHOOSE_TAC%} adds
+{\small\verb%t[p'/p]%} to the assumptions of the goal, where {\small\verb%p'%} is a variant of 
+the pair {\small\verb%p%} which has no components free in the assumption list;
+normally {\small\verb%p'%} is just {\small\verb%p%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+         A ?- u
+   ====================  CHOOSE_TAC (A' |- ?q. t)
+    A u {t[p'/p]} ?- u
+\end{verbatim}
+}
+\noindent Unless {\small\verb%A'%} is a subset of {\small\verb%A%}, this is not a valid tactic.
+
+\FAILURE
+Fails unless the given theorem is a paired existential quantification.
+
+\SEEALSO
+CHOOSE_TAC, PCHOOSE_THEN, P_PCHOOSE_TAC.
+
+\ENDDOC
+\DOC{PCHOOSE\_THEN}
+
+\TYPE {\small\verb%PCHOOSE_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+Applies a tactic generated from the body of paired existentially quantified
+theorem.
+
+\DESCRIBE
+When applied to a theorem-tactic {\small\verb%ttac%}, a paired existentially quantified
+theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A' |- ?p. t
+\end{verbatim}
+}
+and a goal, {\small\verb%CHOOSE_THEN%} applies the tactic {\small\verb%ttac (t[p'/p] |- t[p'/p])%} to
+the goal, where {\small\verb%p'%} is a variant of the pair {\small\verb%p%} chosen to have no
+components free in the assumption list of the goal. Thus if:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- s1
+   =========  ttac (t[q'/q] |- t[q'/q])
+    B ?- s2
+\end{verbatim}
+}
+\noindent then
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- s1
+   ==========  CHOOSE_THEN ttac (A' |- ?q. t)
+    B ?- s2
+\end{verbatim}
+}
+\noindent This is invalid unless {\small\verb%A'%} is a subset of {\small\verb%A%}.
+
+\FAILURE
+Fails unless the given theorem is a paired existential quantification,
+or if the resulting tactic fails when applied to the goal.
+
+\SEEALSO
+CHOOSE_THEN, PCHOOSE_TAC, P_PCHOOSE_THEN.
+
+\ENDDOC
+\DOC{PETA\_CONV}
+
+\TYPE {\small\verb%PETA_CONV : conv%}\egroup
+
+\SYNOPSIS
+Performs a top-level paired eta-conversion.
+
+\DESCRIBE
+{\small\verb%PETA_CONV%} maps an eta-redex {\small\verb%"\p. t p"%}, where none of variables in the
+paired structure of variables {\small\verb%p%} occurs free in {\small\verb%t%},
+to the theorem {\small\verb%|- (\p. t p) = t%}.
+
+\FAILURE
+Fails if the input term is not a paired eta-redex.
+
+\ENDDOC
+\DOC{PEXISTENCE}
+
+\TYPE {\small\verb%PEXISTENCE : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Deduces paired existence from paired unique existence.
+
+\DESCRIBE
+When applied to a theorem with a paired unique-existentially quantified
+conclusion, {\small\verb%EXISTENCE%} returns the same theorem with normal paired 
+existential quantification over the same pair.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- ?!p. t
+   -------------  PEXISTENCE
+    A |- ?p. t
+\end{verbatim}
+}
+\FAILURE
+Fails unless the conclusion of the theorem is a paired unique-existential
+quantification.
+
+\SEEALSO
+EXISTENCE, PEXISTS_UNIQUE_CONV.
+
+\ENDDOC
+\DOC{PEXISTS}
+
+\TYPE {\small\verb%PEXISTS : ((term # term) -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Introduces paired existential quantification given a particular witness.
+
+\DESCRIBE
+When applied to a pair of terms and a theorem, where the first term a paired
+existentially quantified pattern indicating the desired form of the result,
+and the second a witness whose substitution for the quantified pair gives a
+term which is the same as the conclusion of the theorem,
+{\small\verb%PEXISTS%} gives the desired theorem.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- t[q/p]
+   -------------  EXISTS ("?p. t","q")
+    A |- ?p. t
+\end{verbatim}
+}
+\FAILURE
+Fails unless the substituted pattern is the same as the conclusion of the
+theorem.
+
+\EXAMPLE
+The following examples illustrate the various uses of {\small\verb%PEXISTS%}:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PEXISTS ("?x. x + 2 = x + 2", "1") (REFL "1 + 2");;
+   |- ?x. x + 2 = x + 2
+
+   #PEXISTS ("?y. 1 + y = 1 + y", "2") (REFL "1 + 2");;
+   |- ?y. 1 + y = 1 + y
+
+   #PEXISTS ("?(x,y). x + y = x + y", "(1,2)") (REFL "1 + 2");;
+   |- ?(x,y). x + y = x + y
+
+   #PEXISTS ("?(a:*,b:*). (a,b) = (a,b)", "ab:*#*") (REFL "ab:*#*");;
+   |- ?(a,b). a,b = a,b
+\end{verbatim}
+}
+\SEEALSO
+EXISTS, PCHOOSE, PEXISTS_TAC.
+
+\ENDDOC
+\DOC{PEXISTS\_AND\_CONV}
+
+\TYPE {\small\verb%PEXISTS_AND_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification inwards through a conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%?p. t /\ u%}, where variables in {\small\verb%p%} are
+not free in both {\small\verb%t%} and {\small\verb%u%}, {\small\verb%PEXISTS_AND_CONV%} returns a theorem of one of
+three forms, depending on occurrences of variables from {\small\verb%p%} in {\small\verb%t%} and {\small\verb%u%}.  
+If {\small\verb%p%} contains variables free in {\small\verb%t%} but none in {\small\verb%u%}, then the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t /\ u) = (?p. t) /\ u
+\end{verbatim}
+}
+\noindent is returned.  If {\small\verb%p%} contains variables free in {\small\verb%u%} but none in {\small\verb%t%},
+then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t /\ u) = t /\ (?x. u)
+\end{verbatim}
+}
+\noindent And if {\small\verb%p%} does not contain any variable free in either {\small\verb%t%} nor {\small\verb%u%},
+then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t /\ u) = (?x. t) /\ (?x. u)
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%PEXISTS_AND_CONV%} fails if it is applied to a term not of the form
+{\small\verb%?p. t /\ u%}, or if it is applied to a term {\small\verb%?p. t /\ u%} in which 
+variables in {\small\verb%p%} are free in both {\small\verb%t%} and {\small\verb%u%}.
+
+\SEEALSO
+EXISTS_AND_CONV, AND_PEXISTS_CONV, LEFT_AND_PEXISTS_CONV,
+RIGHT_AND_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{PEXISTS\_CONV}
+
+\TYPE {\small\verb%PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Eliminates paired existential quantifier by introducing a paired choice-term.
+
+\DESCRIBE
+The conversion {\small\verb%PEXISTS_CONV%} expects a boolean term of the form
+{\small\verb%(?p. t[p])%}, where {\small\verb%p%} may be a paired structure or variables,
+and converts it to the form {\small\verb%(t [@p. t[p]])%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+   ---------------------------------  PEXISTS_CONV "(?p. t[p])"
+    (|- (?p. t[p]) = (t [@p. t[p]])
+\end{verbatim}
+}
+
+\FAILURE
+Fails if applied to a term that is not a paired existential quantification.
+
+\SEEALSO
+PSELECT_RULE, PSELECT_CONV, PEXISTS_RULE, PSELECT_INTRO, PSELECT_ELIM.
+
+\ENDDOC
+\DOC{PEXISTS\_EQ}
+
+\TYPE {\small\verb%PEXISTS_EQ : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Existentially quantifies both sides of an equational theorem.
+
+\DESCRIBE
+When applied to a paired structure of variables {\small\verb%p%} and a theorem
+whose conclusion is equational:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- t1 = t2
+\end{verbatim}
+}
+the inference rule {\small\verb%PEXISTS_EQ%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- (?p. t1) = (?p. t2)
+\end{verbatim}
+}
+provided the none of the variables in {\small\verb%p%} is not free in any of the
+assumptions.
+{\par\samepage\setseps\small
+\begin{verbatim}
+          A |- t1 = t2
+   --------------------------  PEXISTS_EQ "p"      [where p is not free in A]
+    A |- (?p. t1) = (?p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is equational with both sides having type {\small\verb%bool%},
+or if the term is not a paired structure of variables, or if any variable in
+the pair to be quantified over is free in any of the assumptions.
+
+\SEEALSO
+EXISTS_EQ, PEXISTS_IMP, PFORALL_EQ, MK_PEXISTS, PSELECT_EQ.
+
+\ENDDOC
+\DOC{PEXISTS\_IMP}
+
+\TYPE {\small\verb%PEXISTS_IMP : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Existentially quantifies both the antecedent and consequent of an implication.
+
+\DESCRIBE
+When applied to a paired structure of variables {\small\verb%p%} and a
+theorem {\small\verb%A |- t1 ==> t2%}, the inference rule {\small\verb%PEXISTS_IMP%} returns the
+theorem {\small\verb%A |- (?p. t1) ==> (?p. t2)%},
+provided no variable in {\small\verb%p%} is free in the assumptions.
+{\par\samepage\setseps\small
+\begin{verbatim}
+         A |- t1 ==> t2
+   --------------------------  EXISTS_IMP "x"   [where x is not free in A]
+    A |- (?x.t1) ==> (?x.t2)
+\end{verbatim}
+}
+\FAILURE
+Fails if the theorem is not implicative, or if the term is not a paired 
+structure of variables, of if any variable in the pair is free in the
+assumption list.
+
+\SEEALSO
+EXISTS_IMP, PEXISTS_EQ.
+
+\ENDDOC
+\DOC{PEXISTS\_IMP\_CONV}
+
+\TYPE {\small\verb%PEXISTS_IMP_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification inwards through an implication.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%?p. t ==> u%}, where variables from {\small\verb%p%}
+are not free in both {\small\verb%t%} and {\small\verb%u%}, {\small\verb%PEXISTS_IMP_CONV%} returns a theorem of one
+of three forms, depending on occurrences of variable from {\small\verb%p%} in {\small\verb%t%} and {\small\verb%u%}.
+If variables from {\small\verb%p%} are free in {\small\verb%t%} but none are in {\small\verb%u%}, then the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t ==> u) = (!p. t) ==> u
+\end{verbatim}
+}
+\noindent is returned.  If variables from {\small\verb%p%} are free in {\small\verb%u%} but none are in
+{\small\verb%t%}, then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t ==> u) = t ==> (?p. u)
+\end{verbatim}
+}
+\noindent And if no variable from {\small\verb%p%} is free in either {\small\verb%t%} nor {\small\verb%u%},
+then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t ==> u) = (!p. t) ==> (?p. u)
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%PEXISTS_IMP_CONV%} fails if it is applied to a term not of the form
+{\small\verb%?p. t ==> u%}, or if it is applied to a term {\small\verb%?p. t ==> u%} in which the
+variables from {\small\verb%p%} are free in both {\small\verb%t%} and {\small\verb%u%}.
+
+\SEEALSO
+EXISTS_IMP_CONV, LEFT_IMP_PFORALL_CONV, RIGHT_IMP_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{PEXISTS\_NOT\_CONV}
+
+\TYPE {\small\verb%PEXISTS_NOT_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification inwards through a negation.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%?p. ~t%}, the conversion {\small\verb%PEXISTS_NOT_CONV%}
+returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. ~t) = ~(!p. t)
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%?p. ~t%}.
+
+\SEEALSO
+EXISTS_NOT_CONV, PFORALL_NOT_CONV, NOT_PEXISTS_CONV, NOT_PFORALL_CONV.
+
+\ENDDOC
+\DOC{PEXISTS\_OR\_CONV}
+
+\TYPE {\small\verb%PEXISTS_OR_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification inwards through a disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%?p. t \/ u%}, the conversion
+{\small\verb%PEXISTS_OR_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p. t \/ u) = (?p. t) \/ (?p. u)
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%?p. t \/ u%}.
+
+\SEEALSO
+EXISTS_OR_CONV, OR_PEXISTS_CONV, LEFT_OR_PEXISTS_CONV, RIGHT_OR_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{PEXISTS\_RULE}
+
+\TYPE {\small\verb%PEXISTS_RULE : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Introduces a paired existential quantification in place of a paired choice.
+
+\DESCRIBE
+The inference rule {\small\verb%PEXISTS_RULE%} expects a theorem asserting that
+{\small\verb%(@p. t)%} denotes a pair for which {\small\verb%t%} holds.
+The equivalent assertion that there exists a {\small\verb%p%} for which {\small\verb%t%} holds is
+returned.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- t[(@p. t)/p]
+   ------------------  PEXISTS_RULE
+       A |- ?p. t
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a theorem the conclusion of which is not
+of the form {\small\verb%(t[(@p.t)/p])%}.
+
+\SEEALSO
+PEXISTS_CONV, PSELECT_RULE, PSELECT_CONV, PSELECT_INTRO, PSELECT_ELIM.
+
+\ENDDOC
+\DOC{PEXISTS\_TAC}
+
+\TYPE {\small\verb%PEXISTS_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Reduces paired existentially quantified goal to one involving a 
+specific witness.
+
+\DESCRIBE
+When applied to a term {\small\verb%q%} and a goal {\small\verb%?p. t%}, the tactic
+{\small\verb%PEXISTS_TAC%} reduces the goal to {\small\verb%t[q/p]%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- ?p. t
+   =============  EXISTS_TAC "q"
+    A ?- t[q/p]
+\end{verbatim}
+}
+\FAILURE
+Fails unless the goal's conclusion is a paired existential quantification
+and the term supplied has the same type as the quantified pair in the goal.
+
+\EXAMPLE
+The goal:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   ?- ?(x,y). (x,y)=(1,2)
+\end{verbatim}
+}
+\noindent can be solved by:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   PEXISTS_TAC "(1,2)" THEN REFL_TAC
+\end{verbatim}
+}
+\SEEALSO
+EXISTS_TAC, PEXISTS.
+
+\ENDDOC
+\DOC{PEXISTS\_UNIQUE\_CONV}
+
+\TYPE {\small\verb%PEXISTS_UNIQUE_CONV : conv%}\egroup
+
+\SYNOPSIS
+Expands with the definition of paired unique existence.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"?!p. t[p]"%}, the conversion {\small\verb%PEXISTS_UNIQUE_CONV%}
+proves that this assertion is equivalent to the conjunction of two statements,
+namely that there exists at least one pair {\small\verb%p%} such that {\small\verb%t[p]%}, and that
+there is at most one value {\small\verb%p%} for which {\small\verb%t[p]%} holds. The theorem returned is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?!p. t[p]) = (?p. t[p]) /\ (!p p'. t[p] /\ t[p'] ==> (p = p'))
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} none of the components
+of which appear free in the input term.  Note that the quantified pair {\small\verb%p%}
+need not in fact appear free in the body of the input term.  
+For example, {\small\verb%PEXISTS_UNIQUE_CONV "?!(x,y). T"%}
+returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?!(x,y). T) =
+      (?(x,y). T) /\ (!(x,y) (x',y'). T /\ T ==> ((x,y) = (x',y')))
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%PEXISTS_UNIQUE_CONV tm%} fails if {\small\verb%tm%} does not have the form {\small\verb%"?!p.t"%}.
+
+\SEEALSO
+EXISTS_UNIQUE_CONV, PEXISTENCE.
+
+\ENDDOC
+\DOC{PEXT}
+
+\TYPE {\small\verb%PEXT : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Derives equality of functions from extensional equivalence.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p. t1 p = t2 p%},
+the inference rule {\small\verb%PEXT%} returns the theorem {\small\verb%A |- t1 = t2%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- !p. t1 p = t2 p
+   ----------------------  PEXT          [where p is not free in t1 or t2]
+        A |- t1 = t2
+\end{verbatim}
+}
+
+\FAILURE
+Fails if the theorem does not have the form indicated above, or
+if any of the component variables in the paired variable structure {\small\verb%p%}
+is free either of the functions {\small\verb%t1%} or {\small\verb%t2%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#PEXT (ASSUME "!(x,y). ((f:(*#*)->*) (x,y)) = (g (x,y))");;
+. |- f = g
+\end{verbatim}
+}
+
+\SEEALSO
+EXT, AP_THM, PETA_CONV, FUN_EQ_CONV, P_FUN_EQ_CONV.
+
+\ENDDOC
+\DOC{PFORALL\_AND\_CONV}
+
+\TYPE {\small\verb%PFORALL_AND_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification inwards through a conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%!p. t /\ u%}, the conversion
+{\small\verb%PFORALL_AND_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t /\ u) = (!p. t) /\ (!p. u)
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%!p. t /\ u%}.
+
+\SEEALSO
+FORALL_AND_CONV, AND_PFORALL_CONV, LEFT_AND_PFORALL_CONV,
+RIGHT_AND_PFORALL_CONV.
+
+\ENDDOC
+\DOC{PFORALL\_EQ}
+
+\TYPE {\small\verb%PFORALL_EQ : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Universally quantifies both sides of an equational theorem.
+
+\DESCRIBE
+When applied to a paired structure of variables {\small\verb%p%}
+and a theorem
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- t1 = t2
+\end{verbatim}
+}
+whose conclusion is an equation between boolean terms:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    PFORALL_EQ
+\end{verbatim}
+}
+returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- (!p. t1) = (!p. t2)
+\end{verbatim}
+}
+unless any of the variables in {\small\verb%p%} is free in any of the assumptions.
+{\par\samepage\setseps\small
+\begin{verbatim}
+          A |- t1 = t2
+   --------------------------  PFORALL_EQ "p"      [where p is not free in A]
+    A |- (!p. t1) = (!p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails if the theorem is not an equation between boolean terms, or if the
+supplied term is not a paired structure of variables, or if any of the
+variables in the supplied pair is free in any of the assumptions.
+
+\SEEALSO
+FORALL_EQ, PEXISTS_EQ, PSELECT_EQ.
+
+\ENDDOC
+\DOC{PFORALL\_IMP\_CONV}
+
+\TYPE {\small\verb%PFORALL_IMP_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification inwards through an implication.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%!p. t ==> u%}, where variables from {\small\verb%p%}
+are not free in both {\small\verb%t%} and {\small\verb%u%}, {\small\verb%PFORALL_IMP_CONV%} returns a theorem of
+one of three forms, depending on occurrences of the variables from {\small\verb%p%} in {\small\verb%t%}
+and {\small\verb%u%}.  If variables from {\small\verb%p%} are free in {\small\verb%t%} but none are in {\small\verb%u%},
+then the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t ==> u) = (?p. t) ==> u
+\end{verbatim}
+}
+\noindent is returned.  If variables from {\small\verb%p%} are free in {\small\verb%u%} but none are
+in {\small\verb%t%}, then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t ==> u) = t ==> (!p. u)
+\end{verbatim}
+}
+\noindent And if no variable from {\small\verb%p%} is free in either {\small\verb%t%} nor {\small\verb%u%},
+then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t ==> u) = (?p. t) ==> (!p. u)
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%PFORALL_IMP_CONV%} fails if it is applied to a term not of the form
+{\small\verb%!p. t ==> u%}, or if it is applied to a term {\small\verb%!p. t ==> u%} in which
+variables from {\small\verb%p%} are free in both {\small\verb%t%} and {\small\verb%u%}.
+
+\SEEALSO
+FORALL_IMP_CONV, LEFT_IMP_PEXISTS_CONV, RIGHT_IMP_PFORALL_CONV.
+
+\ENDDOC
+\DOC{PFORALL\_NOT\_CONV}
+
+\TYPE {\small\verb%PFORALL_NOT_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification inwards through a negation.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%!p. ~t%}, the conversion {\small\verb%PFORALL_NOT_CONV%}
+returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. ~t) = ~(?p. t)
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%!p. ~t%}.
+
+\SEEALSO
+FORALL_NOT_CONV, PEXISTS_NOT_CONV, NOT_PEXISTS_CONV, NOT_PFORALL_CONV.
+
+\ENDDOC
+\DOC{PFORALL\_OR\_CONV}
+
+\TYPE {\small\verb%PFORALL_OR_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification inwards through a disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%!p. t \/ u%}, where no variable in {\small\verb%p%} is
+free in both {\small\verb%t%} and {\small\verb%u%}, {\small\verb%PFORALL_OR_CONV%} returns a theorem of one of three
+forms, depending on occurrences of the variables from {\small\verb%p%} in {\small\verb%t%} and {\small\verb%u%}.
+If variables from {\small\verb%p%} are free in {\small\verb%t%} but not in {\small\verb%u%}, then the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t \/ u) = (!p. t) \/ u
+\end{verbatim}
+}
+\noindent is returned.  If variables from {\small\verb%p%} are free in {\small\verb%u%} but none are
+free in {\small\verb%t%}, then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t \/ u) = t \/ (!t. u)
+\end{verbatim}
+}
+\noindent And if no variable from {\small\verb%p%} is free in either {\small\verb%t%} nor {\small\verb%u%},
+then the result is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p. t \/ u) = (!p. t) \/ (!p. u)
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%PFORALL_OR_CONV%} fails if it is applied to a term not of the form
+{\small\verb%!p. t \/ u%}, or if it is applied to a term {\small\verb%!p. t \/ u%} in which 
+variables from {\small\verb%p%} are free in both {\small\verb%t%} and {\small\verb%u%}.
+
+\SEEALSO
+FORALL_OR_CONV, OR_PFORALL_CONV, LEFT_OR_PFORALL_CONV, RIGHT_OR_PFORALL_CONV.
+
+\ENDDOC
+\DOC{PGEN}
+
+\TYPE {\small\verb%PGEN : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Generalizes the conclusion of a theorem.
+
+\DESCRIBE
+When applied to a paired structure of variables {\small\verb%p%} and a theorem {\small\verb%A |- t%},
+the inference rule {\small\verb%PGEN%} returns the theorem {\small\verb%A |- !p. t%}, provided that
+no variable in {\small\verb%p%} occurs free in the assumptions {\small\verb%A%}.
+There is no compulsion that the variables of {\small\verb%p%} should be free in {\small\verb%t%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A |- t
+   ------------  PGEN "p"               [where p does not occur free in A]
+    A |- !p. t
+\end{verbatim}
+}
+\FAILURE
+Fails if {\small\verb%p%} is not a paired structure of variables,
+of if any variable in {\small\verb%p%} is free in the assumptions.
+
+\SEEALSO
+GEN, PGENL, PGEN_ALL, PGEN_TAC, PSPEC, PSPECL, PSPEC_ALL, PSPEC_TAC.
+
+\ENDDOC
+\DOC{PGENL}
+
+\TYPE {\small\verb%PGENL : (term list -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Generalizes zero or more pairs in the conclusion of a theorem.
+
+\DESCRIBE
+When applied to a list of paired variable structures {\small\verb%[p1;...;pn]%}
+and a theorem {\small\verb%A |- t%}, the inference rule {\small\verb%PGENL%} returns
+the theorem {\small\verb%A |- !p1...pn. t%}, provided none of the constituent variables
+from any of the pairs {\small\verb%pi%} occur free in the assumptions.
+{\par\samepage\setseps\small
+\begin{verbatim}
+         A |- t
+   ------------------  PGENL "[p1;...;pn]"       [where no pi is free in A]
+    A |- !p1...pn. t
+\end{verbatim}
+}
+\FAILURE
+Fails unless all the terms in the list are paired structures of variables,
+none of the variables from which are free in the assumption list.
+
+\SEEALSO
+GENL, PGEN, PGEN_ALL, PGEN_TAC, PSPEC, PSPECL, PSPEC_ALL, PSPEC_TAC.
+
+\ENDDOC
+\DOC{PGEN\_TAC}
+
+\TYPE {\small\verb%PGEN_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Strips the outermost paired universal quantifier from the conclusion of a goal.
+
+\DESCRIBE
+When applied to a goal {\small\verb%A ?- !p. t%}, the tactic {\small\verb%PGEN_TAC%} reduces it to
+{\small\verb%A ?- t[p'/p]%} where {\small\verb%p'%} is a variant of the paired variable structure {\small\verb%p%}
+chosen to avoid clashing with any variables free in the goal's assumption list.
+Normally {\small\verb%p'%} is just {\small\verb%p%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A ?- !p. t
+   ==============  PGEN_TAC
+    A ?- t[p'/p]
+\end{verbatim}
+}
+\FAILURE
+Fails unless the goal's conclusion is a paired universally quantification.
+
+\SEEALSO
+GEN_TAC, FILTER_PGEN_TAC, PGEN, PGENL, PGEN_ALL, PSPEC, PSPECL, PSPEC_ALL,
+PSPEC_TAC, PSTRIP_TAC, P_PGEN_TAC.
+
+\ENDDOC
+\DOC{PMATCH\_MP}
+
+\TYPE {\small\verb%PMATCH_MP : (thm -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Modus Ponens inference rule with automatic matching.
+
+\DESCRIBE
+When applied to theorems {\small\verb%A1 |- !p1...pn. t1 ==> t2%} and {\small\verb%A2 |- t1'%}, the
+inference rule {\small\verb%PMATCH_MP%} matches {\small\verb%t1%} to {\small\verb%t1'%} by instantiating free or
+paired universally quantified variables in the first theorem (only),
+and returns a theorem {\small\verb%A1 u A2 |- !pa..pk. t2'%}, where {\small\verb%t2'%} is a
+correspondingly instantiated version of {\small\verb%t2%}. Polymorphic types are also
+instantiated if necessary.
+
+Variables free in the consequent but not the antecedent of the first argument
+theorem will be replaced by variants if this is necessary to maintain the full
+generality of the theorem, and any pairs which were universally quantified
+over in the first argument theorem will be universally quantified over in the
+result, and in the same order.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A1 |- !p1..pn. t1 ==> t2   A2 |- t1'
+   --------------------------------------  MATCH_MP
+          A1 u A2 |- !pa..pk. t2'
+\end{verbatim}
+}
+\FAILURE
+Fails unless the first theorem is a (possibly repeatedly paired universally
+quantified) implication whose antecedent can be instantiated to match
+the conclusion of the second theorem, without instantiating any variables
+which are free in {\small\verb%A1%}, the first theorem's assumption list.
+
+\SEEALSO
+MATCH_MP.
+
+\ENDDOC
+\DOC{PMATCH\_MP\_TAC}
+
+\TYPE {\small\verb%PMATCH_MP_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Reduces the goal using a supplied implication, with matching.
+
+\DESCRIBE
+When applied to a theorem of the form
+{\par\samepage\setseps\small
+\begin{verbatim}
+   A' |- !p1...pn. s ==> !q1...qm. t
+\end{verbatim}
+}
+\noindent {\small\verb%PMATCH_MP_TAC%} produces a tactic that reduces a goal whose
+conclusion {\small\verb%t'%} is a substitution and/or type instance of {\small\verb%t%} to the
+corresponding instance of {\small\verb%s%}. Any variables free in {\small\verb%s%} but not in {\small\verb%t%} will
+be existentially quantified in the resulting subgoal:
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A ?- !u1...ui. t'
+  ======================  PMATCH_MP_TAC (A' |- !p1...pn. s ==> !q1...qm. t)
+     A ?- ?w1...wp. s'
+\end{verbatim}
+}
+\noindent where {\small\verb%w1%}, ..., {\small\verb%wp%} are (type instances of) those pairs among
+{\small\verb%p1%}, ..., {\small\verb%pn%} having variables that do not occur free in {\small\verb%t%}.
+Note that this is not a valid tactic unless {\small\verb%A'%} is a subset of {\small\verb%A%}.
+
+\FAILURE
+Fails unless the theorem is an (optionally paired universally quantified)
+implication whose consequent can be instantiated to match the goal.
+The generalized pairs {\small\verb%u1%}, ..., {\small\verb%ui%} must occur in {\small\verb%s'%} in order for the
+conclusion {\small\verb%t%} of the supplied theorem to match {\small\verb%t'%}.
+
+\SEEALSO
+MATCH_MP_TAC.
+
+\ENDDOC
+\DOC{PSELECT\_CONV}
+
+\TYPE {\small\verb%PSELECT_CONV : conv%}\egroup
+
+\SYNOPSIS
+Eliminates a paired epsilon term by introducing a existential quantifier.
+
+\DESCRIBE
+The conversion {\small\verb%PSELECT_CONV%} expects a boolean term of the form
+{\small\verb%"t[@p.t[p]/p]"%}, which asserts that the epsilon term {\small\verb%@p.t[p]%} denotes
+a pair, {\small\verb%p%} say, for which {\small\verb%t[p]%} holds.  This assertion is equivalent
+to saying that there exists such a pair, and {\small\verb%PSELECT_CONV%} applied to a
+term of this form returns the theorem {\small\verb%|- t[@p.t[p]/p] = ?p. t[p]%}.
+
+\FAILURE
+Fails if applied to a term that is not of the form {\small\verb%"p[@p.t[p]/p]"%}.
+
+\SEEALSO
+SELECT_CONV, PSELECT_ELIM, PSELECT_INTRO, PSELECT_RULE.
+
+\ENDDOC
+\DOC{PSELECT\_ELIM}
+
+\TYPE {\small\verb%PSELECT_ELIM : (thm -> (term # thm) -> thm)%}\egroup
+
+\SYNOPSIS
+Eliminates a paired epsilon term, using deduction from a particular instance.
+
+\DESCRIBE
+{\small\verb%PSELECT_ELIM%} expects two arguments, a theorem {\small\verb%th1%}, and a pair
+{\small\verb%(p,th2):(term # thm)%}.  The conclusion of {\small\verb%th1%} must have the form {\small\verb%P($@ P)%},
+which asserts that the epsilon term {\small\verb%$@ P%} denotes some value at which
+{\small\verb%P%} holds.  The paired variable structure {\small\verb%p%} appears only in the assumption
+{\small\verb%P p%} of the theorem {\small\verb%th2%}.  The conclusion of the resulting theorem matches
+that of {\small\verb%th2%}, and the hypotheses include the union of all hypotheses
+of the premises excepting {\small\verb%P p%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A1 |- P($@ P)     A2 u {P p} |- t
+   -------------------------------------  PSELECT_ELIM th1 (p ,th2)
+              A1 u A2 |- t
+\end{verbatim}
+}
+\noindent where {\small\verb%p%} is not free in {\small\verb%A2%}. If {\small\verb%p%} appears in the conclusion of
+{\small\verb%th2%}, the epsilon term will NOT be eliminated, and the conclusion will be
+{\small\verb%t[$@ P/p]%}.
+
+\FAILURE
+Fails if the first theorem is not of the form {\small\verb%A1 |- P($@ P)%}, or if
+any of the variables from the variable structure {\small\verb%p%} occur free in any
+other assumption of {\small\verb%th2%}.
+
+\SEEALSO
+SELECT_ELIM, PCHOOSE, SELECT_AX, PSELECT_CONV, PSELECT_INTRO, PSELECT_RULE.
+
+\ENDDOC
+\DOC{PSELECT\_EQ}
+
+\TYPE {\small\verb%PSELECT_EQ : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Applies epsilon abstraction to both terms of an equation.
+
+\DESCRIBE
+When applied to a paired structure of variables {\small\verb%p%} and a theorem
+whose conclusion is equational:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- t1 = t2
+\end{verbatim}
+}
+the inference rule {\small\verb%PSELECT_EQ%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- (@p. t1) = (@p. t2)
+\end{verbatim}
+}
+provided no variable in {\small\verb%p%} is free in the assumptions.
+{\par\samepage\setseps\small
+\begin{verbatim}
+         A |- t1 = t2
+   --------------------------  SELECT_EQ "p"      [where p is not free in A]
+    A |- (@p. t1) = (@p. t2)
+\end{verbatim}
+}
+\FAILURE
+Fails if the conclusion of the theorem is not an equation, 
+of if {\small\verb%p%} is not a paired structure of variables, 
+or if any variable in {\small\verb%p%} is free in {\small\verb%A%}.
+
+\SEEALSO
+SELECT_EQ, PFORALL_EQ, PEXISTS_EQ.
+
+\ENDDOC
+\DOC{PSELECT\_INTRO}
+
+\TYPE {\small\verb%PSELECT_INTRO : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Introduces an epsilon term.
+
+\DESCRIBE
+{\small\verb%PSELECT_INTRO%} takes a theorem with an applicative conclusion, say
+{\small\verb%P x%}, and returns a theorem with the epsilon term {\small\verb%$@ P%} in place
+of the original operand {\small\verb%x%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A |- P x
+   --------------  PSELECT_INTRO
+    A |- P($@ P)
+\end{verbatim}
+}
+\noindent The returned theorem asserts that {\small\verb%$@ P%} denotes some value
+at which {\small\verb%P%} holds.
+
+\FAILURE
+Fails if the conclusion of the theorem is not an application.
+
+\COMMENTS
+This function is exactly the same as {\small\verb%SELECT_INTRO%}, it is duplicated in
+the pair library for completeness.
+
+\SEEALSO
+SELECT_INTRO, PEXISTS, SELECT_AX, PSELECT_CONV, PSELECT_ELIM, PSELECT_RULE.
+
+\ENDDOC
+\DOC{PSELECT\_RULE}
+
+\TYPE {\small\verb%PSELECT_RULE : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Introduces a paired epsilon term in place of a paired existential quantifier.
+
+\DESCRIBE
+The inference rule {\small\verb%PSELECT_RULE%} expects a theorem asserting the
+existence of a pair {\small\verb%p%} such that {\small\verb%t%} holds.  The equivalent assertion
+that the epsilon term {\small\verb%@p.t%} denotes a pair {\small\verb%p%} for
+which {\small\verb%t%} holds is returned as a theorem.
+{\par\samepage\setseps\small
+\begin{verbatim}
+       A |- ?p. t
+   ------------------  PSELECT_RULE
+    A |- t[(@p.t)/p]
+\end{verbatim}
+}
+\FAILURE
+Fails if applied to a theorem the conclusion of which is not
+a paired existential quantifier.
+
+\SEEALSO
+SELECT_RULE, PCHOOSE, SELECT_AX, PSELECT_CONV, PEXISTS_CONV, PSELECT_ELIM, 
+PSELECT_INTRO.
+
+\ENDDOC
+\DOC{PSKOLEM\_CONV}
+
+\TYPE {\small\verb%PSKOLEM_CONV : conv%}\egroup
+
+\SYNOPSIS
+Proves the existence of a pair of Skolem functions.
+
+\DESCRIBE
+When applied to an argument of the form {\small\verb%!p1...pn. ?q. tm%}, the conversion
+{\small\verb%PSKOLEM_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p1...pn. ?q. tm) = (?q'. !p1...pn. tm[q' p1 ... pn/yq)
+\end{verbatim}
+}
+\noindent where {\small\verb%q'%} is a primed variant of the pair {\small\verb%q%} not free in the
+input term.
+
+\FAILURE
+{\small\verb%PSKOLEM_CONV tm%} fails if {\small\verb%tm%} is not a term of the form {\small\verb%!p1...pn. ?q. tm%}.
+
+\EXAMPLE Both {\small\verb%q%} and any {\small\verb%pi%} may be a paired structure of variables:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PSKOLEM_CONV
+     "!(x11:*,x12:*) (x21:*,x22:*). ?(y1:*,y2:*). tm x11 x12 x21 x21 y1 y2";;
+   |- (!(x11,x12) (x21,x22). ?(y1,y2). tm x11 x12 x21 x21 y1 y2) =
+      (?(y1,y2).
+        !(x11,x12) (x21,x22).
+         tm x11 x12 x21 x21(y1(x11,x12)(x21,x22))(y2(x11,x12)(x21,x22)))
+\end{verbatim}
+}
+
+\SEEALSO
+SKOLEM_CONV, P_PSKOLEM_CONV.
+
+\ENDDOC
+\DOC{PSPEC}
+
+\TYPE {\small\verb%PSPEC : (term -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Specializes the conclusion of a theorem.
+
+\DESCRIBE
+When applied to a term {\small\verb%q%} and a theorem {\small\verb%A |- !p. t%}, then {\small\verb%PSPEC%} returns
+the theorem {\small\verb%A |- t[q/p]%}.
+If necessary, variables will be renamed prior to the specialization to ensure
+that {\small\verb%q%} is free for {\small\verb%p%} in {\small\verb%t%}, that is,
+no variables free in {\small\verb%q%} become bound after substitution.
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A |- !p. t
+   --------------  PSPEC "q"
+    A |- t[q/p]
+\end{verbatim}
+}
+\FAILURE
+Fails if the theorem's conclusion is not a paired universal quantification,
+or if {\small\verb%p%} and {\small\verb%q%} have different types.
+
+\EXAMPLE
+{\small\verb%PSPEC%} specialised paired quantifications.
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PSPEC "(1,2)" (ASSUME "!(x,y). (x + y) = (y + x)");;
+   . |- 1 + 2 = 2 + 1
+\end{verbatim}
+}
+{\small\verb%PSPEC%} treats paired structures of variables as variables and 
+preserves structure accordingly.
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #PSPEC "x:*#*" (ASSUME "!(x:*,y:*). (x,y) = (x,y)");;
+   . |- x = x
+\end{verbatim}
+}
+
+\SEEALSO
+SPEC, IPSPEC, PSPECL, PSPEC_ALL, PSPEC_VAR, PGEN, PGENL, PGEN_ALL.
+
+\ENDDOC
+\DOC{PSPECL}
+
+\TYPE {\small\verb%PSPECL : (term list -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Specializes zero or more pairs in the conclusion of a theorem.
+
+\DESCRIBE
+When applied to a term list {\small\verb%[q1;...;qn]%} and a theorem
+{\small\verb%A |- !p1...pn. t%}, the inference rule {\small\verb%SPECL%} returns the theorem
+{\small\verb%A |- t[q1/p1]...[qn/pn]%}, where the substitutions are made
+sequentially left-to-right in the same way as for {\small\verb%PSPEC%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+       A |- !p1...pn. t
+   --------------------------  SPECL "[q1;...;qn]"
+     A |- t[q1/p1]...[qn/pn]
+\end{verbatim}
+}
+\noindent It is permissible for the term-list to be empty, in which case
+the application of {\small\verb%PSPECL%} has no effect.
+
+\FAILURE
+Fails unless each of the terms is of the same type
+as that of the appropriate quantified variable in the original
+theorem.
+Fails if the list of terms is longer than the number of quantified
+pairs in the theorem.
+
+\SEEALSO
+SPECL, PGEN, PGENL, PGEN_ALL, PGEN_TAC, PSPEC, PSPEC_ALL, PSPEC_TAC.
+
+\ENDDOC
+\DOC{PSPEC\_ALL}
+
+\TYPE {\small\verb%PSPEC_ALL : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Specializes the conclusion of a theorem with its own quantified pairs.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p1...pn. t%}, the inference rule {\small\verb%PSPEC_ALL%}
+returns the theorem {\small\verb%A |- t[p1'/p1]...[pn'/pn]%} where the {\small\verb%pi'%} are distinct
+variants of the corresponding {\small\verb%pi%}, chosen to avoid clashes with any variables
+free in the assumption list and with the names of constants. Normally {\small\verb%pi'%} is
+just {\small\verb%pi%}, in which case {\small\verb%PSPEC_ALL%} simply removes all universal quantifiers.
+{\par\samepage\setseps\small
+\begin{verbatim}
+       A |- !p1...pn. t
+   ---------------------------  PSPEC_ALL
+    A |- t[p1'/x1]...[pn'/xn]
+\end{verbatim}
+}
+\FAILURE
+Never fails.
+
+\SEEALSO
+SPEC_ALL, PGEN, PGENL, PGEN_ALL, PGEN_TAC, PSPEC, PSPECL, PSPEC_TAC.
+
+\ENDDOC
+\DOC{PSPEC\_PAIR}
+
+\TYPE {\small\verb%PSPEC_PAIR : (thm -> (term # thm))%}\egroup
+
+\SYNOPSIS
+Specializes the conclusion of a theorem, returning the chosen variant.
+
+\DESCRIBE
+When applied to a theorem {\small\verb%A |- !p. t%}, the inference rule {\small\verb%PSPEC_PAIR%}
+returns the term {\small\verb%q'%} and the theorem {\small\verb%A |- t[q'/p]%}, where {\small\verb%q'%} is a variant
+of {\small\verb%p%} chosen to avoid free variable capture.
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A |- !p. t
+   --------------  PSPEC_PAIR
+    A |- t[q'/q]
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem's conclusion is a paired universal quantification.
+
+\COMMENTS
+This rule is very similar to plain {\small\verb%PSPEC%}, except that it returns the
+variant chosen, which may be useful information under some circumstances.
+
+\SEEALSO
+SPEC_VAR, PGEN, PGENL, PGEN_ALL, PGEN_TAC, PSPEC, PSPECL, PSPEC_ALL.
+
+\ENDDOC
+\DOC{PSPEC\_TAC}
+
+\TYPE {\small\verb%PSPEC_TAC : ((term # term) -> tactic)%}\egroup
+
+\SYNOPSIS
+Generalizes a goal.
+
+\DESCRIBE
+When applied to a pair of terms {\small\verb%(q,p)%}, where {\small\verb%p%} is a paired structure of
+variables and a goal {\small\verb%A ?- t%}, the tactic {\small\verb%PSPEC_TAC%} generalizes the
+goal to {\small\verb%A ?- !p. t[p/q]%}, that is, all components of {\small\verb%q%} are turned into 
+the corresponding components of {\small\verb%p%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+        A ?- t
+   =================  PSPEC_TAC ("q","p")
+    A ?- !x. t[p/q]
+\end{verbatim}
+}
+\FAILURE
+Fails unless {\small\verb%p%} is a paired structure of variables with the same type as {\small\verb%q%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+g "1 + 2 = 2 + 1";;
+"1 + 2 = 2 + 1"
+
+() : void
+
+#e (PSPEC_TAC ("(1,2)","(x:num,y:num)"));;
+OK..
+"!(x,y). x + y = y + x"
+
+() : void
+\end{verbatim}
+}
+
+\USES
+Removing unnecessary speciality in a goal, particularly as a prelude to
+an inductive proof.
+
+\SEEALSO
+PGEN, PGENL, PGEN_ALL, PGEN_TAC, PSPEC, PSPECL, PSPEC_ALL, PSTRIP_TAC.
+
+\ENDDOC
+\DOC{PSTRIP\_ASSUME\_TAC}
+
+\TYPE {\small\verb%PSTRIP_ASSUME_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Splits a theorem into a list of theorems and then adds them to the assumptions.
+
+\DESCRIBE
+Given a theorem {\small\verb%th%} and a goal {\small\verb%(A,t)%}, {\small\verb%PSTRIP_ASSUME_TAC th%} splits {\small\verb%th%} into
+a list of theorems. This is done by recursively breaking conjunctions into
+separate conjuncts, cases-splitting disjunctions, and eliminating paired
+existential quantifiers by choosing arbitrary variables.  Schematically,
+the following rules are applied:
+{\par\samepage\setseps\small
+\begin{verbatim}
+           A ?- t
+   ======================  PSTRIP_ASSUME_TAC (A' |- v1 /\ ... /\ vn)
+    A u {v1,...,vn} ?- t
+
+                A ?- t
+   =================================  PSTRIP_ASSUME_TAC (A' |- v1 \/ ... \/ vn)
+    A u {v1} ?- t ... A u {vn} ?- t
+
+          A ?- t
+   ====================  PSTRIP_ASSUME_TAC (A' |- ?p. v)
+    A u {v[p'/p]} ?- t
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a variant of the pair {\small\verb%p%}.
+
+If the conclusion of {\small\verb%th%} is not a conjunction, a disjunction or a paired
+existentially quantified term, the whole theorem {\small\verb%th%} is added to the
+assumptions.
+
+As assumptions are generated, they are examined to see if they solve the goal
+(either by being alpha-equivalent to the conclusion of the goal or by deriving
+a contradiction).
+
+The assumptions of the theorem being split are not added to the assumptions of
+the goal(s), but they are recorded in the proof.  This means that if {\small\verb%A'%} is
+not a subset of the assumptions {\small\verb%A%} of the goal (up to alpha-conversion),
+{\small\verb%PSTRIP_ASSUME_TAC (A'|-v)%} results in an invalid tactic.
+
+\FAILURE
+Never fails.
+
+\USES
+{\small\verb%PSTRIP_ASSUME_TAC%} is used when applying a previously proved theorem to solve
+a goal, or when enriching its assumptions so that resolution,
+rewriting with assumptions and other operations involving assumptions have
+more to work with.
+
+\SEEALSO
+PSTRIP_THM_THEN, ,PSTRIP_ASSUME_TAC, PSTRIP_GOAL_THEN, PSTRIP_TAC.
+
+\ENDDOC
+\DOC{PSTRIP\_GOAL\_THEN}
+
+\TYPE {\small\verb%PSTRIP_GOAL_THEN : (thm_tactic -> tactic)%}\egroup
+
+\SYNOPSIS
+Splits a goal by eliminating one outermost connective, applying the
+given theorem-tactic to the antecedents of implications.
+
+\DESCRIBE
+Given a theorem-tactic {\small\verb%ttac%} and a goal {\small\verb%(A,t)%}, {\small\verb%PSTRIP_GOAL_THEN%} removes one
+outermost occurrence of one of the connectives {\small\verb%!%}, {\small\verb%==>%}, {\small\verb%~%} or {\small\verb%/\%} from the
+conclusion of the goal {\small\verb%t%}.  If {\small\verb%t%} is a universally quantified term, then
+{\small\verb%STRIP_GOAL_THEN%} strips off the quantifier.   Note that {\small\verb%PSTRIP_GOAL_THEN%}
+will strip off paired universal quantifications.
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- !p. u
+   ==============  PSTRIP_GOAL_THEN ttac
+    A ?- u[p'/p]
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant that contains no variables that
+appear free in the assumptions {\small\verb%A%}.  If {\small\verb%t%} is a conjunction,
+then {\small\verb%PSTRIP_GOAL_THEN%} simply splits
+the conjunction into two subgoals:
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- v /\ w
+   =================  PSTRIP_GOAL_THEN ttac
+    A ?- v   A ?- w
+\end{verbatim}
+}
+\noindent If {\small\verb%t%} is an implication {\small\verb%"u ==> v"%} and if:
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- v
+  ===============  ttac (u |- u)
+     A' ?- v'
+\end{verbatim}
+}
+\noindent then:
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- u ==> v
+  ====================  PSTRIP_GOAL_THEN ttac
+        A' ?- v'
+\end{verbatim}
+}
+\noindent Finally, a negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}.
+
+\FAILURE
+{\small\verb%PSTRIP_GOAL_THEN ttac (A,t)%} fails if {\small\verb%t%} is not a paired universally
+quantified term, an implication, a negation or a conjunction.  
+Failure also occurs if the application of {\small\verb%ttac%} fails,
+after stripping the goal.
+
+\USES
+{\small\verb%PSTRIP_GOAL_THEN%} is used when manipulating intermediate results (obtained by
+stripping outer connectives from a goal) directly, rather than as assumptions.
+
+\SEEALSO
+PGEN_TAC, STRIP_GOAL_THEN, FILTER_PSTRIP_THEN, PSTRIP_TAC, FILTER_PSTRIP_TAC.
+
+\ENDDOC
+\DOC{PSTRIP\_TAC}
+
+\TYPE {\small\verb%PSTRIP_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Splits a goal by eliminating one outermost connective.
+
+\DESCRIBE
+Given a goal {\small\verb%(A,t)%}, {\small\verb%PSTRIP_TAC%} removes one outermost occurrence of one of 
+the connectives {\small\verb%!%}, {\small\verb%==>%}, {\small\verb%~%} or {\small\verb%/\%} from the conclusion of the goal {\small\verb%t%}.
+If {\small\verb%t%} is a universally quantified term, then {\small\verb%STRIP_TAC%} strips off the
+quantifier. Note that {\small\verb%PSTRIP_TAC%} will strip off paired quantifications.
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A ?- !p. u
+   ==============  PSTRIP_TAC
+    A ?- u[p'/p]
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not contain
+any variables that appear free in the assumptions {\small\verb%A%}.  If {\small\verb%t%} is a
+conjunction, then {\small\verb%PSTRIP_TAC%} simply splits the conjunction into two subgoals:
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- v /\ w
+   =================  PSTRIP_TAC
+    A ?- v   A ?- w
+\end{verbatim}
+}
+\noindent If {\small\verb%t%} is an implication, {\small\verb%PSTRIP_TAC%} moves the antecedent into the
+assumptions, stripping conjunctions, disjunctions and existential
+quantifiers according to the following rules:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- v1 /\ ... /\ vn ==> v            A ?- v1 \/ ... \/ vn ==> v
+   ============================        =================================
+       A u {v1,...,vn} ?- v             A u {v1} ?- v ... A u {vn} ?- v
+
+     A ?- (?p. w) ==> v
+   =====================
+    A u {w[p'/p]} ?- v
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not appear
+free in {\small\verb%A%}. Finally, a negation {\small\verb%~t%} is treated as the implication {\small\verb%t ==> F%}.
+
+\FAILURE
+{\small\verb%PSTRIP_TAC (A,t)%} fails if {\small\verb%t%} is not a paired universally quantified term,
+an implication, a negation or a conjunction.
+
+\USES
+When trying to solve a goal, often the best thing to do first
+is {\small\verb%REPEAT PSTRIP_TAC%} to split the goal up into manageable pieces.
+
+\SEEALSO
+PGEN_TAC, PSTRIP_GOAL_THEN, FILTER_PSTRIP_THEN, STRIP_TAC, FILTER_PSTRIP_TAC.
+
+\ENDDOC
+\DOC{PSTRIP\_THM\_THEN}
+
+\TYPE {\small\verb%PSTRIP_THM_THEN : thm_tactical%}\egroup
+
+\SYNOPSIS
+{\small\verb%PSTRIP_THM_THEN%} applies the given theorem-tactic using the result of
+stripping off one outer connective from the given theorem.
+
+\DESCRIBE
+Given a theorem-tactic {\small\verb%ttac%}, a theorem {\small\verb%th%} whose conclusion is a
+conjunction, a disjunction or a paired existentially quantified term,
+and a goal {\small\verb%(A,t)%}, {\small\verb%STRIP_THM_THEN ttac th%} first strips apart the 
+conclusion of {\small\verb%th%}, next applies {\small\verb%ttac%} to the theorem(s) resulting from the
+stripping and then applies the resulting tactic to the goal.
+
+In particular, when stripping a conjunctive theorem {\small\verb%A'|- u /\ v%}, the tactic
+{\par\samepage\setseps\small
+\begin{verbatim}
+   ttac(u|-u) THEN ttac(v|-v)
+\end{verbatim}
+}
+\noindent resulting from applying {\small\verb%ttac%} to the conjuncts, is applied to the
+goal.  When stripping a disjunctive theorem {\small\verb%A'|- u \/ v%}, the tactics
+resulting from applying {\small\verb%ttac%} to the disjuncts, are applied to split the goal
+into two cases. That is, if
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- t                           A ?- t
+   =========  ttac (u|-u)    and    =========  ttac (v|-v)
+    A ?- t1                          A ?- t2
+\end{verbatim}
+}
+\noindent then:
+{\par\samepage\setseps\small
+\begin{verbatim}
+         A ?- t
+   ================== PSTRIP_THM_THEN ttac (A'|- u \/ v)
+    A ?- t1  A ?- t2
+\end{verbatim}
+}
+\noindent When stripping a paired existentially quantified theorem
+{\small\verb%A'|- ?p. u%}, the tactic resulting from applying {\small\verb%ttac%} to the
+body of the paired existential quantification, {\small\verb%ttac(u|-u)%},
+is applied to the goal.  
+That is, if:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- t
+   =========  ttac (u|-u)
+    A ?- t1
+\end{verbatim}
+}
+\noindent then:
+{\par\samepage\setseps\small
+\begin{verbatim}
+      A ?- t
+   =============  PSTRIP_THM_THEN ttac (A'|- ?p. u)
+      A ?- t1
+\end{verbatim}
+}
+The assumptions of the theorem being split are not added to the assumptions of
+the goal(s) but are recorded in the proof.  If {\small\verb%A'%} is not a subset of the
+assumptions {\small\verb%A%} of the goal (up to alpha-conversion), {\small\verb%PSTRIP_THM_THEN ttac th%}
+results in an invalid tactic.
+
+\FAILURE
+{\small\verb%PSTRIP_THM_THEN ttac th%} fails if the conclusion of {\small\verb%th%} is not a conjunction,
+a disjunction or a paired  existentially quantification.  Failure also occurs
+if the application of {\small\verb%ttac%} fails, after stripping the outer connective from
+the conclusion of {\small\verb%th%}.
+
+\USES
+{\small\verb%PSTRIP_THM_THEN%} is used enrich the assumptions of a goal with a stripped
+version of a previously-proved theorem.
+
+\SEEALSO
+STRIP_THM_THEN, , PSTRIP_ASSUME_TAC, PSTRIP_GOAL_THEN, PSTRIP_TAC.
+
+\ENDDOC
+\DOC{PSTRUCT\_CASES\_TAC}
+
+\TYPE {\small\verb%PSTRUCT_CASES_TAC : thm_tactic%}\egroup
+
+\SYNOPSIS
+Performs very general structural case analysis.
+
+\DESCRIBE
+When it is applied to a theorem of the form:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   th = A' |- ?p11...p1m. (x=t1) /\ (B11 /\ ... /\ B1k) \/ ... \/
+                ?pn1...pnp. (x=tn) /\ (Bn1 /\ ... /\ Bnp)
+\end{verbatim}
+}
+\noindent in which there may be no paired existential quantifiers where a
+`vector' of them is shown above, {\small\verb%PSTRUCT_CASES_TAC th%} splits a goal
+{\small\verb%A ?- s%} into {\small\verb%n%} subgoals as follows:
+{\par\samepage\setseps\small
+\begin{verbatim}
+                             A ?- s
+   ===============================================================
+    A u {B11,...,B1k} ?- s[t1/x] ... A u {Bn1,...,Bnp} ?- s[tn/x]
+\end{verbatim}
+}
+\noindent that is, performs a case split over the possible constructions (the
+{\small\verb%ti%}) of a term, providing as assumptions the given constraints, having
+split conjoined constraints into separate assumptions. Note that unless {\small\verb%A'%}
+is a subset of {\small\verb%A%}, this is an invalid tactic.
+
+\FAILURE
+Fails unless the theorem has the above form, namely a conjunction of
+(possibly multiply paired existentially quantified) terms which assert the
+equality of the same variable {\small\verb%x%} and the given terms.
+
+\USES
+Generating a case split from the axioms specifying a structure.
+
+\SEEALSO
+STRUCT_CASES_TAC.
+
+\ENDDOC
+\DOC{PSUB\_CONV}
+
+\TYPE {\small\verb%PSUB_CONV : (conv -> conv)%}\egroup
+
+\SYNOPSIS
+Applies a conversion to the top-level subterms of a term.
+
+\DESCRIBE
+For any conversion {\small\verb%c%}, the function returned by {\small\verb%PSUB_CONV c%} is a conversion
+that applies {\small\verb%c%} to all the top-level subterms of a term.  If the conversion
+{\small\verb%c%} maps {\small\verb%t%} to {\small\verb%|- t = t'%}, then {\small\verb%SUB_CONV c%} maps a paired
+abstraction {\small\verb%"\p.t"%} to the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (\p.t) = (\p.t')
+\end{verbatim}
+}
+\noindent That is, {\small\verb%PSUB_CONV c "\p.t"%} applies {\small\verb%c%} to the body of the
+paired abstraction {\small\verb%"\p.t"%}.
+If {\small\verb%c%} is a conversion that maps {\small\verb%"t1"%} to the theorem
+{\small\verb%|- t1 = t1'%} and {\small\verb%"t2"%} to the theorem {\small\verb%|- t2 = t2'%}, then the conversion
+{\small\verb%PSUB_CONV c%} maps an application {\small\verb%"t1 t2"%} to the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (t1 t2) = (t1' t2')
+\end{verbatim}
+}
+\noindent That is, {\small\verb%PSUB_CONV c "t1 t2"%} applies {\small\verb%c%} to the both the operator
+{\small\verb%t1%} and the operand {\small\verb%t2%} of the application {\small\verb%"t1 t2"%}.  Finally, for any
+conversion {\small\verb%c%}, the function returned by {\small\verb%PSUB_CONV c%} acts as the identity
+conversion on variables and constants.  That is, if {\small\verb%"t"%} is a variable or
+constant, then {\small\verb%PSUB_CONV c "t"%} returns {\small\verb%|- t = t%}.
+
+\FAILURE
+{\small\verb%PSUB_CONV c tm%} fails if {\small\verb%tm%} is a paired abstraction {\small\verb%"\p.t"%} and the 
+conversion {\small\verb%c%} fails when applied to {\small\verb%t%},
+or if {\small\verb%tm%} is an application {\small\verb%"t1 t2"%} and the
+conversion {\small\verb%c%} fails when applied to either {\small\verb%t1%} or {\small\verb%t2%}.  The function
+returned by {\small\verb%PSUB_CONV c%} may also fail if the ML function {\small\verb%c:term->thm%} is not,
+in fact, a conversion (i.e. a function that maps a term {\small\verb%t%} to a theorem
+{\small\verb%|- t = t'%}).
+
+\SEEALSO
+SUB_CONV, PABS_CONV, RAND_CONV, RATOR_CONV.
+
+\ENDDOC
+\DOC{pvariant}
+
+\TYPE {\small\verb%pvariant : (term list -> term -> term)%}\egroup
+
+\SYNOPSIS
+Modifies variable and constant names in a paired structure to avoid clashes.
+
+\DESCRIBE
+When applied to a list of (possibly paired structures of) variables to avoid
+clashing with, and a pair to modify, {\small\verb%pvariant%} returns a variant of the pair.
+That is, it changes the names of variables and constants in the pair as
+intuitively as possible to make them distinct from any variables in the list,
+or any (non-hidden) constants.
+This is normally done by adding primes to the names.
+
+The exact form of the altered names should not be relied on,
+except that the original variables will be unmodified unless they
+are in the list to avoid clashing with.
+Also note that if the same variable occurs more that one in the pair,
+then each instance of the variable will be modified in the same way.
+
+\FAILURE
+{\small\verb%pvariant l p%} fails if any term in the list {\small\verb%l%} is not a paired structure of
+variables, or if {\small\verb%p%} is not a paired structure of variables and constants.
+
+\EXAMPLE
+The following shows a case that exhibits most possible behaviours:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   #pvariant ["b:*"; "(c:*,c':*)"] "((a:*,b:*),(c:*,b':*,T,b:*))";;
+   "(a,b''),c'',b',T',b''" : term
+\end{verbatim}
+}
+
+\USES
+The function {\small\verb%pvariant%} is extremely useful for complicated derived rules which
+need to rename pairs variable to avoid free variable capture while still
+making the role of the pair obvious to the user.
+
+\SEEALSO
+variant, genvar, hide_constant, genlike.
+
+\ENDDOC
+\DOC{P\_FUN\_EQ\_CONV}
+
+\TYPE {\small\verb%P_FUN_EQ_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Performs extensionality conversion for functions (function equality).
+
+\DESCRIBE
+The conversion {\small\verb%P_FUN_EQ_CONV%} embodies the fact that two functions are equal
+precisely when they give the same results for all values to which they can be
+applied. For any paired variable structure {\small\verb%"p"%} and equation {\small\verb%"f = g"%},
+where {\small\verb%p%} is of type {\small\verb%ty1%} and {\small\verb%f%} and {\small\verb%g%} are functions of type {\small\verb%ty1->ty2%},
+a call to {\small\verb%P_FUN_EQ_CONV "p" "f = g"%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (f = g) = (!p. f p = g p)
+\end{verbatim}
+}
+\FAILURE
+{\small\verb%P_FUN_EQ_CONV p tm%} fails if {\small\verb%p%} is not a paired structure of variables
+or if {\small\verb%tm%} is not an equation {\small\verb%f = g%} where {\small\verb%f%} and {\small\verb%g%} are functions.  
+Furthermore, if {\small\verb%f%} and {\small\verb%g%} are functions of type {\small\verb%ty1->ty2%},
+then the pair {\small\verb%x%} must have type {\small\verb%ty1%}; otherwise the conversion fails.  
+Finally, failure also occurs if any of the variables in {\small\verb%p%} is free in either
+{\small\verb%f%} or {\small\verb%g%}.
+
+\SEEALSO
+FUN_EQ_CONV, PEXT.
+
+\ENDDOC
+\DOC{P\_PCHOOSE\_TAC}
+
+\TYPE {\small\verb%P_PCHOOSE_TAC : (term -> thm_tactic)%}\egroup
+
+\SYNOPSIS
+Assumes a theorem, with existentially quantified pair replaced by a given
+witness.
+
+\DESCRIBE
+{\small\verb%P_PCHOOSE_TAC%} expects a pair {\small\verb%q%} and theorem with a paired existentially
+quantified conclusion.  When applied to a goal, it adds a new
+assumption obtained by introducing the pair {\small\verb%q%} as a witness for
+the pair {\small\verb%p%} whose existence is asserted in the theorem.
+{\par\samepage\setseps\small
+\begin{verbatim}
+           A ?- t
+   ===================  P_CHOOSE_TAC "q" (A1 |- ?p. u)
+    A u {u[q/p]} ?- t         ("y" not free anywhere)
+\end{verbatim}
+}
+\FAILURE
+Fails if the theorem's conclusion is not a paired existential quantification,
+or if the first argument is not a paired structure of variables.  
+Failures may arise in the tactic-generating function.  
+An invalid tactic is produced if the introduced variable is free in {\small\verb%u%} or {\small\verb%t%},
+or if the theorem has any hypothesis which is not alpha-convertible to an 
+assumption of the goal.
+
+\SEEALSO
+X_CHOOSE_TAC, PCHOOSE, PCHOOSE_THEN, P_PCHOOSE_THEN.
+
+\ENDDOC
+\DOC{P\_PCHOOSE\_THEN}
+
+\TYPE {\small\verb%P_PCHOOSE_THEN : (term -> thm_tactical)%}\egroup
+
+\SYNOPSIS
+Replaces existentially quantified pair with given witness,
+and passes it to a theorem-tactic.
+
+\DESCRIBE
+{\small\verb%P_PCHOOSE_THEN%} expects a pair {\small\verb%q%}, a tactic-generating function
+{\small\verb%f:thm->tactic%}, and a theorem of the form {\small\verb%(A1 |- ?p. u)%} as
+arguments.  A new theorem is created by introducing the given pair
+{\small\verb%q%} as a witness for the pair {\small\verb%p%} whose existence is asserted in the original
+theorem, {\small\verb%(u[q/p] |- u[q/p])%}.  If the tactic-generating function {\small\verb%f%}
+applied to this theorem produces results as follows when applied to a
+goal {\small\verb%(A ?- u)%}:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- t
+   =========  f ({u[q/p]} |- u[q/p])
+    A ?- t1
+\end{verbatim}
+}
+\noindent then applying {\small\verb%(P_PCHOOSE_THEN "q" f (A1 |- ?p. u))%} to the
+goal {\small\verb%(A ?- t)%} produces the subgoal:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A ?- t
+   =========  P_PCHOOSE_THEN "q" f (A1 |- ?p. u)
+    A ?- t1         ("q" not free anywhere)
+\end{verbatim}
+}
+\FAILURE
+Fails if the theorem's conclusion is not existentially quantified, or if
+the first argument is not a paired structure of variables.  
+Failures may arise in the tactic-generating function.  
+An invalid tactic is produced if the introduced variable is free in {\small\verb%u%} or {\small\verb%t%},
+or if the theorem has any hypothesis which is not alpha-convertible to an
+assumption of the goal.
+
+\SEEALSO
+X_CHOOSE_THEN, PCHOOSE, PCHOOSE_THEN, P_PCHOOSE_TAC.
+
+\ENDDOC
+\DOC{P\_PGEN\_TAC}
+
+\TYPE {\small\verb%P_PGEN_TAC : (term -> tactic)%}\egroup
+
+\SYNOPSIS
+Specializes a goal with the given paired structure of variables.
+
+\DESCRIBE
+When applied to a paired structure of variables {\small\verb%p'%}, and a goal
+{\small\verb%A ?- !p. t%}, the tactic {\small\verb%P_PGEN_TAC%} returns the goal {\small\verb%A ?- t[p'/p]%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+     A ?- !p. t
+   ==============  P_PGEN_TAC "p'"
+    A ?- t[p'/x]
+\end{verbatim}
+}
+\FAILURE
+Fails unless the goal's conclusion is a paired universal quantification
+and the term a paired structure of variables of the appropriate type.
+It also fails if any of the variables of the supplied structure occurs free
+in either the assumptions or (initial) conclusion of the goal.
+
+\SEEALSO
+X_GEN_TAC, FILTER_PGEN_TAC, PGEN, PGENL, PGEN_ALL, PSPEC, PSPECL, PSPEC_ALL,
+PSPEC_TAC.
+
+\ENDDOC
+\DOC{P\_PSKOLEM\_CONV}
+
+\TYPE {\small\verb%P_PSKOLEM_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Introduces a user-supplied Skolem function.
+
+\DESCRIBE
+{\small\verb%P_PSKOLEM_CONV%} takes two arguments.  The first is a variable {\small\verb%f%}, which
+must range over functions of the appropriate type, and the second is a term of
+the form {\small\verb%!p1...pn. ?q. t%} (where {\small\verb%pi%} and {\small\verb%q%} may be pairs).  
+Given these arguments, {\small\verb%P_PSKOLEM_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p1...pn. ?q. t) = (?f. !p1...pn. tm[f p1 ... pn/q])
+\end{verbatim}
+}
+\noindent which expresses the fact that a skolem function {\small\verb%f%} of the
+universally quantified variables {\small\verb%p1...pn%} may be introduced in place of the
+the existentially quantified pair {\small\verb%p%}.
+
+\FAILURE
+{\small\verb%P_PSKOLEM_CONV f tm%} fails if {\small\verb%f%} is not a variable, or if the input term {\small\verb%tm%}
+is not a term of the form {\small\verb%!p1...pn. ?q. t%}, or if the variable {\small\verb%f%} is free in
+{\small\verb%tm%}, or if the type of {\small\verb%f%} does not match its intended use as an {\small\verb%n%}-place
+curried function from the pairs {\small\verb%p1...pn%} to a value having the same type
+as {\small\verb%p%}.
+
+\SEEALSO
+X_SKOLEM_CONV, PSKOLEM_CONV.
+
+\ENDDOC
+\DOC{RIGHT\_AND\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%RIGHT_AND_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification of the right conjunct outwards
+through a conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%t /\ (?p. t)%}, the conversion
+{\small\verb%RIGHT_AND_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- t /\ (?p. u) = (?p'. t /\ (u[p'/p]))
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not
+contain any variables free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%t /\ (?p. u)%}.
+
+\SEEALSO
+RIGHT_AND_EXISTS_CONV, AND_PEXISTS_CONV, PEXISTS_AND_CONV,
+LEFT_AND_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{RIGHT\_AND\_PFORALL\_CONV}
+
+\TYPE {\small\verb%RIGHT_AND_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification of the right conjunct outwards through a
+conjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%t /\ (!p. u)%}, the conversion
+{\small\verb%RIGHT_AND_PFORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- t /\ (!p. u) = (!p'. t /\ (u[p'/p]))
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not 
+contain any variables free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%t /\ (!p. u)%}.
+
+\SEEALSO
+RIGHT_AND_FORALL_CONV, AND_PFORALL_CONV, PFORALL_AND_CONV,
+LEFT_AND_PFORALL_CONV.
+
+\ENDDOC
+\DOC{RIGHT\_IMP\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%RIGHT_IMP_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification of the consequent outwards through
+an implication.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%t ==> (?p. u)%}, 
+{\small\verb%RIGHT_IMP_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- t ==> (?p. u) = (?p'. t ==> (u[p'/p]))
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not
+contain any variables that appear free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%t ==> (?p. u)%}.
+
+\SEEALSO
+RIGHT_IMP_EXISTS_CONV, PEXISTS_IMP_CONV, LEFT_IMP_PFORALL_CONV.
+
+\ENDDOC
+\DOC{RIGHT\_IMP\_PFORALL\_CONV}
+
+\TYPE {\small\verb%RIGHT_IMP_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification of the consequent outwards through an
+implication.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%t ==> (!p. u)%}, the conversion
+{\small\verb%RIGHT_IMP_FORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- t ==> (!p. u) = (!p'. t ==> (u[p'/p]))
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not
+contain any variables that appear free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%t ==> (!p. u)%}.
+
+\SEEALSO
+RIGHT_IMP_FORALL_CONV, PFORALL_IMP_CONV, LEFT_IMP_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{RIGHT\_LIST\_PBETA}
+
+\TYPE {\small\verb%RIGHT_LIST_PBETA : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Iteratively beta-reduces a top-level paired beta-redex on the right-hand side
+of an equation.
+
+\DESCRIBE
+When applied to an equational theorem, {\small\verb%RIGHT_LIST_PBETA%} applies paired 
+beta-reduction over a top-level chain of beta-redexes to the right-hand side
+(only).
+Variables are renamed if necessary to avoid free variable capture.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- s = (\p1...pn. t) q1 ... qn
+   ----------------------------------  RIGHT_LIST_BETA
+       A |- s = t[q1/p1]...[qn/pn]
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is equational, with its right-hand side being
+a top-level paired beta-redex.
+
+\SEEALSO
+RIGHT_LIST_BETA, PBETA_CONV, PBETA_RULE, PBETA_TAC, LIST_PBETA_CONV,
+RIGHT_PBETA, LEFT_PBETA, LEFT_LIST_PBETA.
+
+\ENDDOC
+\DOC{RIGHT\_OR\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%RIGHT_OR_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired existential quantification of the right disjunct outwards
+through a disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%t \/ (?p. u)%}, the conversion
+{\small\verb%RIGHT_OR_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- t \/ (?p. u) = (?p'. t \/ (u[p'/p]))
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not 
+contain any variables free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%t \/ (?p. u)%}.
+
+\SEEALSO
+RIGHT_OR_EXISTS_CONV, OR_PEXISTS_CONV, PEXISTS_OR_CONV, LEFT_OR_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{RIGHT\_OR\_PFORALL\_CONV}
+
+\TYPE {\small\verb%RIGHT_OR_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Moves a paired universal quantification of the right disjunct outwards through a
+disjunction.
+
+\DESCRIBE
+When applied to a term of the form {\small\verb%t \/ (!p. u)%}, the conversion
+{\small\verb%RIGHT_OR_FORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- t \/ (!p. u) = (!p'. t \/ (u[p'/p]))
+\end{verbatim}
+}
+\noindent where {\small\verb%p'%} is a primed variant of the pair {\small\verb%p%} that does not
+contain any variables that appear free in the input term.
+
+\FAILURE
+Fails if applied to a term not of the form {\small\verb%t \/ (!p. u)%}.
+
+\SEEALSO
+RIGHT_OR_FORALL_CONV, OR_PFORALL_CONV, PFORALL_OR_CONV, LEFT_OR_PFORALL_CONV.
+
+\ENDDOC
+\DOC{RIGHT\_PBETA}
+
+\TYPE {\small\verb%RIGHT_PBETA : (thm -> thm)%}\egroup
+
+\SYNOPSIS
+Beta-reduces a top-level paired beta-redex on the right-hand side of an 
+equation.
+
+\DESCRIBE
+When applied to an equational theorem, {\small\verb%RIGHT_PBETA%} applies paired
+beta-reduction at top level to the right-hand side (only).
+Variables are renamed if necessary to avoid free variable capture.
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A |- s = (\p. t1) t2
+   ----------------------  RIGHT_PBETA
+     A |- s = t1[t2/p]
+\end{verbatim}
+}
+\FAILURE
+Fails unless the theorem is equational, with its right-hand side being
+a top-level paired beta-redex.
+
+\SEEALSO
+RIGHT_BETA, PBETA_CONV, PBETA_RULE, PBETA_TAC, RIGHT_LIST_PBETA, LEFT_PBETA,
+LEFT_LIST_PBETA.
+
+\ENDDOC
+\DOC{rip\_pair}
+
+\TYPE {\small\verb%rip_pair : (term -> term list)%}\egroup
+
+\SYNOPSIS
+Recursively breaks a paired structure into its constituent pieces.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#rip_pair "((1,2),(3,4))";;
+["1"; "2"; "3"; "4"] : term list
+\end{verbatim}
+}
+
+\COMMENTS
+Note that {\small\verb%rip_pair%} is similar, but not identical, to {\small\verb%strip_pair%}
+which iteratively breaks apart tuples (flat paired structures).
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+strip_pair.
+
+\ENDDOC
+\DOC{strip\_pabs}
+
+\TYPE {\small\verb%strip_pabs : (term -> goal)%}\egroup
+
+\SYNOPSIS
+Iteratively breaks apart paired abstractions.
+
+\DESCRIBE
+{\small\verb%strip_pabs "\p1 ... pn. t"%} returns {\small\verb%(["p1";...;"pn"],"t")%}. Note that
+{\par\samepage\setseps\small
+\begin{verbatim}
+   strip_pabs(list_mk_abs(["p1";...;"pn"],"t"))
+\end{verbatim}
+}
+\noindent will not return {\small\verb%(["p1";...;"pn"],"t")%} if {\small\verb%t%} is
+a paired abstraction.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+strip_abs, list_mk_pabs, dest_pabs.
+
+\ENDDOC
+\DOC{strip\_pexists}
+
+\TYPE {\small\verb%strip_pexists : (term -> goal)%}\egroup
+
+\SYNOPSIS
+Iteratively breaks apart paired existential quantifications.
+
+\DESCRIBE
+{\small\verb%strip_pexists "?p1 ... pn. t"%} returns {\small\verb%(["p1";...;"pn"],"t")%}. Note that
+{\par\samepage\setseps\small
+\begin{verbatim}
+   strip_pexists(list_mk_pexists(["[p1";...;"pn"],"t"))
+\end{verbatim}
+}
+\noindent will not return {\small\verb%(["p1";...;"pn"],"t")%} if {\small\verb%t%} is a paired
+existential quantification.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+strip_exists, list_mk_pexists, dest_pexists.
+
+\ENDDOC
+\DOC{strip\_pforall}
+
+\TYPE {\small\verb%strip_pforall : (term -> goal)%}\egroup
+
+\SYNOPSIS
+Iteratively breaks apart paired universal quantifications.
+
+\DESCRIBE
+{\small\verb%strip_pforall "!p1 ... pn. t"%} returns {\small\verb%(["p1";...;"pn"],"t")%}. Note that
+{\par\samepage\setseps\small
+\begin{verbatim}
+   strip_pforall(list_mk_pforall(["p1";...;"pn"],"t"))
+\end{verbatim}
+}
+\noindent will not return {\small\verb%(["p1";...;"pn"],"t")%} if {\small\verb%t%} is a paired universal
+quantification.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+strip_forall, list_mk_pforall, dest_pforall.
+
+\ENDDOC
+\DOC{SWAP\_PEXISTS\_CONV}
+
+\TYPE {\small\verb%SWAP_PEXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Interchanges the order of two existentially quantified pairs.
+
+\DESCRIBE
+When applied to a term argument of the form {\small\verb%?p q. t%}, the conversion
+{\small\verb%SWAP_PEXISTS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (?p q. t) = (?q t. t)
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%SWAP_PEXISTS_CONV%} fails if applied to a term that is not of the form
+{\small\verb%?p q. t%}.
+
+\SEEALSO
+SWAP_EXISTS_CONV, SWAP_PFORALL_CONV.
+
+\ENDDOC
+\DOC{SWAP\_PFORALL\_CONV}
+
+\TYPE {\small\verb%SWAP_PFORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Interchanges the order of two universally quantified pairs.
+
+\DESCRIBE
+When applied to a term argument of the form {\small\verb%!p q. t%}, the conversion
+{\small\verb%SWAP_PFORALL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!p q. t) = (!q t. t)
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%SWAP_PFORALL_CONV%} fails if applied to a term that is not of the form
+{\small\verb%!p q. t%}.
+
+\SEEALSO
+SWAP_PEXISTS_CONV.
+
+\ENDDOC
+\DOC{UNCURRY\_CONV}
+
+\TYPE {\small\verb%UNCURRY_CONV : conv%}\egroup
+
+\SYNOPSIS
+Uncurrys an application of an abstraction.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#UNCURRY_CONV "(\x y. x + y) 1 2";;
+|- (\x y. x + y)1 2 = (\(x,y). x + y)(1,2)
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%UNCURRY_CONV tm%} fails if {\small\verb%tm%} is not double abstraction applied to two 
+arguments
+
+\SEEALSO
+CURRY_CONV.
+
+\ENDDOC
+\DOC{UNCURRY\_EXISTS\_CONV}
+
+\TYPE {\small\verb%UNCURRY_EXISTS_CONV : conv%}\egroup
+
+\SYNOPSIS
+Uncurrys consecutive existential quantifications into
+a paired existential quantification.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#UNCURRY_EXISTS_CONV "?x y. x + y = y + x";;
+|- (?x y. x + y = y + x) = (?(x,y). x + y = y + x)
+
+#UNCURRY_EXISTS_CONV "?(w,x) (y,z). w+x+y+z = z+y+x+w";;
+|- (?(w,x) (y,z). w + (x + (y + z)) = z + (y + (x + w))) =
+   (?((w,x),y,z). w + (x + (y + z)) = z + (y + (x + w)))
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%UNCURRY_EXISTS_CONV tm%} fails if {\small\verb%tm%} is not a
+consecutive existential quantification.
+
+\SEEALSO
+CURRY_CONV, UNCURRY_CONV, CURRY_EXISTS_CONV, CURRY_FORALL_CONV, 
+UNCURRY_FORALL_CONV.
+
+\ENDDOC
+\DOC{UNCURRY\_FORALL\_CONV}
+
+\TYPE {\small\verb%UNCURRY_FORALL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Uncurrys consecutive universal quantifications into a paired
+universal quantification.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#UNCURRY_FORALL_CONV "!x y. x + y = y + x";;
+|- (!x y. x + y = y + x) = (!(x,y). x + y = y + x)
+
+#UNCURRY_FORALL_CONV "!(w,x) (y,z). w+x+y+z = z+y+x+w";;
+|- (!(w,x) (y,z). w + (x + (y + z)) = z + (y + (x + w))) =
+   (!((w,x),y,z). w + (x + (y + z)) = z + (y + (x + w)))
+\end{verbatim}
+}
+
+\FAILURE
+{\small\verb%UNCURRY_FORALL_CONV tm%} fails if {\small\verb%tm%} is not a
+consecutive universal quantification.
+
+\SEEALSO
+CURRY_CONV, UNCURRY_CONV, CURRY_FORALL_CONV, CURRY_EXISTS_CONV, 
+UNCURRY_EXISTS_CONV.
+
+\ENDDOC
+\DOC{UNPBETA\_CONV}
+
+\TYPE {\small\verb%UNPBETA_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Creates an application of a paired abstraction from a term.
+
+\DESCRIBE
+The user nominates some pair structure of variables {\small\verb%p%} and a term {\small\verb%t%},
+and {\small\verb%UNPBETA_CONV%} turns {\small\verb%t%} into an abstraction on {\small\verb%p%} applied to {\small\verb%p%}.
+{\par\samepage\setseps\small
+\begin{verbatim}
+   ------------------  UNPBETA_CONV "p" "t"
+    |- t = (\p. t) p
+\end{verbatim}
+}
+\FAILURE
+Fails if {\small\verb%p%} is not a paired structure of variables.
+
+\SEEALSO
+PBETA_CONV, PAIRED_BETA_CONV.
+
+\ENDDOC

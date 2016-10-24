@@ -1,0 +1,8 @@
+\THEOREM TERMDIFF_LEMMA1 POWSER
+|- !m z h.
+    Sum(0,m)(\p. (((z + h) pow (m num_sub p)) * (z pow p)) - (z pow m)) =
+    Sum
+    (0,m)
+    (\p.
+      (z pow p) * (((z + h) pow (m num_sub p)) - (z pow (m num_sub p))))
+\ENDTHEOREM

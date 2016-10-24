@@ -1,0 +1,3 @@
+\THEOREM PAIRED_EXT WELLORDER
+|- !l m. (!x y. l(x,y) = m(x,y)) = (l = m)
+\ENDTHEOREM

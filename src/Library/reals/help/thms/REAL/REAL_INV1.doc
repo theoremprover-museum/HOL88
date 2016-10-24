@@ -1,0 +1,3 @@
+\THEOREM REAL_INV1 REAL
+|- inv(& 1) = & 1
+\ENDTHEOREM

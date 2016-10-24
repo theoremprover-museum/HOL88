@@ -1,0 +1,38 @@
+This case study is supported by the files in the directory, protocols,
+in the HOL distribution directory.  These files are :
+
+
+READ-ME
+
+casestudy.tex	sect1.tex 	sect2.tex	sect3.tex	appendix.tex
+casestudy.dvi   cshead.tex
+
+SWnew.ml	SW.th
+
+hdi_tli.ml	plusm_subm.ml	int.ml		mod.ml		da.ml
+hdi_tli.th	plusm_subm.th	int.th		mod.th		da.th
+arith.ml	arith.th	myarith.ml	myarith.th
+
+tacticsSW.ml	mytactics.ml
+
+startSW.ml	restartSW.ml	tydefsSW.ml
+
+MakeSW		MakeEverything
+
+
+The file READ-ME contains this explanation.  The .tex files are needed
+to print the casestudy document, and casestudy.dvi is its output form.
+SWnew.ml contains the HOL sessions in this document and SW.th contains
+a copy of the theory which is created by executing SWnew.ml.
+
+The remaining .ml and .th files support the main sliding window protocol
+theory.  MakeSW automatically performs the HOL session described in the
+case study, and MakeEverything rebuilds the complete supporting theory
+as well.  MakeEverything should not be used if it can be avoided, as
+the sessions involved will take a very long time.
+
+The HOL files used in this case study have been updated to run in HOL12
+and the text updated to match the new files
+
+RCO 
+7 May 1991

@@ -1,0 +1,31 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: hol_users							%
+%									%
+% DESCRIPTION: Information on groups using HOL				%
+%									%
+% AUTHOR: Sara Kalvala							%
+%									%
+% ADDRESS: University of Cambridge 					%
+%	   Computer Laboratory						%
+%	   New Museums Site						%
+%          Pembroke Street						%
+%	   Cambridge, CB2 3QG						%
+%	   England							%
+%									%
+%	   email: sk@cl.cam.ac.uk					%
+%									%
+% DATE: 93.08.25							%
+% --------------------------------------------------------------------- %
+
+This directory contains the files survey.dvi and survey.ps, which contain
+contributions from different individuals regarding projects using HOL.
+I plan on keeping an updated version, and supplying it whenever I
+receive a request.
+
+
+
+The file HUG90.tex is the LaTeX source of Elsa Gunter's report on the
+Third International HOL Users's Meeting, held at Aarhus University,
+Denmark, 1-3 October 1990.
+
+

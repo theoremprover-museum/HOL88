@@ -1,0 +1,3 @@
+\THEOREM MAX_LEMMA SEQ
+|- !s N. ?k. !n. n num_lt N ==> (abs(s n)) < k
+\ENDTHEOREM

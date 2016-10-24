@@ -1,0 +1,3 @@
+\THEOREM MONO_SUC SEQ
+|- !f. mono f = (!n. (f(SUC n)) >= (f n)) \/ (!n. (f(SUC n)) <= (f n))
+\ENDTHEOREM

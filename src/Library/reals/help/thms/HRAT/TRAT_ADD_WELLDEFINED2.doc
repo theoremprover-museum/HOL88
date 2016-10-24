@@ -1,0 +1,5 @@
+\THEOREM TRAT_ADD_WELLDEFINED2 HRAT
+|- !p1 p2 q1 q2.
+    p1 trat_eq p2 /\ q1 trat_eq q2 ==>
+    (p1 trat_add q1) trat_eq (p2 trat_add q2)
+\ENDTHEOREM

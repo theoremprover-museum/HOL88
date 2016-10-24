@@ -1,0 +1,10 @@
+\DOC HypP'
+
+\TYPE {HypP' : (termpattern list -> thmpattern_rep)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

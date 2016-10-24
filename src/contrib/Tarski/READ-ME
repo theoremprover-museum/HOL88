@@ -1,0 +1,93 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: Tarski   						|
+| 									|
+| DESCRIPTION   : Definition of a theory for defining recursive boolean	|
+|		  functions.			                        |
+|									|
+| AUTHORS	: Flemming Andersen & Kim Dam Petersen			|
+| DATE		: October 29, 1992		         		|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    
+    mk_tarski.ml	A fixed point theory for defining recursive boolean
+			functions using monotonic predicate transformers. 
+
+			This theory is based on the article:
+
+
+				Alfred Tarski, A Lattice-Theoretical Fixpoint 
+					       Theorem and its Applications,
+				Pacific Journal of Mathematics, 1955.
+
+
+    tarski.ml		Loads the theory into hol
+
+    curry.ml		Defines operations for manipulating curried abstraction
+
+    recbool.ml		Defines ml functions for constructing recursive
+			boolean functions
+
+    examples		Contains two examples using recbool:
+
+			mk_UNITY01.ml
+			   This theory defines (a small part of) the UNITY 
+			   theory.
+
+			mk_CTL01.ml
+			   This file defines a HOL theory for the CTL
+			   Branching Time Temporal Logic.
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   Not fininished yet
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+                                      
+   0) Dependencies: NONE
+
+   1) Edit the pathnames in the Makefile (if necessary)
+
+   2) Type "make clean"
+
+   3) Type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE EXAMPLES:						|
+|									|
++ --------------------------------------------------------------------- +
+                                      
+   0) Dependencies: NONE
+
+   1) Edit the pathnames in the Makefile (if necessary)
+
+   2) Type "make clean"
+
+   3) Type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   loadf `recbool`;;
+
+

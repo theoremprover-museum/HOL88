@@ -1,0 +1,3 @@
+\THEOREM SEQ_MONOSUB SEQ
+|- !s. ?f. subseq f /\ mono(\n. s(f n))
+\ENDTHEOREM

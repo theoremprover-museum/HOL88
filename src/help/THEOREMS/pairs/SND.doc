@@ -1,0 +1,3 @@
+\THEOREM SND bool
+|- !x y. SND(x,y) = y
+\ENDTHEOREM

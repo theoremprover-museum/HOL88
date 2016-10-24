@@ -1,0 +1,5 @@
+\THEOREM POWDIFF_LEMMA POWSER
+|- !n x y.
+    Sum(0,SUC n)(\p. (x pow p) * (y pow ((SUC n) num_sub p))) =
+    y * (Sum(0,SUC n)(\p. (x pow p) * (y pow (n num_sub p))))
+\ENDTHEOREM

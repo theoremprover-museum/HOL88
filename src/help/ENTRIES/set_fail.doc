@@ -1,0 +1,33 @@
+\DOC set_fail
+
+\TYPE {set_fail : (string -> (* -> **) -> * -> **)}
+
+\SYNOPSIS
+Specifies the failure string for a function evaluation.
+
+\DESCRIBE
+When applied to a string {s} and a function {f}, the function {set_fail}
+gives a function which behaves identically to {f} except that on failure, the
+failure string is {s}, regardless of what failure string {f} itself gives rise
+to.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The following example shows how a failure string can be customized either by
+using {set_fail} or by adding a toplevel error trap.
+{
+   #BETA_CONV "1 + 1";;
+   evaluation failed     BETA_CONV
+
+   #(set_fail `Term is not a beta-redex` BETA_CONV) "1 + 1";;
+   evaluation failed     Term is not a beta-redex
+
+   #(BETA_CONV "1 + 1") ? failwith `Term is not a beta-redex`;;
+   evaluation failed     Term is not a beta-redex
+}
+\SEEALSO
+set_fail_prefix.
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM SEG_LASTN_BUTLASTN list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==>
+    (SEG n m l = LASTN n(BUTLASTN((LENGTH l) - (n + m))l))
+\ENDTHEOREM

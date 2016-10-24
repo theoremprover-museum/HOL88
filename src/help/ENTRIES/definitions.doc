@@ -1,0 +1,34 @@
+\DOC definitions
+
+\TYPE {definitions : (string -> (string # thm) list)}
+
+\SYNOPSIS
+Returns the constant definitions, type definitions and constant specifications
+of a given theory segment of the current theory.
+
+\DESCRIBE
+A call of {definitions `thy`} returns the definitions of the theory segment
+{thy} together with their names. Constant definitions, type definitions and
+constant specifications are all retrieved by the function {definitions}. The
+theory segment {thy} must be part of the current theory. The names are those
+given to the definitions by the user when they were originally added to the
+theory segment (by a call, for example, to {new_definition}). The name of the
+current theory segment can be abbreviated by {`-`}.
+
+\FAILURE
+The call {definitions `thy`} will fail if the theory segment {thy} is not
+part of the current theory.
+
+\EXAMPLE
+{
+#definitions `combin`;;
+[(`I_DEF`, |- I = S K K);
+ (`S_DEF`, |- S = (\f g x. f x(g x)));
+ (`K_DEF`, |- K = (\x y. x));
+ (`o_DEF`, |- !f g. f o g = (\x. f(g x)))]
+: (string # thm) list
+}
+\SEEALSO
+axioms, definition, load_definition, load_definitions, new_definition, print_theory, theorems.
+
+\ENDDOC

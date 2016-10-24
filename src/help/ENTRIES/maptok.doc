@@ -1,0 +1,32 @@
+\DOC maptok
+
+\TYPE {maptok : ((string -> *) -> string -> * list)}
+
+\SYNOPSIS
+Maps a function over the constituent words of a string.
+
+\DESCRIBE
+{maptok f s} first splits the string {s} into a list of substrings, and then
+maps the function {f} over that list. Splitting of the string occurs at each
+sequence of blanks and carriage returns (white space). This white space does
+not appear in the list of substrings. Leading and trailing white space in the
+input string is also thrown away.
+
+\FAILURE
+Fails if one of the applications of {f} to a substring fails.
+
+\EXAMPLE
+{
+#maptok explode `  the cat  sat `;;
+[[`t`; `h`; `e`]; [`c`; `a`; `t`]; [`s`; `a`; `t`]] : string list list
+}
+\USES
+Useful when wanting to map a function over a list of constant strings.
+Instead of using {map f [`string1`;...;`stringn`]} one can use:
+{
+   (maptok f `string1 ... stringn`)
+}
+\SEEALSO
+words, word_separators, words2, map.
+
+\ENDDOC

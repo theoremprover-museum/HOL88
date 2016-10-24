@@ -1,0 +1,3 @@
+\THEOREM REAL_NEGNEG REAL
+|- !x. --(-- x) = x
+\ENDTHEOREM

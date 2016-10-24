@@ -1,0 +1,41 @@
+\DOC define_wordn_bit_ops
+
+\TYPE {define_wordn_bit_ops : thm -> int -> (thm) list}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Defines a set of bitwise logical operators for the given word length.
+
+\DESCRIBE
+{define_wordn_bit_ops wordn_FNDEF n}, where {wordn_FNDEF} is the theorem
+returned by calling the function {prove_function_defn_thm} and {n} is the
+word length, defines four
+commonly used bitwise logical operators: {NOTn}, {ANDn}, {ORn}, and
+{XORn}.  The definitions are stored in the current theory under the
+names: {NOTn_DEF}, {ANDn_DEF}, {ORn_DEF} and {XORn_DEF}  and are
+returned in a list as  the value of this function.
+
+\FAILURE
+Fails if either it is not in draft mode, or the input theorem is not
+in the expected form or the type {:wordn} has not been defined.
+
+\EXAMPLE
+{define_wordn_bit_ops word3_FNDEF 3} returns the following list of
+definitons:
+{
+   [ |- !b0 b1 b2. NOT3(WORD3[b0;b1;b2]) = WORD3(B_NOT[b0;b1;b2]);
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) AND3 w = WORD3(B_AND[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) OR3 w = WORD3(B_OR[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) XOR3 w = WORD3(B_XOR[b0;b1;b2](BITS3 w)) ]
+}
+\noindent and they are stored in the current theory under the names
+{NOT3_DEF}, {AND3_DEF}, {OR3_DEF} and {XOR3_DEF}, repectively.
+
+\SEEALSO
+{prove_bit_opthms}, {wordn_bit_ops}.
+
+\ENDDOC

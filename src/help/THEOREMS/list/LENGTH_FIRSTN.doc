@@ -1,0 +1,3 @@
+\THEOREM LENGTH_FIRSTN list
+|- !n l. n <= (LENGTH l) ==> (LENGTH(FIRSTN n l) = n)
+\ENDTHEOREM

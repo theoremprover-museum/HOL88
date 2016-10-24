@@ -1,0 +1,363 @@
+% =====================================================================
+% HOL Course Slides: Pimitive recursion and induction (c) T melham 1990
+% =====================================================================
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+\def\_{\char'137}
+
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Primitive Recursion and Induction}{9}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+Primitive Recursion\\
+and\\
+Induction
+\esectitle
+
+% =====================================================================
+\slide{Proof by Induction}
+
+\point{For example, to prove:}
+
+\vskip 5mm
+\bspindent\LARGE\bf
+$\forall n.\: \forall m.\: n + m = m + n$
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+it is sufficient to prove that
+\epindent
+\vskip5mm
+\bspindent\LARGE\bf
+$\forall m.\: 0 + m = m + 0$
+\vskip5mm
+\bpindent\LARGE\bf
+and
+\epindent
+\vskip5mm
+$\begin{array}[t]{@{}l}
+\forall m.\: n + m = m+n \;\\
+\;\;\;\;\;\;\;\supset\\
+ \forall m.\; (SUC\; n) + m = m + (SUC\; n)\end{array}$
+\espindent
+
+\vskip7mm
+
+\point{HOL has built-in tactics and inference rules for this kind of inductive
+proof.}
+
+% =====================================================================
+\slide{Proof by Mathematical Induction}
+
+\point{In general, to prove that $\forall n.\: P[n]$ it is sufficient to prove
+that:}
+
+\vskip 5mm
+\subpoint{$P[0]$}
+\vskip 5mm
+\bpindent\LARGE\bf
+and \epindent
+\vskip 5mm
+\subpoint{$\forall n.\: P[n] \supset P[SUC\;n]$}
+
+\vskip7mm
+
+\point{The HOL inference rule {\tt INDUCT} implements \\
+this induction principle.}
+
+% =====================================================================
+\slide{Inference Rule for Induction}
+
+\point{The rule is {\tt INDUCT : (thm \# thm) -> thm}}
+
+
+\vskip7mm
+\point{Given the theorems:}
+\vskip6mm
+\bspindent\LARGE\bf
+\verb+|- P[0]+ \quad and\quad \verb+|- !n. P[n] ==> P[SUC n]+
+\espindent
+\vskip6mm
+\bpindent\LARGE\bf
+\verb!INDUCT! returns the theorem \verb+|- !n.P[n]+
+\epindent
+
+\vskip7mm
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#base;;
+ |- !m. (0 + m) = (m + 0)
+
+#step;;
+ |- !n. (!m. n + m = m + n) ==>
+        (!m. SUC n + m = m + SUC n)
+
+#INDUCT(base, step);;
+ |- !n. !m. n + m = m + n
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{The Induction Tactic}
+
+\point{There is also a tactic  for induction: {\tt INDUCT\_TAC}}
+\vskip7mm
+\point{Given a goal of the form:}
+\vskip6mm
+\bspindent\LARGE\bf
+\verb+!n:num. P n+
+\espindent
+\vskip6mm
+\bpindent\LARGE\bf
+\verb!INDUCT_TAC! breaks it into two subgoals:
+\epindent
+\vskip6mm
+\subpoint{the base case: {\tt [], "P 0"}}
+\vskip 4mm
+\subpoint{the step case: {\tt [P n], "P (SUC n)"}}
+\vskip7mm
+\point{For example:}
+\begin{session}\begin{verbatim}
+#let [g1;g2],p = INDUCT_TAC([],"!n. n >= 0");;
+g1 = ([], "0 >= 0") : goal
+g2 = (["n >= 0"], "(SUC n) >= 0") : goal
+p = - : proof
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Induction for Lists}
+
+\point{HOL also has a rule and a tactic for structural induction on lists.}
+
+\vskip7mm
+\point{To prove $\forall l.\: P[l]$ it is sufficient to show:}
+\vskip 5mm
+\subpoint{$P[Nil]$ \quad and \quad
+$\forall l.\: P[l] \supset \forall h.\: P[CONS\;h\;l]$}
+
+\vskip7mm
+\point{The inference rule is}
+\vskip 6mm
+\bspindent\LARGE\bf
+\verb!LIST_INDUCT : (thm # thm) -> thm!
+\espindent
+\vskip 6mm
+\bpindent\LARGE\bf
+and the tactic is:
+\epindent
+\vskip 6mm
+\bspindent\LARGE\bf
+\verb!LIST_INDUCT_TAC : tactic!
+\espindent
+
+\vskip7mm
+\point{These are similar to {\tt INDUCT} and {\tt INDUCT\_TAC}}
+
+% =====================================================================
+\slide{Definition by Primitive Recursion}
+
+\point{Recursive definitions are not allowed by the HOL primitive rules of
+definition.}
+\vskip7mm
+\point{The problem with recursion is that one could 
+give a `defining' equation, for example:}
+\vskip6mm 
+\bspindent \LARGE $f(x) \; = \; (f\;x) + 1$\espindent
+\vskip6mm
+\bpindent\LARGE\bf
+that is not satisfied by any total function.
+\epindent
+\vskip7mm
+\point{We must instead {\it derive\/} recursive definitions from equivalent
+non-recursive ones.}
+\vskip7mm
+\point{For {\it primitive recursive} functions, the system does this
+automatically.}
+
+
+% =====================================================================
+\slide{Primitive Recursion}
+
+\point{A primitive recursive definition has the form:}
+\vskip6mm
+\bspindent\LARGE\bf
+$f(0) \;\; = \;\; E_0$
+\vskip4mm
+$f(SUC \; n) \;\; = \;\; E_1 [f \; n, \; n]$
+\espindent
+\vskip6mm
+\bpindent\LARGE\bf
+where\epindent
+\vskip6mm
+\subpoint{the first equation is the {\it base case\/}, and}
+\subpoint{the second is the {\it recursive case}}
+
+\vskip7mm
+\point{Example:}
+\vskip 6mm
+\bspindent\LARGE\bf
+$plus\; 0 = \lambda m.\: m$
+\vskip 4mm
+$plus\; (SUC\;n) = \lambda m.\: SUC((plus\; n)\;m)$
+\espindent
+
+\vskip7mm
+\point{In more familiar notation:}
+\vskip 6mm
+\bspindent\LARGE\bf
+$0 + m = m$
+\vskip 4mm
+$(SUC\;n) + m = SUC(n + m)$
+\espindent
+
+% =====================================================================
+\slide{Primitive Recursion in HOL}
+
+\point{The derived rule is:}
+
+\vskip 5mm
+\bspindent\Large\bf
+\verb!new_prim_rec_definition: (string # term) -> thm!
+\espindent
+\vskip 5mm
+\bpindent\LARGE\bf
+where:
+\epindent
+\vskip 5mm
+\subpoint{the string is the name under which the definition will be stored in
+the current theory,}
+\subpoint{the term gives the desired definition, and}
+\subpoint{the result is the definition as a theorem.}
+
+\vskip7mm
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_prim_rec_definition
+  (`plus_def`,
+   "(plus 0 m = m) /\
+    (plus (SUC n) m = SUC(plus n m))");;
+|- (!m. plus 0 m = m) /\ 
+   (!n m. plus(SUC n)m = SUC(plus n m))
+\end{verbatim}\end{session}
+
+\vskip5mm
+
+\point{Definitions allowed only in draft mode.}
+
+
+% =====================================================================
+\slide{Primitive Recursion}
+
+\point{The ML function }
+
+\vskip 6mm
+\bspindent\LARGE\bf
+\verb!new_prim_rec_definition!
+\espindent
+\vskip 6mm
+
+\subpoint{checks that the given equations are 
+primitive\\ recursive, and}
+
+\subpoint{proves that there is a function that satisfies them.}
+
+\vskip7mm
+
+\point{There is also a function for defining infixes:}
+
+\vskip 6mm
+\bspindent\LARGE\bf
+\verb!new_infix_prim_rec_definition!
+\espindent
+\vskip 7mm
+\point{For example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_infix_prim_rec_definition
+   (`iplus`,
+    "(++ 0 n = n) /\ 
+     (++ (SUC n) m = SUC(++ n m))");;
+|- (!n. 0 ++ n = n) /\ 
+   (!n m. (SUC n) ++ m = SUC(n ++ m))
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Primitive Recursion on Lists}
+
+\point{There are corresponding derived rules of\\
+definition for primitive recursion on lists:}
+
+\vskip 7mm
+\bspindent\LARGE\bf
+\verb!new_list_rec_definition!
+\vskip 4mm
+\verb!new_infix_list_rec_definition!
+\espindent
+\vskip7mm
+\point{For example, the {\tt map} function is defined by:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_list_rec_definition
+  (`map_def`,
+   "(map (f:*->**) ([]:* list) = ([]:** list)) /\
+    (map f (CONS h t) = CONS (f h) (map f t))");;
+|- (!f. map f[] = []) /\
+   (!f h t. map f(CONS h t) = CONS(f h)(map f t))
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Summary}
+
+\point{Mathematical induction:}
+
+  \subpoint{{\tt INDUCT}}
+  \subpoint{{\tt INDUCT\_TAC}}
+
+\point{Structural induction on lists:}
+
+  \subpoint{{\tt LIST\_INDUCT}}
+  \subpoint{{\tt LIST\_INDUCT\_TAC}}
+
+\point{Primitive recursive definitions:}
+
+  \subpoint{{\tt new\_prim\_rec\_definition}}
+  \subpoint{{\tt new\_infix\_prim\_rec\_definition}}
+
+
+\point{Primitive recursion on lists:}
+
+  \subpoint{{\tt new\_list\_rec\_definition}}
+  \subpoint{{\tt new\_infix\_list\_rec\_definition}}
+
+
+\end{document}

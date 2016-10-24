@@ -1,0 +1,5 @@
+\THEOREM SIN_ZERO_LEMMA TRANSC
+|- !x.
+    (& 0) <= x /\ (sin x = & 0) ==>
+    (?n. EVEN n /\ (x = (& n) * (pi / (& 2))))
+\ENDTHEOREM

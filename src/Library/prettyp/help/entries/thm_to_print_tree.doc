@@ -1,0 +1,72 @@
+\DOC thm_to_print_tree
+
+\BLTYPE
+thm_to_print_tree :
+   (bool -> bool -> type_selection -> thm -> print_tree)
+\ELTYPE
+
+\SYNOPSIS
+Function for converting a HOL theorem into a print-tree.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+The first argument to {thm_to_print_tree} determines whether or not the
+hypotheses (assumptions) of the theorem are included in the print-tree in full.
+
+The second argument to {thm_to_print_tree} is a flag. If the flag is {true},
+the function converts instances of the HOL constant {UNCURRY} in the theorem
+into an appropriate use of ordered pairs in the print-tree. If the flag is
+{false}, {UNCURRY} is treated in the same way as any other HOL constant. The
+conversion is necessary because the representation of tuples of bound
+variables in a HOL term is so unlike the syntax of the tuples that the
+pretty-printer cannot handle them. So, normally, the flag should be set to
+{true}.
+
+The third argument to {thm_to_print_tree} controls the amount of type
+information included in the print-tree of the theorem. If {No_types} is given
+as the argument, then the print-tree will contain no type information. If
+{All_types} is given as the argument, the tree will contain type information
+for every variable and constant. Use of {Useful_types} instructs
+{thm_to_print_tree} to attach type information to the bound variables of
+abstractions, and to one occurrence of every free variable. Type information
+is only included for constants if the constant is a function and it is not
+fully applied. So, the equals sign in {"1 = 2"} would not be adorned with type
+information, but in {"$= 1"} it would be.
+
+Finally, using {Hidden_types} as the third argument to {thm_to_print_tree}
+causes type information to be attached only to variables which, although free,
+without type information appear to be bound. An example of such a variable is
+{"x:num"} in the term:
+{
+   "\(x:bool). (x:num)"
+}
+\noindent Without types, this term appears as {"\x. x"}. However, the two
+occurrences of {x} are different.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#thm_to_print_tree false true No_types (UNDISCH (SPEC_ALL FALSITY));;
+Print_node(`thm`,
+           [Print_node(`term`,
+                       [Print_node(`VAR`, [Print_node(`t`, [])])]);
+            Print_node(`dots`, [Print_node(`dot`, [])])])
+: print_tree
+
+#thm_to_print_tree true true No_types (UNDISCH (SPEC_ALL FALSITY));;
+Print_node(`thm`,
+           [Print_node(`term`,
+                       [Print_node(`VAR`, [Print_node(`t`, [])])]);
+            Print_node(`hyp`,
+                       [Print_node(`term`,
+                                   [Print_node(`CONST`,
+                                               [Print_node(`F`, [])])])])])
+: print_tree
+}
+\SEEALSO
+type_to_print_tree, term_to_print_tree, pp_convert_thm, pp_convert_all_thm.
+
+\ENDDOC

@@ -1,0 +1,23 @@
+\DOC create_win
+
+\TYPE {create_win : (term -> term list -> thm list -> window)}
+
+\SYNOPSIS
+Create a window.
+
+\LIBRARY window
+
+\DESCRIBE
+{create_win "r f" hyps thms} creates a window with:
+focus {"f"}, relation {"r"}, hypotheses {hyps} and relevant theorems {thms}.
+
+\FAILURE
+Never fails.
+
+\USES
+Use this command to create an initial window for reasoning with.
+
+\SEEALSO
+transform, BEGIN_STACK
+
+\ENDDOC

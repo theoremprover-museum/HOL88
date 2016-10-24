@@ -1,0 +1,3 @@
+\THEOREM REAL_10 REAL
+|- ~(& 1 = & 0)
+\ENDTHEOREM

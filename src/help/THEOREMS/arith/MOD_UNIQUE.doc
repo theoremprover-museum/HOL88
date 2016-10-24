@@ -1,0 +1,3 @@
+\THEOREM MOD_UNIQUE arithmetic
+|- !n k r. (?q. (k = (q * n) + r) /\ r < n) ==> (k MOD n = r)
+\ENDTHEOREM

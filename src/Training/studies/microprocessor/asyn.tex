@@ -1,0 +1,625 @@
+\section{Using temporal logic to deal with asynchrony}
+\label{sec-asyn}
+
+This section gives a very brief outline of the formal verification
+of \Tamarack\ when operating in fully asynchronous mode.
+The main specification problem is to define a behavioural model
+for fully asynchronous memory which is completely general and
+independent from the microprocessor specification.
+The main verification problem is to derive an abstract view of
+the instruction cycle where handshaking interactions are collapsed
+into fixed sequences of steps.
+
+Our solution to these problems is to embed a form of
+temporal logic in higher-order logic by regarding a set of
+temporal logic operators as abbreviations for higher-order functions.
+Temporal logic is especially useful for specifying and reasoning
+about relative order in a set of events.
+This approach results in succinct specifications and simplifies
+the verification task by hiding some
+low-level aspects of proof, in particular, the use of mathematical
+induction, in derived inference rules for temporal logic operators.
+
+In this section, we only present details on how temporal logic
+operators are used to specify constraints on the handshaking signals
+themselves, i.e., \verb"dreq" and \verb"dack".
+A complete model of external memory also involves a formal specification
+of constraints on the address and data signals which are synchronized by the
+handshaking signals.  For completeness,
+this latter part of the memory specification
+is given in Appendix~\ref{apx-asynmem} but
+these details are not discussed here.
+
+\subsection{Specification using temporal logic operators}
+
+We use the temporal logic operators,
+
+\begin{quote}
+\begin{tabular}{ll}
+$\Box$ & - ``henceforth''\\
+$\Diamond$ & -  ``eventually''\\
+$\TLNext$ & - ``next''\\
+$\cup$ & - ``until''
+\end{tabular}
+\end{quote}
+
+\noindent
+and a number of connectives
+({\TLNot}, $\longrightarrow$, {\TLAnd})
+corresponding to logical connectives in propositional logic.
+Later on, we give precise definitions for these operators and
+connectives as abbreviations for higher-order functions.
+For now, the intuitive meanings suggested above are enough to
+illustrate the use of these operators in the formal
+specification of a handshaking protocol.
+
+Figure~\ref{fig-style} shows a stylized timing diagram for a four-phase
+handshaking sequence.
+A request at time \verb"t1"
+by the sender is acknowledged at time \verb"t2" by the receiver.
+A request to end the interaction is signaled at time \verb"t3"
+and eventually acknowledged at time \verb"t4".
+
+\begin{figure}
+\begin{center}
+\input{fig-style}
+
+\caption{Four-Phase Handshaking Timing Diagram.}
+\label{fig-style}
+\end{center}
+\end{figure}
+
+The handshaking protocol is formally specified by a number of
+constraints imposed on both the sender and receiver.
+For now, these can be understood as constraints imposed on the
+sender and receiver viewed together as a single system;
+later on, we say which constraints are imposed on which process.
+
+A handshaking interaction is initiated whenever
+\verb"dreq" becomes true.
+\verb"dreq" must continue to be true until this is acknowledged.
+This constraint is expressed by:
+
+\begin{quote}
+\verb"(dreq "$\longrightarrow$\verb" (dreq "$\cup$\verb" dack))"
+\end{quote}
+
+A request must be eventually be acknowledged. Furthermore,
+once \verb"dack" becomes true, it must remain true until
+\verb"dreq" becomes false.
+
+\begin{quote}
+\verb"(dreq "$\longrightarrow$\verb" ("$\Diamond$\verb" dack))"
+
+\verb"(dack "$\longrightarrow$\verb" (dack "$\cup$\verb" ("{\TLNot}\verb"  dreq)))"
+\end{quote}
+
+Once a request has been acknowledged,
+\verb"dreq" must eventually become false again to signal
+the end of the interaction.
+The next request cannot be signaled until \verb"dack" also returns
+to false.
+
+\begin{quote}
+\verb"(dack "$\longrightarrow$\verb" ("$\Diamond$\verb" ("{\TLNot}\verb"  dreq)))"
+
+\verb"(("{\TLNot}\verb"  dreq) "$\longrightarrow$\verb" (("{\TLNot}\verb"  dreq) "$\cup$\verb" ("{\TLNot}\verb"  dack)))"
+\end{quote}
+
+When \verb"dreq" becomes false, \verb"dack" must
+also becomes false and stay false until the next request.
+
+\begin{quote}
+\verb"(("{\TLNot}\verb"  dreq) "$\longrightarrow$\verb" ("$\Diamond$\verb" ("{\TLNot}\verb"  dack)))"
+
+\verb"(("{\TLNot}\verb"  dack)  "$\longrightarrow$\verb" (("{\TLNot}\verb"  dack) "$\cup$\verb" dreq))"
+\end{quote}
+
+Upon completion of the handshaking interaction,
+the protocol requires another request to be initiated
+sometime in the future.
+This final constraint is usually included in the
+handshaking protocol specification
+to obtain the property that system activity never ceases.
+
+\begin{quote}
+\verb"(("{\TLNot}\verb"  dack) "$\longrightarrow$\verb" ("$\Diamond$\verb" dreq))"
+\end{quote}
+
+The use of temporal logic operators to specify the relative order
+of events in a handshaking protocol
+has been described by others including
+Bochman \cite{Bochman},
+Dill and Clarke \cite{Clarke},
+and Fujita et al.\ \cite{Fujita}.
+
+\subsection{Embedding temporal logic in higher-order logic}
+
+Temporal logics are often treated as primitive systems
+based on semantic definitions for temporal logic operators.
+However, our higher-order logic framework allows us to regard
+temporal logic operators
+as simply abbreviations for higher-order functions.
+The following definitions yield temporal logic operators
+for a form of temporal logic known as {\it Linear Temporal Logic}.
+
+\begintt
+let H = new_definition (`H`,"\(\Box\) P = \(\lambda\)t. \(\forall\)n. P (t+n)");;
+
+let E = new_definition (`E`,"\(\Diamond\) P = \(\lambda\)t. \(\exists\)n. P (t+n)");;
+
+let N = new_definition (`N`,"\(\TLNext\) P = \(\lambda\)t. ((P (t+1)):bool)");;
+
+let Until = new_infix_definition (
+  `Until`,
+  "$\(\cup\) P Q = \(\lambda\)t. \(\forall\)n. (\(\forall\)m. m < n ==> \(\neg\)(Q (t+m))) ==> P (t+n)");;
+
+let Not = new_definition (`Not`,"\(\TLNot\) P = \(\lambda\)t. \(\neg\)(P t)");;
+
+let Imp = new_infix_definition (`Imp`,"$\(\TLImp\) P Q = \(\lambda\)t. P t ==> Q t");;
+
+let And = new_infix_definition (`And`,"$\(\TLAnd\) P Q = \(\lambda\)t. P t \(\wedge\) Q t");;
+\endtt
+
+Each operator is defined in terms of a function
+which maps discrete points in time,
+modelled by the natural numbers, to Boolean values.
+These operators can
+can be combined with variables such as \verb"P" and \verb"Q"
+to form assertions in temporal logic.
+In both first-order logic and higher-order logic,
+every assertion, for instance,
+
+\begin{quote}
+$\forall$\verb"b. b "$\vee$\verb" "$\neg$\verb"b"
+\end{quote}
+
+\noindent
+is a Boolean expression which is either true or false.
+However, an assertion in temporal logic such as,
+
+\begin{quote}
+\verb" (P "$\TLImp$\verb" "$\Diamond$\verb" (Q "$\cup$\verb" R))"
+\end{quote}
+
+\noindent
+is only true or false relative to a particular instant of time.
+When stated as an assertion,
+this is informally understood to mean
+that the assertion is true at every instant of time.
+However, to formally represent temporal logic assertions
+as assertions in
+our higher-order logic framework,
+we introduce an notion of validity
+where a temporal logic assertion is valid if and only if it
+is true at all times.
+
+\begintt
+let VALID = new_definition (`VALID`,"VALID P = \(\forall\)t. P t");;
+\endtt
+
+Powerful inferences rules for direct manipulation of temporal
+logic assertions can be derived in higher-order logic from
+the above definitions.
+Many such rules effectively `package up'
+what would otherwise be tedious and repetitive patterns of
+inference.
+For instance, the following theorem provides a particularly
+useful rule;
+this rule achieves, in a single step, an inference which
+would otherwise involve a proof by mathematical induction.
+
+\begintt
+|- \(\forall\)P Q. VALID((P \(\TLAnd\) (\(\TLNot\) Q)) \(\TLImp\) (\(\TLNext\) P)) ==> VALID(P \(\TLImp\) (P U Q))
+\endtt
+
+A recent survey article
+\cite{Camurati} describes `traditional logic' (which includes
+higher-order logic) and temporal logic as two alternative kinds
+of pure formalisms for reasoning about hardware.
+But when
+temporal logic operators are
+simply abbreviations for higher-order functions,
+anything which can done with the temporal logic operators
+can also be done without them using explicit time variables.
+In fact, we have taken a mixed-mode approach of using both
+temporal operators and explicit time variables.
+The right mixture of temporal operators and explicit time variables
+yields relatively succinct specifications and much easier proofs.
+
+Previous work by Hale \cite{Hale:thesis} demonstrated that
+the idea of embedding of a temporal logic
+in higher-order logic was of practical use.
+Leeser \cite{Leeser:thesis} has also embedded temporal logic in
+a theorem proving environment to reason about hardware.
+Both Hale and Leeser used another form of temporal logic called
+{\it Interval Temporal Logic} developed by Moszkowski
+\cite{Moszkowski:thesis,Moszkowski:journal}
+to reason about digital systems in general.
+However, the more ordinary form of temporal logic
+captured in our definitions for $\Box$, $\Diamond$, $\TLNext$, etc.,
+is adequate for the very specific purpose
+of reasoning about
+handshaking interactions between \Tamarack\ and
+external memory.
+
+\subsection{Sender and receiver specifications}
+
+Earlier we gave a formal specification of the handshaking protocol
+in terms of constraints
+expressed by a set of temporal logic assertions.
+Seitz \cite{Seitz} distinguishes between {\it functional constraints}
+on outputs which must
+be satisfied by a process and {\it domain constraints}
+which are allowable assumptions about inputs.
+In the handshaking protocol,
+constraints imposed on \verb"dreq" are functional constraints
+for the sender process and domain constraints for the
+receiver process.
+Constraints imposed on \verb"dack" are functional constraints
+for the receiver process and domain constraints for the
+sender process.
+
+It turns out that only some of the domain constraints are
+actually needed in each case.
+Furthermore, 
+these domain constraints are only needed to establish specific
+functional constraints.
+For example, the domain constraint,
+
+\begin{quote}
+\verb"(dreq "$\longrightarrow$\verb" (dreq "$\cup$\verb" dack))"
+\end{quote}
+
+\noindent
+that \verb"dreq", once true,
+must remain true can be assumed in showing that the receiver
+satisfies the functional constraint,
+
+\begin{quote}
+\verb"(dreq "$\longrightarrow$\verb" ("$\Diamond$\verb" dack))"
+\end{quote}
+
+\noindent
+that it will eventually detect and acknowledge the request.
+
+The following definitions
+give the functional constraints for
+the sender and receiver respectively and, where required,
+the domain constraints which can be assumed in showing that
+a process satisfies a particular functional constraint.
+
+\begintt
+let Sender = new_definition (
+  `Sender`,
+  "Sender (dreq,dack) =
+    VALID (dreq \(\TLImp\) (dreq \(\cup\) dack)) \(\wedge\)
+    VALID ((\(\TLNot\) dreq) \(\TLImp\) ((\(\TLNot\) dreq) \(\cup\) (\(\TLNot\) dack))) \(\wedge\)
+    (VALID (dack \(\TLImp\) (dack \(\cup\) (\(\TLNot\) dreq))) ==>
+     VALID (dack \(\TLImp\) (\(\Diamond\) (\(\TLNot\) dreq)))) \(\wedge\)
+    (VALID ((\(\TLNot\) dack) \(\TLImp\) ((\(\TLNot\) dack) \(\cup\) dreq)) ==>
+     VALID ((\(\TLNot\) dack) \(\TLImp\) (\(\Diamond\) dreq)))");;
+
+let Receiver = new_definition (
+  `Receiver`,
+  "Receiver (dreq,dack) =
+    VALID (dack \(\TLImp\) (dack \(\cup\) (\(\TLNot\) dreq))) \(\wedge\)
+    VALID ((\(\TLNot\) dack)  \(\TLImp\) ((\(\TLNot\) dack) \(\cup\) dreq)) \(\wedge\)
+    (VALID (dreq \(\TLImp\) (dreq \(\cup\) dack)) ==>
+     VALID (dreq \(\TLImp\) (\(\Diamond\) dack))) \(\wedge\)
+    (VALID ((\(\TLNot\) dreq) \(\TLImp\) ((\(\TLNot\) dreq) \(\cup\) (\(\TLNot\) dack))) ==>
+     VALID ((\(\TLNot\) dreq) \(\TLImp\) (\(\Diamond\) (\(\TLNot\) dack))))");;
+\endtt
+
+When the sender and receiver parts of the handshaking protocol
+specification are both satisfied, this results in the set of
+constraint mentioned at the beginning of this section
+for the system as a whole.
+This is shown by the following theorem.
+
+\begintt
+|- Sender(dreq,dack) \(\wedge\)
+   Receiver(dreq,dack)
+   ==>
+   VALID (dreq \(\TLImp\) (dreq \(\cup\) dack)) \(\wedge\)
+   VALID (dreq \(\TLImp\) (\(\Diamond\) dack)) \(\wedge\)
+   VALID (dack \(\TLImp\) (dack \(\cup\) (\(\TLNot\) dreq))) \(\wedge\)
+   VALID (dack \(\TLImp\) (\(\Diamond\) (\(\TLNot\) dreq))) \(\wedge\)
+   VALID ((\(\TLNot\) dreq) \(\TLImp\) ((\(\TLNot\) dreq) \(\cup\) (\(\TLNot\) dack))) \(\wedge\)
+   VALID ((\(\TLNot\) dreq) \(\TLImp\) (\(\Diamond\) (\(\TLNot\) dack))) \(\wedge\)
+   VALID ((\(\TLNot\) dack) \(\TLImp\) ((\(\TLNot\) dack) \(\cup\) dreq)) \(\wedge\)
+   VALID ((\(\TLNot\) dack) \(\TLImp\) (\(\Diamond\) dreq))
+\endtt
+
+\subsection{Memory specification}
+
+The predicate \verb"Receiver" is used to partially specify a
+behavioural model of fully asynchronous memory.
+The rest of the memory specification
+(given in Appendix~\ref{apx-asynmem})
+specifies constraints on the address and data signals which
+are synchronized by the handshaking signals.
+These two parts of the specification are combined together
+in the definition of \verb"AsynMemory"
+(also given in Appendix~\ref{apx-asynmem}).
+
+The memory specification is a formal rendering of the
+description given earlier in Section~\ref{sec-memory}.
+In particular,
+it is precise statement about details such as the constraint
+that:
+
+\begin{quotation}
+After signaling a memory request,
+\verb"dreq" must remain equal to \verb"T"
+and the \verb"wmem", address bus \verb"addr" and dataout bus \verb"dataout"
+must remain at stable values until \verb"dack" becomes equal to \verb"T"
+signaling that the request has been satisfied.
+\end{quotation}
+
+As with the specification of fully synchronous memory, \verb"SynMemory",
+the operations performed by memory are selected from the representation
+variable by \verb"fetch" and \verb"store".
+For example, when \verb"dack" becomes equal to \verb"T"
+at time \verb"t+n"
+in response to a read request initiated at time \verb"t",
+the value of the \verb"datain" bus is described by the following equation:
+
+\begin{quote}
+\verb"datain (t+n) = (fetch rep) (mem t,(address rep) (mar t))"
+\end{quote}
+
+One of the main differences from the FM8501
+specification \cite{Hunt:thesis} is that our relational specification style
+allows the memory model to have an entirely independent specification.
+Thus, it is possible to reason independently about
+the internal operation of
+\Tamarack\ at the phase level without need of a memory model.
+It is only necessary to compose specifications for \Tamarack\
+and external memory
+in order to reason about their interaction at the microprogramming level.
+This contrasts with the functional specification style used for FM8501
+where ``the characterization of external devices are wrapped up
+in the same function which specifies the microprocessor" \cite{Hunt:thesis}.
+
+\subsection{Verification}
+
+Verifying the operation of \Tamarack\ in fully asynchronous mode
+is much more difficult than fully synchronous mode because of
+the unknown length of microcode repeat-loops during
+an instruction cycle.
+The overall strategy is to first show that every handshaking sequence
+runs to completion,
+then collapse repeat-loops to single steps in an abstract view
+of behaviour.
+Symbolic execution is then used to reason about the fixed sequences
+of operations in this abstract view of behaviour.
+Finally, we use the function \verb"TimeOf" described earlier
+in Section~\ref{sec-temp} to specify a synchronization scheme
+for asynchronous mode.
+
+\subsubsection{Phase level}
+
+Earlier correctness results described in Section~\ref{sec-verfphase}
+(and given in Appendix~\ref{apx-phase})
+for the phase level operation of \Tamarack\
+are re-used in this version of the correctness proof without
+change or addition.
+We recall that phase level correctness results do not depend
+on any particular model of external memory.
+The interaction of the microprocessor with external memory
+only concerns the operation of its internal architecture at
+the microprogramming level.
+
+\subsubsection{Implementation of the sender specification}
+
+One of the first steps in verifying the operation of \Tamarack\
+in fully asynchronous mode is to show that the microprogramming
+level correctly implements the sender part of the handshaking specification.
+The derivation of the following theorem is tedious but
+very routine.
+This proof step does not involve a behavioural model for external memory.
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,gnd,idreq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,idack,dataout,wmem,dreq,addr) \(\wedge\)
+   GND gnd \(\wedge\)
+   (((val4 rep) o mpc) 0 = 0)
+    ==>
+   Sender (dreq,dack)
+\endtt
+
+The proof procedure used to establish this result
+is illustrated in the following \HOL\ source file
+by proving that a very simple state machine also satisfies the
+sender part of the handshaking protocol specification.
+
+\begin{quote}
+\verb"hol/Training/studies/microprocessor/proof/example4.ml"
+\end{quote}
+
+Once it has been established that the microprogramming level
+satisfies the constraints expressed by \verb"Sender",
+this result can be combined with the specification of external
+memory, in particular, the constraints expressed by \verb"Receiver"
+to obtain some very useful facts for reasoning about
+handshaking interactions.
+Among other things, one of the useful facts implied by
+the combined constraints of
+\verb"Sender" and \verb"Receiver" is that every handshaking sequence
+runs to completion, that is,
+every repeat-loop in the microcode eventually terminates.
+
+\subsubsection{Collapsing repeat-loops to single steps}
+
+The microprocessor specification and behavioural model of external
+memory are combined together in the definition of \verb"AsynSystem"
+to reason about interactions of the \Tamarack\ microchip
+with fully asynchronous memory.
+As mentioned earlier,
+the memory specification \verb"AsynSystem" includes
+the constraints
+expressed by \verb"Receiver".
+
+\begintt
+let AsynSystem = new_definition (
+  `AsynSystem`,
+  "AsynSystem (rep:^rep_ty)
+    (ireq,mpc,mar,pc,acc,ir,rtn,arg,buf,iack,dack,mem) =
+    \(\exists\)datain gnd dataout wmem dreq addr.
+      TamarackImp rep (
+        datain,dack,gnd,ireq,mpc,mar,pc,
+        acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr) \(\wedge\)
+      AsynMemory rep (dreq,dack,mem,wmem,addr,dataout,datain) \(\wedge\)
+      GND gnd");;
+\endtt
+
+The fact that every repeat-loop in the microcode terminates
+makes it possible to derive theorems
+which, in effect, collapse repeat-loops to single steps
+in an abstract view of behaviour at the microprogramming level.
+
+For instance, the following theorem
+provides a collapsed view of the repeat-loop in state~6
+of the FSM flow graph.
+This theorem states that the repeat-loop will terminate
+after zero or more clock cycles
+with no changes to the internal state of the microprocessor.
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   AsynSystem rep (idreq,mpc,mar,pc,acc,ir,rtn,arg,buf,idack,dack,mem) \(\wedge\)
+   (((val4 rep) o mpc) 0 = 0)
+   ==>
+   \(\forall\)t.
+     (((val4 rep) o mpc) t = 6)
+     ==>
+     \(\exists\)n.
+       (dack (t+n) = F) \(\wedge\)
+       (\(\forall\)m. m < n ==> (dack (t+m) = T)) \(\wedge\)
+       (((val4 rep) o mpc) (t+n) = 6) \(\wedge\)
+       (mem (t+n) = mem t) \(\wedge\)
+       (mar (t+n) = mar t) \(\wedge\)
+       (pc (t+n) = pc t) \(\wedge\)
+       (acc (t+n) = acc t) \(\wedge\)
+       (rtn (t+n) = rtn t) \(\wedge\)
+       (idack (t+n) = idack t)
+\endtt
+
+Another example is the theorem shown below which provides a collapsed
+view of the repeat-loop in state~13.
+It is convenient to state this result as a transition which begins
+in state~6 and terminates in state~15.
+During this transition, a value is fetched from memory \verb"mem",
+added to the current contents of the accumulator \verb"acc", and the result
+temporarily placed in the ALU buffer \verb"buf".
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   AsynSystem rep (idreq,mpc,mar,pc,acc,ir,rtn,arg,buf,idack,dack,mem) \(\wedge\)
+   (((val4 rep) o mpc) 0 = 0)
+   ==>
+   \(\forall\)t.
+     (((val4 rep) o mpc) t = 6) \(\wedge\)
+     (dack t = F)
+     ==>
+     \(\exists\)n.
+       (\(\forall\)m. m < n ==> \(\neg\)(((val4 rep) o mpc) (t+m) = 0)) \(\wedge\)
+       (((val4 rep) o mpc) (t+n) = 15) \(\wedge\)
+       (mem (t+n) = mem t) \(\wedge\)
+       (pc (t+n) = pc t) \(\wedge\)
+       (buf (t+n) =
+         add rep (acc t,fetch rep (mem t,(address rep (mar t))))) \(\wedge\)
+       (rtn (t+n) = rtn t) \(\wedge\)
+       (idack (t+n) = idack t)
+\endtt
+
+The above pair of theorems describe two successive steps in the
+symbolic execution of the microprogramming level.
+In the course of reasoning about the microinstruction sequence
+for an ADD instruction,
+the first theorem advances the state of the symbolic execution
+to end of the repeat-loop in state~6 and the second theorem
+advances the symbolic execution from this point to state~15.
+
+\subsubsection{Symbolic execution}
+
+A complete set of theorems for collapsing
+repeat-loops into single steps represent
+an abstract view of behaviour where programming level
+operations are implemented by fixed sequences of actions.
+Hence, the symbolic execution proof technique described earlier
+in Section~\ref{sec-verf}
+for fully synchronous mode can also be used here
+to show that programming level operations are correctly implemented
+by microinstruction sequences which involve handshaking interactions
+with external memory.
+
+Correctness results for each programming level operation
+are combined by case analysis to obtain the following theorem.
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   AsynSystem rep (idreq,mpc,mar,pc,acc,ir,rtn,arg,buf,idack,dack,mem) \(\wedge\)
+   (((val4 rep) o mpc) 0 = 0)
+   ==>
+   \(\forall\)t.
+     (((val4 rep) o mpc) t = 0) \(\wedge\)
+     (dack t = F)
+     ==>
+     \(\exists\)n.
+       Next ((((val4 rep) o mpc) Eq 0) \(\TLAnd\) (\(\TLNot\) dack)) (t,t+n) \(\wedge\)
+       ((mem (t+n),pc (t+n),acc (t+n),rtn (t+n),idack (t+n)) =
+        NextState rep (idreq t,mem t,pc t,acc t,rtn t,idack t))
+\endtt
+
+The above theorem is almost identical to the top-level correctness theorem
+for fully synchronous mode
+given in Section~\ref{sec-temp} except for the term used to denote the
+next-instruction signal.  Instead of,
+
+\begin{quote}
+\verb"(((val4 rep) o mpc) Eq 0)"
+\end{quote}
+
+\noindent
+the next-instruction signal is denoted by the term,
+
+\begin{quote}
+\verb"(((val4 rep) o mpc) Eq 0) "\TLAnd\verb" ("\TLNot\verb" dack)"
+\end{quote}
+
+\noindent
+which states that the next instruction cycle does
+not begin until the control unit FSM is about to leave state 0.
+The use of this condition for the next-instruction signal
+is not necessarily an obvious choice.
+We leave it an exercise for the reader to
+determine why other conditions,
+e.g., when the FSM first enters state~0,
+are not suitable.
+
+\subsubsection{Top level correctness statement}
+
+This version of the proof is completed by repeating the proof
+procedure outlined earlier in Section~\ref{sec-temp}
+for using the function \verb"TimeOf" to construct a mapping
+from abstract time to concrete time.
+The top-level correctness statement for this version of the
+proof is shown below.
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   AsynSystem rep (idreq,mpc,mar,pc,acc,ir,rtn,arg,buf,idack,dack,mem) \(\wedge\)
+   (((val4 rep) o mpc) 0 = 0)
+   ==>
+   let f = TimeOf ((((val4 rep) o mpc) Eq 0) \(\TLAnd\) (\(\TLNot\) dack)) in
+   TamarackBeh rep (idreq o f,mem o f,pc o f,acc o f,rtn o f,idack o f)
+\endtt

@@ -1,0 +1,25 @@
+This directory contains a subset of the HOL term parser. 
+
+In order to accomplish the typechecking properly, some lisp hacks were
+implemented by MJCG.  We parse to a recursive data type that is then
+sent to the HOL typechecker for conversion to a term.  The datatype
+is defined to mirror the construction of the underlying representation
+of terms as much as possible.
+
+The type parser defined in the user guide is incorporated into the
+term parser.  In order to do so, modifications were required to the
+action symbols defined for the raw type parser.  The functionality is
+the same, it was only necessary to modify them to reflect the new
+data type they are dealing with.
+
+The term parser is a more extended excercise in operator precedence. 
+For that reason, the grammar is looks extensive.  It is, however, only
+repetitive.
+
+The files *.grm contain the grammars for the term parser.  term_help.ml
+defines the action symbols.  To make, change the pathnames in Makefile
+to suit your purposes.  To load in the parser, change the pathname to 
+general.ml in loader.ml, and then perform a loadf on it.  The parser
+may be re-generated from scratch by parsing *.grm in any order.
+
+

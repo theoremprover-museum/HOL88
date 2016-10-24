@@ -1,0 +1,44 @@
+\DOC timer
+
+\TYPE {timer : (bool -> bool)}
+
+\SYNOPSIS
+Switches timing and inference-counting on or off.
+
+\DESCRIBE
+A call {timer true} switches on timing and inference-counting; {timer false}
+switches it off. In either case, the previous on/off setting ({true} means on)
+is returned. When switched on, the CPU (and, if relevant, garbage collection)
+time and the number of intermediate theorems generated is displayed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+This example was run from a state with timings initially switched off:
+{
+   #let th = SPEC "x:num" (theorem `arithmetic` `ADD1`);;
+   th = |- SUC x = x + 1
+   Run time: 0.0s
+   Intermediate theorems generated: 1
+
+   #ONCE_REWRITE_RULE[EQ_SYM_EQ] th;;
+   |- x + 1 = SUC x
+   Run time: 0.1s
+   Intermediate theorems generated: 11
+
+   #SYM th;;
+   |- x + 1 = SUC x
+   Run time: 0.0s
+   Intermediate theorems generated: 1
+}
+\USES
+Guiding the optimization of important proofs.
+
+\COMMENTS
+The same effect can be achieved by setting the flag {timing}.
+
+\SEEALSO
+set_flag, set_thm_count, thm_count.
+
+\ENDDOC

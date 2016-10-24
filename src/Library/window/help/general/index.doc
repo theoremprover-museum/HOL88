@@ -1,0 +1,26 @@
+\DOC index
+
+\TYPE {index : ((* -> bool) -> * list -> int)}
+
+\SYNOPSIS
+Find the position of an element in a list.
+
+\LIBRARY window
+
+\DESCRIBE
+{index p l} finds the position of the first occurrence of an element in the 
+list {l} satisfying the predicate {p}.
+
+\FAILURE
+{index p l} fails if no element of {l} satisfies p.
+
+\EXAMPLE
+{
+   # position (\e. e = 2) [1; 2; 3];;
+   2 : int 
+}
+
+\SEEALSO
+el
+
+\ENDDOC

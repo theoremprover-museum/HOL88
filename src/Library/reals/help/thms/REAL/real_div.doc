@@ -1,0 +1,3 @@
+\THEOREM real_div REAL
+|- !x y. x / y = x * (inv y)
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM WORDLEN_SUC_WCAT word_base
+|- !n w.
+    PWORDLEN(SUC n)w ==>
+    (?b :: PWORDLEN 1. ?w' :: PWORDLEN n. w = WCAT(b,w'))
+\ENDTHEOREM

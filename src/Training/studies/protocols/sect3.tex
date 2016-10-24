@@ -1,0 +1,1485 @@
+
+\section{Verification}
+
+This section presents the proofs that the implementation
+described in the last section satisfies 
+its total correctness specification.  Executing this session in HOL will
+create the complete sliding window theory.  Because the number of
+proofs in the theory is reasonably large, some of the proof steps
+have been saved in a set of tactics which are stored in the file
+\verb%tacticsSW.ml%. 
+Load these tactic files first.
+\begin{session}
+\begin{verbatim}
+loadf`tacticsSW`;;
+\end{verbatim}
+\end{session}
+Alternatively,
+if you have been working on these proofs earlier and wish to return to
+the latest state, start HOL and load the following file, which
+will set up the new session.
+\begin{session}
+\begin{verbatim}
+loadf`restartSW`;;
+\end{verbatim}
+\end{session}
+
+The first theorem to be proved states that the receiver's sequence
+counter is always less than \verb%maxseq%.  It will be used in the proofs of
+theorems involving 
+\verb%plusm%, \verb%subm% and the receiver's sequence counter, \verb+r+.  
+
+\begin{session}
+\begin{verbatim}
+g("!source:^data list. !maxseq:^sequence.
+   !rem:^datatime.  !s:^seqtime.
+   !sink:^datatime. !r:^seqtime. !RW:^sequence.
+   !dataR:^channel.
+
+  (INIT source maxseq rem s sink r) /\
+  (DATA_RECV dataR RW maxseq sink r)
+ ==>
+  ( !t:^time. (r t) < maxseq )");;
+\end{verbatim}
+\end{session}
+
+The first step of the
+proof is to expand the definitions \verb%INIT% and \verb%DATA_RECV% and
+to include the conclusion of 
+the theorem \verb%ONE_LESS_0_LESS |- !m. 1 < m ==> 0 < m%
+in the assumption list.
+These steps are combined in tactic2.
+An edited version of the result of executing tactic2 is shown below.
+To save space ``\ldots'' are used to indicate parts of the 
+assumption list which have not been shown.
+
+\begin{session}
+\begin{verbatim}
+#expand tactic2;;
+OK..
+"!t. (r t) < maxseq"
+  ...
+    [ "r 0 = 0" ]
+  ...
+    [ "!t.
+        (IN_WINDOW(dataR t)(r t)RW maxseq => 
+         ((r(t + 1) = plusm(r t,1,maxseq)) /\
+          (sink(t + 1) = APPEND(sink t)[message(dataR t)])) | 
+         ((r(t + 1) = r t) /\ (sink(t + 1) = sink t)))" ]
+    [ "0 < maxseq" ]
+\end{verbatim}
+\end{session}
+
+This goal is solved using induction.
+The basis case is proved by rewriting with the assumption \verb%(r 0 = 0)%.
+The induction step examines the two cases for the value of \verb%r(t+1)%
+given by the second assumption of the above list.
+In addition to these assumptions,
+a specialization of the theorem \verb%plusm_less_m% is used :
+\begin{verbatim}
+|- 0 < maxseq ==> (plusm(r t,1,maxseq)) < maxseq
+\end{verbatim}
+These steps, contained in tactic3, complete the proof.  The newly proved
+theorem is then saved in the theory.
+
+\begin{session}
+\begin{verbatim}
+expand tactic3;;
+let r_in_range = save_top_thm `r_in_range`;;
+\end{verbatim}
+\end{session}
+
+Expanding the definition of \verb+INIT+ is all that is
+needed to prove the next theorem. 
+
+\begin{session}
+\begin{verbatim}
+let INIT_maxseq_1 =
+prove_thm(
+  `INIT_maxseq_1`,
+  "!source:^data list. !maxseq:^sequence. 
+   !rem sink :^datatime.  !s r :^seqtime.
+  (INIT source maxseq rem s sink r) ==> (1 < maxseq)",
+
+  REWRITE_TAC[INIT] THEN REPEAT STRIP_TAC THEN 
+  FIRST_ASSUM ACCEPT_TAC );;
+\end{verbatim}
+\end{session}
+
+In the next theorem, it is shown that \verb%INIT% also implies
+that \verb%0 < maxseq%, since we know \verb%1 < maxseq%.
+Use \verb%INIT_maxseq_1% to show
+\verb%1<maxseq%, then resolve with \verb%ONE_LESS_0_LESS%.
+The last result satisfies the original goal and completes the proof.
+
+\begin{session}
+\begin{verbatim}
+let INIT_maxseq_0 = prove_thm( 
+  `INIT_maxseq_0`,
+  "!source:^data list. !maxseq:^sequence.
+   !rem sink :^datatime.  !s r :^seqtime.
+   (INIT source maxseq rem s sink r) ==> (0 < maxseq)",
+   
+   REPEAT STRIP_TAC THEN IMP_RES_TAC INIT_maxseq_1 THEN
+   IMP_RES_TAC ONE_LESS_0_LESS );;
+\end{verbatim}
+\end{session}
+
+\subsection{Safety theorems}
+The lemma Lemma1A states that
+if a non-garbled packet is received at any time then it must be a copy of
+the packet input to the channel at that time.
+
+\begin{session}
+\begin{verbatim}
+g("!inC outC :^channel. !t:^time.
+   (CHANNEL inC outC) /\
+    good_packet (outC t)
+ ==>
+   ( (outC t) = (inC t) )");;
+\end{verbatim}
+\end{session}
+
+The proof is set up using tactic5 which expands the \verb%CHANNEL% 
+definition and strips the goal.
+\begin{session}
+\begin{verbatim}
+#expand tactic5;;
+OK..
+"outC t = inC t"
+    [ "!t. (outC t = inC t) \/ (outC t = set_non_packet)" ]
+    [ "good_packet(outC t)" ]
+\end{verbatim}
+\end{session}
+We perform cases on the disjunctive assumption (after specializing \verb%!t%).
+
+\begin{session}
+\begin{verbatim}
+#expand( POP_ASSUM MP_TAC THEN POP_ASSUM(DISJ_CASES_TAC o SPEC_ALL));;
+OK..
+2 subgoals
+"outC t = inC t"
+    [ "!t. (outC t = inC t) \/ (outC t = set_non_packet)" ]
+    [ "good_packet(outC t)" ]
+    [ "outC t = set_non_packet" ]
+
+"outC t = inC t"
+    [ "!t. (outC t = inC t) \/ (outC t = set_non_packet)" ]
+    [ "good_packet(outC t)" ]
+    [ "outC t = inC t" ]
+\end{verbatim}
+\end{session}
+
+It can now be seen that the first goal (the lowest one above), can be
+solved since the first assumption is the same as the goal. 
+In the second goal, the assumption
+that \verb%outC t% is a good packet contradicts the assumption
+\verb%outC t = set_non_packet%.  Undischarging the former and
+rewriting with assumptions and definitions yields a theorem of the form
+\verb%|- F ==>% $term$ which is true for any term, $term$.  This completes
+the proof of the goal in box 22 which is saved as \verb%Lemma1A%. 
+
+\begin{session}
+\begin{verbatim}
+expand( ASM_REWRITE_TAC[] );;
+expand( ASM_REWRITE_TAC [good_packet;set_non_packet;ISL]);;
+
+let Lemma1A = save_top_thm`Lemma1A`;;
+\end{verbatim}
+\end{session}
+
+Lemma1 gives the label values of acknowledgements received by
+the sender.
+
+\begin{session}
+\begin{verbatim}
+g("!r s :^seqtime.
+   !q:^time->bool. !SW maxseq :^sequence.
+   !ackS ackR :^channel.
+   !t:^time.
+     ACK_TRANS r maxseq q ackR /\
+     CHANNEL ackR ackS /\
+     IN_WINDOW (ackS t) (s t) SW maxseq 
+    ==>
+     (label(ackS t) = subm(r t,1,maxseq))" );;
+\end{verbatim}
+\end{session}
+
+The definition of \verb%ACK_TRANS% contains a conditional statement
+for assigning values to \verb%ackR t%. 
+This proof analyses each of these cases.
+The first case states that a good acknowledgement was
+transmitted, and second that a non-packet was transmitted.
+The cases are set up by tactic6 which expands the definition of
+\verb%IN_WINDOW% so as to resolve with Lemma1A and then expands
+the definition of \verb%ACK_TRANS% and breaks the main goal into
+two goals, one for each case.
+
+\begin{session}
+\begin{verbatim}
+#expand(tactic6 Lemma1A);;
+
+OK..
+2 subgoals
+"label(ackS t) = subm(r t,1,maxseq)"
+ ...
+    [ "good_packet(ackS t)" ]
+ ...
+    [ "ackS t = ackR t" ]
+ ...
+    [ "ackR t = set_non_packet" ]
+
+
+"label(ackS t) = subm(r t,1,maxseq)"
+  ...
+    [ "ackS t = ackR t" ]
+  ...
+    [ "ackR t = new_packet(subm(r t,1,maxseq))dummy" ]
+\end{verbatim}
+\end{session}
+
+The first of these goals can be solved by rewriting with the
+assumptions and with definitions.
+The second case is solved by contradiction.
+\begin{session}
+\begin{verbatim}
+expand( ASM_REWRITE_TAC[label;new_packet;OUTL;FST] );;
+
+expand(
+      UNDISCH_TAC "good_packet((ackS:^channel) t)" THEN
+      ASM_REWRITE_TAC[good_packet;set_non_packet;ISL] );;
+
+let Lemma1 = save_top_thm`Lemma1`;;
+\end{verbatim}
+\end{session}
+
+The following lemmas, 2A,2B,2C and 2, relate the contents of data packets 
+received by the receiver, through
+\verb+DATA_RECV+, to the sender's and receiver's sequence numbers.
+
+The sender's view of the values which are transmitted
+in its data packets is expressed in Lemma2A.  
+This lemma will be used later with Lemma1A to prove
+properties of data packets received by \verb+DATA_RECV+.
+
+\begin{session}
+\begin{verbatim}
+g("!dataS:^channel.
+   !maxseq:^sequence. !s:^seqtime. 
+   !p:^time->^sequence->bool. !i:^seqtime. !rem:^datatime.
+   !t:^time.
+   (DATA_TRANS rem s SW maxseq p i dataS) /\ 
+    good_packet(dataS t) /\
+    (0 < maxseq)
+  ==> 
+   ((label(dataS t) = plusm(s t,i t,maxseq)) /\
+    (message(dataS t) = (HDI (i t) (rem t))) /\
+    ( ((i t)+1) < maxseq ) /\
+    ( ~NULL(TLI (i t) (rem t)) ) )" );;
+\end{verbatim}
+\end{session}
+
+
+The first step in the proof is to break down the goal into the
+two cases for \verb%dataS t% values in \verb%DATA_TRANS%.  This
+step is performed by tactic7.
+
+\begin{session}
+\begin{verbatim}
+expand tactic7;;
+\end{verbatim}
+\end{session}
+
+The parts of the goal which concern the values of the label and message
+of a packet are solved by rewriting using the following tactic.
+
+\begin{session}
+\begin{verbatim}
+#expand( ASM_REWRITE_TAC[label;new_packet;OUTL;FST;message;SND] );;
+OK..
+"((i t) + 1) < maxseq /\ ~NULL(TLI(i t)(rem t))"
+    [ "SW = maxseq - 1" ]
+...
+    [ "0 < maxseq" ]
+    [ "p t(i t) ==> ~NULL(TLI(i t)(rem t)) /\ (i t) < SW" ]
+...
+    [ "p t(i t) /\ ~NULL(rem t)" ]
+...
+\end{verbatim}
+\end{session}
+
+The remaining goal can be solved by extracting the conclusion of the 
+second assumption from the bottom in the list above
+and using the assumption \verb%SW = maxseq - 1% and the theorem
+\begin{verbatim}
+PRE_LESS_LESS_SUC = |- !i m. i < (m - 1) /\ 0 < m ==> (i + 1) < m
+\end{verbatim}
+to deduce that \verb%((i t) + 1) < maxseq)%.  
+The steps are performed by tactic8 which completes the first case of 
+the proof.
+\begin{session}
+\begin{verbatim}
+expand tactic8;;
+\end{verbatim}
+\end{session}
+
+To complete the proof, prove that 
+transmitting and receiving a non-packet contradicts the 
+assumption that \verb%dataS t% is a good packet as before.
+The proved theorem is saved as \verb%Lemma2A%.
+
+\begin{session}
+\begin{verbatim}
+expand(
+  UNDISCH_TAC "good_packet ((dataS:^channel) t)" THEN
+  ASM_REWRITE_TAC [good_packet;set_non_packet;ISL] );;
+
+let Lemma2A = save_top_thm`Lemma2A`;;
+\end{verbatim}
+\end{session}
+
+Lemma2B shows that, for a window size of 1, packets 
+are only accepted if the difference between the incoming
+sequence number and the base marker for the window is zero.
+\begin{session}
+\begin{verbatim}
+g("!dataR:^channel. 
+  !r:^seqtime. !RW:^sequence. !maxseq:^sequence.
+  !t:^time.
+     ((IN_WINDOW (dataR t) (r t) RW maxseq) /\ (RW=1))
+    ==>
+     ( subm(label(dataR t),r t,maxseq) = 0 )");;
+\end{verbatim}
+\end{session}
+
+The proof involves expanding the definition of \verb%IN_WINDOW% and
+then showing that if the difference between the label of \verb%dataR t%
+and \verb%r t% is less than \verb%RW%, which is 1, then the difference
+must be equal to 0.  This is a specialization of the theorem
+\begin{verbatim}
+less_than_one_is_0 = |- !a. a < 1 = (a = 0)
+\end{verbatim}
+The theorem is proved by tactic10 and saved as Lemma2B.
+\begin{session}
+\begin{verbatim}
+expand tactic10 ;;
+
+let Lemma2B = save_top_thm `Lemma2B`;;
+\end{verbatim}
+\end{session}
+
+The relationship between the window markers of the sender and receiver 
+when the receiver accepts a packet is expressed by Lemma2C.
+
+\begin{session}
+\begin{verbatim}
+g("!dataR dataS :^channel.
+   !maxseq  SW  RW :^sequence. 
+   !rem sink :^datatime. !s r :^seqtime.
+   !p:^time->^sequence->bool. !i:^seqtime.
+   !t:^time.
+  ( (DATA_TRANS rem s SW maxseq p i dataS ) /\
+    (CHANNEL dataS dataR) /\
+    (RW=1) /\
+    (IN_WINDOW (dataR t) (r t) RW maxseq) /\
+    ( 0 < maxseq ) )
+  ==>
+    ( i t = (subm(r t,s t,maxseq)) )" );;
+\end{verbatim}
+\end{session}
+
+First move all assumptions to the assumption list and resolve 
+with Lemma2B.
+\begin{session}
+\begin{verbatim}
+expand( REPEAT STRIP_TAC THEN 
+        IMP_RES_TAC Lemma2B THEN 
+        POP_ASSUM MP_TAC);; 
+\end{verbatim}
+\end{session}
+
+Then use tactic11A and tactic11B which expand the goal and its assumption list
+using the results of Lemma1A and Lemma2B.
+\begin{session}
+\begin{verbatim}
+#expand( tactic11A Lemma1A THEN tactic11B Lemma2A );;
+OK..
+"(subm(plusm(s t,i t,maxseq),r t,maxseq) = 0) ==>
+ (i t = subm(r t,s t,maxseq))"
+...
+    [ "0 < maxseq" ]
+...
+    [ "(i t) < maxseq" ]
+\end{verbatim}
+\end{session}
+
+The final goal and its assumptions match the theorem \verb%change_sides%
+from the theory \verb%plusm_subm%.
+\begin{verbatim}
+change_sides = |- !a b c m.
+   b < m /\ 0 < m /\ (subm(plusm(a,b,m),c,m) = 0) ==> (b = subm(c,a,m))
+\end{verbatim}
+Resolving the assumptions with this lemma proves the theorem which
+is then saved in the theory.  
+
+\begin{session}
+\begin{verbatim}
+expand(
+  DISCH_TAC THEN
+  IMP_RES_TAC (SPECL 
+      ["(s:^seqtime) t";"(i:^seqtime) t";"(r:^seqtime) t";"maxseq:num"] 
+      change_sides) );;
+
+let Lemma2C = save_top_thm`Lemma2C`;;
+\end{verbatim}
+\end{session}
+
+Lemma2 combines the results of 
+lemmas 1A, 2A and 2C to express the
+relationship between data messages received by \verb%DATA_RECV% and
+those transmitted by \verb%DATA_TRANS%.
+
+\begin{session}
+\begin{verbatim}
+g("!dataR dataS :^channel.
+   !maxseq SW RW :^sequence. 
+   !rem sink :^datatime. !s r :^seqtime.
+   !p:^time->^sequence->bool. !i:^seqtime.
+   !t:^time.
+  ( (DATA_TRANS rem s SW maxseq p i dataS ) /\
+    (CHANNEL dataS dataR) /\
+    (RW=1) /\
+    (IN_WINDOW (dataR t) (r t) RW maxseq) /\
+    ( 0 < maxseq ) )
+  ==>
+  ( ((HDI (subm(r t,s t,maxseq)) (rem t)) = message(dataR t) ) /\
+    (~NULL(TLI (subm(r t,s t,maxseq)) (rem t))) /\
+     ( (subm(r t,s t,maxseq)+1) < maxseq) )" );;
+\end{verbatim}
+\end{session}
+
+To prove this lemma use tactic12 to strip the goal and add the conclusions 
+of Lemma1A,
+Lemma2A and Lemma2C to the assumption list.  Rewriting with this assumption
+list proves the goal which is then saved as Lemma2.
+\begin{session}
+\begin{verbatim}
+expand (tactic12 Lemma1A Lemma2A Lemma2C);;
+
+let Lemma2 = save_top_thm`Lemma2`;;
+\end{verbatim}
+\end{session}
+
+Lemmas 3 and 4 state the results of all earlier lemmas in a form suitable
+for the case analysis which will be performed in the proof of the
+\verb+SAFETY_THM+
+
+\begin{session}
+\begin{verbatim}
+g("!source:^data list. !rem sink:^datatime. 
+   !SW:^sequence. !maxseq:^sequence. 
+   !s r:^seqtime.  !q:^time->bool. 
+   !ackS ackR dataR:^channel.
+
+      ACK_TRANS r maxseq q ackR /\
+      CHANNEL ackR ackS /\
+      ACK_RECV ackS SW maxseq rem s /\
+      INIT source maxseq rem s sink r /\
+      DATA_RECV dataR RW maxseq sink r
+     ==>
+
+      (!t:^time.
+        (IN_WINDOW(ackS t)(s t)SW maxseq => 
+           ((s(t + 1) = r t) /\
+            (rem(t + 1) = TLI(subm(r t,s t,maxseq))(rem t))) | 
+           ((s(t + 1) = s t) /\ (rem(t + 1) = rem t))))" );;
+\end{verbatim}
+\end{session}
+
+The proof uses the results of some earlier lemmas, \verb%INIT_maxseq_0% and
+\verb%r_in_range% and then rewrites the definition of \verb%ACK_RECV% 
+with the results of Lemma1, saving the theorem as Lemma3.
+
+\begin{session}
+\begin{verbatim}
+expand(
+  REPEAT STRIP_TAC THEN IMP_RES_TAC INIT_maxseq_0 THEN
+  IMP_RES_TAC r_in_range THEN
+  POP_ASSUM (ASSUME_TAC o SPEC_ALL) THEN
+
+  IMP_RES_TAC (SPECL ["(r:^seqtime) t";"1";"maxseq:num"] plusm_subm) THEN
+  UNDISCH_TAC "ACK_RECV (ackS:^channel) SW maxseq rem s" THEN 
+  REWRITE_TAC[ACK_RECV] THEN REPEAT STRIP_TAC THEN
+
+  POP_ASSUM (MP_TAC o SPEC_ALL) THEN COND_CASES_TAC
+    REPEAT STRIP_TAC THEN IMP_RES_TAC Lemma1 THEN ASM_REWRITE_TAC[]);;
+
+let Lemma3=save_top_thm`Lemma3`;;
+\end{verbatim}
+\end{session}
+
+Lemma4 is similar to Lemma3.  It rewrites the definition of
+\verb%ACK_RECV% using Lemma2.
+
+\begin{session}
+\begin{verbatim}
+g("!dataR dataS:^channel.
+  !maxseq:^sequence.  !source:^data list.
+  !rem sink:^datatime. !s r:^seqtime. !SW RW:^sequence.
+  !p:^time->^sequence->bool. !i:^seqtime.
+    INIT source maxseq rem s sink r  /\
+    DATA_TRANS rem s SW maxseq p i dataS  /\
+    CHANNEL dataS dataR  /\
+    DATA_RECV dataR RW maxseq sink r
+ ==>
+  (!t:^time.
+    (IN_WINDOW (dataR t) (r t) RW maxseq)
+      => ((r(t+1)=plusm(r t,1,maxseq)) /\ 
+          (sink(t+1)=
+           (APPEND (sink t) [HDI (subm(r t,s t,maxseq)) (rem t)])) /\
+          (~NULL(TLI (subm(r t,s t,maxseq)) (rem t))) /\
+          ( (subm(r t,s t,maxseq)+1) < maxseq) )
+      |  ((r(t+1)=(r t)) /\ 
+          (sink(t+1)=(sink t)) ))" );;
+\end{verbatim}
+\end{session}
+
+\begin{session}
+\begin{verbatim}
+expand(
+  REPEAT STRIP_TAC THEN IMP_RES_TAC INIT_maxseq_0 THEN
+  UNDISCH_TAC "DATA_RECV (dataR:^channel) RW maxseq sink r" THEN
+  REWRITE_TAC[DATA_RECV] THEN DISCH_TAC THEN POP_ASSUM STRIP_ASSUME_TAC THEN
+  POP_ASSUM (MP_TAC o SPEC_ALL) THEN
+  COND_CASES_TAC THEN
+    REPEAT STRIP_TAC THEN IMP_RES_TAC Lemma2 THEN ASM_REWRITE_TAC[]);;
+
+let Lemma4 =save_top_thm`Lemma4`;;
+\end{verbatim}
+\end{session}
+
+All the lemmas required to prove the main safety theorem are now in place.
+The idea of the safety proof is quite straightforward: the required
+invariant is proved by induction over time.  The base case can be proved
+by rewriting with the initial values given in \verb+INIT+.  The induction
+step is proved by analysing the cases for updated variables which have been
+set up in Lemma3 and Lemma4.  The goal of the \verb%SAFETY_THM% is :
+
+\begin{session}
+\begin{verbatim}
+g("!source:^data list. !maxseq:^sequence.
+   !rem:^datatime.  !s:^seqtime. !SW:^sequence.
+   !p:^time->^sequence->bool. !i:^seqtime.
+   !c:^time->num. !aborted:^time->bool. !maxT:num.
+   !sink:^datatime. !r:^seqtime. !RW:^sequence. !q:^time->bool.
+   !dataS dataR ackS ackR:^channel.
+
+   (IMPL source maxseq rem s SW p i c aborted maxT sink r RW q 
+        dataS dataR ackS ackR)
+ ==>
+   ( !t:^time. 
+      ( (APPEND (sink t) (TLI (subm(r t,s t,maxseq)) (rem t))) = source) )");;
+\end{verbatim}
+\end{session}
+
+The proof is begun by setting up the induction as usual and expanding the
+definitions of \verb%IMPL, SENDER% and \verb%RECEIVER% using tactic15.
+\begin{session}
+\begin{verbatim}
+#expand( tactic15 [IMPL;SENDER;RECEIVER] );;
+
+OK..
+2 subgoals
+"APPEND(sink(SUC t))(TLI(subm(r(SUC t),s(SUC t),maxseq))(rem(SUC t))) =
+ source"
+...
+    [ "APPEND(sink t)(TLI(subm(r t,s t,maxseq))(rem t)) = source" ]
+
+
+"APPEND(sink 0)(TLI(subm(r 0,s 0,maxseq))(rem 0)) = source"
+    [ "INIT source maxseq rem s sink r" ]
+...
+\end{verbatim}
+\end{session}
+
+The base case is solved by the list of tactics below.
+The first task is to resolve with the theorems
+\verb%INIT_maxseq_0% and
+\begin{verbatim}
+subm_self = |- !m. 0 < m ==> (!r. subm(r,r,m) = 0)
+\end{verbatim}
+from the theory \verb%plusm_subm%. 
+Next, specialize \verb%subm_self% using
+\verb%maxseq% for \verb%m%.
+Then expand the definition of \verb%INIT%.  Rewrite the goal 
+with these assumptions and the basis cases
+of the recursive list definition \verb%APPEND [] l = l% and 
+the primitive recursive definition \verb%TLI 0 l = l%.  These steps
+prove the basis case of the \verb%SAFETY_THM%.
+
+\begin{session}
+\begin{verbatim}
+expand(
+   IMP_RES_TAC INIT_maxseq_0 THEN
+   IMP_RES_TAC (SPEC "maxseq:num" subm_self) THEN
+
+   UNDISCH_TAC "INIT (source:^data list) maxseq rem s sink r" THEN
+   REWRITE_TAC[INIT] THEN REPEAT STRIP_TAC THEN
+   ASM_REWRITE_TAC[APPEND;TLI] );;
+
+\end{verbatim}
+\end{session}
+
+The cases for the induction step are now set up. 
+We use \verb%MP_TAC% instead of \verb%IMP_RES_TAC% to avoid an explosion of
+theorems on the assumption list.
+
+\begin{session}
+\begin{verbatim}
+#expand( MP_TAC (SPEC_ALL Lemma3) THEN ASM_REWRITE_TAC[] THEN
+        DISCH_TAC THEN POP_ASSUM (MP_TAC o SPEC_ALL) THEN
+        COND_CASES_TAC THEN REPEAT STRIP_TAC );;
+\end{verbatim}
+\end{session}
+
+
+\begin{session}
+\begin{verbatim}
+#expand( MP_TAC (SPEC_ALL Lemma4) THEN ASM_REWRITE_TAC[] THEN
+        DISCH_TAC THEN POP_ASSUM (MP_TAC o SPEC_ALL) THEN
+        COND_CASES_TAC THEN REPEAT STRIP_TAC );;
+OK..
+...
+"APPEND(sink(SUC t))(TLI(subm(r(SUC t),s(SUC t),maxseq))(rem(SUC t))) =
+ source"
+...
+    [ "IN_WINDOW(ackS t)(s t)SW maxseq" ]
+    [ "(s(t + 1) = r t) /\
+       (rem(t + 1) = TLI(subm(r t,s t,maxseq))(rem t))" ]
+...
+    [ "IN_WINDOW(dataR t)(r t)RW maxseq" ]
+    [ "(r(t + 1) = plusm(r t,1,maxseq)) /\
+       (sink(t + 1) = APPEND(sink t)[HDI(subm(r t,s t,maxseq))(rem t)]) /\
+       ~NULL(TLI(subm(r t,s t,maxseq))(rem t)) /\
+       ((subm(r t,s t,maxseq)) + 1) < maxseq" ]
+\end{verbatim}
+\end{session}
+
+To show that \verb%(subm(plusm(r t,1,maxseq),r t,maxseq))=1%
+use a specialisation of the theorem \verb%plus_1_sub%
+which states
+\begin{verbatim}
+    |- 1 < maxseq ==> (subm(plusm(r t,1,maxseq),r t,maxseq) = 1)
+\end{verbatim}
+\begin{session}
+\begin{verbatim}
+#expand(
+  IMP_RES_TAC INIT_maxseq_1 THEN
+  IMP_RES_TAC (SPECL ["(r:^seqtime) t";"maxseq:num"] plus_1_sub) THEN
+  ASM_REWRITE_TAC[ADD1] );;
+OK..
+"APPEND
+ (APPEND(sink t)[HDI(subm(r t,s t,maxseq))(rem t)])
+ (TLI 1(TLI(subm(r t,s t,maxseq))(rem t))) =
+ source"
+...
+    [ "~NULL(TLI(subm(r t,s t,maxseq))(rem t))" ]
+...
+\end{verbatim}
+\end{session}
+
+Two theorems from the \verb%hdi_tli% theory (see Appendix A) 
+are used to finish the proof.  The first
+\begin{verbatim}
+HDI_TLI_2 = |- !x y l. TLI x(TLI y l) = TLI(x + y) l
+\end{verbatim}
+is used to rewrite the goal in a form suitable for rewriting with the
+conclusion of the second theorem,
+\begin{verbatim}
+HDI_TLI_1 = 
+   |- !x l. ~NULL(TLI x l) ==> (APPEND[HDI x l](TLI(x + 1)l) = TLI x l)
+\end{verbatim}
+The rewriting is completed using associativity of the list APPEND
+operation. 
+\begin{session}
+\begin{verbatim}
+expand(
+  IMP_RES_TAC HDI_TLI_1 THEN
+  POP_ASSUM (ASSUME_TAC o ONCE_REWRITE_RULE [ADD_SYM]) THEN
+  ASM_REWRITE_TAC[(SYM (SPEC_ALL APPEND_ASSOC));HDI_TLI_2]);;
+\end{verbatim}
+\end{session}
+
+This concludes the proof for the first case.
+In the second case, rewriting with the assumption list
+yields :
+\begin{session}
+\begin{verbatim}
+#expand( ASM_REWRITE_TAC[ADD1] );;
+OK..
+"APPEND
+ (sink t)
+ (TLI(subm(r t,r t,maxseq))(TLI(subm(r t,s t,maxseq))(rem t))) =
+ source"
+...
+\end{verbatim}
+\end{session}
+
+
+This goal can be solved with the theorem 
+\begin{verbatim}
+subm_self = |- !m. 0 < m ==> (!r. subm(r,r,m) = 0)
+\end{verbatim}
+and the base case for \verb%TLI%, which is \verb%TLI 0 l = l%.
+
+\begin{session}
+\begin{verbatim}
+expand(
+  IMP_RES_TAC INIT_maxseq_0 THEN
+  IMP_RES_TAC (SPEC "maxseq:num" subm_self) THEN
+  POP_ASSUM (ASSUME_TAC o SPEC "(r:^seqtime) t") THEN
+  ASM_REWRITE_TAC[ADD1; TLI ] );;
+\end{verbatim}
+\end{session}
+
+Set up the second half of the proof in the same way as the first.
+
+\begin{session}
+\begin{verbatim}
+#expand( MP_TAC (SPEC_ALL Lemma4) THEN ASM_REWRITE_TAC[] THEN
+        DISCH_TAC THEN POP_ASSUM (MP_TAC o SPEC_ALL) THEN
+        COND_CASES_TAC THEN REPEAT STRIP_TAC );;
+OK..
+"APPEND
+ (APPEND(sink t)[HDI(subm(r t,s t,maxseq))(rem t)])
+ (TLI(subm(plusm(r t,1,maxseq),s t,maxseq))(rem t)) =
+ source"
+...
+\end{verbatim}
+\end{session}
+
+It can be seen that it is necessary to show
+\begin{verbatim}
+subm(plusm(r t,1,maxseq),s t,maxseq)) = 1 + subm(r t,s t,maxseq)
+\end{verbatim}
+and then use the theorem \verb%HDI_TLI_2% as in the first case of the proof.
+The theorem
+\begin{verbatim}
+plusm_eq_plus = 
+    |- !a b m. 0 < m /\ (a + b) < m ==> (plusm(a,b,m) = a + b)
+\end{verbatim}
+will be used for the former task.  
+The tactics which prove this are contained in tactic16.
+\begin{session}
+\begin{verbatim}
+#expand( tactic16 INIT_maxseq_0 r_in_range );;
+
+OK..
+goal proved
+...
+
+Previous subproof:
+
+"APPEND(sink(SUC t))(TLI(subm(r(SUC t),s(SUC t),maxseq))(rem(SUC t))) =
+ source"
+...
+    [ "(s(t + 1) = s t) /\ (rem(t + 1) = rem t)" ]
+...
+    [ "(r(t + 1) = r t) /\ (sink(t + 1) = sink t)" ]
+\end{verbatim}
+\end{session}
+
+It can be seen from the last result that the
+final case can be proved by simply rewriting with the assumption list
+and \verb%ADD1%. 
+The completed theorem is saved in \verb+SAFETY_THM+.
+
+\begin{session}
+\begin{verbatim}
+expand( ASM_REWRITE_TAC[ADD1] );;
+
+let SAFETY_THM = save_top_thm`SAFETY_THM`;;
+\end{verbatim}
+\end{session}
+
+
+
+\subsection{Liveness theorems}
+
+These theorems form the second set of those needed to prove the total
+correctness of this sliding window protocol implementation.
+First, a theorem which extracts the necessary predicates from the
+\verb+IMPL+ definition and one which extracts the size of the
+sender's sliding window are proved by rewriting with the obvious
+definitions using tactic17 and tactic18.
+
+\vfill % PBHACK
+
+\begin{session}
+\begin{verbatim}
+let IMPL_LIVE_PARTS = 
+prove_thm( 
+  `IMPL_LIVE_PARTS`,
+
+  "!source:^data list. !maxseq SW RW :^sequence.
+   !rem sink :^datatime.  !s r :^seqtime.
+   !p:^time->^sequence->bool. !i:^seqtime. !q:^time->bool.
+   !c:^time->num. !aborted:^time->bool. !maxT:num.
+   !dataS dataR ackS ackR :^channel.
+
+  (IMPL source maxseq rem s SW p i c aborted maxT sink r RW q 
+        dataS dataR ackS ackR)
+  ==>
+  ((INIT source maxseq rem s sink r ) /\
+   (SENDER maxseq SW rem s p i dataS ackS ) /\
+   (ABORT c aborted maxT maxseq SW s rem ackS))" ,
+
+ tactic17 );;
+\end{verbatim}
+\end{session}
+
+
+\begin{session}
+\begin{verbatim}
+let SW_value = 
+prove_thm( 
+  `SW_value`,
+
+  "!rem:^datatime. !s:^seqtime. !SW maxseq:^sequence.
+   !p:^time->^sequence->bool. !i:^seqtime.
+   !dataS:^channel.   
+  ( DATA_TRANS rem s SW maxseq p i dataS ) ==> ( SW = maxseq-1 )",
+
+  tactic18 );;
+\end{verbatim}
+\end{session}
+
+
+The lemma \verb%Liveness_1% states that for any time, \verb%t%, the list 
+of messages remaining to be transmitted at time \verb%t+1%,
+\verb%(rem t+1)%, is either the same as in the last time
+interval, \verb+(rem t)+, or is entirely contained by the tail of the 
+last list.  That is, there has either been progress made
+towards the termination of the protocol (when \verb+(rem t)=NIL+) or there
+has been no progress.
+In the first case the abort counter will be reset to 0 and in the
+second case the value of the abort counter is incremented by 1.
+
+\begin{session}
+\begin{verbatim}
+g("!maxseq:^sequence.
+   !rem sink:^datatime.  !s r:^seqtime. !SW :^sequence.
+   !c:^time->num. !aborted:^time->bool. !maxT:num.
+   !p:^time->^sequence->bool. !i:^seqtime.
+   !ackS dataS :^channel.
+   !source:^data list.
+
+   (INIT source maxseq rem s sink r ) /\
+   (SENDER maxseq SW rem s p i dataS ackS ) /\
+   (ABORT c aborted maxT maxseq SW s rem ackS)
+
+  ==>
+
+   !t:^time. 
+     ( (?x:num. ( rem(t+1) = (TLI x (rem t))) /\ (0<x)) /\ (c(t+1)=0) ) \/
+       (( rem(t+1) = (rem t) ) /\ (c(t+1)=((c t)+1)) )");;
+\end{verbatim}
+\end{session}
+
+\vfill % PBHACK
+
+To prove this goal, use tactic19 to
+strip the goal as usual and perform case analysis on the sender's actions
+when it receives an acknowledgement packet.
+
+\vfill % PBHACK
+
+\begin{session}
+\begin{verbatim}
+#expand tactic19;;
+OK..
+2 subgoals
+...
+
+"(?x. (rem(t + 1) = TLI x(rem t)) /\ 0 < x) /\ (c(t + 1) = 0) \/
+ (rem(t + 1) = rem t) /\ (c(t + 1) = (c t) + 1)"
+...
+    [ "!t.
+        (c 0 = 0) /\
+        (c(t + 1) = (IN_WINDOW(ackS t)(s t)SW maxseq => 0 | (c t) + 1)) /\
+        ~aborted 0 /\
+        (aborted(t + 1) = ((c t) >= maxT \/ aborted t) /\ ~NULL(rem t))" ]
+    [ "IN_WINDOW(ackS t)(s t)SW maxseq" ]
+    [ "(s(t + 1) = plusm(label(ackS t),1,maxseq)) /\
+       (rem(t + 1) =
+        TLI(subm(plusm(label(ackS t),1,maxseq),s t,maxseq))(rem t))" ]
+\end{verbatim}
+\end{session}
+
+We choose to prove the first disjunct of the current goal.
+\begin{session}
+\begin{verbatim}
+#expand( DISJ1_TAC THEN ASM_REWRITE_TAC[]);;
+\end{verbatim}
+\end{session}
+
+Now choose a value of \verb%x% which will satisfy the goal.  It can
+be seen that a suitable choice for \verb%x% is,
+\begin{verbatim}
+   SUC(subm(label((ackS:^channel) t),s t,maxseq))
+\end{verbatim}
+Some rewriting using the following theorems is performed by
+tactic20 to make the value for \verb%rem t+1% in the
+first assumption match this choice of x in the goal.  The main
+theorems used in tactic20 are:
+\begin{verbatim}
+subm_plusm = 
+    |- !m. 0 < m ==> 
+           (!a b c. subm(plusm(a,b,m),c,m) = plusm(subm(a,c,m),b,m))
+
+plusm_eq_plus = 
+    |- !a b m. 0 < m /\ (a + b) < m ==> (plusm(a,b,m) = a + b)
+\end{verbatim}
+
+\begin{session}
+\begin{verbatim}
+expand( tactic20 INIT_maxseq_0 SW_value );;
+\end{verbatim}
+\end{session}
+
+In the case we have \verb%c (t+1) = (c t) + 1% and \verb%rem (t+1) = rem t%
+in the assumptions.  Rewriting satisfies the second disjunct, and the
+theorem is proved.
+The theorem is saved as \verb%Liveness_1%.
+
+\begin{session}
+\begin{verbatim}
+expand( DISJ2_TAC THEN ASM_REWRITE_TAC[] );;
+
+let Liveness_1 = save_top_thm`Liveness_1`;;
+\end{verbatim}
+\end{session}
+
+The theorem \verb+Liveness_2+ extracts the expression for the \verb+aborted+
+variable from the \verb+ABORT+ predicate, by expanding its definition
+and rewriting using tactic21.
+
+\begin{session}
+\begin{verbatim}
+let Liveness_2 = 
+prove_thm(
+  `Liveness_2`,
+
+  "!maxseq:^sequence.
+   !rem sink:^datatime.  !s:^seqtime. !SW:^sequence.
+   !c:^time->num. !aborted:^time->bool. !maxT:num.
+   !ackS:^channel.  
+
+   (ABORT c aborted maxT maxseq SW s rem ackS)
+
+  ==>
+
+  !t:^time.
+  ( (((c t >= maxT) \/ (aborted t)) /\ ~(NULL(rem t))) 
+    = aborted(t+1) )",
+
+ tactic21 );;
+\end{verbatim}
+\end{session}
+
+The theorem \verb+Liveness_3+ is a generalized version of \verb+Liveness_1+, 
+relating the current value of \verb+rem+ at any time, \verb%t%, to its value
+\verb+n+ time steps into the future.
+
+\begin{session}
+\begin{verbatim}
+g("!maxseq:^sequence.
+   !rem sink:^datatime.  !s r:^seqtime. !SW :^sequence.
+   !c:^time->num. !aborted:^time->bool. !maxT:num.
+   !p:^time->^sequence->bool. !i:^seqtime.
+   !ackS dataS :^channel.
+   !source:^data list.
+
+   (INIT source maxseq rem s sink r ) /\
+   (SENDER maxseq SW rem s p i dataS ackS ) /\
+   (ABORT c aborted maxT maxseq SW s rem ackS)
+
+  ==>
+
+  !n:num. !t:^time.
+   ( ?x:num. ( rem(t+n) = (TLI x (rem t)) ) /\ (0<x)  ) \/
+   (         ( rem(t+n) = (rem t)) /\ (n <= c(t+n)) )");;
+\end{verbatim}
+\end{session}
+
+The proof uses induction on \verb%n% and the theorem 
+\verb%Liveness_1%.
+Set up the proof using the following tactic,
+
+
+\begin{session}
+\begin{verbatim}
+#expand(
+  REPEAT GEN_TAC THEN DISCH_TAC THEN 
+  POP_ASSUM (ASSUME_TAC o ( MP (SPEC_ALL Liveness_1) )) THEN 
+  INDUCT_TAC );;
+OK..
+2 subgoals
+"!t.
+  (?x. (rem(t + (SUC n)) = TLI x(rem t)) /\ 0 < x) \/
+  (rem(t + (SUC n)) = rem t) /\ (SUC n) <= (c(t + (SUC n)))"
+    [ "!t.
+        (?x. (rem(t + 1) = TLI x(rem t)) /\ 0 < x) /\ (c(t + 1) = 0) \/
+        (rem(t + 1) = rem t) /\ (c(t + 1) = (c t) + 1)" ]
+    [ "!t.
+        (?x. (rem(t + n) = TLI x(rem t)) /\ 0 < x) \/
+        (rem(t + n) = rem t) /\ n <= (c(t + n))" ]
+
+"!t.
+  (?x. (rem(t + 0) = TLI x(rem t)) /\ 0 < x) \/
+  (rem(t + 0) = rem t) /\ 0 <= (c(t + 0))"
+...
+\end{verbatim}
+\end{session}
+
+The base case is trivially satisfied by rewriting with standard
+arithmetic theorems.
+\begin{session}
+\begin{verbatim}
+expand( REWRITE_TAC[ADD_CLAUSES;LESS_OR_EQ_0] );;
+\end{verbatim}
+\end{session}
+
+To prove the induction step, analyse each disjunct of each of the two
+assumptions in turn.  There are two cases relating \verb%rem t+n% 
+to \verb%rem t% (from the induction assumption) and two 
+relating \verb%rem t'% to \verb%rem t'+1% (from \verb%Liveness_1%).
+Use tactic21A and tactic21B to set up these cases.  The box below
+shows the first of the four goals to be proved.
+
+\begin{session}
+\begin{verbatim}
+#expand tactic21A ;;
+#expand tactic21B ;;
+OK..
+...
+"(?x. (rem(SUC(t + n)) = TLI x(rem t)) /\ 0 < x) \/
+ (rem(SUC(t + n)) = rem t) /\ (SUC n) <= (c(SUC(t + n)))"
+...
+    [ "rem(t + n) = TLI(@x. (rem(t + n) = TLI x(rem t)) /\ 0 < x)(rem t)" ]
+    [ "0 < (@x. (rem(t + n) = TLI x(rem t)) /\ 0 < x)" ]
+    [ "(?x. (rem((t + n) + 1) = TLI x(rem(t + n))) /\ 0 < x) /\
+       (c((t + n) + 1) = 0)" ]
+\end{verbatim}
+\end{session}
+
+In the first case the goal can be solved by rewriting the first disjunct
+of the goal with a suitable choice of \verb%x%.  This value will be
+the sum of the x which satisfy the 2nd and 3rd assumptions, and the x which
+satisfies the first conjunct of the first assumption in the list above.  
+
+The second, much simpler, case is solved in a similar manner using
+tactic23.
+
+\begin{session}
+\begin{verbatim}
+expand tactic22;;
+expand tactic23;;
+\end{verbatim}
+\end{session}
+
+The third and fourth cases of the four are set up by tactic23A.
+\begin{session}
+\begin{verbatim}
+#expand tactic21B;;
+OK..
+...
+"(?x. (rem(SUC(t + n)) = TLI x(rem t)) /\ 0 < x) \/
+ (rem(SUC(t + n)) = rem t) /\ (SUC n) <= (c(SUC(t + n)))"
+...
+    [ "(rem(t + n) = rem t) /\ n <= (c(t + n))" ]
+    [ "(?x. (rem((t + n) + 1) = TLI x(rem(t + n))) /\ 0 < x) /\
+       (c((t + n) + 1) = 0)" ]
+\end{verbatim}
+\end{session}
+
+This time the x needed is that from the first assumption.  
+The necessary selection and rewriting is performed by tactic23,
+leaving one last case.
+\begin{session}
+\begin{verbatim}
+#expand tactic23;;
+OK..
+goal proved
+...
+
+Previous subproof:
+"(?x. (rem(SUC(t + n)) = TLI x(rem t)) /\ 0 < x) \/
+ (rem(SUC(t + n)) = rem t) /\ (SUC n) <= (c(SUC(t + n)))"
+...
+    [ "(rem(t + n) = rem t) /\ n <= (c(t + n))" ]
+    [ "(rem((t + n) + 1) = rem(t + n)) /\
+       (c((t + n) + 1) = (c(t + n)) + 1)" ]
+\end{verbatim}
+\end{session}
+
+This case is easily satisfied by rewriting with the assumptions 
+to satisfy the second disjunct.
+\begin{session}
+\begin{verbatim}
+expand(
+  DISJ2_TAC THEN
+  ASM_REWRITE_TAC[ADD1;REWRITE_RULE [ADD1] LESS_EQ_MONO_EQ] );;
+
+let Liveness_3=save_top_thm `Liveness_3`;;
+\end{verbatim}
+\end{session}
+
+The theorem \verb%Liveness% identifies three possible outcomes related 
+to the progress of this sliding window protocol.
+The theorem states that {\em if} the list of remaining 
+data, \verb+(rem t)+, has not been exhausted by time \verb%t+maxT% {\em then} 
+{\em either} \verb%rem (t+maxT)% is shorter than it was at time, \verb+t+
+{\em or} \verb+aborted+ will be set to true by time \verb%t+maxT+1%.
+This theorem is used later to show that if it is {\em assumed} that the
+protocol is never aborted then it must make progress in the sense that
+\verb%rem t% will eventually be the empty list.
+\begin{session}
+\begin{verbatim}
+g("!maxseq:^sequence.
+   !rem sink:^datatime.  !s r:^seqtime. !SW:^sequence.
+   !c:^time->num. !aborted:^time->bool. !maxT:num.
+   !p:^time->^sequence->bool. !i:^seqtime.
+   !ackS dataS :^channel.
+   !source:^data list.
+
+   (INIT source maxseq rem s sink r ) /\
+   (SENDER maxseq SW rem s p i dataS ackS ) /\
+   (ABORT c aborted maxT maxseq SW s rem ackS)
+
+  ==>
+
+  !t:^time.
+   (~NULL (rem (t+maxT)) )
+
+  ==>
+
+   ( ( ?x:num. ( rem(t+maxT) = (TLI x (rem t)) ) /\ (0<x)  ) \/
+     ( aborted(t+maxT+1) ) )");;
+\end{verbatim}
+\end{session}
+
+To begin the proof we perform case analysis on the conclusion of 
+\verb%Liveness_3% with \verb%maxT% for \verb%n%.
+\begin{session}
+\begin{verbatim}
+expand( REPEAT GEN_TAC THEN DISCH_TAC THEN 
+        POP_ASSUM STRIP_ASSUME_TAC THEN IMP_RES_TAC Liveness_3);;
+
+expand( GEN_TAC THEN 
+        POP_ASSUM (DISJ_CASES_TAC o SPECL ["t:num";"maxT:num"]) );;
+
+OK..
+2 subgoals
+"(?x. (rem(t + maxT) = TLI x(rem t)) /\ 0 < x) \/
+ aborted(t + (maxT + 1))"
+...
+    [ "!t. ((c t) >= maxT \/ aborted t) /\ ~NULL(rem t) = aborted(t + 1)" ]
+    [ "!n t.
+        (?x. (rem(t + n) = TLI x(rem t)) /\ 0 < x) \/
+        (rem(t + n) = rem t) /\ n <= (c(t + n))" ]
+    [ "~NULL(rem(t + maxT))" ]
+    [ "(rem(t + maxT) = rem t) /\ maxT <= (c(t + maxT))" ]
+
+
+"(?x. (rem(t + maxT) = TLI x(rem t)) /\ 0 < x) \/
+ aborted(t + (maxT + 1))"
+...
+    [ "?x. (rem(t + maxT) = TLI x(rem t)) /\ 0 < x" ]
+\end{verbatim}
+\end{session}
+
+We use \verb%Liveness_2% to complete this proof.
+\begin{session}
+\begin{verbatim}
+expand( DISCH_TAC THEN DISJ1_TAC THEN FIRST_ASSUM MATCH_ACCEPT_TAC);;
+
+expand( POP_ASSUM STRIP_ASSUME_TAC THEN DISCH_TAC THEN DISJ2_TAC THEN
+        IMP_RES_TAC Liveness_2);;
+
+expand( UNDISCH_TAC "(c(t + maxT)) >= maxT ==> aborted((t + maxT) + 1)" THEN
+        REWRITE_TAC[GREATER_OR_EQ_LESS_OR_EQ] THEN
+        ASM_REWRITE_TAC[ADD_ASSOC]);;
+
+let Liveness = save_top_thm`Liveness`;;
+\end{verbatim}
+\end{session}
+
+To prove the total correctness of the sliding window protocol we
+need to make some assumptions about its behaviour.
+Consider what happens if the protocol is {\em not} aborted, that is either
+\verb+rem+ is \verb+NIL+ or \verb+rem+ is still decreasing.  In this case
+the length of \verb+rem+ at the end of each interval of length \verb+maxT+ is
+at least one less than its length at the beginning of the
+interval.  Generalising this result, the length of \verb+rem+ at the
+end of \verb%n% intervals of length \verb+maxT+ is at 
+least \verb%n% less than the original length of \verb+rem+.
+This lemma is called the \verb%decreasing_rem_lemma%.
+
+\begin{session}
+\begin{verbatim}
+g("!rem:^datatime. !maxT:num. 
+   (!t:^time.
+     ( NULL(rem (t+maxT))) \/ 
+     ( ?x:num. (rem(t+maxT) = (TLI x (rem t)) ) /\ (0<x)) )
+  ==>
+   ( !n:num. LENGTH(rem(maxT * n)) <= (LENGTH(rem 0) - n ) )" );;
+\end{verbatim}
+\end{session}
+
+This theorem is proved by induction which is set up in the usual way.
+\begin{session}
+\begin{verbatim}
+#expand(
+ REPEAT GEN_TAC THEN DISCH_TAC THEN INDUCT_TAC );;
+OK..
+2 subgoals
+"(LENGTH(rem(maxT * (SUC n)))) <= ((LENGTH(rem 0)) - (SUC n))"
+    [ "!t.
+        NULL(rem(t + maxT)) \/
+        (?x. (rem(t + maxT) = TLI x(rem t)) /\ 0 < x)" ]
+    [ "(LENGTH(rem(maxT * n))) <= ((LENGTH(rem 0)) - n)" ]
+
+"(LENGTH(rem(maxT * 0))) <= ((LENGTH(rem 0)) - 0)"
+...
+\end{verbatim}
+\end{session}
+
+The base case is solved by rewriting with a number of
+arithmetic theorems.
+
+\begin{session}
+\begin{verbatim}
+expand( REWRITE_TAC[MULT_CLAUSES;SUB_0;LESS_EQ_REFL] );;
+\end{verbatim}
+\end{session}
+
+The proof of the induction step will use cases from 
+its second assumption, in which \verb%t% is specialized 
+by \verb%maxT*n%.
+\begin{session}
+\begin{verbatim}
+#expand( UNDISCH_TAC "!t.
+        NULL((rem:^datatime)(t + maxT)) \/
+        (?x. (rem(t + maxT) = TLI x(rem t)) /\ 0 < x)" THEN
+        DISCH_TAC THEN POP_ASSUM(DISJ_CASES_TAC o (SPEC "maxT*n")) );;
+OK..
+2 subgoals
+"(LENGTH(rem(maxT * (SUC n)))) <= ((LENGTH(rem 0)) - (SUC n))"
+...
+    [ "(LENGTH(rem(maxT * n))) <= ((LENGTH(rem 0)) - n)" ]
+    [ "?x. (rem((maxT * n) + maxT) = TLI x(rem(maxT * n))) /\ 0 < x" ]
+
+"(LENGTH(rem(maxT * (SUC n)))) <= ((LENGTH(rem 0)) - (SUC n))"
+...
+    [ "(LENGTH(rem(maxT * n))) <= ((LENGTH(rem 0)) - n)" ]
+    [ "NULL(rem((maxT * n) + maxT))" ]
+\end{verbatim}
+\end{session}
+
+For the first case, tactic28 proves that the  goal must be satisfied
+because the length of a NULL list is 0,
+the tail of a NULL list is also NULL, and every number is greater 
+than or equal to 0.
+
+For the second case, tactic29 proves that since \verb%0<x% 
+the length of \verb%TLI x% of any list is at least 1 less
+than the length of the original list.  The proof uses a
+useful lemma,
+\begin{verbatim}
+useful_lemma =
+  |- !a b c n. 0 < c /\ a <= (b - n) ==> (a - c) <= (b - (SUC n))
+\end{verbatim}
+Rewriting with these deductions and the induction assumption proves the goal.
+\begin{session}
+\begin{verbatim}
+expand tactic28;;
+expand tactic29;;
+
+let decreasing_rem_lemma = save_top_thm`decreasing_rem_lemma`;;
+\end{verbatim}
+\end{session}
+
+The theorem just proved, \verb+decreasing_rem_lemma+, and the assumption 
+that the protocol
+is never aborted are combined in the theorem \verb%LIVENESS%
+which gives a worst case for the time by which the protocol must have
+satisfied \verb%?t. sink t = source%.
+
+Here is the definition intended to capture the assumption that
+the protocol is never aborted.
+\begin{session}
+\begin{verbatim}
+let LIVE_ASSUM = new_definition(
+  `LIVE_ASSUM`,
+  "LIVE_ASSUM (aborted:^time->bool) (maxT:num) =
+    ( !t:^time. ~(aborted (t + maxT + 1)) )" );;
+\end{verbatim}
+\end{session}
+and a statment of the last liveness theorem, \verb%LIVENESS%.
+\begin{session}
+\begin{verbatim}
+g( "!maxseq:^sequence.                                                      
+    !rem sink:^datatime.  !s r:^seqtime. !SW:^sequence.                  
+    !c:^time->num. !aborted:^time->bool. !maxT:num.                         
+    !p:^time->^sequence->bool. !i:^seqtime.                                 
+    !ackS dataS :^channel.                                                  
+    !source:^data list.                                                     
+    (LIVE_ASSUM aborted maxT) /\ 
+    (INIT source maxseq rem s sink r ) /\  
+    (SENDER maxseq SW rem s p i dataS ackS ) /\        
+    (ABORT c aborted maxT maxseq SW s rem ackS) 
+   ==>                                                                      
+    (rem (maxT * LENGTH(rem 0)) = [] )" );;
+\end{verbatim}
+\end{session}
+
+The first part of the proof is completed using tactic30.
+First add the conclusion of the \verb%Liveness% theorem.  Use 
+\verb%IMP_DISJ_THM% to rewrite the implication of this
+conclusion as a disjunction and then 
+\verb%LIVE_ASSUM% to show that the disjunct for aborting the protocol
+cannot be satisfied.  All this rewriting has provided the premise
+of \verb%decreasing_rem_lemma% as an assumption, so using
+\verb%IMP_RES_TAC% adds the required conclusion to the assumption
+list.
+
+\begin{session}
+\begin{verbatim}
+#expand( tactic30 Liveness LIVE_ASSUM decreasing_rem_lemma);;
+OK..
+"rem(maxT * (LENGTH(rem 0))) = []"
+...
+    [ "(LENGTH(rem(maxT * (LENGTH(rem 0))))) <=
+       ((LENGTH(rem 0)) - (LENGTH(rem 0)))" ]
+\end{verbatim}
+\end{session}
+
+Rewrite the first assumption with a number of list and arithmetic lemmas
+to put it in the same form as the goal, and rewrite to solve the goal.
+\begin{session}
+\begin{verbatim}
+expand(
+  POP_ASSUM (ASSUME_TAC o REWRITE_RULE  
+     [SUB_SELF;LESS_OR_EQ;NOT_LESS_0;LENGTH_NIL]) THEN
+  ASM_REWRITE_TAC[]  );;
+ 
+let LIVENESS = save_top_thm`LIVENESS`;;
+\end{verbatim}
+\end{session}
+
+\subsection{Total correctness theorem}
+The theorems \verb%SAFETY% and \verb%LIVENESS% can now be combined to prove 
+the total correctness of the sliding window protocol
+as expressed in the original informal specification.  That is,
+that the implementation of the protocol
+and the assumption that the protocol is not
+aborted together satisfy the specification that there is a time at
+which the sink list is a copy of the source list. 
+
+\begin{session}
+\begin{verbatim}
+g("!source:^data list. !maxseq:^sequence.
+   !rem sink : ^datatime. !s r :^seqtime. !SW RW :^sequence.
+   !p:^time->^sequence->bool. !i:^seqtime.  !q:^time->bool.
+   !c:^time->num. !aborted:^time->bool. !maxT:num.
+   !dataS dataR ackS ackR : ^channel.
+
+  (IMPL source maxseq rem s SW p i c aborted maxT sink r RW q 
+        dataS dataR ackS ackR) /\
+  (LIVE_ASSUM aborted maxT)
+  ==>
+  ( ?t :^time. (sink t) = source )" );;
+\end{verbatim}
+\end{session}
+
+The proof is straightforward. First add the conclusions of the
+theorems,
+\verb%SAFETY_THM%, \verb%IMPL_LIVE_PARTS% and \verb%LIVENESS%
+and specialize the safety theorem to the time at which \verb%rem%
+is guaranteed to be NIL.
+\begin{session}
+\begin{verbatim}
+expand( 
+  REPEAT STRIP_TAC THEN 
+  IMP_RES_TAC IMPL_LIVE_PARTS THEN
+  IMP_RES_TAC LIVENESS THEN
+  IMP_RES_TAC SAFETY_THM THEN
+  POP_ASSUM (ASSUME_TAC o (SPEC "maxT*LENGTH((rem:^datatime) 0)")) );;
+\end{verbatim}
+\end{session}
+
+Now rewrite this version of the safety theorem using the assumption
+\begin{verbatim}
+    rem(maxT * (LENGTH(rem 0))) = []
+\end{verbatim}
+and use rewriting to
+get an assumption in the correct form to match the goal.
+\begin{session}
+\begin{verbatim}
+#expand(
+  POP_ASSUM MP_TAC THEN 
+  ASM_REWRITE_TAC[TLI_NIL;APPEND_NIL] THEN 
+  DISCH_TAC);;
+OK..
+"?t. sink t = source"
+...
+    [ "rem(maxT * (LENGTH(rem 0))) = []" ]
+    [ "APPEND
+       (sink(maxT * (LENGTH(rem 0))))
+       (TLI
+        (subm
+         (r(maxT * (LENGTH(rem 0))),s(maxT * (LENGTH(rem 0))),maxseq))
+        (rem(maxT * (LENGTH(rem 0))))) =
+       source" ]
+    [ "sink(maxT * (LENGTH(rem 0))) = source" ]
+\end{verbatim}
+\end{session}
+
+The last steps of the proof are to choose a value for t in the goal
+using \verb%EXISTS_TAC% and to match the result to the first assumption
+in the list using \verb%FIRST_ASSUM% and \verb%ACCEPT_TAC%.
+After saving this proof, close the newly created sliding window theory.
+You may also end your HOL session by typing \verb%quit();;%.
+\begin{session}
+\begin{verbatim}
+expand(
+  EXISTS_TAC "maxT * LENGTH((rem:^datatime) 0)" THEN
+  FIRST_ASSUM ACCEPT_TAC);;
+
+let TOTAL_CORRECTNESS_THM = save_top_thm`TOTAL_CORRECTNESS_THM`;;
+
+close_theory();;
+\end{verbatim}
+\end{session}
+
+
+\begin{thebibliography}{1}
+
+\bibitem{bertsekas}
+Dimitri Bertsekas and Robert Gallagher. {\em Data Networks}.  Prentice-Hall
+International, Englewood Cliffs, NJ, 1987.
+
+\bibitem{cardelloliver}
+Rachel Cardell-Oliver. {\em The Specification and Verification of 
+Sliding Window Protocols}.  Computer Laboratory Technical
+Report 183, The University of Cambridge, October 1989.
+
+\bibitem{cardell.tapsoft}
+Rachel Cardell-Oliver.  Using higher order logic for modelling real-time
+protocols. In {\em TAPSOFT '91}, number 494 in Lecture Notes in Computer
+Science, pages 259-282. Springer Verlag, April 1991.
+\end{thebibliography}
+
+
+

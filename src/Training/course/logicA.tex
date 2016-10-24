@@ -1,0 +1,1229 @@
+% =====================================================================
+% HOL Course Slides: overview of higher order logic   (c) T melham 1990
+% =====================================================================
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+
+
+% ---------------------------------------------------------------------
+% Macro for a tricky underbrace
+% ---------------------------------------------------------------------
+\def\rul#1{\vrule width0.25mm height#1mm depth-1mm}
+\newbox\ubox
+\def\und#1#2{%
+    \setbox\ubox=\hbox{${\stackrel{\rul{#2}}{\scriptstyle\hbox{\rm #1}}}$}%
+    {\wd\ubox=0mm\box\ubox}}
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Syntax of the logic}{2}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+Overview of\\
+Higher Order Logic\\
+{\vrule width20mm height2.5mm depth-2mm}\\
+Syntax
+\esectitle
+
+% =====================================================================
+\slide{Syntax of Terms}
+
+\point{There are four kinds of terms:}
+   \subpoint{constants}
+   \subpoint{variables}
+   \subpoint{function applications}
+   \subpoint{lambda abstractions}
+
+\vskip5mm
+
+\point{Syntax of raw terms:}
+
+\vskip7mm
+
+\bspindent\LARGE
+$T\quad {:}{:}{=}\quad
+\underbrace{\mathstrut c}_{\und{constant}{10}} \quad | \quad
+\underbrace{\mathstrut v}_{\und{variable}{20}} \quad | \quad
+\underbrace{\mathstrut T_1 \;\;\; T_2}_{\und{application}{10}} \quad | \quad
+\underbrace{\mathstrut \lambda v.\:T}_{\und{abstraction}{20}} $
+\espindent
+
+% =====================================================================
+\slide{Constants and Variables}
+
+\point{These are just identifiers:}
+
+\vskip7mm
+
+\bspindent\LARGE
+$x$, $y$, $f\mkern-1.4mu oo$, $t'$, $k_2$, $c$\_$val$, \dots
+\espindent
+
+\vskip7mm
+
+\bpindent
+\LARGE\bf or certain special symbols:
+\epindent
+
+\vskip7mm
+
+\bspindent\LARGE
+$\exists$, $\forall$, $\supset$, $\wedge$, $\vee$, $\neg$, 
+$1$, $2$, $3$, \dots, $+$, $\times$, $=$, \dots
+\espindent
+
+\vskip5mm
+
+\point{The distinction between a constant and a \\variable depends on 
+       the context.}
+
+% =====================================================================
+\slide{Function Applications}
+
+\point{An application looks like:}
+
+\vskip7mm
+
+\bspindent\LARGE
+$\langle {\hbox{\LARGE\it term}}_1 \rangle\;\;\;
+ \langle {\hbox{\LARGE\it term}}_2\rangle$
+\espindent
+
+\vskip7mm
+
+\bpindent\LARGE\bf 
+and denotes the result of applying the function $\langle {\hbox{\LARGE\it
+term}}_1 \rangle$ to the value $\langle {\hbox{\LARGE\it term}}_2\rangle$.
+\epindent
+
+\vskip4mm
+
+\point{Parentheses can be used for grouping:}
+
+\vskip7mm
+
+\bspindent\LARGE
+$f(x)$, $\;f\;(g \; y)$, $\;(f\; x) \; y$, \dots
+\espindent
+
+\vskip4mm
+
+\point{Convention:}
+
+\vskip7mm
+
+\bspindent\LARGE
+$f\;\:x_1\;\:x_2\;\:\cdots\;\:x_n\; = \;
+(((f \;\: x_1) \;\: x_2 ) \;\: \cdots \;\: x_n)$
+\espindent
+
+
+% =====================================================================
+\slide{Abstractions}
+
+\point{An abstraction looks like:}
+
+\vskip7mm
+
+\bspindent\LARGE\bf
+$\lambda \langle {\hbox{\LARGE\it var}} \rangle$ . 
+$\langle {\hbox{\LARGE\it term}}\rangle$
+\espindent
+
+\vskip7mm
+
+\bpindent\LARGE\bf 
+and denotes the function: 
+$x \mapsto \hbox{\LARGE\it term}[x / \hbox{\LARGE\it var}]$.
+\epindent
+
+\vskip4mm
+
+\point{Examples:}
+
+\vskip7mm
+
+\bspindent\Large\bf
+\begin{tabular}{@{}l@{\qquad}l@{}}
+$ \lambda x. \; x$ & the identity function \\[2mm]
+$ \lambda x. \; f(f\;x)$ & function that applies $f$ twice\\[2mm]
+$ \lambda f. \lambda g. \lambda x. \; f(g\;x)$ & function composition
+\end{tabular}
+\espindent
+
+\vskip4mm
+
+\point{Convention:}
+
+\vskip7mm
+
+\bspindent\LARGE
+$\lambda x_1\;x_2\;\cdots\;x_n\:.\:t \; = \;
+\lambda x_1\:.\:\lambda x_2\:.\:\; \cdots \;\:
+\lambda x_n\:.\:t$
+\espindent
+
+
+% =====================================================================
+\slide{Free and Bound Variables}
+
+\point{A variable $x$ is {\it free} in a term if it does not
+occur inside the body of an abstraction:}
+
+\vskip7mm
+
+\bspindent\LARGE\(
+\lambda x. \langle{\it body}\rangle
+\)
+\espindent
+
+\vskip7mm
+
+\point{If an instance of a varible is not free, it is {\it bound}.}
+
+\vskip7mm
+
+
+\point{Thus, in the term:}
+
+\begin{center}\LARGE
+\begin{picture}(20,30)\thicklines
+ \put(10,19){\makebox(0,0)[t]{$(\lambda x.\: f\; x)(\lambda y.\: x)$}}
+ \put(8.5,0){\vector(0,1){10}}
+ \put(8.5,-1){\makebox(0,0)[t]{\Large bound}}
+ \put(30,0){\vector(0,1){10}}
+ \put(30,-1){\makebox(0,0)[t]{\Large free}}
+\end{picture}\end{center}
+
+
+% =====================================================================
+\slide{Summary of Terms}
+
+\point{Terms may be :}
+
+\vskip 7mm 
+\subpoint{Variables:
+$x$,~~$y$,~~$a'$,~~$a\_var$,~~$phi_1$, \dots}
+
+
+\subpoint{Constants:
+$T$,~~$F$,~~$phi$,~~$\exists$,~~$+$, \dots}
+
+
+\subpoint{Applications:
+$t_1\;t_2$,~~$t_1\;t_2\;t_3\;\ldots \;t_n$}
+
+
+\subpoint{Abstractions:
+$\lambda x.\:t$,~~$\lambda\;x_1\;x_2\;\ldots\;x_n.\: t$}
+
+\vskip7mm
+
+\point{Free and bound variables:}
+
+\begin{center}\LARGE
+\begin{picture}(20,30)(30,0)\thicklines
+ \put(10,19){\makebox(0,0)[t]{$(\lambda x.\: f\; x)(\lambda y.\: x)$}}
+ \put(8.5,0){\vector(0,1){10}}
+ \put(8.5,-1){\makebox(0,0)[t]{\Large bound}}
+ \put(30,0){\vector(0,1){10}}
+ \put(30,-1){\makebox(0,0)[t]{\Large free}}
+\end{picture}\end{center}
+
+
+% =====================================================================
+\slide{Higher Order Terms}
+
+\point{Variables can range over functions or \\
+predicates (i.e.\ boolean-valued functions).}
+
+\vskip7mm
+
+\subpoint{in $\lambda f. f \; 0$, the variable $f$ ranges over functions}
+
+\subpoint{in $\forall P.\:P(n) \supset P(n{+}1)$, $P$ ranges over predicates}
+
+\vskip5mm
+
+\point{\bf A typical higher-order assertion:}
+
+\vskip7mm
+\bspindent\LARGE\bf
+$ \forall x f.\,\exists g.\:(g\; 0 = x) \wedge 
+   \forall n.\,g\:(n{+}1) = (f\;(g\;n))\;n$
+\espindent
+
+
+
+% =====================================================================
+\slide{Problem: Russell's Paradox}
+
+\point{Having variables that range over predicates\\
+allows us write terms like:}
+
+\vskip 7mm
+\bspindent\LARGE
+\( \Omega \stackrel{def}{=}\lambda P.\: \neg(P\; P) \)
+\espindent
+\vskip 7mm
+
+\bpindent\LARGE
+{\bf where $P$ is a variable.}
+\espindent
+\vskip 7mm
+
+\point{But by $\beta$-reduction, we have:}
+
+\vskip 7mm
+\bspindent\LARGE
+\( \Omega \;\Omega = (\lambda P.\: \neg(P\; P))\;\Omega = \neg(\Omega\;\Omega)
+\)
+\espindent
+\vskip 7mm
+
+\bpindent\LARGE
+{\bf which is nonsense (Russell's paradox)}
+\epindent
+
+\vskip 7mm
+
+\point{To avoid this kind of thing we use {\it types}.}
+
+
+% =====================================================================
+\slide{Types}
+
+\point{Syntax of types:}
+
+\vskip7mm
+
+\bspindent\LARGE
+$\sigma\quad {:}{:}{=}\quad
+\underbrace{\mathstrut c}_{\und{type constant}{10}} \quad | \quad
+\underbrace{\mathstrut \alpha}_{\und{type variable}{20}} \quad | \quad
+\underbrace{\mathstrut (\sigma_1,\dots,\sigma_n)op}_{\und{compound type}{10}}$
+\espindent
+
+\vskip7mm
+
+\point{Examples of type constants:}
+
+\vskip 7mm
+\bspindent{\Large{\bf
+\begin{tabular}{l l}
+$bool$ & booleans\\
+$num$  & natural numbers\\
+$ind$  & individuals
+\end{tabular}}}
+\espindent
+\vskip 7mm
+
+\point{Examples of compound types:}
+
+\vskip 7mm
+\bspindent\Large{\bf
+\begin{tabular}{l @{\qquad} l}
+\( (\sigma_1,\sigma_2)fun \)  & functions from $\sigma_1$ to $\sigma_2$\\[2mm]
+\( (\sigma_1,\sigma_2)prod \) & pairs of values\\
+\end{tabular}}
+\espindent
+\vskip 7mm
+
+
+\point{Type variables: $\alpha$, $\beta$, $\gamma$, \dots}
+
+% =====================================================================
+\slide{Terminology and Notation}
+
+\point{Type operators:}
+
+\subpoint{the `$op$' in $(\sigma_1,\dots,\sigma_n)op$ is called a {\it type
+operator}}
+
+\vskip 7mm
+
+\point{Notation:}
+
+\subpoint{The type $(\sigma_1,\sigma_2)fun$ is usually written
+ \( \sigma_1 \rightarrow \sigma_2\)}
+
+\subpoint{The type $(\sigma_1,\sigma_2)prod$ is usually written
+ \( \sigma_1 \times \sigma_2\)}
+
+\vskip 7mm
+
+\point{Conventions:}
+
+\vskip5mm
+
+\bspindent\LARGE
+$ \sigma_1 \rightarrow \sigma_2 \rightarrow \dots
+\rightarrow \sigma_n = 
+(\sigma_1 \rightarrow (\sigma_2 \rightarrow
+(\dots \rightarrow \sigma_n))) $
+\espindent
+
+\vskip5mm
+
+
+\bspindent\LARGE
+$\sigma_1 \times \sigma_2 \times \dots
+\times \sigma_n = 
+(\sigma_1 \times (\sigma_2 \times 
+(\dots \times \sigma_n))) $
+\espindent
+
+
+% =====================================================================
+\slide{Typing of Terms}
+
+\point{All terms must be well-typed.}
+
+\vskip5mm
+
+\point{Notation: `$t{:}\sigma$' means the term
+$t$ is well-typed and has type $\sigma$.}
+\vskip7mm
+
+\point{Variables and constants:}
+
+\vskip4mm
+
+\subpoint{Variables may have any type: $v{:}\sigma$}
+
+\subpoint{Constants have a fixed {\it generic\/} type: $c{:}\sigma$}
+
+
+\vskip7mm
+
+\point{Rules for assigning types to other terms:}
+
+\vskip 7mm
+\bspindent\LARGE{
+{\large\bf App:}%
+\begin{tabular}{@{\quad}c@{}} 
+\( t_1{:}\sigma_1 \rightarrow \sigma_2 \qquad t_2{:}\sigma_1 \)\\[-4mm]
+\vbox{\hrule width70mm height0.3mm}\\
+\( (t_1 \; t_2){:}\sigma_2 \) \\
+\end{tabular} }
+\espindent
+
+\vskip 7mm
+
+\vskip 4mm
+
+\bspindent\LARGE{
+{\large\bf Abs:}%
+\begin{tabular}{ @{\quad} c @{}} 
+\( x{:}\sigma_1 \qquad t{:}\sigma_2 \)\\[-4mm] 
+\vbox{\hrule width70mm height0.3mm}\\
+\( (\lambda x. t){:}\sigma_1 \rightarrow \sigma_2 \) 
+\end{tabular} }
+\espindent
+
+
+
+% =====================================================================
+\slide{Examples}
+
+\point{Some well-typed terms:}
+
+\vskip 7mm
+\bspindent\LARGE
+\begin{tabular}{l}
+\( T:bool\)\\[2mm]
+\( \lambda x.\: x{+}23:num {\rightarrow} num\)\\[2mm]
+\( (\lambda x.\:x{+}23)\;7: num\)\\[2mm]
+\( (\lambda x.\:\lambda y.\:x{+}y):
+   num {\rightarrow} num {\rightarrow} num\) \\[2mm]
+\( (\lambda x.\:x): \alpha {\rightarrow} \alpha \)
+\end{tabular}
+\espindent
+\vskip 7mm
+
+% =====================================================================
+\slide{Typing Avoids Meaningless Terms}
+
+\point{Suppose $(\lambda P.\: \neg(P\; P))$ is well-typed.}
+
+\vskip7mm
+
+\point{Then, by the typing rules:}
+
+\vskip4mm
+
+\bspindent\LARGE\bf
+$ (P{:}\sigma{\rightarrow}bool\;\;P{:}\sigma){:}bool$
+\espindent
+\vskip4mm
+
+\bpindent
+\LARGE\bf
+for some type $\sigma$.
+\epindent
+
+\vskip 7mm
+\point{That is, there are two {\it different\/} variables:}
+
+\vskip4mm
+
+\bspindent\LARGE\bf
+$ P{:}\sigma{\rightarrow}bool$ and $P{:}\sigma$
+\espindent
+
+\vskip 7mm
+
+\point{Furthermore, if \(\Omega = \lambda P.\: \neg(P \; P)\) then}
+
+\vskip 7mm
+\bspindent\LARGE
+$ (\Omega{:}\sigma_1{\rightarrow}\sigma_2) \;\;\Omega{:}\sigma_1 $
+\espindent
+
+\vskip 7mm
+\bpindent\LARGE\bf
+is impossible, since $\sigma_1{\rightarrow}\sigma_2 \neq \sigma_1$.
+\epindent
+
+% =====================================================================
+\slide{Polymorphism}
+
+
+\point{Consider the constant $I$, defined by:}
+
+\vskip 7mm
+\bspindent\LARGE 
+$I\stackrel{def}{=}\lambda x.\:x  $
+\espindent
+\vskip 7mm
+
+\point{We may want to apply the function $I$ to things of different types:}
+
+\vskip 7mm
+\bspindent\LARGE
+$\begin{array}{l @{\quad} l  @{\quad} l}
+I \; 7 = 7 & {\bf with} & I : num \rightarrow num \\
+I \; T = T & {\bf with} & I : bool \rightarrow bool \\
+\end{array} $
+\espindent
+\vskip 7mm
+
+\point{It seems that $I$ must have two different types.}
+
+
+% =====================================================================
+\slide{Polymorphism and Generic Types}
+
+\point{The types of polymorphic functions such as $I$ contain type
+variables:}
+
+\vskip5mm
+
+\bspindent\LARGE
+$I\; \stackrel{def}{=}\; (\lambda x.\: x){:} \alpha{\rightarrow} \alpha$
+\espindent
+
+\vskip 5mm
+\bpindent\LARGE{\bf
+where $\alpha$ stands for `any type'.}
+\epindent
+\vskip 7mm
+
+\point{Here, $\alpha{\rightarrow}\alpha$ is the {\it generic\/} type of $I$.}
+
+\vskip 7mm
+
+\point{The constant $I$ then has every type obtainable by substituting
+any type for the variable $\alpha$ in its generic type:}
+
+\vskip5mm
+\bspindent\LARGE
+\[ \begin{array}{l}
+I : bool \rightarrow bool\\[2mm]
+I : num \rightarrow num\\[2mm]
+I : (\alpha \rightarrow bool) \rightarrow (\alpha \rightarrow bool)\\[2mm]
+I :\alpha  \rightarrow \alpha
+\end{array} \]
+\espindent
+
+\vskip5mm
+
+\bpindent\LARGE{\bf
+and so `$I \; 7$' and `$I \; T$' are both well-typed.}
+\epindent
+
+
+% =====================================================================
+\slide{Polymorphism: Examples}
+
+\point{Definition of function composition:}
+
+\vskip5mm
+
+\bspindent\LARGE
+\(o \;\stackrel{def}{=}\; \lambda f. \lambda g. \lambda x. f(g(x))\)
+\espindent
+\vskip5mm
+
+\bpindent\LARGE\bf
+where \( o:(\beta \rightarrow \gamma) \rightarrow (\alpha \rightarrow \beta)
+\rightarrow (\alpha \rightarrow \gamma) \)
+\epindent
+
+
+\vskip 7mm
+
+\point{Equality is also polymorphic:}
+
+\vskip 7mm
+\bspindent\LARGE
+\( = \; : \; \alpha \rightarrow \alpha \rightarrow bool \)
+\espindent
+
+\vskip 7mm
+
+\point{Apply a function and add:}
+
+
+\vskip 7mm
+\bspindent\LARGE
+\( app\_add \; \stackrel{def}{=} \; \lambda f. (\lambda x. f(x) + f(x)) \)
+\espindent
+
+
+\vskip 7mm
+\bspindent\LARGE
+\( app\_add : (\alpha \rightarrow num) \rightarrow (\alpha \rightarrow num) \)
+\espindent
+
+
+% =====================================================================
+\slide{Summary of Types}
+
+\point{Types are used to avoid inconsistency.}
+
+\vskip5mm
+
+\point{Type constants: $bool$, $num$, \dots}
+
+\vskip5mm
+
+\point{Type variables: $\alpha$, $\beta$, $\gamma$, \dots}
+
+\vskip5mm
+
+\point{Compound Types: $(\sigma_1,\dots,\sigma_n)op$}
+
+\subpoint{e.g. $\sigma_1 \rightarrow \sigma_2$, and 
+$\sigma_1 \times \sigma_2$.}
+
+\vskip5mm
+
+\point{Well-typed terms:}
+
+\subpoint{
+\( (\lambda x. t):\sigma_1 \rightarrow \sigma_2\)
+   when \( x:\sigma_1\) and \(t:\sigma_2 \)}
+\subpoint{\( (t_1 \; t_2):\sigma\)
+when \(t_1:\sigma_1 \rightarrow \sigma\) and \(t_2:\sigma_1\)}
+
+\vskip5mm
+
+\point{Polymorphism:}
+\vskip5mm
+\bspindent\LARGE 
+\( twice \;\stackrel{def}{=}\; \lambda f. \lambda x. f(f(x)) \) \\
+\( twice : (\alpha \rightarrow \alpha) \rightarrow (\alpha \rightarrow \alpha)\)
+\espindent
+
+
+% =====================================================================
+\slide{Syntactic Sugar: Infix Applications}
+				       
+\point{Certain constants are written in infix position:}
+
+\vskip7mm
+
+\bspindent\LARGE{\bf
+\begin{tabular}{@{}l@{\qquad}l@{\qquad}l}
+\(t_1 + t_2\) & abbreviates & \( + \; t_1 \; t_2 \)\\
+\(t_1 \times t_2\) & abbreviates &\( \times \; t_1 \; t_2 \) \\
+\(t_1 \wedge t_2\) &  abbreviates &\( \wedge \; t_1 \; t_2 \) 
+\end{tabular}}
+\espindent
+
+\vskip7mm
+
+\point{HOL convention: A constant's infix status is supressed by
+prefixing it with `$\$$'}
+
+\vskip7mm
+\bspindent\LARGE{\bf
+\begin{tabular}{@{}l@{\qquad}l@{\qquad}l}
+\( \$+ \; t_1 \; t_2 \) & means & \( t_1 + t_2 \) \\
+\( \$\vee \; t_1 \; t_2\) & means & \( t_1 \vee t_2 \) \\
+\end{tabular}}
+\espindent
+
+% =====================================================================
+\slide{Syntactic Sugar: Binders}
+
+\point{The quantifiers $\forall$ and $\exists$
+are in fact polymorphic constants with types:}
+
+\vskip 7mm
+\bspindent\LARGE 
+\( \forall : (\alpha \rightarrow bool) \rightarrow bool \)
+\espindent
+\vskip 5mm
+\bspindent\LARGE 
+\( \exists : (\alpha \rightarrow bool) \rightarrow bool \)
+\espindent
+
+\vskip5mm
+
+\point{They are {\it defined\/} such that for $P:(\alpha \rightarrow bool)$:}
+
+\vskip 7mm
+\bspindent\LARGE 
+{\bf $\forall P$ means $P(x)=T$ for all $x$}
+\espindent
+
+\vskip 7mm
+\bspindent\LARGE 
+{\bf $\exists P$ means $P(x)=T$ for some $x$}
+\espindent
+
+% =====================================================================
+\slide{Binders}
+
+\point{We can use $\forall$ and $\exists$ as follows}
+
+\vskip 5mm
+\bspindent\LARGE\bf\(\forall(\lambda x. \; 0 \leq x)\)~~~~and~~~~
+\(\exists(\lambda x. \; x = 2+3) \)
+\espindent
+
+\vskip 5mm
+
+\bpindent\LARGE{\bf but it is more conventional to write}
+\epindent
+
+\vskip 5mm
+\bspindent\LARGE{\bf
+\(\forall x. \; 0 \leq x\)~~~~and~~~~\(\exists x. \; x = 2+3\)}
+\espindent
+
+\vskip7mm
+
+\point{We simply make:}
+
+\vskip5mm
+
+\bspindent\LARGE{\bf
+\begin{tabular}{@{}l@{\qquad}l@{\qquad}l}
+\(\forall x.\:t \) & abbreviate & \( \forall\;(\lambda x.\:t)\)\\
+\(\exists x.\:t \) & abbreviate & \( \exists\;(\lambda x.\:t)\)
+\end{tabular}}
+\espindent
+
+\vskip7mm
+
+\point{Constants like $\forall$ and $\exists$ are called {\it binders}.}
+
+\vskip5mm
+
+\point{Any constant of type \( (\sigma_1 \rightarrow \sigma_2) \rightarrow
+\sigma_3 \) can be treated as a binder.}
+
+\vskip5mm
+
+\point{HOL convention: binder status is supressed by the prefix `\(\$\)', as in
+`\(\$\exists\)'}
+
+% =====================================================================
+\slide{Pairs}
+
+\point{The symbol `$,$' is an infix constant of type:}
+\vskip 5mm
+\bspindent\LARGE
+$\alpha \rightarrow \beta \rightarrow (\alpha \times \beta)$
+\espindent
+\vskip 5mm
+\bpindent\LARGE\bf
+where $\alpha \times \beta$ is the type of pairs $(a,b)$ for which
+$a{:}\alpha$ and $b{:}\beta$.
+\epindent
+
+\vskip7mm
+
+\point{Constants for selecting components:}
+\vskip5mm
+\bspindent\LARGE
+$\begin{array}{@{}l}
+\forall a\:b.\:FST(a,b) = a\\
+\forall a\:b.\:SND(a,b) = a\\
+\end{array} $
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf where\epindent
+\vskip5mm
+\bspindent\LARGE
+$ \begin{array}{@{}l}
+FST : (\alpha \times \beta) \rightarrow \alpha \\[2mm]
+SND : (\alpha \times \beta) \rightarrow \beta \end{array}$
+\espindent
+\vskip7mm
+
+
+\point{Convention:}
+
+\vskip5mm
+
+\bspindent\LARGE
+$(x_1,x_2,\dots,x_n)\; = \;
+(x_1,(x_2,(\dots,x_n)))$
+\espindent
+		
+
+
+% =====================================================================
+\slide{Lists}
+
+\point{The type $\alpha \; list$ is the type of finite lists of values of 
+type $\alpha$.}
+
+\vskip7mm
+
+\point{Constants:}
+\vskip 5mm
+\bspindent\LARGE
+\begin{tabular}{l}
+\( HD : \alpha \; list \rightarrow \alpha \)\\[2mm]
+\( TL : \alpha \; list \rightarrow \alpha \; list \) \\[2mm]
+\( CONS : \alpha \rightarrow \alpha \; list \rightarrow \alpha \; list\) \\[2mm]
+\( NULL : \alpha \; list \rightarrow bool\)
+\( NIL : \alpha \; list \)
+\end{tabular}
+\espindent
+
+\point{Syntatic sugar:}
+\vskip 5mm
+\bspindent\LARGE
+\begin{tabular}{l}
+{\em [1;2;3] : num list}\\[2mm]
+{\em [T;F;T;F] : bool list}\\[2mm]
+{\em [] : $\alpha$ list}
+\end{tabular}
+\espindent\vskip5mm
+\bpindent\LARGE\bf
+where:
+\epindent
+\vskip5mm
+
+\bspindent\LARGE
+ $[x_1;\dots;x_n]\;=\; CONS\;x_1\;(\dots (CONS\;x_n\;NIL))$
+\espindent
+
+
+% =====================================================================
+\slide{Conditionals}
+
+\point{The expression:}
+\vskip5mm
+\bspindent\LARGE
+{\( (t \Rightarrow t_1 \mid t_2) \)}
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf means\epindent
+\vskip5mm
+\bspindent\LARGE\bf
+`if $t$ then $t_1$ else $t_2$'
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf and is an abbreviation for\epindent
+\vskip5mm
+\bspindent\LARGE\bf
+$COND\;\;t\;\;t_1\;\;t_2$
+\espindent
+\vskip7mm
+
+\point{The generic type of the constant $COND$ is}
+\vskip 5mm
+\bspindent\LARGE
+{$COND:bool \rightarrow \alpha \rightarrow \alpha \rightarrow \alpha$}
+\espindent
+
+
+% =====================================================================
+\slide{Summary of Special Syntax}
+
+\point{Infixes:}
+\vskip5mm
+\bspindent\LARGE\bf
+E.g.\ \( b_1 \vee b_2 \;=\; \$\vee b_1 b_2 \)
+\espindent
+
+\point{Binders:}
+\vskip5mm
+\bspindent\LARGE\bf
+E.g.\ \( \exists x.t  \;=\;  \$\exists(\lambda x.t) \)
+\espindent
+
+\point{Pairs and tuples:}
+\vskip5mm
+\bspindent\LARGE\bf
+$(t_1, t_2): \sigma_1 \times \sigma_2$, where $t_1{:}\sigma_1$ and
+$t_2{:}\sigma_2$
+\espindent
+
+\vskip 5mm
+
+\bspindent\LARGE
+$(t_1, t_2, t_3,\ldots) \;=\; (t_1, (t_2, (t_3, \ldots )))$
+\espindent
+
+\point{Lists:}
+\vskip 5mm
+\bspindent\LARGE
+\begin{tabular}{@{}l}
+{\em [1;2;3] : num list}\\[2mm]
+{\em [T;F;T;F] : bool list}\\[2mm]
+{\em [] : $\alpha$ list}
+\end{tabular}
+\espindent
+
+\point{Conditionals: \((t \Rightarrow t_1 \mid t_2)\) }
+
+% =====================================================================
+\slide{The $\epsilon$ Operator}
+
+\point{The primitive constant $\epsilon$ is a binder of type}
+\vskip 7mm
+\bspindent\LARGE
+\((\alpha \rightarrow bool) \rightarrow \alpha \)
+\espindent
+
+\point{If $x$ has type $\sigma$ and $t[x]$ is a term involving (free
+occurrences of) $x$ then:}
+
+\vskip 7mm
+\bspindent\LARGE
+\( \epsilon x. \; t[x] \)
+\espindent
+\vskip 7mm
+
+\bpindent\LARGE{\bf denotes some value of type $\sigma$, $v{:}\sigma$ say, such
+that $t[v]$ is true} 
+\epindent \vskip 7mm
+
+\point{If no such value exists, then \( \epsilon x. \; t[x] \) denotes an
+unspecified but fixed value of type $\sigma$}
+
+
+% =====================================================================
+\slide{Examples of $\epsilon$-terms}
+
+\point{This term denotes the number 1:}
+\vskip5mm
+\bspindent\LARGE
+$\epsilon x.\: 0<x \wedge x<2 \;\;$
+\espindent
+\vskip7mm
+
+\point{This term denotes an even number:}
+\vskip5mm
+\bspindent\LARGE
+$\epsilon x.\: \exists y.\: x = 2 \times y \;\;$
+\espindent
+\vskip7mm
+
+\point{An unspecified natural number:}
+\vskip5mm
+\bspindent\LARGE
+$\epsilon x.\: x+1 = x \;\;$
+\espindent
+\vskip7mm
+
+\point{The following proposition is true:}
+\vskip5mm
+\bspindent\LARGE
+$(\epsilon x.\: x+3 = 9) = 6 \;\;$
+\espindent
+
+
+% =====================================================================
+\slide{Formulas}
+
+\point{Formulas in HOL are just terms of type $bool$:}
+\vskip 5mm
+\subpoint{\( \forall x.\: x=0 \vee \neg(x=0) \)}
+\subpoint{\( T \)}
+\subpoint{\( (\lambda x. \; \neg\; x) (\forall y. \; y=y) \)}
+\subpoint{\( \forall x.\; x=T \)}
+\subpoint{\( \$\forall(\lambda x. \; x=T) \)}
+
+
+% =====================================================================
+\slide{Sequents}
+
+\point{A sequent has the form:}
+
+\vskip 7mm
+\bspindent\LARGE \( ( \Gamma, t) \)
+\espindent
+\vskip 5mm
+\bpindent\LARGE\bf where\epindent\vskip5mm
+
+\subpoint{$\Gamma$ is a set of formulas (assumptions) and}
+\subpoint{$t$ is a formula (conclusion)}
+
+\vskip7mm
+\point{A sequent `\( ( \Gamma, t) \)' means:}
+\vskip5mm
+\bspindent\Large\bf
+{`if every formula in $\Gamma$ is true then
+so is $t$'}
+\espindent
+
+\point{Example:}
+\vskip 5mm
+\bspindent\LARGE{\bf
+$($ \{ $x=3,\;  \forall n.\: n=n$ \}, $x=99$ $)$
+}\espindent
+\vskip 5mm
+\bpindent\LARGE\bf is a sequent which means\epindent
+\vskip 5mm
+\bspindent\LARGE{\bf
+\( \forall x.\: (x=3 \wedge \forall n.\:n=n) \; \supset \; x=99 \)}
+\espindent
+
+
+% =====================================================================
+\slide{Theorems}
+
+\point{A {\it theorem\/} is a sequent that is either}
+\subpoint{an axiom, or}
+\subpoint{follows from other theorems by an inference rule}
+
+\vskip7mm
+\point{For theorems we write}
+\vskip 5mm
+\bspindent\LARGE
+\( \Gamma \vdash t \)
+\espindent
+\vskip 5mm
+\bpindent\LARGE
+{\bf or just \( \; \vdash t \; \) if $\; \Gamma \; $ is empty}
+\epindent
+\vskip7mm
+\point{Axioms are just sequents that are postulated to be theorems.}
+
+
+% =====================================================================
+\slide{Constant Definitions}
+
+\point{We introduce axioms to define new constants.}
+\vskip7mm
+
+\point{Rule of constant definition:}
+\vskip5mm
+\bspindent\Large\bf
+{\Large\bf If}\\[2mm]
+\mbox{}\hskip10mm $\bullet$ $c$ is not already a constant, and\\
+\mbox{}\hskip10mm  $\bullet$ $t$ has no free variables, and\\
+\mbox{}\hskip10mm  $\bullet$ $t$ does not contain $c$, and\\
+\mbox{}\hskip10mm  $\bullet$ all the type variables in $t$ also appear in\\
+\mbox{}\hskip10mm  $\phantom\bullet$\ the type of $c$ \\[2mm]
+{\Large\bf then we can}\\[2mm]
+\mbox{}\hskip10mm  $\bullet$ make $c$ a constant, and \\
+\mbox{}\hskip10mm  $\bullet$ take as an axiom \(\vdash c = t\)
+\espindent
+\vskip5mm
+
+\point{$c$ is just an abbreviation for the term $t$.}
+
+\vskip5mm
+
+\point{Examples:}
+
+\vskip 5mm
+\bspindent\LARGE{
+\(\vdash o \; = \; \lambda f \; g\; x. \; f(g(x))\)
+\vskip 5mm
+\(\vdash Onto = \lambda f. \; (\forall y. \; \exists x. \;\; y = f(x))\)
+\vskip 5mm
+\(\vdash I \; = \; \lambda x. x\)}
+\espindent
+
+% =====================================================================
+\slide{Derived Definitions}
+
+\point{A definition of the form:}
+
+\vskip 5mm
+
+\bspindent\LARGE{\bf
+\( \vdash c = \lambda x_1 \; \dots \; x_n.\:\; t \)}
+\espindent
+\vskip 5mm
+\bpindent\LARGE\bf
+is equivalent to
+\epindent
+\vskip 5mm
+\bspindent\LARGE
+\( \vdash c \;\; x_1 \; \dots \; x_3 \; = \; t\) 
+\espindent
+\vskip 5mm
+\bpindent\LARGE\bf
+which therefore  also counts as a definition.
+\epindent
+
+
+\vskip7mm
+\point{Derived definitions also include, for example:}
+
+\vskip 5mm
+
+\bspindent\LARGE
+\( \vdash c \;\; (v_1,v_2)\;= \; t[v_1,v_2]\) 
+\espindent
+\vskip 5mm
+\bpindent\LARGE\bf
+which is equivalent to
+\epindent
+\vskip 5mm
+\bspindent\LARGE{\bf
+\( \vdash c = \lambda p.\: t[FST\; p,SND\; p] \)}
+\espindent
+
+
+
+
+% =====================================================================
+\slide{Theories}
+
+\point{A theory is a collection of}
+
+\subpoint{type constants}
+\subpoint{type operators}
+\subpoint{constants}
+\subpoint{constant definitions}
+\subpoint{type definitions (discussed later)}
+\subpoint{axioms}
+\subpoint{theorems}
+
+\vskip 7mm 
+
+\point{A theory is called {\it defined\/} if it contains no \\
+axioms, other than constant definitions\\ and type definitions.}
+
+\vskip 7mm 
+
+\point{All non-primitive HOL theories are defined!}
+
+% =====================================================================
+\slide{Theory Hierarchies}
+
+\point{Theories can have other theories as parents}
+
+\vskip 7mm
+\vskip 7mm
+
+\begin{center}
+\setlength{\unitlength}{0.0125in}%
+\begin{picture}(309,262)(190,460)
+\thicklines
+\put(474,477){\vector(-2, 3){ 64.615}}
+\put(330,475){\vector( 2, 3){ 64.615}}
+\put(183,475){\vector( 2, 3){ 64.615}}
+\put(327,477){\vector(-2, 3){ 64.615}}
+\put(399,602){\vector(-2, 3){ 64.615}}
+\put(255,600){\vector( 2, 3){ 64.615}}
+\put(450,460){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm{\Large theory6}}}}
+\put(305,460){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm{\Large theory5}}}}
+\put(160,460){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm{\Large theory4}}}}
+\put(375,580){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm{\Large theory3}}}}
+\put(230,580){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm{\Large theory2}}}}
+\put(300,710){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm{\Large theory1}}}}
+\end{picture}
+\end{center}
+\vskip 7mm
+
+\point{Everything in the parent theory is also in the child or descendent
+theories.}
+
+\point{Loops in the parent graph are not allowed.}
+
+% =====================================================================
+\slide{Summary}
+
+\point{The $\epsilon$-operator: $\epsilon x.\:t[x]$}
+
+\point{Formulas: are just boolean terms}
+
+\point{Sequents: $(\Gamma, t)$}
+
+\point{Theorems: $\Gamma \vdash t$ and $\vdash t$}
+
+\point{Constant definitions:}
+\vskip 5mm
+\bspindent\LARGE{\bf
+\( \vdash c = t \)}
+\espindent
+\vskip 4mm
+\bspindent\LARGE{\bf
+\( \vdash c = \lambda x_1 \; \dots \; x_n.\:\; t \)}
+\espindent
+\vskip 4mm
+\bspindent\LARGE
+\( \vdash c \;\; x_1 \; \dots \; x_3 \; = \; t\) 
+\espindent
+\vskip 4mm
+\bspindent\LARGE
+\( \vdash c \;\; (v_1,v_2)\;= \; t[v_1,v_2]\) 
+\espindent
+
+% =====================================================================
+\slide{Summary Continued}
+
+
+\point{Theories:}
+
+\subpoint{type constants}
+\subpoint{type operators}
+\subpoint{constants}
+\subpoint{constant definitions}
+\subpoint{type definitions (discussed later)}
+\subpoint{axioms}
+\subpoint{theorems}
+
+
+
+
+\end{document}

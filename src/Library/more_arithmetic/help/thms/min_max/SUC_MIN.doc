@@ -1,0 +1,3 @@
+\THEOREM SUC_MIN min_max
+|- !n p. MIN(SUC n)(SUC p) = SUC(MIN n p)
+\ENDTHEOREM

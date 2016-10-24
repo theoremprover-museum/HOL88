@@ -1,0 +1,3 @@
+\THEOREM HREAL_SUB_ADD HREAL
+|- !X Y. X hreal_lt Y ==> ((Y hreal_sub X) hreal_add X = Y)
+\ENDTHEOREM

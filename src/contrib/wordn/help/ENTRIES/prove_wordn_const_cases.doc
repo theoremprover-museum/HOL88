@@ -1,0 +1,38 @@
+\DOC prove_wordn_const_cases
+
+\TYPE {prove_wordn_const_cases : thm -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Exhaustive cases theorem for wordn constants.
+
+\DESCRIBE
+{prove_wordn_const_cases} derives an exhaustive cases theorem for
+constants of type {:wordn}.  Use only for small n.
+The input is a theorem of the form returned by {prove_word_cases_thm}:
+{
+    |- !w. ?b0...bn-1. w = WORDn [b0;...;bn-1]
+}
+\noindent The corresponding output has the form:
+{
+   |- !w. ((w = #0...0) \/ ...)  \/ (... \/ w = #1...1)
+}
+
+\FAILURE
+
+
+\EXAMPLE
+{prove_wordn_const_cases word3_CASES} returns the following theorem:
+{
+   |- !w.
+    (((w = #000) \/ (w = #001)) \/ (w = #010) \/ (w = #011)) \/
+    ((w = #100) \/ (w = #101)) \/
+    (w = #110) \/
+    (w = #111)
+}
+
+\SEEALSO
+{prove_wordn_cases_thm}
+
+\ENDDOC

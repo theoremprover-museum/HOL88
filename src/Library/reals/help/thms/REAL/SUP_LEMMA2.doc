@@ -1,0 +1,3 @@
+\THEOREM SUP_LEMMA2 REAL
+|- (?x. P x) ==> (?d x. (\x. P(x + d))x /\ (& 0) < x)
+\ENDTHEOREM

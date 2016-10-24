@@ -1,0 +1,82 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: Predicate                                                  %
+%                                                                       %
+% DESCRIPTION: Theory of lifted predicates in HOL                       %
+%                                                                       %
+% AUTHOR: Wishnu Prasetya                                               %
+%         email: wishnu@cs.ruu.nl                                       %
+%                                                                       %
+% DATE: 93.04.05                                                        %
+% --------------------------------------------------------------------- %
+
+How to Install
+--------------
+
+There is a LaTeX source called predicate.tex. You can compile it to
+generate a nice documentation of the library. PRINT THE DOCUMENT
+FIRST, you will find a direction of how to install there!
+
+
+What is Provided by Library Predicate
+-------------------------------------
+In short:
+   (1) All logical operators ~, /\, \/, ==>, plus ! and ? are lifted
+       to the predicate level.
+   (2) Basic properties of the lifted operators.
+   (3) Two tactics to automatically solve simple formula in the
+       calculus of lifted operators.
+   (4) Induction for finite predicates.
+
+Predicate calculus is supported by standard HOL. The negation, the
+standard logical connectives, and the quantors ! and ? are all
+defined and some of their basic properties are part of HOL built-in
+features. There is even a tautology checker to automatically prove the
+validity of a proposition calculus formula.
+
+In programming people extensively make use of predicate calculus, or
+at least people pretend they use predicate calculus. The primitive
+concept in programming is predicate, which is a function from some
+domain to BOOL. Predicate is used, for example, to describe a set
+of states, for example those states where the value of variable z is
+0.
+
+If P and Q are predicates, the expression P AND Q cannot be a
+formula in predicate calculus. The expression does not even make sense
+since AND is a logical operator, so it expects Boolean arguments,
+not predicates. Yet in programming, we pretend that the expression
+does make sense and that it can be treated as a predicate calculus
+formula.
+
+What people has silently done is that they overload the symbol AND
+to denote the point-wise lift of the logical AND. Indeed, the
+lifted AND inherits all algebraic properties of the logical AND.
+But this does not mean that they are semantically the same thing.
+
+What is actually applied in programming is the predicate calculus
+lifted to the predicate level. It is a calculus of predicates rather
+than predicate calculus. Because the inference rules of predicate
+calculus also applies to the lifted predicate calculus, people then
+pretend that they work with predicate calculus instead.
+
+When it comes to formalization however, we have to be very precise. So
+an explicit distinction between logical operators and lifted logical
+operators has to be made.
+
+In the library called predicate we provide the lifted operators of
+predicate calculus and their basic properties, including finite
+predicates induction. The library basically provides the user with the
+lifted predicate calculus, which is not yet supported by the standard
+HOL.
+
+
+Why is There so Many Files in the Package?
+------------------------------------------
+
+Indeed, many files are redundant and can be extracted from a NOWEB
+source file predicate.nw. NOWEB is a literate programming tool which
+we used to maintain well documented libraries. If you consider to
+modify the code you should do the modification at the NOWEB source.
+NOWEB is included in the package just in case you need it.
+
+
+-Wishnu Prasetya-

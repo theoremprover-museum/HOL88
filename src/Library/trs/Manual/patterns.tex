@@ -1,0 +1,196 @@
+\section{Patterns}
+
+The following session illustrates the construction and use of patterns.
+
+\setcounter{sessioncount}{1}
+
+\begin{session}\begin{verbatim}
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 2
+
+#load_library `trs`;;
+Loading library `trs` ...
+Updating help search path
+.............................................................................
+......................
+Library `trs` loaded.
+() : void
+\end{verbatim}\end{session}
+
+\index{patterns!for terms}
+A common search requirement is to test the conclusion of a theorem. The
+constructor \ml{conc} attempts to match the term given as its argument to the
+{\em whole\/} of the conclusion of a theorem. The argument term is used as a
+pattern in which variables can match any term of a matching type. We begin by
+searching for theorems with a conclusion matching
+{\small\verb%"!x. SUC x = y"%}. The function {\small\verb%full_search%}
+completes the search in one step.
+
+\begin{session}\begin{verbatim}
+#full_search (conc "!x. SUC x = y") (Paths [Ancestors ([`HOL`],[])]);;
+Searching theory HOL
+Searching theory tydefs
+Searching theory sum
+Searching theory one
+Searching theory BASIC-HOL
+Searching theory ltree
+Searching theory combin
+Searching theory ind
+Searching theory tree
+Searching theory bool
+Searching theory list
+Searching theory PPLAMB
+Searching theory arithmetic
+Searching theory prim_rec
+Searching theory num
+[((Theorem), `arithmetic`, `ADD1`, |- !m. SUC m = m + 1);
+ ((Definition),
+  `num`,
+  `SUC_DEF`,
+  |- !m. SUC m = ABS_num(SUC_REP(REP_num m)))]
+: foundthm list
+\end{verbatim}\end{session}
+
+\index{matching!within a term}
+It is more common to want to search for a pattern {\em within\/} the
+conclusion of a theorem, because the exact form of the theorem is not known.
+This is far more computationally intensive than direct matching because the
+pattern must be tested against every subterm of the conclusion, not just
+against the conclusion itself.
+
+In the following example, we search the theory {\small\verb%arithmetic%} for
+theorems with a conclusion {\em containing\/} the greater-than operator. The
+list of theorems found is extracted from the {\small\verb%searchstep%} and is
+bound to \ml{found}.
+
+\vfill
+\begin{session}\begin{verbatim}
+#let found = show_step (find_theorems ("conc:bool" contains "x > y")
+#                                     (Paths [Theory `arithmetic`]));;
+Searching theory arithmetic
+found = 
+[((Definition),
+  `arithmetic`,
+  `GREATER_OR_EQ`,
+  |- !m n. m >= n = m > n \/ (m = n));
+ ((Definition), `arithmetic`, `GREATER`, |- !m n. m > n = n < m)]
+: foundthm list
+\end{verbatim}\end{session}
+\vfill
+
+\index{searching!the result of a previous search}
+A search may yield more theorems than required because the original pattern
+was not specific enough. We can filter out the unwanted theorems by searching
+the list of theorems obtained from the previous search with a new pattern.
+We now filter out theorems in the list bound to \ml{found} if they do not
+contain the greater-than-or-equal-to operator.
+
+\vfill
+\begin{session}\begin{verbatim}
+#find_theorems ("conc:bool" contains ">=") (List found);;
+Endofsearch[((Definition),
+             `arithmetic`,
+             `GREATER_OR_EQ`,
+             |- !m n. m >= n = m > n \/ (m = n))]
+: searchstep
+\end{verbatim}\end{session}
+\vfill
+
+\index{kind@{\ptt kind}}
+Sometimes one wants to restrict searches to theorems which are either axioms,
+definitions, or derived theorems. In the next example we search for axioms
+within the built-in \HOL\ theories.
+
+\begin{session}\begin{verbatim}
+#full_search (kind Axiom) (Paths [Ancestors ([`HOL`],[])]);;
+Searching theory HOL
+Searching theory tydefs
+Searching theory sum
+Searching theory one
+Searching theory BASIC-HOL
+Searching theory ltree
+Searching theory combin
+Searching theory ind
+Searching theory tree
+Searching theory bool
+Searching theory list
+Searching theory PPLAMB
+Searching theory arithmetic
+Searching theory prim_rec
+Searching theory num
+[((Axiom), `ind`, `INFINITY_AX`, |- ?f. ONE_ONE f /\ ~ONTO f);
+ ((Axiom), `bool`, `SELECT_AX`, |- !P x. P x ==> P($@ P));
+ ((Axiom), `bool`, `ETA_AX`, |- !t. (\x. t x) = t);
+ ((Axiom),
+  `bool`,
+  `IMP_ANTISYM_AX`,
+  |- !t1 t2. (t1 ==> t2) ==> (t2 ==> t1) ==> (t1 = t2));
+ ((Axiom), `bool`, `BOOL_CASES_AX`, |- !t. (t = T) \/ (t = F));
+ ((Axiom), `bool`, `ARB_THM`, |- $= = $=)]
+: foundthm list
+\end{verbatim}\end{session}
+\vfill
+
+\index{patterns!for names}
+The retrieval system also provides simple pattern matching on the names of
+theorems and the names of theory segments to which the theorems belong. It is
+however envisaged that these facilities will not be greatly used, given the
+far more powerful structural matching available.
+
+As an example, we search the theory segment {\small\verb%sum%} for theorems
+with names containing two characters followed by a letter `L'. The function
+\ml{thmname} tests for theorem names matching the string pattern given as its
+argument. A {\small\verb%*%} in the string pattern means `match zero or more
+characters'. A {\small\verb%?%} means `match exactly one character'. All other
+characters in the pattern must be matched literally.
+
+\begin{session}\begin{verbatim}
+#find_theorems (thmname `*??L*`) (Paths [Theory `sum`]);;
+Searching theory sum
+Step([((Definition), `sum`, `OUTL`, |- !x. OUTL(INL x) = x);
+      ((Definition),
+       `sum`,
+       `ISL`,
+       |- (!x. ISL(INL x)) /\ (!y. ~ISL(INR y)));
+      ((Definition),
+       `sum`,
+       `INL_DEF`,
+       |- !e. INL e = ABS_sum(\b x y. (x = e) /\ b));
+      ((Theorem), `sum`, `INL`, |- !x. ISL x ==> (INL(OUTL x) = x));
+      ((Theorem), `sum`, `ISL_OR_ISR`, |- !x. ISL x \/ ISR x)],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+
+Since the search specifications are built up entirely from \ML\ functions, it
+is easy to make abbreviations for parts of the specification. Here we bind
+\ml{s} to a {\small\verb%source%} for searching the theory (segment)
+{\small\verb%sum%}. We then search this {\small\verb%source%} for theorems
+which have {\em both\/} a sub-string consisting of two characters and the
+letter `L', and a sub-string consisting of two characters and the letter `R',
+in their name.
+
+\begin{session}\begin{verbatim}
+#let s = Paths [Theory `sum`];;
+s = Paths[Theory `sum`] : source
+
+#find_theorems ((thmname `*??L*`) Andalso (thmname `*??R*`)) s;;
+Searching theory sum
+Step([((Theorem), `sum`, `ISL_OR_ISR`, |- !x. ISL x \/ ISR x)], -)
+: searchstep
+
+#quit();;
+$
+\end{verbatim}\end{session}
+
+\noindent
+The function \ml{Andalso}\index{Andalso@{\ptt Andalso}} can be used to combine
+two patterns into a single one such that both the sub-patterns must match for
+the composite pattern to match. There are also functions
+\ml{Orelse}\index{Orelse@{\ptt Orelse}} and \ml{Not}\index{Not@{\ptt Not}}
+which implement the obvious logical operations on patterns.
+

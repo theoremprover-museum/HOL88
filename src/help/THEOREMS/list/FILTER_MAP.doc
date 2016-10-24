@@ -1,0 +1,3 @@
+\THEOREM FILTER_MAP list
+|- !f1 f2 l. FILTER f1(MAP f2 l) = MAP f2(FILTER(f1 o f2)l)
+\ENDTHEOREM

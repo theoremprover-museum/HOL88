@@ -1,0 +1,451 @@
+
+\DOC SUPPOSE_TAC
+{
+SUPPOSE_TAC : term -> tactic
+}
+
+\SYNOPSIS
+A tactic for adding an assumption to a goal, with the condition
+that the assumption be proved later.
+
+
+
+\DESCRIBE
+The tactic {SUPPOSE_TAC t} when applied to a goal {([a1;...;an],Goal)}
+returns the two subgoals
+{
+   ([t;a1;...;an],Goal)
+
+   ([a1;...;an],t)
+}
+
+
+\FAILURE
+The tactic {SUPPOSE_TAC} fails if it is not given a term of type {":bool"}.
+
+
+\EXAMPLE
+{
+   SUPPOSE_TAC "?n. INT n = MIN"
+}
+\noindent when applied to the goal
+{
+   (["POS MIN"], "?x:num. Y = ((MAX times (INT x)) plus REM)")
+}
+returns the two subgoals
+{
+   (["?n. INT n = MIN"; "POS MIN"], "?x. Y = ((MAX times (INT x)) plus REM)")
+
+   (["POS MIN"], "?n. INT n = MIN")
+}
+
+\USES
+Adding new assumptions to a goal to assists in its proof.
+
+\SEEALSO
+{
+REV_SUPPOSE_TAC, ASSUME_TAC
+}
+
+\ENDDOC
+
+\DOC REV_SUPPOSE_TAC
+{
+REV_SUPPOSE_TAC : term -> tactic
+}
+
+\SYNOPSIS
+A tactic for adding an assumption to a goal, with the condition
+that the assumption be proved first.
+
+\DESCRIBE
+The tactic {REV_SUPPOSE_TAC t} when applied to a goal {([a1;...;an],Goal)}
+returns the two subgoals
+{
+   ([a1;...;an],t)
+
+   ([t;a1;...;an],Goal)
+}
+\noindent The differnce between {REV_SUPPOSE_TAC} and {SUPPOSE_TAC} is the
+order in which they reurn the subgoals.
+
+\FAILURE
+The tactic {REV_SUPPOSE_TAC} fails if it is not given a term of type
+{":bool"}.
+
+
+\EXAMPLE
+{
+   REV_SUPPOSE_TAC "?n. INT n = MIN"
+}
+\noindent when applied to the goal
+{
+   (["POS MIN"], "?x:num. Y = ((MAX times x) plus REM)")
+}
+returns the two subgoals
+{
+   (["POS MIN"], "?n. INT n = MIN")
+
+   (["?n. INT n = MIN"; "POS MIN"], "?x. Y = ((MAX times x) plus REM)")
+}
+
+\USES
+Adding new assumptions to a goal to assists in its proof.
+
+\SEEALSO
+{
+SUPPOSE_TAC, ASSUME_TAC
+}
+
+\DOC ASSUME_LIST_TAC
+{
+ASSUME_LIST_TAC : thm list -> tactic
+}
+
+\SYNOPSIS
+A tactic for addin a list of theorems as assumptions to a goal.
+
+\DESCRIBE
+The tactic {ASSUME_LIST_TAC [thm1;...;thmn]} when applied to a goal
+{([a1;...;am],Goal)} returns the subgoal {([a1;...;am;thm1;...;thmn],Goal)}.
+If {hyp} is a hypothesis of one of the theorems {thmi}, and {hyp} is
+not among the assumptions {[a1;...;am]} then the subgoal
+{([a1;...;am;...],hyp)} is also returned.
+
+\EXAMPLE
+{
+   ASSUME_LIST_TAC [integer_as_GROUP;int_mod_as_GROUP]
+}
+where
+{
+   integer_as_GROUP = |- GROUP((\N. T),$plus)
+   int_mod_as_GROUP = |- GROUP(int_mod n,plus_mod n)
+}
+when applied to the goal
+{
+   ([],"ID(int_mod n,plus_mod n) = mod n(INT 0)")
+}
+returns the subgoal
+{
+   (["GROUP(int_mod n,plus_mod n)"; "GROUP((\N. T),$plus)"],
+    "ID(int_mod n,plus_mod n) = mod n(INT 0)")
+}
+\USES
+Adding a collection of standard facts to the assumptions of a goal
+so that hypotheses of theorems used in proving the goal will already
+be among the assumptions.
+
+\SEEALSO
+{
+ASSUME_TAC, SUPPOSE_TAC, REV_SUPPOSE_TAC
+}
+
+\ENDDOC
+
+\DOC NEW_SUBST1_TAC
+{
+NEW_SUBST1_TAC : thm -> tactic
+}
+
+\SYNOPSIS
+Substitutes all occurrences of an expression within a goal for an
+equal expression.
+
+\DESCRIBE
+The tactic {NEW_SUBST1_TAC thm} where {thm = |- exp1 = exp2},
+when applied to a goal {([a1;...;an],P(exp1))} where {exp1} does not
+occur in {P}, returns the subgoal {([a1;...;an],P(exp2))}.  If {hyp}
+is a hypothesis of {thm} which is not among the assumptions
+{[a1,...,an]}, then the subgoal {([a1,...,an],hyp)} is also returned.
+
+\FAILURE
+The tactic {NEW_SUBST1_TAC} fails if the conclusionof the theorem it
+is given is not an equation.
+
+
+\EXAMPLE
+{
+   NEW_SUBST1_TAC
+    (UNDISCH (SPECL ["neg((Y times QUOT) plus REM)"; "X:integer"]
+      PLUS_UNIQUE_INV))
+}
+where
+{
+   PLUS_UNIQUE_INV = |- !x u. (u plus x = INT 0) ==> (u = neg x)
+}
+when applied to the goal
+{
+   (["X minus ((Y times QUOT) plus REM) = INT 0"],
+    "MIN times X = TOP plus (MIN times REM)")
+}
+returns the subgoals
+{
+   (["X plus (neg((Y times QUOT) plus REM)) = INT 0";
+     "X minus ((Y times QUOT) plus REM) = INT 0"],
+    "MIN times (neg(neg((Y times QUOT) plus REM))) =
+     TOP plus (MIN times REM)");
+
+   (["X minus ((Y times QUOT) plus REM) = INT 0"],
+    "X plus (neg((Y times QUOT) plus REM)) = INT 0")
+}
+
+\USES
+For use when you need to carefully control the rewritng of a goal.
+
+\SEEALSO
+{
+SUBST1_TAC, SUBST_TAC, PURE_ONCE_REWRITE_TAC, REWRIET_TAC, SUBST_MATCH_TAC
+}
+
+\ENDDOC
+
+\DOC SUBST_MATCH_TAC
+{
+SUBST_MATCH_TAC : thm -> tactic
+}
+
+\SYNOPSIS
+Rewriting with a single theorem, particularly when the rewrite theorem
+has hypotheses.
+
+\DESCRIBE
+The tactic {SUBST_MATCH_TAC thm} strips the theorem {thm} to find an
+equation {lhs = rhs} then looks for a match bewteen {lhs} and the
+subterms of the goal.  Once a match is found the thmeorem is
+instantiated to the particular instance found, and {NEW_SUBST1_TAC}
+is used to write the goal with the result.
+
+
+\FAILURE
+The tactic {SUBST_MATCH_TAC thm} will fail if either {thm} does not
+strip to and equation, or if no match is found with the left hand side
+of the equation.
+
+\EXAMPLE
+The tactic
+{
+   SUBST_MATCH_TAC (SYM (UNDISCH SBGP_ID_GP_ID))
+}
+where 
+{
+   SBGP_ID_GP_ID = |- SUBGROUP(G,prod)H ==> (ID(H,prod) = ID(G,prod))
+}
+when applied to the goal
+{
+   (["SUBGROUP((\N. T),$plus)H"],"H(ID((\N. T),$plus))")
+}
+returns the subgoal
+{
+   (["SUBGROUP((\N. T),$plus)H"],"H(ID(H,$plus))")
+}
+
+\USES
+Rewriting with a theorem that has hypotheses tha need to be
+instantiated by the matching of the rewriting.
+
+\SEEALSO
+{
+NEW_SUBST1_TAC, PURE_ONCE_REWRITE_TAC
+}
+
+\ENDDOC
+
+\DOC MP_IMP_TAC
+{
+MP_IMP_TAC
+}
+
+\SYNOPSIS
+The tactic {MP_IMP_TAC thm} uses modus ponens with the theorem {thm}
+to reduce a goal.
+
+\DESCRIBE
+The tactic
+{
+   MP_IMP_TAC thm
+}
+where {thm} is a theorem of the form {|- A ==> B}, when applied to the
+goal {([a1;...;an],B)} returns the subgoal {([a1;...;an],A)}.  If {hyp}
+is a hypothesis of {thm} which does not occor among the assumptions
+{[a1;...;an]}, then the subgoal {([a1;...;an],hyp)} is also returned.
+
+
+\FAILURE
+The tactic {MP_IMP_TAC thm} fails if either the conclusion of {thm} is
+not an implication, or if the consequent of the implication is not the
+statment of the goal.
+
+
+\EXAMPLE
+The tactic
+{
+   MP_IMP_TAC 
+    (SPECL ["N:integer";"N':integer";"N' times (INT(SUC n))"] TRANSIT)
+}
+where
+{
+   TRANSIT = |- !M N P. M below N /\ N below P ==> M below P
+}
+when applied to the goal
+{
+   (["N below N'"],"N below (N' times (INT(SUC n)))")
+}
+returns the subgoal
+{
+   (["N below N'"], "N below N' /\ N' below (N' times (INT(SUC n)))")
+}
+
+\USES
+Using a theorem to reduce a goal using modus ponens.
+
+\SEEALSO
+{
+MATCH_MP_IMP_TAC, REDUCE_TAC, REST_TAC
+}
+
+\ENDDOC
+
+\DOC MATCH_MP_IMP_TAC
+{
+MATCH_MP_IMP_TAC : thm -> tactic
+}
+
+\SYNOPSIS
+Reduces a goal using modus ponens and a theorem which is an implication
+whose antecedent matches the statement of the goal.
+
+\DESCRIBE
+The tactic {MATCH_IMP_IMP_TAC thm} where the statement of {thm} is a
+(possibly universally quantified) implication {A ==> B}, when applied to
+a goal {([a1;...;an],B')}, where {B'} is an instance of {B}, returns the
+subgoal {([a1;...;an],A')} where {A'} is the corresponding instance of {A}.
+If {thm} has a hypothesis {hyp} which does not occur among the assumptions
+{[a1;...;an]}, then the subgoal {([a1;...;an],hyp)} is also returned.
+
+\FAILURE
+The tactic {MATCH_MP_IMP_TAC thm} fails if either the conclusion of
+{thm} is not a (possibliy universally quantified) implication, or if
+the consequent of the implication does not match the statment of the goal.
+
+
+\EXAMPLE
+The tactic
+{
+   MATCH_MP_IMP_TAC INT_SBGP_NORMAL
+}
+where
+{
+   INT_SUBGROUP_NORMAL =
+     |- !H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+}
+when applied to the goal
+{
+   ([],"NORMAL((\N. T),$plus)(int_mult_set n)")
+}
+returns the subgoal
+{
+   ([],"SUBGROUP((\N. T),$plus)(int_mult_set n)")
+}
+
+
+\USES
+Reducing goals using modus ponens with a theorem as a template.
+{MATCH_MP_IMP_TAC} allows theorems to act as specialized tactics.
+
+\SEEALSO
+{
+MP_IMP_TAC, REDUCE_TAC, RES_TAC
+}
+
+\ENDDOC
+
+\DOC REDUCE_TAC
+{
+REDUCE_TAC : thm list -> tactic
+}
+
+\SYNOPSIS
+Repeated reduces a goal using modus ponens and the given list of theorems.
+
+\DESCRIBE
+The tactic {REDUCE_TAC thm_list} repeatedly reduces a goal by
+stripping and using modus ponens with any theorem from {thm_list}
+which is an implication and whose implication conclusion matches the
+goal statement.  It also solves those subgoals which match any of the
+given theorems, or which are included among the assumptions.
+
+\EXAMPLE
+Then tactic
+{
+   REDUCE_TAC [CLOSURE; INV_CLOSURE]
+}
+where
+{
+  CLOSURE = |- GROUP(G,prod) ==> (!x y. G x /\ G y ==> G(prod x y))
+  INV_LEMMA =
+    |- GROUP(G,prod) ==>
+        (!x. G x ==>
+             (prod(INV(G,prod)x)x = ID(G,prod)) /\
+             (prod x(INV(G,prod)x) = ID(G,prod)))
+}
+when applied to the goal
+{
+   (["GROUP(Mat,comb)"; "Mat Y"; "Mat X"],
+    "Mat(INV(Mat,comb)(comb X(INV(Mat,comb)Y)))")
+}
+solves the goal.
+
+\USES
+The tactic {REDUCE_TAC} when used with a collection theorems that
+act as reductions for a theory can finish routine goals for the thoery.
+
+\SEEALSO
+{
+MP_IMP_TAC, MATCH_MP_IMP_TAC, ASM_REWRITE_TAC
+}
+
+\ENDDOC
+
+\DOC EXT_TAC
+{
+EXT_TAC : term -> tactic
+}
+
+\SYNOPSIS
+The tactic {EXT_TAC} reduces a goal of showing that two functions are
+equal to showing that they are equal on all values.
+
+\DESCRIBE
+The tactic {EXT_TAC "x"} when aplied to a goal {[a1;...;an],"f = g"},
+where {x} is a variable of the same type as the common domain of {f}
+and {g}, returns the subgoal {([a1;...;an],"!x. f x = g x")}.
+
+\FAILURE
+The tactic {EXT_TAC var} fails if {var} is not a term variable, or if
+the tactic is applied to a goal that is not the equation of two functions
+with common domain type the same as the type of {var}.
+
+\EXAMPLE
+The tactic
+{
+   EXT_TAC "N:integer"
+}
+when applied to the goal
+{
+   ([],"Mult = \x. ?m. (x = m times c)")
+}
+returns the subgoal
+{
+([], "!N. Mult N = (\x. ?m. x = m times c)N")
+}
+which then can be further reduced by applications of {BETA_TAC},
+{GEN_TAC}, and {EQ_TAC}.
+
+\USES
+Reducing the problem of showing that two functions are equal to an
+elementwise argument.
+
+\ENDDOC
+
+
+

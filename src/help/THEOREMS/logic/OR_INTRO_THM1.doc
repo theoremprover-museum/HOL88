@@ -1,0 +1,3 @@
+\THEOREM OR_INTRO_THM1 \none
+|- !t1 t2. t1 ==> t1 \/ t2
+\ENDTHEOREM

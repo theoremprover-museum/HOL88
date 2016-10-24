@@ -1,0 +1,26 @@
+\DOC beg_stack_sig
+
+\TYPE {beg_stack_sig : string signal}
+
+\SYNOPSIS
+Raised after a new window stack is begun.
+
+\LIBRARY window
+
+\DESCRIBE
+The signal {beg_stack_sig} is raised after a new stack is created.
+The signal is raised with the name of the new stack.
+
+When the window library is first loaded a handler is associated with this signal
+that will print the window on top of the new stack.
+Loading the xlabel component associates another handler with this signal
+that sets the label on the xterminal in which HOL is running to the name
+of the new stack.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+end_stack_sig, set_stack_sig, cng_win_sig, pop_win_sig, psh_win_sig.
+
+\ENDDOC

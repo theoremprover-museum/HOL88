@@ -1,0 +1,3 @@
+\THEOREM PRE prim_rec
+|- (PRE 0 = 0) /\ (!m. PRE(SUC m) = m)
+\ENDTHEOREM

@@ -1,0 +1,15 @@
+\DOC Test2types
+
+\BLTYPE
+Test2types : ((type -> type -> bool) ->
+              wildtype ->
+              wildtype ->
+              thmpattern)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

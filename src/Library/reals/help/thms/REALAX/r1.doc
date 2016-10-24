@@ -1,0 +1,3 @@
+\THEOREM r1 REALAX
+|- r1 = mk_real($treal_eq treal_1)
+\ENDTHEOREM

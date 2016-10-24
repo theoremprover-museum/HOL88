@@ -1,0 +1,6 @@
+\THEOREM DIFF_LMIN LIM
+|- !f x l.
+    (f diffl l)x /\
+    (?d. (& 0) < d /\ (!y. (abs(x - y)) < d ==> (f x) <= (f y))) ==>
+    (l = & 0)
+\ENDTHEOREM

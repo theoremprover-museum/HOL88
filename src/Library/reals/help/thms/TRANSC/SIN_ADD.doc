@@ -1,0 +1,3 @@
+\THEOREM SIN_ADD TRANSC
+|- !x y. sin(x + y) = ((sin x) * (cos y)) + ((cos x) * (sin y))
+\ENDTHEOREM

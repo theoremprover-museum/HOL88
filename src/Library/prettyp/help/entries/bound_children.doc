@@ -1,0 +1,34 @@
+\DOC bound_children
+
+\BLTYPE
+bound_children : (string ->
+                  (string # int) list ->
+                  print_binding ->
+                  print_tree list)
+\ELTYPE
+
+\SYNOPSIS
+Obtains the print-trees bound to a pretty-printer metavariable.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{bound_children} can be used to obtain the data item bound to a named
+metavariable. It takes the name of a metavariable (less the preceding {*},
+{**}, or {***}) as its first argument and returns a function of type:
+{
+   (string # int) list -> print_binding -> print_tree list
+}
+\noindent When given the current environment as arguments, this function yields
+the list of print-trees bound to the specified metavariable. The parameter
+list is not used, but is present for consistency.
+
+\FAILURE
+The function fails if the specified metavariable is not bound to a list of
+print-trees. It also fails if the metavariable cannot be found in the binding.
+
+\SEEALSO
+bound_child, bound_name, bound_names, is_a_member_of, bound_number,
+bound_context.
+
+\ENDDOC

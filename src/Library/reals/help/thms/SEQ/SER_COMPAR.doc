@@ -1,0 +1,5 @@
+\THEOREM SER_COMPAR SEQ
+|- !f g.
+    (?N. !n. n num_ge N ==> (abs(f n)) <= (g n)) /\ summable g ==>
+    summable f
+\ENDTHEOREM

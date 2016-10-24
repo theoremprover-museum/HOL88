@@ -1,0 +1,3 @@
+\THEOREM SUC_ID prim_rec
+|- !n. ~(SUC n = n)
+\ENDTHEOREM

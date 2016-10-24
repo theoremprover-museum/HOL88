@@ -1,0 +1,5 @@
+\THEOREM HREAL_SUP_ISACUT HREAL
+|- !P.
+    (?X. P X) /\ (?Y. !X. P X ==> X hreal_lt Y) ==>
+    isacut(\w. ?X. P X /\ cut X w)
+\ENDTHEOREM

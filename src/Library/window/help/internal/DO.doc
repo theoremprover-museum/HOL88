@@ -1,0 +1,10 @@
+\DOC DO
+
+\TYPE {DO : ((window_stack -> window_stack) -> void)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

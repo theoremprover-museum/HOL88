@@ -1,0 +1,3 @@
+\THEOREM ELL_LAST list
+|- !l. ~NULL l ==> (ELL 0 l = LAST l)
+\ENDTHEOREM

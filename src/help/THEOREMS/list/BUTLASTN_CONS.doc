@@ -1,0 +1,5 @@
+\THEOREM BUTLASTN_CONS list
+|- !n l.
+    n <= (LENGTH l) ==>
+    (!x. BUTLASTN n(CONS x l) = CONS x(BUTLASTN n l))
+\ENDTHEOREM

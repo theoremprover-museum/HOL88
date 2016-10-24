@@ -1,0 +1,211 @@
+\chapter{ML Functions in the taut Library}
+\input{entries-intro}
+\DOC{PTAUT\_CONV}
+
+\TYPE {\small\verb%PTAUT_CONV : conv%}\egroup
+
+\SYNOPSIS
+Tautology checker. Proves closed propositional formulae true or false.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"!x1 ... xn. t"%} where {\small\verb%t%} contains only Boolean
+constants, Boolean-valued variables, Boolean equalities, implications,
+conjunctions, disjunctions, negations and Boolean-valued conditionals, and
+all the variables in {\small\verb%t%} appear in {\small\verb%x1 ... xn%}, the conversion {\small\verb%PTAUT_CONV%}
+proves the term to be either true or false, that is, one of the following
+theorems is returned:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- (!x1 ... xn. t) = T
+   |- (!x1 ... xn. t) = F
+\end{verbatim}
+}
+\noindent This conversion also accepts propositional terms that are not fully
+universally quantified. However, for such a term, the conversion will only
+succeed if the term is valid.
+
+\FAILURE
+Fails if the term is not of the form {\small\verb%"!x1 ... xn. f[x1,...,xn]"%} where
+{\small\verb%f[x1,...,xn]%} is a propositional formula (except that the variables do not
+have to be universally quantified if the term is valid).
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#PTAUT_CONV "!x y z w. (((x \/ ~y) ==> z) /\ (z ==> ~w) /\ w) ==> y";;
+|- (!x y z w. (x \/ ~y ==> z) /\ (z ==> ~w) /\ w ==> y) = T
+
+#PTAUT_CONV "(((x \/ ~y) ==> z) /\ (z ==> ~w) /\ w) ==> y";;
+|- (x \/ ~y ==> z) /\ (z ==> ~w) /\ w ==> y = T
+
+#PTAUT_CONV "!x. x = T";;
+|- (!x. x = T) = F
+
+#PTAUT_CONV "x = T";;
+evaluation failed     PTAUT_CONV
+\end{verbatim}
+}
+\SEEALSO
+PTAUT_PROVE, PTAUT_TAC, TAUT_CONV.
+
+\ENDDOC
+\DOC{PTAUT\_PROVE}
+
+\TYPE {\small\verb%PTAUT_PROVE : conv%}\egroup
+
+\SYNOPSIS
+Tautology checker. Proves propositional formulae.
+
+\DESCRIBE
+Given a term that contains only Boolean constants, Boolean-valued variables,
+Boolean equalities, implications, conjunctions, disjunctions, negations and
+Boolean-valued conditionals, {\small\verb%PTAUT_PROVE%} returns the term as a theorem if it
+is valid. The variables in the term may be universally quantified.
+
+\FAILURE
+Fails if the term is not a valid propositional formula.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#PTAUT_PROVE "!x y z w. (((x \/ ~y) ==> z) /\ (z ==> ~w) /\ w) ==> y";;
+|- !x y z w. (x \/ ~y ==> z) /\ (z ==> ~w) /\ w ==> y
+
+#PTAUT_PROVE "(((x \/ ~y) ==> z) /\ (z ==> ~w) /\ w) ==> y";;
+|- (x \/ ~y ==> z) /\ (z ==> ~w) /\ w ==> y
+
+#PTAUT_PROVE "!x. x = T";;
+evaluation failed     PTAUT_PROVE
+
+#PTAUT_PROVE "x = T";;
+evaluation failed     PTAUT_PROVE
+\end{verbatim}
+}
+\SEEALSO
+PTAUT_CONV, PTAUT_TAC, TAUT_PROVE.
+
+\ENDDOC
+\DOC{PTAUT\_TAC}
+
+\TYPE {\small\verb%PTAUT_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Tautology checker. Proves propositional goals.
+
+\DESCRIBE
+Given a goal with a conclusion that contains only Boolean constants,
+Boolean-valued variables, Boolean equalities, implications, conjunctions,
+disjunctions, negations and Boolean-valued conditionals, this tactic will
+prove the goal if it is valid. If all the variables in the conclusion are
+universally quantified, this tactic will also reduce an invalid goal to false.
+
+\FAILURE
+Fails if the conclusion of the goal is not of the form
+{\small\verb%"!x1 ... xn. f[x1,...,xn]"%} where {\small\verb%f[x1,...,xn]%} is a propositional formula
+(except that the variables do not have to be universally quantified if the
+goal is valid).
+
+\SEEALSO
+PTAUT_CONV, PTAUT_PROVE, TAUT_TAC.
+
+\ENDDOC
+\DOC{TAUT\_CONV}
+
+\TYPE {\small\verb%TAUT_CONV : conv%}\egroup
+
+\SYNOPSIS
+Tautology checker. Proves instances of propositional formulae.
+
+\DESCRIBE
+Given an instance of a valid propositional formula, {\small\verb%TAUT_CONV%} proves the
+instance of the formula to be true. A propositional formula is a term
+containing only Boolean constants, Boolean-valued variables, Boolean
+equalities, implications, conjunctions, disjunctions, negations and
+Boolean-valued conditionals. An instance of a formula is the formula with one
+or more of the variables replaced by terms of the same type. The conversion
+accepts terms with or without universal quantifiers for the variables.
+
+\FAILURE
+Fails if the term is not an instance of a propositional formula or if the
+instance is not a valid formula.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#TAUT_CONV
+# "!x n y. ((((n = 1) \/ ~x) ==> y) /\ (y ==> ~(n < 0)) /\ (n < 0)) ==> x";;
+|- (!x n y. ((n = 1) \/ ~x ==> y) /\ (y ==> ~n < 0) /\ n < 0 ==> x) = T
+
+#TAUT_CONV "((((n = 1) \/ ~x) ==> y) /\ (y ==> ~(n < 0)) /\ (n < 0)) ==> x";;
+|- ((n = 1) \/ ~x ==> y) /\ (y ==> ~n < 0) /\ n < 0 ==> x = T
+
+#TAUT_CONV "!n. (n < 0) \/ (n = 0)";;
+evaluation failed     TAUT_CONV
+\end{verbatim}
+}
+\SEEALSO
+TAUT_PROVE, TAUT_TAC, PTAUT_CONV.
+
+\ENDDOC
+\DOC{TAUT\_PROVE}
+
+\TYPE {\small\verb%TAUT_PROVE : conv%}\egroup
+
+\SYNOPSIS
+Tautology checker. Proves propositional formulae (and instances of them).
+
+\DESCRIBE
+Given an instance of a valid propositional formula, {\small\verb%TAUT_PROVE%} returns the
+instance of the formula as a theorem. A propositional formula is a term
+containing only Boolean constants, Boolean-valued variables, Boolean
+equalities, implications, conjunctions, disjunctions, negations and
+Boolean-valued conditionals. An instance of a formula is the formula with one
+or more of the variables replaced by terms of the same type. The conversion
+accepts terms with or without universal quantifiers for the variables.
+
+\FAILURE
+Fails if the term is not an instance of a propositional formula or if the
+instance is not a valid formula.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#TAUT_PROVE
+# "!x n y. ((((n = 1) \/ ~x) ==> y) /\ (y ==> ~(n < 0)) /\ (n < 0)) ==> x";;
+|- !x n y. ((n = 1) \/ ~x ==> y) /\ (y ==> ~n < 0) /\ n < 0 ==> x
+
+#TAUT_PROVE "((((n = 1) \/ ~x) ==> y) /\ (y ==> ~(n < 0)) /\ (n < 0)) ==> x";;
+|- ((n = 1) \/ ~x ==> y) /\ (y ==> ~n < 0) /\ n < 0 ==> x
+
+#TAUT_PROVE "!n. (n < 0) \/ (n = 0)";;
+evaluation failed     TAUT_PROVE
+\end{verbatim}
+}
+\SEEALSO
+TAUT_CONV, TAUT_TAC, PTAUT_PROVE.
+
+\ENDDOC
+\DOC{TAUT\_TAC}
+
+\TYPE {\small\verb%TAUT_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Tautology checker. Proves propositional goals (and instances of them).
+
+\DESCRIBE
+Given a goal that is an instance of a propositional formula, this tactic will
+prove the goal provided it is valid. A propositional formula is a term
+containing only Boolean constants, Boolean-valued variables, Boolean
+equalities, implications, conjunctions, disjunctions, negations and
+Boolean-valued conditionals. An instance of a formula is the formula with one
+or more of the variables replaced by terms of the same type. The tactic
+accepts goals with or without universal quantifiers for the variables.
+
+\FAILURE
+Fails if the conclusion of the goal is not an instance of a propositional
+formula or if the instance is not a valid formula.
+
+\SEEALSO
+TAUT_CONV, TAUT_PROVE, PTAUT_TAC.
+
+\ENDDOC

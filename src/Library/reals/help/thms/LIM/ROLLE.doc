@@ -1,0 +1,8 @@
+\THEOREM ROLLE LIM
+|- !f a b.
+    a < b /\
+    (f a = f b) /\
+    (!x. a <= x /\ x <= b ==> f contl x) /\
+    (!x. a < x /\ x < b ==> f differentiable x) ==>
+    (?z. a < z /\ z < b /\ (f diffl (& 0))z)
+\ENDTHEOREM

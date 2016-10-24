@@ -1,0 +1,9 @@
+\THEOREM NET_LE NETS
+|- !g.
+    dorder g ==>
+    (!x x0 y y0.
+      (x tends x0)(mtop mr1,g) /\
+      (y tends y0)(mtop mr1,g) /\
+      (?N. g N N /\ (!n. g n N ==> (x n) real_le (y n))) ==>
+      x0 real_le y0)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM TREAL_EQ_TRANS REALAX
+|- !x y z. x treal_eq y /\ y treal_eq z ==> x treal_eq z
+\ENDTHEOREM

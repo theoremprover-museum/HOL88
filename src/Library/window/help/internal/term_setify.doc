@@ -1,0 +1,10 @@
+\DOC term_setify.doc
+
+\TYPE {term_setify.doc : (term list -> term list)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

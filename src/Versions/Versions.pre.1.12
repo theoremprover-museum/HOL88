@@ -1,0 +1,1619 @@
+
+|============================================================================|
+|============================================================================|
+|                                                                            |
+|     This file documents all versions of HOL88 following Version 1.00       |
+|                                                                            |
+|============================================================================|
+|============================================================================|
+
+
+******************************************************************************
+******************************** Version 1.01 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/F-iox-stand.l                                          |
+|                Makefile                                                    |
+|                HOL88.doc                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          28 Feb. 1989                                                |
+|----------------------------------------------------------------------------|
+
+
+Bug fixed in find_file and find_ml_file which resulted in:
+
+   #find_ml_file`~/hol88/Library/unwind/unwind`;;
+   `~/hol88/Library/unwind/unwind.m*` : string
+
+In such cases a failure is now generated instead of the mysterious
+`.m*` extension (a Lisp hack) appearing. The empty string has been
+put at the front of the built-in search path, so that absolute
+path names will work.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix and new ML function (is_hidden)                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-pars.l                                             |
+|                lisp/F-subst.l                                              |
+|                HOL88.doc                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          1 March 1989                                                |
+|----------------------------------------------------------------------------|
+
+
+Bugs in the constant hiding mechanism have been fixed
+(unhide_constant did not work in HOL88.1.00).
+
+The variable priming mechanism (e.g. including the ML function variant) has
+been modified so that variables are no longer primed to avoid clashes with
+hidden constants.
+
+The ML function 
+
+   is_hidden : string -> bool
+
+has been added; it tests if a string is the name of a hidden constant.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML functions (version, address, $<<)                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/F-dml.l                                                |
+|                ml/gen.ml                                                   |
+|                HOL88.doc                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          2 March 1989                                                |
+|----------------------------------------------------------------------------|
+
+
+The following ML functions added:
+
+   version : void -> int
+   address : * -> int
+   $<<     : * # ** -> bool
+
+<< is a paired infix.
+
+
+DOCUMENTATION:
+==============
+
+Function for getting the version number
+---------------------------------------
+
+The ML function:
+
+   version : void -> int
+
+returns the version number of HOL88 as an integer less than 1000
+(i.e. in HOL88 Version 1.mn, version() returns 1mn). For example,
+in Version 1.01:
+
+   #version();;
+   101 : int
+
+
+Signatures and ordering of arbitrary ML objects
+-----------------------------------------------
+
+The ML function:
+
+   address : * -> int
+
+maps an arbitrary value to a number which is the address of the value in
+memory.  Note that only terms that correspond to the same address (i.e. are eq
+in Lisp jargon) get mapped to the same number:
+
+   #let t = "x+1";;
+   t = "x + 1" : term
+
+   #address t;;
+   2792072 : int
+
+   #address "x+1";;
+   2786736 : int
+
+   #address t;;
+   2792072 : int
+
+A fast ordering on values can be defined by:
+
+   #let comp x y = (address x < address y);;
+   comp = - : (* -> ** -> bool)
+
+but, because different evaluations of identical ML expressions may 
+lead to different addresses, this function may not be what is wanted:
+
+   #comp "x+1" "x+2";;
+   true : bool
+
+   #comp "x+2" "x+1";;
+   true : bool
+
+However, if already constructed terms are used it works:
+
+   #let t1, t2 = "x+1", "x=2";;
+   t1 = "x + 1" : term
+   t2 = "x = 2" : term
+
+   #comp t1 t2;;
+   false : bool
+
+   #comp t2 t1;;
+   true : bool
+
+To avoid this delicacy, a predefined ML infix 
+
+   $<< : * -> ** -> int
+
+is provided for comparing values; this is substitutive with
+respect to ML's equality (i.e. if t1<<t2 and t1=t1' and t2=t2'
+then t1'<<t2').
+
+   #"x+1" << "x+2";;
+   true : bool
+
+   #"x+2" << "x+1";;
+   false : bool
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML functions (coded in lisp)                            |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml                                                   |
+|                lisp/F-tml.l                                                |
+|                HOL88.doc                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          2 March 1989                                                |
+|----------------------------------------------------------------------------|
+
+
+The following ML functions added:
+
+   load_library : string # bool -> void
+   load_lib     : string -> void
+   libraries    : void -> string list
+
+N.B. In HOL88.1.02 (see below) load_library is changed and load_lib eliminated.
+---
+
+DOCUMENTATION: [For HOL88.1.01 only]
+==============
+
+ML functions for loading libraries
+----------------------------------
+
+The list of currently loaded libraries is given by:
+
+   libraries : void -> string list
+
+A library can be loaded with the function:
+
+   load_library : string # bool -> void
+
+The second argument determines the load printing (as with load).
+The first argument is the name of a library. A call:
+
+   load_library(`foo`,b)
+
+will do nothing if `foo` is already loaded, otherwise it will do 
+
+   load(`.../hol/Library/foo/foo`,b)
+
+where `.../hol` is the directory of the hol system (which is setup by
+hol/Makefile). The function load_lib is defined by:
+
+   let load_lib s = load_library(s,true);;
+
+The function:
+
+   libraries : void -> string list
+
+returns the libraries that have already been loaded.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML feature (supercomments)                              |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/F-parser.l                                             |
+|                ml/hol-drule.ml (supercomments used here)                   |
+|                HOL88.doc                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          3 March 1989                                                |
+|----------------------------------------------------------------------------|
+
+Properly nesting comments of the form:
+
+   %< ... >%
+
+are now allowed. The only way to terminate a comment starting with %< is
+with a matching >%. If %x, where x is not <, occurs outside a %< >% pair,
+then the comment is terminated by the next % as before. Thus %< ... >% 
+can be used to comment out old style (i.e. % ... %) comments, but not
+vice versa.
+
+
+******************************************************************************
+******************************** Version 1.02 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML predefined variable (HOLdir)			     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml                                                   |
+|                Makefile						     |
+|----------------------------------------------------------------------------|
+| DATE:          21 March 1989	(revised 26 March 1989) 		     |
+|----------------------------------------------------------------------------|
+
+The ML assignable variable HOLdir is predefined to contain the pathname of the
+HOL directory. This is the directory where the built-in theories live.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix							     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/F-parsml.l					     |
+|                ml/hol-thyfn.ml					     |
+|----------------------------------------------------------------------------|
+| DATE:          22 March 1989, 27 March 1989				     |
+|----------------------------------------------------------------------------|
+
+The deletion of autoloading actions is now performed when the autoloading is
+done, as well as when the marked ML variable is parsed. This ensures that
+compiled ML files that perform autoloading work properly when fasled in.
+Previously such files would autoload OK, but they would not delete the
+autoload action (because this was only done in the different incarnation of
+HOL when the file was parsed prior to being fed to the Lisp compiler Liszt).
+This did not do much harm: it just meant that certain preloaded things (e.g.
+HD) were also autoloaded (and hence loaded twice) the first time they were
+used. 
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix and code rationalization      			     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/F-dml.l       (host_name, tty_read,		     |
+| 				     version, ml-version) 		     |
+|                lisp/F-tml.l	    (libraries, ml-libraries)		     |
+|                lisp/F-unix.l	    (ml-host_name)			     |
+|                lisp/F-iox-stand.l (search_path)			     |
+|                lisp/F-ol-syntax.l (thm_count, ml-thm_count)		     |
+|                lisp/F-thyfns.l    (draft_mode, close_theory, 		     |
+|				     ml-close_theory, cached-theories,	     |
+|				     ml-cached_theories,                     |
+|				     current_theory, ml-current_theory)      |
+|                lisp/F-typeol.l    (sticky_list, ml-sticky_list)	     |
+|                lisp/holpars.l     (interface_map, special_symbols,         |
+|				     ml-special_symbols)		     |
+|                lisp/holwrit.l     (print_defined_types, prdeftypes)	     |
+|----------------------------------------------------------------------------|
+| DATE:          22 March 1989						     |
+|----------------------------------------------------------------------------|
+
+Some of the Lisp-coded ML functions with types of the form (void -> ...) have
+been badly defined with dml by specifying that they take 1 rather than 0
+arguments. In such cases sometimes the lisp function took no arguments and
+sometimes it had a dummy argument. In Franz Lisp Opus 38.69 for Sun 3s
+everything works (presumably due to lax checking), but in other versions of
+Lisp errors may get generated. The problem was first spotted by Phil Windley
+when he tried to make HOL88 on a Vax.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix 			      			     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG (bug spotted by John Van Tassel)                       |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/parslet.l						     |
+|----------------------------------------------------------------------------|
+| DATE:          22 March 1989						     |
+|----------------------------------------------------------------------------|
+
+Local declaration of unused push-in-ollp and pop-in-ollp removed.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Change from HOL88.1.01                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml                                                   |
+|                lisp/F-tml.l                                                |
+|                Makefile                                                    |
+|                HOL88.doc                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          23 March 1989                                               |
+|----------------------------------------------------------------------------|
+
+The ML function load_library is changed to take only one argument (the other
+one now being handled via the flag print_lib). The ML function load_lib has
+been removed.
+
+DOCUMENTATION: 
+==============
+
+ML functions for loading libraries
+----------------------------------
+
+The list of currently loaded libraries is given by:
+
+   libraries : void -> string list
+
+A library can be loaded with the function:
+
+   load_library : string -> void
+
+The output during the loading is determined by the flag print_lib. If
+this is true, the output is verbose. For consistency, libraries should be
+set up so that the loading of ML files in the library is done by:
+
+   load(`<file>`, get_flag_value `print-lib`)
+
+In HOL88.1.05 this can be done using the function loadx defined by:
+
+   let loadx tok = load(tok, get_flag_value `print_lib`)
+
+(see below).
+
+A call:
+
+   load_library `foo`
+
+will do nothing if `foo` is already loaded, otherwise it will do 
+
+   load((HOLdir ^ `/Library/foo/foo`), get_flag_value `print_lib`)
+
+where HOLdir (see above) is the directory of the hol system (which is setup by
+hol/Makefile). 
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Reorganization of library      			     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/eval/eval.ml					     |
+|                Library/unwind/unwind.ml				     |
+|                Library/string/string.ml				     |
+|----------------------------------------------------------------------------|
+| FILES ADDED:   Library/string/string_rules.ml   	       		     |
+|----------------------------------------------------------------------------|
+| DATE:          22 March 1989						     |
+|----------------------------------------------------------------------------|
+
+Files 
+
+   Library/eval/eval.ml 
+   Library/unwind/unwind.ml
+   Library/string/string.ml 
+
+have been set up so that these libraries can be loaded using load_library (see
+below). 
+
+The file Library/string/string.ml in HOL88.1.01 has been renamed to
+Library/string/string_rules.ml in HOL88.1.02 and a new string.ml written (see
+below).  Loading the library `string` will make the theory `string` a new
+parent if the loading is done in draft mode, otherwise the theory is just
+loaded (with load_theory). Note that if `string` is made a parent of a theory,
+`foo` say, then before loading `foo` it will be necessary to put the directory
+where string.th is (normally HOLdir^`/Library/string/`) on the search path.
+This is done automatically is the library `string` is loaded.
+
+N.B. In HOL88.1.03 the default search path contains all the libraries
+     (see below), so the hassle mentioned at the end of the last
+     paragraph is avoided.
+
+Here is the contents of the file hol/Library/string/string.ml (note: this is
+different from HOL88.1.01; the file string.ml in that version has been renamed
+to string_rules.ml).
+
+   % FILE          : string.ml                                             %
+   % DESCRIPTION   : loads the library "string" into hol.                  %
+   %                                                                       %
+   %                                                                       %
+   % AUTHOR        : T. Melham                                             %
+   % DATE          : 87.10.09                                              %
+   %                                                                       %
+   % MODIFIED      : M. Gordon                                             %
+   % DATE          : 23 March 89                                           %
+
+   set_search_path((HOLdir ^ `/Library/string/`) . search_path());;
+
+   if draft_mode() 
+    then (print_newline();
+          print_string`string declared a new parent`;
+          print_newline();
+          new_parent`string`)
+    else load_theory`string`;;
+
+   load((HOLdir ^ `/Library/string/string_rules`), 
+        get_flag_value `print_lib`);;
+
+   % load (selected) theorems from string.th				   %
+   let string_Axiom   =    theorem `string` `string_Axiom`  and
+       string_Induct  =    theorem `string` `string_Induct` and
+       string_CASES   =    theorem `string` `string_CASES`;;
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML functions.					     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml						     |
+|----------------------------------------------------------------------------|
+| DATE:          26 March 1989						     |
+|----------------------------------------------------------------------------|
+
+
+The following functions have been added.
+
+   let load_from_lib t lib file =
+    load((HOLdir ^ `/Library/` ^ lib ^ `/` ^ file),t);;
+
+   let loadt_from_lib = load_from_lib true
+   and loadf_from_lib = load_from_lib false;;
+
+   let add_to_search_path p = set_search_path(p.search_path());;
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Extra error check added				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-pars.l					     |
+|----------------------------------------------------------------------------|
+| DATE:          28 March 1989						     |
+|----------------------------------------------------------------------------|
+
+The HOL parser  has been modified so that it produces an error if constants
+of the form "`...`" are entered before the type ":string" has been defined.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library						     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG (using code from R Jones of ICL Defence Systems)	     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/taut (new directory)				     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          30 March 1989						     |
+|----------------------------------------------------------------------------|
+
+Various theorem proving tools written by Roger Jones of ICL Defence Systems
+have been installed as the library taut. 
+
+The main tools are described below. There are various other tools also,
+see the comments in taut.ml for details.
+
+
+LEMMA : term -> tactic
+
+   For an arbitrary term tm:
+            al |- g
+   ================================== LEMMA tm
+     al |- tm         tm', al |- g
+
+   where "tm', al |- g"  results from applying STRIP_TAC to "al |- tm ==> g"
+
+
+LEMMA_PROOF : term -> tactic list -> tactic
+
+   For any term, tm, together with a list of tactics, tacl:
+
+	   al |- g
+   ========================= LEMMA_PROOF tm tacl
+         tm, al |- g
+
+   if EVERY tacl proves tm. 
+
+
+FORALL_OUT_TAC : tactic
+
+         A |- (!x. f) ==> (!x. g)
+     =============================== FORALL_OUT_TAC
+         A |- (!x. f ==> g)
+
+
+TAUT_TAC : tactic
+
+   TAUT_TAC proves tautologies: if the current goal is a tautology 
+   then TAUT_TAC will prove it. Otherwise it will take longer and fail. 
+   The definition of tautology is fairly broad, including all substitution
+   instances of tautologies, allowing for an understanding of boolean equality
+   and conditionals, and coping with outer universal quantifiers. 
+   Similar rules apply to all the derivatives with TAUT in their names. 
+
+
+TAUT_RULE : conv
+
+   TAUT_RULE also proves tautologies, given a tautological term
+   it will return a tautological theorem.
+
+
+TAUT_CONV : conv
+
+   TAUT_CONV, given a term t will return the theorem "t = T" 
+   if this is a tautology.
+
+
+PURE_TAUT_SIMP_TAC : tactic
+TAUT_SIMP_TAC      : tactic
+
+   PURE_TAUT_SIMP_TAC takes a long time,
+   replacing all tautological subexpressions by T. 
+   TAUT_SIMP_TAC follows this by a REWRITE_TAC[]. 
+
+
+
+******************************************************************************
+******************************** Version 1.03 ********************************
+******************************************************************************
+
+ 
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Changed defaults    					     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Makefile						     |
+|----------------------------------------------------------------------------|
+| DATE:          31 March 1989						     |
+|----------------------------------------------------------------------------|
+
+The built-in search paths now incude all the libraries. This is so that if
+a user's theory has a library theory as parent, then loading the descendent
+theory will work (because the parent in the library will be found via the 
+search path).
+
+	
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML function (append_to_search_path)		     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml						     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          31 March 1989						     |
+|----------------------------------------------------------------------------|
+
+
+The function:
+
+   append_to_search_path : string -> string list
+
+has been added. It is defined by:
+
+   let append_to_search_path p = set_search_path(search_path()@[p])
+
+
+
+******************************************************************************
+******************************** Version 1.04 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New Makefile entry	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Makefile						     |
+|----------------------------------------------------------------------------|
+| DATE:          1 April 1989						     |
+|----------------------------------------------------------------------------|
+
+A new makefile entry has been added to allow the builder of the system
+to change file permissions in the hol distribution directory.  Typing:
+
+	make permissions
+
+will recursively go through the hol directory and set permissions on all
+files and directories.  The franz sub-directory is left untouched, since
+it really isn't part of the hol system "proper". (Other sites may use
+other versions of lisp.).
+
+The effect is to set:
+
+	1) all directories to have the permission given by Dperm
+	2) all (text) files to have the permission given by Tperm
+	3) all executable files (in the list Exec) to have permission
+	   given by Eperm.
+
+Example:
+
+	IF      Dperm=770 Tperm=660 Eperm=770 Exec=hol 
+
+	THEN    1) directories get permission     "drwxrwx---"
+	        2) the file hol gets permission   "-rwxrwx---"
+		3) all other files get permission "-rw-rw---"
+
+Note, only the owner of a file/directory can change permissions, of course.
+The makefile entry skips all files not owned by the caller.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (fixpoints) 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/fixpoints (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          3 April 1989						     |
+|----------------------------------------------------------------------------|
+
+The concepts of monotonicity, continuity, fixedpoints and chain-completeness
+(i.e. admitting induction) are defined for polymorphic predicates. Various
+basic lemmas are proved, concluding with the validity of Scott induction (also
+called fixedpoint induction and computation induction) in the following form:
+
+    |- !(p:(*->bool)->bool) fun.
+        ADMITS_INDUCTION p /\ 
+        CONTINUOUS fun     /\
+        p BOT              /\ 
+        (!f. p f ==> p(fun f)) 
+        ==> 
+        p(FIX fun)
+
+See the comments in Library/fixpoints/mk_fixpoints.ml for more details.
+
+
+******************************************************************************
+******************************** Version 1.05 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix to GEN_TAC	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/tactics.ml						     |
+|----------------------------------------------------------------------------|
+| DATE:          4 April 1989						     |
+|----------------------------------------------------------------------------|
+
+GEN_TAC had a bug (which first appeared in Version 1 HOL88, I think) that made
+it generate a proof part that failed if the the quantified variable being
+stripped off was free in the assumptions of the goal. This has been fixed by
+renaming the bound variable after then GEN (by alpha-conversion) instead of
+before the GEN (using INST).
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML function (loadx) 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml						     |
+|                (various library files changed to use loadx)                |
+|----------------------------------------------------------------------------|
+| DATE:          6 April 1989						     |
+|----------------------------------------------------------------------------|
+
+The function loadx had been added; it is defined by:
+
+   let loadx tok = load(tok, get_flag_value `print_lib`);;
+
+The intended use of this is in writing libraries.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (prog_logic88) 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/prog_logic88 (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          3 April 1989						     |
+|----------------------------------------------------------------------------|
+
+This library contains experimental tools to support a variety of programming
+logics. The logical principles underlying these tools are described in the
+paper:
+                                                                            
+   "Mechanizing Programming Logics in Higher Order Logic",                 
+   by M.J.C. Gordon, in "Current Trends in Hardware Verification and       
+   Automated Theorem Proving" edited by P.A. Subrahmanyam and              
+   Graham Birtwistle, Springer-Verlag, 1989.
+
+This library is provided primarily to help readers of the paper who
+want more details. The tools in the library were implemented to test
+the ideas and are not likely to be useful for serious software
+verification. Eventually, it is hoped to implement practical tools 
+to support reasoning about imperative programs. 
+                                                                            
+Executing the ML phrases in the file:
+
+   Library/prog_logic88/examples.ml
+
+(in the order given in the file) will illustrate the 
+contents of the library.      
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (group)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Elsa Gunter						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/group (new directory)				     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          14 April 1989						     |
+|----------------------------------------------------------------------------|
+
+The library `group`, due to Elsa Gunter, develops first-order and higher-order
+group theory, including the notions of subgroup, left coset, normal subgroup,
+quotient group, homomorphism, and isomorphism.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (integer)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Elsa Gunter						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/integer (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          14 April 1989						     |
+|----------------------------------------------------------------------------|
+
+The library `integer`, due to Elsa Gunter, develops the basic algebraic and 
+order-theoretic structure of the integers and basic algebraic properties of 
+modular arithmetic.
+
+
+******************************************************************************
+******************************** Version 1.06 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (sets)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Phil Windley						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/sets (new directory)	  			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          3 May 1989						     |
+|----------------------------------------------------------------------------|
+
+The library `sets`, due to Phil Windley, defines a new type for finite sets
+and proves various set-theoretical properties.  The theory is a formalization
+of the theory of sets presented in Chapter 10 of Manna and Waldingers "The
+Logical Basis of Computer Programming, VOL 1.". 
+
+The theory is non-definitional.
+
+
+******************************************************************************
+******************************** Version 1.07 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (sets)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Phil Windley						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/sets (new directory)	  			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          13 May 1989						     |
+|----------------------------------------------------------------------------|
+
+The library `sets`, due to Phil Windley, defines a new type for finite sets
+and proves various set-theoretical properties.  The theory is a formalization
+of the theory of sets presented in chapter 10 of Manna and Waldingers "The
+Logical Basis of Computer Programming, VOL 1.". 
+
+The theory is definitional. The previous non-definitional theory 
+(in HOL88.1.06) turned out to be inconsistent.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Improved library (sets)				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Philippe Leveilley					     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/sets/card.ml (new file)  			     |
+|                Library/sets/mk_sets.ml                                     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          25 May 1989						     |
+|----------------------------------------------------------------------------|
+
+The library `sets`, due to Phil Windley has been extended by Philippe
+Leveilley to contain the definition of the cardinality (size) of
+sets. This enables some previously commented-out theorems of Phil
+Windley to be reinstated. Previously these theorems were based on an
+axiom and so were suspect.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix 
+|----------------------------------------------------------------------------|
+| CHANGED BY:    David Shepherd (installed by MJCG)   			     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/F-iox-stand.l                                          |
+|----------------------------------------------------------------------------|
+| DATE:          25 May 1989						     |
+|----------------------------------------------------------------------------|
+
+The functions find_theory and find_ml both did not work if the file 
+did not exist. Calling find-file with (concat name '|.th|) resulted
+in found-name being compared with name and not the composite name 
+that find-file will return if it fails. Bug spotted and fixed by 
+David Shepherd of Inmos.
+
+
+
+******************************************************************************
+******************************** Version 1.08 ********************************
+******************************************************************************
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (quotient)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/quotient (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          10 June 1989						     |
+|----------------------------------------------------------------------------|
+
+Given an equivalence relation, the function 'new_quotient_definition' creates
+the type of equivalence classes. 
+
+Example: defining the constant "EQUI_POTENT:(*->bool)->(*->bool)->bool"
+         in some natural way, one proves
+
+         EQUIVALENCE_THM = |- EQUIVALENCE EQUI_POTENT
+
+         The call 'new_quotient_definition(`card`,EQUIVALENCE_THM)'
+
+         creates the type (*)card of cardinals of type *.
+
+         The call returns 3 theorems, asserting that the
+         canonical projection is surjective and universal for
+         the equivalence relation.
+
+The tactic "QUOTIENT_TAC" allows for rewriting product variables to tuples of
+variables.  The tactic FACTOR_TAC is a general mechanism for defining
+functions on quotient types. 
+
+
+******************************************************************************
+******************************** Version 1.09 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Changed ML function (RES_CANON_FUN) 			     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    David Shepherd						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: hol/ml/resolve.ml					     |
+|----------------------------------------------------------------------------|
+| DATE:          23 June 1989						     |
+|----------------------------------------------------------------------------|
+
+Resolution has been changed to canonicalize "t1=t2" into "t1==>t2"
+and "t2==>t1". This makes RES_TAC and IMP_RES_TAC work with equalities
+as well as implications.
+
+N.B.  This change means that more resolvants are generated by resolution   
+====  tactics. Existing proofs that use POP_ASSUM, ASSUM_LIST etc may thus
+      need to be modified. For example,
+
+         ASSUM_LIST(\thl. ..... (el 5 thl) ..... )
+
+      may not work if previous steps used the new resolution tactics and
+      generate more assumptions than before (if one extra assumption is
+      generated then the 5 will need to be changed to 6). If this causes
+      serious problems, then edit ml/resolve.ml to reinstate the old 
+      version of RES_CANON_FUN (which is archived there in a comment).
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (all_sets)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Phillipe leveilley					     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/all_sets (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          29 June 1989						     |
+|----------------------------------------------------------------------------|
+
+This is an alternative to the library `sets` which supports both finite
+and infinite sets.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (bags)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Phillipe leveilley					     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/bags (new directory) 				     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          29 June 1989						     |
+|----------------------------------------------------------------------------|
+
+This library is based on the treatment of bags (multisets) in Manna
+and Waldinger's book.
+
+
+
+******************************************************************************
+******************************** Version 1.10 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (well-order) 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/well-order (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          11 July 1989						     |
+|----------------------------------------------------------------------------|
+
+In the theory WELL-ORDER, it is proved that every type can be well ordered.
+This is a well known equivalent to the axiom of choice.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Constant renamed (UNION in library `fixpoints`)             |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Mike Gordon						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/fixpoints/mk_fixpoints.ml			     |
+|		 Library/fixpoints/fixpoints.ml				     |
+|----------------------------------------------------------------------------|
+| DATE:          11 July 1989						     |
+|----------------------------------------------------------------------------|
+
+At Ton Kalker's suggestion I have renamed the constant UNION in the library
+fixpoints to LUB (Least Upper Bound). This is a better name, and it resolves
+a name clash with UNION in the library `well-order`.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Theory name changed                                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Mike Gordon, John Carroll				     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_tree.ml					     |
+|		 theories/mk_TREE.ml					     |
+|                theories/mk_ltree.ml (new file replacing mk_tree.ml)	     |
+|                ml/site.ml    (new file)		  		     |
+|                franz-cl-th   (new file)				     |
+|                Make-non-unix (new file)				     |
+|                Makefile						     |
+|----------------------------------------------------------------------------|
+| DATE:          26 August 1989						     |
+|----------------------------------------------------------------------------|
+
+Changes made in CL port of HOL88 version 1.10
+---------------------------------------------
+
+1. Loading ML files in UNIX giving a directory of '..' used to cause an
+error - this now works properly.
+
+2. Lisp flag %compile_on_the_fly-flag added (default value nil). Has no
+effect in Franz lisp version.
+
+3. There is a UNIX shell script, franz-cl-th, for converting a theory made
+in the Franz lisp version of HOL into one which can be loaded by a CL
+version of HOL. It is invoked by:   sh franz-cl-th < franz.th > cl.th
+
+4. For making HOL in CL on a non-UNIX machine, use the file Make-non-unix.
+It performs the same actions as the Makefile for UNIX. 
+
+5. Set the lisp flag %directory to simulate changing directories on machines
+where there is no concept of current or working directory. The directory
+name should be a string, ending with the directory name separator (the
+equivalent of '/' in UNIX). The file ml/site.ml may need to be changed on
+such machines since it contains pathnames relative to the current directory.
+
+6. The theory tree has been renamed ltree, since otherwise the name would
+clash with the theory TREE on machines where case is not significant in
+filenames.
+
+7. Implementations tested:
+
+      Procyon Common Lisp 2.1.3
+      Sun Common Lisp (Lucid) 2.1.1
+      Kyoto Common Lisp June 3, 1987
+      Austin Kyoto Common Lisp
+      Allegro Common Lisp 3.0.3 (but bug in interpreter means doesn't work)
+      Franz Lisp Opus 38.69
+
+
+John Carroll     Aug 89
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Modification of an ML function (set_search_path)	     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-iox-stand.l					     |
+|----------------------------------------------------------------------------|
+| DATE:          26 September 1989 					     |
+|----------------------------------------------------------------------------|
+
+set_search_path changed to return () rather than the previous value
+of the search path.
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML variable (Libraries) and function (install)	     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml						     |
+|                HOL88.doc						     |
+|                Makefile						     |
+|                READ-ME						     |
+|----------------------------------------------------------------------------|
+| DATE:          26 September 1989 					     |
+|----------------------------------------------------------------------------|
+
+The ML variable Libraries contains a list of the current libraries; it is set
+when HOL is made.
+
+The ML function:
+
+   install : string -> void
+
+reconfigures a HOL system to a new root directory. The string should be the
+absolute path name of the directory where the hol system and theory files are
+located. Executing:
+
+   install `dir`;;
+
+does the following
+
+   -- The ML variable HOLdir is rebound to dir.
+
+   -- %hol-dir is set to dir.
+
+   -- %lib-dir is set to dir/Library.
+
+   -- The search path is reset to:
+
+         [`dir\Library\lib1\`; `dir\Library\lib2\`; ... ;`dir\Library\libn\`]
+
+      where [`lib1`; `lib2`; ... ; `libn`] is the value of the ML variable
+      Libraries.
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (convert)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    David Shepherd						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/convert (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          27 September 1989					     |
+|---------------------------------------
+
+Various conversion orientated stuff includes tidied (?) versions of unwinding
+stuff for hardware structural specifications.
+
+As well as David Shepherd's term conversion package there are tidied up
+versions of the unfold/unwind/prune library -- mainly to make PRUNE work more
+of the time.  For example
+
+	"? x y z .  (x = y) /\ (a = y+2) /\ (z = y)"
+	
+would now prune to
+
+	"? y .  (a = y+2)"
+
+instead of failing as before (PRUNE used to have to be able to prune all the
+quantified variables).  Also there are a few other conversions and
+conversionals that seem to be useful. 
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (auxiliary) 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/auxiliary (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          27 September 1989					     |
+|----------------------------------------------------------------------------|
+
+This library contains a collection rules, tactics, conversions, definitions
+and theorems for general use. Prominent are the filter tactics and the
+conversions. Included are also two resolution tactics which use renaming if
+necessary, and use specialising as little as possible.
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (well_order) 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/well_order (new directory)			     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          27 September 1989					     |
+|----------------------------------------------------------------------------|
+
+The library well_order replaces the library well-order.
+ 
+It is well known from set theory that the axiom of choice
+is equivalent to the fact that every set can be well-ordered.
+That is to say, on every set there is partial order, which is
+linear and, moreover, every non-empty subset has a smallest element.
+A typical example of such a well-order is the natural ordening
+on the natural numbers (this fact is recorded in HOL).
+
+The proof of the above mentioned fact is quite complicated, as
+can be seen from the fact that we need some 30 theorems and
+about 11 lemmas to prove the existence of such a well-order.
+
+The outline from the proof is as follows: 
+
+	first we define a maximal chain of subsets,
+    	which we call WOC. We start with BOT (the empty set),
+        then we take an arbitrary element of TOP, say x0 and
+ 	the second element of our chain will be {x0}. Then
+	we take an arbitrary element of TOP\{x0}, say x1,
+	and we take {x0,x1} as the third set of our chain.
+	And so on. To ensure that we use all elements,
+        the technical definition of WOC is somewhat more
+        complicated. We define WOC as the smallest set of
+        sets such that it preserves UNIONS and INTERSECTION,
+        and such that if A is a set of WOC, then also
+        A U {x|x = @x.x member of TOP\A} is a member of WOC.
+        We prove that WOC exists, that WOC is linear, that it is dense
+        (it skips no elements) and that the subset ordering
+        on WOC is a well-ordening. 
+        To define a well-ordening on the original type
+        all we have to do is find an embedding of
+        the type into WOC. This is rather straight forward,
+        except for the fact that this embedding (INWOC) is
+        injective. Pulling the subset ordering on WOC
+	back to the basis type defines a well-order.
+        See also the documentation in "mk_well-order.ml".  
+
+The well-ordening is named WLEQ; the associated choice function is
+named LEAST. That is, for every non empty set D, LEAST(D) is
+the smallest element of D (which exists as WLEQ is a
+well-order). 
+
+Using the canonical well-order transfinite induction is
+introduced. The main notion in this context is the constant
+RESTRICT. "RESTRICT x f" is the pair (x,g), where "g y" equals "f y" if
+"y WLESS x", and equals a universal constant in other cases.
+The file wo_fns.ml introduces WO_CONV and wo_rec_definition.
+
+WO_CONV tm;; %< evaluates to existence theorem derived from
+                transfinite induction principle>%
+
+wo_rec_definition tm;; %<Use the result from WO_CONV in new_specification>%
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Updated library (quotient) 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/quotient					     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          27 September 1989					     |
+|----------------------------------------------------------------------------|
+
+Given an equivalence relation, the function 'new_quotient_definition'
+creates the type of equivalence classes. 
+
+Example: defining the constant "EQUI_POTENT:(*->bool)->(*->bool)->bool"
+         in some natural way, one proves
+
+         EQUIVALENCE_THM = |- EQUIVALENCE EQUI_POTENT
+
+         The call 'new_quotient_definition(`card`,EQUIVALENCE_THM)'
+
+         creates the type (*)card of cardinals of type *.
+
+         The call returns 3 theorems, asserting that the
+         canonical projection is surjective and universal for
+         the equivalence relation.
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (set)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/set						     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          27 September 1989					     |
+|----------------------------------------------------------------------------|
+
+
+Sets are modeled as predicates on types.  The empty set is borrowed from
+"fixpoints" where it is called BOT.  The constructed is mainly concerned with
+theorems on functions on sets. The boolean algebra of sets is hardly
+considered, and is left to the taste of the user.
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (zet)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/zet						     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          27 September 1989					     |
+|----------------------------------------------------------------------------|
+
+
+The theory of integers is constructed from the naturals using a quotient
+construct.  The relation with the naturals is given via the function INT.
+Induction is provided for by three tactics based upon three differrent, but
+similar theorems.  
+
+0)  |-  "!Q.((!x.(NEG x) ==> Q x) /\ (!x.((POS x) /\ (Q x)) ==> 
+                                       (Q (x plus een)))) ==> !x.Q x
+
+1)  |-  "!k Q.((!x.(x leq k) ==> (Q x)) /\
+               (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> (!x.Q x)
+
+2)  |-  "!k Q.((Q k) /\ 
+                  (!x.((x leq k) /\ (Q x)) ==> (Q (x minus een))) /\
+                  (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> 
+                    (!x.Q x)
+
+The latter theorem is used for constructing the functions:
+
+zet_recursive_definition, zet_zero_definition, zet_een_definition
+ 
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New library (card)	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Ton Kalker						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/card						     |
+|		 Makefile						     |
+|		 Library/Makefile					     |
+|		 HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          27 September 1989					     |
+|----------------------------------------------------------------------------|
+
+
+The type of cardinals is defined as the equivalence classes of equi_potent
+sets. The canonical order "<<<" is defined, and it proved that "<<<" is a
+linear order. This latter prove is done using transfinite induction .
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML functions (flags, new_flag) 			     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Mike Gordon						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-iox-stand.l     				     |
+|----------------------------------------------------------------------------|
+| DATE:          13 October 1989					     |
+|----------------------------------------------------------------------------|
+
+
+The function:
+
+   new_flag : string # bool -> void
+
+creates a new user-settable flag with a given default value; it fails
+if the flag already exists.
+
+The function:
+
+   flags : void -> string list
+
+returns the list of settable flags in the system.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Change to subgoal package 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Phil Windley						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-iox-stand.l     				     |
+|		 ml/goals.ml						     |
+|----------------------------------------------------------------------------|
+| DATE:          13 October 1989					     |
+|----------------------------------------------------------------------------|
+
+
+Flag			Function			Initial Value
+----			--------			-------------
+print_all_subgoals	print all subgoals or		true
+			just current one
+
+The flag print_all_subgoals affects all operations where the subgoal
+stack is printed.  If the flag is true, the entire subgoal stack is
+printed.  If the flag is false, only the top subgoal on the stack is
+printed. If only the current subgoal is to be printed, the subgoal package
+will report the number of subgoals remaining before displaying the subgoal
+on the top of the goal stack.  The default value of this flag is true.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Global Renaming	 				     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Tom Melham						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_TREE.ml					     |
+|	         theories/mk_ltree.ml					     |
+|	         theories/mk_tydefs.ml					     |
+|		 ml/load_thms.ml					     |
+|		 ml/tydefs.ml						     |
+|		 Makefile						     |
+|		 Make-non-unix						     |
+|----------------------------------------------------------------------------|
+| DATE:          14 October 1989					     |
+|----------------------------------------------------------------------------|
+
+The namings for the two built-in types of trees have been rationalized and
+made completely lower-case (MJCG: for Common Lisp compatibility).  
+The changes are:
+
+    1) mk_ltree.ml changed back to mk_tree.ml.
+    2) ltree.th accordingly changed to tree.ml.
+    3) the type operator (*)TREE changed to (*)ltree (for "labelled tree").
+    4) mk_TREE.ml changed to mk_ltree.ml
+    5) TREE.th changed to ltree.th
+    6) other files updated as needed to reflect this.
+
+In general, this change should have no effect on users --- except that:
+
+    a) you will have to rebuild any theories that contain
+       defined types which are defined using the built-in
+       type definition tool (i.e. using define_type).
+    b) the new name (*)ltree and associated constants may clash
+       with names you've defined.
+    c) if you've used the built-in type (*)TREE explicitly somewhere
+       you'll have to change it to (*)ltree.
+
+Sorry about that.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bug fix (INST_TYPE) and new ML function (inst_check)	     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Mike Gordon						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-inst.l		     				     |
+|		 ml/hol-rule.ml						     |
+|----------------------------------------------------------------------------|
+| DATE:          16 October 1989					     |
+|----------------------------------------------------------------------------|
+
+The following proof of |- F was supplied by Roger Jones' team at ICL
+Defence Systems.
+
+   let x = "x:*";;
+
+   let thm1 =
+    prove("!y:*. y = (\^x.\x.^x) y T",
+          BETA_TAC THEN REWRITE_TAC[]);;
+
+   let thm2 = prove("F", ONCE_REWRITE_TAC[thm1] THEN BETA_TAC);;
+
+It appears that optimizations to type instantiation for Cambridge LCF 
+eliminated the check for variable collision. The new code uses a Lisp coded 
+check:
+
+   inst_rename_list : term -> term list
+
+which returns a list of those variables in a term that are preceded in the
+term by a variable with the same name but a different type.  Such variables
+are renamed by INST_TYPE if their type is instantiated. This insures that type
+instantiation cannot cause distinct variables to become the same.
+
+As a slight optimization (to compensate for the loss of performance due to the
+extra checking in inst_rename_list) the validity testing for INST_TYPE has
+been efficiently coded in Lisp via a dml-ed function:
+
+   inst_check : (type # type) list # term list -> term list
+
+A call 
+
+   inst_check [(ty1,v1); ... ;(tyn,vn)] [tm1; ... ;tmn]
+
+returns the list of free variables in tm1, ..., tmn if:
+
+   (i)  each vi is a type variable, and
+   (ii) none of the vi occurs in any of the tm1, ... ,tmn
+
+if (i) or (ii) fails to hold the call fails.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Trivial renamings					     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Tom Melham						     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_list.ml	     				     |
+|	         theories/mk_ltree.ml					     |
+|	         ml/load_thms.ml					     |
+|----------------------------------------------------------------------------|
+| DATE:          17 October 1989					     |
+|----------------------------------------------------------------------------|
+
+(1) The theorem list_Axiom in the built-in theory list.th has been
+    changed from:
+
+      |- !x f. ?! fun. (fun[] = x) /\ (!h t. fun(CONS h t) = f(fun t)h t)
+
+    to
+
+      |- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+
+(2) The theorem Node_one_one in ltree.th has been renamed Node_11.
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   New ML function (PROVE)		          	     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG 							     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/goals.ml						     |
+|                HOL88.doc						     |
+|----------------------------------------------------------------------------|
+| DATE:          12 November 1989 					     |
+|----------------------------------------------------------------------------|
+
+The function
+
+   PROVE : term # tactic -> theorem
+
+takes a term (considered as a goal with an empty assumption list)
+and tries to prove it with a supplied tactic. If it fails the
+unsolved goals are printed. For example:
+
+   #PROVE("!n. SUC n > n", INDUCT_TAC);;
+   Unsolved goals:
+   "(SUC 0) > 0"
+
+   "(SUC(SUC n)) > (SUC n)"
+       [ "(SUC n) > n" ]
+
+
+   evaluation failed     PROVE -- unsolved goals
+
+   #
+
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-parser.l	                                     |
+|----------------------------------------------------------------------------|
+| DATE:          12 Nov. 1989                                                |
+|----------------------------------------------------------------------------|
+
+nconc replaced by append in token parser function tcn to fix the bug 
+illustrated below (and spotted by Richard Boulton).
+
+   #`abc\L`;;
+   `abc
+   ` : string
+
+   #`abc\L`;;
+   `abcabc
+   ` : string
+
+
+******************************************************************************
+******************************** Version 1.11 ********************************
+******************************************************************************
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Improved help system                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-help.l   	                                     |
+		 lisp/f-system.l					     |
+|----------------------------------------------------------------------------|
+| DATE:          7 December 1989                                             |
+|----------------------------------------------------------------------------|
+
+
+The help system now searches the same database that is used to make the
+REFERENCE MANUAL.

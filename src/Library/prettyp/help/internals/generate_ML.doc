@@ -1,0 +1,12 @@
+\DOC generate_ML
+
+\BLTYPE
+generate_ML : (((string # string) -> void) -> string -> print_tree -> void)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

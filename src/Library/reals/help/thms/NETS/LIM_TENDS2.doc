@@ -1,0 +1,13 @@
+\THEOREM LIM_TENDS2 NETS
+|- !m1 m2 f x0 y0.
+    limpt(mtop m1)x0 universe ==>
+    ((f tends y0)(mtop m2,tendsto(m1,x0)) =
+     (!e.
+       (real_of_num 0) real_lt e ==>
+       (?d.
+         (real_of_num 0) real_lt d /\
+         (!x.
+           (real_of_num 0) real_lt (dist m1(x,x0)) /\
+           (dist m1(x,x0)) real_lt d ==>
+           (dist m2(f x,y0)) real_lt e))))
+\ENDTHEOREM

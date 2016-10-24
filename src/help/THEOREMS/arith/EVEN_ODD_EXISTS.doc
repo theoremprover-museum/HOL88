@@ -1,0 +1,3 @@
+\THEOREM EVEN_ODD_EXISTS arithmetic
+|- !n. (EVEN n ==> (?m. n = 2 * m)) /\ (ODD n ==> (?m. n = SUC(2 * m)))
+\ENDTHEOREM

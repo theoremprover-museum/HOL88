@@ -1,0 +1,785 @@
+\begin{theindex}
+
+  \item accreditation, 91, 96
+  \item Ada, i, 122, 123, 186
+  \item AEG-Telefunken AG, 189
+  \item agriculture, v, 28, 202
+  \item Air Traffic Control, 9
+  \item Aiso, Hideo, 165
+  \item Albus, J., 223
+  \item algorithm, 60, 89, 122, 140, 141
+    \subitem Karmarkar's, 141
+    \subitem Khachiyan's, 140
+  \item Alvey program, 66, 104, 181--183
+  \item Alvey, John, 182
+  \item American Micro Devices, 212
+  \item Anderson, William S., 144
+  \item antitrust laws, 3, 55, 70, 73, 74, 133, 137, 146
+  \item Apple Computer Company, 55, 60, 67, 93, 148--150, 174, 196
+    \subitem II, 149
+    \subitem IIe, 149
+    \subitem III, 149
+    \subitem Lisa, 60, 149
+    \subitem Macintosh, 56, 149, 150
+  \item Archbold, Pamela, 229
+  \item Argentina, 33, 34
+  \item Argonne National Laboratory, 126
+  \item ARPANET, 116
+  \item artificial intelligence, 3, 11, 20, 27, 28, 34, 42--45, 116, 
+		131, 136, 154, 162, 163, 167, 178, 180, 184, 185, 194
+  \item Asia, vi, 25, 63, 78, 87, 94, 174, 175, 190, 195
+  \item Association for Computing Machinery, vii, 43, 102, 135, 139
+  \item AT\&T, 42, 67, 136--138, 140, 152, 185
+  \item atomic bomb, 52, 53, 105
+  \item Austria, 177
+  \item automobile, 7, 25, 35, 68, 72, 173, 193, 201, 205, 206
+
+  \indexspace
+
+  \item Babbage, Charles, 103, 122
+  \item balance of trade, 77--80, 132, 133, 212
+  \item ballistic missile defense, 115, 119
+  \item ballistic transport, 135
+  \item Barzini, Luigi, 221
+  \item Bauer, R., 229
+  \item Baxter, William~F., 74, 224
+  \item Beardsley, Tim, 228
+  \item Bechtolsheim, Andy, 93
+  \item Beckurts, Karl Heinz, 188
+  \item Belgium, 188
+  \item Bell Communication Research, 140
+  \item Bell Laboratories, i, 136, 138--141, 171
+  \item Bell, Alexander Graham, 90, 136
+  \item Bell, Eric~T., 27, 222
+  \item Bentley, J., 222
+  \item Bergamini, David, 75, 224
+  \item Berne Convention, 61
+  \item Bethe, Hans, 105
+  \item Big Dragon, 190, 192
+  \item Binford, T., 223
+  \item Bingaman, Senator Jeff, 208
+  \item biotechnology, 13--15, 54, 95
+  \item bit, 36--38, 134, 135, 188, 189
+  \item Bloch, Erich, 126, 225
+  \item Blomstrom, R.~L., 221
+  \item Boeing 707 airplane, 216
+  \item Boeing Aircraft Corporation, 48, 173
+  \item Borrus, Michael, 223, 225
+  \item Boyd, Gerald~M., 230
+  \item Brady, M., 223
+  \item Brandin, David~H., vii, viii, 222, 231
+  \item Brandin, Ellen, viii
+  \item British Telecom, 182, 185
+  \item Brodie, Ivor, 222
+  \item Brookes, Warren~T., 231
+  \item Brookhaven National Laboratory, 126
+  \item Brooks, Harvey, 226
+  \item Brown, Representative George~E., 212
+  \item Buchanan, Ian, vii
+  \item Bull, 147, 168, 178, 185--187
+  \item BUNCH, 143--145
+  \item Burroughs, 143, 145, 146
+  \item bushido, 83
+  \item byte, 36--38
+
+  \indexspace
+
+  \item Canon Inc., 150
+  \item Capasso, F., 229
+  \item capital, vi, 7, 16, 17, 49, 74--77, 104, 113, 130, 153, 158, 
+		193, 202, 208, 210, 212
+  \item capitalism, v
+  \item Caplan, N., 223
+  \item Carnegie-Mellon University, 123
+  \item Carter, President Jimmy, 8
+  \item Central Intelligence Agency, 65, 153
+  \item Centre National de Recherche Scientifique, 185
+  \item Cezar Industries, Ltd., vii
+  \item Chandler, A.~R., 223
+  \item Chen, Pehong, vii
+  \item China, vii, 61, 101--103, 127, 190--192, 195, 196
+    \subitem Cultural Revolution, 10, 101, 102, 190
+  \item Chirac, Premier Jacques, 185
+  \item Chrysler Corporation, 205
+  \item Churchill, Winston, 84, 225
+  \item Cie. Generale de L'\'Electricit\'e, 176, 185
+  \item Clark, Don, 231
+  \item Clarke, Arthur~C., 221
+  \item Codd, Ted, 135
+  \item Cohen, Steven, 206
+  \item Coker, John, vii
+  \item Collins, D., 229
+  \item Colmerauer, Alain, 186
+  \item Commodity Control List, 64, 65
+  \item communications, 6, 7, 9, 25, 34, 42, 55, 116, 137, 138, 
+		140, 141, 145, 146, 151, 167, 168, 171, 172, 178, 180, 
+		184, 187, 188, 194
+    \subitem optical, 22
+  \item compiler, 41, 123
+  \item computational science, 39, 125
+  \item computer, 3, 5, 7--9, 18, 33--44, 48, 49, 55, 63, 64, 72, 102, 
+		116, 122, 123, 127, 128, 131, 132, 134, 138, 139, 
+		141, 142, 145, 146, 148, 150, 151, 161, 163, 167, 168, 
+		172, 193
+    \subitem address, 35, 36
+    \subitem architecture, 10, 26, 34, 35, 77, 116, 120, 129, 154, 156, 
+		162, 164, 167--169, 179, 187, 188
+    \subitem literacy, 5, 195
+    \subitem MARK I, 132
+    \subitem memory, 35, 37, 38, 41, 152, 164
+    \subitem personal, 37, 38, 64, 133, 139, 142, 149, 152, 174, 188, 
+		193, 203
+    \subitem VAX, 141, 168
+  \item computer science, vii, 5, 13, 14, 17, 18, 20, 92, 93, 102, 103, 
+		105, 109, 116, 119, 126, 127, 131, 136, 140, 154, 155, 
+		160, 184
+  \item computer-aided design, 47, 124, 154, 155, 162, 170, 172, 183, 
+		195
+  \item computer-aided engineering, 47
+  \item computer-aided manufacturing, 47, 48, 170, 195
+  \item computer-aided process planning, 47
+  \item computer-integrated manufacturing, 47, 49, 173, 176
+  \item Control Data Corp., 143, 146, 153
+  \item Coordinating Committee, 65, 66, 180
+  \item copyright, 59--62, 150, 196
+  \item Crawford, Mark, 221
+  \item Cray Research, 127, 146
+  \item Cray, Seymour, 40
+  \item creativity, 19, 22, 23, 27, 90, 106, 209
+  \item cryptology, 18, 60
+  \item Cullinan, Terrence, 222
+
+  \indexspace
+
+  \item Daewoo Telecom, 193
+  \item DARPA, vii, 115--118, 126, 182, 185, 220
+  \item Davis III, G.~Gervaise, 223
+  \item Davis, K., 221
+  \item de Vignemont, Minister C., 186
+  \item deficit
+    \subitem budget, 202, 205, 208, 213
+    \subitem trade, 202, 208, 212--214
+  \item degrees
+    \subitem bachelor's, 99, 100
+    \subitem doctoral, 92, 93, 100, 103, 104, 106, 107
+    \subitem master's, 92, 93, 97, 100, 103, 124
+  \item denationalization, 185
+  \item Department of Commerce, vii, 4, 14, 61, 63, 65, 72, 73, 81, 127, 
+		133, 153, 211
+  \item Department of Commerce and Technology (DCT), 211
+  \item Department of Defense, i, vii, 3, 8, 42, 64--66, 72, 73, 94, 
+		113--116, 120--124, 126--128, 130, 133, 208, 210, 211, 
+		216, 218
+  \item Department of Education, 62
+  \item Department of Energy, 65, 126--128
+  \item Department of Justice, 3, 7, 74, 133, 137, 153
+  \item Department of State, 64, 65, 127, 210
+  \item Diamond, S., 231
+  \item Digital Equipment Corporation, 67, 139, 141--144, 152, 168
+    \subitem PDP-7, 139
+    \subitem PDP-8, 141
+    \subitem VAX, 141, 142, 168
+  \item Direction de Recherche d'\'Etudes et Technique, 185
+  \item Doigan, Paul, 226
+  \item Donlon, J.~P., 229
+  \item Dornier, 188
+  \item Dreyfus, Herbert~L., 223
+  \item Dreyfus, Stuart~E., 223
+  \item Dutch Learning, 58
+  \item dynamic RAM, 37, 135, 193
+
+  \indexspace
+
+  \item Eastman Kodak Company, 150, 172
+  \item Eastman, George, 90
+  \item ECRC, 178, 179, 183, 188
+  \item Edison, Thomas A., 90
+  \item education, vi, 5, 11, 19, 29, 52, 69, 89--93, 95--98, 100--110, 
+		124, 125, 190, 201--206, 210, 212, 218--220
+    \subitem continuing, 97, 109
+    \subitem engineering, 91, 92, 94, 96, 98--100, 103, 105, 107, 108, 
+		110, 125
+  \item Einstein, Albert, 52, 105
+  \item Electro-Communications Laboratories, 160, 171, 172
+  \item Electro-Technical Laboratories, 138, 159, 160, 164
+  \item employment, 4, 6, 13, 15, 16, 24, 76, 81, 108, 109, 196, 210, 
+		213
+    \subitem lifetime, 84, 108, 109
+  \item encryption, 9, 65
+  \item engineering, vi, 3, 11, 14, 15, 24, 37, 40, 49, 53, 84, 92, 93, 
+		96, 97, 100, 108, 115, 125, 126, 128, 134
+    \subitem education, 91, 94, 96, 108, 109
+    \subitem faculty, 92--94, 214, 219
+  \item Esaki, Leo, 23
+  \item ESPRIT, vii, 3, 28, 176--178, 181, 183, 188, 189
+  \item Etzold, Thomas~H., 227
+  \item Eureka, 178--180
+  \item Eurobot, 180
+  \item Eurocom, 180
+  \item Europe, vi, vii, 4, 6, 13, 16, 21, 24, 26--29, 44, 49, 53, 66, 
+		78, 80, 82, 86, 101, 109, 113, 127, 133, 162, 175--181, 
+		188, 189, 204, 214
+  \item European Economic Community, 3, 28, 79, 176, 177
+  \item Ewing, Tom, 229
+  \item exchange rate, 75--78
+  \item expert systems, 45, 46, 116, 117, 154, 161, 178, 179, 187, 194
+  \item export control, 4, 64--66, 217
+  \item exports, 57, 63--66, 76, 77, 79, 157, 174, 180, 191, 217
+
+  \indexspace
+
+  \item Fagen, M.~D., 228
+  \item Fairchild Camera and Instrument Corporation, 80, 167
+  \item Federal Automatic Data Processing Reorganization Study, 8
+  \item Federal Aviation Agency, 9
+  \item Federal Bureau of Investigation, 169
+  \item Federal Communications Commission, 54, 137
+  \item Feigenbaum, Edward, 222
+  \item Ferranti, 184
+  \item Fifth Generation Computer Program, vii, 18, 20, 156, 161, 163, 
+		165, 176, 181
+  \item Finland, 177
+  \item Fisher, Franklin~M., 221
+  \item Fishman, Katherine~D., 147, 229
+  \item flexible manufacturing systems, 47, 48
+  \item Food and Drug Administration, 54
+  \item FORTRAN, 39
+  \item France, 29, 57, 68, 79, 91, 96, 106, 107, 109, 172, 180, 181, 
+		184--186
+    \subitem Ministry of Defense, 185
+  \item Franck, James, 105
+  \item Fuchi, Kazuhiro, 162, 163
+  \item Fuji Xerox, 151
+  \item Fujitsu, 37, 80, 158, 164, 167, 168, 173, 204
+
+  \indexspace
+
+  \item Gallaire, Herv\'e, 179
+  \item gallium arsenide, 118, 119, 164, 172, 182, 184
+  \item Gannon, T., 222
+  \item Gartner Group, 132, 133
+  \item General Electric Company, 138, 143, 146, 197
+  \item General Electric Company (UK), 183, 184
+  \item General Motors, 131, 173, 202
+  \item Gephardt amendment, 214
+  \item Gephardt, Representative Richard~A., 214
+  \item German mark, 208
+  \item Germany, 16, 33, 53, 57, 58, 72, 82, 91, 105, 106, 109, 180, 
+		186--189, 208
+    \subitem BMFT, 187, 188
+    \subitem Bundespost, 188
+  \item Gilchrist, Bruce, 224
+  \item Glenn, Senator John, 209, 212, 231
+  \item Goldberg, Adele J., vii
+  \item graduate schools of business, 104, 207
+  \item Graham, Susan L., viii
+  \item Gramm-Rudman bill, 206
+  \item Grayson, Lawrence~P., 225
+  \item Great Britain, 4, 16, 19, 26, 27, 33, 58, 78, 79, 92, 103, 104, 
+		109, 180--184, 186, 190
+    \subitem Department of Trade and Industry, 182, 211
+    \subitem Ministry of Defense, 18, 182
+    \subitem Very High Performance Integrated Circuit Program, 5, 182
+  \item Greenhouse, Linda, 231
+  \item Greenwood, Joel~E., 221
+  \item gross national product, 17, 85, 130, 191, 192, 195, 217
+  \item Groupe de Recherche Coordonn\'e, 185
+  \item GTE, 167, 188, 197
+
+  \indexspace
+
+  \item hardware, 11, 18, 34, 35, 37, 39--42, 60, 64, 77, 123, 132, 134, 
+		141, 143--145, 147, 162, 167, 169
+  \item Harrison, Michael~A., vii, viii, 222, 227
+  \item Harrison, Susan G., viii
+  \item Harvard University, 92, 98, 132
+  \item Hegg, Warren, 222
+  \item Hess, K., 229
+  \item Hewlett-Packard, 67, 144, 147, 148
+  \item Hillkirk, John, 229
+  \item Hirschon, Michael~Wels, 224
+  \item Hitachi, 37, 158, 164, 167--169, 173
+  \item Hodges, Parker, 229
+  \item Hokaido University, 98
+  \item Honeywell, 143, 146, 147, 168, 187
+  \item Hong Kong, 61, 192, 195, 196
+  \item Hunter, Philip, 228
+  \item hydrogen bomb, 105
+
+  \indexspace
+
+  \item Iacocca, Lee, 73, 224
+  \item IBM, 3, 7, 14, 23, 26, 40, 55, 56, 67, 71, 73, 89, 130--136, 
+		139, 141--147, 150--152, 159, 167--169, 185, 186, 188
+    \subitem 3380 disk unit, 134
+    \subitem compatibility, 26, 40, 64, 132, 143--146, 149, 168
+    \subitem Fellow, 135
+    \subitem Research Centers, 134, 136
+      \subsubitem San Jose, 134, 135
+    \subitem System 360, 132, 147
+  \item Iceland, 177
+  \item Ichbiah, Jean, 186
+  \item ICOT, vii, 160--163, 166, 170, 173
+  \item imports, 76, 77, 79, 206, 209
+  \item India, 19, 92
+  \item Indonesia, 61
+  \item Industrial Revolution, 175, 208
+  \item Informatik, 105
+  \item information technology, v--vii, 3, 5--9, 14, 18, 20, 27, 33, 34, 
+		72--75, 77, 103, 113, 118, 120, 121, 125, 131, 132, 
+		153, 158, 160, 163, 169, 171, 173, 176, 180, 181, 184, 
+		186, 189, 192, 194, 195
+  \item Inman, Admiral Bobby R., 67, 153--155
+  \item INMOS, 184
+  \item innovation, 13, 15, 18, 21--23, 27, 53--56, 61, 73, 90, 109, 
+		135--137, 148, 152, 183, 197, 201, 205, 209
+  \item Inst. for New Generation Computer Technology, 179, 182
+  \item integrated circuits, 36, 124, 170, 182, 196
+  \item intellectual property, 67, 74, 194
+    \subitem laws, vi, 26, 58, 59, 62, 150, 169
+    \subitem rights, 26, 61, 67, 150, 169, 194, 210
+  \item International Computers Ltd., 4, 178, 183, 186, 190, 213
+  \item International Telephone and Telegraph, 183, 193, 197
+  \item International Trade Commission, 73, 81, 213
+  \item International Traffic in Arms Regulations, 3, 65
+  \item Israel, 57, 195
+  \item Italy, 188
+
+  \indexspace
+
+  \item Jacob, Jean Paul, vii
+  \item Jacobs, Michael A., vii
+  \item Jacobson, Gary, 229
+  \item Japan, vii, 3--6, 13, 15--17, 19--22, 24--26, 28, 29, 39, 40, 
+		49, 54, 62, 63, 65--68, 70--73, 75, 76, 78--86, 91, 
+		97--101, 103, 104, 108--110, 113, 119, 130, 138, 150, 
+		157--160, 162, 163, 165--176, 180, 183, 190--195, 
+		203--206, 209, 212--214
+    \subitem Incorporated, 72
+    \subitem National Superspeed Computer Project, 163, 164
+    \subitem Next Generation Industries Program, 165
+    \subitem robots, 49
+    \subitem Science and Technology Agency, 166
+  \item Jefferson, Thomas, 29, 177
+  \item Jobs, Steve, 149
+  \item Johnson, Chalmers, 71, 83, 224
+  \item Jonas, Norman, 230
+  \item Joy, William N., 93, 152
+  \item JTECH, 14, 19, 22, 166, 206
+
+  \indexspace
+
+  \item Kahn, David, 223
+  \item Kahn, Robert E., vii, 220
+  \item Karmarkar, Narendra, 140, 141
+  \item Kato, K., 225
+  \item Keio University, 159, 165
+  \item Kelly, Erin A., vii
+  \item Kelly, Joseph, vii
+  \item Kitihara, Eiji, 222
+  \item knowledge engineering, 3, 161, 167, 169
+  \item knowledge-based systems, 45, 46, 179, 182, 185, 194
+  \item Kobayashi, Hishashi, vii
+  \item Kraar, Louis, 230
+  \item Kroger, H., 229
+  \item Kuo, Franklin F., vii
+  \item Kurihara, T., 228
+  \item Kutcher, M., 223
+  \item Kyoto University, 98, 99, 159
+  \item Kyushu University, 98
+
+  \indexspace
+
+  \item Land, Edward, 90
+  \item Lawrence Livermore National Laboratory, 126, 128
+  \item level playing field, 209
+  \item Libya, 66, 215
+  \item license
+    \subitem general, 64
+    \subitem validated, 64
+  \item Lieblein, Edward, 227
+  \item Lighthill, Sir James, 27, 28
+  \item linear programming, 140, 141
+  \item Little Dragons, 192, 195, 196
+  \item Lohr, Steve, 222
+  \item Los Alamos National Laboratories, 126, 160
+  \item Lovelace, Countess Augusta Ada Byron, 103, 122
+  \item Lulin, Gao, 230
+
+  \indexspace
+
+  \item MacArthur, General Douglas, 70
+  \item machine inference, 45, 162
+  \item machine language, 40, 41, 59
+  \item machines, thinking, 43--45
+  \item MacVicar-Whelan, P.~J., 223
+  \item Malaysia, 19, 190, 196
+  \item Malik, Rex, 133, 228
+  \item marketshare, 6, 7, 11, 27, 74, 81, 82, 110, 132, 133, 142, 
+		144, 145, 147, 150, 151, 155, 157, 159, 167, 168, 172, 
+		175, 183, 189, 205, 209, 210, 217
+  \item Matsubara, Tomoo, 229
+  \item Matsushita Electric Industrial Co., 82, 158
+  \item McCarrell, Jeff, vii
+  \item McCarthy, John, 46
+  \item McClellan, Stephen~T., 19, 221
+  \item McCorduck, Pamela, 222
+  \item McGowen, John~J., 221
+  \item McKenna, Regis, 149, 229
+  \item mechatronics, 14, 47
+  \item Meiji Period, 58, 100
+  \item Memorex, 197
+  \item Mexico, 84
+  \item microelectronics, 9--11, 14, 16, 36, 37, 80, 82, 125, 154--156, 
+		165, 167, 172, 173, 176, 177, 180, 182, 184, 189, 
+		193, 194, 196, 213
+  \item Microelectronics and Computer Technology Corporation, 74, 146, 
+		154, 155, 177, 179
+  \item Microelectronics Center of North Carolina, 74, 155, 156
+  \item Military Critical Technologies List (MCTL), 64, 65
+  \item Miller, G.~L., 223
+  \item Miller, Judith, 226
+  \item Miller, William F., vii
+  \item Millstein, James, 223, 225
+  \item minicomputer, 37, 141, 142, 144, 147, 148, 151
+  \item Ministry of Education, 159
+  \item Ministry of Intl. Trade and Industry (MITI), 21, 62, 70--73, 83, 
+		85, 98, 158--168, 170, 171, 173, 182, 194, 208, 211
+  \item missile, 33, 34, 115, 117, 119, 204, 208
+  \item MIT, 95
+  \item Mitsubishi Electric Company, 158, 159, 162, 164, 170
+  \item Mitterrand, President Fran\c cois, 184, 186
+  \item moon, 205, 207
+  \item Morris, J., 223
+  \item Moto-Oka, Tohru, i, 20, 163, 165
+  \item Motorola, 152
+  \item Mu Program, 166
+  \item Murakami, Kunio, 222
+  \item Murray, Julius, 222
+
+  \indexspace
+
+  \item Nagao, Makoto, 229
+  \item Nagoya University, 98
+  \item Nakasone, Prime Minister Yasuhiro, 204
+  \item National Academy of Sciences, vii, 28, 64, 217
+  \item National Aeronautics and Space Administration (NASA), 65, 113, 
+		115, 121, 216
+  \item National Bureau of Standards, 159, 160, 211
+  \item National Cash Register Company, 143, 144, 146
+  \item national debt, 204
+  \item National Productivity and Innovation Act, 74
+  \item National Science Foundation, vii, 95, 113, 125, 126, 163, 211
+    \subitem CISE Program, 125, 126
+    \subitem Engineering Research Centers, 95
+    \subitem Presidential Young Investigators, 125
+  \item National Security Agency, 9, 153
+  \item Nazis, 107
+  \item NEC, 14, 37, 138, 147, 153, 158, 159, 164, 168, 173, 187, 189
+  \item Nevins, J., 223
+  \item New Zealand, 79
+  \item Nippon Telephone and Telegraph, 37, 138, 160, 168, 171, 172, 
+		178, 185
+    \subitem information network system, 171, 172, 178, 185
+  \item Nishida, Toyoaki, 229
+  \item Nishizawa, Junichi, 22, 23, 222
+  \item Nixdorf Computers, 187, 189
+  \item Nixon, President Richard M., 207
+  \item Nobel Prize, 5, 23, 90, 205
+  \item Nordheim, Lothar W., 105
+  \item Norris, William C., 153, 154
+  \item North Atlantic Treaty Organization, 28, 114, 119, 180, 183
+  \item Norway, 53, 177
+  \item Novak, William, 224
+  \item numerical control, 48
+
+  \indexspace
+
+  \item Oak Ridge National Laboratory, 126
+  \item Oki Electric Company, 37, 158, 159, 164
+  \item Olivetti SPA, 189
+  \item Olsen, Kenneth H., 141
+  \item optics, 15, 194
+  \item optoelectronics, 14, 15, 166, 171, 180
+    \subitem Joint Research Laboratory, 166
+  \item Osaka University, 98
+  \item Ouichi, William, 229
+
+  \indexspace
+
+  \item Panama, 84
+  \item patent, 22, 23, 59--61, 71, 90, 139, 155
+    \subitem law, 191
+    \subitem Patent Secrecy act, 60
+  \item Pearl Harbor, 220
+  \item Perle, Richard, 217
+  \item Perot, H. Ross, 202
+  \item personal sequential inference machine, 162, 170
+  \item Philco Corporation, 138
+  \item Philips' Gloeilampenfabrieken, 189
+  \item physics, 13, 23, 39, 57, 90, 91, 105, 106, 120, 128
+    \subitem nuclear, 52, 53, 58, 127, 188
+    \subitem solid state, 140
+    \subitem surface, 135
+  \item Pilot's Associate, 117
+  \item Plato system, 146
+  \item Plessey Company Ltd., 184
+  \item plutonium, 53
+  \item Port, Otis, 230
+  \item Presidential Science Advisor, 207
+  \item Prestowitz, Clyde, vii
+  \item privatization, 185, 187
+  \item Procter, Steven, vii
+  \item professional societies, 97
+  \item PROLOG, 162, 186
+  \item Prospector, 45, 46
+  \item prototype, 26, 37, 124, 128
+  \item PTT, 29, 185
+  \item Public Crypto. Study Group, 60
+
+  \indexspace
+
+  \item Rabinowitch, Eugene, 105
+  \item RACE, 178
+  \item Radio Corporation of America, 138, 143, 145, 197
+  \item RAM, 16, 17, 83, 135, 184, 188
+  \item RAMAC, 134
+  \item Reagan administration, 134
+  \item Reagan, President Ronald, 66, 118, 126, 128, 133, 203, 207, 216, 
+		218, 219
+  \item Reischauer, Edwin~O., 221
+  \item relational database, 135, 185
+  \item Republic of Korea, 19, 25, 78, 82, 190, 192--194, 203, 204, 213
+  \item research and development, 7, 18, 20, 21, 39, 73, 81, 85, 91, 95, 
+		104, 115, 128, 130, 134, 154, 155, 158, 159, 167, 170, 
+		172, 173, 181, 186--188, 191, 195, 196, 211, 215, 216
+  \item research support
+    \subitem computing, 116, 128, 129
+  \item Research Triangle Institute, 155
+  \item Ricoh Inc., 150
+  \item Riganati, J., 222
+  \item Ris, F., 222
+  \item Ritchie, Dennis~M., 139, 228
+  \item Robinson, Arthur~L., 228
+  \item robotics, 14, 15, 28, 47--49, 95, 125, 158, 180, 185, 187, 194, 
+		203
+  \item Roosevelt, President Franklin, 105
+  \item Rositzke, Harry, 224
+  \item Rossol, L., 223
+  \item Roubine, Olivier, vii
+  \item Roy, Rustum, 96, 226
+  \item Rubin, Harry, vii
+  \item Rudman, Senator Warren B., 206, 208
+  \item Rudzinski, Joe, 222
+  \item Russian Revolution, 220
+
+  \indexspace
+
+  \item Sanders, Jerry, 212
+  \item Sandia National Laboratory, 126
+  \item savings, 6, 75
+  \item Scace, R., 229
+  \item SCAP, 70, 71
+  \item Schutz, K., 223
+  \item Scientific Data Systems, 151
+  \item scientists and engineers
+    \subitem demographics of, 89, 91, 92, 94, 100, 103, 107, 195
+  \item semiconductor manufacturers
+    \subitem merchant, 17, 212
+  \item Semiconductor Research Corporation, 155
+  \item service economy, 7, 202, 204, 207
+  \item Seven Dwarfs, 143
+  \item Shapley, Deborah, 96, 226
+  \item Siemens, 178, 186--189
+  \item Sigma Program, 165, 166
+  \item Silicon Valley, 134, 147, 209
+  \item Simpson, Janice~C., 225
+  \item Singapore, 19, 61, 62, 110, 190, 192, 194--196
+    \subitem National Computer Board, 62, 194
+  \item Smith, Bruce~L., 225
+  \item Smith, R., 227
+  \item Smits, F.~M., 228
+  \item smokestack industries, 4, 201
+  \item Snyder, Robert~G., 226
+  \item software, 9, 11, 15, 18, 19, 25, 26, 34, 39--42, 47, 59--64, 67, 
+		89, 119--124, 132, 133, 135, 140, 144, 148--150, 152, 
+		154, 162, 165, 168, 169, 174, 176, 186, 194, 195
+    \subitem custom, 19
+    \subitem engineering, 10, 38, 40, 97, 123, 124, 165--168, 170, 177, 
+		182, 184, 185
+    \subitem market, 6, 19, 121, 133, 195
+      \subsubitem Japanese, 19, 165--167
+    \subitem protection, 59, 60, 62, 150
+    \subitem supercomputer, 39, 40
+  \item Software Engineering Institute, 123
+  \item Software Productivity Consortium, 74
+  \item Sollorzano, Lucia, 230
+  \item Solomon, Ezra, 222
+  \item Solomon, Steven, 231
+  \item Sondheimer, N., 222
+  \item Sony, 23
+  \item South Africa, 66
+  \item Soviet Union, 5, 33, 58, 64, 84, 91, 114, 127, 180, 191, 214, 
+		220
+  \item Spencer, William~J., 56, 223
+  \item Sperry Univac, 143, 145, 146, 188, 197
+  \item Spicer, W., 229
+  \item spinoff, 216, 217
+  \item SRI International, viii
+  \item standard of living, v, 4, 16, 193, 194, 205
+  \item standards, 24, 28, 41, 59, 122, 133, 175, 177
+  \item Stanford University, 46, 95, 169
+  \item STARS Program, 123, 124
+  \item steel, 72, 75, 158, 159, 201, 209
+  \item Stern, Jacques, 187
+  \item Strategic Computing Initiative, vii, 116, 117
+  \item Strategic Defense Initiative, vii, 9, 39, 43, 118--121, 130, 
+		179, 180, 188, 216
+  \item Sumitomo Steel, 158
+  \item Sun Microsystems Inc., i, 93, 142, 148, 151, 152, 174
+  \item supercollider, 205, 216
+  \item supercomputer, 9, 35, 38--40, 125, 127, 128, 146, 165, 168, 180
+  \item Sweden, 177
+  \item Switzerland, 134, 177
+  \item System R, 135
+  \item Szilard, Leo, 105
+
+  \indexspace
+
+  \item Taiwan, 19, 61, 188, 190, 192, 195
+  \item Tajima, Denji, 229
+  \item Technical University of Munich, 105
+  \item technology transfer, 11, 21, 24, 50, 51, 53--59, 61, 66, 67, 85, 
+		108, 122--124, 128, 136, 139--141, 143, 147, 150, 152, 
+		154, 155, 160, 179, 214, 215, 219
+  \item Telecki, George, vii
+  \item telecommunications, 25, 65, 82, 95, 172, 178, 186, 188, 
+		194, 195
+  \item TELENET, 116
+  \item Telex Corporation, 197
+  \item Teller, Edward, 105
+  \item Teng, Teng, 230
+  \item Thompson, Ken, 139
+  \item Thompson-Brandt, 185
+  \item Thorn EMI, 184
+  \item Thurow, Lester~C., 231
+  \item thyristor, 23
+  \item Tohoku University, 98
+  \item Tolchin, Martin, 231
+  \item Toshiba, 37, 158, 159, 161, 164, 169, 170
+  \item TOW missile, 204
+  \item trade secret, 59--61
+  \item trademark, 59
+  \item transistor, 14, 36, 37, 139, 145, 161
+  \item TRW, 131, 167
+  \item Tsujii, Junichi, 229
+  \item Tsukuba, 159, 160
+  \item Tuchman, Barbara~W., 225
+  \item Turing
+    \subitem award, 135, 139
+    \subitem test, 43
+  \item Turing, Alan, 43, 103
+  \item Turner, Fran Peche, vii
+  \item Tzu, Sun, 222
+
+  \indexspace
+
+  \item unemployment, vi, 4, 6, 19, 76, 101, 110, 174, 202--204, 220
+  \item Unisys, 142, 143, 145, 146
+  \item United States, v--vii, 3--6, 8, 11, 15--29, 39, 40, 48, 49, 
+		53, 54, 57--59, 61, 63--68, 71--74, 77, 78, 80--85, 
+		89--96, 98--106, 108--110, 113, 114, 116, 119, 120, 
+		126, 130, 133, 136, 140, 141, 143, 153, 155, 159, 
+		162, 163, 167--169, 172, 173, 175, 179, 183--186, 189, 
+		192, 193, 195, 196, 201--203, 205, 207--209, 212--215, 
+		218, 220
+    \subitem Army, 8
+    \subitem Congress, 154, 212, 214, 218
+    \subitem Constitution, 59
+    \subitem procurement system, 75, 123, 124
+    \subitem Senate, 66, 84, 212
+  \item United States versus IBM suit, 73, 89
+  \item UNIVAC, 131, 145, 159
+    \subitem Model I, 8, 145
+  \item Universal Copyright Convention, 61
+  \item University of Berlin, 105
+  \item University of California at Berkeley, vii, 57, 93, 99, 152
+  \item University of Erlangen, 105
+  \item University of Karlsruhe, 105
+  \item University of Saarbr\"ucken, 105
+  \item University of Tokyo, 70, 98, 159
+  \item University of Tsukuba, 159
+  \item UNIX operating system, 139, 146, 152, 168
+    \subitem 4.2 BSD, 152
+    \subitem System V, 152
+  \item uranium, 46, 52, 53
+
+  \indexspace
+
+  \item venture capital, 61, 109, 151, 191
+  \item VHSIC, 124
+  \item videoconferencing, 188
+  \item Vietnam War, vi, 94
+  \item Vliet, J.~C. van, 227
+  \item VLSI, 77, 161, 162, 170--172, 177, 182, 184, 188, 193, 195
+  \item Vogel, Ezra, 227
+  \item von Neumann architecture, 35
+  \item von Neumann, John, 35
+
+  \indexspace
+
+  \item Waldrop, M.~Mitchell, 227
+  \item Wang Computers, 97
+  \item Wang Institute, 97
+  \item Wang, An, 97
+  \item war, v
+    \subitem conventional, v, 33, 67, 107, 113, 114
+    \subitem nuclear, v, 113, 119
+    \subitem technology, v
+    \subitem Technology War, v, vi, 5, 10, 13, 17, 20, 21, 25, 29, 
+		33, 34, 43, 44, 47, 49--51, 65, 67, 71, 74, 77, 81, 83, 
+		86, 87, 89, 97, 102--104, 106, 107, 109, 110, 113, 114, 
+		120, 121, 131, 134, 138, 142, 143, 146, 147, 150, 152, 
+		157, 158, 161, 166, 169, 174, 175, 177, 178, 183, 186, 
+		188--190, 193, 196, 197, 201, 202, 205--208, 210--212, 
+		215, 217--220
+  \item Watergate, 220
+  \item Watson, Sr., Thomas J., 146
+  \item weapons, v, vi, 8, 9, 21, 33, 34, 39, 43, 52, 53, 60, 67, 114, 
+		117, 118, 124, 128, 214, 218
+    \subitem nuclear, 8, 34, 39, 53, 118, 119
+  \item Weidenbaum, Murray~L., 225
+  \item Wessel, Milton~R., 224
+  \item White House, 126, 207, 211, 219
+    \subitem Office of Science and Technology Policy (OSTP), 211
+  \item Wieder, H., 229
+  \item Willenbrock, F.~Karl, 226
+  \item Wilson, John~W. , 230
+  \item workstation, 38, 55, 77, 142, 148, 151, 152, 170, 174, 189
+  \item World War II, v, 5, 8--10, 16, 18--20, 33, 35, 53, 58, 70, 75, 
+		94, 105, 114, 128, 132, 157, 201, 211
+  \item Wozniak, Stephen, 93
+  \item Wright, Speaker James~C., 218
+  \item Wriston, Walter~B., 221
+
+  \indexspace
+
+  \item xerography, 90
+  \item Xerox, 55, 56, 136, 138, 142, 147--151, 172, 173
+    \subitem 914 copier, 150
+    \subitem copiers, 55, 150, 151, 173
+    \subitem Palo Alto Research Center, 55, 56, 60, 136, 149, 151
+    \subitem STAR computer, 55, 151
+
+  \indexspace
+
+  \item yen, 71, 76, 78--80, 167, 174, 212, 213
+  \item Yukuta, Toshio, 222
+
+  \indexspace
+
+  \item Zhaoxiang, Xu, 230
+  \item ZyMos, 193, 197
+  \item Zysman, John, 223, 225
+
+\end{theindex}

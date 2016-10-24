@@ -1,0 +1,3 @@
+\THEOREM ORDINAL_CHAINED WELLORDER
+|- !l m. ordinal l /\ ordinal m ==> m inseg l \/ l inseg m
+\ENDTHEOREM

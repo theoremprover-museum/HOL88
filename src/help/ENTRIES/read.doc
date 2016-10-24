@@ -1,0 +1,44 @@
+\DOC read
+
+\TYPE {read : (string -> string)}
+
+\SYNOPSIS
+Reads a character from a file.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+When applied to a string describing a port (a port is the standard ML file
+descriptor, normally obtained from a call to {openi}), the function {read}
+reads in a character from that port, and advances the internal state so that a
+subsequent call to {read} will return the next character. When the end of the
+file is reached, the multi-character string `nil` will be returned.
+
+\FAILURE
+May fail or hang in system-dependent ways when given an invalid port
+descriptor.
+
+\EXAMPLE
+The following assumes that HOL is being run under Unix. It will overwrite an
+existing file {test-file} in the current directory. Notice that the actual
+string returned by {openi} may vary on other systems.
+{
+   #system `echo "Hi" >test-file`;;
+   0 : int
+
+   #let port = openi `test-file`;;
+   port = `%test-file` : string
+
+   #read port, read port, read port, read port, read port;;
+   (`H`, `i`, `
+   `, `nil`, `nil`)
+   : (string # string # string # string # string)
+
+   #close port;;
+   () : void
+}
+\SEEALSO
+append_openw, close, openi, openw, tty_read, tty_write, write.
+
+\ENDDOC

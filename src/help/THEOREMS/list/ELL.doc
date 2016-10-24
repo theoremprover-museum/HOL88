@@ -1,0 +1,3 @@
+\THEOREM ELL list
+|- (!l. ELL 0 l = LAST l) /\ (!n l. ELL(SUC n)l = ELL n(BUTLAST l))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM WORDN wordn_num
+|- !n m. (LENGTH(WORDN n m) = n) /\ (VAL(WORDN n m) = m MOD (2 EXP n))
+\ENDTHEOREM

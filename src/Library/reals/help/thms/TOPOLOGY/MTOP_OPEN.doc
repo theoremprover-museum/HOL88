@@ -1,0 +1,5 @@
+\THEOREM MTOP_OPEN TOPOLOGY
+|- !m.
+    open(mtop m)S =
+    (!x. S x ==> (?e. (& 0) < e /\ (!y. (dist m(x,y)) < e ==> S y)))
+\ENDTHEOREM

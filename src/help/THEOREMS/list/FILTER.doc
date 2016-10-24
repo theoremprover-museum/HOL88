@@ -1,0 +1,5 @@
+\THEOREM FILTER list
+|- (!P. FILTER P[] = []) /\
+   (!P x l.
+     FILTER P(CONS x l) = (P x => CONS x(FILTER P l) | FILTER P l))
+\ENDTHEOREM

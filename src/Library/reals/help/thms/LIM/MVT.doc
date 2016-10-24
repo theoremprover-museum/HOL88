@@ -1,0 +1,8 @@
+\THEOREM MVT LIM
+|- !f a b.
+    a < b /\
+    (!x. a <= x /\ x <= b ==> f contl x) /\
+    (!x. a < x /\ x < b ==> f differentiable x) ==>
+    (?l z.
+      a < z /\ z < b /\ (f diffl l)z /\ ((f b) - (f a) = (b - a) * l))
+\ENDTHEOREM

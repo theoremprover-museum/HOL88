@@ -1,0 +1,3 @@
+\THEOREM SUB_LESS_EQ_SUB_SUC sub
+|- !a b c n. 0 < c /\ a <= (b - n) ==> (a - c) <= (b - (SUC n))
+\ENDTHEOREM

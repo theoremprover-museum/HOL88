@@ -1,0 +1,3 @@
+\THEOREM EL_IS_EL list
+|- !n l. n < (LENGTH l) ==> IS_EL(EL n l)l
+\ENDTHEOREM

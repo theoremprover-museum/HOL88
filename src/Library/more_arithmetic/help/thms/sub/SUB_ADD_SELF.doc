@@ -1,0 +1,3 @@
+\THEOREM SUB_ADD_SELF sub
+|- !m n. ~m < n ==> ((m - n) + n = m)
+\ENDTHEOREM

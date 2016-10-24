@@ -1,0 +1,13 @@
+\DOC show_termpattern
+
+\BLTYPE
+show_termpattern : (termpattern ->
+                    (term # wildvar list # wildtype list))
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

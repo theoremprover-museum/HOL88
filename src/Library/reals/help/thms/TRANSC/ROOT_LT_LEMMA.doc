@@ -1,0 +1,3 @@
+\THEOREM ROOT_LT_LEMMA TRANSC
+|- !n x. (& 0) < x ==> ((exp((ln x) / (&(SUC n)))) pow (SUC n) = x)
+\ENDTHEOREM

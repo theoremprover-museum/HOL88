@@ -1,0 +1,27 @@
+\section{The Theory {\tt zero\_ineq}}
+
+The theory \ml{zero\_ineq}\index{zero\_ineq, theory@{\ptt zero\_ineq}, theory} contains an
+\adhoc\ collection of 
+theorems about zero and the inequality operators. It contains no new
+definitions. 
+The theorems that have been pre-proved in this theory are given below.
+\begin{hol}
+\index{M\_LESS\_0\_LESS@{\ptt M\_LESS\_0\_LESS}}
+\index{LESS1EQ0@{\ptt LESS1EQ0}}
+\index{NOT\_EQ\_0@{\ptt NOT\_EQ\_0}}
+\index{LESS\_EQ\_0\_EQ@{\ptt LESS\_EQ\_0\_EQ}}
+\index{GREATER\_NOT\_ZERO@{\ptt GREATER\_NOT\_ZERO}}
+\index{NOT\_0\_AND\_MORE@{\ptt NOT\_0\_AND\_MORE}}
+\begin{verbatim}
+  M_LESS_0_LESS     |- !m n. m < n ==> 0 < n
+
+  LESS1EQ0          |- !m. m < 1 = (m = 0)
+
+  NOT_EQ_0          |- !m. ~(m = 0) ==> m >= 1
+
+  LESS_EQ_0_EQ      |- !m. m <= 0 ==> (m = 0)
+
+  GREATER_NOT_ZERO  |- !x. 0 < x ==> ~(x = 0)
+
+  NOT_0_AND_MORE    |- !x. ~((x = 0) /\ 0 < x)
+\end{verbatim}\end{hol}

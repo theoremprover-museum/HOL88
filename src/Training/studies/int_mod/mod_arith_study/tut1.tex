@@ -1,0 +1,1038 @@
+\section{Subgroups of the integers}
+
+To begin, create a directory where you will be able to store the files
+you will be making.  Enter that directory, start emacs, create two
+windows, begin editing a file named
+{\small\verb+int_sbgp.show.ml+} in one window and in the other
+start a shell.  In the shell start running \HOL.  The file
+{\small\verb+int_sbgp.show1.ml+} will be used throughout this
+section to record the commands to be executed here.  When you are
+finished, this file will be able to create the theory file
+{\small\verb+int_sbgp.th+}.  As you create commands to execute in
+\HOL, you should write them in this file, and then copy them into
+\HOL.  A file which should be essentially the same as the one you are
+creating can be found in
+\begin{verbatim}
+   hol/Library/int_mod/int_sbgp.show1.ml
+\end{verbatim}
+and, as was mentioned before, a copy of a shell script created by doing
+the work in this section can be found in
+\begin{verbatim}
+   hol/Training/studies/int_mod/int_sbgp.shell1
+\end{verbatim}
+At any time you should feel free to compare your work with what is
+found in these two files.
+
+In this section, we want to create a new theory file, named
+{\small\verb+int_sbgp.th+}.  To do so, type
+\begin{verbatim}
+   new_theory `int_sbgp`;;
+\end{verbatim}
+into the file {\small\verb+int_sbgp.show.ml+}, and then copy it
+into the shell, following it by a carriage return.  This will
+initialize the creation of the theory file, and put you in draft mode.
+Your shell session should look like the following now:
+
+\setcounter{sessioncount}{1}
+\begin{session}
+\begin{verbatim}
+faulkner+ hol88
+
+       _  _    __    _      __    __
+|___   |__|   |  |   |     |__|  |__|
+|      |  |   |__|   |__   |__|  |__|
+
+  Version 1.07, built on Jul 13 1989
+
+#new_theory `int_sbgp`;;
+() : void
+\end{verbatim}
+\end{session}
+
+The next thing we want to do is to include the group theory and the
+theory of the integers that is already available to \HOL.  This is done
+by loading the appropriate Library entries.  To load the group theory,
+type
+\begin{verbatim}
+   load_library `group`;;
+\end{verbatim}
+into your file and copy it into the shell, followed by a carriage return.
+
+\begin{session}
+\begin{verbatim}
+#load_library `group`;;
+Loading library `group` ...
+\end{verbatim}
+\evdots
+\end{session}
+
+It will respond by typing out a collection of messages informing you
+of the progress of the loading of the group theory library.  In the
+same manner you need to load the library for the integers.
+
+\begin{session}
+\begin{verbatim}
+#load_library `integer`;;
+Loading library `integer` ...
+\end{verbatim}
+\evdots
+\end{session}
+
+From now on, when I say that you should execute a command in \HOL, I
+will mean that you should enter it into the file
+{\small\verb+int_sbgp.show.ml+} and then copy it into the shell,
+following it by a carriage return.  There is no harm in copying a
+command of several lines all at once into the shell (provided that the
+command is not more than about 50 lines.  In the last section you will
+see a way to deal with commands of arbitrarily many lines.)  Now we
+are set up to start proving theorems.
+
+To provide focus for this study, we shall take as our goal the
+development of basic facts about subgroups of the integers, and  basic
+modular arithmetic.  By modular arithmetic, I am referring to the set
+of integers mod {\small\tt n} under addition, where we shall consider
+{\small\tt n} as fixed.  In terms of group theory (see
+{\small\verb+hol/Library/group/elt_gp.print+} and
+{\small\verb+hol/Library/group/more_gp.print+}, or Appendix A for
+the theory that has been developed in \HOL), what is meant by the
+integers mod {\small\tt n} is the quotient group of the integers by
+the subgroup of all multiples of {\small\tt n}.  To make sense of this
+statement we need to show the following:
+\begin{enumerate}
+\item the set all multiples of a fixed integer {\small\tt n} forms a
+   subgroup of the integers, and
+\item this subgroup is a normal subgroup of the integers.
+\end{enumerate}
+(We already have the fact that the integers form a group themselves.)
+A subgroup {\small\tt S} of the integers is a normal subgroup just
+when, for every integer {\small\tt x} in {\small\tt S}, the integer
+{\small\verb+((neg x) plus (s plus x))+} is also in {\small\tt S}.
+But mbox{\small\verb+((neg x) plus (s plus x))+} is just {\small\tt s}
+for any integer {\small\tt s}, so any subgroup of the integers is
+normal.  Let's make that the first theorem that we prove.
+
+Our first goal is, for all {\small\tt H}, if {\small\tt H} is a
+subgroup of the integers, then {\small\tt H} is a normal subgroup of
+the integers.  So, how do we express this in \HOL?  First, the group
+associated with the integers is written as the pair
+{\small\verb+((\N:integer.T),$plus)+}.  (For more on why this is
+how we represent the group of the integers under addition, see
+{\it Doing Algebra in Simple Type Theory}.)  Next, we express the
+concept that {\small\tt H} is a subgroup of the group
+{\small\verb+((\N:integer.T),$plus)+} by
+{\small\verb+SUBGROUP((\N.T),$plus)H+}.
+Similarly, we express the concept that {\small\tt H} is a normal
+subgroup of the group {\small\verb+((\N.T),$plus)+} by
+{\small\verb+NORMAL((\N.T),$plus)H+}.  The predicates
+{\small\verb+SUBGROUP+} and {\small\verb+NORMAL+} are
+defined in the theory {\small\verb+more_gp.th+}.  Putting the
+pieces together, the statement of our goal is
+\begin{verbatim}
+   "!H. SUBGROUP((\N.T),$plus)H ==> NORMAL((\N.T),$plus)H"
+\end{verbatim}
+We can leave out the type information, because
+{\small\verb+$plus+} tells us that we are dealing with the
+integers.  Now that we have the statement of our goal, we need to
+enter it onto the goal stack.  This is done by entering the command
+\begin{verbatim}
+   set_goal ([],"!H. SUBGROUP((\N.T),$plus)H ==> NORMAL((\N.T),$plus)H");;
+\end{verbatim}
+\begin{session}
+\begin{verbatim}
+#set_goal ([],"!H. SUBGROUP((\N.T),$plus)H ==> NORMAL((\N.T),$plus)H");;
+"!H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H"
+
+() : void
+\end{verbatim}
+\end{session}
+Since this goal has no assumptions, it could also be entered onto
+the goal stack by
+\begin{verbatim}
+   g "!H. SUBGROUP((\N.T),$plus)H ==> NORMAL((\N.T),$plus)H";;
+\end{verbatim}
+
+The first thing that we want to do in order to prove this theorem,
+just as we did more informally above, is focus on a generic {\small\tt H}, 
+convert the antecedent of the implication into an assumption, and then
+expand {\small\verb+NORMAL+} using the definition of being normal
+and the subgroup assumption.  That is, we want to use
+{\small\verb+GEN_TAC+} followed by {\small\verb+DISCH_TAC+}
+followed by {\small\verb+ASM_REWRITE_TAC [NORMAL_DEF]+}.  We can
+carry this out with the single command 
+
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN DISCH_TAC THEN (ASM_REWRITE_TAC [NORMAL_DEF]));;
+Definition NORMAL_DEF autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"!x n. H n ==> H((INV((\N. T),$plus)x) plus (n plus x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+As a result of executing the previous tactic, we have reduced our goal
+to showing that, if {\small\tt n} is in {\small\tt H}, then some
+expression involving {\small\tt n} is in {\small\tt H}.  If you look
+at the definition of {\small\verb+neg+} found in
+\begin{verbatim}
+   hol/Library/integer/integer.print
+\end{verbatim}
+or Appendix A, you will recognize that
+{\small\verb+INV((\N. T),$plus)x+} is really just what
+{\small\verb+neg x+} is defined to be.  Therefore, what we would
+next like to do is to break up the implication, as before, and 
+then to rewrite with the definition of {\small\verb+neg+} read
+right to left.  To break up the implication exactly as before, we
+would first need to deal with the two universal quantifications out
+front.  That would require two applications of
+{\small\verb+GEN_TAC+}.  However, the universal quantifications
+and the implication can each be dealt with by the more general tactic,
+{\small\verb+STRIP_TAC+}.  Therefore, we can deal with the two
+universal quantifications and the implication all at once with
+{\small\verb+(REPEAT STRIP_TAC)+}.  To turn the definition of
+{\small\verb+neg+} around we need to rewrite with
+{\small\verb+(SYM neg_DEF)+} instead of
+{\small\verb+neg_DEF+}.  One way of accomplishing all this is
+
+\begin{session}
+\begin{verbatim}
+#expand ((REPEAT STRIP_TAC) THEN
+#   (PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]));;
+Definition neg_DEF autoloaded from theory `integer`.
+neg_DEF = |- neg = INV((\N. T),$plus)
+
+OK..
+"H((neg x) plus (n plus x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+What remains is to simplify the arithmetic expression down to
+{\small\tt n}, and then conclude the result from the assumptions.
+The first thing to do to simplify this expression is to use
+commutativity to switch {\small\verb+(n plus x)+} around to
+{\small\verb+(x plus n)+}.  But we must be a bit careful how we
+attempt to do this.  If we use {\small\verb+REWRITE_TAC+} or
+{\small\verb+PURE_REWRITE_TAC+} together with
+{\small\verb+COMM_PLUS+} (or even
+{\small\verb+(SPECL ["n:integer";"x:integer"] COMM_PLUS))+},
+we'll end up with a stack overflow error, since these will proceed to
+repeatedly switch all applications of {\small\verb+plus+} around
+indefinitely.  If we try
+\begin{verbatim}
+   PURE_ONCE_REWRITE_TAC[(SPECL ["n:integer";"x:integer"] COMM_PLUS)]
+\end{verbatim}
+we will avoid the stack overflow error, but it won't give us what we
+want.  Let's try it and see.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC
+#          [(SPECL ["n:integer";"x:integer"] COMM_PLUS)]);;
+Theorem COMM_PLUS autoloaded from theory `integer`.
+COMM_PLUS = |- !M N. M plus N = N plus M
+
+OK..
+"H((n plus x) plus (neg x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The resultant goal is not what we originally intended to reduce to.
+It switched the outermost {\small\verb+plus+} instead of the one
+we had intended.  We could proceed from here this particular time, but
+sometimes we may end up with a goal that we can not proceed from, and
+must back up and find a different way to proceed.  So let us undo this
+previous reduction.
+\begin{session}
+\begin{verbatim}
+#backup();;
+"H((neg x) plus (n plus x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+We could repeat this to undo even more steps if that were desired.
+
+So, how do we deal with rewriting a subterm of a term when
+{\small\verb+REWRITE+} is too heavy-handed?  An answer is to use
+{\small\verb+SUBST1_TAC+}.  (Actually, throughout this case study,
+we shall use a variation, {\small\verb+NEW_SUBST1_TAC+}, that was
+added into \HOL\ when you loaded the Library {\small\verb+group+}.
+It differs from {\small\verb+SUBST1_TAC+} by dealing with
+hypotheses in a bit more subtle manner.  We will need this extra bit
+occasionally later on.)  We wish to substitute all occurrences of
+{\small\verb+(n plus x)+} by {\small\verb+(x plus n)+}.
+This can be accomplished by
+\begin{session}
+\begin{verbatim}
+#expand (NEW_SUBST1_TAC (SPECL ["n:integer";"x:integer"] COMM_PLUS));;
+OK..
+"H((neg x) plus (x plus n))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The next thing we need to do is regroup the addition to get at
+{\small\verb+((neg x) plus x)+}.  We need to rewrite with
+the associativity of {\small\verb+plus+}.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC[ASSOC_PLUS]);;
+Theorem ASSOC_PLUS autoloaded from theory `integer`.
+ASSOC_PLUS = |- !M N P. M plus (N plus P) = (M plus N) plus P
+
+OK..
+"H(((neg x) plus x) plus n)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+To finish this off, we need to rewrite
+{\small\verb+((neg x) plus x)+} to zero 
+{\small\verb+(INT 0)+} as it is represented in the integers), and
+then use the fact that {\small\verb+(INT 0)+} is the identity of
+addition to reduce {\small\verb+((INT 0) plus n)+} to {\small\tt n}.
+This would give us a goal of {\small\verb+(H n)+}, which is one of
+our assumptions.  We can accomplish these two rewrites and finish off
+the goal by
+\begin{session}
+\begin{verbatim}
+#expand (ASM_REWRITE_TAC[PLUS_INV_LEMMA; PLUS_ID_LEMMA]);;
+Theorem PLUS_ID_LEMMA autoloaded from theory `integer`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+goal proved
+. |- H(((neg x) plus x) plus n)
+. |- H((neg x) plus (x plus n))
+. |- H((neg x) plus (n plus x))
+|- !x n. H n ==> H((INV((\N. T),$plus)x) plus (n plus x))
+|- !H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+We have finished proving the theorem, but it isn't permanently stored
+anywhere.  To do this we'll use {\small\verb+prove_thm+}.  We
+want not just to store this theorem, but also to have it available for
+use in other proofs in this session.  Therefore for consistency, we
+should bind the theorem to the same name that we store it under.  We
+can do this by
+\begin{session}
+\begin{verbatim}
+#let INT_SBGP_NORMAL = prove_thm(`INT_SBGP_NORMAL`,
+#"!H. SUBGROUP((\N.T),$plus)H ==> NORMAL((\N.T),$plus)H",
+#(GEN_TAC THEN DISCH_TAC THEN (ASM_REWRITE_TAC[NORMAL_DEF]) THEN
+# (REPEAT STRIP_TAC) THEN (PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]) THEN
+# (NEW_SUBST1_TAC (SPECL ["n:integer";"x:integer"] COMM_PLUS)) THEN
+# (PURE_ONCE_REWRITE_TAC[ASSOC_PLUS]) THEN
+# (ASM_REWRITE_TAC[PLUS_INV_LEMMA; PLUS_ID_LEMMA])));;
+INT_SBGP_NORMAL = 
+|- !H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+\end{verbatim}
+\end{session}
+
+The tactic given to {\small\verb+prove_thm+} is the result of
+conjoining each of the tactics given to {\small\verb+expand+}.
+In general, the composition will be a bit more complicated, since a
+tactic may return a list of subgoals, requiring the composition of the
+tactic with a list of tactics, using {\small\verb+THENL+}.
+
+In addition to the fact that every subgroup of the integers is normal,
+there are a couple of other facts about subgroups that will make our
+work later on a little easier.  These two facts are that
+{\small\verb+(INT 0)+} is contained in every subgroup of the
+integers, and that if {\small\tt N} is in a subgroup of the integers,
+then so is {\small\verb+(neg N)+}.  Let's prove each of these
+theorems next.
+
+For the first theorem, the goal is to show that for all {\small\tt H},
+if {\small\tt H} is a subgroup, then {\small\verb+(INT 0)+} is in
+{\small\tt H}, \ie\ we have {\small\verb+H(INT O)+}.
+\begin{session}
+\begin{verbatim}
+#set_goal ([],"!H.SUBGROUP((\N.T),$plus)H ==> H(INT 0)");;
+"!H. SUBGROUP((\N. T),$plus)H ==> H(INT 0)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+As in the previous problem, we want to begin by moving the hypothesis
+that {\small\tt H} is a subgroup into the assumptions.
+\begin{session}
+\begin{verbatim}
+#expand (REPEAT STRIP_TAC);;
+OK..
+"H(INT 0)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, the reason that {\small\verb+(INT 0)+} is in {\small\tt H}
+is that {\small\verb+(INT 0)+} is the group identity of the
+integers and the group identity of any subgroup of a group is the same
+identity as that of the whole group.  This fact is recorded by theorem
+{\small\verb+SBGP_ID_GP_ID+}, which can be found in the file
+\begin{verbatim}
+   hol/Library/group/more_gp.print
+\end{verbatim}
+or Appendix A.  But to use {\small\verb+SBGP_ID_GP_ID+}, we need
+first to rewrite with the fact that {\small\verb+(INT 0)+} is the
+group identity of the integers.  This requires using the theorem
+{\small\verb+ID_EQ_0+}, which
+can be found in
+\begin{verbatim}
+   hol/Library/integer/integer.print
+\end{verbatim}
+or Appendix A.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC [(SYM ID_EQ_0)]);;
+Theorem ID_EQ_0 autoloaded from theory `integer`.
+ID_EQ_0 = |- ID((\N. T),$plus) = INT 0
+
+OK..
+"H(ID((\N. T),$plus))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Next, we want to use the fact that the group identity is also the
+subgroup identity.  This requires using
+\begin{verbatim}
+   SBGP_ID_GP_ID  |- SUBGROUP(G,prod)H ==> (ID(H,prod) = ID(G,prod))
+\end{verbatim}
+Now, {\small\verb+SBGP_ID_GP_ID+} at the outermost level is an
+implication, so we will want to use {\small\verb+UNDISCH+} to
+expose the equation.  However, once we have used
+{\small\verb+UNDISCH+} we will have
+{\small\verb+SUBGROUP(G,prod)H+} as a hypothesis.  In order to
+rewrite the the equation {\small\verb+ID(G,prod) = ID(H,prod)+}
+we need to instantiate {\small\tt G} and {\small\verb+prod+} (and
+the type of {\small\tt H}).  But these all occur in the hypothesis of
+the equation.  None of the rewrite tactics (for the time being) will
+perform an instantiation if the variable to be instantiated occurs
+free in the hypotheses of the rewrite theorem.  Thus, none of the
+rewrite tactics will do the job for us here.  However, there is a
+variation of {\small\verb+NEW_SUBST1_TAC+} that will do the job
+for us.  That variation is {\small\verb+SUBST_MATCH_TAC+}.
+\begin{session}
+\begin{verbatim}
+#expand (SUBST_MATCH_TAC (SYM (UNDISCH SBGP_ID_GP_ID)));;
+Theorem SBGP_ID_GP_ID autoloaded from theory `more_gp`.
+SBGP_ID_GP_ID = |- SUBGROUP(G,prod)H ==> (ID(H,prod) = ID(G,prod))
+
+OK..
+"H(ID(H,$plus))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+So now we are confronted with showing that the identity of {\small\tt H}
+is contained in {\small\tt H}.  There exists a tactic,
+{\small\verb+GROUP_ELT_TAC+}, in group theory that is specially
+designed to deal with routine goals of membership in a group.  If we
+had as one of our assumptions that {\small\tt H} were a group (we only
+have right now that {\small\tt H} is a subgroup), then we could use
+{\small\verb+GROUP_ELT_TAC+} to finish this off.  As it is, if we
+use {\small\verb+GROUP_ELT_TAC+} now, it will reduce our goal to
+showing this.  So let us do that first.
+\begin{session}
+\begin{verbatim}
+#expand GROUP_ELT_TAC;;
+OK..
+"GROUP(H,$plus)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, in our assumptions we have that {\small\tt H} is a subgroup.  We
+need to use this assumption to get that {\small\tt H} is a group.  In
+order to do this, we want to take the assumption, rewrite it with the
+definition of being a subgroup, take the last conjunct of the result,
+and solve the goal with it.  By "take the assumption", I mean use
+{{\small\verb+POP_ASSUM \thm. +}\ldots}.
+\begin{session}
+\begin{verbatim}
+#expand (POP_ASSUM \thm. (ACCEPT_TAC (CONJUNCT2 (CONJUNCT2
+#    (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF] thm)))));;
+Definition SUBGROUP_DEF autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+goal proved
+. |- GROUP(H,$plus)
+. |- H(ID(H,$plus))
+. |- H(ID((\N. T),$plus))
+. |- H(INT 0)
+|- !H. SUBGROUP((\N. T),$plus)H ==> H(INT 0)
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+This finishes of the theorem.  Let's give it the name
+{\small\verb+INT_SBGP_ZERO+}.  Putting it all together, we have
+\begin{session}
+\begin{verbatim}
+#let INT_SBGP_ZERO = prove_thm (`INT_SBGP_ZERO`,
+#"!H.SUBGROUP((\N.T),$plus)H ==> H(INT 0)",
+#((REPEAT STRIP_TAC) THEN
+# (PURE_ONCE_REWRITE_TAC [(SYM ID_EQ_0)]) THEN
+# (SUBST_MATCH_TAC (SYM (UNDISCH SBGP_ID_GP_ID))) THEN
+# GROUP_ELT_TAC THEN
+# (POP_ASSUM \thm. (ACCEPT_TAC (CONJUNCT2 (CONJUNCT2
+#   (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF] thm)))))));;
+INT_SBGP_ZERO = |- !H. SUBGROUP((\N. T),$plus)H ==> H(INT 0)
+\end{verbatim}
+\end{session}
+
+Let's move on to the other general theorem about subgroups of the
+integers.  We want to show that for every subgroup {\small\tt H} of
+the integers and for every integer {\small\tt N}, if {\small\tt N} is
+in {\small\tt H}, then {\small\verb+(neg N)+} is also in
+{\small\tt H}.
+\begin{session}
+\begin{verbatim}
+#set_goal ([],"!H.SUBGROUP((\N.T),$plus)H ==> !N. (H N ==> H (neg N))");;
+"!H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))"
+
+() : void
+\end{verbatim}
+\end{session}
+
+As before, let us move all the preconditions into the assumptions to
+expose the goal {\small\verb+H(neg N)+}.
+\begin{session}
+\begin{verbatim}
+#expand (REPEAT STRIP_TAC);;
+OK..
+"H(neg N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, the proof of this fact is going to be much the same as the proof
+of the previous fact.  In particular, we are going to need to use
+{\small\verb+SBGP_INV_GP_INV+} (as {\small\verb+SGBP_ID_GP_ID+}
+was used before) to change an inverse in the integers into an inverse
+in {\small\tt H}, and then we are going to want to finish up the
+{\small\verb+GROUP_ELT_TAC+}.  But for
+{\small\verb+GROUP_ELT_TAC+} to finish the problem off we will need
+to have among our assumptions that {\small\tt H} is a group.  We can't use
+{\small\verb+POP_ASSUM+} to give us access to the assumption that
+{\small\tt H} is a subgroup here because we want to access the
+assumption that {\small\tt H} is a subgroup and that is not the top
+assumption.  There are ways of making use of
+{\small\verb+POP_ASSUM+}, but since we want to keep all the
+assumptions we currently have, there are easier ways.  Probably the
+simplest and easiest way to access the assumption we want is to use
+{\small\verb+ASSUME+}.  We can then rewrite the resulting theorem
+with the subgroup definition, break it up and put the pieces into the
+assumptions.  To break up the result of rewriting with the definition
+of being a subgroup and include the results in the assumptions, we
+want to use {\small\verb+STRIP_ASSUME_TAC+}.
+
+\begin{session}
+\begin{verbatim}
+#expand (STRIP_ASSUME_TAC (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF]
+#    (ASSUME "SUBGROUP((\N.T),$plus)H")));;
+OK..
+"H(neg N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, to get started with the proof in earnest, let us rewrite
+{\small\verb+(neg n)+} to the inverse in the integers of
+{\small\tt N}.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC [neg_DEF]);;
+OK..
+"H(INV((\N. T),$plus)N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+Then we want to rewrite the inverse in the integers to the inverse in
+{\small\tt H}.  (Remember what we did with the identity?)
+\begin{session}
+\begin{verbatim}
+#expand (SUBST_MATCH_TAC
+#    (SYM (UNDISCH (SPEC_ALL (UNDISCH SBGP_INV_GP_INV)))));;
+Theorem SBGP_INV_GP_INV autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"H(INV(H,$plus)N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+And finally we want to finish it off with
+{\small\verb+GROUP_ELT_TAC+}.
+\begin{session}
+\begin{verbatim}
+#expand GROUP_ELT_TAC;;
+OK..
+goal proved
+.. |- H(INV(H,$plus)N)
+... |- H(INV((\N. T),$plus)N)
+... |- H(neg N)
+.. |- H(neg N)
+|- !H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+Let's put it all together and call the resulting theorem
+{\small\verb+INT_SBGP_neg+}.
+\begin{session}
+\begin{verbatim}
+#let INT_SBGP_neg = prove_thm(`INT_SBGP_neg`,
+#"!H.SUBGROUP((\N.T),$plus)H ==> !N. (H N ==> H (neg N))",
+#((REPEAT STRIP_TAC) THEN
+# (STRIP_ASSUME_TAC (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF]
+#    (ASSUME "SUBGROUP((\N.T),$plus)H"))) THEN
+# (PURE_ONCE_REWRITE_TAC [neg_DEF]) THEN
+# (SUBST_MATCH_TAC
+#    (SYM (UNDISCH (SPEC_ALL (UNDISCH SBGP_INV_GP_INV))))) THEN
+# GROUP_ELT_TAC));;
+INT_SBGP_neg = 
+|- !H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))
+\end{verbatim}
+\end{session}
+
+Since we are going to be working a great deal with the set of
+multiples of an integer, let's make a definition to make this easier.
+The way we represent a set is with a predicate.   For each {\small\tt n},
+we  want to define the predicate saying whether a given {\small\tt m}
+is a multiple of {\small\tt n}, that is, whether there exists a
+{\small\tt p} such that {\small\tt m} is {\small\verb+p times n+}.
+The following command will make such a definition. 
+
+\begin{session}
+\begin{verbatim}
+#let INT_MULT_SET_DEF = new_definition(`INT_MULT_SET_DEF`,
+#        "int_mult_set n = \m. ?p. (m = p times n)");;
+INT_MULT_SET_DEF = |- !n. int_mult_set n = (\m. ?p. m = p times n)
+\end{verbatim}
+\end{session}
+
+The predicate {\small\verb+(int_mult_set n)+} describes (is true
+of) those integers which are multiples of the given integer {\small\tt
+n}.  We could have given the definition as
+\begin{verbatim}
+   "int_mult_set n m = ?p. (m = p times n)"
+\end{verbatim}
+which would have perhaps been more conventional, or equally well as
+\begin{verbatim}
+   "int_mult_set = \n m. ?p. (m = p times n)"
+\end{verbatim}
+However, the phrasing chosen emphasizes that we are defining the
+entity, the set of multiples of {\small\tt n}, where {\small\tt n} is
+considered fixed, or a parameter.
+
+The next thing that we want to show is that the set of multiples of
+{\small\tt n} under addition from a normal subgroup of the integers.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"!n.NORMAL((\N.T),$plus)(int_mult_set n)");;
+"!n. NORMAL((\N. T),$plus)(int_mult_set n)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+By the theorem we just proved, if a subset of the integers is a
+subgroup, then it is a normal subgroup.  Therefore, it should suffice
+to show that the set of multiples of {\small\tt n} is a subgroup in
+order to show that it is a normal subgroup.  The tactics
+{\small\verb+MP_IMP_TAC+} and {\small\verb+MATCH_MP_IMP_TAC+}
+are two more of the tactics in the same package as
+{\small\verb+NEW_SUBST1_TAC+}, and they are designed to do deal
+with reductions of this kind.  That is, if we need to show {\small\tt A},
+and we have a theorem
+\begin{verbatim}
+   thm = |- B ==> A
+\end{verbatim}
+then {\small\verb+(MP_IMP_TAC thm)+} will reduce the problem of
+showing {\small\tt A} to the problem of showing {\small\tt B}.  More
+generally, if we need to show {\small\tt A}, and we have a theorem
+\begin{verbatim}
+   thm = |- B' ==> A'
+\end{verbatim}
+where {\small\tt A} is an instance of {\small\verb+A'+}, then
+{\small\verb+(MATCH_MP_IMP_TAC thm)+} will reduce the problem of
+showing {\small\tt A} to the problem of showing {\small\tt B} where
+{\small\tt B} is the corresponding instance of {\small\verb+B'+}.
+Thus, remembering first to undo the universal quantification, what we
+want is
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN (MATCH_MP_IMP_TAC INT_SBGP_NORMAL));;
+OK..
+"SUBGROUP((\N. T),$plus)(int_mult_set n)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+From group theory, there is a lemma, {\small\verb+SUBGROUP_LEMMA+},
+which says that a set {\small\tt H} is a subgroup of a set {\small\tt
+G} provided that {\small\tt G} is a group, that {\small\tt H } is nonempty
+and contained in {\small\tt G}, and that {\small\tt H} is closed under
+products and inverses.  Therefore, if we rewrite with this lemma, then
+we need to show that the integers form a group, that the set of
+multiples of a fixed number is non-empty and that it is closed under
+addition and additive inverses.  However, we have a theorem from the
+integer theory, {\small\verb+integer_as_GROUP+}, that states that
+the integers form a group.  So, if we rewrite with that theorem at the
+same time as we rewrite with {\small\verb+SUBGROUP_LEMMA+}, this
+subgoal of showing the integers form a group would be automatically
+dealt with.  For the remaining subgoals, the next step will be to expand
+the definition of the {\small\verb+int_mult_set+}.  Therefore, we
+might as well rewrite with {\small\verb+INT_MULT_SET_DEF+} at the same
+time as the other rewrites.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [SUBGROUP_LEMMA;INT_MULT_SET_DEF;integer_as_GROUP]);;
+Theorem integer_as_GROUP autoloaded from theory `integer`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"(?x. (\m. ?p. m = p times n)x) /\
+ (!x y.
+   (\m. ?p. m = p times n)x /\ (\m. ?p. m = p times n)y ==>
+   (\m. ?p. m = p times n)(x plus y)) /\
+ (!x.
+   (\m. ?p. m = p times n)x ==>
+   (\m. ?p. m = p times n)(INV((\N. T),$plus)x))"
+
+() : void
+\end{verbatim}
+\end{session}
+
+In this subgoal we have a lot of lambda abstractions being applied
+to arguments.  Therefore, simplification by beta reduction is called
+for.
+\begin{session}
+\begin{verbatim}
+#expand BETA_TAC;;
+OK..
+"(?x p. x = p times n) /\
+ (!x y.
+   (?p. x = p times n) /\ (?p. y = p times n) ==>
+   (?p. x plus y = p times n)) /\
+ (!x. (?p. x = p times n) ==> (?p. INV((\N. T),$plus)x = p times n))"
+
+() : void
+\end{verbatim}
+\end{session}
+
+We have at this point a goal which is a conjunction of three subgoals:
+namely, that there is a multiple of the fixed integer, that the sum of
+two multiples is again a multiple, and that the additive inverse of a
+multiple is again a multiple.  To solve this compound goal, we want to
+solve each of these goals individually.  Therefore, we need to break up
+this goal, and {\small\verb+(REPEAT STRIP_TAC)+} will do the job.
+\begin{session}
+\begin{verbatim}
+#expand (REPEAT STRIP_TAC);;
+OK..
+3 subgoals
+"?p. INV((\N. T),$plus)x = p times n"
+    [ "x = p times n" ]
+
+"?p. x plus y = p times n"
+    [ "x = p times n" ]
+    [ "y = p' times n" ]
+
+"?x p. x = p times n"
+
+() : void
+\end{verbatim}
+\end{session}
+
+This returns three subgoals, and I suggest that you separate out the
+work that you do for each of them by putting something like the
+following at the start of work on each of the subgoals:
+\begin{verbatim}
+   % goal 1 -- int_mult_set is non-empty %
+\end{verbatim}
+
+The first subgoal to be dealt with is showing that there is a multiple
+of {\small\tt n}.  One of the easiest multiples to demonstrate exists is
+{\small\verb+(INT 0)+}.
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "INT 0");;
+OK..
+"?p. INT 0 = p times n"
+
+() : void
+\end{verbatim}
+\end{session}
+And, of course, the thing you multiply by to get
+{\small\verb+(INT 0)+} is {\small\verb+(INT 0)+}.
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "INT 0");;
+OK..
+"INT 0 = (INT 0) times n"
+
+() : void
+\end{verbatim}
+\end{session}
+If we rewrite this goal with {\small\verb+TIMES_ZERO+}, we will
+finish it off.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [TIMES_ZERO]);;
+Theorem TIMES_ZERO autoloaded from theory `integer`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+goal proved
+|- INT 0 = (INT 0) times n
+|- ?p. INT 0 = p times n
+|- ?x p. x = p times n
+
+Previous subproof:
+2 subgoals
+"?p. INV((\N. T),$plus)x = p times n"
+    [ "x = p times n" ]
+
+"?p. x plus y = p times n"
+    [ "x = p times n" ]
+    [ "y = p' times n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+This finishes off the first subgoal, leaving two more to be dealt
+with.
+
+The next goal is to show that the sum of two multiples of a fixed
+integer is again a multiple of that fixed integer.
+\begin{verbatim}
+   % goal 2 -- int_mult_set closed under addition %
+\end{verbatim}
+From our assumptions we have that {\small\verb+x = p times n+}
+and {\small\verb+y = p' times n+}.  We would like to substitute
+these into the equation we are trying to show.  However, first we need
+to eliminate the existential quantifier.  Obviously, the particular
+multiple of {\small\tt n} that yields {\small\verb+x plus y+} is
+{\small\verb+p plus p'+}. 
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "p plus p'");;
+OK..
+"x plus y = (p plus p') times n"
+    [ "x = p times n" ]
+    [ "y = p' times n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+Now we may rewrite with the assumptions.  However, we also wish to use
+distributivity to pull the {\small\tt n} out to the right in the
+resulting expression.  Therefore let us rewrite with
+\begin{session}
+\begin{verbatim}
+#expand (ASM_REWRITE_TAC [RIGHT_PLUS_DISTRIB]);;
+Theorem RIGHT_PLUS_DISTRIB autoloaded from theory `integer`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+goal proved
+.. |- x plus y = (p plus p') times n
+.. |- ?p. x plus y = p times n
+
+Previous subproof:
+"?p. INV((\N. T),$plus)x = p times n"
+    [ "x = p times n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+which finishes off the second goal.
+
+We are now left with the third and last subgoal: to show that the
+additive inverse of a multiple of {\small\tt n} is again a multiple of
+{\small\tt n}. 
+\begin{verbatim}
+   % goal 3 -- int_mult set closed under additive inverses %
+\end{verbatim}
+Now, the additive inverse of a number is a fancy way of saying the
+negative of a number.  So, let us rewrite the goal to use
+{\small\verb+neg+} instead.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]);;
+OK..
+"?p. neg x = p times n"
+    [ "x = p times n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Obviously, the multiple of {\small\tt n} that gets us
+{\small\verb+neg x+} is just the negative of the multiple that
+gets us {\small\tt x}.
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "neg p");;
+OK..
+"neg x = (neg p) times n"
+    [ "x = p times n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Finally, if we rewrite with the assumption that
+{\small\verb+x = p times n+} we get essentially one of the
+clauses of the theorem {\small\verb+TIMES_neg+} from the theory
+{\small\verb+integer+}.  If we rewrite with that as well, we
+finish off the entire goal.
+\begin{session}
+\begin{verbatim}
+#expand (ASM_REWRITE_TAC[TIMES_neg]);;
+Theorem TIMES_neg autoloaded from theory `integer`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+goal proved
+. |- neg x = (neg p) times n
+. |- ?p. neg x = p times n
+. |- ?p. INV((\N. T),$plus)x = p times n
+|- (?x p. x = p times n) /\
+   (!x y.
+     (?p. x = p times n) /\ (?p. y = p times n) ==>
+     (?p. x plus y = p times n)) /\
+   (!x. (?p. x = p times n) ==> (?p. INV((\N. T),$plus)x = p times n))
+|- (?x. (\m. ?p. m = p times n)x) /\
+   (!x y.
+     (\m. ?p. m = p times n)x /\ (\m. ?p. m = p times n)y ==>
+     (\m. ?p. m = p times n)(x plus y)) /\
+   (!x.
+     (\m. ?p. m = p times n)x ==>
+     (\m. ?p. m = p times n)(INV((\N. T),$plus)x))
+|- SUBGROUP((\N. T),$plus)(int_mult_set n)
+|- !n. NORMAL((\N. T),$plus)(int_mult_set n)
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+All the steps put together to save
+the theorem looks like the following: 
+\begin{session}
+\begin{verbatim}
+#let INT_MULT_SET_NORMAL = prove_thm(`INT_MULT_SET_NORMAL`,
+#"!n. NORMAL((\N. T),$plus)(int_mult_set n)",
+#(GEN_TAC THEN (MATCH_MP_IMP_TAC INT_SBGP_NORMAL) THEN
+# (REWRITE_TAC[SUBGROUP_LEMMA;INT_MULT_SET_DEF;integer_as_GROUP]) THEN
+# BETA_TAC THEN (REPEAT STRIP_TAC) THENL
+# [((EXISTS_TAC "INT 0") THEN (EXISTS_TAC "INT 0") THEN
+#  (REWRITE_TAC [TIMES_ZERO]));
+#  ((EXISTS_TAC "p plus p'") THEN
+#   (ASM_REWRITE_TAC [RIGHT_PLUS_DISTRIB]));
+#  ((PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]) THEN
+#   (EXISTS_TAC "neg p") THEN
+#   (ASM_REWRITE_TAC[TIMES_neg]))]));;
+INT_MULT_SET_NORMAL = |- !n. NORMAL((\N. T),$plus)(int_mult_set n)
+\end{verbatim}
+\end{session}
+
+With this result we conclude this this section.  To shut down, you
+should 
+execute
+\begin{session}
+\begin{verbatim}
+#close_theory ();;
+() : void
+\end{verbatim}
+\end{session}
+followed by
+\begin{session}
+\begin{verbatim}
+#quit();;
+faulkner+
+\end{verbatim}
+\end{session}
+if you wish to leave \HOL.
+
+As a closing remark, you might want to create another file
+{\small\verb+mk_int_sbgp.ml+} that contains the same work as is
+currently in {\small\verb+int_sbgp.show.ml+} minus all the
+executions of {\small\verb+set_goal+} and
+{\small\verb+expand+}.  These were only used to discover the
+proofs, not to save them. 
+

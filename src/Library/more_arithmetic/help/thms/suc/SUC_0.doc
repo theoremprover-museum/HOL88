@@ -1,0 +1,3 @@
+\THEOREM SUC_0 suc
+|- 1 = SUC 0
+\ENDTHEOREM

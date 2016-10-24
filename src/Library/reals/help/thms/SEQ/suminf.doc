@@ -1,0 +1,3 @@
+\THEOREM suminf SEQ
+|- !f. suminf f = (@s. f sums s)
+\ENDTHEOREM

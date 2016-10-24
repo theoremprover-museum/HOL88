@@ -1,0 +1,21 @@
+\DOC dest_const
+
+\TYPE {dest_const : (term -> (string # type))}
+
+\SYNOPSIS
+Breaks apart a constant into name and type.
+
+\DESCRIBE
+{dest_const} is a term destructor for constants:
+{
+   dest_const "const:ty"
+}
+\noindent returns {(`const`,":ty")}.
+
+\FAILURE
+Fails with {dest_const} if term is not a constant.
+
+\SEEALSO
+mk_const, is_const, dest_var, dest_comb, dest_abs.
+
+\ENDDOC

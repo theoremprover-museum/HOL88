@@ -1,0 +1,22 @@
+\DOC Not
+
+\TYPE {Not : (thmpattern -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern that matches if the argument pattern does not match.
+
+\LIBRARY trs
+
+\DESCRIBE
+Note that {Not} throws away binding information. So, one cannot test the
+bindings of pattern variables occurring in the pattern used as argument to
+{Not} (at least not from outside the {Not}).
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+Andalso, Orelse, Where, BigAnd, BigOr, kind, thryname, thmname, conc, hypP,
+hypF.
+
+\ENDDOC

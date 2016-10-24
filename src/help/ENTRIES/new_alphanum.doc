@@ -1,0 +1,45 @@
+\DOC new_alphanum
+
+\TYPE {new_alphanum : (string -> void)}
+
+\SYNOPSIS
+Defines a character to be alphanumeric.
+
+\DESCRIBE
+When given a string, which should be of length 1, {new_alphanum} extends
+the scope of the definition of `alphanumeric' as used by {is_alphanum}.
+(If the supplied string is null ({``}) then {new_alphanum} has no effect.)
+
+The term `alphanumeric' initially means one of the following:
+{a..z A..Z 0..9 _ '}. A call to {new_alphanum} can affect ML lexical analysis
+dynamically, because the function {is_alphanum} is called by the lexical
+analyzer to check for characters beyond the first in an identifier.
+
+\EXAMPLE
+Suppose we set a variable {y} as follows:
+{
+   #let y = 2;;
+   y = 2 : int
+}
+\noindent then {y-1} is a numeric expression:
+{
+   #let x = y-1;;
+   x = 1 : int
+}
+\noindent but after defining {-} to be alphanumeric:
+{
+   #new_alphanum `-`;;
+   () : void
+}
+\noindent {y-1} counts as a single token (which is undefined).
+{
+   #let x = y-1;;
+   unbound or non-assignable variable y-1
+}
+\FAILURE
+Fails if the string has length greater than 1.
+
+\SEEALSO
+ascii, ascii_code, is_alphanum, is_letter, new_alphanum.
+
+\ENDDOC

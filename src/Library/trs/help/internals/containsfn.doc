@@ -1,0 +1,10 @@
+\DOC containsfn
+
+\TYPE {containsfn : (termpattern -> term -> void -> result_of_match)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

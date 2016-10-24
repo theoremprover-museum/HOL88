@@ -1,0 +1,47 @@
+This is makeindex, portable version 2.11 [11-Sep-1991].
+Scanning input file tort.idx...
+!! Input index error (file = tort.idx, line = 1):
+   -- Illegal null field.
+!! Input index error (file = tort.idx, line = 2):
+   -- Illegal null field.
+!! Input index error (file = tort.idx, line = 3):
+   -- Extra `@' at position 14 of first argument.
+!! Input index error (file = tort.idx, line = 4):
+   -- Extra `!' at position 18 of first argument.
+!! Input index error (file = tort.idx, line = 5):
+   -- Extra `|' at position 15 of first argument.
+.done (29 entries accepted, 5 rejected).
+Sorting entries....done (135 comparisons).
+Generating output file tort.ind....
+## Warning (input = tort.idx, line = 23; output = tort.ind, line = 3):
+   -- Range closing operator has an inconsistent encapsulator iii.
+
+## Warning (input = tort.idx, line = 26; output = tort.ind, line = 8):
+   -- Inconsistent page encapsulator ii within range.
+
+## Warning (input = tort.idx, line = 30; output = tort.ind, line = 9):
+   -- Inconsistent page encapsulator ii within range.
+
+## Warning (input = tort.idx, line = 7; output = tort.ind, line = 10):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = tort.idx, line = 14; output = tort.ind, line = 14):
+   -- Unmatched range closing operator ).
+
+## Warning (input = tort.idx, line = 15; output = tort.ind, line = 15):
+   -- Unmatched range opening operator (.
+
+## Warning (input = tort.idx, line = 34; output = tort.ind, line = 16):
+   -- Illegal range formation: starting & ending pages are of different types.
+
+## Warning (input = tort.idx, line = 38; output = tort.ind, line = 17):
+   -- Illegal range formation: starting & ending pages are of different types.
+
+## Warning (input = tort.idx, line = 42; output = tort.ind, line = 18):
+   -- Inconsistent page encapsulator xx within range.
+
+## Warning (input = tort.idx, line = 43; output = tort.ind, line = 18):
+   -- Illegal range formation: starting & ending pages are of different types.
+done (24 lines written, 10 warnings).
+Output written in tort.ind.
+Transcript written in tort.ilg.

@@ -1,0 +1,16 @@
+\DOC is_nil
+
+\TYPE {is_nil : (* pointer -> bool)}
+
+\SYNOPSIS
+Returns {true} iff there is nothing stored in a pointer.
+
+\LIBRARY window
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+dispose, ptrtype, store, value.
+
+\ENDDOC

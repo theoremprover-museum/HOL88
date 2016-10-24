@@ -1,0 +1,3 @@
+\THEOREM OR_LESS arithmetic
+|- !m n. (SUC m) <= n ==> m < n
+\ENDTHEOREM

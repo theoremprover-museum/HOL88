@@ -1,0 +1,32 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  19 FEB 1994 10:33
+**simple
+(simple.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/article.sty
+Standard Document Style `article' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (mwebmac.tex
+\halfwid=\dimen99
+\quawid=\dimen100
+)
+(/homes/ww/lib/tex/inputs/tokmac.tex) (simple.aux) [1
+
+] (simple.aux) ) 
+Here is how much of TeX's memory you used:
+ 200 strings out of 11977
+ 1913 string characters out of 87025
+ 27825 words of memory out of 262141
+ 2152 multiletter control sequences out of 9500
+ 19641 words of font info for 75 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 12i,6n,17p,163b,219s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on simple.dvi (1 page, 1440 bytes).

@@ -1,0 +1,4 @@
+\THEOREM ZIP list
+|- (ZIP([],[]) = []) /\
+   (!x1 l1 x2 l2. ZIP(CONS x1 l1,CONS x2 l2) = CONS(x1,x2)(ZIP(l1,l2)))
+\ENDTHEOREM

@@ -1,0 +1,10 @@
+\DOC searchseq
+
+\TYPE {searchseq : (string list -> string list -> string list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

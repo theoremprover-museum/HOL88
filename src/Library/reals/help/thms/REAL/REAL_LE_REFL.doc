@@ -1,0 +1,3 @@
+\THEOREM REAL_LE_REFL REAL
+|- !x. x <= x
+\ENDTHEOREM

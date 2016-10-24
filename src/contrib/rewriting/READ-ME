@@ -1,0 +1,27 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: rewriting							%
+%									%
+% DESCRIPTION: rewriting tools						%
+%									%
+% AUTHOR: R. A. Fleming							%
+%									%
+% ADDRESS: Hewlett Packard Laboratories,				%
+%          Filton Road,							%
+%          Stoke Gifford						%
+%          Bristol BS12 6QZ						%
+%          U.K.								%
+%									%
+%	   email: ..!mcvax!ukc!hplb!raf					%
+%                 raf@hplb.lb.hp.co.uk					%
+%									%
+% DATE: 90.11.14							%
+% --------------------------------------------------------------------- %
+
+The contents of this directory are as follows:
+
+    half.ml     -- "Half rewriting" tactics for HOL
+    imp.ml      -- "Implicational (= conditional) rewriting" tactics for HOL
+    rew.ml      -- alternative implementation of rewriting
+
+See the files themselves for documentation.
+

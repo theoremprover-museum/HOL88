@@ -1,0 +1,3 @@
+\THEOREM node_11 tree
+|- !tl1 tl2. (node tl1 = node tl2) = (tl1 = tl2)
+\ENDTHEOREM

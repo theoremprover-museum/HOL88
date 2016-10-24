@@ -1,0 +1,5 @@
+\THEOREM POWDIFF POWSER
+|- !n x y.
+    (x pow (SUC n)) - (y pow (SUC n)) =
+    (x - y) * (Sum(0,SUC n)(\p. (x pow p) * (y pow (n num_sub p))))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM wo_fl WELLORDER
+|- !l x. fl l x = (?y. l(x,y) \/ l(y,x))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM HD list
+|- !h t. HD(CONS h t) = h
+\ENDTHEOREM

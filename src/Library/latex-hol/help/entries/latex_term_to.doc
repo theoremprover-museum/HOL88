@@ -1,0 +1,27 @@
+\DOC latex_thm_to
+
+\TYPE {latex_thm_to : (string -> thm -> void)}
+
+\SYNOPSIS
+Translate \HOL\ terms to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+This function is similar to {latex_thm} except the result is written
+to a file whose name is specified as the first argument. If the named
+file exists, it is overwritten, otherwise, a file having the given
+name is created.
+
+\FAILURE
+Fails if the second argument is not an expression evaluated to having
+ type {thm}.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to}, {latex_term_add_to},
+{latex_thm}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to},
+{latex_theory_to}, {latex_theorems_to} and {latex_theorems_add_to}.
+
+\ENDDOC

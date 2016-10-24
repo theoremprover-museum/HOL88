@@ -1,0 +1,22 @@
+\DOC ran
+
+\TYPE {ran : (term -> type)}
+
+\SYNOPSIS
+Finds the range of a function.
+
+\LIBRARY window
+
+\FAILURE
+Fails if the argument is not a function.
+
+\EXAMPLE
+{
+   #ran "f:*->**";;
+   ":**" : type
+}
+
+\SEEALSO
+is_fun, dom
+
+\ENDDOC

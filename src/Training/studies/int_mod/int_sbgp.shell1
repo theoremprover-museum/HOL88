@@ -1,0 +1,527 @@
+faulkner% hol88
+
+       _  _    __    _      __    __
+|___   |__|   |  |   |     |__|  |__|
+|      |  |   |__|   |__   |__|  |__|
+
+  Version 1.07, built on Jul 13 1989
+
+#new_theory `int_sbgp`;;
+() : void
+
+#load_library `group`;;
+Loading library `group` ...
+[fasl /home/unagi/elsa/hol/hol88/Library/group/group_ml.o]
+Theory more_gp loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+..........................................[fasl /home/unagi/elsa/hol/hol88/Library/group/group_tac_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+GROUP_TAC = - : (thm list -> tactic)
+
+GROUP_ELT_TAC = - : tactic
+
+GROUP_RIGHT_ASSOC_TAC = - : (term -> tactic)
+
+GROUP_LEFT_ASSOC_TAC = - : (term -> tactic)
+
+File group_tac loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/group/inst_gp_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+return_GROUP_thm = - : (string -> thm -> proof)
+
+include_GROUP_thm = - : (string -> string -> thm -> proof)
+
+return_GROUP_theory = 
+-
+: (string -> thm -> thm list -> (string # thm) list)
+
+include_GROUP_theory = - : (string -> thm -> thm list -> void)
+
+File inst_gp loaded
+.
+Library `group` loaded.
+() : void
+
+#load_library `integer`;;
+Loading library `integer` ...
+[fasl /home/unagi/elsa/hol/hol88/Library/integer/integer_ml.o]
+Theory integer loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+........................................[fasl /home/unagi/elsa/hol/hol88/Library/integer/num_tac_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+GEN_INDUCT_RULE = - : (thm -> thm -> thm)
+
+GEN_INDUCT_TAC = - : tactic
+
+File num_tac loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/integer/integer_tac_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+INT_CASES_RULE = - : (thm -> thm -> thm)
+
+INT_CASES_TAC = - : tactic
+
+SIMPLE_INT_CASES_RULE = - : (thm -> thm -> thm -> thm)
+
+SIMPLE_INT_CASES_TAC = - : tactic
+
+INT_MIN_RULE = - : (thm -> thm -> thm)
+
+INT_MIN_TAC = - : (term -> tactic)
+
+INT_MAX_RULE = - : (thm -> thm -> thm)
+
+INT_MAX_TAC = - : (term -> tactic)
+
+INT_RIGHT_ASSOC_TAC = - : (term -> tactic)
+
+INT_LEFT_ASSOC_TAC = - : (term -> tactic)
+
+File integer_tac loaded
+...
+Library `integer` loaded.
+() : void
+
+#set_goal ([],"!H. SUBGROUP((\N.T),$plus)H ==> NORMAL((\N.T),$plus)H");;
+"!H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H"
+
+() : void
+
+#expand (GEN_TAC THEN DISCH_TAC THEN (ASM_REWRITE_TAC [NORMAL_DEF]));;
+Definition NORMAL_DEF autoloaded from theory `more_gp`.
+NORMAL_DEF = 
+|- !G prod N.
+    NORMAL(G,prod)N =
+    SUBGROUP(G,prod)N /\
+    (!x n. G x /\ N n ==> N(prod(INV(G,prod)x)(prod n x)))
+
+OK..
+"!x n. H n ==> H((INV((\N. T),$plus)x) plus (n plus x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+
+#expand ((REPEAT STRIP_TAC) THEN
+#   (PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]));;
+Definition neg_DEF autoloaded from theory `integer`.
+neg_DEF = |- neg = INV((\N. T),$plus)
+
+OK..
+"H((neg x) plus (n plus x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC
+#          [(SPECL ["n:integer";"x:integer"] COMM_PLUS)]);;
+Theorem COMM_PLUS autoloaded from theory `integer`.
+COMM_PLUS = |- !M N. M plus N = N plus M
+
+OK..
+"H((n plus x) plus (neg x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+
+#backup();;
+"H((neg x) plus (n plus x))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+
+#expand (NEW_SUBST1_TAC (SPECL ["n:integer";"x:integer"] COMM_PLUS));;
+OK..
+"H((neg x) plus (x plus n))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC[ASSOC_PLUS]);;
+Theorem ASSOC_PLUS autoloaded from theory `integer`.
+ASSOC_PLUS = |- !M N P. M plus (N plus P) = (M plus N) plus P
+
+OK..
+"H(((neg x) plus x) plus n)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H n" ]
+
+() : void
+
+#expand (ASM_REWRITE_TAC[PLUS_INV_LEMMA; PLUS_ID_LEMMA]);;
+Theorem PLUS_ID_LEMMA autoloaded from theory `integer`.
+PLUS_ID_LEMMA = 
+|- (!x. (INT 0) plus x = x) /\
+   (!x. x plus (INT 0) = x) /\
+   (!x. ?y. y plus x = INT 0)
+
+Theorem PLUS_INV_LEMMA autoloaded from theory `integer`.
+PLUS_INV_LEMMA = 
+|- !x. ((neg x) plus x = INT 0) /\ (x plus (neg x) = INT 0)
+
+OK..
+goal proved
+. |- H(((neg x) plus x) plus n)
+. |- H((neg x) plus (x plus n))
+. |- H((neg x) plus (n plus x))
+|- !x n. H n ==> H((INV((\N. T),$plus)x) plus (n plus x))
+|- !H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+
+Previous subproof:
+goal proved
+() : void
+
+#let INT_SBGP_NORMAL = prove_thm(`INT_SBGP_NORMAL`,
+#"!H. SUBGROUP((\N.T),$plus)H ==> NORMAL((\N.T),$plus)H",
+#(GEN_TAC THEN DISCH_TAC THEN (ASM_REWRITE_TAC[NORMAL_DEF]) THEN
+# (REPEAT STRIP_TAC) THEN (PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]) THEN
+# (NEW_SUBST1_TAC (SPECL ["n:integer";"x:integer"] COMM_PLUS)) THEN
+# (PURE_ONCE_REWRITE_TAC[ASSOC_PLUS]) THEN
+# (ASM_REWRITE_TAC[PLUS_INV_LEMMA; PLUS_ID_LEMMA])));;
+INT_SBGP_NORMAL = 
+|- !H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+
+#set_goal ([],"!H.SUBGROUP((\N.T),$plus)H ==> H(INT 0)");;
+"!H. SUBGROUP((\N. T),$plus)H ==> H(INT 0)"
+
+() : void
+
+#expand (REPEAT STRIP_TAC);;
+OK..
+"H(INT 0)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC [(SYM ID_EQ_0)]);;
+Theorem ID_EQ_0 autoloaded from theory `integer`.
+ID_EQ_0 = |- ID((\N. T),$plus) = INT 0
+
+OK..
+"H(ID((\N. T),$plus))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+
+#expand (SUBST_MATCH_TAC (SYM (UNDISCH SBGP_ID_GP_ID)));;
+Theorem SBGP_ID_GP_ID autoloaded from theory `more_gp`.
+SBGP_ID_GP_ID = |- SUBGROUP(G,prod)H ==> (ID(H,prod) = ID(G,prod))
+
+OK..
+"H(ID(H,$plus))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+
+#expand GROUP_ELT_TAC;;
+OK..
+"GROUP(H,$plus)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+
+#expand (POP_ASSUM \thm. (ACCEPT_TAC (CONJUNCT2 (CONJUNCT2
+#    (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF] thm)))));;
+Definition SUBGROUP_DEF autoloaded from theory `more_gp`.
+SUBGROUP_DEF = 
+|- !G prod H.
+    SUBGROUP(G,prod)H =
+    GROUP(G,prod) /\ (!x. H x ==> G x) /\ GROUP(H,prod)
+
+OK..
+goal proved
+. |- GROUP(H,$plus)
+. |- H(ID(H,$plus))
+. |- H(ID((\N. T),$plus))
+. |- H(INT 0)
+|- !H. SUBGROUP((\N. T),$plus)H ==> H(INT 0)
+
+Previous subproof:
+goal proved
+() : void
+
+#let INT_SBGP_ZERO = prove_thm (`INT_SBGP_ZERO`,
+#"!H.SUBGROUP((\N.T),$plus)H ==> H(INT 0)",
+#((REPEAT STRIP_TAC) THEN
+# (PURE_ONCE_REWRITE_TAC [(SYM ID_EQ_0)]) THEN
+# (SUBST_MATCH_TAC (SYM (UNDISCH SBGP_ID_GP_ID))) THEN
+# GROUP_ELT_TAC THEN
+# (POP_ASSUM \thm. (ACCEPT_TAC (CONJUNCT2 (CONJUNCT2
+#   (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF] thm)))))));;
+INT_SBGP_ZERO = |- !H. SUBGROUP((\N. T),$plus)H ==> H(INT 0)
+
+#set_goal ([],"!H.SUBGROUP((\N.T),$plus)H ==> !N. (H N ==> H (neg N))");;
+"!H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))"
+
+() : void
+
+#expand (REPEAT STRIP_TAC);;
+OK..
+"H(neg N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+
+() : void
+
+#expand (STRIP_ASSUME_TAC (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF]
+#    (ASSUME "SUBGROUP((\N.T),$plus)H")));;
+OK..
+"H(neg N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC [neg_DEF]);;
+OK..
+"H(INV((\N. T),$plus)N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+
+#expand (SUBST_MATCH_TAC
+#    (SYM (UNDISCH (SPEC_ALL (UNDISCH SBGP_INV_GP_INV)))));;
+Theorem SBGP_INV_GP_INV autoloaded from theory `more_gp`.
+SBGP_INV_GP_INV = 
+|- SUBGROUP(G,prod)H ==> (!x. H x ==> (INV(H,prod)x = INV(G,prod)x))
+
+OK..
+"H(INV(H,$plus)N)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "H N" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+
+#expand GROUP_ELT_TAC;;
+OK..
+goal proved
+.. |- H(INV(H,$plus)N)
+... |- H(INV((\N. T),$plus)N)
+... |- H(neg N)
+.. |- H(neg N)
+|- !H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))
+
+Previous subproof:
+goal proved
+() : void
+
+#let INT_SBGP_neg = prove_thm(`INT_SBGP_neg`,
+#"!H.SUBGROUP((\N.T),$plus)H ==> !N. (H N ==> H (neg N))",
+#((REPEAT STRIP_TAC) THEN
+# (STRIP_ASSUME_TAC (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF]
+#    (ASSUME "SUBGROUP((\N.T),$plus)H"))) THEN
+# (PURE_ONCE_REWRITE_TAC [neg_DEF]) THEN
+# (SUBST_MATCH_TAC
+#    (SYM (UNDISCH (SPEC_ALL (UNDISCH SBGP_INV_GP_INV))))) THEN
+# GROUP_ELT_TAC));;
+INT_SBGP_neg = 
+|- !H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))
+
+#let INT_MULT_SET_DEF = new_definition(`INT_MULT_SET_DEF`,
+#	"int_mult_set n = \m. ?p. (m = p times n)");;
+INT_MULT_SET_DEF = |- !n. int_mult_set n = (\m. ?p. m = p times n)
+
+#set_goal([],"!n.NORMAL((\N.T),$plus)(int_mult_set n)");;
+"!n. NORMAL((\N. T),$plus)(int_mult_set n)"
+
+() : void
+
+#expand (GEN_TAC THEN (MATCH_MP_IMP_TAC INT_SBGP_NORMAL));;
+OK..
+"SUBGROUP((\N. T),$plus)(int_mult_set n)"
+
+() : void
+
+#expand (REWRITE_TAC [SUBGROUP_LEMMA;INT_MULT_SET_DEF;integer_as_GROUP]);;
+Theorem integer_as_GROUP autoloaded from theory `integer`.
+integer_as_GROUP = |- GROUP((\N. T),$plus)
+
+Theorem SUBGROUP_LEMMA autoloaded from theory `more_gp`.
+SUBGROUP_LEMMA = 
+|- SUBGROUP(G,prod)H =
+   GROUP(G,prod) /\
+   (?x. H x) /\
+   (!x. H x ==> G x) /\
+   (!x y. H x /\ H y ==> H(prod x y)) /\
+   (!x. H x ==> H(INV(G,prod)x))
+
+OK..
+"(?x. (\m. ?p. m = p times n)x) /\
+ (!x y.
+   (\m. ?p. m = p times n)x /\ (\m. ?p. m = p times n)y ==>
+   (\m. ?p. m = p times n)(x plus y)) /\
+ (!x.
+   (\m. ?p. m = p times n)x ==>
+   (\m. ?p. m = p times n)(INV((\N. T),$plus)x))"
+
+() : void
+
+#expand BETA_TAC;;
+OK..
+"(?x p. x = p times n) /\
+ (!x y.
+   (?p. x = p times n) /\ (?p. y = p times n) ==>
+   (?p. x plus y = p times n)) /\
+ (!x. (?p. x = p times n) ==> (?p. INV((\N. T),$plus)x = p times n))"
+
+() : void
+
+#expand (REPEAT STRIP_TAC);;
+OK..
+3 subgoals
+"?p. INV((\N. T),$plus)x = p times n"
+    [ "x = p times n" ]
+
+"?p. x plus y = p times n"
+    [ "x = p times n" ]
+    [ "y = p' times n" ]
+
+"?x p. x = p times n"
+
+() : void
+
+#expand (EXISTS_TAC "INT 0");;
+OK..
+"?p. INT 0 = p times n"
+
+() : void
+
+#expand (EXISTS_TAC "INT 0");;
+OK..
+"INT 0 = (INT 0) times n"
+
+() : void
+
+#expand (REWRITE_TAC [TIMES_ZERO]);;
+Theorem TIMES_ZERO autoloaded from theory `integer`.
+TIMES_ZERO = 
+|- !M. (M times (INT 0) = INT 0) /\ ((INT 0) times M = INT 0)
+
+OK..
+goal proved
+|- INT 0 = (INT 0) times n
+|- ?p. INT 0 = p times n
+|- ?x p. x = p times n
+
+Previous subproof:
+2 subgoals
+"?p. INV((\N. T),$plus)x = p times n"
+    [ "x = p times n" ]
+
+"?p. x plus y = p times n"
+    [ "x = p times n" ]
+    [ "y = p' times n" ]
+
+() : void
+
+#expand (EXISTS_TAC "p plus p'");;
+OK..
+"x plus y = (p plus p') times n"
+    [ "x = p times n" ]
+    [ "y = p' times n" ]
+
+() : void
+
+#expand (ASM_REWRITE_TAC [RIGHT_PLUS_DISTRIB]);;
+Theorem RIGHT_PLUS_DISTRIB autoloaded from theory `integer`.
+RIGHT_PLUS_DISTRIB = 
+|- !M N P. (M plus N) times P = (M times P) plus (N times P)
+
+OK..
+goal proved
+.. |- x plus y = (p plus p') times n
+.. |- ?p. x plus y = p times n
+
+Previous subproof:
+"?p. INV((\N. T),$plus)x = p times n"
+    [ "x = p times n" ]
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]);;
+OK..
+"?p. neg x = p times n"
+    [ "x = p times n" ]
+
+() : void
+
+#expand (EXISTS_TAC "neg p");;
+OK..
+"neg x = (neg p) times n"
+    [ "x = p times n" ]
+
+() : void
+
+#expand (ASM_REWRITE_TAC[TIMES_neg]);;
+Theorem TIMES_neg autoloaded from theory `integer`.
+TIMES_neg = 
+|- (!M N. M times (neg N) = neg(M times N)) /\
+   (!M N. (neg M) times N = neg(M times N))
+
+OK..
+goal proved
+. |- neg x = (neg p) times n
+. |- ?p. neg x = p times n
+. |- ?p. INV((\N. T),$plus)x = p times n
+|- (?x p. x = p times n) /\
+   (!x y.
+     (?p. x = p times n) /\ (?p. y = p times n) ==>
+     (?p. x plus y = p times n)) /\
+   (!x. (?p. x = p times n) ==> (?p. INV((\N. T),$plus)x = p times n))
+|- (?x. (\m. ?p. m = p times n)x) /\
+   (!x y.
+     (\m. ?p. m = p times n)x /\ (\m. ?p. m = p times n)y ==>
+     (\m. ?p. m = p times n)(x plus y)) /\
+   (!x.
+     (\m. ?p. m = p times n)x ==>
+     (\m. ?p. m = p times n)(INV((\N. T),$plus)x))
+|- SUBGROUP((\N. T),$plus)(int_mult_set n)
+|- !n. NORMAL((\N. T),$plus)(int_mult_set n)
+
+Previous subproof:
+goal proved
+() : void
+
+#let INT_MULT_SET_NORMAL = prove_thm(`INT_MULT_SET_NORMAL`,
+#"!n. NORMAL((\N. T),$plus)(int_mult_set n)",
+#(GEN_TAC THEN (MATCH_MP_IMP_TAC INT_SBGP_NORMAL) THEN
+# (REWRITE_TAC[SUBGROUP_LEMMA;INT_MULT_SET_DEF;integer_as_GROUP]) THEN
+# BETA_TAC THEN (REPEAT STRIP_TAC) THENL
+# [((EXISTS_TAC "INT 0") THEN (EXISTS_TAC "INT 0") THEN
+#  (REWRITE_TAC [TIMES_ZERO]));
+#  ((EXISTS_TAC "p plus p'") THEN
+#   (ASM_REWRITE_TAC [RIGHT_PLUS_DISTRIB]));
+#  ((PURE_ONCE_REWRITE_TAC[(SYM neg_DEF)]) THEN
+#   (EXISTS_TAC "neg p") THEN
+#   (ASM_REWRITE_TAC[TIMES_neg]))]));;
+INT_MULT_SET_NORMAL = |- !n. NORMAL((\N. T),$plus)(int_mult_set n)
+
+#close_theory ();;
+() : void
+
+#quit();;
+faulkner% 

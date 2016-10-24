@@ -1,0 +1,3 @@
+\THEOREM PRE_K_K pre
+|- !k. 0 < k ==> (PRE k) < k
+\ENDTHEOREM

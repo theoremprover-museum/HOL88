@@ -1,0 +1,3 @@
+\THEOREM sqrt TRANSC
+|- !x. sqrt x = root 2 x
+\ENDTHEOREM

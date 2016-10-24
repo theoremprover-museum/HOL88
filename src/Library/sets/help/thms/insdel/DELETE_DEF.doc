@@ -1,0 +1,3 @@
+\THEOREM DELETE_DEF sets
+|- !s x. s DELETE x = s DIFF {{x}}
+\ENDTHEOREM

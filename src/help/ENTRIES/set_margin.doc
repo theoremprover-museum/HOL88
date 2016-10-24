@@ -1,0 +1,28 @@
+\DOC set_margin
+
+\TYPE {set_margin : (int -> int)}
+
+\SYNOPSIS
+Changes the limit on the width of the output produced by the pretty-printer.
+
+\DESCRIBE
+{set_margin i} sets the limit on the width of the output produced by the
+pretty-printer to the integer {i}. The pretty-printer will try to avoid
+exceeding this limit by breaking the text into multiple lines. However it can
+only break at points specified by the functions that send text to it. The
+result of a call to {set_margin} is the value to which the margin was
+previously set.
+
+\FAILURE
+Never fails.
+
+\USES
+Obtaining readable output when using a text window of non-standard width.
+It is a good idea to set the margin to a few characters less than the actual
+width of the window; for example the default is 72 for an 80 character wide
+display.
+
+\SEEALSO
+print_begin, print_end, print_newline, print_break.
+
+\ENDDOC

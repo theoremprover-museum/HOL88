@@ -1,0 +1,45 @@
+\DOC do
+
+\TYPE {$do : (* -> void)}
+
+\SYNOPSIS
+Evaluates an expression for its side-effects.
+
+\DESCRIBE
+The function {do} evaluates its argument (presumably for its side-effects)
+and returns the value {(): void}.
+
+\FAILURE
+Fails iff the evaluation of its argument fails.
+
+\EXAMPLE
+The following shows how an assignment can be evaluated for its
+side-effects:
+{
+   #letref x = 1;;
+   x = 1 : int
+
+   #x := x + 1;;
+   2 : int
+
+   #do (x := x + 1);;
+   () : void
+
+   #x := x + 1;;
+   4 : int
+}
+\COMMENTS
+The use of {do} as if it were a normal ML function should not be confused with
+its role as a syntactic construct in a while loop. For example, following on
+from the above example, consider the following:
+{
+   #while x > 0 do do (x := x - 1);;
+   () : void
+
+   #x;;
+   0 : int
+}
+\noindent In the above, the first {do} is part of the {while} loop, whereas the
+second is function-like.
+
+\ENDDOC

@@ -1,0 +1,33 @@
+\DOC print_end
+
+\TYPE {print_end : (void -> void)}
+
+\SYNOPSIS
+Closes a formatting block.
+
+\DESCRIBE
+This function closes a formatting block initialized
+by {print_begin} or {print_ibegin}. It terminates the offset settings
+that were defined within the block.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+
+{
+#let  example =
+   (print_begin 0;
+    print_string `first`;
+    print_break (0,2);
+    print_string `second`;
+    print_break (0,2);
+    print_end());;
+}
+\noindent It is immediately clear how the function terminates the formatting
+block.
+
+\SEEALSO
+print_begin, print_ibegin
+
+\ENDDOC

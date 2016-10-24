@@ -1,0 +1,3 @@
+\THEOREM convergent SEQ
+|- !f. convergent f = (?l. f --> l)
+\ENDTHEOREM

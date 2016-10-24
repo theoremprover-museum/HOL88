@@ -1,0 +1,3 @@
+\THEOREM NOT_EQ_LIST list
+|- !h1 h2. ~(h1 = h2) ==> (!l1 l2. ~(CONS h1 l1 = CONS h2 l2))
+\ENDTHEOREM

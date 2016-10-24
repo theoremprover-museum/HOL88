@@ -1,0 +1,4 @@
+\THEOREM PREFIX list
+|- (!P. PREFIX P[] = []) /\
+   (!P x l. PREFIX P(CONS x l) = (P x => CONS x(PREFIX P l) | []))
+\ENDTHEOREM

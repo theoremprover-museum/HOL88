@@ -1,0 +1,3 @@
+\THEOREM REAL_LE_ADDR REAL
+|- !x y. x <= (x + y) = (& 0) <= y
+\ENDTHEOREM

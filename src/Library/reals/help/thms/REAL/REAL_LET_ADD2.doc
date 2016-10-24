@@ -1,0 +1,3 @@
+\THEOREM REAL_LET_ADD2 REAL
+|- !w x y z. w <= x /\ y < z ==> (w + y) < (x + z)
+\ENDTHEOREM

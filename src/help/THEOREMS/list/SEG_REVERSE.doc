@@ -1,0 +1,5 @@
+\THEOREM SEG_REVERSE list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==>
+    (SEG n m(REVERSE l) = REVERSE(SEG n((LENGTH l) - (n + m))l))
+\ENDTHEOREM

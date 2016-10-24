@@ -1,0 +1,3 @@
+\THEOREM SING_IFF_EMPTY_REST sets
+|- !s. SING s = ~(s = {{}}) /\ (REST s = {{}})
+\ENDTHEOREM

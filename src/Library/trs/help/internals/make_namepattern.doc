@@ -1,0 +1,10 @@
+\DOC make_namepattern
+
+\TYPE {make_namepattern : ((string # wildchar # wildchar) -> namepattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

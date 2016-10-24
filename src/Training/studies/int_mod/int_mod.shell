@@ -1,0 +1,942 @@
+faulkner% hol88
+
+       _  _    __    _      __    __
+|___   |__|   |  |   |     |__|  |__|
+|      |  |   |__|   |__   |__|  |__|
+
+  Version 1.07, built on Jul 13 1989
+
+#new_theory `int_mod`;;
+() : void
+
+#load_library `group`;;
+Loading library `group` ...
+[fasl /home/unagi/elsa/hol/hol88/Library/group/group_ml.o]
+Theory more_gp loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+..........................................[fasl /home/unagi/elsa/hol/hol88/Library/group/group_tac_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+GROUP_TAC = - : (thm list -> tactic)
+
+GROUP_ELT_TAC = - : tactic
+
+GROUP_RIGHT_ASSOC_TAC = - : (term -> tactic)
+
+GROUP_LEFT_ASSOC_TAC = - : (term -> tactic)
+
+File group_tac loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/group/inst_gp_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+return_GROUP_thm = - : (string -> thm -> proof)
+
+include_GROUP_thm = - : (string -> string -> thm -> proof)
+
+return_GROUP_theory = 
+-
+: (string -> thm -> thm list -> (string # thm) list)
+
+include_GROUP_theory = - : (string -> thm -> thm list -> void)
+
+File inst_gp loaded
+.
+Library `group` loaded.
+() : void
+
+#load_library `integer`;;
+Loading library `integer` ...
+[fasl /home/unagi/elsa/hol/hol88/Library/integer/integer_ml.o]
+Theory integer loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+........................................[fasl /home/unagi/elsa/hol/hol88/Library/integer/num_tac_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+GEN_INDUCT_RULE = - : (thm -> thm -> thm)
+
+GEN_INDUCT_TAC = - : tactic
+
+File num_tac loaded
+.[fasl /home/unagi/elsa/hol/hol88/Library/integer/integer_tac_ml.o]
+
+[fasl /home/unagi/elsa/hol/hol88/Library/group/start_groups_ml.o]
+.......................................() : void
+
+INT_CASES_RULE = - : (thm -> thm -> thm)
+
+INT_CASES_TAC = - : tactic
+
+SIMPLE_INT_CASES_RULE = - : (thm -> thm -> thm -> thm)
+
+SIMPLE_INT_CASES_TAC = - : tactic
+
+INT_MIN_RULE = - : (thm -> thm -> thm)
+
+INT_MIN_TAC = - : (term -> tactic)
+
+INT_MAX_RULE = - : (thm -> thm -> thm)
+
+INT_MAX_TAC = - : (term -> tactic)
+
+INT_RIGHT_ASSOC_TAC = - : (term -> tactic)
+
+INT_LEFT_ASSOC_TAC = - : (term -> tactic)
+
+File integer_tac loaded
+...
+Library `integer` loaded.
+() : void
+
+#new_parent `int_sbgp`;;
+Theory int_sbgp loaded
+() : void
+
+#include_theory `int_sbgp`;;
+() : void
+
+#let INT_MOD_DEF = new_definition(`INT_MOD_DEF`,
+#"int_mod n = quot_set((\N.T),plus)(int_mult_set n)");;
+INT_MOD_DEF = |- !n. int_mod n = quot_set((\N. T),$plus)(int_mult_set n)
+
+#let PLUS_MOD_DEF = new_definition(`PLUS_MOD_DEF`,
+#"plus_mod n = quot_prod((\N.T),plus)(int_mult_set n)");;
+PLUS_MOD_DEF = 
+|- !n. plus_mod n = quot_prod((\N. T),$plus)(int_mult_set n)
+
+#let MOD_DEF = new_definition(`MOD_DEF`,
+#"mod n m = LEFT_COSET((\N.T),$plus)(int_mult_set n)m");;
+MOD_DEF = |- !n m. mod n m = LEFT_COSET((\N. T),$plus)(int_mult_set n)m
+
+#set_goal([],"(!m.int_mod n (mod n m)) /\
+#             (int_mod n q ==> ?m.(q = mod n m))");;
+"(!m. int_mod n(mod n m)) /\ (int_mod n q ==> (?m. q = mod n m))"
+
+() : void
+
+#expand (REWRITE_TAC
+#         [INT_MOD_DEF;MOD_DEF;QUOTIENT_SET_DEF;INT_MULT_SET_NORMAL]);;
+Theorem INT_MULT_SET_NORMAL autoloaded from theory `int_sbgp`.
+INT_MULT_SET_NORMAL = |- !n. NORMAL((\N. T),$plus)(int_mult_set n)
+
+Definition QUOTIENT_SET_DEF autoloaded from theory `more_gp`.
+QUOTIENT_SET_DEF = 
+|- !G prod N q.
+    quot_set(G,prod)N q =
+    NORMAL(G,prod)N /\ (?x. G x /\ (q = LEFT_COSET(G,prod)N x))
+
+OK..
+"!m.
+  ?x.
+   LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+   LEFT_COSET((\N. T),$plus)(int_mult_set n)x"
+
+() : void
+
+#expand (GEN_TAC THEN (EXISTS_TAC "m:integer") THEN REFL_TAC);;
+OK..
+goal proved
+|- !m.
+    ?x.
+     LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+     LEFT_COSET((\N. T),$plus)(int_mult_set n)x
+|- (!m. int_mod n(mod n m)) /\ (int_mod n q ==> (?m. q = mod n m))
+
+Previous subproof:
+goal proved
+() : void
+
+#let INT_MOD_MOD_LEMMA = prove_thm(`INT_MOD_MOD_LEMMA`,
+#"(!m.int_mod n (mod n m)) /\ (int_mod n q ==> ?m.(q = mod n m))",
+#((REWRITE_TAC
+#  [INT_MOD_DEF;MOD_DEF;QUOTIENT_SET_DEF;INT_MULT_SET_NORMAL]) THEN
+# GEN_TAC THEN (EXISTS_TAC "m:integer") THEN REFL_TAC));;
+INT_MOD_MOD_LEMMA = 
+|- (!m. int_mod n(mod n m)) /\ (int_mod n q ==> (?m. q = mod n m))
+
+#set_goal([],"!x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)");;
+"!x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)"
+
+() : void
+
+#expand (REWRITE_TAC [PLUS_MOD_DEF;MOD_DEF]);;
+OK..
+"!x y.
+  quot_prod
+  ((\N. T),$plus)
+  (int_mult_set n)
+  (LEFT_COSET((\N. T),$plus)(int_mult_set n)x)
+  (LEFT_COSET((\N. T),$plus)(int_mult_set n)y) =
+  LEFT_COSET((\N. T),$plus)(int_mult_set n)(x plus y)"
+
+() : void
+
+#expand (MATCH_MP_IMP_TAC (UNDISCH QUOT_PROD));;
+Theorem QUOT_PROD autoloaded from theory `more_gp`.
+QUOT_PROD = 
+|- NORMAL(G,prod)N ==>
+   (!x y.
+     G x /\ G y ==>
+     (quot_prod(G,prod)N(LEFT_COSET(G,prod)N x)(LEFT_COSET(G,prod)N y) =
+      LEFT_COSET(G,prod)N(prod x y)))
+
+OK..
+2 subgoals
+"NORMAL((\N. T),$plus)(int_mult_set n)"
+
+"(\N. T)x /\ (\N. T)y"
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand (REWRITE_TAC []);;
+OK..
+goal proved
+|- (\N. T)x /\ (\N. T)y
+
+Previous subproof:
+"NORMAL((\N. T),$plus)(int_mult_set n)"
+
+() : void
+
+#expand (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL));;
+OK..
+goal proved
+|- NORMAL((\N. T),$plus)(int_mult_set n)
+|- !x y.
+    quot_prod
+    ((\N. T),$plus)
+    (int_mult_set n)
+    (LEFT_COSET((\N. T),$plus)(int_mult_set n)x)
+    (LEFT_COSET((\N. T),$plus)(int_mult_set n)y) =
+    LEFT_COSET((\N. T),$plus)(int_mult_set n)(x plus y)
+|- !x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)
+
+Previous subproof:
+goal proved
+() : void
+
+#let PLUS_MOD_LEMMA = prove_thm(`PLUS_MOD_LEMMA`,
+# "!x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)",
+#((REWRITE_TAC [PLUS_MOD_DEF;MOD_DEF]) THEN
+# (MATCH_MP_IMP_TAC (UNDISCH QUOT_PROD)) THENL
+# [(REWRITE_TAC []);
+#  (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL))]));;
+PLUS_MOD_LEMMA = |- !x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)
+
+#set_goal([],"GROUP(int_mod n,plus_mod n)");;
+"GROUP(int_mod n,plus_mod n)"
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]);;
+OK..
+"GROUP
+ (quot_set((\N. T),$plus)(int_mult_set n),
+  quot_prod((\N. T),$plus)(int_mult_set n))"
+
+() : void
+
+#expand (MATCH_MP_IMP_TAC QUOTIENT_GROUP);;
+Theorem QUOTIENT_GROUP autoloaded from theory `more_gp`.
+QUOTIENT_GROUP = 
+|- NORMAL(G,prod)N ==> GROUP(quot_set(G,prod)N,quot_prod(G,prod)N)
+
+OK..
+"NORMAL((\N. T),$plus)(int_mult_set n)"
+
+() : void
+
+#expand (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL));;
+OK..
+goal proved
+|- NORMAL((\N. T),$plus)(int_mult_set n)
+|- GROUP
+   (quot_set((\N. T),$plus)(int_mult_set n),
+    quot_prod((\N. T),$plus)(int_mult_set n))
+|- GROUP(int_mod n,plus_mod n)
+
+Previous subproof:
+goal proved
+() : void
+
+#let int_mod_as_GROUP = prove_thm(`int_mod_as_GROUP`,
+#"GROUP(int_mod n,plus_mod n)",
+#((PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]) THEN
+# (MATCH_MP_IMP_TAC QUOTIENT_GROUP) THEN
+# (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL))));;
+int_mod_as_GROUP = |- GROUP(int_mod n,plus_mod n)
+
+#set_goal([],"mod n = NAT_HOM((\N.T),$plus)(int_mult_set n)");;
+"mod n = NAT_HOM((\N. T),$plus)(int_mult_set n)"
+
+() : void
+
+#expand (EXT_TAC "m:integer");;
+OK..
+"!m. mod n m = NAT_HOM((\N. T),$plus)(int_mult_set n)m"
+
+() : void
+
+#expand (REWRITE_TAC [NAT_HOM_DEF;MOD_DEF]);;
+Definition NAT_HOM_DEF autoloaded from theory `more_gp`.
+NAT_HOM_DEF = 
+|- !G prod N x.
+    NAT_HOM(G,prod)N x =
+    (\y. GROUP(G,prod) /\ NORMAL(G,prod)N /\ LEFT_COSET(G,prod)N x y)
+
+OK..
+"!m.
+  LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+  (\y.
+    GROUP((\N. T),$plus) /\
+    NORMAL((\N. T),$plus)(int_mult_set n) /\
+    LEFT_COSET((\N. T),$plus)(int_mult_set n)m y)"
+
+() : void
+
+#expand (REWRITE_TAC [integer_as_GROUP;INT_MULT_SET_NORMAL;ETA_AX]);;
+Theorem integer_as_GROUP autoloaded from theory `integer`.
+integer_as_GROUP = |- GROUP((\N. T),$plus)
+
+OK..
+goal proved
+|- !m.
+    LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+    (\y.
+      GROUP((\N. T),$plus) /\
+      NORMAL((\N. T),$plus)(int_mult_set n) /\
+      LEFT_COSET((\N. T),$plus)(int_mult_set n)m y)
+|- !m. mod n m = NAT_HOM((\N. T),$plus)(int_mult_set n)m
+|- mod n = NAT_HOM((\N. T),$plus)(int_mult_set n)
+
+Previous subproof:
+goal proved
+() : void
+
+#let MOD_NAT_HOM_LEMMA = prove_thm(`MOD_NAT_HOM_LEMMA`,
+#"mod n = NAT_HOM((\N.T),$plus)(int_mult_set n)",
+#((EXT_TAC "m:integer") THEN
+# (REWRITE_TAC [NAT_HOM_DEF;MOD_DEF]) THEN
+# (REWRITE_TAC [integer_as_GROUP;INT_MULT_SET_NORMAL;ETA_AX])));;
+MOD_NAT_HOM_LEMMA = |- mod n = NAT_HOM((\N. T),$plus)(int_mult_set n)
+
+#set_goal([],"ID(int_mod n,plus_mod n) = mod n (INT 0)");;
+"ID(int_mod n,plus_mod n) = mod n(INT 0)"
+
+() : void
+
+#expand (ASSUME_LIST_TAC
+#  [integer_as_GROUP;int_mod_as_GROUP;(SPEC_ALL INT_MULT_SET_NORMAL)]);;
+OK..
+"ID(int_mod n,plus_mod n) = mod n(INT 0)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand (REWRITE_TAC [MOD_NAT_HOM_LEMMA]);;
+OK..
+"ID(int_mod n,plus_mod n) =
+ NAT_HOM((\N. T),$plus)(int_mult_set n)(INT 0)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand ((PURE_ONCE_REWRITE_TAC[(SYM ID_EQ_0)]) THEN
+#  (NEW_MATCH_ACCEPT_TAC
+#     (SYM (CONJUNCT1 (UNDISCH HOM_ID_INV_LEMMA)))));;
+Theorem HOM_ID_INV_LEMMA autoloaded from theory `more_gp`.
+HOM_ID_INV_LEMMA = 
+|- GP_HOM(G1,prod1)(G2,prod2)f ==>
+   (f(ID(G1,prod1)) = ID(G2,prod2)) /\
+   (!x. G1 x ==> (f(INV(G1,prod1)x) = INV(G2,prod2)(f x)))
+
+Theorem ID_EQ_0 autoloaded from theory `integer`.
+ID_EQ_0 = |- ID((\N. T),$plus) = INT 0
+
+OK..
+"GP_HOM
+ ((\N. T),$plus)
+ (int_mod n,plus_mod n)
+ (NAT_HOM((\N. T),$plus)(int_mult_set n))"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]);;
+OK..
+"GP_HOM
+ ((\N. T),$plus)
+ (quot_set((\N. T),$plus)(int_mult_set n),
+  quot_prod((\N. T),$plus)(int_mult_set n))
+ (NAT_HOM((\N. T),$plus)(int_mult_set n))"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand (NEW_MATCH_ACCEPT_TAC (CONJUNCT1 (UNDISCH NAT_HOM_THM)));;
+Theorem NAT_HOM_THM autoloaded from theory `more_gp`.
+NAT_HOM_THM = 
+|- GROUP(G,prod) /\ NORMAL(G,prod)N ==>
+   GP_HOM
+   (G,prod)
+   (quot_set(G,prod)N,quot_prod(G,prod)N)
+   (NAT_HOM(G,prod)N) /\
+   (!q.
+     (?x. G x /\ (q = LEFT_COSET(G,prod)N x)) ==>
+     (?x. G x /\ (q = NAT_HOM(G,prod)N x))) /\
+   (KERNEL
+    (G,prod)
+    (quot_set(G,prod)N,quot_prod(G,prod)N)
+    (NAT_HOM(G,prod)N) =
+    N)
+
+OK..
+"GROUP((\N. T),$plus) /\ NORMAL((\N. T),$plus)(int_mult_set n)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand (ASM_REWRITE_TAC []);;
+OK..
+goal proved
+.. |- GROUP((\N. T),$plus) /\ NORMAL((\N. T),$plus)(int_mult_set n)
+.. |- GP_HOM
+      ((\N. T),$plus)
+      (quot_set((\N. T),$plus)(int_mult_set n),
+       quot_prod((\N. T),$plus)(int_mult_set n))
+      (NAT_HOM((\N. T),$plus)(int_mult_set n))
+.. |- GP_HOM
+      ((\N. T),$plus)
+      (int_mod n,plus_mod n)
+      (NAT_HOM((\N. T),$plus)(int_mult_set n))
+.. |- ID(int_mod n,plus_mod n) =
+      NAT_HOM((\N. T),$plus)(int_mult_set n)(INT 0)
+.. |- ID(int_mod n,plus_mod n) = mod n(INT 0)
+|- ID(int_mod n,plus_mod n) = mod n(INT 0)
+
+Previous subproof:
+goal proved
+() : void
+
+#let ID_EQ_MOD_0 = prove_thm(`ID_EQ_MOD_0`,
+#"ID(int_mod n,plus_mod n) = mod n (INT 0)",
+#((ASSUME_LIST_TAC
+#  [integer_as_GROUP;int_mod_as_GROUP;
+#   (SPEC_ALL INT_MULT_SET_NORMAL)]) THEN
+# (REWRITE_TAC [MOD_NAT_HOM_LEMMA]) THEN
+# (PURE_ONCE_REWRITE_TAC[(SYM ID_EQ_0)]) THEN
+# (NEW_MATCH_ACCEPT_TAC
+#  (SYM (CONJUNCT1 (UNDISCH HOM_ID_INV_LEMMA)))) THEN
+# (PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]) THEN
+# (NEW_MATCH_ACCEPT_TAC (CONJUNCT1 (UNDISCH NAT_HOM_THM))) THEN
+# (ASM_REWRITE_TAC [])));;
+ID_EQ_MOD_0 = |- ID(int_mod n,plus_mod n) = mod n(INT 0)
+
+#set_goal([],"!m.(INV(int_mod n,plus_mod n)(mod n m) = mod n (neg m))");;
+"!m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)"
+
+() : void
+
+#expand (ASSUME_LIST_TAC
+#  [integer_as_GROUP;int_mod_as_GROUP;(SPEC_ALL INT_MULT_SET_NORMAL)]);;
+OK..
+"!m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand (REWRITE_TAC [MOD_NAT_HOM_LEMMA]);;
+OK..
+"!m.
+  INV(int_mod n,plus_mod n)(NAT_HOM((\N. T),$plus)(int_mult_set n)m) =
+  NAT_HOM((\N. T),$plus)(int_mult_set n)(neg m)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand ((PURE_ONCE_REWRITE_TAC[neg_DEF]) THEN
+#   (NEW_MATCH_ACCEPT_TAC (SYM (UNDISCH (SPEC_ALL
+#      (CONJUNCT2 (UNDISCH HOM_ID_INV_LEMMA)))))));;
+Definition neg_DEF autoloaded from theory `integer`.
+neg_DEF = |- neg = INV((\N. T),$plus)
+
+OK..
+2 subgoals
+"(\N. T)m"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+"GP_HOM
+ ((\N. T),$plus)
+ (int_mod n,plus_mod n)
+ (NAT_HOM((\N. T),$plus)(int_mult_set n))"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+    [ "(\N. T)m" ]
+
+() : void
+
+#expand (PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]);;
+OK..
+"GP_HOM
+ ((\N. T),$plus)
+ (quot_set((\N. T),$plus)(int_mult_set n),
+  quot_prod((\N. T),$plus)(int_mult_set n))
+ (NAT_HOM((\N. T),$plus)(int_mult_set n))"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+    [ "(\N. T)m" ]
+
+() : void
+
+#expand (NEW_MATCH_ACCEPT_TAC (CONJUNCT1 (UNDISCH NAT_HOM_THM)));;
+OK..
+"GROUP((\N. T),$plus) /\ NORMAL((\N. T),$plus)(int_mult_set n)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+    [ "(\N. T)m" ]
+
+() : void
+
+#expand (ASM_REWRITE_TAC []);;
+OK..
+goal proved
+.. |- GROUP((\N. T),$plus) /\ NORMAL((\N. T),$plus)(int_mult_set n)
+.. |- GP_HOM
+      ((\N. T),$plus)
+      (quot_set((\N. T),$plus)(int_mult_set n),
+       quot_prod((\N. T),$plus)(int_mult_set n))
+      (NAT_HOM((\N. T),$plus)(int_mult_set n))
+.. |- GP_HOM
+      ((\N. T),$plus)
+      (int_mod n,plus_mod n)
+      (NAT_HOM((\N. T),$plus)(int_mult_set n))
+
+Previous subproof:
+"(\N. T)m"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+
+#expand (REWRITE_TAC []);;
+OK..
+goal proved
+|- (\x. T)m
+.. |- !m.
+       INV
+       (int_mod n,plus_mod n)
+       (NAT_HOM((\N. T),$plus)(int_mult_set n)m) =
+       NAT_HOM((\N. T),$plus)(int_mult_set n)(neg m)
+.. |- !m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)
+|- !m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)
+
+Previous subproof:
+goal proved
+() : void
+
+#let INV_EQ_MOD_NEG = prove_thm(`INV_EQ_MOD_NEG`,
+#"!m.(INV(int_mod n,plus_mod n)(mod n m) = mod n (neg m))",
+#((ASSUME_LIST_TAC
+#  [integer_as_GROUP;int_mod_as_GROUP;
+#   (SPEC_ALL INT_MULT_SET_NORMAL)]) THEN
+# (REWRITE_TAC [MOD_NAT_HOM_LEMMA]) THEN
+# (PURE_ONCE_REWRITE_TAC[neg_DEF]) THEN
+# (NEW_MATCH_ACCEPT_TAC (SYM (UNDISCH (SPEC_ALL
+#    (CONJUNCT2 (UNDISCH HOM_ID_INV_LEMMA)))))) THENL
+# [((PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]) THEN
+#   (NEW_MATCH_ACCEPT_TAC (CONJUNCT1 (UNDISCH NAT_HOM_THM))) THEN
+#   (ASM_REWRITE_TAC []));
+#  (REWRITE_TAC [])]));;
+INV_EQ_MOD_NEG = 
+|- !m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)
+
+#let MINUS_MOD_DEF = new_definition(`MINUS_MOD_DEF`,
+#"minus_mod n m p = plus_mod n m (INV(int_mod n,plus_mod n)p)");;
+MINUS_MOD_DEF = 
+|- !n m p. minus_mod n m p = plus_mod n m(INV(int_mod n,plus_mod n)p)
+
+#set_goal([], "!m p. minus_mod n (mod n m) (mod n p) = mod n (m minus p)");;
+"!m p. minus_mod n(mod n m)(mod n p) = mod n(m minus p)"
+
+() : void
+
+#expand (REWRITE_TAC [MINUS_MOD_DEF;INV_EQ_MOD_NEG;
+#	   MINUS_DEF;PLUS_MOD_LEMMA]);;
+Definition MINUS_DEF autoloaded from theory `integer`.
+MINUS_DEF = |- !M N. M minus N = M plus (neg N)
+
+OK..
+goal proved
+|- !m p. minus_mod n(mod n m)(mod n p) = mod n(m minus p)
+
+Previous subproof:
+goal proved
+() : void
+
+#let MINUS_MOD_LEMMA = prove_thm(`MINUS_MOD_LEMMA`,
+#"!m p. minus_mod n (mod n m) (mod n p) = mod n (m minus p)",
+#(REWRITE_TAC [MINUS_MOD_DEF;INV_EQ_MOD_NEG;
+#              MINUS_DEF;PLUS_MOD_LEMMA]));;
+MINUS_MOD_LEMMA = 
+|- !m p. minus_mod n(mod n m)(mod n p) = mod n(m minus p)
+
+#let thm_list = return_GROUP_theory `INT_MOD` int_mod_as_GROUP
+# [ID_EQ_MOD_0;(SYM (SPEC_ALL MINUS_MOD_DEF))];;
+thm_list = 
+[(`INT_MOD_CLOSURE`,
+  |- !x y. int_mod n x /\ int_mod n y ==> int_mod n(plus_mod n x y));
+ (`INT_MOD_GROUP_ASSOC`,
+  |- !x y z.
+      int_mod n x /\ int_mod n y /\ int_mod n z ==>
+      (plus_mod n(plus_mod n x y)z = plus_mod n x(plus_mod n y z)));
+ (`INT_MOD_ID_LEMMA`,
+  |- int_mod n(mod n(INT 0)) /\
+     (!x. int_mod n x ==> (plus_mod n(mod n(INT 0))x = x)) /\
+     (!x. int_mod n x ==> (plus_mod n x(mod n(INT 0)) = x)) /\
+     (!x.
+       int_mod n x ==>
+       (?y. int_mod n y /\ (plus_mod n y x = mod n(INT 0)))));
+ (`INT_MOD_INV_CLOSURE`,
+  |- !x. int_mod n x ==> int_mod n(INV(int_mod n,plus_mod n)x));
+ (`INT_MOD_LEFT_RIGHT_INV`,
+  |- !x y.
+      int_mod n x /\ int_mod n y ==>
+      (plus_mod n y x = mod n(INT 0)) ==>
+      (plus_mod n x y = mod n(INT 0)));
+ (`INT_MOD_INV_LEMMA`,
+  |- !x.
+      int_mod n x ==>
+      (plus_mod n(INV(int_mod n,plus_mod n)x)x = mod n(INT 0)) /\
+      (minus_mod n x x = mod n(INT 0)));
+ (`INT_MOD_LEFT_CANCELLATION`,
+  |- !x y z.
+      int_mod n x /\ int_mod n y /\ int_mod n z ==>
+      (plus_mod n x y = plus_mod n x z) ==>
+      (y = z));
+ (`INT_MOD_RIGHT_CANCELLATION`,
+  |- !x y z.
+      int_mod n x /\ int_mod n y /\ int_mod n z ==>
+      (plus_mod n y x = plus_mod n z x) ==>
+      (y = z));
+ (`INT_MOD_RIGHT_ONE_ONE_ONTO`,
+  |- !x y.
+      int_mod n x /\ int_mod n y ==>
+      (?z.
+        int_mod n z /\
+        (plus_mod n x z = y) /\
+        (!u. int_mod n u /\ (plus_mod n x u = y) ==> (u = z))));
+ (`INT_MOD_LEFT_ONE_ONE_ONTO`,
+  |- !x y.
+      int_mod n x /\ int_mod n y ==>
+      (?z.
+        int_mod n z /\
+        (plus_mod n z x = y) /\
+        (!u. int_mod n u /\ (plus_mod n u x = y) ==> (u = z))));
+ (`INT_MOD_UNIQUE_ID`,
+  |- !e.
+      int_mod n e /\
+      ((?x. int_mod n x /\ (plus_mod n e x = x)) \/
+       (?x. int_mod n x /\ (plus_mod n x e = x))) ==>
+      (e = mod n(INT 0)));
+ (`INT_MOD_UNIQUE_INV`,
+  |- !x.
+      int_mod n x ==>
+      (!u.
+        int_mod n u /\ (plus_mod n u x = mod n(INT 0)) ==>
+        (u = INV(int_mod n,plus_mod n)x)));
+ (`INT_MOD_INV_ID_LEMMA`,
+  |- INV(int_mod n,plus_mod n)(mod n(INT 0)) = mod n(INT 0));
+ (`INT_MOD_INV_INV_LEMMA`,
+  |- !x.
+      int_mod n x ==>
+      (INV(int_mod n,plus_mod n)(INV(int_mod n,plus_mod n)x) = x));
+ (`INT_MOD_DIST_INV_LEMMA`,
+  |- !x y.
+      int_mod n x /\ int_mod n y ==>
+      (minus_mod n(INV(int_mod n,plus_mod n)x)y =
+       INV(int_mod n,plus_mod n)(plus_mod n y x)))]
+: (string # thm) list
+
+#let thl1 = map (\ (name,thm).(name,
+#(IMP_CANON thm) and_then
+# (map (\thm1.
+#  (STRONG_INST
+#   [("mod n m1","x:integer -> bool");
+#    ("mod n m2","y:integer -> bool");
+#    ("mod n m3","z:integer -> bool")] thm1) and_then
+#  (REWRITE_RULE[(CONJUNCT1 INT_MOD_MOD_LEMMA);
+#                 INV_EQ_MOD_NEG]))))) thm_list;;
+thl1 = 
+[(`INT_MOD_CLOSURE`, [|- int_mod n(plus_mod n(mod n m1)(mod n m2))]);
+ (`INT_MOD_GROUP_ASSOC`,
+  [|- plus_mod n(plus_mod n(mod n m1)(mod n m2))(mod n m3) =
+      plus_mod n(mod n m1)(plus_mod n(mod n m2)(mod n m3))]);
+ (`INT_MOD_ID_LEMMA`,
+  [|- T;
+   |- plus_mod n(mod n(INT 0))(mod n m1) = mod n m1;
+   |- plus_mod n(mod n m1)(mod n(INT 0)) = mod n m1;
+   |- ?y. int_mod n y /\ (plus_mod n y(mod n m1) = mod n(INT 0))]);
+ (`INT_MOD_INV_CLOSURE`, [|- T]);
+ (`INT_MOD_LEFT_RIGHT_INV`,
+  [|- (plus_mod n(mod n m2)(mod n m1) = mod n(INT 0)) ==>
+      (plus_mod n(mod n m1)(mod n m2) = mod n(INT 0))]);
+ (`INT_MOD_INV_LEMMA`,
+  [|- plus_mod n(mod n(neg m1))(mod n m1) = mod n(INT 0);
+   |- minus_mod n(mod n m1)(mod n m1) = mod n(INT 0)]);
+ (`INT_MOD_LEFT_CANCELLATION`,
+  [|- (plus_mod n(mod n m1)(mod n m2) = plus_mod n(mod n m1)(mod n m3)) ==>
+      (mod n m2 = mod n m3)]);
+ (`INT_MOD_RIGHT_CANCELLATION`,
+  [|- (plus_mod n(mod n m2)(mod n m1) = plus_mod n(mod n m3)(mod n m1)) ==>
+      (mod n m2 = mod n m3)]);
+ (`INT_MOD_RIGHT_ONE_ONE_ONTO`,
+  [|- ?z.
+       int_mod n z /\
+       (plus_mod n(mod n m1)z = mod n m2) /\
+       (!u.
+         int_mod n u /\ (plus_mod n(mod n m1)u = mod n m2) ==> (u = z))]);
+ (`INT_MOD_LEFT_ONE_ONE_ONTO`,
+  [|- ?z.
+       int_mod n z /\
+       (plus_mod n z(mod n m1) = mod n m2) /\
+       (!u.
+         int_mod n u /\ (plus_mod n u(mod n m1) = mod n m2) ==> (u = z))]);
+ (`INT_MOD_UNIQUE_ID`,
+  [|- int_mod n e ==>
+      (plus_mod n e(mod n m1) = mod n m1) ==>
+      (e = mod n(INT 0));
+   |- int_mod n e ==>
+      (plus_mod n(mod n m1)e = mod n m1) ==>
+      (e = mod n(INT 0))]);
+ (`INT_MOD_UNIQUE_INV`,
+  [|- int_mod n u ==>
+      (plus_mod n u(mod n m1) = mod n(INT 0)) ==>
+      (u = mod n(neg m1))]);
+ (`INT_MOD_INV_ID_LEMMA`, [|- mod n(neg(INT 0)) = mod n(INT 0)]);
+ (`INT_MOD_INV_INV_LEMMA`, [|- mod n(neg(neg m1)) = mod n m1]);
+ (`INT_MOD_DIST_INV_LEMMA`,
+  [|- minus_mod n(mod n(neg m1))(mod n m2) =
+      INV(int_mod n,plus_mod n)(plus_mod n(mod n m2)(mod n m1))])]
+: (string # thm list) list
+
+#let thl2 = map (\ (name,thl).(name,
+# (LIST_CONJ thl) and_then (REWRITE_RULE []))) thl1;;
+thl2 = 
+[(`INT_MOD_CLOSURE`, |- int_mod n(plus_mod n(mod n m1)(mod n m2)));
+ (`INT_MOD_GROUP_ASSOC`,
+  |- plus_mod n(plus_mod n(mod n m1)(mod n m2))(mod n m3) =
+     plus_mod n(mod n m1)(plus_mod n(mod n m2)(mod n m3)));
+ (`INT_MOD_ID_LEMMA`,
+  |- (plus_mod n(mod n(INT 0))(mod n m1) = mod n m1) /\
+     (plus_mod n(mod n m1)(mod n(INT 0)) = mod n m1) /\
+     (?y. int_mod n y /\ (plus_mod n y(mod n m1) = mod n(INT 0))));
+ (`INT_MOD_INV_CLOSURE`, |- T);
+ (`INT_MOD_LEFT_RIGHT_INV`,
+  |- (plus_mod n(mod n m2)(mod n m1) = mod n(INT 0)) ==>
+     (plus_mod n(mod n m1)(mod n m2) = mod n(INT 0)));
+ (`INT_MOD_INV_LEMMA`,
+  |- (plus_mod n(mod n(neg m1))(mod n m1) = mod n(INT 0)) /\
+     (minus_mod n(mod n m1)(mod n m1) = mod n(INT 0)));
+ (`INT_MOD_LEFT_CANCELLATION`,
+  |- (plus_mod n(mod n m1)(mod n m2) = plus_mod n(mod n m1)(mod n m3)) ==>
+     (mod n m2 = mod n m3));
+ (`INT_MOD_RIGHT_CANCELLATION`,
+  |- (plus_mod n(mod n m2)(mod n m1) = plus_mod n(mod n m3)(mod n m1)) ==>
+     (mod n m2 = mod n m3));
+ (`INT_MOD_RIGHT_ONE_ONE_ONTO`,
+  |- ?z.
+      int_mod n z /\
+      (plus_mod n(mod n m1)z = mod n m2) /\
+      (!u.
+        int_mod n u /\ (plus_mod n(mod n m1)u = mod n m2) ==> (u = z)));
+ (`INT_MOD_LEFT_ONE_ONE_ONTO`,
+  |- ?z.
+      int_mod n z /\
+      (plus_mod n z(mod n m1) = mod n m2) /\
+      (!u.
+        int_mod n u /\ (plus_mod n u(mod n m1) = mod n m2) ==> (u = z)));
+ (`INT_MOD_UNIQUE_ID`,
+  |- (int_mod n e ==>
+      (plus_mod n e(mod n m1) = mod n m1) ==>
+      (e = mod n(INT 0))) /\
+     (int_mod n e ==>
+      (plus_mod n(mod n m1)e = mod n m1) ==>
+      (e = mod n(INT 0))));
+ (`INT_MOD_UNIQUE_INV`,
+  |- int_mod n u ==>
+     (plus_mod n u(mod n m1) = mod n(INT 0)) ==>
+     (u = mod n(neg m1)));
+ (`INT_MOD_INV_ID_LEMMA`, |- mod n(neg(INT 0)) = mod n(INT 0));
+ (`INT_MOD_INV_INV_LEMMA`, |- mod n(neg(neg m1)) = mod n m1);
+ (`INT_MOD_DIST_INV_LEMMA`,
+  |- minus_mod n(mod n(neg m1))(mod n m2) =
+     INV(int_mod n,plus_mod n)(plus_mod n(mod n m2)(mod n m1)))]
+: (string # thm) list
+
+#let thl3 = map (\ (name,thm).(name,
+# GENL (filter (\x.not(x = "n:integer")) (frees (concl thm))) thm))
+# thl2;;
+thl3 = 
+[(`INT_MOD_CLOSURE`,
+  |- !m1 m2. int_mod n(plus_mod n(mod n m1)(mod n m2)));
+ (`INT_MOD_GROUP_ASSOC`,
+  |- !m1 m2 m3.
+      plus_mod n(plus_mod n(mod n m1)(mod n m2))(mod n m3) =
+      plus_mod n(mod n m1)(plus_mod n(mod n m2)(mod n m3)));
+ (`INT_MOD_ID_LEMMA`,
+  |- !m1.
+      (plus_mod n(mod n(INT 0))(mod n m1) = mod n m1) /\
+      (plus_mod n(mod n m1)(mod n(INT 0)) = mod n m1) /\
+      (?y. int_mod n y /\ (plus_mod n y(mod n m1) = mod n(INT 0))));
+ (`INT_MOD_INV_CLOSURE`, |- T);
+ (`INT_MOD_LEFT_RIGHT_INV`,
+  |- !m2 m1.
+      (plus_mod n(mod n m2)(mod n m1) = mod n(INT 0)) ==>
+      (plus_mod n(mod n m1)(mod n m2) = mod n(INT 0)));
+ (`INT_MOD_INV_LEMMA`,
+  |- !m1.
+      (plus_mod n(mod n(neg m1))(mod n m1) = mod n(INT 0)) /\
+      (minus_mod n(mod n m1)(mod n m1) = mod n(INT 0)));
+ (`INT_MOD_LEFT_CANCELLATION`,
+  |- !m1 m2 m3.
+      (plus_mod n(mod n m1)(mod n m2) = plus_mod n(mod n m1)(mod n m3)) ==>
+      (mod n m2 = mod n m3));
+ (`INT_MOD_RIGHT_CANCELLATION`,
+  |- !m2 m1 m3.
+      (plus_mod n(mod n m2)(mod n m1) = plus_mod n(mod n m3)(mod n m1)) ==>
+      (mod n m2 = mod n m3));
+ (`INT_MOD_RIGHT_ONE_ONE_ONTO`,
+  |- !m1 m2.
+      ?z.
+       int_mod n z /\
+       (plus_mod n(mod n m1)z = mod n m2) /\
+       (!u.
+         int_mod n u /\ (plus_mod n(mod n m1)u = mod n m2) ==> (u = z)));
+ (`INT_MOD_LEFT_ONE_ONE_ONTO`,
+  |- !m1 m2.
+      ?z.
+       int_mod n z /\
+       (plus_mod n z(mod n m1) = mod n m2) /\
+       (!u.
+         int_mod n u /\ (plus_mod n u(mod n m1) = mod n m2) ==> (u = z)));
+ (`INT_MOD_UNIQUE_ID`,
+  |- !e m1.
+      (int_mod n e ==>
+       (plus_mod n e(mod n m1) = mod n m1) ==>
+       (e = mod n(INT 0))) /\
+      (int_mod n e ==>
+       (plus_mod n(mod n m1)e = mod n m1) ==>
+       (e = mod n(INT 0))));
+ (`INT_MOD_UNIQUE_INV`,
+  |- !u m1.
+      int_mod n u ==>
+      (plus_mod n u(mod n m1) = mod n(INT 0)) ==>
+      (u = mod n(neg m1)));
+ (`INT_MOD_INV_ID_LEMMA`, |- mod n(neg(INT 0)) = mod n(INT 0));
+ (`INT_MOD_INV_INV_LEMMA`, |- !m1. mod n(neg(neg m1)) = mod n m1);
+ (`INT_MOD_DIST_INV_LEMMA`,
+  |- !m1 m2.
+      minus_mod n(mod n(neg m1))(mod n m2) =
+      INV(int_mod n,plus_mod n)(plus_mod n(mod n m2)(mod n m1)))]
+: (string # thm) list
+
+#let thl4 = filter (\ (name,thm).not((concl thm) = "T")) thl3;;
+thl4 = 
+[(`INT_MOD_CLOSURE`,
+  |- !m1 m2. int_mod n(plus_mod n(mod n m1)(mod n m2)));
+ (`INT_MOD_GROUP_ASSOC`,
+  |- !m1 m2 m3.
+      plus_mod n(plus_mod n(mod n m1)(mod n m2))(mod n m3) =
+      plus_mod n(mod n m1)(plus_mod n(mod n m2)(mod n m3)));
+ (`INT_MOD_ID_LEMMA`,
+  |- !m1.
+      (plus_mod n(mod n(INT 0))(mod n m1) = mod n m1) /\
+      (plus_mod n(mod n m1)(mod n(INT 0)) = mod n m1) /\
+      (?y. int_mod n y /\ (plus_mod n y(mod n m1) = mod n(INT 0))));
+ (`INT_MOD_LEFT_RIGHT_INV`,
+  |- !m2 m1.
+      (plus_mod n(mod n m2)(mod n m1) = mod n(INT 0)) ==>
+      (plus_mod n(mod n m1)(mod n m2) = mod n(INT 0)));
+ (`INT_MOD_INV_LEMMA`,
+  |- !m1.
+      (plus_mod n(mod n(neg m1))(mod n m1) = mod n(INT 0)) /\
+      (minus_mod n(mod n m1)(mod n m1) = mod n(INT 0)));
+ (`INT_MOD_LEFT_CANCELLATION`,
+  |- !m1 m2 m3.
+      (plus_mod n(mod n m1)(mod n m2) = plus_mod n(mod n m1)(mod n m3)) ==>
+      (mod n m2 = mod n m3));
+ (`INT_MOD_RIGHT_CANCELLATION`,
+  |- !m2 m1 m3.
+      (plus_mod n(mod n m2)(mod n m1) = plus_mod n(mod n m3)(mod n m1)) ==>
+      (mod n m2 = mod n m3));
+ (`INT_MOD_RIGHT_ONE_ONE_ONTO`,
+  |- !m1 m2.
+      ?z.
+       int_mod n z /\
+       (plus_mod n(mod n m1)z = mod n m2) /\
+       (!u.
+         int_mod n u /\ (plus_mod n(mod n m1)u = mod n m2) ==> (u = z)));
+ (`INT_MOD_LEFT_ONE_ONE_ONTO`,
+  |- !m1 m2.
+      ?z.
+       int_mod n z /\
+       (plus_mod n z(mod n m1) = mod n m2) /\
+       (!u.
+         int_mod n u /\ (plus_mod n u(mod n m1) = mod n m2) ==> (u = z)));
+ (`INT_MOD_UNIQUE_ID`,
+  |- !e m1.
+      (int_mod n e ==>
+       (plus_mod n e(mod n m1) = mod n m1) ==>
+       (e = mod n(INT 0))) /\
+      (int_mod n e ==>
+       (plus_mod n(mod n m1)e = mod n m1) ==>
+       (e = mod n(INT 0))));
+ (`INT_MOD_UNIQUE_INV`,
+  |- !u m1.
+      int_mod n u ==>
+      (plus_mod n u(mod n m1) = mod n(INT 0)) ==>
+      (u = mod n(neg m1)));
+ (`INT_MOD_INV_ID_LEMMA`, |- mod n(neg(INT 0)) = mod n(INT 0));
+ (`INT_MOD_INV_INV_LEMMA`, |- !m1. mod n(neg(neg m1)) = mod n m1);
+ (`INT_MOD_DIST_INV_LEMMA`,
+  |- !m1 m2.
+      minus_mod n(mod n(neg m1))(mod n m2) =
+      INV(int_mod n,plus_mod n)(plus_mod n(mod n m2)(mod n m1)))]
+: (string # thm) list
+
+#map (\ (name,thm).
+#  (save_thm (name,thm));
+#  (autoload_theory (`theorem`,(current_theory()), name))) thl4;;
+[(); (); (); (); (); (); (); (); (); (); (); (); (); ()] : void list
+
+#close_theory `int_mod`;;
+() : void
+
+#quit();;
+faulkner% 

@@ -1,0 +1,5 @@
+\THEOREM COMM_MONOID_FOLDR list
+|- !f.
+    COMM f ==>
+    (!e'. MONOID f e' ==> (!e l. FOLDR f e l = f e(FOLDR f e' l)))
+\ENDTHEOREM

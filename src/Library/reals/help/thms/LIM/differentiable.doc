@@ -1,0 +1,3 @@
+\THEOREM differentiable LIM
+|- !f x. f differentiable x = (?l. (f diffl l)x)
+\ENDTHEOREM

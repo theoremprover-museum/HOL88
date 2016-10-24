@@ -1,0 +1,22 @@
+\DOC map
+
+\TYPE {map : ((* -> **) -> * list -> ** list)}
+
+\SYNOPSIS
+Applies a function to every element of a list.
+
+\DESCRIBE
+{map f [x1;...;xn]} returns {[(f x1);...;(f xn)]}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#map (\x. x * 2) [];;
+[] : int list
+
+#map (\x. x * 2) [1;2;3];;
+[2; 4; 6] : int list
+}
+\ENDDOC

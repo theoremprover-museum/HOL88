@@ -1,0 +1,3 @@
+\THEOREM ADD1 arithmetic
+|- !m. SUC m = m + 1
+\ENDTHEOREM

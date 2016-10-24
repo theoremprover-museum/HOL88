@@ -1,0 +1,5 @@
+\THEOREM LIM_NULL_MUL LIM
+|- !x x0 y.
+    bounded(mr1,tendsto(mr1,x0))x /\ (y --> (& 0))x0 ==>
+    ((\u. (x u) * (y u)) --> (& 0))x0
+\ENDTHEOREM

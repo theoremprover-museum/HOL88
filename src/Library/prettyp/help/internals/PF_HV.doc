@@ -1,0 +1,12 @@
+\DOC PF_HV
+
+\BLTYPE
+PF_HV : (((nat # print_indent # nat) # print_object) list -> print_format)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

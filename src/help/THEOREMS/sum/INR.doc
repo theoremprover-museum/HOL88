@@ -1,0 +1,3 @@
+\THEOREM INR sum
+|- !x. ISR x ==> (INR(OUTR x) = x)
+\ENDTHEOREM

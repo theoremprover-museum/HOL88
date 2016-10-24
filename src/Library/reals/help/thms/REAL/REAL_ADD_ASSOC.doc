@@ -1,0 +1,3 @@
+\THEOREM REAL_ADD_ASSOC REAL
+|- !x y z. x + (y + z) = (x + y) + z
+\ENDTHEOREM

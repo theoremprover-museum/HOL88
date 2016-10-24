@@ -1,0 +1,61 @@
+\DOC sanity_test
+
+\BLTYPE
+sanity_test : ((* -> **) ->
+string ->
+(* -> ** -> *** -> bool) ->
+(string # * # ***) list ->
+string)
+\ELTYPE
+
+\SYNOPSIS
+Test a function to ensure that it returns the expected values.
+
+\LIBRARY basen
+
+\DESCRIBE
+Its inputs are:
+  f             a function to test
+  f\_name        the name of that function as a string
+  relation      a function that compares the input, the actual output, and
+                the expected output and returns true if the actual output
+                was correct
+  test\_cases    a list of triples, each of which is a test case, consisting
+                of a string that identifies the test case and is to be printed
+                out in case of failure, an input, and an expected output.
+If the function signals failure when given the input on a test case, that test
+case is considered to have failed.  If all test cases pass, the output is nil.
+If any test case fails, a list is printed of the identification strings of all
+failing test cases, and then the whole function fails.
+
+\FAILURE
+None.
+
+\EXAMPLE
+{
+#let increment x = x + 1;;
+increment = - : (int -> int)
+
+#sanity_test increment `increment` relation [
+        `test 1: increment zero`,
+                0,      1;
+        `test 2: increment one`,
+                1,      3;
+        `test 3: increment a relatively small number`,
+                20,     21;
+        `test 4: increment causing a carry`,
+                9,      13;
+        `test 5: increment a large number`,
+                999999, 1000000 ]
+where relation input actual expected =
+  actual = expected;;
+
+Failures testing increment --
+  test 2: increment one     test 4: increment causing a carry
+evaluation failed     sanity test
+}
+\COMMENTS
+{sanity_test} cannot be used to test the failure behaviour of a function.  It
+should be replaced by something that can.
+
+\ENDDOC

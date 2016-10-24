@@ -1,0 +1,27 @@
+\DOC setify
+
+\TYPE {setify : (* list -> * list)}
+
+\SYNOPSIS
+Removes repeated elements from a list. Makes a list into a `set'.
+
+\DESCRIBE
+{setify l} removes repeated elements from {l}, leaving the last occurrence of
+each duplicate in the list.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#setify [1;2;3;1;4;3];;
+[2; 1; 4; 3] : int list
+}
+\COMMENTS
+Perhaps the first occurrence of each duplicate should be left in the list, not
+the last? However, other functions may rely on the ordering currently used.
+
+\SEEALSO
+distinct.
+
+\ENDDOC

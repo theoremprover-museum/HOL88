@@ -1,0 +1,65 @@
+\DOC new_syntax_block
+
+\TYPE {new_syntax_block : ((string # string # string) -> void)}
+
+\SYNOPSIS
+Declares a new syntax block.
+
+\DESCRIBE
+A syntax block starts with keyword and ends with a terminator and is
+associated with a function of strings. When such a block is
+encountered in the input stream, all the characters between the start
+keyword and the terminator are made into a string to which the
+associated function is applied.
+
+The ML function {new_syntax_block} declares a new syntax block. The
+first argument is the start keyword of the block, the second argument
+is the terminator and the third argument is the name of a function
+having a type which is an instance of {string->*}. The effect of
+{
+   new_syntax_block(`XXX`, `YYY`, `Fun`);;
+}
+\noindent is that if
+{
+   XXX
+
+      ...
+
+   YYY
+}
+\noindent occurs in the input, then it is as though
+{
+   Fun `
+
+      ...
+
+   `
+}
+\noindent were input.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#let foo s = print_string `Hello: `; print_string s; print_newline();;
+foo = - : (string -> void)
+
+#new_syntax_block(`FOO`,`OOF`, `foo`);;
+() : void
+
+#FOO 123OO44OOF;;
+Hello: 123OO44
+() : void
+
+#FOO
+#splat
+#OOF;;
+Hello: splat
+
+() : void
+}
+\USES
+Interfacing parsers to HOL.
+
+\ENDDOC

@@ -1,0 +1,25 @@
+\DOC set_abs_goal
+
+\TYPE {set_abs_goal : (goal -> void)}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Initializes the subgoal package with a new abstract goal.
+
+\DESCRIBE 
+The function {set_abs_goal} is identical to {set_goal} except that 
+the theory obligations for any abstract objects in the goal 
+are added to the assumption list.
+
+\FAILURE
+Never fails.
+
+\USES
+Starting an interactive proof session with the subgoal package for an
+abstract goal.
+
+\SEEALSO
+set_goal
+
+\ENDDOC

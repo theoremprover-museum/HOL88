@@ -1,0 +1,35 @@
+\DOC openw
+
+\TYPE {openw : (string -> string)}
+
+\SYNOPSIS
+Opens a port for writing to a named file.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+Given a string argument {`foo`}, {openw} creates a new file {foo}
+(overwriting an existing file with the same name) and returns a string
+(a port identifier) that can be used by {write} to write characters to the
+ file. The port identifier is also used by {close} to close the file.
+
+\EXAMPLE
+{
+#let port = openw `foo`;;
+port = `%foo` : string
+
+#write (port, `contents of file foo\L`);;
+() : void
+
+#close port;;
+() : void
+
+#system `cat foo`;;
+contents of file foo
+0 : int
+}
+\SEEALSO
+close, openi, read, write
+
+\ENDDOC

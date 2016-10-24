@@ -1,0 +1,69 @@
+\indexentry{load\_library@{\ptt load\_library}}{1}
+\indexentry{help!updating search path}{1}
+\indexentry{searching!steps}{6}
+\indexentry{patterns!for terms}{6}
+\indexentry{searching!continuation}{6}
+\indexentry{searching!for operators}{7}
+\indexentry{patterns!for terms}{8}
+\indexentry{matching!within a term}{8}
+\indexentry{searching!the result of a previous search}{9}
+\indexentry{kind@{\ptt kind}}{9}
+\indexentry{patterns!for names}{10}
+\indexentry{Andalso@{\ptt Andalso}}{11}
+\indexentry{Orelse@{\ptt Orelse}}{11}
+\indexentry{Not@{\ptt Not}}{11}
+\indexentry{searching!end of}{12}
+\indexentry{searching!a theory ancestry}{12}
+\indexentry{exclusion!of parts of an ancestry}{13}
+\indexentry{searching!user theories}{13}
+\indexentry{searching!order of}{14}
+\indexentry{side-conditions!abbreviation}{15}
+\indexentry{test1term@{\ptt test1term}}{15}
+\indexentry{side-conditions!user functions}{15}
+\indexentry{side-conditions!abbreviation}{16}
+\indexentry{test2terms@{\ptt test2terms}}{16}
+\indexentry{patterns!type information}{17}
+\indexentry{errors!at run-time}{18}
+\indexentry{patterns!distinct variables}{18}
+\indexentry{errors!illegal pattern construction}{19}
+\indexentry{Ancestors@{\ptt Ancestors}}{23}
+\indexentry{ancestors\_excluding@{\ptt ancestors\_excluding}}{23}
+\indexentry{Ancestry@{\ptt Ancestry}}{24}
+\indexentry{Andalso@{\ptt Andalso}}{25}
+\indexentry{Axiom@{\ptt Axiom}}{25}
+\indexentry{BigAnd@{\ptt BigAnd}}{25}
+\indexentry{BigOr@{\ptt BigOr}}{26}
+\indexentry{conc@{\ptt conc}}{26}
+\indexentry{contains@{\ptt contains}}{27}
+\indexentry{continue\_search@{\ptt continue\_search}}{27}
+\indexentry{CS@{\ptt CS}}{28}
+\indexentry{Definition@{\ptt Definition}}{29}
+\indexentry{Endofsearch@{\ptt Endofsearch}}{29}
+\indexentry{find\_theorems@{\ptt find\_theorems}}{29}
+\indexentry{FT@{\ptt FT}}{30}
+\indexentry{full\_search@{\ptt full\_search}}{31}
+\indexentry{has\_body@{\ptt has\_body}}{31}
+\indexentry{hypF@{\ptt hypF}}{32}
+\indexentry{hypP@{\ptt hypP}}{33}
+\indexentry{kind@{\ptt kind}}{33}
+\indexentry{List@{\ptt List}}{34}
+\indexentry{List\_from@{\ptt List\_from}}{34}
+\indexentry{matches@{\ptt matches}}{35}
+\indexentry{Not@{\ptt Not}}{36}
+\indexentry{Orelse@{\ptt Orelse}}{36}
+\indexentry{Paths@{\ptt Paths}}{36}
+\indexentry{run\_search@{\ptt run\_search}}{37}
+\indexentry{search\_n\_theories@{\ptt search\_n\_theories}}{38}
+\indexentry{search\_n\_until\_find@{\ptt search\_n\_until\_find}}{38}
+\indexentry{search\_until\_find@{\ptt search\_until\_find}}{39}
+\indexentry{show\_step@{\ptt show\_step}}{39}
+\indexentry{Step@{\ptt Step}}{40}
+\indexentry{test1term@{\ptt test1term}}{40}
+\indexentry{test1type@{\ptt test1type}}{41}
+\indexentry{test2terms@{\ptt test2terms}}{41}
+\indexentry{test2types@{\ptt test2types}}{42}
+\indexentry{Theorem@{\ptt Theorem}}{43}
+\indexentry{Theory@{\ptt Theory}}{43}
+\indexentry{thmname@{\ptt thmname}}{43}
+\indexentry{thryname@{\ptt thryname}}{44}
+\indexentry{Where@{\ptt Where}}{44}

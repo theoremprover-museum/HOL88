@@ -1,0 +1,3 @@
+\THEOREM DIFF_TAN TRANSC
+|- !x. ~(cos x = & 0) ==> (tan diffl (inv((cos x) pow 2)))x
+\ENDTHEOREM

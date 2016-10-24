@@ -1,0 +1,34 @@
+\DOC PRINT_STACK
+
+\TYPE {PRINT_WIN : (void -> void)}
+
+\SYNOPSIS
+Print out the top window of the current window stack.
+
+\LIBRARY window
+
+\DESCRIBE
+{PRINT_STACK} will print out the top window on the stack according to the
+following format.
+{
+     ! "a"
+     | "l"
+     ? "c"
+     $ "u"
+     @ "b"
+   R * "f"
+}
+That is, {PRINT_STACK} prints the context of the window followed by
+{R * "f"} where {R} is the relation that the window is supposed to
+preserve, and {"f"} is the focus of the window.
+Each element in the context is preceded by some prefix.
+The prefix {!} denotes an assumption.
+The prefix {|} denotes a lemma.
+The prefix {?} denotes a conjecture.
+The prefix {$} denotes a used conjecture.
+The prefix {@} denotes a bad conjecture.
+
+\FAILURE
+{PRINT_STACK ()} will fail if there is no current window stack.
+
+\ENDDOC

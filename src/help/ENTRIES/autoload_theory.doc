@@ -1,0 +1,37 @@
+\DOC autoload_theory
+
+\TYPE {autoload_theory : ((string # string # string) -> void)}
+
+\SYNOPSIS
+Makes an axiom, definition or theorem autoload when mentioned.
+
+\DESCRIBE
+After a call {autoload_theory(`kind`,`thy`,`name`)}, a subsequent occurrence of
+the name {name} in an ML phrase will cause the relevant autoloading action.
+The {kind} value should be one of {axiom}, {definition} (this includes type
+definitions) or {theorem}, and the appropriate entity called {name} will be
+loaded from theory {thy} before the ML phrase containing {name} is evaluated.
+
+\FAILURE
+Never fails, although the subsequent autoloading action may do.
+
+\EXAMPLE
+The following autoload is not necessary because {ETA_AX} is already bound to an
+identifier when HOL is started. However, it shows the general idea.
+{
+   #autoload_theory(`axiom`,`bool`,`ETA_AX`);;
+   () : void
+
+   #ETA_AX;;
+   Axiom ETA_AX autoloaded from theory `bool`.
+   ETA_AX = |- !t. (\x. t x) = t
+
+   |- !t. (\x. t x) = t
+}
+\COMMENTS
+More general automatic actions can be achieved using {autoload}.
+
+\SEEALSO
+autoload, undo_autoload.
+
+\ENDDOC

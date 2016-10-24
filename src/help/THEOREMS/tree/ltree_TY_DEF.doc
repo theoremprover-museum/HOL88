@@ -1,0 +1,3 @@
+\THEOREM ltree_TY_DEF ltree
+|- ?rep. TYPE_DEFINITION Is_ltree rep
+\ENDTHEOREM

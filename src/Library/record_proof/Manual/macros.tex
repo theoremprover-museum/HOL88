@@ -1,0 +1,58 @@
+
+
+\input{holmacs}
+\input{tokmac}
+
+%\newtokmac{ter}{\tt}
+%\newtokmac{nter}{\tt}
+\newtokmac{mlname}{\tt}
+\newtokmac{CONST}{\constfont}
+
+
+\newenvironment{hproof}{\begin{center}
+ \begin{tabular*}{5.25in}{r>{$}l<{$}@{\extracolsep{0pt plus 1fill}}>{[}r<{]}}}
+ {\end{tabular*}\end{center}}
+
+\makeatletter
+
+%% \verbatimnumbered{<file>}
+%% read a file and format the contains in a verbatim environment with
+%% line number.
+%\newcounter{VerbatimLineNo}
+%\def\verbatimnumbered#1{\begingroup
+%  \setcounter{VerbatimLineNo}{0}%
+%  \def\verbatim@processline{%
+%    \addtocounter{VerbatimLineNo}{1}%
+%    \leavevmode
+%    \llap{\theVerbatimLineNo
+%          \ \hskip\@totalleftmargin}%
+%    \the\verbatim@line\par}%
+%  \verbatiminput{#1}\endgroup}
+
+%% Redefine the theindex environment
+%%
+%\renewenvironment{theindex}{\begin{multicols}{2}[\section*{\indexname}]%
+% \columnseprule \z@ \columnsep 35\p@
+% \parindent\z@ \parskip\z@ plus.3\p@\relax\let\item\@idxitem}{\end{multicols}}
+%
+%\def\@idxitem{\par\hangindent 40\p@}
+%
+%\def\subitem{\par\hangindent 40\p@ \hspace*{20\p@}}
+%
+%\def\subsubitem{\par\hangindent 40\p@ \hspace*{30\p@}}
+%
+%\def\indexspace{\par \vskip 10\p@ plus5\p@ minus3\p@\relax}
+
+\makeatother
+
+%% macros for special words
+%%
+%\def\HOL{{\sc  hol}}
+%\def\CHOL{{\sc hol88}}
+
+%% Redfine constfont. The font cmssc12 is a vertual font based on
+%% cmss12. The only difference is that the character at '137 becomes
+%% an underline in cmssc12.
+\font\sfc=cmssc12 \def\constfont{\sfc}
+\def\ul#1{$\underline{#1}$}
+

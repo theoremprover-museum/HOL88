@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_ADDL REAL
+|- !x y. y < (x + y) = (& 0) < x
+\ENDTHEOREM

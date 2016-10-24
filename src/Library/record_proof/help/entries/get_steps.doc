@@ -1,0 +1,74 @@
+\DOC get_steps
+
+\TYPE {get_steps : void -> step list}
+
+\KEYWORDS
+proof recording.
+
+
+\SYNOPSIS
+Get the proof steps since last time the proof recorder is enabled.
+
+\DESCRIBE
+A proof is a list of inference steps. After the proof recorder is
+enabled, every inference performed by the system is recorded and
+cumulated in an internal buffer. When a proof is completed, the raw
+records can then be processed and output to a disk file.
+
+{get_steps} is a low level user function for managing the proof
+recorder. It returns the list of steps cumulated since last time the
+proof recorder is enabled, i.e. the function {record_proof} is called
+with the value {true}. The list of inference step needs to be
+processed to produce a proof line list which can be output to a file.
+
+
+\FAILURE
+Never fail.
+
+\EXAMPLE
+Below is an example showing how to record an extremely simple proof
+in which the function {get_steps} is called to get the list of
+inference steps:
+{
+#let th = SPEC_ALL ADD_SYM;;
+Theorem ADD_SYM autoloading from theory `arithmetic` ...
+ADD_SYM = |- !m n. m + n = n + m
+
+th = |- m + n = n + m
+
+#let v = genvar ":num";;
+"GEN%VAR%536" : term
+
+#record_proof true;;
+() : void
+
+#let th1 = (REFL "SUC(m + n)");;
+th1 = |- SUC(m + n) = SUC(m + n)
+
+#let th2 = SUBST [th,v] "SUC(m + n) = SUC ^v" th1;;
+th2 = |- SUC(m + n) = SUC(n + m)
+
+#record_proof false;;
+() : void
+
+#write_proof_to `ap_term.prf` `ap_term` [] (get_steps());;
+() : void
+}
+The proof consists of two inference steps: the application of the two
+primitive inference rules {REFL} and {SUBST}. The function
+{write_proof_to} outputs the proof into a file names {ap_term.prf}.
+
+\COMMENTS
+This function is used to implement higher level user functions for
+recording proof in the library {record_proof}. It is much more
+convenient to use those functions than the low level functions
+such as {get_steps} directly.
+
+\SEEALSO
+record_proof, is_recording_proof, RecordStep, 
+suspend_recording, resume_recording, MakeProof,
+current_proof, current_proof_file,
+new_proof_file, close_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm.
+
+\ENDDOC

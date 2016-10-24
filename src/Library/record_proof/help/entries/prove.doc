@@ -1,0 +1,36 @@
+\DOC prove
+
+\TYPE {prove : ((term # tactic) -> thm)}
+
+\SYNOPSIS
+Attempts to prove a boolean term using the supplied tactic and saves the proof.
+
+\KEYWORDS
+apply, proof recording.
+
+\LIBRARY
+record_proof
+
+\DESCRIBE
+When applied to a term-tactic pair {(tm,tac)}, the function {prove} attempts to
+prove the goal {?- tm}, that is, the term {tm} with no assumptions, using the
+tactic {tac}. If {prove} succeeds, it saves the proof in the current proof
+file and returns the corresponding theorem
+{A |- tm}, where the assumption list {A} may not be empty if the tactic is
+invalid; {prove} has no inbuilt validity-checking.
+
+\FAILURE
+Fails if the term is not of type {bool} (and so cannot possibly be
+the conclusion of a theorem), or if the tactic cannot solve the goal.
+
+\COMMENTS
+The function {PROVE} provides almost identical functionality, and will
+also list unsolved goals if the tactic fails. It is therefore preferable
+for most purposes.
+
+\SEEALSO
+current_proof, current_proof_file, begin_proof, end_proof,
+new_proof_file, close_proof_file, PROVE, TAC_PROOF, prove_thm.
+
+
+\ENDDOC

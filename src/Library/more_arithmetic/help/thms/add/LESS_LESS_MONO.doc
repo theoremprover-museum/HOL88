@@ -1,0 +1,3 @@
+\THEOREM LESS_LESS_MONO add
+|- !m n p q. m < p /\ n < q ==> (m + n) < (p + q)
+\ENDTHEOREM

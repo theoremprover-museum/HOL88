@@ -1,0 +1,16 @@
+\section{The Theory {\tt ineq}}
+
+The theory \ml{ineq}\index{ineq, theory@{\ptt ineq}, theory} contains an \adhoc\ collection of
+theorems about the inequality operators. It contains no new definitions.
+Below is a selection of the theorems that have been pre-proved in this theory.
+\begin{hol}
+\index{EQ\_LESS\_EQ@{\ptt EQ\_LESS\_EQ}}
+\index{NOT\_EQ\_LESS\_EQ@{\ptt NOT\_EQ\_LESS\_EQ}}
+\index{LESS\_EQ\_LESS\_EQ\_EQ@{\ptt LESS\_EQ\_LESS\_EQ\_EQ}}
+\begin{verbatim}
+  EQ_LESS_EQ          |- !a b. (a = b) = a <= b /\ b <= a
+
+  NOT_EQ_LESS_EQ      |- !a b. ~(a = b) = a < b \/ b < a
+
+  LESS_EQ_LESS_EQ_EQ  |- !m n. m <= n /\ n <= m = (m = n)
+\end{verbatim}\end{hol}

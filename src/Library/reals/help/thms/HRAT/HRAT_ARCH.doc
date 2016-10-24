@@ -1,0 +1,3 @@
+\THEOREM HRAT_ARCH HRAT
+|- !h. ?n d. hrat_sucint n = h hrat_add d
+\ENDTHEOREM

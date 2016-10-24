@@ -1,0 +1,116 @@
+     This directory contains several sample tooltool specifications
+which you can use to help learn tooltool.  All files ending in ".tt"
+are tooltool files.  The samples contained herein are:
+
+	lpq.tt
+	queue.c
+	laserwriter.icon
+		This specification uses a custom application (queue.c)
+		to show how a user could build a new windowed application
+		from scratch using a small C program and a tooltool
+		file.  Compile queue.c (using "cc -O -o queue queue.c")
+		and type "tooltool -f lpq.tt" to see the results.  Lpq.tt
+		creates a windowed print queue monitor which polls the
+		print queue.  Closing the window stops the polling, 
+		opening it restarts it, as do the buttons in the gadget
+		panel.  You can adjust the polling rate using the slider.
+
+	lpq2.tt
+	tty.c
+		This is another queue tool, but written with all the 
+		smarts in the tooltool file itself.  It uses /bin/cat
+		to write to the display.  This is a good example of
+		the new features in tooltool 2.0.
+
+	top.tt
+	top.icon
+		Top.tt turns the popular top command into a windowed
+		application.  Common top commands have been placed on 
+		buttons, and you can still type to top like you used to.
+
+	rn.tt
+	news.icon
+		This turns rn, the news reading program, into a windowed
+		news reading program.  Again, common commands are on
+		buttons, and less used commands are in a menu.  You can 
+		add to or change rn.tt to suit your own tastes, depending
+		on how you like to use rn.
+
+	calc.tt
+		This is the sample file discussed in the documentation.
+		It uses very few tooltool options, and serves as a simple
+		introductory example to tooltool.  You could jazz this up
+		with an icon, and some other buttons to perform other
+		arithmetic operations.
+
+	stopwatch.tt
+	stopwatch.icon
+		This creates a handy stopwatch tool, entirely within tooltool.
+		It can count up or down, can take a split time, and can be set
+		by clicking on the appropriate digits.  It offers tenth or
+		single second resolution.
+
+	keytool
+	keytool.r.14
+	keytool.defaults
+		Keytool is a different kind of tooltool application.  It is 
+		actually a shell script, which builds a specification for 
+		tooltool.  It is a good example of how to process command
+		line arguments for a tooltool application, and is a complex
+		example of using tooltool.  Basically, keytool lets you
+		reprogram your keyboard, save those definitions and have them
+		recalled when you next invoke keytool.  To define keys and mouse
+		actions, click shift-control-meta mouse right to see the
+		programming window.  Click on the key (and shift pattern)
+		you want to define, and type the definition.  A typical
+		invocation would be "keytool /bin/csh" to create a shell
+		window with programmable keys.  Since keytool is a shell
+		script, you invoke it directly, instead of using "tooltool -f
+		keytool".  Keytool is courtesy of Ken Laprade, here at Harris.
+		Try it!
+
+		Before using keytool, you must unpack the defaults and font
+		files by typing:
+		
+			uudecode keytool.defaults.uu
+			uudecode keytool.r.14.uu
+		
+		Then you can successfully run keytool.
+		
+		Note that keytool has its own special font, which you should
+		install in /usr/lib/fonts/fixedwidthfonts if you make keytool
+		an installed tool at your site.  Don't forget to fix up the
+		keytool reference to this font when you move it.  The same
+		goes for the keytool.defaults file, which we keep in 
+		/usr/local/lib.
+
+In all of these files, references are made to icon files, font files, and
+application names.  If you wish to make these samples real commands, you should
+put the icons and associated files in a public place and modify the .tt 
+file accordingly.  At Harris, we put all .tt files in /usr/local/lib/tooltool,
+and icons go in /usr/local/images.  The fonts used by these files are Sun
+standards, so that should be no problem.  Finally, you should create little
+shell files to invoke tooltool transparently when the command name is typed:
+
+	lpqtool:
+		tooltool -f /usr/local/lib/tooltool/lpq.tt
+	   or
+	        tooltool -f /usr/local/lib/tooltool/lpq2.tt
+
+	toptool:
+		tooltool -f /usr/local/lib/tooltool/top.tt
+
+	newstool:
+		tooltool -f /usr/local/lib/tooltool/rn.tt
+
+	calctool:
+		tooltool -f /usr/local/lib/tooltool/calc.tt
+
+	stopwatchtool:
+		tooltool -f /usr/local/lib/tooltool/stopwatch.tt
+
+	supershelltool:
+		keytool /bin/csh
+
+Of course, replace /usr/local/lib/tooltool with the pathname of the place
+you keep the tooltool file.

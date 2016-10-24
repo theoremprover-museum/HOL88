@@ -1,0 +1,30 @@
+\DOC infix_variable
+
+\TYPE {infix_variable : string -> void}
+
+\SYNOPSIS
+Makes a HOL variable parse and print as an infix.
+
+\DESCRIBE 
+A call {infix_variable `x`} makes {x} an infixed
+variable. This is purely an interface property for the current
+session. Infixed variables are assumed curried. Infixed variables used
+in non-infix positions (e.g. as arguments or when being quantified)
+must be preceded by {$}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+   #new_special_symbol `<<`;;
+   () : void
+
+   #infix_variable `<<`;;
+   () : void
+
+   #"!$<<. TRANSITIVE $<< = !(x y z:*). x << y /\ y << z ==> x << z";;
+   "TRANSITIVE $<< = (!x y z. x << y /\ y << z ==> x << z)" : term
+}
+
+\ENDDOC

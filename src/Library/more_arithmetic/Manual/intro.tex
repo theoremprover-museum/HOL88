@@ -1,0 +1,92 @@
+\chapter{The more\_arithmetic Library}
+
+This document describes the facilities provided by the \ml{more\_arithmetic}
+library. The 
+library contains an \adhoc\ collection of definitions 
+and theorems about arithmetic which extends the standard theory
+\ml{arithmetic}. Included 
+are many general purpose theorems about the arithmetic operators defined in the
+theory \ml{arithmetic}. In addition, definitions of new operators are given with
+associated 
+theorems. Several conversions related to arithmetic are also
+provided.  
+The library is split into several theories, the ancestry of which is shown
+below. 
+{\samepage
+\begin{center}
+\begin{picture}(135,65)(-10,10)
+
+\thicklines
+
+% -----------------------------------------------------------
+% Lines in theory hierarchy graph
+% -----------------------------------------------------------
+
+ \put(70,25){\line(0,1){5}}	 % more_arithmetic --> sub
+
+
+ \put(10,27.5){\line(0,1){2.5}}  % more_arithmetic --> odd_even
+ \put(90,27.5){\line(0,1){2.5}}	 % more_arithmetic --> pre
+ \put(110,27.5){\line(0,1){2.5}} % more_arithmetic --> mult
+ \put(-10,27.5){\line(0,1){2.5}} % more_arithmetic --> min_max
+ \put(-10,27.5){\line(1,0){140}} % more_arithmetic --> min_max
+ \put(130,27.5){\line(0,1){2.5}} % more_arithmetic --> div_mod
+ \put(30,27.5){\line(0,1){2.5}}    % more_arithmetic --> ineq
+
+ \put(70,35){\line(0,1){5}}	 % sub --> add
+
+ \put(50,37.5){\line(0,1){2.5}}	 % sub --> zero_ineq
+ \put(50,37.5){\line(1,0){20}}	 % sub --> zero_ineq
+
+ \put(70,45){\line(0,1){5}}	 % add --> suc
+
+ \put(-10,57.5){\line(1,0){140}} % arithmetic --> min_max
+
+ \put(70,55){\line(0,1){5}}      % suc --> arithmetic
+ \put(-10,35){\line(0,1){22.5}}	 % min_max --> arithmetic
+ \put(10,35){\line(0,1){22.5}}	 % odd_even --> arithmetic
+ \put(90,35){\line(0,1){22.5}}	 % pre --> arithmetic
+ \put(110,35){\line(0,1){22.5}}	 % mult --> arithmetic
+ \put(130,35){\line(0,1){22.5}}	 % div_mod --> arithmetic
+
+ \put(50,45){\line(0,1){12.5}}	 % zero_ineq --> arithmetic
+ \put(30,35){\line(0,1){22.5}}	 % ineq --> arithmetic
+
+
+% -----------------------------------------------------------
+% Theory names:
+% -----------------------------------------------------------
+
+\put(70,22.5){\makebox(0,0){\verb!more\_arithmetic!}}
+\put(90,32.5){\makebox(0,0){\verb!pre!}}
+\put(50,42.5){\makebox(0,0){\verb!zero\_ineq!}}
+\put(10,32.5){\makebox(0,0){\verb!odd\_even!}}
+\put(-10,32.5){\makebox(0,0){\verb!min\_max!}}
+\put(110,32.5){\makebox(0,0){\verb!mult!}}
+\put(130,32.5){\makebox(0,0){\verb!div\_mod!}}
+\put(30,32.5){\makebox(0,0){\verb!ineq!}}
+\put(70,52.5){\makebox(0,0){\verb!suc!}}
+\put(70,32.5){\makebox(0,0){\verb!sub!}}
+\put(70,42.5){\makebox(0,0){\verb!add!}}
+\put(70,62.5){\makebox(0,0){\verb!arithmetic!}}
+\end{picture}
+\end{center}
+\nopagebreak
+
+\noindent
+A complete list of the arithmetic theorems which are available in the library
+ is given in Chapter \ref{thms}. Due
+to the large number of theorems, users of the library may find the theorem
+retrieval library of help. The above hierarchy should be kept in mind when
+searching for theorems.
+ All definitions and theorems from the ancestor theories are
+automatically loaded, if possible, when their names are first mentioned during
+a \HOL\ session. 
+}
+
+\section{The Theory {\tt more\_arithmetic}}
+
+The theory \ml{more\_arithmetic}\index{more_arithmetic, theory@{\ptt more\_arithmetic}, theory}
+is the descendant theory of all the theories in 
+the library. It contains no theorems or definitions itself.
+

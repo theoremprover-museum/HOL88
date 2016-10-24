@@ -1,0 +1,156 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:12
+**parser.tex
+(parser.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+\@indexfile=\write3
+
+Writing index file parser.idx 
+(parser.aux (title.aux) (description.aux) (entries.aux) (theorems.aux)
+(references.aux) (index.aux)) (title.tex [1
+
+
+] [2]) (parser.toc)
+\tf@toc=\write4
+ [3
+
+
+] [4
+
+]
+(description.tex
+Chapter 1.
+[1
+
+
+] [2]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 11.16724
+.\glue(\topskip) 0.0
+.\hbox(102.18983+96.71486)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...etc.
+..\penalty 0
+..\hbox(102.18983+96.71486)x455.04408
+...\mathon
+...\vbox(102.18983+96.71486)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [3]
+[4] [5] [6] [7] [8] [9] [10] [11]
+Underfull \vbox (badness 1221) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.30466
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.08017
+..\hbox(0.0+0.0)x11.38109
+..\twlrm T
+..\twlrm h
+..\twlrm e
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..etc.
+.\penalty 10000
+.\glue(\baselineskip) 3.83337
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.60144
+..\twlrm t
+..\twlrm h
+..\twlrm e
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\twlrm B
+..etc.
+.etc.
+
+ [12]
+[13]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 10.69527
+.\glue(\topskip) 0.0
+.\hbox(233.30553+227.30551)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...etc.
+..\penalty 0
+..\hbox(233.30553+227.30551)x455.04408
+...\mathon
+...\vbox(233.30553+227.30551)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue -10.0 plus -4.0 minus -6.0
+.etc.
+
+ [14]
+[15] [16] [17]) [18] (entries.tex
+Chapter 2.
+(entries-intro.tex)) [19
+
+
+
+] (theorems.tex [20
+
+
+
+]
+Chapter 3.
+) [21] (references.tex [22
+
+
+
+]) [23] (index.tex [24
+
+
+
+]) (parser.aux (title.aux)
+(description.aux) (entries.aux) (theorems.aux) (references.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 468 strings out of 11977
+ 3878 string characters out of 87025
+ 41270 words of memory out of 262141
+ 2294 multiletter control sequences out of 9500
+ 19472 words of font info for 74 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 18i,15n,17p,188b,602s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on parser.dvi (28 pages, 58336 bytes).

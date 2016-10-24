@@ -1,0 +1,3 @@
+\THEOREM DIV_MULT arithmetic
+|- !n r. r < n ==> (!q. ((q * n) + r) DIV n = q)
+\ENDTHEOREM

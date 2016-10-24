@@ -1,0 +1,22 @@
+\DOC Theory
+
+\TYPE {Theory : (string -> searchpath)}
+
+\SYNOPSIS
+Generates a {searchpath} that consists precisely of the named theory segment.
+
+\LIBRARY trs
+
+\DESCRIBE
+A {searchpath} is either a single theory segment, or it is a hierarchy of
+theory segments. {Theory} is used to generate a {searchpath} of the first
+kind. A search path is, as its name suggests, a specification of where a
+search for theorems should take place.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+Ancestors, ancestors_excluding, Ancestry.
+
+\ENDDOC

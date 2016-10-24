@@ -1,0 +1,33 @@
+\DOC theorems
+
+\TYPE {theorems : (string -> (string # thm) list)}
+
+\SYNOPSIS
+Returns the derived theorems of a given theory segment of the current theory.
+
+\DESCRIBE
+A call of {theorems `thy`} returns the derived theorems of the theory segment
+{thy} together with their names. The theory segment {thy} must be part of
+the current theory. The names are those given to the theorems by the user when
+they were originally added to the theory segment (by, for example, a call to
+{save_thm}). The name of the current theory segment can be abbreviated by {`-`}.
+
+\FAILURE
+The call {theorems `thy`} will fail if the theory segment {thy} is not part
+of the current theory.
+
+\EXAMPLE
+{
+#theorems `bool`;;
+[(`PAIR_EQ`, |- !x y a b. (x,y = a,b) = (x = a) /\ (y = b));
+ (`SND`, |- !x y. SND(x,y) = y);
+ (`FST`, |- !x y. FST(x,y) = x);
+ (`PAIR`, |- !x. FST x,SND x = x);
+ (`PAIR_EXISTS`, |- ?p. IS_PAIR p)]
+: (string # thm) list
+}
+\SEEALSO
+axioms, definitions, load_theorem, load_theorems, print_theory, save_thm,
+theorem.
+
+\ENDDOC

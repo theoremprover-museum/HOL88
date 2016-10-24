@@ -1,0 +1,5 @@
+\THEOREM DELETE_INSERT sets
+|- !x y s.
+    (x INSERT s) DELETE y =
+    ((x = y) => s DELETE y | x INSERT (s DELETE y))
+\ENDTHEOREM

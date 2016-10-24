@@ -1,0 +1,76 @@
+\indexentry{ADD-INTERVAL-CONSTRAINT|ITIDX}{5}
+\indexentry{ADD-INTERVAL-CONSTRAINT|ITIDX}{5}
+\indexentry{GET-INTERVAL-CONSTRAINT|ITIDX}{5}
+\indexentry{:FLOATS|ITIDX}{6}
+\indexentry{ADD-INTERVAL-CONSTRAINT|ITIDX}{7}
+\indexentry{ADD-INTERVAL-CONSTRAINT|ITIDX}{7}
+\indexentry{GET-INTERVAL-CONSTRAINT|ITIDX}{7}
+\indexentry{TIMELOGIC-BACKTRACK|ITIDX}{15}
+\indexentry{:AUTO-BACKTRACK|ITIDX}{16}
+\indexentry{:AUTO-BACKTRACK|ITIDX}{18}
+\indexentry{ADD-INTERVAL-CONSTRAINT|ITIDX}{18}
+\indexentry{TIMELOGIC-INIT@\CL {(TIMELOGIC-INIT)}}{18}
+\indexentry{TIMELOGIC-RESET-PROPS|ITIDX}{18}
+\indexentry{DEFINE-CONTEXT@\CL {(DEFINE-CONTEXT {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  name parent\/}}}\relax )}}{18}
+\indexentry{DEFINED-CONTEXTS@\CL {(DEFINED-CONTEXTS)}}{18}
+\indexentry{CONTEXT-DEFINED-P@\CL {(CONTEXT-DEFINED-P {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}name\/}}}\relax )}}{18}
+\indexentry{DELETE-CONTEXT@\CL {(DELETE-CONTEXT {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}name\/}}}\relax )}}{18}
+\indexentry{SWITCH-CONTEXT@\CL {(SWITCH-CONTEXT {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}name\/}}}\relax )}}{18}
+\indexentry{PUSH-CONTEXT@\CL {(PUSH-CONTEXT)}}{18}
+\indexentry{POP-CONTEXT@\CL {(POP-CONTEXT {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  dont-delete-p\/}}}\relax )}}{18}
+\indexentry{CONTEXT-TREE@\CL {(CONTEXT-TREE {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss ({\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}name\/}}}\relax  T)}}\relax \/}}}\relax )}}{19}
+\indexentry{DEFINE-INTERVAL@\CL {(DEFINE-INTERVAL {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  int ref {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  context\/}}}\relax )}}{19}
+\indexentry{:AUTO-REFERENCE|ITIDX}{19}
+\indexentry{INTERVAL-DEFINED-P@\CL {(INTERVAL-DEFINED-P {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}int\/}}}\relax )}}{19}
+\indexentry{DEFINED-INTERVALS@\CL {(DEFINED-INTERVALS)}}{19}
+\indexentry{RELATED-INTERVALS@\CL {(RELATED-INTERVALS {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}int {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  context type\/}}}\relax )}}{19}
+\indexentry{REFERENCE-INTERVALS@\CL {(REFERENCE-INTERVALS {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}int {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  inverse-p {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  context\/}}}\relax )}}{19}
+\indexentry{ADD-INTERVAL-CONSTRAINT@\CL {(ADD-INTERVAL-CONSTRAINT {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}x constraint y {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  context {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss ({\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}type\/}}}\relax  :REL)}}\relax \/}}}\relax )}}{19}
+\indexentry{:AUTO-DEFINE|ITIDX}{19}
+\indexentry{:AUTO-BACKTRACK|ITIDX}{19}
+\indexentry{TIMELOGIC-BACKTRACK|ITIDX}{20}
+\indexentry{ADD-INTERVAL-CONSTRAINT|ITIDX}{20}
+\indexentry{GET-INTERVAL-CONSTRAINT@\CL {(GET-INTERVAL-CONSTRAINT {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}x y {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  context {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss ({\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}type\/}}}\relax  :REL)}}\relax \/}}}\relax )}}{20}
+\indexentry{TEST-INTERVAL-CONSTRAINT@\CL {(TEST-INTERVAL-CONSTRAINT {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}x constraint y {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  context {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss ({\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}type\/}}}\relax  :REL) ({\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}test\/}}}\relax  :INTERSECT)}}\relax \/}}}\relax )}}{20}
+\indexentry{TIMELOGIC-BACKTRACK@\CL {(TIMELOGIC-BACKTRACK {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  btpoint\/}}}\relax )}}{20}
+\indexentry{ADD-INTERVAL-CONSTRAINT|ITIDX}{20}
+\indexentry{TIMELOGIC-CHECKPOINT|ITIDX}{20}
+\indexentry{TIMELOGIC-CHECKPOINT@\CL {(TIMELOGIC-CHECKPOINT)}}{20}
+\indexentry{TIMELOGIC-CHECKPOINT-P@\CL {(TIMELOGIC-CHECKPOINT-P {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  btpoint\/}}}\relax )}}{20}
+\indexentry{SHOW-INTERVAL-CONSTRAINTS@\CL {(SHOW-INTERVAL-CONSTRAINTS {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}int {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  with-ints context {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss ({\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}type\/}}}\relax  :REL)}}\relax \/}}}\relax )}}{20}
+\indexentry{DISPLAY-INTERVALS@\CL {(DISPLAY-INTERVALS {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Key}}\relax  ints context {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss ({\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}clear\/}}}\relax  T)}}\relax \/}}}\relax )}}{20}
+\indexentry{TRACE-INTERVAL|ITIDX}{20}
+\indexentry{GRAPH-INTERVALS@\CL {(GRAPH-INTERVALS {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  ints\/}}}\relax )}}{21}
+\indexentry{TRACE-INTERVAL@\CL {(TRACE-INTERVAL {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}int {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  with-ints\/}}}\relax )}}{21}
+\indexentry{:TRACE|ITIDX}{21}
+\indexentry{UNTRACE-INTERVAL@\CL {(UNTRACE-INTERVAL {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  int\/}}}\relax )}}{21}
+\indexentry{TRACE-INTERVAL|ITIDX}{21}
+\indexentry{TIMELOGIC-STATS@\CL {(TIMELOGIC-STATS)}}{21}
+\indexentry{:STATS|ITIDX}{21}
+\indexentry{:STATS|ITIDX}{21}
+\indexentry{TIMELOGIC-RESET-PROPS@\CL {(TIMELOGIC-RESET-PROPS {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}{\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Rest}}\relax  keywords\/}}}\relax )}}{21}
+\indexentry{TIMELOGIC-PROP@\CL {(TIMELOGIC-PROP {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss {\pem {}propname {\let \pem {}=\tenssi \let \pbf =\tenssbx {\tenss \&Optional}}\relax  newpropvalue\/}}}\relax )}}{21}
+\indexentry{TIMELOGIC-INIT|ITIDX}{21}
+\indexentry{:ALL-PATHS@\CL {:ALL-PATHS}}{22}
+\indexentry{:AUTO-BACKTRACK@\CL {:AUTO-BACKTRACK}}{22}
+\indexentry{:AUTO-DEFINE@\CL {:AUTO-DEFINE}}{22}
+\indexentry{:AUTO-REFERENCE@\CL {:AUTO-REFERENCE}}{22}
+\indexentry{:DEPTH-FIRST@\CL {:DEPTH-FIRST}}{22}
+\indexentry{:DISPLAY@\CL {:DISPLAY}}{22}
+\indexentry{:TRACE|ITIDX}{22}
+\indexentry{:TRACE|ITIDX}{22}
+\indexentry{:TRACE|ITIDX}{22}
+\indexentry{:DURATIONS@\CL {:DURATIONS}}{22}
+\indexentry{:FLOATS@\CL {:FLOATS}}{22}
+\indexentry{:TOLERANCE|ITIDX}{22}
+\indexentry{:LEAVES-ONLY@\CL {:LEAVES-ONLY}}{23}
+\indexentry{:RELATIONS@\CL {:RELATIONS}}{23}
+\indexentry{:SORT@\CL {:SORT}}{23}
+\indexentry{:DISPLAY|ITIDX}{23}
+\indexentry{:STATS@\CL {:STATS}}{23}
+\indexentry{TIMELOGIC-PROP|ITIDX}{23}
+\indexentry{:TOLERANCE@\CL {:TOLERANCE}}{23}
+\indexentry{:FLOATS|ITIDX}{23}
+\indexentry{:TRACE@\CL {:TRACE}}{23}
+\indexentry{:WAIT@\CL {:WAIT}}{24}
+\indexentry{:DISPLAY|ITIDX}{24}

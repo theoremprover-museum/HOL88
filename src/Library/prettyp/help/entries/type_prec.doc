@@ -1,0 +1,22 @@
+\DOC type_prec
+
+\TYPE {type_prec : (string -> int)}
+
+\SYNOPSIS
+Precedence table for HOL types (as a function).
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{type_prec} is a function which given the name of a HOL type operator, returns
+the precedence used by the pretty-printer. The standard infix type operators
+should be referred to by {fun}, {prod} and {sum}, rather than by the symbolic
+forms.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+min_type_prec, max_type_prec, term_prec.
+
+\ENDDOC

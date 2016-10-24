@@ -1,0 +1,19 @@
+\DOC get_max_hist
+
+\TYPE {get_max_hist : (* histoty -> int)}
+
+\SYNOPSIS
+Finds the maximum size of a history.
+
+\LIBRARY window
+
+\DESCRIBE
+
+Returns the maximum number of events that can be stored by a particular hisoty.
+
+\FAILURE
+
+\SEEALSO
+set_max_hist, epoch, present, dodo, undo, redo
+
+\ENDDOC

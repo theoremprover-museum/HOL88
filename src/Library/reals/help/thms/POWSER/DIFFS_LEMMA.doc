@@ -1,0 +1,6 @@
+\THEOREM DIFFS_LEMMA POWSER
+|- !n c x.
+    Sum(0,n)(\n'. (diffs c n') * (x pow n')) =
+    (Sum(0,n)(\n'. (& n') * ((c n') * (x pow (n' num_sub 1))))) +
+    ((& n) * ((c n) * (x pow (n num_sub 1))))
+\ENDTHEOREM

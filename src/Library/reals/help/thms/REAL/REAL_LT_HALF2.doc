@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_HALF2 REAL
+|- !d. (d / (& 2)) < d = (& 0) < d
+\ENDTHEOREM

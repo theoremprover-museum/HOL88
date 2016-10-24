@@ -1,0 +1,35 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: batch-hol-tool						%
+%									%
+% DESCRIPTION: Batch HOL session with merged input and output.		%
+%									%
+% AUTHOR: Richard Boulton						%
+%									%
+% ADDRESS: University of Cambridge					%
+%	   Computer Laboratory						%
+%	   New Museums Site						%
+% 	   Pembroke Street						%
+%	   Cambridge, CB2 3QG 						%
+%	   England.							%
+%	   								%
+%	   email: rjb@uk.ac.cam.cl					%
+%									%
+% DATE: 90.04.11							%
+% --------------------------------------------------------------------- %
+
+
+Have you ever wanted to run a HOL session non-interactively and have the input
+included in the output along with the results?
+
+In this directory, you will find the code for two C programs which allow you
+to do just that. `hol_merge' takes the output from a non-interactive HOL
+session and merges the original input into it (provided you tell it to use the
+right file!) `hol_batch' uses `hol_merge' and presents a simple command to do
+batch HOL sessions.
+
+The code may not be very good, but then I'm not really a C programmer.
+Any bug reports or improvements would be gratefully received.
+
+I hope you find these programs useful.
+
+                     Richard Boulton (rjb@uk.ac.cam.cl), 11th November 1989.

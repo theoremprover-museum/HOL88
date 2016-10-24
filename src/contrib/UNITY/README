@@ -1,0 +1,1139 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: UNITY                                                 |
+|									|
+| DESCRIPTION   : Definition of the UNITY theory, described in the	|
+|		  book [CM88]:						|
+|									|
+|			Parallel Program Design	- A Foundation		|
+|				K. Many Chandy				|
+|				Jayadev Misra				|
+|			Addison Wesley 1988				|
+|									|
+|									|
+| AUTHOR	: Flemming Andersen					|
+|		  TFL - a Telecomms Research Laboratory			|
+|		  Lyngsoe Alle 2					|
+|		  DK-2970 Horsholm					|
+|		  Denmark						|
+|									|
+| EMAIL		: fa@tfl.dk						|
+|									|
+| DATE		: 7. February 1991  			                |
+| LAST UPDATE	: October 17, 1992					|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+
+	l_unity:
+		load this file into your hol system and you are working in
+		the defined UNITY theory.
+
+	aux_definitions:
+		defines some new special symbols to introduce the state
+		abstracted logical operators, and defines some tactics and
+                ML functions used.
+
+        mk_state_logic:
+		defines state abstracted logical predicates and theorems
+		used in the UNITY theory.
+
+        mk_unless:
+		defines the UNITY safety properties:
+			UNLESS, STABLE and INVARIANT
+		and proves the theorems and corollaries presented in [CM88].
+                
+        mk_ensures:
+		defines the basic progress property:
+			ENSURES
+		and proves the theorems and corollaries presented in [CM88].
+
+        mk_gen_induct:
+		proves the theorem of generalized induction on the natural
+                numbers (used in mk_leadsto.ml).
+
+        mk_leadsto:
+		defines the progress property:
+			LEADSTO
+		and proves the theorems and corollaries presented in [CM88].
+
+	leadsto_induct0:
+		defines as example one LEADSTO induction tactics.
+			LEADSTO_INDUCT0_TAC
+		supports one of the induction principles used in [CM88].
+
+        mk_comp_unity:
+		proves the UNITY composition principle and the theorems
+		and corollaries in [CM88] correct.
+
+        mk_unity_prog:
+		defines a possible representation of UNITY programs, but you
+		may find this representation inconvenient for your particular
+		purpose. Hence, look into the examples to get a more detailed
+		understanding of possible program representations.
+
+        mk_until:
+		defines the progress property:
+			UNTIL
+		this file has not been finished yet.
+
+	examples:
+
+		mk_example01:
+			the dining philosophers example in [CM88] page 168-170
+
+		mk_example02:
+			the readers/writers example in [CM88] page 139-140
+
+		mk_example03:
+			An example of a 2-arbiter (description in the file)
+
+
++ --------------------------------------------------------------------------- +
+|									      |
+| DOCUMENTATION:						      	      |
+|									      |
++ --------------------------------------------------------------------------- +
+
+This version of the HOL-UNITY system is still not the final version.  A version
+which supports state space restriction will follow soon.
+
+Notice that a program in the present version is still represented as lists of
+state transitions.  But the list representation is proven valid as a LEADSTO
+theorem.
+
+Look into /Manual.
+
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE UNITY LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +  
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE UNITY LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   loadf `l_unity`;;
+
+
++ --------------------------------------------------------------------- +
+|									|
+| A PRINTOUT OF THE HOL-UNITY THEORIES					|
+|									|
++ --------------------------------------------------------------------- +
+
+The Theory state_logic
+Parents --  HOL     
+Constants --
+  /\* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  \/* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  ==>* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  <* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  <=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  =* ":(* -> **) -> ((* -> **) -> (* -> bool))"
+  =>* ":(* -> bool) -> ((* -> **) -> ((* -> **) -> (* -> **)))"
+  +* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  -* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ** ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ModX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  DivX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ExpX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  IndX ":(* -> (*1 -> *2)) -> ((* -> *1) -> (* -> *2))"
+  FALSE ":* -> bool"     TRUE ":* -> bool"
+  ~* ":(* -> bool) -> (* -> bool)"
+  !* ":(** -> (* -> bool)) -> (* -> bool)"
+  ?* ":(** -> (* -> bool)) -> (* -> bool)"
+  SucX ":(* -> num) -> (* -> num)"
+  PreX ":(* -> num) -> (* -> num)"
+  !<=* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  ?<=* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  ?<* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  /<=\* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  \<=/* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  /<\* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  \</* ":(num -> (* -> bool)) -> (num -> (* -> bool))"     
+Infixes --
+  /\* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  \/* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  ==>* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  <* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  <=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  =* ":(* -> **) -> ((* -> **) -> (* -> bool))"
+  =>* ":(* -> bool) -> ((* -> **) -> ((* -> **) -> (* -> **)))"
+  +* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  -* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ** ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ModX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  DivX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ExpX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  IndX ":(* -> (*1 -> *2)) -> ((* -> *1) -> (* -> *2))"     
+Binders --
+  !* ":(** -> (* -> bool)) -> (* -> bool)"
+  ?* ":(** -> (* -> bool)) -> (* -> bool)"     
+Definitions --
+  FALSE_DEF  |- FALSE = (\s. F)
+  TRUE_DEF  |- TRUE = (\s. T)
+  ~*  |- !p. ~* p = (\s. ~p s)
+  /\*  |- !p q. p /\* q = (\s. p s /\ q s)
+  \/*  |- !p q. p \/* q = (\s. p s \/ q s)
+  !*  |- !P. $!* P = (\s. !x. P x s)
+  ?*  |- !P. $?* P = (\s. ?x. P x s)
+  ==>*  |- !p q. p ==>* q = (\s. p s ==> q s)
+  <*  |- !p q. p <* q = (\s. (p s) < (q s))
+  >*  |- !p q. p >* q = (\s. (p s) > (q s))
+  <=*  |- !p q. p <=* q = (\s. (p s) <= (q s))
+  >=*  |- !p q. p >=* q = (\s. (p s) >= (q s))
+  =*  |- !p q. p =* q = (\s. p s = q s)
+  =>*  |- !p r1 r2. (p =>* r1)r2 = (\s. (p s => r1 s | r2 s))
+  +*  |- !p q. p +* q = (\s. (p s) + (q s))
+  -*  |- !p q. p -* q = (\s. (p s) - (q s))
+  **  |- !p q. p ** q = (\s. (p s) * (q s))
+  SucX  |- !p. SucX p = (\s. SUC(p s))
+  PreX  |- !p. PreX p = (\s. PRE(p s))
+  ModX  |- !p q. p ModX q = (\s. (p s) MOD (q s))
+  DivX  |- !p q. p DivX q = (\s. (p s) DIV (q s))
+  ExpX  |- !p q. p ExpX q = (\s. (p s) EXP (q s))
+  IndX  |- !a i. a IndX i = (\s. a s(i s))
+  !<=*  |- !P m. !<=* P m = (\s. !i. i <= m ==> P i s)
+  ?<=*  |- !P m. ?<=* P m = (\s. ?i. i <= m /\ P i s)
+  ?<*  |- !P m. ?<* P m = (\s. ?i. i < m /\ P i s)
+  /<=\*
+    |- (!P. /<=\* P 0 = P 0) /\
+       (!i P. /<=\* P(SUC i) = (/<=\* P i) /\* (P(SUC i)))
+  \<=/*
+    |- (!P. \<=/* P 0 = P 0) /\
+       (!i P. \<=/* P(SUC i) = (\<=/* P i) \/* (P(SUC i)))
+  /<\*
+    |- (!P. /<\* P 0 = FALSE) /\
+       (!i P. /<\* P(SUC i) = (/<\* P i) /\* (P i))
+  \</*
+    |- (!P. \</* P 0 = FALSE) /\
+       (!i P. \</* P(SUC i) = (\</* P i) \/* (P i))
+  
+Theorems --
+  IMPLY_WEAK_lemma1
+    |- !p q p' q' s.
+        (((p /\* q') \/* (p' /\* q)) \/* (q /\* q'))s ==> (q \/* q')s
+  IMPLY_WEAK_lemma2
+    |- !p q p' q' s.
+        ((((~* p) /\* q') \/* ((~* p') /\* q)) \/* (q /\* q'))s ==>
+        (q \/* q')s
+  IMPLY_WEAK_lemma3
+    |- !p q r s.
+        ((((~* p) /\* r) \/* ((~* q) /\* q)) \/* (q /\* r))s ==> r s
+  IMPLY_WEAK_lemma4
+    |- !p q p' q' r r' s.
+        ((((~*(p \/* p')) /\* (p \/* r')) \/*
+          ((~*(q \/* q')) /\* (q \/* r))) \/*
+         ((q \/* r) /\* (p \/* r')))
+        s ==>
+        ((p /\* q) \/* (r \/* r'))s
+  IMPLY_WEAK_lemma5
+    |- !p q r s.
+        ((p /\* r) \/* (((p \/* q) /\* (q \/* r)) \/* r))s ==>
+        (q \/* r)s
+  IMPLY_WEAK_lemma6
+    |- !p q b r s.
+        ((r /\* q) \/* ((p /\* b) \/* (b /\* q)))s ==>
+        ((q /\* r) \/* b)s
+  IMPLY_WEAK_lemma7
+    |- !p q b r s.
+        (((r /\* q) \/* ((r /\* p) /\* b)) \/* (b /\* q))s ==>
+        ((q /\* r) \/* b)s
+  AND_COMM_OR_lemma  |- !p q r. (r /\* q) \/* p = (q /\* r) \/* p
+  AND_OR_COMM_lemma  |- !p q r. p /\* (r \/* q) = p /\* (q \/* r)
+  OR_COMM_AND_lemma  |- !p q r. (r \/* q) /\* p = (q \/* r) /\* p
+  OR_COMM_OR_lemma  |- !p q r. (r \/* q) \/* p = (q \/* r) \/* p
+  OR_OR_COMM_lemma  |- !p q r. p \/* (r \/* q) = p \/* (q \/* r)
+  AND_COMM_AND_lemma  |- !p q r. (r /\* q) /\* p = (q /\* r) /\* p
+  AND_AND_COMM_lemma  |- !p q r. p /\* (r /\* q) = p /\* (q /\* r)
+  OR_AND_COMM_lemma  |- !p q r. p \/* (r /\* q) = p \/* (q /\* r)
+  NOT_NOT_lemma  |- !p. ~*(~* p) = p
+  OR_COMM_lemma  |- !p q. p \/* q = q \/* p
+  OR_OR_lemma  |- !p. p \/* p = p
+  OR_ASSOC_lemma  |- !p q r. (p \/* q) \/* r = p \/* (q \/* r)
+  AND_IMPLY_WEAK_lemma  |- !p q s. (p /\* q)s ==> q s
+  SYM_AND_IMPLY_WEAK_lemma  |- !p q s. (p /\* q)s ==> p s
+  OR_IMPLY_WEAK_lemma  |- !p q s. p s ==> (p \/* q)s
+  SYM_OR_IMPLY_WEAK_lemma  |- !p q s. p s ==> (q \/* p)s
+  IMPLY_WEAK_AND_lemma
+    |- !p q r. (!s. p s ==> q s) ==> (!s. (p /\* r)s ==> (q /\* r)s)
+  IMPLY_WEAK_OR_lemma
+    |- !p q r. (!s. p s ==> q s) ==> (!s. (p \/* r)s ==> (q \/* r)s)
+  AND_AND_lemma  |- !p. p /\* p = p
+  AND_COMM_lemma  |- !p q. p /\* q = q /\* p
+  AND_ASSOC_lemma  |- !p q r. (p /\* q) /\* r = p /\* (q /\* r)
+  AND_TRUE_lemma  |- !p. p /\* TRUE = p
+  OR_TRUE_lemma  |- !p. p \/* TRUE = TRUE
+  AND_FALSE_lemma  |- !p. p /\* FALSE = FALSE
+  OR_FALSE_lemma  |- !p. p \/* FALSE = p
+  P_OR_NOT_P_lemma  |- !p. p \/* (~* p) = TRUE
+  P_AND_NOT_P_lemma  |- !p. p /\* (~* p) = FALSE
+  AND_COMPL_OR_lemma  |- !p q. (p /\* (~* q)) \/* (p /\* q) = p
+  OR_NOT_AND_lemma  |- !p q. (p \/* q) /\* (~* q) = p /\* (~* q)
+  P_AND_Q_OR_Q_lemma  |- !p q. (p /\* q) \/* q = q
+  P_OR_Q_AND_Q_lemma  |- !p q. (p \/* q) /\* q = q
+  NOT_OR_AND_NOT_lemma  |- !p q. ~*(p \/* q) = (~* p) /\* (~* q)
+  NOT_AND_OR_NOT_lemma  |- !p q. ~*(p /\* q) = (~* p) \/* (~* q)
+  NOT_IMPLY_OR_lemma  |- !p q. (!s. ~* p s ==> q s) = (!s. (p \/* q)s)
+  IMPLY_OR_lemma  |- !p q. (!s. p s ==> q s) = (!s. ((~* p) \/* q)s)
+  OR_IMPLY_lemma  |- !p q. (!s. (p \/* q)s) = (!s. ~* p s ==> q s)
+  NOT_OR_IMPLY_lemma  |- !p q. (!s. ((~* p) \/* q)s) = (!s. p s ==> q s)
+  OR_AND_DISTR_lemma
+    |- !p q r. p \/* (q /\* r) = (p \/* q) /\* (p \/* r)
+  AND_OR_DISTR_lemma
+    |- !p q r. p /\* (q \/* r) = (p /\* q) \/* (p /\* r)
+  NOT_IMPLIES_FALSE_lemma  |- !p. (!s. ~* p s) ==> (!s. p s = FALSE s)
+  NOT_P_IMPLIES_P_EQ_FALSE_lemma  |- !p. (!s. ~* p s) ==> (p = FALSE)
+  NOT_AND_IMPLIES_lemma
+    |- !p q. (!s. ~*(p /\* q)s) = (!s. p s ==> ~* q s)
+  NOT_AND_IMPLIES_lemma1
+    |- !p q. (!s. ~*(p /\* q)s) ==> (!s. p s ==> ~* q s)
+  NOT_AND_IMPLIES_lemma2
+    |- !p q. (!s. ~*(p /\* q)s) ==> (!s. q s ==> ~* p s)
+  AND_OR_EQ_lemma  |- !p q. p /\* (p \/* q) = p
+  AND_OR_EQ_AND_COMM_OR_lemma
+    |- !p q. p /\* (q \/* p) = p /\* (p \/* q)
+  IMPLY_WEAK_lemma  |- !p q. (!s. p s) ==> (!s. (p \/* q)s)
+  IMPLY_WEAK_lemma_b  |- !p q s. p s ==> (p \/* q)s
+  ALL_OR_lemma  |- !P i. $?* P = (P i) \/* ($?* P)
+  ALL_i_OR_lemma  |- !P. (\s. ?i. \<=/* P i s) = $?* P
+  
+******************** state_logic ********************
+
+The Theory unless
+Parents --  state_logic     
+Constants --
+  UNLESS_STMT
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *) -> (* -> bool)))"
+  UNLESS ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  STABLE ":(* -> bool) -> ((* -> *)list -> bool)"
+  INVARIANT ":(* -> bool) -> ((* -> bool) # (* -> *)list -> bool)"     
+Infixes --
+  UNLESS_STMT
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *) -> (* -> bool)))"
+  UNLESS ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  STABLE ":(* -> bool) -> ((* -> *)list -> bool)"
+  INVARIANT ":(* -> bool) -> ((* -> bool) # (* -> *)list -> bool)"     
+Definitions --
+  UNLESS_STMT
+    |- !p q st.
+        (p UNLESS_STMT q)st = (\s. p s /\ ~q s ==> p(st s) \/ q(st s))
+  UNLESS
+    |- (!p q. (p UNLESS q)[] = T) /\
+       (!p q st Pr.
+         (p UNLESS q)(CONS st Pr) =
+         (!s. (p UNLESS_STMT q)st s) /\ (p UNLESS q)Pr)
+  STABLE  |- !p Pr. p STABLE Pr = (p UNLESS FALSE)Pr
+  INVARIANT
+    |- !p p0 Pr. p INVARIANT (p0,Pr) = (!s. p0 s ==> p s) /\ p STABLE Pr
+  
+Theorems --
+  UNLESS_STMT_thm0  |- !p st s. (p UNLESS_STMT p)st s
+  UNLESS_STMT_thm1
+    |- !p q r st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. q s ==> r s) ==>
+        (!s. (p UNLESS_STMT r)st s)
+  UNLESS_STMT_thm2
+    |- !p q p' q' st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. (p' UNLESS_STMT q')st s) ==>
+        (!s. ((p \/* p') UNLESS_STMT (q \/* q'))st s)
+  UNLESS_STMT_thm3
+    |- !p q p' q' st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. (p' UNLESS_STMT q')st s) ==>
+        (!s.
+          ((p /\* p') UNLESS_STMT
+           (((p /\* q') \/* (p' /\* q)) \/* (q /\* q')))
+          st 
+          s)
+  UNLESS_STMT_thm4
+    |- !p q p' q' st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. (p' UNLESS_STMT q')st s) ==>
+        (!s.
+          ((p \/* p') UNLESS_STMT
+           ((((~* p) /\* q') \/* ((~* p') /\* q)) \/* (q /\* q')))
+          st 
+          s)
+  UNLESS_STMT_thm5
+    |- !P q st.
+        (!m s. ((P m) UNLESS_STMT q)st s) ==>
+        (!s. ((\s. ?n. P n s) UNLESS_STMT q)st s)
+  UNLESS_thm1  |- !p Pr. (p UNLESS p)Pr
+  UNLESS_thm2  |- !p Pr. (p UNLESS (~* p))Pr
+  UNLESS_thm3
+    |- !p q r Pr. (p UNLESS q)Pr /\ (!s. q s ==> r s) ==> (p UNLESS r)Pr
+  UNLESS_thm4
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p /\* p') UNLESS (((p /\* q') \/* (p' /\* q)) \/* (q /\* q')))
+        Pr
+  UNLESS_thm5
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p \/* p') UNLESS
+         ((((~* p) /\* q') \/* ((~* p') /\* q)) \/* (q /\* q')))
+        Pr
+  UNLESS_thm6
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p /\* p') UNLESS (q \/* q'))Pr
+  UNLESS_thm7
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p \/* p') UNLESS (q \/* q'))Pr
+  UNLESS_thm8
+    |- !p q r Pr.
+        (p UNLESS q)Pr /\ (q UNLESS r)Pr ==> ((p \/* q) UNLESS r)Pr
+  UNLESS_cor1  |- !p q Pr. (!s. p s ==> q s) ==> (p UNLESS q)Pr
+  UNLESS_cor2  |- !p q Pr. (!s. ~* p s ==> q s) ==> (p UNLESS q)Pr
+  UNLESS_cor3
+    |- !p q r Pr.
+        ((p /\* (~* q)) UNLESS (q \/* r))Pr = (p UNLESS (q \/* r))Pr
+  UNLESS_cor4
+    |- !p q r Pr. ((p \/* q) UNLESS r)Pr ==> (p UNLESS (q \/* r))Pr
+  UNLESS_cor5  |- !p Pr. (p UNLESS TRUE)Pr
+  UNLESS_cor6  |- !p Pr. (TRUE UNLESS p)Pr
+  UNLESS_cor7  |- !p Pr. (FALSE UNLESS p)Pr
+  UNLESS_cor8
+    |- !p q p' Pr.
+        (!s. p s /\ ~q s) ==>
+        (!s. p' s) ==>
+        (!s. p s \/ q s) ==>
+        (((p /\* (~* q)) UNLESS q)Pr = ((p' /\* (~* q)) UNLESS q)Pr)
+  UNLESS_cor9
+    |- !p q p' q' r r' Pr.
+        ((p \/* p') UNLESS (q \/* r))Pr /\
+        ((q \/* q') UNLESS (p \/* r'))Pr ==>
+        ((p \/* (p' \/* (q \/* q'))) UNLESS ((p /\* q) \/* (r \/* r')))
+        Pr
+  UNLESS_cor10  |- !p q Pr. (p \/* q) STABLE Pr ==> (p UNLESS q)Pr
+  UNLESS_cor11  |- !p Pr. (!s. ~* p s) ==> p STABLE Pr
+  UNLESS_cor12  |- !p Pr. (!s. ~* p s) ==> (~* p) STABLE Pr
+  UNLESS_cor13
+    |- !p q Pr.
+        (p UNLESS q)Pr /\ (q UNLESS p)Pr /\ (!s. ~*(p /\* q)s) ==>
+        (p \/* q) STABLE Pr
+  UNLESS_cor14
+    |- !p q Pr.
+        (p UNLESS (~* q))Pr /\ q STABLE Pr ==>
+        (p UNLESS (p /\* (~* q)))Pr
+  UNLESS_cor15
+    |- !P Q Pr.
+        (!i. ((P i) UNLESS ((P i) /\* (Q i)))Pr) ==>
+        (($!* P) UNLESS (($!* P) /\* ($?* Q)))Pr
+  UNLESS_cor16
+    |- !P Q Pr.
+        (!i. ((P i) UNLESS (Q i))Pr) ==>
+        (!i. ((/<=\* P i) UNLESS (\<=/* Q i))Pr)
+  UNLESS_cor17
+    |- !P q Pr.
+        (!i. ((P i) UNLESS q)Pr) ==> (!i. ((/<=\* P i) UNLESS q)Pr)
+  UNLESS_cor18
+    |- !P q Pr. (!m. ((P m) UNLESS q)Pr) ==> (($?* P) UNLESS q)Pr
+  UNLESS_cor19  |- !Pr. FALSE STABLE Pr
+  UNLESS_cor20
+    |- !p q Pr. p STABLE Pr /\ q STABLE Pr ==> (p /\* q) STABLE Pr
+  UNLESS_cor21
+    |- !p q Pr. p STABLE Pr /\ q STABLE Pr ==> (p \/* q) STABLE Pr
+  UNLESS_cor22
+    |- !p q r Pr.
+        (p UNLESS q)Pr /\ r STABLE Pr ==> ((p /\* r) UNLESS (q /\* r))Pr
+  
+******************** unless ********************
+
+The Theory ensures
+Parents --  unless     
+Constants --
+  EXIST_TRANSITION
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  ENSURES ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"     
+Infixes --
+  EXIST_TRANSITION
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  ENSURES ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"     
+Definitions --
+  EXIST_TRANSITION
+    |- (!p q. (p EXIST_TRANSITION q)[] = F) /\
+       (!p q st Pr.
+         (p EXIST_TRANSITION q)(CONS st Pr) =
+         (!s. p s /\ ~q s ==> q(st s)) \/ (p EXIST_TRANSITION q)Pr)
+  ENSURES
+    |- !p q Pr.
+        (p ENSURES q)Pr = (p UNLESS q)Pr /\ (p EXIST_TRANSITION q)Pr
+  
+Theorems --
+  EXIST_TRANSITION_thm1
+    |- !p q r Pr.
+        (p EXIST_TRANSITION q)Pr /\ (!s. q s ==> r s) ==>
+        (p EXIST_TRANSITION r)Pr
+  EXIST_TRANSITION_thm2
+    |- !p Pr. (p EXIST_TRANSITION FALSE)Pr ==> (!s. ~* p s)
+  EXIST_TRANSITION_thm3
+    |- !p st Pr. (FALSE EXIST_TRANSITION p)(CONS st Pr)
+  ENSURES_thm0  |- !p q. (p ENSURES q)[] = F
+  ENSURES_thm1  |- !p st Pr. (p ENSURES p)(CONS st Pr)
+  ENSURES_thm2
+    |- !p q r Pr.
+        (p ENSURES q)Pr /\ (!s. q s ==> r s) ==> (p ENSURES r)Pr
+  ENSURES_thm3  |- !p Pr. (p ENSURES FALSE)Pr ==> (!s. ~* p s)
+  ENSURES_thm4
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' ENSURES q')Pr ==>
+        ((p /\* p') ENSURES
+         (((p /\* q') \/* (p' /\* q)) \/* (q /\* q')))
+        Pr
+  ENSURES_thm5
+    |- !p q r Pr. (p ENSURES q)Pr ==> ((p \/* r) ENSURES (q \/* r))Pr
+  ENSURES_cor1
+    |- !p q st Pr. (!s. p s ==> q s) ==> (p ENSURES q)(CONS st Pr)
+  ENSURES_cor2  |- !p q Pr. (p ENSURES q)Pr ==> (p UNLESS q)Pr
+  ENSURES_cor3
+    |- !p q r Pr. ((p \/* q) ENSURES r)Pr ==> (p ENSURES (q \/* r))Pr
+  ENSURES_cor4
+    |- !p q r Pr.
+        (p ENSURES (q \/* r))Pr ==> ((p /\* (~* q)) ENSURES (q \/* r))Pr
+  ENSURES_cor5
+    |- !p q r Pr. (p ENSURES q)Pr ==> (p ENSURES (q \/* r))Pr
+  ENSURES_cor6  |- !p st Pr. (FALSE ENSURES p)(CONS st Pr)
+  ENSURES_cor7
+    |- !p q r Pr.
+        (p ENSURES q)Pr /\ r STABLE Pr ==>
+        ((p /\* r) ENSURES (q /\* r))Pr
+  
+******************** ensures ********************
+
+The Theory gen_induct
+Parents --  ensures     
+Theorems --
+  GEN_INDUCT_lemma1  |- !P. (!m n. n <= m ==> P n) ==> (!m. P m)
+  GEN_INDUCT_lemma2  |- !m n. n <= m = n < (SUC m)
+  GEN_INDUCT_lemma3
+    |- !P. (!m. (!n. n < m ==> P n) ==> P m) ==> (!m n. n <= m ==> P n)
+  GEN_INDUCT_thm  |- !P. (!m. (!n. n < m ==> P n) ==> P m) ==> (!m. P m)
+  
+******************** gen_induct ********************
+
+The Theory leadsto
+Parents --  gen_induct     
+Constants --
+  In ":(* -> bool) -> (((* -> bool) -> bool) -> bool)"
+  LEADSTO ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  EQmetric ":(* -> num) -> (num -> (* -> bool))"
+  LESSmetric ":(* -> num) -> (num -> (* -> bool))"
+  LUB ":((* -> bool) -> bool) -> (* -> bool)"
+  LeadstoRel
+    ":((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))) ->
+      ((* -> *)list -> bool)"
+  LEADSTO2Fn
+    ":((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))) ->
+      ((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool)))"
+  LEADSTO2 ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  LEADSTO2Fam
+    ":((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))) ->
+      ((* -> *)list -> bool)"     
+Infixes --
+  In ":(* -> bool) -> (((* -> bool) -> bool) -> bool)"
+  LEADSTO ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  EQmetric ":(* -> num) -> (num -> (* -> bool))"
+  LESSmetric ":(* -> num) -> (num -> (* -> bool))"     
+Definitions --
+  LUB  |- !P. LUB P = (\s. ?p. P p /\ p s)
+  In  |- !p P. p In P = P p
+  LeadstoRel
+    |- !R Pr.
+        LeadstoRel R Pr =
+        (!p q.
+          ((p ENSURES q)Pr ==> R p q Pr) /\
+          (!r. R p r Pr /\ R r q Pr ==> R p q Pr) /\
+          (!P. (p = LUB P) /\ (!p'. p' In P ==> R p' q Pr) ==> R p q Pr))
+  LEADSTO
+    |- !p q Pr. (p LEADSTO q)Pr = (!R. LeadstoRel R Pr ==> R p q Pr)
+  LEADSTO2Fn
+    |- !R.
+        LEADSTO2Fn R =
+        (\p q Pr.
+          (p ENSURES q)Pr \/
+          (?r. (p ENSURES r)Pr /\ R r q Pr) \/
+          (?P. (p = LUB P) /\ (!p'. p' In P ==> R p' q Pr)))
+  LEADSTO2
+    |- !p q Pr.
+        LEADSTO2 p q Pr =
+        (!R.
+          (!p' q'. LEADSTO2Fn R p' q' Pr ==> R p' q' Pr) ==> R p q Pr)
+  LEADSTO2Fam
+    |- !R Pr.
+        LEADSTO2Fam R Pr =
+        (!p q.
+          ((p ENSURES q)Pr ==> R p q Pr) /\
+          (!r. (p ENSURES r)Pr /\ R r q Pr ==> R p q Pr) /\
+          (!P. (!p'. p' In P ==> R p' q Pr) ==> R(LUB P)q Pr))
+  EQmetric  |- !M m. M EQmetric m = (\s. M s = m)
+  LESSmetric  |- !M m. M LESSmetric m = (\s. (M s) < m)
+  
+Theorems --
+  LEADSTO_thm0  |- !p q Pr. (p ENSURES q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm1
+    |- !p r q Pr. (p LEADSTO r)Pr /\ (r LEADSTO q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm2
+    |- !p r q Pr. (p ENSURES r)Pr /\ (r LEADSTO q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm2a
+    |- !p r q Pr. (p ENSURES r)Pr /\ (r ENSURES q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm3
+    |- !p P q Pr.
+        (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr) ==>
+        (p LEADSTO q)Pr
+  LEADSTO_thm3a
+    |- !P q Pr.
+        (!p. p In P ==> (p LEADSTO q)Pr) ==> ((LUB P) LEADSTO q)Pr
+  LEADSTO_thm3c
+    |- !P q Pr. (!i. ((P i) LEADSTO q)Pr) ==> (($?* P) LEADSTO q)Pr
+  LEADSTO_thm4
+    |- !p1 p2 q Pr.
+        (p1 LEADSTO q)Pr /\ (p2 LEADSTO q)Pr ==>
+        ((p1 \/* p2) LEADSTO q)Pr
+  LEADSTO_thm5
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p LEADSTO r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm6
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm7
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p ENSURES r)Pr /\ (r ENSURES q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm8
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm9
+    |- !p q Pr.
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm11
+    |- !p q st Pr.
+        (?r. (p ENSURES r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr)) =
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm12  |- !p st Pr. (p LEADSTO p)(CONS st Pr)
+  LEADSTO_thm13
+    |- !p q st Pr.
+        (?r. (p LEADSTO r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr)) =
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm14
+    |- !p q st Pr.
+        (?r. (p LEADSTO r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr)) =
+        (?r. (p ENSURES r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr))
+  LEADSTO_thm15
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (!r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm16
+    |- !p q Pr.
+        (!r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm17
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\
+            ((p LEADSTO r)Pr ==> X p r Pr) /\
+            (r LEADSTO q)Pr /\
+            ((r LEADSTO q)Pr ==> X r q Pr) ==>
+            (p LEADSTO q)Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+            ((LUB P) LEADSTO q)Pr ==>
+            X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm18
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\
+          ((p LEADSTO r)Pr ==> X p r Pr) /\
+          (r LEADSTO q)Pr /\
+          ((r LEADSTO q)Pr ==> X r q Pr) ==>
+          (p LEADSTO q)Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+          ((LUB P) LEADSTO q)Pr ==>
+          X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm19
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\ X p r Pr /\ (r LEADSTO q)Pr /\ X r q Pr ==>
+            (p LEADSTO q)Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            ((LUB P) LEADSTO q)Pr ==>
+            X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm20
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\ X p r Pr /\ (r LEADSTO q)Pr /\ X r q Pr ==>
+          (p LEADSTO q)Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q Pr) ==>
+          ((LUB P) LEADSTO q)Pr ==>
+          X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm21
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r. X p r Pr /\ X r q Pr ==> X p q Pr) /\
+          (!P. (p = LUB P) /\ (!p. p In P ==> X p q Pr) ==> X p q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm22
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr. X p r Pr /\ X r q Pr ==> X p q Pr) /\
+        (!p P q Pr.
+          (p = LUB P) /\ (!p. p In P ==> X p q Pr) ==> X p q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm23
+    |- !X Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (p = LUB P) /\
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            X p q Pr)) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm24
+    |- !X Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            X(LUB P)q Pr)) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm25
+    |- !p q st Pr. (!s. p s ==> q s) ==> (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm26
+    |- !p q q' st Pr.
+        (p LEADSTO q)(CONS st Pr) ==> (p LEADSTO (q \/* q'))(CONS st Pr)
+  LEADSTO_thm27
+    |- !p q p' q' st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (p' LEADSTO q')(CONS st Pr) ==>
+        ((p \/* p') LEADSTO (q \/* q'))(CONS st Pr)
+  LEADSTO_thm28
+    |- !p q b r st Pr.
+        (p LEADSTO (q \/* b))(CONS st Pr) /\ (b LEADSTO r)(CONS st Pr) ==>
+        (p LEADSTO (q \/* r))(CONS st Pr)
+  LEADSTO_thm29
+    |- !p q r b st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (r UNLESS b)(CONS st Pr) ==>
+        ((p /\* r) LEADSTO ((q /\* r) \/* b))(CONS st Pr)
+  LEADSTO_thm30
+    |- !p st Pr. (p LEADSTO FALSE)(CONS st Pr) ==> (!s. ~* p s)
+  LEADSTO_cor1
+    |- !p b q Pr.
+        ((p /\* b) LEADSTO q)Pr /\ ((p /\* (~* b)) LEADSTO q)Pr ==>
+        (p LEADSTO q)Pr
+  LEADSTO_cor2
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ r STABLE (CONS st Pr) ==>
+        ((p /\* r) LEADSTO (q /\* r))(CONS st Pr)
+  LEADSTO_cor3
+    |- !p q st Pr.
+        (p LEADSTO q)(CONS st Pr) =
+        ((p /\* (~* q)) LEADSTO q)(CONS st Pr)
+  LEADSTO_cor4
+    |- !p b q st Pr.
+        ((p /\* b) LEADSTO q)(CONS st Pr) /\
+        ((p /\* (~* b)) LEADSTO ((p /\* b) \/* q))(CONS st Pr) ==>
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_cor5
+    |- !p q r st Pr.
+        ((p /\* q) LEADSTO r)(CONS st Pr) ==>
+        (p LEADSTO ((~* q) \/* r))(CONS st Pr)
+  LEADSTO_cor6
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (r UNLESS (q /\* r))(CONS st Pr) ==>
+        ((p /\* r) LEADSTO (q /\* r))(CONS st Pr)
+  LEADSTO_cor7
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (r /\* (~* q)) STABLE (CONS st Pr) ==>
+        (!s. (p /\* r)s ==> q s)
+  LEADSTO_cor8
+    |- !p r q st Pr.
+        (p LEADSTO r)(CONS st Pr) ==> ((p /\* q) LEADSTO r)(CONS st Pr)
+  LEADSTO_cor9
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (!s. q s ==> r s) ==>
+        (p LEADSTO r)(CONS st Pr)
+  LEADSTO_cor10
+    |- !P q Pr.
+        (!i. ((P i) LEADSTO q)Pr) ==> (!i. ((\<=/* P i) LEADSTO q)Pr)
+  LEADSTO_cor11  |- !p st Pr. (FALSE LEADSTO p)(CONS st Pr)
+  LEADSTO_cor12
+    |- !P q st Pr.
+        (!i. ((P i) LEADSTO q)(CONS st Pr)) ==>
+        (!i. ((\</* P i) LEADSTO q)(CONS st Pr))
+  LEADSTO2_thm0  |- !p q Pr. (p ENSURES q)Pr ==> LEADSTO2 p q Pr
+  LEADSTO2_thm1
+    |- !p r q Pr. (p ENSURES r)Pr /\ LEADSTO2 r q Pr ==> LEADSTO2 p q Pr
+  LEADSTO2_thm3
+    |- !P q Pr. (!p. p In P ==> LEADSTO2 p q Pr) ==> LEADSTO2(LUB P)q Pr
+  LEADSTO2_thm3a
+    |- !P q Pr.
+        (p = LUB P) /\ (!p. p In P ==> LEADSTO2 p q Pr) ==>
+        LEADSTO2 p q Pr
+  LEADSTO2_thm4
+    |- !p1 p2 q Pr.
+        LEADSTO2 p1 q Pr /\ LEADSTO2 p2 q Pr ==> LEADSTO2(p1 \/* p2)q Pr
+  LEADSTO2_thm8
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r. (p ENSURES r)Pr /\ X r q Pr ==> X p q Pr) /\
+          (!P. (!p. p In P ==> X p q Pr) ==> X(LUB P)q Pr)) ==>
+        LEADSTO2 p q Pr ==>
+        X p q Pr
+  LEADSTO2_thm2
+    |- !p r q Pr. LEADSTO2 p r Pr /\ LEADSTO2 r q Pr ==> LEADSTO2 p q Pr
+  LEADSTO2_thm5
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. LEADSTO2 p r Pr /\ LEADSTO2 r q Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> LEADSTO2 p q Pr)) =
+        LEADSTO2 p q Pr
+  LEADSTO2_thm6
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p ENSURES r)Pr /\ LEADSTO2 r q Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> LEADSTO2 p q Pr)) =
+        LEADSTO2 p q Pr
+  LEADSTO2_thm7
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p ENSURES r)Pr /\
+            LEADSTO2 r q Pr /\
+            (LEADSTO2 r q Pr ==> X r q Pr) ==>
+            LEADSTO2 p q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> LEADSTO2 p q Pr) /\
+            (!p. p In P ==> LEADSTO2 p q Pr ==> X p q Pr) ==>
+            LEADSTO2(LUB P)q Pr ==>
+            X(LUB P)q Pr)) ==>
+        LEADSTO2 p q Pr ==>
+        X p q Pr
+  LEADSTO_EQ_LEADSTO2  |- !p q Pr. (p LEADSTO q)Pr = LEADSTO2 p q Pr
+  LEADSTO_thm31
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r. (p ENSURES r)Pr /\ X r q Pr ==> X p q Pr) /\
+          (!P. (!p. p In P ==> X p q Pr) ==> X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm32
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr. (p ENSURES r)Pr /\ X r q Pr ==> X p q Pr) /\
+        (!P q Pr. (!p. p In P ==> X p q Pr) ==> X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm33
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p ENSURES r)Pr /\
+            (r LEADSTO q)Pr /\
+            ((r LEADSTO q)Pr ==> X r q Pr) ==>
+            (p LEADSTO q)Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+            ((LUB P) LEADSTO q)Pr ==>
+            X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm34
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p ENSURES r)Pr /\
+          (r LEADSTO q)Pr /\
+          ((r LEADSTO q)Pr ==> X r q Pr) ==>
+          (p LEADSTO q)Pr ==>
+          X p q Pr) /\
+        (!P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+          ((LUB P) LEADSTO q)Pr ==>
+          X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm34a
+    |- !X Pr.
+        (!p q. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q.
+          (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X r q Pr ==> X p q Pr) /\
+        (!P q.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q Pr) ==>
+          X(LUB P)q Pr) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm34b
+    |- !X.
+        (!p q st Pr. (p ENSURES q)(CONS st Pr) ==> X p q(CONS st Pr)) /\
+        (!p r q st Pr.
+          (p ENSURES r)(CONS st Pr) /\
+          (r LEADSTO q)(CONS st Pr) /\
+          X r q(CONS st Pr) ==>
+          X p q(CONS st Pr)) /\
+        (!P q st Pr.
+          (!p. p In P ==> (p LEADSTO q)(CONS st Pr)) /\
+          (!p. p In P ==> X p q(CONS st Pr)) ==>
+          X(LUB P)q(CONS st Pr)) ==>
+        (!p q st Pr. (p LEADSTO q)(CONS st Pr) ==> X p q(CONS st Pr))
+  LEADSTO_thm35
+    |- !p q p' q' r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\
+        (p' LEADSTO q')(CONS st Pr) /\
+        (q UNLESS r)(CONS st Pr) /\
+        (q' UNLESS r)(CONS st Pr) ==>
+        ((p /\* p') LEADSTO ((q /\* q') \/* r))(CONS st Pr)
+  LEADSTO_thm36
+    |- !p q st Pr M.
+        (!m.
+          ((p /\* (M EQmetric m)) LEADSTO
+           ((p /\* (M LESSmetric m)) \/* q))
+          (CONS st Pr)) ==>
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm37
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q) /\
+          (!r.
+            (p LEADSTO r)Pr /\ X p r /\ (r LEADSTO q)Pr /\ X r q ==>
+            X p q) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+            X(LUB P)q)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q
+  LEADSTO_thm38
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\ X p r /\ (r LEADSTO q)Pr /\ X r q ==> X p q) /\
+        (!P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+          X(LUB P)q) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q)
+  LEADSTO_thm39
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q) /\
+          (!r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X r q ==> X p q) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+            X(LUB P)q)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q
+  LEADSTO_thm40
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q) /\
+        (!p r q Pr.
+          (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X r q ==> X p q) /\
+        (!P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+          X(LUB P)q) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q)
+  LEADSTO_thm41
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (p = LUB P) /\
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> X p q Pr) ==>
+          X p q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm42
+    |- !X Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (p = LUB P) /\
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            X p q Pr)) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm43
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (p = LUB P) /\
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> X p q Pr) ==>
+          X p q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_cor13
+    |- !P Q r st Pr.
+        (!i. ((P i) LEADSTO ((Q i) \/* r))(CONS st Pr)) /\
+        (!i. ((Q i) UNLESS r)(CONS st Pr)) ==>
+        (!i. ((/<=\* P i) LEADSTO ((/<=\* Q i) \/* r))(CONS st Pr))
+  LEADSTO_cor14
+    |- !p q r p' q' st Pr.
+        (p LEADSTO (q \/* r))(CONS st Pr) /\
+        (q UNLESS r)(CONS st Pr) /\
+        (p' LEADSTO (q' \/* r))(CONS st Pr) /\
+        (q' UNLESS r)(CONS st Pr) ==>
+        ((p /\* p') LEADSTO ((q /\* q') \/* r))(CONS st Pr)
+  LEADSTO_cor15
+    |- !p q r b p' q' r' b' st Pr.
+        (p LEADSTO (q \/* r))(CONS st Pr) /\
+        (q UNLESS b)(CONS st Pr) /\
+        (p' LEADSTO (q' \/* r'))(CONS st Pr) /\
+        (q' UNLESS b')(CONS st Pr) ==>
+        ((p /\* p') LEADSTO
+         ((q /\* q') \/* ((r \/* b) \/* (r' \/* b'))))
+        (CONS st Pr)
+  LEADSTO_cor16
+    |- !P Q R B st Pr.
+        (!i. ((P i) LEADSTO ((Q i) \/* (R i)))(CONS st Pr)) /\
+        (!i. ((Q i) UNLESS (B i))(CONS st Pr)) ==>
+        (!i.
+          ((/<=\* P i) LEADSTO
+           ((/<=\* Q i) \/* ((\<=/* R i) \/* (\<=/* B i))))
+          (CONS st Pr))
+  
+******************** leadsto ********************
+
+The Theory comp_unity
+Parents --  leadsto     
+Theorems --
+  COMP_UNLESS_thm1
+    |- !p q FPr GPr.
+        (p UNLESS q)(APPEND FPr GPr) =
+        (p UNLESS q)FPr /\ (p UNLESS q)GPr
+  COMP_ENSURES_thm1
+    |- !p q FPr GPr.
+        (p ENSURES q)(APPEND FPr GPr) =
+        (p ENSURES q)FPr /\ (p UNLESS q)GPr \/
+        (p ENSURES q)GPr /\ (p UNLESS q)FPr
+  COMP_ENSURES_cor0
+    |- !p q FPr GPr.
+        (p ENSURES q)FPr /\ (p UNLESS q)GPr ==>
+        (p ENSURES q)(APPEND FPr GPr)
+  COMP_ENSURES_cor1
+    |- !p q FPr GPr.
+        (p ENSURES q)GPr /\ (p UNLESS q)FPr ==>
+        (p ENSURES q)(APPEND FPr GPr)
+  COMP_UNITY_cor0
+    |- !p0 p FPr GPr.
+        p INVARIANT (p0,APPEND FPr GPr) =
+        p INVARIANT (p0,FPr) /\ p INVARIANT (p0,GPr)
+  COMP_UNITY_cor1
+    |- !p FPr GPr.
+        p STABLE (APPEND FPr GPr) = p STABLE FPr /\ p STABLE GPr
+  COMP_UNITY_cor2
+    |- !p q FPr GPr.
+        (p UNLESS q)FPr /\ p STABLE GPr ==> (p UNLESS q)(APPEND FPr GPr)
+  COMP_UNITY_cor3
+    |- !p0 p FPr GPr.
+        p INVARIANT (p0,FPr) /\ p STABLE GPr ==>
+        p INVARIANT (p0,APPEND FPr GPr)
+  COMP_UNITY_cor4
+    |- !p q FPr GPr.
+        (p ENSURES q)FPr /\ p STABLE GPr ==>
+        (p ENSURES q)(APPEND FPr GPr)
+  COMP_UNITY_cor5
+    |- !p q FPr GPr. (p UNLESS q)(APPEND FPr GPr) ==> (p UNLESS q)GPr
+  COMP_UNITY_cor6
+    |- !p q FPr GPr. (p UNLESS q)(APPEND FPr GPr) ==> (p UNLESS q)FPr
+  COMP_UNITY_cor7
+    |- !p q st FPr. (p UNLESS q)(CONS st FPr) ==> (p UNLESS q)FPr
+  COMP_UNITY_cor8
+    |- !p FPr GPr.
+        (p ENSURES (~* p))FPr ==> (p ENSURES (~* p))(APPEND FPr GPr)
+  COMP_UNITY_cor9
+    |- !p q FPr GPr.
+        p STABLE FPr /\ (p UNLESS q)GPr ==> (p UNLESS q)(APPEND FPr GPr)
+  COMP_UNITY_cor10
+    |- !p q FPr GPr.
+        (p UNLESS q)(APPEND FPr GPr) = (p UNLESS q)(APPEND GPr FPr)
+  COMP_UNITY_cor11
+    |- !p q FPr GPr.
+        (p ENSURES q)(APPEND FPr GPr) = (p ENSURES q)(APPEND GPr FPr)
+  COMP_UNITY_cor12
+    |- !p q Pr1 Pr2.
+        (p LEADSTO q)(APPEND Pr1 Pr2) = (p LEADSTO q)(APPEND Pr2 Pr1)
+  COMP_UNITY_cor13
+    |- !p FPr GPr. p STABLE (APPEND FPr GPr) = p STABLE (APPEND GPr FPr)
+  COMP_UNITY_cor14
+    |- !p0 p FPr GPr.
+        p INVARIANT (p0,APPEND FPr GPr) =
+        p INVARIANT (p0,APPEND GPr FPr)
+  
+******************** comp_unity ********************

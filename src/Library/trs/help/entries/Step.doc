@@ -1,0 +1,23 @@
+\DOC Step
+
+\TYPE {Step : ((foundthm list # (void -> searchstep)) -> searchstep)}
+
+\SYNOPSIS
+Constructor function for intermediate steps of a search.
+
+\LIBRARY trs
+
+\DESCRIBE
+Searches proceed in steps, one theory segment at a time. At the end of the
+search, the theorems found are presented. At intermediate steps, the name of
+the theory being searched is displayed. If the search halts after an
+intermediate step, a list of theorems found so far and a function to continue
+the search are returned by means of the constructor {Step}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+Endofsearch, find_theorems, continue_search, show_step.
+
+\ENDDOC

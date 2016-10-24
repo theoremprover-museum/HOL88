@@ -1,0 +1,20 @@
+\DOC set_max_hist
+
+\TYPE {set_max_hist : (int -> * histoty -> * history)}
+
+\SYNOPSIS
+Sets the maximum size of a history.
+
+\LIBRARY window
+
+\DESCRIBE
+
+Sets the maximum number of event that will be stored by a particular history.
+
+\FAILURE
+Fails if the first parameter is not at least 1.
+
+\SEEALSO
+get_max_hist, epoch, present, dodo, undo, redo
+
+\ENDDOC

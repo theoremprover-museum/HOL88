@@ -1,0 +1,3 @@
+\THEOREM TRAT_EQ_EQUIV HRAT
+|- !p q. p trat_eq q = ($trat_eq p = $trat_eq q)
+\ENDTHEOREM

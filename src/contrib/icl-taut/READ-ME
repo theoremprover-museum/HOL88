@@ -1,0 +1,115 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: icl-taut                                                   %
+%                                                                       %
+% DESCRIPTION: Various theorem proving utilities, including a           %
+%              tautology checker.                                       %
+%                                                                       %
+% AUTHOR: R.B.Jones of ICL Defence Systems                              %
+%         (made into a HOL88 library by Mike Gordon)                    %
+%         (moved to contrib by Richard Boulton, 15th July 1991)         %
+%                                                                       %
+% ADDRESS: Mr R.B.Jones                                                 %
+%          International Computers Limited                              %
+%          Eskdale Road                                                 %
+%          Winnersh                                                     %
+%          Wokingham                                                    %
+%          Berks RG11 5TT                                               %
+%          ENGLAND, UK                                                  %
+%                                                                       %
+%          email: R.B.Jones@win0103.uucp                                %
+%                 R.B.Jones@win0103.icl.icl.gold-400.gb                 %
+%                 rbj@win.icl.co.uk                                     %
+%                                                                       %
+% DATE: 89.03.30                                                        %
+% --------------------------------------------------------------------- %
+
+
+% --------------------------------------------------------------------- %
+%									%
+% FILES:								%
+%									%
+% --------------------------------------------------------------------- %
+
+    taut_rules.ml            contains the various tools
+
+% --------------------------------------------------------------------- %
+%									%
+% TO REBUILD:								%
+%									%
+% --------------------------------------------------------------------- %
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
+
+% --------------------------------------------------------------------- %
+%									%
+% DOCUMENTATION:							%
+%									%
+% --------------------------------------------------------------------- %
+
+The main tools are described below. There are various other tools also,
+see the comments in taut_rules.ml for details.
+
+
+LEMMA : term -> tactic
+
+   For an arbitrary term tm:
+
+            al |- g
+   ================================== LEMMA tm
+     al |- tm         tm', al |- g
+
+   where "tm', al |- g"  results from applying STRIP_TAC to "al |- tm ==> g"
+
+
+LEMMA_PROOF : term -> tactic list -> tactic
+
+   For any term, tm, together with a list of tactics, tacl:
+
+	   al |- g
+   ========================= LEMMA_PROOF tm tacl
+         tm, al |- g
+
+   if EVERY tacl proves tm. 
+
+
+FORALL_OUT_TAC : tactic
+
+         A |- (!x. f) ==> (!x. g)
+     =============================== FORALL_OUT_TAC
+         A |- (!x. f ==> g)
+
+
+TAUT_TAC : tactic
+
+   TAUT_TAC proves tautologies: if the current goal is a tautology 
+   then TAUT_TAC will prove it. Otherwise it will take longer and fail. 
+   The definition of tautology is fairly broad, including all substitution
+   instances of tautologies, allowing for an understanding of boolean equality
+   and conditionals, and coping with outer universal quantifiers. 
+   Similar rules apply to all the derivatives with TAUT in their names. 
+
+
+TAUT_RULE : conv
+
+   TAUT_RULE also proves tautologies, given a tautological term
+   it will return a tautological theorem.
+
+
+TAUT_CONV : conv
+
+   TAUT_CONV, given a term t will return the theorem "t = T" 
+   if this is a tautology.
+
+
+PURE_TAUT_SIMP_TAC : tactic
+TAUT_SIMP_TAC      : tactic
+
+   PURE_TAUT_SIMP_TAC takes a long time,
+   replacing all tautological subexpressions by T. 
+   TAUT_SIMP_TAC follows this by a REWRITE_TAC[]. 
+

@@ -1,0 +1,3 @@
+\THEOREM POW_INV REAL
+|- !c. ~(c = & 0) ==> (!n. inv(c pow n) = (inv c) pow n)
+\ENDTHEOREM

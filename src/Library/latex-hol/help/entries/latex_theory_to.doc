@@ -1,0 +1,38 @@
+\DOC latex_theory_to
+
+\TYPE {latex_theory_to : (string -> bool -> string -> void)}
+
+\SYNOPSIS
+Translate \HOL\ theories to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+This function converts a theory to \LaTeX\ format for typsetting. The
+result is written to a file whose name is specified as the first
+argument. If such a file already exists, it is overwritten,
+otherwise, a file having the given name is created. The second
+argument specifies whether the output can be included in a larger
+\LaTeX\ document. If it is {true}, the output can be included in a
+document, otherwise, the ouput can be formatted as a standalone
+document. The last argument specifies the name of the theory to be
+processed. For example,
+{
+# latex_theory_to `bool.tex` false `bool`;;
+() : void
+}
+\noindent creates a file named {bool.tex} which can then be formatted using the
+command {latex bool}. This will produce a pretty printed copy of the
+\HOL\ theory {bool}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to}, {latex_term_add_to},
+{latex_thm}, {latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to}
+{latex_theorems_to} and {latex_theorems_add_to}.
+
+\ENDDOC

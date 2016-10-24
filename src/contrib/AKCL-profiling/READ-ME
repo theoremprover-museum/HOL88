@@ -1,0 +1,8 @@
+This directory contains a rudimentary profiling utility for AKCL
+versions of HOL.  The code is pretty much as distributed with the AKCL
+system, but some functions have been lifted to the ML level.
+
+The file guide.txt gives instructions for using the package.
+
+John Van Tassel (14 May 1993).
+

@@ -1,0 +1,4 @@
+\THEOREM REAL_SUP_UBOUND REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x < z) ==> (!y. P y ==> y <= (sup P))
+\ENDTHEOREM

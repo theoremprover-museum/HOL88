@@ -1,0 +1,108 @@
+
+\countdef\ppboxhlessone=255
+\countdef\ppboxwlessio=254
+\countdef\ppboxwlessfo=253
+\countdef\ppboxx=252
+\countdef\ppboxy=251
+\countdef\ppboxscratch=250
+
+\countdef\pplinen=249
+\countdef\pplinesubl=248
+\countdef\pplinehalfsubl=247
+\countdef\pplinex=246
+\countdef\ppliney=245
+\countdef\pplinedeltax=244
+\countdef\pplinedeltay=243
+\countdef\pplinescratch=242
+
+\def\ppline(#1,#2)(#3,#4)#5{\put(#1,#2){\line(#3,#4){#5}}}
+
+\def\ppdashline(#1,#2)(#3,#4)#5{
+   \ifnum#5>0
+   \pplinen=#5
+   \divide\pplinen by 5
+   \ifodd\pplinen \advance\pplinen by 1 \fi
+   \pplinesubl=#5
+   \divide\pplinesubl by \pplinen
+   \pplinehalfsubl=\pplinesubl
+   \divide\pplinehalfsubl by 2
+   \put(#1,#2){\line(#3,#4){\pplinehalfsubl}}
+   \pplinescratch=\pplinesubl
+   \advance\pplinescratch by \pplinehalfsubl
+   \pplinex=\pplinescratch
+   \ppliney=\pplinescratch
+   \multiply\pplinex by #3
+   \multiply\ppliney by #4
+   \advance\pplinex by #1
+   \advance\ppliney by #2
+   \pplinescratch=\pplinesubl
+   \multiply\pplinescratch by 2
+   \pplinedeltax=\pplinescratch
+   \pplinedeltay=\pplinescratch
+   \multiply\pplinedeltax by #3
+   \multiply\pplinedeltay by #4
+   \divide\pplinen by 2
+   \advance\pplinen by -1
+   \multiput(\pplinex,\ppliney)(\pplinedeltax,\pplinedeltay){\pplinen}
+      {\line(#3,#4){\pplinesubl}}
+   \pplinex=#3
+   \ppliney=#4
+   \multiply\pplinex by #5
+   \multiply\ppliney by #5
+   \advance\pplinex by #1
+   \advance\ppliney by #2
+   \put(\pplinex,\ppliney){\line(-#3,-#4){\pplinehalfsubl}}
+   \fi
+   }
+
+\def\ppbox(#1,#2)((#3,#4,#5),#6)#7#8{
+   \ppboxhlessone=#6
+   \advance\ppboxhlessone by -1
+   \ppboxwlessio=#3
+   \multiply\ppboxwlessio by -1
+   \advance\ppboxwlessio by #4
+   \ppboxwlessfo=#5
+   \multiply\ppboxwlessfo by -1
+   \advance\ppboxwlessfo by #4
+
+   \ppboxx=#1
+   \ppboxy=#2
+   \ppboxscratch=#7
+   \divide\ppboxscratch by 5
+   \put(\ppboxx,\ppboxy){\circle*{\ppboxscratch}}
+   \ppboxscratch=\ppboxwlessio
+   \multiply\ppboxscratch by #7
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(1,0){\ppboxscratch}
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(0,-1){#7}
+
+   \advance\ppboxy by -#7
+   \ppboxscratch=#3
+   \multiply\ppboxscratch by #7
+   \advance\ppboxx by -\ppboxscratch
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(1,0){\ppboxscratch}
+   \ppboxscratch=\ppboxhlessone
+   \multiply\ppboxscratch by #7
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(0,-1){\ppboxscratch}
+
+   \advance\ppboxy by -\ppboxscratch
+   \ppboxscratch=#5
+   \multiply\ppboxscratch by #7
+   \advance\ppboxx by \ppboxscratch
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(-1,0){\ppboxscratch}
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(0,1){#7}
+
+   \advance\ppboxy by #7
+   \ppboxscratch=\ppboxwlessfo
+   \multiply\ppboxscratch by #7
+   \advance\ppboxx by \ppboxscratch
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(-1,0){\ppboxscratch}
+   \ppboxscratch=\ppboxhlessone
+   \multiply\ppboxscratch by #7
+   \csname pp#8\endcsname(\ppboxx,\ppboxy)(0,1){\ppboxscratch}
+   }
+
+\def\ppboxplain(#1,#2)((#3,#4,#5),#6)#7{
+   \ppbox(#1,#2)((#3,#4,#5),#6){#7}{line}}
+
+\def\ppboxdashed(#1,#2)((#3,#4,#5),#6)#7{
+   \ppbox(#1,#2)((#3,#4,#5),#6){#7}{dashline}}

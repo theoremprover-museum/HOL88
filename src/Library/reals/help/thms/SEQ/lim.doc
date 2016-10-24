@@ -1,0 +1,3 @@
+\THEOREM lim SEQ
+|- !f. lim f = (@l. f --> l)
+\ENDTHEOREM

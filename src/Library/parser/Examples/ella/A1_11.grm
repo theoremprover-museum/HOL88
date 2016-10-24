@@ -1,0 +1,36 @@
+% A1.11 MACROS %
+
+macdec --> macname macdec_type.
+
+macdec_type --> [=] [FNSET] mac_FNSET 
+              | [\{] macspec [\}] [=] input [->] typ [:] 
+                {MK_five(`macdec`,POP,POP,POP,POP,fnbody)}
+              | [=] input [->] typ [:] {MK_four(`macdec`,POP,POP,POP,fnbody)}.
+
+mac_FNSET --> [\[] int [\]] [(] input [->] 
+              {MK_two(`fnarrow`,POP,typ)} [)] {MK_two(`fnset`,POP,POP)}
+              [:] {MK_one(`fnbody`,fnbody)} {MK_three(`macdec`,POP,POP,POP)}
+            | [(] input [->] {MK_two(`fnarrow`,POP,typ)} more_mac_inputs [)] 
+              {MK_one(`fnarrows`,POP)} [:] {MK_one(`fnbody`,fnbody)}
+              {MK_three(`macdec`,POP,POP,POP)}.
+
+more_mac_inputs --> [,] input [->] {MK_two(`fnarrow`,POP,typ)} 
+                    {add_to_list(POP,POP)} more_mac_inputs 
+                  | [].
+
+macspec --> [INT] {MK_one(`mactype_INT`,macspec_body)} 
+            {MK_one(`mactype`,POP)} more_macspecs {MK_one(`macpsec`,POP)}
+          | [TYPE] {MK_one(`mactype_TYPE`,macspec_body)} 
+            {MK_one(`mactype`,POP)} more_macspecs {MK_one(`macpsec`,POP)}.
+
+macspec_body --> name more_mac_names.
+
+more_mac_names --> {add_to_list(POP,name)} more_mac_names | [].
+
+more_macspecs --> [INT] {MK_one(`mactype_INT`,macspec_body)}
+                  {MK_one(`mactype`,POP)} {add_to_list(POP,POP)} more_macspecs
+                | [TYPE] {MK_one(`mactype_TYPE`,macspec_body)} 
+                  {MK_one(`mactype`,POP)} {add_to_list(POP,POP)} more_macspecs
+                | {MK_one(`mactypes`,POP)}.
+
+printable --> {MK_one(`printable`,string)} | {MK_one(`printable`,name)}.

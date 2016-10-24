@@ -1,0 +1,35 @@
+\DOC define_word_partition
+
+\TYPE {define_word_partition : int -> int -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Defines operators for splitting and joining words.
+
+\DESCRIBE
+{define_word_partition m n} defines the following two constants:
+{JOIN_m_n} which has type {:(wordm # wordn) -> wordl} and
+{SPLIT_m_n} which has type {:wordl -> (wordm # wordn)} where {l = m + n}.
+They are specified by the following theorem:
+{
+   |- (!wm wn. SPLIT_m_n(JOIN_m_n(wm,wn)) = wm,wn) /\
+      (!w. JOIN_m_n(SPLIT_m_n w) = w)
+}
+\noindent which is stored in the current theory as a definition under the name
+{PARTITION_m_n} and is returned as the value of this function.
+
+\FAILURE
+Fails if either it is not in draft mode or any of the word types
+involved has not been defined.
+
+\EXAMPLE
+{define_word_partition 3 5} returns the following definition:
+{
+   |- (!wm wn. SPLIT_3_5(JOIN_3_5 (wm,wn)) = wm,wn) /\
+      (!w. JOIN_3_5(SPLIT_3_5 w) = w)
+}
+where {wm} is of type {:word3}, {wn} is of type {:word5} and {w} is
+{:word8}.
+
+\ENDDOC

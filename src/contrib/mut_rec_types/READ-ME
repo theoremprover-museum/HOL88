@@ -1,0 +1,90 @@
+
+                                                          January 25. 1991
+Defining mutually recursive types in HOL
+========================================
+
+As a minor project towards our masters degree, we have implemented
+a facility for automatically defining mutually recursive types in
+HOL. Superficially it is an extension of Tom Melhams 'define_type'
+package. 
+
+The code works but is inefficient and neither guaranteed nor pretty.
+We have no current plans to improve, extend or maintain the system.
+With these restrictions in mind you're welcome to use it.
+
+The system consists of the following files:
+
+- Makefile    : Standard UNIX makefile
+- microc.ml   : 'Open term surgery' by David Shepherd, INMOS ltd 
+- tools.ml    : Miscellaneous useful functions
+- mut_thms.ml : Builds the theory 'mut_rec_tools'
+- mut_conv.ml : Miscellaneous conversions
+- mut_eu.ml   : Fundamental tactic dealing with n simultaneous ?!'s
+- mut_def.ml  : Defines 'define_mut_rec_type'
+
+
+How to use 'define_mut_rec_type'
+================================
+
+1) Build the system by typing 'make' in your shell. Start HOL.
+2) Open a theory eg.
+
+        new_theory `dummy`;;
+                         
+3) Add 'mut_rec_tools' as a parent.
+
+        new_parent `mut_rec_tools`;;
+                         
+4) load the system.
+
+        loadf `mut_def`;;
+                         
+5) Define your type, eg.
+
+        define_mut_rec_type [`A = A1     | A2 B`;
+                             `B = B1 num | B2 A B`];;
+
+
+The syntax for defining types is as in Tom's package, generalised
+to a list of strings, each defining one type.
+
+Due to debugging, 'define_mut_rec_type' is a bit talkative, which
+doesn't hurt as it tells you that it's alive :-)
+
+The above example returns the following theorem:
+
+|- !f1 f2 f3 f4.
+    ?! x1 x2.
+     (x1 A1 = f1) /\
+     (!z1. x1(A2 z1) = f2(x2 z1)z1) /\
+     (!z1. x2(B1 z1) = f3 z1) /\
+     (!z1 z2. x2(B2 z1 z2) = f4(x1 z1)(x2 z2)z1 z2)
+
+It took about five minutes on a SUN 3/280 (SunOS 4.0.3) running Franz Hol.
+We don't know for sure, but it might easily be exponential in both the
+number of types and the number of constructors. It IS quite memory hungry.
+
+Culprits
+========
+
+Peter Strarup Jensen (No fixed E-mail address at the moment)
+Ann-Grete Tan        (agt@daimi.aau.dk     until September 1991)
+Anders Pilegaard     (andersp@daimi.aau.dk until September 1991)
+
+
+There is an internal report (DAIMI IR-99) available for a small fee from:
+
+      The Computer Science Department
+      Aarhus University
+      Ny Munkegade 116
+      DK-8000 Aarhus C
+      Denmark. 
+
+
+PS
+==
+
+There is a second implementation of the same facility by 
+  
+  Poul Christiansen   (pchris@daimi.aau.dk)
+  Hans Jakob Pedersen (sjakob@daimi.aau.dk)

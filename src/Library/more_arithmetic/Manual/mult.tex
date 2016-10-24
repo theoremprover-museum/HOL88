@@ -1,0 +1,21 @@
+\section{The Theory {\tt mult}}
+
+The theory \ml{mult}\index{mult, theory@{\ptt mult}, theory} contains an
+\adhoc\ collection of 
+theorems about multiplication and exponentials. It contains no new definitions.
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+\begin{hol}
+\index{LESS\_MONO\_MULT1@{\ptt LESS\_MONO\_MULT1}}
+\index{LESS\_MULT\_PLUS\_DIFF@{\ptt LESS\_MULT\_PLUS\_DIFF}}
+\index{LEFT\_SUB\_DISTRIB@{\ptt LEFT\_SUB\_DISTRIB}}
+\index{ONE\_LESS\_TWO\_EXP\_SUC@{\ptt ONE\_LESS\_TWO\_EXP\_SUC}}
+\begin{verbatim}
+  LESS_MONO_MULT1       |- !m n p. m <= n ==> (p * m) <= (p * n)
+
+  LESS_MULT_PLUS_DIFF   |- !n k l. k < l ==> ((k * n) + n) <= (l * n)
+
+  LEFT_SUB_DISTRIB      |- !m n p. m * (n - p) = (m * n) - (m * p)
+
+  ONE_LESS_TWO_EXP_SUC  |- !n. 1 < (2 EXP (SUC n))
+\end{verbatim}\end{hol}

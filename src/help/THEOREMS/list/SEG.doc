@@ -1,0 +1,5 @@
+\THEOREM SEG list
+|- (!k l. SEG 0 k l = []) /\
+   (!m x l. SEG(SUC m)0(CONS x l) = CONS x(SEG m 0 l)) /\
+   (!m k x l. SEG(SUC m)(SUC k)(CONS x l) = SEG(SUC m)k l)
+\ENDTHEOREM

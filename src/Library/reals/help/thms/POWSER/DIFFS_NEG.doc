@@ -1,0 +1,3 @@
+\THEOREM DIFFS_NEG POWSER
+|- !c. diffs(\n. --(c n)) = (\n. --(diffs c n))
+\ENDTHEOREM

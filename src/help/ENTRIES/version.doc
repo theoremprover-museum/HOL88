@@ -1,0 +1,23 @@
+\DOC version
+
+\TYPE {version : (void -> int)}
+
+\SYNOPSIS
+Returns the version number of the {HOL} system being run.
+
+\DESCRIBE
+The number is imagined to have a `decimal point' before its last two digits to
+give the actual version number.
+
+\EXAMPLE
+{
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 2 (Sun4/Allegro 4.0), built on 22/6/91
+
+#version();;
+200 : int
+}
+\ENDDOC

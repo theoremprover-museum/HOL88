@@ -1,0 +1,5 @@
+\THEOREM NET_NULL_CMUL NETS
+|- !g k x.
+    (x tends (real_of_num 0))(mtop mr1,g) ==>
+    ((\n. k real_mul (x n)) tends (real_of_num 0))(mtop mr1,g)
+\ENDTHEOREM

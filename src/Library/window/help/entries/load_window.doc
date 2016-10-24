@@ -1,0 +1,29 @@
+\DOC load_window
+
+\TYPE {load_window : (void -> void)}
+
+\SYNOPSIS
+Finishes loading the window library.
+
+\LIBRARY window
+
+\DESCRIBE
+
+If when the user attempts to load the window library the system is
+unable to load the theory {win}, then loading is aborted and the function
+{load_window} defined.
+If at some later time the user loads the theory {win} or places the system
+in draft mode, then the call {load_library ()} can be used to complete
+the loading of the window library.
+
+\COMMENTS
+The function {load_window} is only defined if the initial attempt to load
+the window library did not succeed.
+
+\FAILURE
+Fails if the theory {win} is not the parent theory
+and the system is not in draft mode.
+
+\SEEALSO
+
+\ENDDOC

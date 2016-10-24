@@ -1,0 +1,10 @@
+\DOC establish_basis
+
+\TYPE {establish_basis : (win_path -> window -> (window # ...))}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM B_XOR_ASSOC wordn_bitops
+|- !l1 l2 l3.
+    (LENGTH l1 = LENGTH l2) /\ (LENGTH l2 = LENGTH l3) ==>
+    (B_XOR l1(B_XOR l2 l3) = B_XOR(B_XOR l1 l2)l3)
+\ENDTHEOREM

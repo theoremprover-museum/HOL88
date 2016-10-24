@@ -1,0 +1,3 @@
+\THEOREM NOT_EXP_0 arithmetic
+|- !m n. ~((SUC n) EXP m = 0)
+\ENDTHEOREM

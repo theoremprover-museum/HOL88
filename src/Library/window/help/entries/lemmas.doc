@@ -1,0 +1,22 @@
+\DOC lemmas
+
+\TYPE {lemmas : (window -> term list)}
+
+\SYNOPSIS
+The lemmas of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+The list of conclusions of those theorems which are relevant to the window
+and the assumptions of which are a subset of the hypotheses of the window.
+The lemmas of a window are a list of terms which are known to be true in 
+the context of the window.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+theorems
+
+\ENDDOC

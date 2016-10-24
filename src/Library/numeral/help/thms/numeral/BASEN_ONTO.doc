@@ -1,0 +1,3 @@
+\THEOREM BASEN_ONTO numeral
+|- !r l. ?n. BASEN r l = n
+\ENDTHEOREM

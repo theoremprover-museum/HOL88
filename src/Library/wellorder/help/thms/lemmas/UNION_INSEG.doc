@@ -1,0 +1,3 @@
+\THEOREM UNION_INSEG WELLORDER
+|- !P l. (!m. P m ==> m inseg l) ==> (Union P) inseg l
+\ENDTHEOREM

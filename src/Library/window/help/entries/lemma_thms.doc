@@ -1,0 +1,16 @@
+\DOC lemma_thms
+
+\TYPE {lemma_thms : (window -> thm list)}
+
+\SYNOPSIS
+The set of theorems recorded as being relevant to this window.
+
+\LIBRARY window
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+LEMMA_THMS, lemmas
+
+\ENDDOC

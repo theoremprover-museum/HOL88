@@ -1,0 +1,3 @@
+\THEOREM ALL_EL_CONJ list
+|- !P Q l. ALL_EL(\x. P x /\ Q x)l = ALL_EL P l /\ ALL_EL Q l
+\ENDTHEOREM

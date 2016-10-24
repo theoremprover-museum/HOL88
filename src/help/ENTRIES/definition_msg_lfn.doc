@@ -1,0 +1,35 @@
+\DOC definition_msg_lfn
+
+\TYPE {definition_msg_lfn : (string list -> thm)}
+
+\SYNOPSIS
+Loads a given definition from a given theory, with an autoload message.
+
+\DESCRIBE
+If {thy} is an ancestor theory, and {def} one of its definitions, then the
+call
+{
+   definition_msg_lfn [`thy`;`def`]
+}
+\noindent will print out a message of the form
+{
+   Definition def autoloaded from theory `thy`
+}
+\noindent and cancel any autoloading action associated with the name {def},
+and return that definition.
+
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {def} is not one of its
+definitions.
+
+\EXAMPLE
+{
+#definition_msg_lfn [`bool`;`NOT_DEF`];;
+Definition NOT_DEF autoloaded from theory `bool`.
+|- $~ = (\t. t ==> F)
+}
+\SEEALSO
+autoload, autoload_theory, definition, definitions, definition_lfn,
+load_definition, load_definitions, undo_autoload.
+
+\ENDDOC

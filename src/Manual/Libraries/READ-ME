@@ -1,0 +1,11 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: Manual/Libraries.				+
++ ===================================================================== +
+
+This directory contains:
+
+  Makefile      : the makefile for the libraries documentation
+  libraries.tex : top-level latex file for libaries volume prelims
+  Templates	: LaTeX and makefile templates for library documentation
+
+

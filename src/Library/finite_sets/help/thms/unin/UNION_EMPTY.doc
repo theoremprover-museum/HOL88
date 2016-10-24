@@ -1,0 +1,3 @@
+\THEOREM UNION_EMPTY finite_sets
+|- (!s. {{}} UNION s = s) /\ (!s. s UNION {{}} = s)
+\ENDTHEOREM

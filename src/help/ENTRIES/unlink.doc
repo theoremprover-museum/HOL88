@@ -1,0 +1,25 @@
+\DOC unlink
+
+\TYPE {unlink : (string -> void)}
+
+\SYNOPSIS
+Deletes a file.
+
+\DESCRIBE
+If {name} is the name of an existing file, then {unlink `name`} will remove
+that file (if there are other links to the file, this will merely remove a
+single link). Under Unix, the effect is the same as the {rm} command.
+
+\FAILURE
+A call to {unlink} may fail in various system-related ways, in particular if
+{name} does not exist or the user does not have write permission for the
+current directory.
+
+\COMMENTS
+This call is somewhat Unix-related, and may behave differently under other
+operating systems.
+
+\SEEALSO
+link, system.
+
+\ENDDOC

@@ -1,0 +1,43 @@
+This directory contains a hol-init file to increase the speed of HOL
+when built with AKCL (version 1-615).  AKCL tends to spend half its time
+doing garbage collection after being used to build HOL.  The supplied file
+increases the allocation of various types of data within lisp, causing
+GC to occur less frequently.  Speed-ups tend to be between 1.75 and 2X.
+Your mileage may vary.
+
+The file has been tested on Sun4's, DS3100's, and HP snakes.  In order to
+make similar mods for another architecture, invoke HOL, and perform the
+lisp "room" command.  Here's what it looks like on my Sun4:
+
+   #lisp `(room)`;;
+    450/450   54.6% 17 CONS BIGNUM RATIO COMPLEX STRUCTURE NIL
+      2/28     6.0%    FIXNUM SHORT-FLOAT CHARACTER RANDOM-STATE READTABLE FAT-STRING
+     83/109   97.9%  3 SYMBOL STREAM
+      1/2      7.7%    PACKAGE
+      2/36     7.9%    ARRAY HASH-TABLE VECTOR BIT-VECTOR PATHNAME
+     40/40    30.8%  2 STRING CCLOSURE
+     14/17    95.0%    CFUN LONG-FLOAT
+      4/5     90.7%    SFUN GFUN CFDATA SPICE NIL
+
+    526/715          4 contiguous (51 blocks)
+	125            hole
+	33    78.1% 15 relocatable
+
+     596 pages for cells
+    1280 total pages
+   14121 pages available
+     983 pages in heap but not gc'd + pages needed for gc marking
+   16384 maximum pages
+
+Now, do exactly what is done for the machines listed in the hol-init file, but
+double the size of available CONS cells for the current machine (i.e. from
+450 to 900 in this case).
+
+These mods are being shipped as contributed software in this release, but
+will probably become part of the standard system next time around (that is if
+they don't seem to break the system).  Please send me the configurations for
+any new machines, so that they may be included.
+
+John Van Tassel (1 December 1992)
+jvt@cl.cam.ac.uk
+

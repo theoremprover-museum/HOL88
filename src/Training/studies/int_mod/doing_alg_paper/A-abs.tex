@@ -1,0 +1,70 @@
+%File:elsa/papers/L-domains/Jim-L-abst.tex
+%This is the root file for the paper about L-domains
+
+\documentstyle[12pt]{article}
+
+%Spacing between rows
+\def\baselinestretch{1.2}
+
+%Width of text
+\setlength{\textwidth}{6in}
+%\setlength{\oddsidemargin}{.6in}
+
+%Height of text and page numbers
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+%To give empty headers
+\pagestyle{myheadings}                       %for page numbers in top
+\markright{\ }                                 %right-hand corner
+%\pagestyle{headings}
+
+\reversemarginpar                            %makes marginal notes on left
+
+\begin{document}
+
+\sloppy
+\thicklines
+\setlength{\unitlength}{6em}
+
+\input{mac.tex}
+
+%for use on "rough draft" copies
+%\newcommand{\mylabel}[1]{\label{#1}\marginpar{{\rm\scriptsize #1}}}
+%\newcommand{\myref}[1]{\ref{#1}\marginpar{{\rm\scriptsize used #1}}}
+
+%for use on "final" copies
+\newcommand{\mylabel}[1]{\label{#1}}
+\newcommand{\myref}[1]{\ref{#1}}
+
+\begin{center}
+\LARGE 
+Doing Algebra in Simple Type Theory\\
+\normalsize
+Elsa L.~Gunter\\
+University of Pennsylvania\\
+\date\\
+\end{center}
+\begin{quotation}
+\begin{center} \bf Abstract \end{center}
+
+To fully utilize the power of higher-order logic in interactive theorem
+proving,  it is desirable to be able to develop abstract areas of Mathematics
+such as algebra and topology in an automated setting.  Theorems provers
+capable of higher order reasoning have generally had some form of type
+theory as their object language.  But mathematicians have tended to use
+the language of set theory to give definitions and prove theorems in
+algebra and topology.  In this paper, we give an incremental description
+of how to express various basic algebraic concepts in terms of simple type
+theory.  We present a method for representing algebras, subalgebras,
+quotient algebras, homomorphisms and isomorphisms in simple type theory, using
+group theory as an example in each case.  Following this, we discuss how
+to automatically apply such an abstract theory to concrete examples.
+Finally, we conclude with some observations about a
+potential inconvenience associated with this method of representation,
+and discuss a difficulty inherent in any attempt to remove this
+inconvenience.
+
+\end{quotation}
+
+\end{document}

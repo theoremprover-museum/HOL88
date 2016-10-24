@@ -1,0 +1,3 @@
+\THEOREM SIN_BOUNDS TRANSC
+|- !x. (--(& 1)) <= (sin x) /\ (sin x) <= (& 1)
+\ENDTHEOREM

@@ -1,0 +1,78 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: zet                                                   |
+|									|
+| DESCRIPTION   : Definition of the integers: zet.                      |
+|									|
+| AUTHOR	: T. kalker						|
+| DATE		: 10 July 1989  			                |
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+
+        mk_zet:     defines the type zet 
+
+	zet_tactics.ml: induction tactics     
+
+	zet_ind:    definition by induction
+
+        zet.ml:     loads the theory zet
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+ 
+The theory of integers is constructed from the naturals
+using a quotient construct. 
+The relation with the naturals is given via the function INT.
+Induction is provided for by three tactics based upon
+three differrent, but similar theorems.  
+
+0)  |-  "!Q.((!x.(NEG x) ==> Q x) /\ (!x.((POS x) /\ (Q x)) ==> 
+                                       (Q (x plus een)))) ==> !x.Q x
+
+1)  |-  "!k Q.((!x.(x leq k) ==> (Q x)) /\
+               (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> (!x.Q x)
+
+2)  |-  "!k Q.((Q k) /\ 
+                  (!x.((x leq k) /\ (Q x)) ==> (Q (x minus een))) /\
+                  (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> 
+                    (!x.Q x)
+
+The latter theorem is used for constructing the functions:
+
+zet_recursive_definition, zet_zero_definition, zet_een_definition
+ 
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +  
+
+   0) necessary libraries: auxiliary, quotient, convert
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `zet`;;
+
+

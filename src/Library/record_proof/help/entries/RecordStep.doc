@@ -1,0 +1,40 @@
+\DOC RecordStep
+
+\TYPE {RecordStep : step -> void}
+
+\KEYWORDS
+proof recording.
+
+
+\SYNOPSIS
+Record a single inference step.
+
+\DESCRIBE
+A proof is a list of inference steps. After the proof recorder is
+enabled, every inference performed by the system is recorded and
+cumulated in an internal buffer. When a proof is completed, the raw
+records can then be processed and output to a disk file.
+
+{record_proof} is a system function for recording a single proof step.
+The type {step} represents a basic inference step. It contains all
+the necessary information of each inference. There are currently 52
+basic inferences which are being recorded. All other ML functions
+representing inference rules are implemented by these basic
+inferences.
+If the proof recorder is enabled when an inference is performed, 
+{RecordStep} will add a step into the internal buffer. 
+
+\FAILURE
+Never fail.
+
+\COMMENTS
+This is a system function implementing the proof recorded. Users
+should not use this function directly. User functions are provided in
+the library {record_proof}.  When new basic inference rule
+is implemented, this function should be called to record the inference step.
+
+\SEEALSO
+record_proof, is_recording_proof, get_steps,
+suspend_recording, resume_recording.
+
+\ENDDOC

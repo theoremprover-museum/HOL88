@@ -1,0 +1,3 @@
+\THEOREM NOT_MULT_LESS_0 mult
+|- !m n. 0 < m /\ 0 < n ==> 0 < (m * n)
+\ENDTHEOREM

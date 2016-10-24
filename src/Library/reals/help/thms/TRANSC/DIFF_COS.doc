@@ -1,0 +1,3 @@
+\THEOREM DIFF_COS TRANSC
+|- !x. (cos diffl (--(sin x)))x
+\ENDTHEOREM

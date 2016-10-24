@@ -1,0 +1,5 @@
+\THEOREM HP WELLORDER
+|- !l.
+    poset l ==>
+    (?P. chain l P /\ (!Q. chain l Q /\ P subset Q ==> (Q = P)))
+\ENDTHEOREM

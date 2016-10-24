@@ -1,0 +1,3 @@
+\THEOREM SER_ZERO SEQ
+|- !f. summable f ==> f --> (& 0)
+\ENDTHEOREM

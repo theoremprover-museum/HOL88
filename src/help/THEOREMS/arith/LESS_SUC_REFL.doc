@@ -1,0 +1,3 @@
+\THEOREM LESS_SUC_REFL prim_rec
+|- !n. n < (SUC n)
+\ENDTHEOREM

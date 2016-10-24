@@ -1,0 +1,3 @@
+\THEOREM ARB_THM bool
+|- $= = $=
+\ENDTHEOREM

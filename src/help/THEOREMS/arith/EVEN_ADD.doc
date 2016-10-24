@@ -1,0 +1,3 @@
+\THEOREM EVEN_ADD arithmetic
+|- !m n. EVEN(m + n) = (EVEN m = EVEN n)
+\ENDTHEOREM

@@ -1,0 +1,1266 @@
+\section{Programming level model}
+\label{sec-progmodel}
+
+The programming level model, or external architecture,
+of \Tamarack\ is a description of its operation as seen by
+a programmer.
+This model hides
+all aspects of the internal architecture
+which the programmer does not need to know about when
+writing programs for this microprocessor.
+
+The programming level model can be viewed as an interpreter
+for manipulating a set of variables which corresponds to the externally
+visible state of the microprocessor.
+It consists of four main parts:
+
+\begin{itemize}
+\item
+Basic data types and primitive operations.
+\item
+Variables manipulated by the interpreter.
+\item
+Format of instructions.
+\item
+Instructions semantics.
+\end{itemize}
+
+Our presentation of the programming level model is organized
+around these four main parts.
+Although we describe hardware interrupts separatedly from the
+semantics of ordinary program instructions,
+hardware interrupts in \Tamarack\ can be regarded as just
+another kind of instruction in the programming level model.
+\footnote{
+This is because the current instruction cycle executes to completion
+before an interrupt request is allowed to interrupt the normal
+flow of program execution.
+Instructions are also indivisible (with respect to
+external interrupt requests) in many commercially-available
+microprocessors such as the M68000.}
+
+\subsection{Basic data types and primitive operations}
+
+We begin with the basic data types and primitive operations
+used in the programming level model.
+The data type \verb":bool" is used to represent voltage values
+or logical conditions.
+The data type \verb":num" is used when some lower level form
+of data is interpreted as the representation of a natural number.
+The remaining data types correspond to machine words,
+groups of bits within a machine word,
+and memory states.
+A complete list of basic data types used in
+the programming level model is shown below.
+
+\begin{center}
+\begin{tabular}{ll}
+\verb":bool"& - Boolean values \{\verb"T",\verb"F"\}\\
+\verb":num"& - natural numbers \{\verb"0",\verb"1",\verb"2",\ldots\}\\
+\verb":*wordn"& - full-size machine words\\
+\verb":*word3"& - instruction opcodes\\
+\verb":*address"& - memory addresses\\
+\verb":*memory"& - memory states
+\end{tabular}
+\end{center}
+
+A conventional description would typically be very precise
+about details such as the number of bits in a machine word
+and the size of memory.
+However, we avoid specifying these details by regarding
+\verb":*wordn", \verb":*word3", \verb":*address" and \verb":*memory"
+as {\it uninterpreted types}.
+The actual representation of these basic data types
+may be thought of as implementation dependent details.
+We use the prefix \verb"*" to distinguish these as uninterpreted types.
+
+Functional elements such as the ALU
+({\it Arithmetic Logic Unit})
+at the lowest level of architectural
+description perform various operations on data.
+It is also possible and desirable to
+avoid specifying any details about these operations.
+Instead, these operations are
+regarded as {\it uninterpreted primitives}.
+Primitive operations used to describe the design and operation of
+\Tamarack\ are listed below
+along with an informal description of their types.
+Although we use the syntax of \HOL\ to describe these types,
+a slightly different set of types is used in the formal theory
+for reasons explained later in Section~\ref{sec-basis}.
+
+\begin{center}
+\begin{tabular}{lll}
+\verb"iszero"&
+\verb":*wordn"$\rightarrow$\verb"bool"&
+test if zero\\
+\verb"inc"&
+\verb":*wordn"$\rightarrow$\verb"*wordn"&
+increment\\
+\verb"add"&
+\verb":(*wordn"$\times$\verb"*wordn)"$\rightarrow$\verb"*wordn"&
+addition\\
+\verb"sub"&
+\verb":(*wordn"$\times$\verb"*wordn)"$\rightarrow$\verb"*wordn"&
+subtraction\\
+\verb"wordn"&
+\verb":num"$\rightarrow$\verb"*wordn"&
+representation of a number\\
+\verb"valn"&
+\verb":*wordn"$\rightarrow$\verb"num"&
+value of a full-size word\\
+\verb"opcode"&
+\verb":*wordn"$\rightarrow$\verb"*word3"&
+extract opcode field\\
+\verb"val3"&
+\verb":*word3"$\rightarrow$\verb"num"&
+value of an opcode\\
+\verb"address"&
+\verb":*wordn"$\rightarrow$\verb"*address"&
+extract address field\\
+\verb"fetch"&
+\verb":(*memory"$\times$\verb"*address)"$\rightarrow$\verb"*wordn"&
+read memory\\
+\verb"store"&
+\verb":(*memory"$\times$\verb"*address"$\times$\verb"*wordn)"$\rightarrow$\verb"*memory"&
+write memory
+\end{tabular}
+\end{center}
+
+The above list also gives a suggested interpretation for each of
+the uninterpreted primitives.
+Although we avoid specific details about
+the operations denoted by these uninterpreted primitives,
+we sometimes relax our presentation style
+by referring to an uninterpreted primitive in terms of its
+suggested interpretation.
+
+Our use of uninterpreted types for data and uninterpreted primitives for
+operations on these data types is one of the key concepts presented
+in this case study.
+It reflects our approach to formal specification
+which aims to separate irrelevant detail from
+those aspects of the design
+have been formally considered in the formal proof of correctness.
+We elaborate on this idea and
+our approach to formal specification later in Section~\ref{sec-abst}.
+Furthermore, by not specifying any details about
+basic data types or primitive operations on data, we have an informal
+description which is generalized
+over a whole range of possible word and memory
+sizes and possible interpretations
+for the primitive operations.
+
+\subsection{Externally visible state}
+
+The set of variables manipulated by the programming level model
+corresponds to the externally visible state of the microprocessor.
+In \Tamarack, these variables are:
+
+\begin{center}
+\begin{tabular}{ll}
+\verb"mem"& - memory\\
+\verb"pc"& - program counter\\
+\verb"acc"& - accumulator\\
+\verb"rtn"& - return address register\\
+\verb"iack"& - interrupt acknowledge flag
+\end{tabular}
+\end{center}
+
+The memory stores memory states, represented by the
+data type \verb":*memory".
+Each of the registers stores full-size memory words, represented
+by the data type \verb":*wordn".
+The interrupt acknowledge flag is stored internally by a flipflop whose
+value belongs to the data type \verb":bool".
+
+\subsection{Instruction word format}
+
+Instructions are exactly one full-size machine word.
+Although specific details about word size and
+instruction word format are not given in this description,
+we can assume that the instruction word consists of a 3-bit opcode
+(since there are eight different instructions)
+with the remaining bits used as an operand address.
+The operand address
+is the absolute address of a memory word
+which may be used as the address of either data or an instruction.
+
+\begin{center}
+\input{fig-format}
+\end{center}
+
+Opcodes and operand addresses
+are represented by the uninterpreted types \verb":*word3"
+and \verb":*address".
+They are extracted from an instruction word by the uninterpreted
+primitives \verb"opcode" and \verb"address".
+
+\subsection{Instruction set semantics}
+\label{sec-semantics}
+
+The eight \Tamarack\ programming level instructions
+are in Table~\ref{tab-inst}.
+Their opcode values and a brief explanation of each instruction are
+also given in the table.
+The opcode is extracted from the current instruction word by
+\verb"opcode" and its numerical value is then obtained
+by applying \verb"val3" to the extracted opcode.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|c|l|}
+\hline
+Instruction& Opcode Value& Effect\\ \hline\hline
+JZR& 0& jump if zero\\ \hline
+JMP& 1& jump\\ \hline
+ADD& 2& add accumulator\\ \hline
+SUB& 3& subtract accumulator\\ \hline
+LDA& 4& load accumulator\\ \hline
+STA& 5& store accumulator\\ \hline
+RFI& 6& return from interrupt\\ \hline
+NOP& 7& no operation \\ \hline
+\end{tabular}
+\caption{TAMARACK-3 Instruction Set}
+\label{tab-inst}
+\end{center}
+\end{table}
+
+The four data processing instructions,
+ADD, SUB, LDA and STA,
+involve both the
+accumulator \verb"acc" and memory \verb"mem".
+The other four instructions,
+JZR, JMP, RFI and NOP, are control instructions
+with no effect on either the accumulator or memory.
+The only conditional branch, JZR, tests
+whether the accumulator \verb"acc"
+contains the machine representation of zero.
+
+The address of the current instruction is always given by
+the program counter \verb"pc" at the beginning of
+each instruction cycle.
+Operationally, the program counter \verb"pc" is full-size register
+but only the address field of this register
+is used to access the current instruction word from memory.
+When a jump is taken as a result of either a JMP or JZR instruction,
+the entire instruction word is loaded into the program counter \verb"pc"
+but only the address field has any significance.
+
+The eight programming level instructions are described
+in the below.
+Only changes to the current state of the external architecture
+are described.
+Unaffected components of the externally visible state are not mentioned.
+Some of these descriptions are simplified by using
+the abbreviations,
+
+\begin{quote}
+\verb"inst = fetch (mem,(address pc))"
+
+\verb"operand = fetch (mem,(address inst))"
+\end{quote}
+
+\noindent
+for the current instruction word
+and the operand addressed by this instruction.
+The informal notation,
+
+\begin{quote}
+$<$destination$>$ $\leftarrow$ $<$expression$>$
+\end{quote}
+
+\noindent
+is used to denote when a value computed from the current machine state
+is loaded into a register, flipflop or memory to form a component of the
+next machine state.
+
+\subsubsection*{JZR - jump if zero}
+
+\begin{quote}
+\verb"pc" $\leftarrow$ if \verb"iszero acc" then \verb"inst" else \verb"inc pc"
+\end{quote}
+
+If the result of applying \verb"iszero" to the current contents of the
+accumulator \verb"acc" is \verb"T",
+then the current instruction word is loaded into the program
+counter \verb"pc".
+Otherwise, the \verb"inc" operation
+is applied to the current contents of the program counter \verb"pc" to
+obtain its new value.
+
+\subsubsection*{JMP - jump}
+
+\begin{quote}
+\verb"pc" $\leftarrow$ \verb"inst"
+\end{quote}
+
+The current instruction word is unconditionally loaded into the program
+counter \verb"pc".
+
+\subsubsection*{ADD - add accumulator}
+
+\begin{quote}
+\verb"acc" $\leftarrow$ \verb"add (acc,operand)"\\
+\verb"pc" $\leftarrow$ \verb"inc pc"
+\end{quote}
+
+The \verb"add" operation is applied to the current contents
+of the accumulator \verb"acc" and the memory word addressed by the operand
+address field of the current instruction. The result is loaded into
+the accumulator \verb"acc".
+The \verb"inc" operation
+is applied to the current contents of the program counter \verb"pc" to
+obtain its new value.
+
+\subsubsection*{SUB - subtract accumulator}
+
+\begin{quote}
+\verb"acc" $\leftarrow$ \verb"sub (acc,operand)"\\
+\verb"pc" $\leftarrow$ \verb"inc pc"
+\end{quote}
+
+The \verb"sub" operation is applied to the current contents
+of the accumulator \verb"acc" and the memory word addressed by the operand
+address field of the current instruction.  The result is loaded into
+the accumulator \verb"acc".
+The \verb"inc" operation
+is applied to the current contents of the program counter \verb"pc" to
+obtain its new value.
+
+\subsubsection*{LDA - load accumulator}
+
+\begin{quote}
+\verb"acc" $\leftarrow$ \verb"operand"\\
+\verb"pc" $\leftarrow$ \verb"inc pc"
+\end{quote}
+
+The memory word addressed by the operand
+address field of the current instruction is loaded into
+the accumulator \verb"acc".
+The \verb"inc" operation
+is applied to the current contents of the program counter \verb"pc" to
+obtain its new value.
+
+\subsubsection*{STA - store accumulator}
+
+\begin{quote}
+\verb"mem" $\leftarrow$ \verb"store (mem,address inst,acc)"\\
+\verb"pc" $\leftarrow$ \verb"inc pc"
+\end{quote}
+
+The current contents of the accumulator \verb"acc" are stored in
+external memory at the location specified by the operand
+address field of the current instruction.
+The \verb"inc" operation
+is applied to the current contents of the program counter \verb"pc" to
+obtain its new value.
+
+\subsubsection*{RFI - return from interrupt}
+
+\begin{quote}
+\verb"pc" $\leftarrow$ \verb"rtn"\\
+\verb"iack" $\leftarrow$ \verb"F"
+\end{quote}
+
+The current contents of the return address register \verb"rtn"
+are loaded into the program counter \verb"pc" and the interrupt acknowledge
+flag \verb"iack" is reset to \verb"F".
+This instruction does not check whether the interrupt acknowledge
+flag \verb"iack" is currently set.
+
+\subsubsection*{NOP - no operation}
+
+\begin{quote}
+\verb"pc" $\leftarrow$ \verb"inc pc"
+\end{quote}
+
+The \verb"inc" operation
+is applied to the current contents of the program counter \verb"pc" to
+obtain its new value.
+
+\subsection{Hardware interrupts}
+\label{sec-ireq}
+
+In the normal flow of program execution, instructions are
+sequentially executed according their semantics described
+in Section~\ref{sec-semantics}.
+The only kind of exception is a 
+single level, non-vectored, non-maskable hardware interrupt
+which is generated by setting the interrupt request pin \verb"irq"
+to \verb"T".
+
+An interrupt request will be detected and processed as soon as execution
+of the current instruction is completed.
+Normally, the interrupt will be detected within a few clock cycles
+but this may be delayed for an arbitrary number of
+clock cycles when the microprocessor is
+operating in either fully asynchronous mode or extended cycle mode.
+Because only a single level of interrupt is supported,
+the value of the interrupt request pin \verb"irq" will be ignored
+if the interrupt acknowledge flag is already \verb"T" indicating
+that a previous interrupt is still being serviced.
+
+\begin{quote}
+if \verb"iack = F" then
+
+\hspace*{.25in}\verb"pc" $\leftarrow$ \verb"0"\\
+\hspace*{.25in}\verb"rtn" $\leftarrow$ \verb"pc"\\
+\hspace*{.25in}\verb"iack" $\leftarrow$ \verb"T"
+\end{quote}
+
+The interrupt request is processed by saving the current value of the program
+counter \verb"pc" in
+the return address register \verb"rtn",
+setting the interrupt acknowledge flag \verb"iack" to \verb"T" and
+loading the machine representation of zero into the program counter \verb"pc".
+The interrupt service routine is assumed to begin at location zero
+in memory.
+
+At the end of the interrupt service routine,
+a return-from-interrupt instruction RFI is executed causing
+the saved return address
+stored in \verb"rtn" to be loaded into the program counter
+\verb"pc" and the interrupt acknowledge flag to be reset to \verb"F".
+
+\section{Memory interface}
+\label{sec-memory}
+
+The microprocessor can be interfaced to external memory to
+operate in one of three possible modes:
+fully synchronous,
+fully asynchronous,
+or extended cycle mode.
+The mode of operation is selected by the input pins
+\verb"dack" and \verb"idle".
+The \verb"dack" pin is used as a handshaking signal
+in fully asynchronous mode and extended cycle mode.
+In extended cycle mode,
+the \verb"idle" pin is used
+in place of a handshaking signal
+to indicate when the external memory is idle and ready
+to begin another interaction.
+
+Although a bi-directional bus would typically be used to transfer data
+between a microprocessor and external memory,
+the design of \Tamarack\ uses
+two separate uni-directional busses,
+\verb"datain" and \verb"dataout".
+Data is sent to external memory on the \verb"dataout" bus
+and received from external memory on the \verb"datain" bus.
+Memory addresses are sent to external memory on the \verb"addr" bus.
+
+The operations performed by external memory are denoted by the
+uninterpreted primitives \verb"fetch" and \verb"store".
+Although the synchronization details depend on the memory mode,
+the result of a read request is described by the equation,
+
+\begin{quote}
+\verb"datain = fetch (mem,addr)"
+\end{quote}
+
+\noindent
+and the result of a write request
+is described by the following update to the internal
+state of memory.
+
+\begin{quote}
+\verb"mem" $\leftarrow$ \verb"store (mem,addr,dataout)"
+\end{quote}
+
+Synchronization details for each of the three memory modes
+are described below.
+
+\subsection{Fully synchronous mode}
+
+In fully synchronous mode,
+every memory interaction is completed in a single cycle.
+The microprocessor is made to operate in this mode by
+wiring both of the pins \verb"idle" and \verb"dack" to \verb"T".
+A detailed timing analysis is needed to ensure that the
+external memory can always satisfy memory requests within
+a single clock cycle.
+
+Figure~\ref{fig-syn} shows the interconnections between
+external memory and \Tamarack\
+when operating in fully synchronous mode.
+The memory request pin \verb"dreq" is not needed in this mode
+because every clock cycle is assumed to be either a read or write request.
+The type of request is indicated by the \verb"wmem" pin which is
+normally reset to \verb"F" except when writing to memory.
+
+\begin{figure}
+\begin{center}
+\input{fig-syn}
+
+\caption{Fully Synchronous Operation.}
+\label{fig-syn}
+\end{center}
+\end{figure}
+
+\subsection{Fully asynchronous mode}
+
+Fully asynchronous interaction with external memory is achieved
+when no assumptions are made about
+the speed of the external memory relative to the
+microprocessor clock speed.
+This allows the microprocessor to be interfaced to a mixture
+of fast and slow devices in the address space of external memory.
+The transfer of data (and memory addresses) between the microprocessor
+and external memory is synchronized by handshaking signals
+following the four-phase bundled data convention
+illustrated in Figure~\ref{fig-hand}.
+It is only assumed that wire delays between the microprocessor
+and external memory are approximately uniform.
+
+\begin{figure}
+\begin{center}
+\input{fig-hand}
+
+\caption{Synchronizing Data Transfer with Handshaking Signals.}
+\label{fig-hand}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig-asyn} shows the interconnections between
+external memory and \Tamarack\
+when operating in fully asynchronous mode.
+In this mode, the \verb"idle" pin is permanently wired to \verb"F".
+The acknowledgement signal
+\verb"dack" is generated by the external memory (or by peripheral devices
+in the case of memory-mapped I/0).
+
+\begin{figure}
+\begin{center}
+\input{fig-asyn}
+
+\caption{Fully Asynchronous Operation.}
+\label{fig-asyn}
+\end{center}
+\end{figure}
+
+A memory request is signaled by setting the memory request pin \verb"dreq"
+to \verb"T".
+The type of request is indicated by the \verb"wmem" pin which is
+normally reset to \verb"F" except when writing to memory.
+After signaling a memory request,
+\verb"dreq" must remain \verb"T" and
+the \verb"wmem" flag,
+address bus \verb"addr" and dataout bus \verb"dataout" must
+remain at stable values
+until \verb"dack" becomes \verb"T" signaling
+that the request has been satisfied.
+In the case of a read request,
+incoming data from the external memory will
+be stable from when the acknowledgement signal \verb"dack" becomes
+\verb"T" until the request signal \verb"dreq" returns to its
+original value of \verb"F".
+Finally, the microprocessor waits for \verb"dack" to also return to
+\verb"F" before starting another memory request.
+
+The use of handshaking signals to synchronize data transfers
+between the microprocessor and external memory
+requires very little extra circuitry
+and no additional control states.
+Best case performance by the external memory will
+result in exactly the same number of clock cycles as fully
+synchronous mode.
+
+\subsection{Extended cycle mode}
+
+A small, but significant variation of fully asynchronous memory
+interaction is found in many commercially-available microprocessors
+including \Viper\ \cite{Pygott84}.
+In \Tamarack, this mode is selected by permanently
+wiring the \verb"idle" pin to \verb"T" as shown in Figure~\ref{fig-ext}.
+As before,
+the acknowledgement signal \verb"dack" is generated by external memory.
+
+The only difference concerns the completion of the memory cycle
+after the request signal \verb"dreq" has been reset to \verb"F".
+Unlike fully asynchronous mode,
+the control logic
+does not force the microprocessor to wait until the
+acknowledgement signal \verb"dack" also
+returns to \verb"F" before starting another memory request.
+Instead, it is assumed that
+the external memory will always complete the current memory cycle
+in time for another request to begin as early as the next clock cycle.
+This is a significant difference from fully asynchronous mode because
+the speed of external memory is no longer independent of
+the microprocessor clock speed.
+
+\begin{figure}
+\begin{center}
+\input{fig-ext}
+
+\caption{Extended Cycle Operation.}
+\label{fig-ext}
+\end{center}
+\end{figure}
+
+Because extended cycle mode is very similar to fully asynchronous
+mode, it is ignored in the rest of this description.
+The formal proof of correctness for
+\Tamarack\ does not consider this mode of operation.
+
+\section{Internal architecture}
+\label{sec-internal}
+
+This section begins with a structural view of the internal architecture
+and an overview of how programming level instructions are interpreted
+by the hardware.
+This is followed by a more detailed view of
+the internal architecture as a series of increasingly
+concrete interpretation levels.
+Finally, we outline some bottom level assumptions which bridge
+the gap between our most detailed level of description and actual hardware.
+
+\subsection{Register-transfer level structure}
+
+Figure~\ref{fig-rtl} shows a structural view of
+the \Tamarack\ register-transfer level architecture.
+It consists of two main parts: a microcoded control unit and
+a single-bus datapath.
+
+\begin{figure}
+\begin{center}
+\input{fig-rtl}
+
+\caption{Register-Transfer Level Architecture.}
+\label{fig-rtl}
+\end{center}
+\end{figure}
+
+The control unit is implemented by
+the microcode program counter \verb"mpc",
+a ROM ({\it Read Only Memory}) for storing microcode,
+a decoder which separates
+the ROM output into various microinstruction fields,
+and combinational logic for
+computing the address of the next microinstruction.
+
+The datapath includes
+the program counter \verb"pc",
+accumulator \verb"acc",
+return address register \verb"rtn",
+and interrupt acknowledge flag \verb"iack" which are components
+of the externally visible state at the programming level.
+In addition to these,
+several internal registers are needed to interpret programming level
+instructions.
+These additional, full-size word registers are:
+
+\begin{center}
+\begin{tabular}{ll}
+\verb"mar"& - memory address register\\
+\verb"ir"& - instruction word register\\
+\verb"arg"& - argument register for ALU input\\
+\verb"buf"& - buffer for ALU output
+\end{tabular}
+\end{center}
+
+The datapath also includes several functional elements:
+
+\begin{center}
+\begin{tabular}{ll}
+\verb"alu" & - four functions: \verb"add", \verb"sub", \verb"inc"
+and the constant (\verb"wordn 0")\\
+\verb"interface" & - switching between system bus and memory data pins\\
+\verb"opc" & - implements \verb"opcode" for extracting opcode field\\
+\verb"addr" & - implements \verb"address" for extracting address field\\
+\verb"zeroflag" & - implements \verb"iszero" to test for zero\\
+\verb"dreq"& - two-input OR-gate
+\end{tabular}
+\end{center}
+
+The storage devices and functional elements of the datapath are
+interconnected by a single system bus.
+The width of the system bus is exactly one full-size machine word.
+The datapath is controlled by signals from the control unit which,
+in turn, receives feedback from the datapath.
+
+\subsection{Overview of instruction interpretation}
+
+Each \Tamarack\ instruction is executed by
+a sequence of steps which varies depending on the particular
+instruction, the machine state and external inputs.
+In general, the following actions are taken by the internal
+architecture to interpret each programming level instruction.
+
+\begin{itemize}
+\item Check for interrupt request, otherwise continue \dots
+\item Fetch instruction addressed by program counter \verb"pc".
+\item Decode instruction.
+\item Fetch operand if needed.
+\item Execute instruction.
+\item Increment program counter \verb"pc" if necessary.
+\end{itemize}
+
+Not all of these actions are performed for each instruction.
+In particular, the control instructions JZR, JMP, RFI and NOP
+do not require an operand to be fetched from memory.
+Similarly, the program counter does not need to be incremented
+for the JMP and RFI instructions or for the
+JZR instruction when the jump is taken.
+There are several opportunities for overlapping some of these
+steps (e.g. incrementing the program counter while executing
+the current instruction) but this has not been done for the
+current design of \Tamarack\
+(see suggested exercise in Section~\ref{sec-exer}).
+
+The interpretation of an ADD instruction illustrates with greater detail how
+the internal architecture of \Tamarack\
+is used to implement its instruction set.
+An ADD instruction is interpreted by a sequence of data transfers
+over the system bus, interactions with memory, and operations
+on data performed by the various functional elements.
+The informal notation,
+
+\begin{quote}
+$<$destination$>$ $\leftarrow$ $<$expression$>$
+\end{quote}
+
+\noindent
+is used here
+to denote when a value computed from the current machine state
+is loaded into a register, flipflop or memory to form a component of the
+next machine state.
+But unlike its previous use
+to describe state changes in the programming level model
+between instruction cycles,
+this informal notation now describes state changes
+at the register-transfer level
+between clock cycles.
+
+Exactly eight steps are required to interpret the ADD instruction
+but some of these steps might be repeated (i.e., they are repeat-loops)
+when the microprocessor is operating in fully asynchronous mode
+\footnote{
+The \verb"fetch" operation performed by external
+memory is not necessarily completed until the last iteration of
+the repeat-loop.}.
+
+\begin{center}
+\begin{tabular}{ll}
+
+\verb"mar" $\leftarrow$ \verb"pc" &
+repeat if $\neg$(\verb"idle" or $\neg$\verb"dack")\\
+
+\verb"ir" $\leftarrow$ \verb"fetch (mem,(address mar))" &
+repeat if $\neg$\verb"dack"\\
+
+\verb"mar" $\leftarrow$ \verb"ir" &
+repeat if $\neg$(\verb"idle" or $\neg$\verb"dack")\\
+
+\verb"arg" $\leftarrow$ \verb"acc" &
+repeat if $\neg$(\verb"idle" or $\neg$\verb"dack")\\
+
+\verb"buf" $\leftarrow$ \verb"add (arg,fetch (mem,(address mar)))" &
+repeat if $\neg$\verb"dack"\\
+
+\verb"acc" $\leftarrow$ \verb"buf" & \\
+
+\verb"buf" $\leftarrow$ \verb"inc pc" & \\
+
+\verb"pc" $\leftarrow$ \verb"buf" & 
+
+\end{tabular}
+\end{center}
+
+The equation,
+
+\begin{quote}
+\verb"clock cycles = 8+n1+n2+n3+n4+n5"
+\end{quote}
+
+\noindent
+gives the total number of clock cycles
+needed to interpret an ADD instruction.
+Since every step is executed at least once,
+at least eight clock cycles are required.
+The variables \verb"n1", \verb"n2", \verb"n3", \verb"n4" and \verb"n5"
+denote the number of additional clock cycles spent waiting for the
+external memory at various steps in the instruction cycle.
+
+In fully synchronous mode, none of the eight steps are ever repeated
+because the pins \verb"idle" and \verb"dack" are both wired to \verb"T".
+In this case,
+the variables \verb"n1", \verb"n2", \verb"n3", \verb"n4" and \verb"n5"
+will all be equal to zero.
+Hence, the instruction cycle will be completed in exactly eight
+clock cycles.
+
+In fully asynchronous mode,
+some of the above steps may be repeated but this will have no
+untoward effect except to increase the number of clock cycles.
+In this case when the microprocessor is using handshaking signals
+to interact with memory,
+the variables \verb"n1", \verb"n2", \verb"n3", \verb"n4" and \verb"n5"
+will depend on the latency of external memory.
+For best case performance,
+these variables will all be zero resulting
+in exactly the same number of clock cycles as fully
+synchronous mode.
+More generally,
+it is only known that each wait loop will eventually terminate.
+This fact depends on the correct implementation of the handshaking protocol
+by both the microprocessor and external memory;
+establishing this fact is a major step
+in the \Tamarack\ proof of correctness.
+
+In either mode of operation,
+the cumulative effect of the ADD instruction interpretation sequence
+is described by the following updates to the accumulator \verb"acc"
+and the program counter \verb"pc".
+
+\begin{quote}
+\verb"acc" $\leftarrow$ \verb"add (acc,fetch (mem,(address fetch (mem,(address pc)))))"\\
+\verb"pc" $\leftarrow$ \verb"inc pc"
+\end{quote}
+
+Simplifying these expressions with the earlier mentioned abbreviations
+\verb"inst" and \verb"operand",
+yields the programming level description of the ADD instruction semantics
+given earlier in Section~\ref{sec-semantics}.
+
+\begin{quote}
+\verb"acc" $\leftarrow$ \verb"add (acc,operand)"\\
+\verb"pc" $\leftarrow$ \verb"inc pc"
+\end{quote}
+
+The interpretation of the other seven programming level instructions
+and the processing of a hardware interrupt can be described in
+a similar way by a sequence of steps.
+Showing by formal proof for each programming level instruction
+that the cumulative effect of each sequence
+satisfies the semantics of that particular instruction is another
+major part
+of the \Tamarack\ proof of correctness.
+
+\subsection{Multiple interpretation levels}
+\label{sec-multi}
+
+The programming level model of a microprocessor sits at the top
+of a hierarchy of interpretation levels
+implemented by the internal architecture.
+The internal operation of a
+microprocessor can generally be
+described in terms of the following language levels~\cite{Anceau}.
+
+\begin{center}
+\begin{tabular}{ll}
+Programming level& - sequential execution of user programs\\
+Microprogramming level& - sequential execution of microcode\\
+Phase level& - concurrent elementary hardware operations\\
+Instant level& - asynchronous sequencing in a clock phase\\
+Basic logic components& - circuit level behaviour
+\end{tabular}
+\end{center}
+
+This description of \Tamarack\ focuses on the three
+highest levels
+of interpretation (i.e., only down to the phase level).
+The programming level has already
+been described in terms of
+the instruction set semantics and the hardware interrupt facility.
+Below the programming level,
+increasingly concrete views of
+the internal operation of \Tamarack\ are described
+at the microprogramming level and at the phase level.
+
+\begin{figure}
+\begin{center}
+\input{fig-hier}
+
+\caption{Hierarchy of Interpretation Levels.}
+\label{fig-hier}
+\end{center}
+\end{figure}
+
+At the microprogramming level,
+a programming level instruction is interpreted by
+executing a sequence of microinstructions.
+This sequence of microinstructions
+is generated by a FSM ({\it Finite State Machine})
+implemented by the control unit.
+Microinstructions are
+executed by an operational part corresponding to the datapath.
+
+The phase level description decomposes
+the interpretation of a single microinstruction
+into the parallel execution of a set of elementary operations.
+This decomposition reveals the structural organization of the
+internal architecture in terms of register-transfer level components.
+
+The concept of multiple interpretation levels
+is used by architects to achieve a ``progressive translation
+of functions in several stages'' \cite{Anceau}.
+We will later describe how this concept
+also provides a very effective strategy for controlling proof complexity
+in the formal verification of \Tamarack.
+
+\subsubsection{Microprogramming level}
+\label{sec-micro}
+
+Every programming level instruction is interpreted by a different
+sequence of actions even though
+they share many individual steps in common.
+This sequence partially depends on the instruction opcode which
+is only known part way through the sequence after the instruction word
+has been fetched from memory.
+The sequence of steps taken may also depend on
+the machine state, in particular, on the contents of the
+accumulator \verb"acc"
+in the case of a jump-if-zero JZR instruction.
+
+The interpretation of each instruction, that is,
+the sequence of actions taken for each instruction, and similarly,
+the actions taken to process a hardware interrupt are determined
+by the control unit.
+The control unit FSM generates
+datapath commands (represented by microinstructions)
+each clock cycle.
+Each command causes an action to be performed by the datapath during
+the current clock cycle.
+
+The interpretation algorithm implemented by the control unit FSM is
+based on {\it conditional branches}, that is,
+a Moore machine approach in contrast to a Mealy machine approach
+based on {\it conditional instructions}.
+Inputs are used to select the next machine state but do not
+determine the current output of the state machine.
+Some of these inputs consists of
+feedback from the datapath, in particular,
+the opcode field of the instruction
+word register \verb"ir" contents,
+a \mbox{test-accumulator-for-zero} flag \verb"zeroflag",
+and the current value of the interrupt acknowledge flag \verb"iack".
+The FSM also receives external inputs from the \verb"idle",
+\verb"dack" and \verb"ireq" pins which determine the behaviour of the FSM.
+The FSM for the \Tamarack\ control
+unit is described by the flow graph in Figure~\ref{fig-flow}.
+
+\begin{figure}
+\begin{center}
+\input{fig-flow}
+
+\caption{Control Unit Finite-State Machine Flow Diagram.}
+\label{fig-flow}
+\end{center}
+\end{figure}
+
+The start of an instruction cycle 
+occurs when the FSM is in state~0 and about to exit to either state~1
+or state~2.
+If an interrupt is requested and the \verb"iack" flag is
+not already set, then the FSM exits to state~1 to process the interrupt.
+Otherwise, the FSM exits to state~2 and causes
+the current instruction word to be fetched from memory.
+In state~3, the FSM dispatches on the opcode field to
+the start of the remaining interpretation sequence for
+the current instruction.
+For instance, the interpretation of an ADD instruction would cause
+a transition from state~3 to state~6.
+From this point onwards, the FSM follows a sequence of state
+transitions leading back to state~0.
+In the case of a JZR instruction, the FSM selects one of two possible exits
+from state~4 depending the
+\mbox{test-accumulator-for-zero} feedback from the datapath.
+Assuming that the FSM never loops indefinitely in a particular state,
+then in all cases, including the processing of interrupts,
+the FSM always returns to state~0 to begin the next instruction cycle.
+
+For example,
+the interpretation of an ADD instruction in fully synchronous mode
+results in the following sequence of states.
+
+\begin{quote}
+0, 2, 3, 6, 13, 15, 11, 12, and back to 0.
+\end{quote}
+
+In fully asynchronous mode, additional clock cycles caused by
+delayed handshaking signals from the external memory could result
+in a sequence such as:
+
+\begin{quote}
+0, 2, 2, 2, 3, 3, 6, 13, 13, 13, 15, 11, 12, and back to 0.
+\end{quote}
+
+Each FSM state causes a specific action to be performed by the datapath.
+The mapping from FSM states to actions is shown in Figure~\ref{fig-map}.
+This mapping,
+combined with the flow graph in Figure~\ref{fig-flow},
+gives a complete description
+of the internal architecture of
+\Tamarack\ at one level of abstraction.
+This level of description contains no structural details aside
+from the conceptual distinction between the
+function of the control unit
+and the operation of datapath.
+Although the components of the internal state are visible in this view,
+updates to machine state are described functionally.
+This abstract view of the internal architecture is the basis
+of an intermediate
+step in the formal verification of \Tamarack.
+
+\begin{figure}
+\begin{center}
+\input{fig-map}
+
+\caption{Mapping from FSM States to Datapath Actions.}
+\label{fig-map}
+\end{center}
+\end{figure}
+
+\subsubsection{Phase level}
+\label{sec-phase}
+
+Each command generated by the FSM is a microinstruction which is
+interpreted by a set of register-transfer level operations.
+The phase level description decomposes
+a microprogramming level action such as,
+
+\begin{quote}
+\verb"buf" $\leftarrow$ \verb"add (arg,fetch (mem,(address mar)))"
+\end{quote}
+
+\noindent
+into the parallel execution of a set of elementary operations:
+
+\begin{quote}
+\verb"addr" = \verb"address mar"\\
+\verb"datain" = \verb"fetch (mem,addr)"\\
+\verb"bus" = \verb"datain"\\
+\verb"alu" = \verb"add (arg,bus)"\\
+\verb"buf" $\leftarrow$ \verb"alu"
+\end{quote}
+
+This decomposition reveals the structural organization of the
+microprocessor.
+Each of the elementary operations shown above corresponds to
+a functional element of the register-transfer architecture
+or, in the case of \verb"fetch",
+to a primitive operation performed by external memory.
+
+The phase level description of \Tamarack\ also refines certain
+abstract features of the microprogramming level description.
+In particular, it reveals that the FSM is implemented by:
+
+\begin{itemize}
+\item A microcode program counter \verb"mpc" to hold the current
+state of the FSM.
+\item The microcode ROM which encodes the abstract mapping
+from FSM states to actions given in Figure~\ref{fig-map}.
+\item A decoder which separates the ROM output into various
+microinstruction fields.
+\item The next address logic which computes the next FSM
+state according the flow graph given in Figure~\ref{fig-flow}.
+\end{itemize}
+
+The microcode program counter is a register which stores
+values belonging to an uninterpreted data type:
+
+\begin{center}
+\begin{tabular}{ll}
+\verb":*word4"& - FSM state
+\end{tabular}
+\end{center}
+
+Several uninterpreted primitives for this data type are
+needed later on to describe the computation performed by
+the next address logic.
+
+\begin{center}
+\begin{tabular}{lll}
+\verb"word4"& \verb":num"$\rightarrow$\verb"*word4"&
+representation of a number\\
+\verb"val4"& \verb":*word4"$\rightarrow$\verb"num"&
+numerical value of a FSM state
+\end{tabular}
+\end{center}
+
+Every clock cycle,
+the current value of the microcode program counter \verb"mpc"
+is used to fetch the current microinstruction
+from the microcode ROM.
+The microcode is {\it horizontal} which means, in this case, that every
+control signal is determined by a unique bit in the microinstruction word.
+The format of microinstruction words is shown below.
+
+\begin{center}
+\input{fig-bits}
+\end{center}
+
+The fifteen datapath
+control bits are extracted from the output of the microcode ROM
+and sent to the data path over a set of control lines.
+These control bits generate individual control signals
+including `write' signals for storage elements,
+`read' signals for devices which can assert values onto the system bus,
+and signals to control the operation of the functional elements such
+as the ALU.
+
+In addition to control bits for the datapath,
+the microinstruction word contains several other fields
+which are used to encode a partial computation of the next FSM state.
+The four next address logic
+control bits determine how the next address logic
+computes the next FSM state.
+The two microinstruction address fields, \verb"addr1" and \verb"addr2"
+(both of the type \verb":*word4"),
+specify destination fields for various kinds of conditional branches
+in the microcode which may be
+selected by the next address logic as the next FSM state.
+The next address logic is just a block of combinational logic
+whose function can be derived from the flow graph in Figure~\ref{fig-flow}.
+
+The interpretation of a microinstruction at the phase level during
+a single clock cycle results in a sequence of events which includes:
+
+\begin{center}
+\begin{itemize}
+\item Fetch the current microinstruction.
+\item Compute the address of the next microinstruction.
+\item Read data onto the system bus.
+\item Evaluate operations performed by functional elements.
+\item Update storage elements such as memory, registers and flipflops.
+\end{itemize}
+\end{center}
+
+Some of these events clearly precede other events.
+For instance, the current microinstruction has to be fetched
+from the microcode ROM before it can be interpreted.
+On the other hand,
+many of these events take place concurrently:
+for example,
+the address of the next microinstruction is computed by the
+next address logic while the datapath executes the actions specified
+by the current microinstruction.
+Indeed, much of the activity during a clock cycle is not necessarily
+synchronized by an explicit control mechanism:
+a change in the inputs to
+a functional element such as the ALU might be propagated to its outputs
+after a few nanoseconds depending on its implementation.
+
+Even though some constraints on the order of events
+during a clock cycle could be described,
+this has not be done in this description of \Tamarack.
+Instead,
+functional elements such as the ALU are modelled without delay
+and the update of storage elements is described as an atomic action.
+A fundamental feature
+of this abstraction
+is the assumption that
+updates to storage elements do not propagate to their outputs
+until the end of the clock cycle,
+i.e., there is no possibility of an closed feedback path
+resulting in a race condition.
+
+\subsection{Some bottom level assumptions}
+\label{sec-bottom}
+
+The relatively abstract view of how a microinstruction is interpreted
+during a single clock cycle is the lowest level in this
+description of \Tamarack.
+The phase level view is also the lowest level of specification in the
+formal proof of correctness.
+The semantic gap between this abstraction and actual hardware
+is bridged by several informally stated assumptions.
+
+First of all,
+it is assumed that the design is implemented
+by digital circuitry in some kind of synchronous logic design style
+(e.g., two-phase, non-overlapping logic).
+Depending on the design style,
+certain rules must be followed to ensure, for instance,
+that updates to storage elements do not propagate to their outputs
+until the end of the clock cycle.
+Assuming that these rules have been followed and certain other constraints
+have been satisfied,
+\footnote{
+Conventional CAD tools are commonly used to
+check that synchronous logic has been correctly implemented
+with respect to the rules of
+a particular design style
+and that other constraints are satisfied
+(e.g., no problems with clock skew for a given clock period).}
+synchronous logic gives rise to the
+abstract view where functional elements are modelled without delay
+and the update of storage elements is described as an atomic action.
+\footnote{
+Although the relatively abstract view of sequential behaviour
+in our lowest level of specification is valid,
+there is a semantic gap between
+this particular level of formal specification and
+the view of sequential behaviour supported by
+many sophisticated CAD tools.
+As it happened, this contributed to
+design error
+when the formal specification of
+\mbox{\scriptsize TAMARACK-2}
+was hand-translated
+into the design specification language
+of the {\scriptsize GENESIL} silicon compiler system
+by Shankar et al.\ \cite{SRI}.
+Even though the design was correct with respect to the
+built-in rules for the two-phase, non-overlapping design style,
+there was a mismatch between
+the single-phase view of sequential behaviour in the
+formal specification and
+the two-phase view supported by the silicon compiler.
+Although this experiment in verification-driven design
+revealed a semantic gap for this particular level
+of bottom level specification, this is does {\it not}
+represent any kind of inherent limitation of formal methods.}
+
+Synchronous logic only ensures that this abstraction is valid
+for the internal logic;
+some additional considerations are required to ensure that
+this abstraction is valid for
+the interface between internal logic and external devices.
+
+Asynchronous input events, such as
+a transition from \verb"F" to \verb"T" on the hardware interrupt
+request pin \verb"ireq", may occur at any time.
+In particular, they may occur at any point during the clock cycle
+used to synchronize the internal logic.
+Asynchronous input events may or may not be detected during
+the clock cycle depending on when they occur with respect to
+the minimum set-up time of any internal storage device that samples
+(directly or indirectly) this input.
+Carefully designed interface circuitry
+would be required to
+minimize the {\it metastability} problem, that is, the possibility
+of unstable equilibria in cross-coupled circuits \cite{Seitz}.
+
+In addition to sampling asynchronous inputs,
+the internal logic generates asynchronous outputs such as the
+interrupt acknowledge flag \verb"iack".
+External outputs may be sampled at any point in continuous time
+and every change in their value is significant.
+During a clock cycle,
+synchronous logic may generate several transient values
+before settling on a set of final values.
+For signals used internally,
+these transient values have no effect,
+but additional interface circuitry may be
+required to ensure that transient values do not
+propagate to asynchronous outputs.
+
+These
+%informally stated
+informal assumptions underlie the abstract view
+of how a microinstruction is interpreted during a single clock cycle.
+In the formal theory,
+asynchronous input and output events are
+modelled with respect to the same discrete time scale
+used to model internal synchronous logic.
+The model represents the {\it observed}
+behaviour of the external environment
+as seen by the internal logic.
+An asynchronous output event is described by
+changing the value of an output signal between adjacent
+points of discrete time.
+It is assumed that the output signal is
+otherwise stable with respect to continuous time.

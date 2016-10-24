@@ -1,0 +1,5 @@
+\THEOREM ZL WELLORDER
+|- !l.
+    poset l /\ (!P. chain l P ==> (?y. fl l y /\ (!x. P x ==> l(x,y)))) ==>
+    (?y. fl l y /\ (!x. l(y,x) ==> (y = x)))
+\ENDTHEOREM

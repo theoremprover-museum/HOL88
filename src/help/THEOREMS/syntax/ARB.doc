@@ -1,0 +1,3 @@
+\THEOREM ARB bool
+|- ARB = (@x. T)
+\ENDTHEOREM

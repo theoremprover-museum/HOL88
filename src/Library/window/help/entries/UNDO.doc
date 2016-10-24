@@ -1,0 +1,27 @@
+\DOC UNDO
+
+\TYPE {UNDO: (void -> void)}
+
+\SYNOPSIS
+Undoes the last transformation made to the current window stack.
+
+\LIBRARY window
+
+\DESCRIBE
+
+Every change made to the current window stack is stored in a history.
+The most recent {n} states of the stack can be retrieved by 
+sucessive calls to the {UNDO} command 
+({n} is the number returned by {GET_MAX_HIST}).
+Undoing a window with the {UNDO_WIN} command counts as a change
+to the stack, and can therefore be undone with {UNDO}.
+An {UNDO}, or seqence of {UNDO}s, can be undone by a {REDO}, or
+sequence of {REDO}s.
+
+\FAILURE
+{UNDO ()} will fail if no transformations have been made to the stack.
+
+\SEEALSO
+UNDO_WIN, REDO, SET_MAX_HIST, GET_MAX_HIST
+
+\ENDDOC

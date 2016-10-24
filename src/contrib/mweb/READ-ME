@@ -1,0 +1,30 @@
+This directory contains mweb---a suite of utility programs for documenting
+and managing HOL srcipt. In fact, it can be used for any programming
+languages since it is highly programmable. It is inspired by the idea
+of literate programming of D. Knuth. The core of this idea
+is to treat programs as works of literature. When programming
+in this method, one creates a master file containing both the document
+and the program text. This master file is processed by utility
+programs to generate program file and document file separately. The
+program file is then processed by a compiler or interpreter whilst the
+document file is processed by a text formatter to produce human
+readable document.
+
+There is a manual in the subdirectory Manual. Both .dvi and PostScript
+files of the manual are distributed. If re-format of the manual is
+needed, type `make all' in that directory provided you have 
+installed all macro files it needs. NOTE: some of these are user
+contributions widely available in the TeX/LaTex community but not
+distributed with TeX/LaTex system and not installed in every systems.
+
+
+To re-build the programs type
+
+	make all
+
+in this directory. To install the programs, you may need to change the
+system dependent path in the Makefile, and then type
+
+	make install
+
+

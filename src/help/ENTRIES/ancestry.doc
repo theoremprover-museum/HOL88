@@ -1,0 +1,21 @@
+\DOC ancestry
+
+\TYPE {ancestry : (void -> string list)}
+
+\SYNOPSIS
+Gets a list of the ancestors of the current theory.
+
+\DESCRIBE
+A call {ancestry()} returns a list of all the ancestors of the current theory,
+i.e. the current theory itself, its parents, parents of parents, etc.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+The call {ancestry()} is considerably more efficient than {ancestors `-`}.
+
+\SEEALSO
+ancestors, parents.
+
+\ENDDOC

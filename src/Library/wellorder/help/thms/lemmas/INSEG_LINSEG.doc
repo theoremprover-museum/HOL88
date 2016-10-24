@@ -1,0 +1,5 @@
+\THEOREM INSEG_LINSEG WELLORDER
+|- !l m.
+    woset l ==>
+    (m inseg l = (m = l) \/ (?a. fl l a /\ (m = linseg l a)))
+\ENDTHEOREM

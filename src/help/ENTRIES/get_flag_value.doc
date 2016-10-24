@@ -1,0 +1,26 @@
+\DOC get_flag_value
+
+\TYPE {get_flag_value : (string -> bool)}
+
+\SYNOPSIS
+Returns the value of one of the system flags.
+
+\DESCRIBE
+The call {get_flag_value name} will read the value of the system flag called
+{name}.
+
+\FAILURE
+Fails unless the name denotes a flag.
+
+\EXAMPLE
+{
+#get_flag_value `timing`;;
+false : bool
+}
+\COMMENTS
+The various flags which are set up by default are detailed in the DESCRIPTION.
+
+\SEEALSO
+flags, set_flag_value.
+
+\ENDDOC

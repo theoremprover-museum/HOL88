@@ -1,0 +1,10 @@
+\DOC H_box
+
+\TYPE {H_box : ((nat # print_object) list -> print_box_spec)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

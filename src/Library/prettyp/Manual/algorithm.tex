@@ -1,0 +1,533 @@
+
+\chapter{The pretty-printing algorithm\label{algorithm}}
+
+\input{ppboxmacros}
+{\setlength{\unitlength}{1pt}
+
+\section{Requirements}
+
+The development of the pretty-printer was motivated by the embedding of
+languages within the logic of the \HOL\ system. Typically, a construct of the
+language is represented by a new \HOL\ constant, which may be of a function
+type. The new constant is defined to have a logical property which expresses
+the meaning of the language construct. The appearance of the constant within
+a \HOL\ term is often too unlike the syntax of the language to be readable.
+The pretty-printer aims to solve this problem, by displaying the new \HOL\
+constant as the language construct the constant is representing.
+
+Consider an example. In set theory, the set:
+
+\begin{small}\begin{verbatim}
+   {1,2,3}
+\end{verbatim}\end{small}
+
+\noindent
+might be represented in \HOL\ as:
+
+\begin{small}\begin{verbatim}
+   "INSERT 1 (INSERT 2 (INSERT 3 EMPTY))"
+\end{verbatim}\end{small}
+
+\noindent
+where {\small\verb%EMPTY%} and {\small\verb%INSERT%} are new \HOL\ constants.
+It would be nice to have the term appear in the set notation.
+
+The \HOL\ term to be pretty-printed in a special way may be contained within a
+larger term, the rest of which is to be pretty-printed in the standard way for
+\HOL\ terms. Similarly, the term to be pretty-printed specially may itself
+contain sub-terms which are to be pretty-printed in the normal way. For
+example, a list of sets of lists:
+
+\begin{small}\begin{verbatim}
+   "[{[1;2],[3],[4;5;6]}; {}; {[8;9],[]}]"
+\end{verbatim}\end{small}
+
+\noindent
+To make use of the standard \HOL\ pretty-printer for most of the term, and
+only use a special pretty-printer for those parts which require it, would need
+a two-way flow of information between the two pretty-printers. In the example
+above, when the set theory constants are encountered, the standard \HOL\
+pretty-printer would have to invoke the special pretty-printer. This in turn
+would need to invoke the standard pretty-printer to deal with the elements of
+the sets, which are lists. With the standard pretty-printer written in Lisp,
+this did not seem to be a practical solution. It is unlikely that the code
+produced would be significantly cleaner than using {\it ad hoc\/} Lisp hacks
+to provide the required pretty-printing, and one of the main aims of the
+new pretty-printer is to provide a cleaner way of doing things.
+
+The alternative to a bidirectional link between the standard and
+special-purpose pretty-printers is to completely re-implement the \HOL\
+pretty-printer, so that no distinction is made between pretty-printing
+built-in \HOL\ constants and pretty-printing user-defined constants. This
+approach is the one that has been taken. It has meant extra work in providing
+a pretty-printer for standard \HOL\ constants. However, it has allowed the
+pretty-printer to be general-purpose; it can be used for pretty-printing
+almost any \ML\ datatype as well as \HOL\ terms.
+
+A number of pretty-printing algorithms were investigated. It was decided to
+base the design on \PPML~\cite{PPML}. This system has the particular
+advantage that it pretty-prints from a tree structure rather than from text
+-- a useful feature when dealing with \HOL\ terms. The trees used by \PPML\ are
+parse-trees. Since \HOL\ terms are similar, but not identical to the
+parse-trees for the text they are to appear as, the pretty-printing language
+has been modified to cope with the differences.
+
+
+\section{Boxes}
+
+The fundamental object for pretty-printing is a {\it box\/} of text. A box
+may extend over several lines of output, and can have initial and final
+indentations.
+
+\begin{center}
+\begin{picture}(190,100)
+\ppboxplain(40,90)((2,8,5),3){20}
+\put(15,92){{\it io}}
+\put(14,95){\vector(-1,0){14}}
+\put(26,95){\vector(1,0){14}}
+\put(45,20){{\it fo}}
+\put(44,23){\vector(-1,0){44}}
+\put(56,23){\vector(1,0){44}}
+\put(67,10){{\it width}}
+\put(64,13){\vector(-1,0){64}}
+\put(96,13){\vector(1,0){64}}
+\put(165,56){{\it height}}
+\put(180,51){\vector(0,-1){21}}
+\put(180,69){\vector(0,1){21}}
+\end{picture}
+\end{center}
+
+\noindent
+{\it io\/} and {\it fo\/} are the initial and final offsets respectively. The
+dot indicates the position of the `origin' of the box. Normally {\it io\/}
+will be zero. A non-zero value allows text on the second and subsequent lines
+to be negatively indented. The last line of the text does not have to extend
+as far as preceding lines. This is indicated by a value of {\it fo\/} which is
+less than the value of {\it width}.
+
+Two boxes of text may be composed to give a compound box of the same shape.
+The composition can be either horizontal or vertical. For horizontal
+composition the first line of the second box begins on the same line as the
+last line of the first box. The separation is given by {\it dx}:
+
+\begin{center}
+\begin{picture}(200,100)
+\ppboxplain(40,90)((2,8,5),3){20}
+\ppboxplain(140,50)((4,7,5),2){20}
+\ppboxdashed(40,90)((2,10,8),4){20}
+\put(114,37){{\it dx}}
+\put(114,40){\vector(-1,0){14}}
+\put(126,40){\vector(1,0){14}}
+\end{picture}
+\end{center}
+
+\noindent
+The vertical composition is similar, but there are two parameters. {\it di\/}
+is the horizontal offset of the second box relative to the first. This offset
+is measured between the origins of the two boxes. {\it dh\/} is the vertical
+separation between the two boxes.
+
+\begin{center}
+\begin{picture}(200,140)
+\ppboxplain(40,130)((2,8,7),3){20}
+\ppboxplain(80,50)((1,7,5),2){20}
+\ppboxdashed(40,130)((2,10,8),6){20}
+\put(55,57){{\it di}}
+\put(54,60){\vector(-1,0){14}}
+\put(66,60){\vector(1,0){14}}
+\put(103,56){{\it dh}}
+\put(110,66){\vector(0,1){4}}
+\put(110,54){\vector(0,-1){4}}
+\end{picture}
+\end{center}
+
+\noindent
+The parameters of the composite box cannot be computed using simple formulae.
+The values are dependent on whether the first box protrudes further to the
+right than the second box, and on which box protrudes further to the left. It
+is helpful to compute two values, {\it lo\/} and {\it ro}, as shown in the
+diagram below.
+
+\begin{center}
+\begin{picture}(200,80)
+\ppboxplain(40,70)((2,8,5),2){20}
+\ppboxplain(140,50)((4,7,6),2){20}
+\ppboxdashed(40,70)((2,10,9),3){20}
+\put(114,37){{\it dx}}
+\put(114,40){\vector(-1,0){14}}
+\put(126,40){\vector(1,0){14}}
+\put(25,17){{\it lo}}
+\put(24,20){\vector(-1,0){24}}
+\put(36,20){\vector(1,0){24}}
+\put(175,57){{\it ro}}
+\put(174,60){\vector(-1,0){14}}
+\put(186,60){\vector(1,0){14}}
+\end{picture}
+\end{center}
+
+\noindent
+As shown in the diagram, {\it lo\/} and {\it ro\/} are taken to have positive
+values. Either or both can also be negative. In the next diagram, both values
+are negative.
+
+\begin{center}
+\begin{picture}(200,80)
+\ppboxplain(60,70)((1,8,2),2){20}
+\ppboxplain(120,50)((6,8,7),2){20}
+\ppboxdashed(60,70)((3,10,7),3){20}
+\put(94,37){{\it dx}}
+\put(94,40){\vector(-1,0){14}}
+\put(106,40){\vector(1,0){14}}
+\put(15,37){{\it lo}}
+\put(14,40){\vector(-1,0){14}}
+\put(26,40){\vector(1,0){14}}
+\put(175,37){{\it ro}}
+\put(174,40){\vector(-1,0){14}}
+\put(186,40){\vector(1,0){14}}
+\end{picture}
+\end{center}
+
+\noindent
+The equations for the parameters of the composite box are given by:
+
+\begin{small}\begin{verbatim}
+   lo = (fo1 + dx) - io2
+   ro = (w2 - io2) - (w1 - (fo1 + dx))
+   io = if (lo < 0) then (io1 - lo) else io1
+   w  = if (lo < 0)
+        then if (ro < 0) then (w1 - lo) else w2
+        else if (ro < 0) then w1 else (w2 + lo)
+   fo = if (lo < 0) then fo2 else (fo2 + lo)
+   h  = h1 + h2 - 1
+\end{verbatim}\end{small}
+
+\noindent
+where identifiers ending with a {\small\verb%1%} are parameters of the first
+box to be composed and identifiers ending with a {\small\verb%2%} are
+parameters of the second box. {\it dx\/} should be checked to make sure it is
+not negative.
+
+The vertical composition of boxes is similar. The equations have to be changed
+as follows:
+
+\begin{small}\begin{verbatim}
+   lo = (io1 + di) - io2
+   ro = (w2 - io2) - (w1 - (io1 + di))
+   h  = h1 + h2 + dh
+\end{verbatim}\end{small}
+
+\noindent
+{\it dh\/} should be checked to make sure it is not negative.
+
+
+\subsection{Horizontal boxes}
+
+The two operations described above are the primitive compositions. Lists of
+boxes can be composed using these operations. There are four ways of doing
+this: horizontal, vertical, horizontal/vertical, and horizontal-or-vertical.
+A list of boxes composed horizontally cannot be broken between lines. Nothing
+can be done about a composite box that does not fit in the output width
+available. Here is an example:
+
+\begin{center}
+\begin{picture}(380,140)
+\ppboxplain(40,130)((2,8,5),3){20}
+\ppboxplain(120,90)((3,7,5),2){20}
+\ppboxplain(160,70)((1,12,5),3){20}
+\ppboxdashed(40,130)((2,19,12),6){20}
+\end{picture}
+\end{center}
+
+\noindent
+The restriction of not being able to break the composite box between lines
+makes horizontal composition the most difficult. In order to fit the boxes
+into the available width, any flexibility in their construction should be
+exploited. So, it is desirable to know how the boxes are to be composed before
+those boxes are themselves built from sub-boxes. Unfortunately, the way in
+which the boxes are composed may in turn depend on the size and shape of the
+boxes. So, iteration is necessary to find an optimal solution. Iteration
+would not be necessary if worst cases were always assumed, but this leads to
+unnecessarily unpleasant formatting.
+
+Iteration could be tricky because a tiny change in a sub-box can have a very
+large effect on an enclosing box. More importantly perhaps, performing
+iteration would make the pretty-printing algorithm too slow. There is
+however a non-iterative solution for horizontal composition which seems at
+first sight to make unreasonable assumptions about the boxes to be composed.
+However, analysis of the use of horizontal composition reveals that the
+assumptions are justified in a large proportion of cases. The assumption is
+that horizontal boxes are made up of sub-boxes, all but one of which are of
+width one character. A very common case is the horizontal composition of three
+boxes, the first of which is a left parenthesis; the second is a large unit,
+and the third is a right parenthesis. For example:
+
+\begin{center}
+\begin{picture}(180,80)
+\ppboxplain(0,70)((0,1,1),1){20}
+\ppboxplain(20,70)((0,8,5),3){20}
+\ppboxplain(120,30)((0,1,1),1){20}
+\ppboxdashed(0,70)((0,9,7),3){20}
+\put(2,55){{\LARGE\verb|(|}}
+\put(22,55){{\LARGE\verb|( a  *  b )  +|}}
+\put(22,35){{\LARGE\verb|( c  *  d  *  e )|}}
+\put(169,35){{\LARGE\verb|+|}}
+\put(22,15){{\LARGE\verb|( f  *  g )|}}
+\put(130,15){{\LARGE\verb|)|}}
+\end{picture}
+\end{center}
+
+\noindent
+It is worth noting that a box may take up zero or negative space in a
+composite box, even though it has a positive width. For example, consider the
+following box:
+
+\begin{center}
+\begin{picture}(160,80)
+\ppboxplain(100,70)((5,8,2),3){20}
+\end{picture}
+\end{center}
+
+\noindent
+The end of the box has a smaller horizontal offset than the start. So any box
+composed horizontally onto the end of the box can begin at a lower horizontal
+offset. This fact indicates that there are two notions of box width. One is
+the difference between the leftmost and rightmost edges. The other is the
+effective width when used in a composite box.
+
+An informal description of the horizontal composition algorithm is as follows.
+The total separation between the sub-boxes is computed. To this is added the
+number of sub-boxes (less the first). The available width is then reduced by
+this total to give the new available width. This is an attempt to guess how
+much space to leave on the line for the remainder of the sub-boxes. The
+effective width of each sub-box is assumed to be one. As we have seen, it
+could be any value, even negative.
+
+As each sub-box is built, the gap between it and the previous sub-box, plus
+one, is added back on to the available width, and the indentation from the
+left margin is changed by the genuine amount. In fact, the indentation is
+computed each time from the original indentation, the effective width of the
+box built so far, and the effective width of the latest sub-box.
+
+
+\subsection{Vertical boxes}
+
+Vertical composition of boxes does not allow any flexibility. However, unlike
+horizontal composition, it is a near to optimal solution. By specifying a
+large relative indentation between the sub-boxes, it is possible to cause the
+display width to be exceeded when not at all necessary, but for typical
+(i.e.~small) indentation values, vertical composition is the method least
+likely to cause the display width to be exceeded.
+
+The relative indentation can either be between a sub-box and its predecessor,
+or between a sub-box and the first box of those to be composed:
+
+\begin{center}
+\begin{picture}(400,100)
+\ppboxplain(0,90)((0,5,5),1){20}
+\ppboxplain(40,70)((0,5,5),1){20}
+\ppboxplain(80,50)((0,5,5),1){20}
+\ppboxplain(120,30)((0,5,5),1){20}
+\put(15,57){{\it di}}
+\put(14,60){\vector(-1,0){14}}
+\put(26,60){\vector(1,0){14}}
+\put(55,37){{\it di}}
+\put(54,40){\vector(-1,0){14}}
+\put(66,40){\vector(1,0){14}}
+\put(95,17){{\it di}}
+\put(94,20){\vector(-1,0){14}}
+\put(106,20){\vector(1,0){14}}
+\ppboxplain(260,90)((0,5,5),1){20}
+\ppboxplain(300,70)((0,5,5),1){20}
+\ppboxplain(300,50)((0,5,5),1){20}
+\ppboxplain(300,30)((0,5,5),1){20}
+\put(275,57){{\it di}}
+\put(274,60){\vector(-1,0){14}}
+\put(286,60){\vector(1,0){14}}
+\put(275,37){{\it di}}
+\put(274,40){\vector(-1,0){14}}
+\put(286,40){\vector(1,0){14}}
+\put(275,17){{\it di}}
+\put(274,20){\vector(-1,0){14}}
+\put(286,20){\vector(1,0){14}}
+\end{picture}
+\end{center}
+
+\noindent
+It is worth noting that the order in which the sub-boxes are composed affects
+the meaning of the indentation value {\it di}. If the first two boxes are
+composed first, and the resulting box composed with the third box, all using
+{\it di\/} for the indentation, the indentation is relative to the first box.
+For example:
+
+\begin{center}
+\begin{picture}(140,80)
+\ppboxplain(0,70)((0,5,5),1){20}
+\ppboxplain(40,50)((0,5,5),1){20}
+\ppboxdashed(0,70)((0,7,7),2){20}
+\ppboxplain(40,30)((0,5,5),1){20}
+\put(15,37){{\it di}}
+\put(14,40){\vector(-1,0){14}}
+\put(26,40){\vector(1,0){14}}
+\put(15,17){{\it di}}
+\put(14,20){\vector(-1,0){14}}
+\put(26,20){\vector(1,0){14}}
+\end{picture}
+\end{center}
+
+\noindent
+If the last two boxes are composed first, followed by a composition of the
+third-to-last box with the resulting box, the indentation is relative to the
+previous box:
+
+\begin{center}
+\begin{picture}(180,80)
+\ppboxplain(0,70)((0,5,5),1){20}
+\ppboxplain(40,50)((0,5,5),1){20}
+\ppboxplain(80,30)((0,5,5),1){20}
+\ppboxdashed(40,50)((0,7,7),2){20}
+\put(15,37){{\it di}}
+\put(14,40){\vector(-1,0){14}}
+\put(26,40){\vector(1,0){14}}
+\put(55,17){{\it di}}
+\put(54,20){\vector(-1,0){14}}
+\put(66,20){\vector(1,0){14}}
+\end{picture}
+\end{center}
+
+
+\subsection{Horizontal/vertical boxes\label{hvboxes}}
+
+With horizontal/vertical composition, boxes are composed horizontally until
+the display width is exceeded. At this point a new horizontal box is begun. A
+new horizontal box is begun whenever the current one exceeds the display
+width. When all of the original boxes have been used up, there is a list of
+composite horizontal boxes. These are then composed vertically. An example:
+
+\begin{center}
+\begin{picture}(300,120)
+\ppboxplain(0,110)((0,5,5),1){20}
+\ppboxplain(100,110)((0,5,3),2){20}
+\ppboxplain(160,90)((0,6,6),1){20}
+\ppboxdashed(0,110)((0,14,14),2){20}
+\ppboxplain(40,70)((0,11,10),2){20}
+\ppboxplain(80,30)((0,6,6),1){20}
+\ppboxplain(200,30)((0,5,5),1){20}
+\ppboxdashed(0,110)((0,15,15),5){20}
+\end{picture}
+\end{center}
+
+\noindent
+When trying to add a sub-box to the current horizontal box, the algorithm
+evaluates by how much the offset from the left margin will be increased if a
+line-break is not used. If this is less than or equal to the increase that
+will occur with a line-break, the sub-box is added to the horizontal box
+regardless.
+
+Two criteria are used for determining when to break. If the width of the
+composite box less its initial offset exceeds the difference between the
+space available and the initial indentation, then the right-hand edge of the
+box will exceed the right margin. A break should therefore occur. This
+criteria does not take into account that the initial offset of the box may be
+greater than the initial indentation. If that is the case, the left-hand edge
+of the box may exceed the left margin. To check for this, a second criteria is
+used, namely whether the width of the box exceeds the space available.
+
+Since the indentation can be negative, a false result may be obtained for the
+first criteria. For this reason negative indentations are taken to be zero.
+
+The vertical composition parameters of the first sub-box of a horizontal box
+are remembered when the horizontal box is begun. This is so that they can be
+used as the parameters for the composite horizontal box.
+
+
+\subsection{Horizontal-or-vertical boxes}
+
+Boxes to be composed horizontal-or-vertically are first composed horizontally.
+If the composite box is too big, the boxes are composed vertically. The
+narrower of the two compositions is used. The criteria for a box being too big
+are specified in Section~\ref{hvboxes}.
+
+
+\subsection{Building sub-boxes}
+
+For horizontal/vertical and horizontal-or-vertical boxes, the sub-boxes are
+built under the assumption that they will have to begin on a new line. This
+approach leads to line-breaking occurring at a high level, i.e.~a block of
+text is not usually split if the text could also be made to fit by making a
+split between a box containing the block of text and some other box. An
+example of low-level breaking is:
+
+\begin{center}
+\begin{picture}(360,80)
+\ppboxdashed(0,70)((0,4,4),1){20}
+\ppboxdashed(80,70)((0,4,4),1){20}
+\ppboxdashed(160,70)((0,4,4),1){20}
+\ppboxplain(0,70)((0,12,12),1){20}
+\ppboxplain(240,70)((0,4,4),1){20}
+\ppboxplain(260,50)((0,4,4),1){20}
+\ppboxplain(280,30)((0,4,4),1){20}
+\ppboxdashed(240,70)((0,6,6),3){20}
+\end{picture}
+\end{center}
+
+\noindent
+The high-level breaking version normally looks much better:
+
+\begin{center}
+\begin{picture}(360,60)
+\ppboxdashed(0,50)((0,4,4),1){20}
+\ppboxdashed(80,50)((0,4,4),1){20}
+\ppboxdashed(160,50)((0,4,4),1){20}
+\ppboxplain(0,50)((0,12,12),1){20}
+\ppboxdashed(40,30)((0,4,4),1){20}
+\ppboxdashed(120,30)((0,4,4),1){20}
+\ppboxdashed(200,30)((0,4,4),1){20}
+\ppboxplain(40,30)((0,12,12),1){20}
+\end{picture}
+\end{center}
+
+
+\section{Limitations}
+
+Certain kinds of pretty-printing are not possible with the algorithm described
+here. In particular, suppose one wanted to pretty-print a {\small\verb%while%}
+loop as either:
+
+\begin{small}\begin{verbatim}
+   while <cond> do <statement>
+\end{verbatim}\end{small}
+
+\noindent
+or as:
+
+\begin{small}\begin{verbatim}
+   while <cond>
+   do    <statement>
+\end{verbatim}\end{small}
+
+\noindent
+depending on available space. It is possible to do the first version in all
+situations and it is possible to do the second version in all cases. It is not
+however possible to do one or the other depending on available space.
+
+The spacing between {\small\verb%do%} and {\small\verb%<statement>%} varies
+according to whether the enclosing box is broken. To achieve this it would be
+necessary to build the enclosing box before deciding how to build the
+{\small\verb%do <statement>%} box. However, it is not known how to build the
+enclosing box until the inner boxes have been built.
+
+Is it not possible to assume the worst case? Suppose the
+{\small\verb%do <statement>%} box is built with the larger spacing. Can the
+decision as to how to break the enclosing box then be made safely? Assuming it
+can, it is then known how to build the {\small\verb%do <statement>%} box
+properly, and if the worst case build is not the correct way, it can be
+rebuilt. The enclosing box can then be built.
+
+The problem with this technique is that it applies at all levels, so it is
+unclear that rebuilding the {\small\verb%do <statement>%} box with the
+non-worst-case parameters will be guaranteed to produce a `narrower' box. This
+becomes of particular concern when one considers that a small change in a
+sub-box can have a large effect on the enclosing box. Further work is required
+to decide whether or not the technique is valid.
+
+}

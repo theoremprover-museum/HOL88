@@ -1,0 +1,3 @@
+\THEOREM Size ltree
+|- Size = (@fn. !tl. fn(node tl) = SUC(SUM(MAP fn tl)))
+\ENDTHEOREM

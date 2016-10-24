@@ -1,0 +1,29 @@
+\DOC NUM_EQ_PLUS_CONV
+
+\TYPE {NUM_EQ_PLUS_CONV : (term -> conv)}
+
+\SYNOPSIS
+Adds a given expression of type {:num} to both sides of an equality between
+natural numbers.
+
+\KEYWORDS
+addition, conversion.
+
+\LIBRARY more_arithmetic
+
+\DESCRIBE
+When applied to terms of the form {"n"} and {"p = q"}, where
+{n}, {p} and {q} have type {:num}, the conversion
+{NUM_EQ_PLUS_CONV} returns the theorem:
+{
+   |-  (p = q) = (p + n = q + n)
+}
+
+\FAILURE
+Fails if the first term does not have type {:num} or the second does not have
+the form {"p = q"}, where {p} and {q} are terms of type {:num}.
+
+\SEEALSO
+NUM_LESS_EQ_PLUS_CONV, NUM_LESS_PLUS_CONV.
+
+\ENDDOC

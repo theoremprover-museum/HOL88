@@ -1,0 +1,22 @@
+\DOC Useful_types
+
+\TYPE {Useful_types : type_selection}
+
+\SYNOPSIS
+Value used to control the amount of type information included in the print-tree
+of a term.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{Useful_types} is a value used to instruct the term-to-print-tree conversion
+function to attach type information to the bound variables of abstractions,
+and to one occurrence of every free variable. Type information is only
+included for constants if the constant is a function and it is not fully
+applied. So, the equals sign in {"1 = 2"} would not be adorned with type
+information, but in {"$= 1"} it would be.
+
+\SEEALSO
+No_types, Hidden_types, All_types, term_to_print_tree.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM POSET_FLEQ WELLORDER
+|- !l. poset l ==> (!x. fl l x = l(x,x))
+\ENDTHEOREM

@@ -1,0 +1,103 @@
+\section{Summary}
+
+The expressive power of higher-order logic has been
+an advantage in several ways for the work described in
+this case study.
+One of the most important uses of higher-order functions and relations
+has been to parameterize definitions by a representation variable
+providing a formal basis for our approach to abstract
+specification.
+
+We have also found several instances where
+the ability to use a relation in place of a function was
+very desirable.
+Our model of the datapath bus
+experiments with relations as an alternative to using
+combining functions.
+In Section~\ref{sec-asyn} we described some advantages of
+a relational style of specification which allows independent
+specifications to be given for the microprocessor and
+external memory.
+Most of the time, functions are more natural and simpler
+to use, but occasionally, the well-conceived use of a relation
+in place of a function gives a superior result.
+
+It was extremely useful (in fact, much more useful than we
+initially expected)
+to embed some operators
+from temporal logic in our higher-order framework especially
+when we compare this approach with our previous attempts
+to reason about asynchrony
+\cite{Joyce:stirling}.
+It is likely that work on embedding other calculi
+in higher-order logic will be a particularly interesting
+area of future development in the \HOL\ user community.
+In addition to Hale's work on Interval Temporal Logic \cite{Hale:thesis},
+some other examples include work by Gordon on program logics
+\cite{Gordon:banff87},
+by Loewenstein on a theory for deterministic and non-deterministic
+state machines \cite{Loewenstein:cornell},
+and by Camilleri on CSP trace theory \cite{Camilleri:csp}.
+
+A number of errors in the design and specification of \Tamarack\
+were discovered in the course of verifying its correctness.
+A few of these errors were not simple mistakes and not
+the kind of error easily revealed by
+simulation (they concerned
+subtle aspects of the handshaking protocol specification).
+However, many simple mistakes were also found by verification
+but they could have been discovered earlier
+without incurring the high cost of verification
+if the specifications
+had been executable.
+Camilleri \cite{Camilleri:pisa} points out the advantage of executing
+formal specifications as a means of supporting a verification
+methodology.
+In this respect, the Boyer-Moore approach
+\cite{Hunt:thesis,Bevier87,Bevier89}
+offers the advantage of directly executable specifications.
+The increased expressiveness of higher-order logic results in
+terms which do not always have an obvious
+interpretation as an executable specification.
+However,
+the implementation of an executable subset of higher-order logic
+is a foreseeable addition to the HOL system.
+\footnote{
+Camilleri's thesis \cite{Camilleri:thesis}
+describes simulation tools for an executable
+subset of higher-order logic oriented to hardware simulation.}
+
+There is a very steep learning curve for the \HOL\ system
+and many new users must wonder if they can afford to invest
+enough effort to receive any return
+on their investment.
+We can offer some encouragement by observing that
+simply getting a large design specification
+to be successfully type-checked by the \HOL\ system
+is a significant accomplishment.
+Fully automated type-checking often reveals errors which
+would go unnoticed without the scrutinizing eye of the type-checker.
+A typical example would be the interconnection of two ports with
+mismatched types (e.g. a 16-bit bus connected to a 13-bit bus).
+While type-checking problems require an understanding of higher-order
+logic, it does not require any familiarity with theorem-proving.
+Of course, there are conventional CAD tools
+(as well as ordinary, strongly-typed programming languages) which can be used
+to check the consistency of a design.
+However, using the \HOL\ system to type-check a design represents
+an intermediate goal for new users
+along the path towards full-scale verification.
+
+\vskip \baselineskip
+
+{\bf Acknowledgements}.
+The work described in this case study owes a great deal to many
+people.  A complete set of acknowledgements are given in \cite{Joyce:thesis},
+however, I would particularly like to
+mention past and present developers of the \HOL\ system
+(and its software parent, the \LCF\ system);
+this work would not have been possible without the elegant tool they have 
+created.
+Furthermore, the remarkably painless transition
+from an earlier version of \HOL\ to the {\HOL}88 system
+is a tribute to the skill of Mike Gordon and Tom Melham.

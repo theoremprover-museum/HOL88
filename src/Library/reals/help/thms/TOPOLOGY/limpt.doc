@@ -1,0 +1,5 @@
+\THEOREM limpt TOPOLOGY
+|- !top x S.
+    limpt top x S =
+    (!N. neigh top(N,x) ==> (?y. ~(x = y) /\ S y /\ N y))
+\ENDTHEOREM

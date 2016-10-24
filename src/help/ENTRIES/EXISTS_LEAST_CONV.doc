@@ -1,0 +1,31 @@
+\DOC EXISTS_LEAST_CONV
+
+\TYPE {EXISTS_LEAST_CONV : conv}
+
+\SYNOPSIS
+Applies the well-ordering property of the natural numbers.
+
+\KEYWORDS
+conversion, number, wellordering, induction.
+
+\DESCRIBE
+Given a term of the form {"?n:num.P[n]"}, the conversion {EXISTS_LEAST_CONV}
+proves that this assertion is equivalent to the statement that there is a
+least number {n} such that {P[n]} holds.  The theorem returned is:
+{
+   |- (?n. P[n]) = ?n. P[n] /\ !n'. (n' < n) ==> ~P[n']
+}
+\noindent where {n'} is a primed variant of {n} that does not appear free in
+the input term.  Note that the variable {n} need not in fact appear free in
+the body of the existentially-quantified input term.  For example,
+{EXISTS_LEAST_CONV "?n:num.T"} returns the theorem:
+{
+   |- (?n. T) = (?n. T /\ (!n'. n' < n ==> ~T))
+}
+\FAILURE
+{EXISTS_LEAST_CONV tm} fails if {tm} is not of the form {"?n:num.P"}.
+
+\SEEALSO
+EXISTS_GREATEST_CONV.
+
+\ENDDOC

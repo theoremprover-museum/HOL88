@@ -1,0 +1,23 @@
+\DOC new_predicate
+
+\TYPE {new_predicate : ((string # type) -> void)}
+
+\SYNOPSIS
+Creates a new predicate constant.
+
+\DESCRIBE
+The call
+{
+   new_predicate(`P`,":ty")
+}
+\noindent will declare a new predicate called {P} on type {ty}, that is, a
+constant {P} of type {ty->bool}.
+
+\FAILURE
+Fails if HOL is not in draft mode, or if there is already a constant of the
+corresponding name in the current theory segment.
+
+\SEEALSO
+mk_const, mk_pred.
+
+\ENDDOC

@@ -1,0 +1,10 @@
+\DOC Lex_block
+
+\TYPE {Lex_block : (((string # string) # string list) -> lex_symb)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

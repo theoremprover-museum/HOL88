@@ -1,0 +1,13 @@
+Microprocessor Case Study for the HOL Tutorial
+----------------------------------------------
+
+Author	: Jeff Joyce
+Date	: 3 November 1989
+
+The latex source file "all.tex" is used to assemble individual sources
+into a single document.  To format this document, type:
+
+	latex all
+
+
+See hol/examples/tamarack2 for another (earlier) microprocessor example.

@@ -1,0 +1,5 @@
+\THEOREM bounded NETS
+|- !m g f.
+    bounded(m,g)f =
+    (?k x N. g N N /\ (!n. g n N ==> (dist m(f n,x)) real_lt k))
+\ENDTHEOREM

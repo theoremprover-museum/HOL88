@@ -1,0 +1,17 @@
+\DOC oo
+
+\TYPE {$oo : ((((* # **) -> ***) # (**** -> *) # (**** -> **)) -> **** -> ***)}
+
+\SYNOPSIS
+Composes a function a pair of functions: {(f oo (g,h)) x} = {f (g x,h x)}.
+
+\KEYWORDS
+combinator.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, CB, Co, I, K, KI, o, S, W.
+
+\ENDDOC

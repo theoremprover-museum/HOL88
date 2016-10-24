@@ -1,0 +1,5 @@
+\THEOREM NET_NULL NETS
+|- !g x x0.
+    (x tends x0)(mtop mr1,g) =
+    ((\n. (x n) real_sub x0) tends (real_of_num 0))(mtop mr1,g)
+\ENDTHEOREM

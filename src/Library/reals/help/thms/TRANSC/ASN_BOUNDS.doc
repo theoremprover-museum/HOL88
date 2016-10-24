@@ -1,0 +1,5 @@
+\THEOREM ASN_BOUNDS TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (--(pi / (& 2))) <= (asn y) /\ (asn y) <= (pi / (& 2))
+\ENDTHEOREM

@@ -1,0 +1,44 @@
+\DOC VALID
+
+\TYPE {VALID : (tactic -> tactic)}
+
+\SYNOPSIS
+Tries to ensure that a tactic is valid.
+
+\KEYWORDS
+tactical.
+
+\DESCRIBE
+For any tactic {T}, the application {VALID T} gives a new tactic which when
+applied to a goal, checks that {T} as applied to that goal is valid, i.e. the
+subgoals produced, if proved, can be used by the justification function given
+by {T} to construct a theorem corresponding to the original goal.
+
+This check is performed by actually creating, using {mk_thm}, theorems
+corresponding to the subgoals, and seeing if the result of applying the
+justification function to them gives a theorem corresponding to the original
+goal. If it does, then {VALID T} simply applies {T}, and if not it fails.
+
+The method by which theorems are created from goals can be changed by rebinding
+the assignable variable {chktac} - see its documentation entry for details.
+
+\FAILURE
+The application of {VALID} to a tactic never fails. The resulting
+tactic fails either if the original tactic fails or is invalid.
+
+\COMMENTS
+The use of {mk_thm} is a possible, though improbable, loophole
+in the general security of the theorem abstract type, since it does
+create possibly spurious theorems; however these should remain anonymous
+in the absence of other bugs in the system.
+
+By default the same validity checking procedure, {check_valid}, is
+invoked by the subgoal package, but it can be switched off.
+
+It is not checked whether the tactic is strongly valid, i.e. the
+subgoals are provable; clearly this is not possible in general.
+
+\SEEALSO
+CHANGED_TAC, check_valid, chktac, e, expand, TRY.
+
+\ENDDOC

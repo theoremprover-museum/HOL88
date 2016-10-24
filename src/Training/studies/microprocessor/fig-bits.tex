@@ -1,0 +1,43 @@
+% ===== MicroInstruction Word Format ===================================
+% ======================================================================
+\setlength{\unitlength}{1mm}
+\begin{picture}(156.6,26)(0,0)
+
+{\thicklines {\put(0,19){\framebox(156.6,7){}}}}
+{\thicklines {\multiput(5.8,19.5)(5.8,0){19}{\line(0,1){6}}}}
+{\thicklines {\put(133.4,19.5){\line(0,1){6}}}}
+
+\put(121.8,22.5){\makebox(0,0)[c]{\verb"addr1"}}
+\put(145,22.5){\makebox(0,0)[c]{\verb"addr2"}}
+
+\put(43.5,15){\makebox(0,0)[c]{$\underbrace{\rule{84mm}{0mm}}$}}
+\put(98.6,15){\makebox(0,0)[c]{$\underbrace{\rule{20.2mm}{0mm}}$}}
+\put(133.4,15){\makebox(0,0)[c]{$\underbrace{\rule{43.4mm}{0mm}}$}}
+
+\put(43.5,13){\makebox(0,0)[t]{
+\begin{minipage}[t]{84mm}
+\begin{center}
+datapath\\
+control bits
+\end{center}
+\end{minipage}
+}}
+\put(98.6,13){\makebox(0,0)[t]{
+\begin{minipage}[t]{30mm}
+\begin{center}
+next\\
+address logic\\
+control bits
+\end{center}
+\end{minipage}
+}}
+\put(133.4,13){\makebox(0,0)[t]{
+\begin{minipage}[t]{43.4mm}
+\begin{center}
+microinstruction\\
+addresses
+\end{center}
+\end{minipage}
+}}
+
+\end{picture}

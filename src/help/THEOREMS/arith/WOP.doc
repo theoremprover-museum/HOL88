@@ -1,0 +1,3 @@
+\THEOREM WOP arithmetic
+|- !P. (?n. P n) ==> (?n. P n /\ (!m. m < n ==> ~P m))
+\ENDTHEOREM

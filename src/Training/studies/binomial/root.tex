@@ -1,0 +1,46 @@
+% =====================================================================
+% HOL Case Study: The Binomial Theorem proven in HOL.
+% By Andrew Gordon.
+% =====================================================================
+
+\documentstyle[12pt,twoside,fleqn,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings etc.
+% ---------------------------------------------------------------------
+
+\renewcommand{\topfraction}{0.8}	  % 0.8 of the top page can be fig.
+\renewcommand{\bottomfraction}{0.8}	  % 0.8 of the bottom page can be fig.
+\renewcommand{\textfraction}{0.1}	  % 0.1 of the page must contain text
+\setcounter{totalnumber}{4}	 	  % max of 4 figures per page
+\setcounter{secnumdepth}{3}		  % number sections down to level 3
+\setcounter{tocdepth}{3}		  % toc contains numbers to level 3
+
+% ---------------------------------------------------------------------
+% Macros
+% ---------------------------------------------------------------------
+\input{commands}
+
+\begin{document}
+\pagestyle{plain}
+
+% ---------------------------------------------------------------------
+% Parameters customising the document; assumed by {title,binomial}.tex
+% ---------------------------------------------------------------------
+% \self{} is one word denoting this document, such as "article" or "chapter"
+% \path{} is the path denoting the case-study directory
+
+\def\self{article}
+\def\path{{\tt Training/studies/binomial}}
+% ---------------------------------------------------------------------
+
+\input{title}
+\input{binomial}
+\input{binomial-bib}
+
+\appendix
+
+\input{appendix}
+
+\end{document}
+

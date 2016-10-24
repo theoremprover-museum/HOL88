@@ -1,0 +1,28 @@
+\DOC test2types
+
+\TYPE {test2types : ((type -> type -> bool) -> type -> type -> thmpattern)}
+
+\SYNOPSIS
+Function for generating a side-condition test from a predicate.
+
+\LIBRARY trs
+
+\DESCRIBE
+{test2types} takes a predicate and two types as arguments and produces a
+side-condition test. The types are pattern variables. When the side-condition
+comes to be applied, the pattern variables are looked up in the binding
+created by the match. The bound objects are then fed to the predicate. The
+side-condition succeeds or fails based on the Boolean result.
+
+Note that user defined functions which indicate a failure to match by raising
+an exception should do so with the string {`no match`}.
+
+\FAILURE
+Fails if either of the type arguments is not a type variable. May also cause a
+failure to match, when used in a search, if either of the pattern variables do
+not appear in the binding.
+
+\SEEALSO
+test1type, test1term, test2terms, Where, contains, matches, has_body.
+
+\ENDDOC

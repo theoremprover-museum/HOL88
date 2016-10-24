@@ -1,0 +1,3 @@
+\THEOREM one_Axiom one
+|- !e. ?! fn. fn one = e
+\ENDTHEOREM

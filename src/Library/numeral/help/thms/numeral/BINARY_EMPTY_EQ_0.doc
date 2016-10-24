@@ -1,0 +1,3 @@
+\THEOREM BINARY_EMPTY_EQ_0 numeral
+|- !l. IS_NORMALIZED l ==> ((BINARY l = 0) = (l = []))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM BINARY_DIGIT_EQ_DIGIT numeral
+|- !e. BINARY[e] = e
+\ENDTHEOREM

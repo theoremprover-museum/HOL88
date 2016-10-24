@@ -1,0 +1,3 @@
+\THEOREM INFINITY_AX ind
+|- ?f. ONE_ONE f /\ ~ONTO f
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM EQUAL_CUTS HREAL
+|- !X Y. (cut X = cut Y) ==> (X = Y)
+\ENDTHEOREM

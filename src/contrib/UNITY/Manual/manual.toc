@@ -1,0 +1,53 @@
+\contentsline {section}{{\pbf Preface}}{1}
+\contentsline {chapter}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {1.1}Predicate Logic}{4}
+\contentsline {section}{\numberline {1.2}Safety Properties}{4}
+\contentsline {section}{\numberline {1.3}Progress Properties}{5}
+\contentsline {section}{\numberline {1.4}Compositionality}{6}
+\contentsline {section}{\numberline {1.5}Representing Programs in HOL-UNITY}{7}
+\contentsline {section}{\numberline {1.6}The Structure of the HOL-UNITY Theory Files}{8}
+\contentsline {chapter}{\numberline {2}Applications of the Mechanized UNITY System}{9}
+\contentsline {section}{\numberline {2.1}Defining State and Program}{10}
+\contentsline {section}{\numberline {2.2}Mutual Exclusion}{11}
+\contentsline {subsection}{\numberline {2.2.1}Introduction}{12}
+\contentsline {subsection}{\numberline {2.2.2}UNITY Specification}{13}
+\contentsline {subsubsection}{Properties given for a {\pit User} component}{13}
+\contentsline {subsubsection}{Properties given for a {\pit G} component}{13}
+\contentsline {subsubsection}{Conditional {\pit G} Properties}{13}
+\contentsline {subsubsection}{Conditional {\pit User} Properties}{13}
+\contentsline {subsubsection}{Properties for the Composed System {$(User\ [\mskip -\thinmuskip ]\ G)$}}{13}
+\contentsline {subsubsection}{Proof of Derived Properties}{13}
+\contentsline {subsection}{\numberline {2.2.3}Specification in HOL-UNITY}{15}
+\contentsline {subsubsection}{Defining the Type {\ptt dine} in HOL}{16}
+\contentsline {subsubsection}{Defining the {\ptt dine} Predicates}{16}
+\contentsline {subsubsection}{Equalities between {\ptt dine} Predicates}{17}
+\contentsline {subsubsection}{The Property Specification}{18}
+\contentsline {subsubsection}{Specifying Properties given for the {\ptt user} component}{19}
+\contentsline {subsubsection}{Specifying Properties given for the {\ptt G} component}{19}
+\contentsline {subsubsection}{Specifying Conditional {\ptt G} Properties component}{19}
+\contentsline {subsubsection}{Specifying Conditional {\ptt user} Properties component}{19}
+\contentsline {subsubsection}{Specifying Properties for the Composed System}{20}
+\contentsline {subsubsection}{Proving Derived Properties of the Specification}{20}
+\contentsline {section}{\numberline {2.3}The {\pit readers/writers} Problem}{23}
+\contentsline {subsection}{\numberline {2.3.1}Introduction}{24}
+\contentsline {subsection}{\numberline {2.3.2}A {\pit readers/writers} Program with {\pit writers} Progress}{24}
+\contentsline {subsection}{\numberline {2.3.3}Verifying {\pit User} Properties using HOL-UNITY}{25}
+\contentsline {subsection}{\numberline {2.3.4}Defining a Program Representation}{26}
+\contentsline {subsubsection}{Program Variables}{26}
+\contentsline {subsubsection}{Program Representation}{27}
+\contentsline {subsubsection}{Defining the Program {\pit User}}{28}
+\contentsline {subsection}{\numberline {2.3.5}Proving Program Properties}{29}
+\contentsline {subsubsection}{Proving the Program Satisfying a Safety Property}{29}
+\contentsline {section}{\numberline {2.4}A 2-Arbiter}{35}
+\contentsline {subsection}{\numberline {2.4.1}Specifying the System}{37}
+\contentsline {subsubsection}{The {\pit Arb} Component}{37}
+\contentsline {subsubsection}{The {\pit Users} Component}{38}
+\contentsline {subsubsection}{Derived Properties Satisfied by {\pit System}}{38}
+\contentsline {subsection}{\numberline {2.4.2}A 2-Arbiter Program and its Verification}{41}
+\contentsline {subsubsection}{Verifying the Properties of the {\pit Arb} Program}{41}
+\contentsline {subsection}{\numberline {2.4.3}The 2-Arbiter in HOL-UNITY}{51}
+\contentsline {subsubsection}{Defining a state for the 2-Arbiter in HOL-UNITY}{52}
+\contentsline {subsubsection}{Defining a state for the 2-Arbiter in HOL-UNITY}{52}
+\contentsline {subsubsection}{Automated proof of basic {\pit Arb} program properties}{53}
+\contentsline {chapter}{\numberline {Appendix A} \phspace {2cm}{UNITY - Theorems and Corollaries}}{55}
+\contentsline {chapter}{\numberline {Appendix B} \phspace {2cm}{HOL-UNITY - Definitions and Theorems}}{61}

@@ -1,0 +1,3 @@
+\THEOREM PRE_LESS pre
+|- !b. 0 < b /\ b < a ==> (PRE b) < a
+\ENDTHEOREM

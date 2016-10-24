@@ -1,0 +1,4 @@
+\THEOREM SER_SUB SEQ
+|- !x x0 y y0.
+    x sums x0 /\ y sums y0 ==> (\n. (x n) - (y n)) sums (x0 - y0)
+\ENDTHEOREM

@@ -1,0 +1,10 @@
+\DOC GET_STACK
+
+\TYPE {GET_STACK : (string -> window_stack)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM SUC_PRE pre
+|- !n. 0 < n ==> (SUC(PRE n) = n)
+\ENDTHEOREM

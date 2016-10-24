@@ -1,0 +1,4 @@
+\THEOREM TRAT_MUL_ASSOC HRAT
+|- !h i j.
+    (h trat_mul (i trat_mul j)) trat_eq ((h trat_mul i) trat_mul j)
+\ENDTHEOREM

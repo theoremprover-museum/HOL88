@@ -1,0 +1,3 @@
+\THEOREM REAL_POS REAL
+|- !n. (& 0) <= (& n)
+\ENDTHEOREM

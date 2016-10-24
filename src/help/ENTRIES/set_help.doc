@@ -1,0 +1,28 @@
+\DOC set_help
+
+\TYPE {set_help : (string -> string)}
+
+\SYNOPSIS
+Specifies a filter to pipe help output through.
+
+\DESCRIBE
+Evaluating {set_help `filter`} will make future help output (generated in
+response to a {help} command) be piped through the program {filter}. The
+function returns the name of the previous filter. The default is {cat}, so
+output is just sent to the console. Previous versions of HOL used {more} by
+default.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#set_help `lpr`;;
+`cat` : string
+}
+\noindent This causes the help file to be printed instead of being displayed.
+
+\SEEALSO
+help, help_search_path, set_help_search_path
+
+\ENDDOC

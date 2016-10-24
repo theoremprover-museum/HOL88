@@ -1,0 +1,3 @@
+\THEOREM SEQ_SUC SEQ
+|- !f l. f --> l = (\n. f(SUC n)) --> l
+\ENDTHEOREM

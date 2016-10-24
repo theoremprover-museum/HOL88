@@ -1,0 +1,3 @@
+\THEOREM ELL_SNOC list
+|- !n. 0 < n ==> (!x l. ELL n(SNOC x l) = ELL(PRE n)l)
+\ENDTHEOREM

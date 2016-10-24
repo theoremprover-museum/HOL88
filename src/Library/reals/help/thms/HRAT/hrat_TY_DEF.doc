@@ -1,0 +1,3 @@
+\THEOREM hrat_TY_DEF HRAT
+|- ?rep. TYPE_DEFINITION(\c. ?x. c = $trat_eq x)rep
+\ENDTHEOREM

@@ -1,0 +1,42 @@
+Directory: hol-emacs
+
+Summary:
+
+The HOL-Emacs interface provides a simple interface for running HOL under
+the GNU Emacs editor.
+
+Author:
+
+Phil Windley
+Dept. of Computer Science
+University of Idaho
+Moscow ID 83843
+
+windley@cs.uidaho.edu
+
+Date:
+
+January 1991
+
+Description:
+
+The interface consists of the following files:
+
+interp.el - The generalized interpreter functions
+xhol.el - The specialization functions.
+hol.el - Sets up and electric HOL mode.
+init.ml - a sample init.ml file for HOL.
+hol-emacs.ps - a postscript file containing the user's manual.
+
+The following changes have been made since the last release:
+
+a.) Electric HOL mode is working now.  
+b.) The name of interpreter,el was changed to interp.el because it
+didn't work on machines that only support 14 character file names.
+c.) A history function was added that records expressions sent to HOL 
+in the interaction buffer.  This is toggled by the C-cC-t key
+sequence.
+d.) The send-buffer command (ESC o) works now.
+e.) A command for recentering the interaction buffer was added (C-c C-l).
+
+Please send bug reports to windley@cs.uidaho.edu.

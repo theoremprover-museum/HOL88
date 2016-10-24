@@ -1,0 +1,27 @@
+\DOC empty_rules
+
+\TYPE {empty_rules : (void -> void)}
+
+\SYNOPSIS
+Deletes all window rules from the system's tables.
+
+\LIBRARY window
+
+\DESCRIBE
+The system maintains a table of window rules for opening subwindows.
+This command is used to purge that table.
+You may wish to use this command if you do not whish to use those rules
+that are loaded by the system by default.
+You may also wish to use this command if you have added an erroneous
+rule to the systems tables with the {store_rule} command.
+To reload the default entries in the table you should reload the following
+segments of the window library: {basic_close}, {eq_close}, {imp_close} and
+{pmi_close}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+store_rule
+
+\ENDDOC

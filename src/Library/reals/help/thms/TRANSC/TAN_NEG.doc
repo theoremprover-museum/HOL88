@@ -1,0 +1,3 @@
+\THEOREM TAN_NEG TRANSC
+|- !x. tan(-- x) = --(tan x)
+\ENDTHEOREM

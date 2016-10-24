@@ -1,0 +1,18 @@
+\DOC mk_forall
+
+\TYPE {mk_forall : ((term # term) -> term)}
+
+\SYNOPSIS
+Term constructor for universal quantification.
+
+\DESCRIBE
+{mk_forall("var","t")} returns {"!var. t"}.
+
+\FAILURE
+Fails with {mk_forall} if first term is not a variable or if {t} is not of
+type {":bool"}.
+
+\SEEALSO
+dest_forall, is_forall, list_mk_forall.
+
+\ENDDOC

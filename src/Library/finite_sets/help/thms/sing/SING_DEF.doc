@@ -1,0 +1,3 @@
+\THEOREM SING_DEF finite_sets
+|- !s. SING s = (?x. s = {{x}})
+\ENDTHEOREM

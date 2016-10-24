@@ -1,0 +1,4 @@
+\THEOREM LIM_EQUAL LIM
+|- !f g l x0.
+    (!x. ~(x = x0) ==> (f x = g x)) ==> ((f --> l)x0 = (g --> l)x0)
+\ENDTHEOREM

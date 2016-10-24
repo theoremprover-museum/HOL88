@@ -1,0 +1,3 @@
+\THEOREM HRAT_ADD_SYM HRAT
+|- !h i. h hrat_add i = i hrat_add h
+\ENDTHEOREM

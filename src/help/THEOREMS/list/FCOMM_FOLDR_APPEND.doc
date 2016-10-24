@@ -1,0 +1,7 @@
+\THEOREM FCOMM_FOLDR_APPEND list
+|- !g f.
+    FCOMM g f ==>
+    (!e.
+      LEFT_ID g e ==>
+      (!l1 l2. FOLDR f e(APPEND l1 l2) = g(FOLDR f e l1)(FOLDR f e l2)))
+\ENDTHEOREM

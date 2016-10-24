@@ -1,0 +1,3 @@
+\THEOREM REAL_FACT_NZ REAL
+|- !n. ~(&(FACT n) = & 0)
+\ENDTHEOREM

@@ -1,0 +1,1008 @@
+% =====================================================================
+% HOL Course Slides: overview of higher order logic   (c) T melham 1990
+% =====================================================================
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+\def\_{\char'137}
+
+
+% ---------------------------------------------------------------------
+% Macro for a tricky underbrace
+% ---------------------------------------------------------------------
+\def\rul#1{\vrule width0.25mm height#1mm depth-1mm}
+\newbox\ubox
+\def\und#1#2{%
+    \setbox\ubox=\hbox{${\stackrel{\rul{#2}}{\scriptstyle\hbox{\rm #1}}}$}%
+    {\wd\ubox=0mm\box\ubox}}
+
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{The HOL System}{5}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+Introduction \\
+to the\\
+HOL System
+\esectitle
+
+% =====================================================================
+\slide{Outline}
+
+\point{HOL = Higher Order Logic embedded in ML.}
+
+\point{How the logic is embedded in ML:}
+
+\subpoint{Terms represented by ML type {\tt term}}
+
+\subpoint{Types represented by ML type {\tt type}}
+
+\subpoint{Theorems represented by ML type {\tt thm}}
+
+\point{Inference rules in HOL:}
+
+\subpoint{ML functions that yield values of type {\tt thm}}
+
+% =====================================================================
+\slide{The ML Representation of Terms}
+
+\point{Higher order logic terms are represented by values of ML type {\tt
+term}.}
+
+\point{Term literals are written in double quotes:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"T /\ F ==> T";;
+"T /\ F ==> T" : term
+
+#["~T"; "x=7"];;
+["~T"; "x = 7"] : term list
+
+#("T","3");;
+("T", "3") : (term # term)
+
+#"T,3";;
+"T,3" : term
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Ascii Notation for Terms}
+
+\point{The following transliteration is used:}
+\vskip7mm
+
+\bpindent\setlength{\arrayrulewidth}{\lwid}
+\renewcommand{\arraystretch}{1.2}
+{\LARGE{\bf
+\vskip 7mm
+\begin{center}
+\begin{tabular}{| l | l|}
+\hline 
+Logic    & HOL \\ \hline
+$\lambda x. t$   & \verb%"\x. t"% \\
+$\forall x. \; t$ & \verb%"!x. t"% \\
+$\exists x. \; t$ & \verb%"?x. t"% \\
+$\exists{\em !} x. \; t$ & \verb%"?!x. t"% \\
+$\epsilon x.\; t$& \verb%"@x. t"% \\
+$\neg x$         & \verb%"~x"% \\
+$t_1 \wedge t_2$ & \verb%"t1 /\ t2"% \\
+$t_1 \vee t_2$   & \verb%"t1 \/ t2"% \\
+$t_1 \supset t_2$& \verb%"t1 ==> t2"% \\
+$(t_1 \rightarrow t_2 \mid t_3)$ & \verb%"(t1 => t2 | t3)"% \\ \hline
+\end{tabular}
+\end{center}
+}}
+\epindent
+
+% =====================================================================
+\slide{Term Literals}
+
+\point{Examples:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"!b. (b=T) \/ (b=F)";;
+"!b. (b = T) \/ (b = F)" : term
+
+#let tm = "?x. x = (\b. b)F";;
+tm = "?x. x = (\b. b)F" : term
+\end{verbatim}\end{session}
+\vskip5mm
+
+\point{Terms must be well-typed:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"7 + T";;
+Badly typed application of:  "$+ 7"
+   which has type:           ":num -> num"
+to the argument term:        "T"
+   which has type:           ":bool"
+
+evaluation failed     mk_comb in quotation
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{The Representation of Types in ML}
+
+\point{The ML type {\tt type} represents logical types:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#":bool";;
+":bool" : type
+
+#":num -> num";;
+":num -> num" : type
+\end{verbatim}\end{session}
+
+\point{The function {\tt type\_of}:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#type_of "T \/ b";;
+":bool" : type
+\end{verbatim}\end{session}
+
+\point{The parser sometimes fails to infer types:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"f a = b";;
+Indeterminate types:  "$=:?1 -> (?2 -> bool)"
+
+evaluation failed  types indeterminate in quotation
+\end{verbatim}\end{session}
+
+
+\point{You must explictly enter polymorphic types:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let tm = "(f:*->**) a = b";;
+tm = "f a = b" : term
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Printing Types}
+
+\point{You can ask the system to show types when printing terms:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#show_types true;;
+false : bool
+
+#let tm = "(f:*->**) a = b";;
+tm = "(f:* -> **) a = b" : term
+
+#"!b. b=T";;
+"!(b:bool). b = T" : term
+
+#"\x. x+1";;
+"\(x:num). x + 1" : term
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Type-checking Errors}
+
+
+\point{Badly-typed applications:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"SUC T";;
+Badly typed application of:  "SUC"
+   which has type:           ":num -> num"
+to the argument term:        "T"
+   which has type:           ":bool"
+
+evaluation failed     mk_comb in quotation
+
+#"x /\ (x=1)";;
+Badly typed application of:  "$= x"
+   which has type:           ":bool -> bool"
+to the argument term:        "1"
+   which has type:           ":num"
+
+evaluation failed     mk_comb in quotation
+\end{verbatim}\end{session}
+
+\point{Illegal types:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"!x:foo->bar. x = x";;
+evaluation failed     mk_type in quotation
+
+#"!P:bool Q. P /\ Q";;
+evaluation failed     mk_type in quotation
+\end{verbatim}\end{session}
+
+% =====================================================================
+%\slide{Type Variables}
+%
+%\point{The ?1, ?2 etc. on the last slide indicate indeterminate types.}
+%
+%\point{Type variables are not considered to be indeterminate.}
+%
+%\vskip7mm
+%\vskip4mm
+%\begin{session}\begin{verbatim}
+%#"INL(x:*) INL";;
+%Badly typed application of:  "INL x"
+%   which has type:           ":* + ?"
+%to the argument term:        "INL"
+%   which has type:           ":?1 -> ?1 + ?2"
+%
+%evaluation failed     mk_comb in quotation
+%\end{verbatim}\end{session}
+%
+%\point{These messages can be switched off by setting the flag
+%`type\_error` to false.}
+
+% =====================================================================
+\slide{Warning}
+
+\point{Do not confuse terms with ML programs:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"(\x. x+7) 3";;
+"(\x. x + 7)3" : term
+
+#(\x. x+7) 3;;
+10 : int
+
+#"(\x. x+7)" 3;;
+
+ill-typed phrase: " ... "
+has an instance of type  term
+which should match type  (* -> **)
+1 error in typing
+typecheck failed     
+\end{verbatim}\end{session}
+
+\point{Do not confuse ML types and logical types:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"3 : int";;
+evaluation failed     mk_type in quotation
+
+#"3" : int;;
+
+ill-typed phrase: " ... "
+has an instance of type  term
+which should match type  int
+1 error in typing
+typecheck failed     
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Antiquotation}
+
+\point{This allows an ML expression which evaluates to a term to occur inside
+the quotation marks.}
+
+\vskip7mm
+
+\point{Items tagged with `{\tt\char'136}' are evaluated:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let t = "f:num->num";;
+t = "f" : term
+
+#"(t 0):num";;
+"t 0" : term
+
+#"^t 0";;
+"f 0" : term
+
+#"^t 0 + t 1";;
+"(f 0) + (t 1)" : term
+\end{verbatim}\end{session}
+
+\point{In {\tt "\dots \char'136$\langle{\it item\/}\rangle$ \dots"}, the
+$\langle{\it item\/}\rangle$ must be an ML\\ expression that can be evaulated:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"^x /\ y";;
+
+unbound or non-assignable variable x
+1 error in typing
+typecheck failed     
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Let-terms}
+
+\point{The term parser accepts {\tt let}-terms like those of local declarations
+in ML:}
+
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"let x=1 and y=2 in x+y";;
+"let x = 1 and y = 2 in x + y" : term
+\end{verbatim}\end{session}
+
+\point{{\tt let}-terms are just abbreviations for ordinary terms
+of the logic.}
+
+\point{They are encoded using the constant {\tt LET}:}
+
+\vskip 5mm
+\bspindent\LARGE
+\verb!|- LET = (\f x. f x)!
+\espindent
+\vskip 5mm
+
+\bpindent\LARGE\bf For example:\epindent
+
+
+\vskip 5mm
+\bspindent\LARGE\bf
+\verb!"let x = 1 in x+2"!
+\espindent
+\vskip5mm
+
+\bpindent\LARGE\bf parses to:
+\epindent
+\vskip5mm
+
+\vskip 5mm
+\bspindent\LARGE\bf
+\verb!"LET(\x. x + 2)1"!
+\espindent
+
+% =====================================================================
+\slide{Parser Support for Let-terms}
+
+
+\point{The parser applies the transformations:}
+
+\vskip7mm
+\vskip4mm
+\bspindent
+\obeylines\Large\bf
+    \verb!"let f v1...vn = t1 in t2"!
+    \begin{picture}(2,11)(-8,0)\thicklines
+      \put(1,8){\vector(0,-1){8}}
+    \end{picture}
+    \verb!"LET (\f. t2) (\v1...vn. t1)"!
+\vskip10mm
+    \verb!"let (v1,...,vn) = t1 in t2"!
+    \begin{picture}(2,11)(-8,0)\thicklines
+      \put(1,8){\vector(0,-1){8}}
+    \end{picture}
+    \verb!"LET (\(v1,...,vn).t2) t1"!
+\vskip10mm
+    \verb!"let v1=t1 and...and vn=tn in t"!
+    \begin{picture}(2,11)(-8,0)\thicklines
+      \put(1,8){\vector(0,-1){8}}
+    \end{picture}
+    \verb!"LET(...(LET(LET (\v1...vn.t) t1)t2)...)tn"!
+\espindent
+
+\vskip11mm
+\bpindent\LARGE\bf
+and the pretty-printer inverts them.
+\epindent
+
+
+% =====================================================================
+\slide{Printing Let-terms}
+
+\point{The {\tt print\_let} flag controls the pretty-printing of {\tt
+let}-terms:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"let x=1 and y=2 in x+y";;
+"let x = 1 and y = 2 in x + y" : term
+
+#set_flag(`print_let`,false);;
+true : bool
+
+#"let x=1 and y=2 in x+y";;
+"LET(LET(\x y. x + y)1)2" : term
+
+#set_flag(`print_let`,true);;
+false : bool
+
+#"let x=1 and y=2 in x+y";;
+"let x = 1 and y = 2 in x + y" : term
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Paired Abstractions}
+
+\point{The following terms are allowed by the parser:}
+
+\vskip7mm
+\vskip4mm
+\begin{center}
+\bspindent\LARGE \bf
+\begin{verbatim}
+      "\(x,y). x + y"
+
+      "!(x,y),(p,q). (x = p) /\ (y = q)"
+
+      "?((x,y),(p,q,r)). (x+y) < ((p+q)*r)"
+\end{verbatim} 
+\espindent
+\end{center}
+
+\vskip5mm
+
+\point{These are just surface syntax: they are parsed into standard terms}
+
+\vskip7mm
+
+\point{The transformation uses the constant {\tt UNCURRY}:}
+
+\vskip 7mm
+\vskip 4mm
+\bspindent\LARGE\bf
+\verb+|- !f x y. UNCURRY f(x,y) = f x y+
+\espindent
+
+
+% =====================================================================
+\slide{Paired Abstractions}
+
+\point{The parser removes all variable structure by applying recursively the
+transformation:}
+
+\vskip 10mm
+\bspindent
+\Large
+      \verb!"\(v1,v2).t"!
+    \begin{picture}(13,2)(-2,-1)\thicklines
+      \put(1,1){\vector(1,0){8}}
+    \end{picture}
+      \verb!"UNCURRY(\v1. (\v2.t))"!
+\espindent
+\vskip 10mm
+
+\bpindent{\LARGE{\bf
+where \verb%"v1"% and \verb%"v2"% are variables, or tuples of variables
+(called {\it variable structures}).
+}}
+\epindent
+
+\vskip 5mm
+\point{The transformation algorithm is:}
+\vskip 7mm
+\bspindent
+\obeylines\Large\bf
+    \verb!"\(x,y).t"!
+    \begin{picture}(2,11)(-8,0)\thicklines
+      \put(1,8){\vector(0,-1){8}}
+    \end{picture}
+    \verb!"UNCURRY(\x y. t)"!
+\vskip8mm
+    \verb!"\(x1,x2,...,xn).t"!
+    \begin{picture}(2,11)(-8,0)\thicklines
+      \put(1,8){\vector(0,-1){8}}
+    \end{picture}
+    \verb!"UNCURRY(\x.\(x2,...,xn).t)"!
+\vskip8mm
+    \verb!"\((x1,...,xn),y1,...,ym).t" !
+    \begin{picture}(2,11)(-8,0)\thicklines
+      \put(1,8){\vector(0,-1){8}}
+    \end{picture}
+    \verb!"UNCURRY(\(x1,...,xn). \y1,...,ym).t"!
+\espindent
+
+
+% =====================================================================
+\slide{Printing Paired Abstractions}
+
+\point{The {\tt print\_uncurry} flag controls the pretty-printing of 
+paired abstractions:}
+
+\vskip4mm
+\begin{session}\begin{verbatim}
+#"\(P,Q). P /\ Q";;
+"\(P,Q). P /\ Q" : term
+
+#set_flag(`print_uncurry`,false);;
+true : bool
+
+#"\(P,Q). P /\ Q";;
+"UNCURRY(\P Q. P /\ Q)" : term
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Summary}
+
+\point{HOL has the two ML data types:}
+
+\subpoint{{\tt term}: to represent logical terms}
+
+\subpoint{{\tt type}: to represent logical types}
+
+\point{Term and type literals in quotations:}
+
+\subpoint{e.g.\ {\tt ":bool->bool"}}
+\subpoint{e.g.\ {\tt "P ==> Q"}}
+
+\point{Parser and pretty-printer support:}
+
+\subpoint{for {\tt let}-terms (the constant {\tt LET})}
+\subpoint{for paired abstractions (the constant {\tt UNCURRY})}
+
+\point{Built-in ML functions:}
+
+\subpoint{{\tt type\_of : term -> type}}
+\subpoint{{\tt show\_types : bool -> bool}}
+\subpoint{{\tt set\_flag : (string \# bool) -> bool}}
+
+% =====================================================================
+\slide{Syntax Functions}
+
+\point{HOL provides functions for }
+
+\subpoint{constructing terms and types}
+
+\subpoint{taking terms and types apart}
+
+\subpoint{testing the syntactic classes of terms and types}
+
+\point{For example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#is_var "x:bool";;
+true : bool
+
+#is_var "\x. x+y";;
+false : bool
+
+#mk_comb ("f:bool -> bool", "x:bool");;
+"f x" : term
+
+#dest_forall "!x. x ==> F";;
+("x", "x ==> F") : (term # term)
+
+#dest_forall "?x. x";;
+evaluation failed     dest_forall
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Primitive Syntax Functions}
+
+\def\m#1{\(#1\)}
+
+\point{Syntax functions for types:}
+\vskip5mm
+\bspindent\Large
+\obeylines
+\begin{tabular}{@{\hskip3mm}l@{\hskip3mm$=$\hskip3mm}l@{}}
+{\tt mk\_vartype `*\m{\dots}`}     & {\tt ":*\m{\dots}"}\\
+{\tt mk\_type(`\m{op}`,[\m{ty_1};\dots;\m{ty_n}])} &
+    {\tt ":(\m{ty_1},\dots,\m{ty_n})\m{op}"}
+\end{tabular}
+\vskip5mm
+
+\begin{tabular}{@{\hskip3mm}l@{\hskip3mm$=$\hskip3mm}l@{}}
+{\tt dest\_vartype ":*\m{\dots}"} & {\tt `*\m{\dots}`}\\
+{\tt dest\_type ":(\m{ty_1},\dots,\m{ty_n})\m{op}"} &
+    {\tt (`\m{op}`,[\m{ty_1};\dots;\m{ty_n}])}
+\end{tabular}
+\vskip5mm
+\begin{tabular}{@{\hskip3mm}l@{\hskip3mm{iff}\hskip3mm}l}
+{\tt is\_vartype ":\m{ty}"} &  {\tt :}\m{ty} is a type variable
+\end{tabular}
+\espindent
+
+\point{Examples:}
+\vskip4mm
+
+\begin{session}\begin{verbatim}
+#dest_type ":bool";;
+(`bool`, []) : (string # type list)
+
+#mk_type (`prod`,[":bool";":ind"]);;
+":bool # ind" : type
+
+#is_vartype ":*";;
+true : bool
+
+#is_vartype ":bool";;
+false : bool
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Primitive Syntax Functions}
+
+\point{Term constructors:}
+\vskip3mm
+\bspindent\Large
+\def\bk{{\tt\char'134}}
+\def\eps{{\tt\char'100}}
+\def\neg{{\tt\char'176}}
+
+\begin{tabular}{@{\hskip3mm}l@{\hskip3mm$=$\hskip3mm}l@{}}
+  {\tt mk\_abs("\m{v}","\m{t}")}     & {\tt "\bk\m{v}.\m{t}"}\\
+  {\tt mk\_comb("\m{t_1}","\m{t_2}")}& {\tt "\m{t_1} \m{t_2}"}\\
+  {\tt mk\_const(`\m{c}`,":\m{ty}")} & {\tt"\m{c}:\m{ty}"} \\
+  {\tt mk\_var(`\m{v}`,":\m{ty}")}   & {\tt "\m{v}:\m{ty}"}
+\end{tabular}
+\espindent
+
+\point{Term destructors:}
+\vskip3mm
+\bspindent\Large
+\def\bk{{\tt\char'134}}
+\def\eps{{\tt\char'100}}
+\def\neg{{\tt\char'176}}
+
+\begin{tabular}{@{\hskip3mm}l@{\hskip3mm$=$\hskip3mm}l}
+{\tt dest\_abs "\bk\m{v}.\m{t}"}  &    {\tt ("\m{v}","\m{t}")} \\
+{\tt dest\_comb "\m{t_1} \m{t_2}"}&    {\tt ("\m{t_1}","\m{t_2}")}\\
+{\tt dest\_const "\m{c}:\m{ty}"}  &    {\tt (`\m{c}`,":\m{ty}")} \\
+{\tt dest\_var "\m{v}:\m{ty}"}    &    {\tt (`\m{v}`,":\m{ty}")}
+\end{tabular}
+\espindent
+
+\point{Term discriminators:}
+\vskip3mm
+\bspindent\Large\bf
+\def\bk{{\tt\char'134}}
+\def\eps{{\tt\char'100}}
+\def\neg{{\tt\char'176}}
+
+\begin{tabular}{@{\hskip3mm}l@{\hskip3mm{iff}\hskip3mm}l@{}}
+{\tt is\_abs "\m{tm}"}   & 
+   \m{tm} = {\tt "\bk\m{v}.\m{t}"} for some \m{v} and \m{t}\\
+{\tt is\_const "\m{tm}" } & 
+   \m{tm} = {\tt "\m{c}:\m{ty}"} for some \m{c} and \m{ty}\\
+{\tt is\_comb "\m{tm}" }  & 
+   \m{tm} = {\tt "\m{t_1} \m{t_2}"} for some \m{t_1} and \m{t_2}\\
+{\tt is\_var  "\m{tm}"}  &   
+   \m{tm} = {\tt "\m{v}:\m{ty}"} for some \m{v} and \m{ty} 
+\end{tabular}
+\espindent
+
+\point{Examples:}
+\begin{session}\begin{verbatim}
+#dest_abs "\P. P ==> Q";;
+("P", "P ==> Q") : (term # term)
+
+#mk_var (`x`,":bool");;
+"x" : term
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Derived Syntax Functions}
+
+\point{There are derived syntax functions for some non-primitive terms:}
+\vskip4mm
+
+\begin{session}\begin{verbatim}
+#dest_forall "!P. P /\ Q";;
+("P", "P /\ Q") : (term # term)
+
+#mk_conj ("P:bool", "Q:bool");;
+"P /\ Q" : term
+\end{verbatim}\end{session}
+
+\point{Naming convention:}
+
+\subpoint{Prefixes: {\tt mk}, {\tt dest}, {\tt is}}
+
+\subpoint{Roots:}
+\bspindent\Large
+\obeylines
+\vskip4mm
+\qquad {\tt pair}, {\tt list}, {\tt cond}
+\qquad {\tt eq}, {\tt neq}, {\tt conj}, {\tt disj}, {\tt imp}
+\qquad{\tt forall}, {\tt exists}, {\tt select}
+\espindent
+
+\point{Hence, for example:}
+
+\bspindent\LARGE\bf
+\begin{verbatim}
+      mk_conj : term # term -> term
+      is_conj : term -> bool
+      dest_conj : term -> (term # term)
+\end{verbatim}
+\espindent
+
+% =====================================================================
+\slide{Iterated Syntax Functions}
+
+\point{Various built-in iterated syntax functions\\ exist, for example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#strip_forall "!P Q R. P /\ Q /\ R";;
+(["P"; "Q"; "R"], "P /\ Q /\ R") : goal
+
+#list_mk_conj ["P:bool";"Q:bool";"R:bool"];;
+"P /\ Q /\ R" : term
+\end{verbatim}\end{session}
+
+\vskip7mm
+
+\point{Their names generally begin with `{\tt strip\_}' or with `{\tt
+list\_}'.}
+
+\vskip7mm
+
+\point{See the manual for details \dots}
+
+% =====================================================================
+\slide{Other Syntax Functions}
+
+\point{Generating a variant variable name:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#variant ["x:bool";"y:bool";"z:bool"] "y:bool" ;;
+"y'" : term
+\end{verbatim}\end{session}
+
+
+\point{Testing if a variable is free in a term:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#free_in "Q:bool" "P /\ Q";;
+true : bool
+
+#free_in "Q:bool" "!P Q. P /\ Q";;
+false : bool
+\end{verbatim}\end{session}
+
+
+\point{Get the free variables of a term:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#frees "!Q. P ==> (Q /\ R)";;
+["P"; "R"] : term list
+\end{verbatim}\end{session}
+
+\point{Test for alpha-equivalence:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#aconv "!P Q. P /\ Q" "!x y. x /\ y";;
+true : bool
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Matching and Instantation}
+
+\point{Example:}
+
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let tm1 = "\x:*. ((x = y) => (a:**) | b)"
+tm1 = "\x. ((x = y) => a | b)" : term
+
+#let s,i = match tm1 "\b. ((b = T) => P | F)";;
+s = [("F", "b"); ("P", "a"); ("T", "y")] 
+      : (term # term) list
+i = [(":bool", ":**"); (":bool", ":*")] 
+      : (type # type) list
+
+#show_types true;;
+false : bool
+
+#let tm2 = inst [] i tm1;;
+tm2 = "\(x:bool). ((x = y) => a | b:bool)" : term
+
+#subst s tm2;;
+"\(x:bool). ((x = T) => P | F)" : term
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Sequents}
+
+\point{A sequent is just a pair $(\Gamma,t)$, where}
+
+\subpoint{$\Gamma$ is set of formulas and}
+\subpoint{$t$ is a formula (term of type bool)}
+
+\vskip7mm
+
+\point{In HOL, sequents are just pairs of ML type:}
+
+\vskip 7mm
+\bspindent\LARGE 
+$\underbrace{\mathstrut \verb!term!\;\;\verb!list!}_{\und{assumptions}{10}}\;\;
+\verb!#!\;\;
+\underbrace{\mathstrut \verb!term!}_{\und{conclusion}{15}}$
+\espindent
+\vskip 7mm
+
+\point{Note, in HOL sequents have a {\it list\/} of \\
+assumptions, not a {\it
+set} of assumptions.}
+
+
+% =====================================================================
+\slide{Sequents in HOL}
+
+\point{The ML type {\tt goal} is just an abbreviation for  
+{\tt term list \# term}.}
+
+\point{Examples:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#[ "x=T" ; "y=F" ], "x=~y" ;;
+(["x = T"; "y = F"], "x = ~y") : goal
+
+#fst it;;
+["x = T"; "y = F"] : term list
+
+#[],"T";;
+([], "T") : (* list # term)
+
+#[]:term list, "T";;
+([], "T") : goal
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Theorems}
+
+\point{In HOL, theorems are values of ML type {\tt thm}.}
+
+\point{A value of type {\tt thm} is printed as follows:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#BOOL_CASES_AX;;
+|- !t. (t = T) \/ (t = F)
+
+#ASSUME "P ==> Q";;
+. |- P ==> Q
+\end{verbatim}\end{session}
+
+\vskip4mm
+\bpindent\LARGE\bf
+The dot represents an assumption which has not been printed.
+\epindent
+
+
+\point{To get assumptions to print:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#top_print print_all_thm;;
+- : (thm -> void)
+
+#ASSUME "P ==> Q";;
+P ==> Q |- P ==> Q
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Syntax Functions for Theorems}
+
+\point{Syntax functions for destructing theorems:}
+
+\vskip 7mm
+\bspindent\LARGE
+\begin{verbatim}
+      dest_thm : thm -> goal
+         concl : thm -> term
+           hyp : thm -> term list
+\end{verbatim}
+\espindent
+\vskip 7mm
+
+
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let t1 = MP (ASSUME "P ==> Q") (ASSUME "P:bool");;
+t1 = P ==> Q, P |- Q
+
+#dest_thm t1;;
+(["P ==> Q"; "P"], "Q") : goal
+\end{verbatim}\end{session}
+
+\point{Note: there are no literals of type {\tt thm}.}
+
+\point{That is, you can't just type arbitrary theorems in, you have to prove
+them!}
+
+
+% =====================================================================
+\slide{Inference Rules}
+
+\point{In HOL, an inference rule is represented by an ML function that:}
+
+\subpoint{takes 0 or more theorems (values of type {\tt thm}) as arguments,
+and possibly other auxiliary\\ arguments as well}
+
+\subpoint{returns a theorem as a result}
+
+
+\vskip5mm
+\point{For example, {\it modus ponens\/} in HOL is:}
+
+\vskip 7mm
+\bspindent\LARGE
+\begin{verbatim}
+      MP : thm -> thm -> thm
+\end{verbatim}
+\espindent
+
+\vskip5mm
+
+\point{These functions return only objects of type {\tt thm} that are logically
+deducable by the inference rules which they represent.}
+
+
+% =====================================================================
+\slide{Theorems and Proof in HOL}
+
+\point{In the core of HOL we have:}
+
+\subpoint{Axioms: five built-in values of type {\tt thm}}
+
+\subpoint{Primitive inference rules: eight built-in functions that return
+values of type {\tt thm}}
+
+\subpoint{Rules of definition: three built-in functions that return
+values of type {\tt thm}}
+
+\point{Thus, one can obtain a value of type {\tt thm}:}
+
+\subpoint{directly - as an axiom.}
+
+\subpoint{by computation - using the built-in functions\\ that
+represent the inference rules and rules of\\ definition.}
+
+\point{These are the {\it only\/} ways obtain a value of type {\tt thm} in the
+HOL system.}
+
+\point{Hence, in HOL, {\it all\/} theorems must be proved!}
+
+
+% =====================================================================
+\slide{Summary}
+
+\point{Logical terms and types;}
+\subpoint{the ML data types {\tt term} and {\tt type}.}
+\subpoint{Syntax functions for manipluating terms.}
+
+\point{Sequents:}
+\subpoint{the ML data type {\tt goal}.}
+
+\point{Theorems:}
+\subpoint{the ML data type {\tt thm}.}
+
+\point{Inference Rules:}
+\subpoint{ML functions that return values of type {\tt thm}.}
+
+\point{Proof in HOL:}
+\subpoint{must be done by ML programs that execute the\\
+appropriate sequence of inference rules.}
+
+\end{document}
+

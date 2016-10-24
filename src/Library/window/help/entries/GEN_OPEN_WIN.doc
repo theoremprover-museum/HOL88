@@ -1,0 +1,25 @@
+\DOC GEN_OPEN_WIN
+
+\TYPE {GEN_OPEN_WIN : (win_path -> void)}
+
+\SYNOPSIS
+Apply some transformation to a subwindow of the top window window.
+
+\LIBRARY window
+
+\DESCRIBE
+{GEN_OPEN_WIN wpath fn} opens a subwindow on the top window at the
+position described by {wpath}.
+{wpath} can take one of two forms.
+If {wpath} is of the form {FOCUS p} then it indicates a subterm of the 
+focus.
+In such cases {GEN_OPEN_WIN wpth} behaves like {OPEN_WIN p}.
+If {wpath} is of the form {CONTEXT_PATH (t,p)} then it indicates a subterm of
+the context.
+In such cases {GEN_OPEN_WIN wpth} behaves like {OPEN_CONTEXT t p}.
+
+\SEEALSO
+GEN_OPEN_WIN, open_win, open_context, OPEN_WIN, OPEN_CONTEXT,
+CLOSE_WIN
+
+\ENDDOC

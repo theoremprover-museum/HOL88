@@ -1,0 +1,534 @@
+\chapter{The unwind Library}
+
+This document describes the facilities provided by the \ml{unwind} library
+for the HOL system~\cite{description}. The library provides conversions and
+rules for unfolding, unwinding and pruning device implementations (logical
+representations of hardware). For a detailed description of these techniques,
+see~\cite{HVusingHOL}.
+
+Most of the functions fall into one of five groups. The first group consists
+of conversions and inference rules for moving universal quantifiers up and
+down through conjunctions; they have names beginning with either
+\ml{CONJ\_FORALL} or \ml{FORALL\_CONJ}. The second group of functions are for
+unfolding, that is expanding sub-components using their definitions. The names
+of these begin with \ml{UNFOLD}. The functions in the third group perform
+unwinding and have names beginning with \ml{UNWIND}. The fourth group of
+functions prune internal lines that have been unwound. Their names begin with
+\ml{PRUNE}. The final group of functions combine unfolding, unwinding and
+pruning. They have names beginning with \ml{EXPAND}.
+
+I have tried to make the behaviour of the functions uniform. The conversions
+apply to the smallest term possible, to provide maximum flexibility. The
+inference rules, on the other hand, are designed to apply to the definition
+of a hardware component. They expect to be given a theorem of the form:
+
+\begin{small}\begin{verbatim}
+   |- !x1 ... xn. DEVICE (x1,...,xn) = ?l1 ... lm. t1 /\ ... /\ tp
+\end{verbatim}\end{small}
+
+
+\section{Using the library}
+
+The \ml{unwind} library can be loaded into a \HOL\ session using the function
+\ml{load\_library}\index{load\_library@{\ptt load\_library}} (see the \HOL\
+manual for a general description of library loading). The first action in the
+load sequence initiated by \ml{load\_library} is to update the \HOL\
+help\index{help!updating search path} search path. The help search path is
+updated with a pathname to online help files for the \ML\ functions in the
+library. After updating the help search path, the \ML\ functions in the
+library are loaded into \HOL.
+
+The following session shows how the \ml{unwind} library may be loaded using
+\ml{load\_library}:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#load_library `unwind`;;
+Loading library `unwind` ...
+Updating help search path
+..................................
+Library `unwind` loaded.
+() : void
+\end{verbatim}\end{session}
+
+We now illustrate the use of the library on the parity-checker example.
+Firstly, we begin a new theory:
+
+\begin{session}\begin{verbatim}
+#new_theory `PARITY`;;
+() : void
+\end{verbatim}\end{session}
+
+\vfill
+
+\noindent
+We define the sub-components used:
+
+\vfill
+
+\begin{session}\begin{verbatim}
+#let ONE_DEF =
+# new_definition
+#  (`ONE_DEF`, "ONE(out:num->bool) = !t. out t = T");;
+ONE_DEF = |- !out. ONE out = (!t. out t = T)
+\end{verbatim}\end{session}
+
+\vfill
+
+\begin{session}\begin{verbatim}
+#let NOT_DEF =
+# new_definition
+#  (`NOT_DEF`, "NOT(in,out:num->bool) = !t. out t = ~(in t)");;
+NOT_DEF = |- !in out. NOT(in,out) = (!t. out t = ~in t)
+\end{verbatim}\end{session}
+
+\vfill
+
+\begin{session}\begin{verbatim}
+#let MUX_DEF =
+# new_definition
+#  (`MUX_DEF`,
+#   "MUX(sw,in1,in2,out:num->bool) =
+#     !t. out t = (sw t => in1 t | in2 t)");;
+MUX_DEF = 
+|- !sw in1 in2 out.
+    MUX(sw,in1,in2,out) = (!t. out t = (sw t => in1 t | in2 t))
+\end{verbatim}\end{session}
+
+\vfill
+
+\begin{session}\begin{verbatim}
+#let REG_DEF =
+# new_definition
+# (`REG_DEF`, "REG(in,out:num->bool) =
+#              !t. out t = ((t=0) => F | in(t-1))");;
+REG_DEF = 
+|- !in out. REG(in,out) = (!t. out t = ((t = 0) => F | in(t - 1)))
+\end{verbatim}\end{session}
+
+\vfill
+
+\noindent
+Now we define the parity-checker implementation:
+
+\begin{session}\begin{verbatim}
+#let PARITY_IMP_DEF =
+# new_definition
+#  (`PARITY_IMP_DEF`,
+#   "PARITY_IMP(in,out) =
+#    ?l1 l2 l3 l4 l5.
+#     NOT(l2,l1) /\ MUX(in,l1,l2,l3) /\ REG(out,l2) /\
+#     ONE l4     /\ REG(l4,l5)       /\ MUX(l5,l3,l4,out)");;
+PARITY_IMP_DEF = 
+|- !in out.
+    PARITY_IMP(in,out) =
+    (?l1 l2 l3 l4 l5.
+      NOT(l2,l1) /\
+      MUX(in,l1,l2,l3) /\
+      REG(out,l2) /\
+      ONE l4 /\
+      REG(l4,l5) /\
+      MUX(l5,l3,l4,out))
+\end{verbatim}\end{session}
+
+\noindent
+The function \ml{EXPAND\_AUTO\_RIGHT\_RULE} can be used to unfold, unwind and
+prune the body of this definition:
+
+\begin{session}\begin{verbatim}
+#EXPAND_AUTO_RIGHT_RULE [ONE_DEF;NOT_DEF;MUX_DEF;REG_DEF] PARITY_IMP_DEF;;
+|- !in out.
+    PARITY_IMP(in,out) =
+    (!t.
+      out t =
+      (((t = 0) => F | T) => 
+       (in t => 
+        ~((t = 0) => F | out(t - 1)) | 
+        ((t = 0) => F | out(t - 1))) | 
+       T))
+\end{verbatim}\end{session}
+
+
+\section{Automatic unwinding}
+
+\def\putbox(#1,#2){\put(#1,#2){\framebox(2,2){}}}
+
+Hardware implementations often contain feedbacks. This presents a problem
+when trying to unwind and prune the internal lines in the logical
+representation. The mutual dependencies between lines can cause a brute-force
+unwind to loop indefinitely. To avoid this one has to be selective about
+which lines to unwind. The tools in the \ml{unwind} library allow the user
+to be selective in this way. However, it is possible for the machine itself to
+be selective. The function \ml{UNWIND\_AUTO\_CONV} attempts to analyze the
+dependencies between lines and unwind as far as possible without looping.
+
+Consider the following term which arises in the parity-checker example:
+
+\begin{small}\begin{verbatim}
+   "?l1 l2 l3 l4 l5.
+     (!t. l1 (t:num) = ~l2 t) /\
+     (!t. l3 t = (in t => l1 t | l2 t)) /\
+     (!t. l2 t = ((t = 0) => F | out (t - 1))) /\
+     (!t. l4 t = T) /\
+     (!t. l5 t = ((t = 0) => F | l4 (t - 1))) /\
+     (!t. out t = (l5 t => l3 t | l4 t))"
+\end{verbatim}\end{small}
+
+\noindent
+We can represent the dependencies of the lines using a directed graph:
+
+{\setlength{\unitlength}{4mm}
+\begin{center}
+\begin{picture}(14,10)(0,0)
+\put(0,2){\makebox(2,2){\small{\tt l2}}}
+\put(4,2){\makebox(2,2){\small{\tt l1}}}
+\put(8,4){\makebox(2,2){\small{\tt l3}}}
+\put(12,6){\makebox(2,2){\small{\tt out}}}
+\put(2,8){\makebox(2,2){\small{\tt l4}}}
+\put(6,8){\makebox(2,2){\small{\tt l5}}}
+
+\put(2,3){\vector(1,0){2}}
+\put(2,3){\vector(3,1){6}}
+\put(6,3){\vector(1,1){2}}
+\put(10,5){\vector(1,1){2}}
+\put(4,9){\vector(1,0){2}}
+\put(4,9){\vector(4,-1){8}}
+\put(8,9){\vector(2,-1){4}}
+
+\put(13,6){\line(0,-1){6}}
+\put(13,0){\line(-1,0){12}}
+\put(1,0){\vector(0,1){2}}
+\end{picture}
+\end{center}}
+
+\noindent
+which can in turn be represented by the following list:
+
+\begin{small}\begin{verbatim}
+   l1, [l2]
+   l3, [l1;l2]
+   l2, [out]
+   l4, []
+   l5, [l4]
+   out,[l5;l3;l4]
+\end{verbatim}\end{small}
+
+Since we wish to eliminate the internal lines, we want to be left with a
+recursive equation for {\small\verb%out%} in terms of itself. We can do this
+be `breaking the loop' at {\small\verb%out%}, giving the following structure:
+
+\begin{small}\begin{verbatim}
+   l1, [l2]
+   l3, [l1;l2]
+   l2, []
+   l4, []
+   l5, [l4]
+\end{verbatim}\end{small}
+
+\noindent
+Note that {\small\verb%out%} has been removed from the structure. From the
+graph we can see that {\small\verb%l2%} and {\small\verb%l4%} do not depend
+on any internal lines. They can therefore be used to unwind without any risk
+of looping. They can be recognized in the datastructure by the fact that their
+corresponding dependency lists are empty.
+
+Once we have unwound with {\small\verb%l2%} and {\small\verb%l4%} they can be
+removed from the datastructure:
+
+\begin{small}\begin{verbatim}
+   l1, []
+   l3, [l1]
+   l5, []
+\end{verbatim}\end{small}
+
+\noindent
+We now see that {\small\verb%l1%} and {\small\verb%l5%} can be unwound to give:
+
+\begin{small}\begin{verbatim}
+   l3, []
+\end{verbatim}\end{small}
+
+\noindent
+Unwinding {\small\verb%l3%} then leaves us with the required recursive
+equation for {\small\verb%out%}.
+
+The problem with the approach just described is that it only unwinds fully if
+there is at most one loop in the circuit, and the output is in that loop. We
+can be a bit more general. Consider the circuit:
+
+\vfill
+
+{\setlength{\unitlength}{4mm}
+\begin{center}
+\begin{picture}(4,18)(0,0)
+\put(1,0){\makebox(2,2){\small{\tt out}}}
+\putbox(1,4)
+\put(0,6){\makebox(2,2){\small{\tt l2}}}
+\putbox(1,8)
+\put(0,10){\makebox(2,2){\small{\tt l1}}}
+\putbox(1,12)
+\put(1,16){\makebox(2,2){\small{\tt in}}}
+
+\put(2,16){\vector(0,-1){2}}
+\put(2,12){\vector(0,-1){2}}
+\put(2,8){\vector(0,-1){2}}
+\put(2,4){\vector(0,-1){2}}
+
+\put(2,7){\circle*{0.2}}
+\put(2,7){\line(1,0){2}}
+\put(4,7){\line(0,1){8}}
+\put(4,15){\line(-1,0){1}}
+\put(3,15){\vector(0,-1){1}}
+\end{picture}
+\end{center}}
+
+\vfill
+
+\noindent
+represented by the graph:
+
+\vfill
+
+\begin{small}\begin{verbatim}
+   l1, [l2]
+   l2, [l1]
+   out,[l2]
+\end{verbatim}\end{small}
+
+\vfill
+
+\noindent
+There are no lines with an empty dependency list, and eliminating
+{\small\verb%out%} will not help because it is not in the loop. However, if we
+break the loop at {\small\verb%l2%} we can unwind {\small\verb%l1%}. This will
+leave us with a recursive equation for {\small\verb%l2%} and an equation for
+{\small\verb%out%} in terms of {\small\verb%l2%}. This is the best that we can
+do, and it is now up to the user to deal with the recursive equation.
+
+Now let's consider an example with more than one loop:
+
+{\setlength{\unitlength}{4mm}
+\begin{center}
+\begin{picture}(12,30)(0,0)
+\put(1,0){\makebox(2,2){\small{\tt out}}}
+\putbox(1,4)
+\put(0,6){\makebox(2,2){\small{\tt l5}}}
+\putbox(1,8)
+\put(0,10){\makebox(2,2){\small{\tt l4}}}
+\putbox(1,12)
+\put(0,14){\makebox(2,2){\small{\tt l3}}}
+\putbox(1,16)
+\putbox(5,16)
+\put(0,18){\makebox(2,2){\small{\tt l2}}}
+\put(6,18){\makebox(2,2){\small{\tt l6}}}
+\putbox(1,20)
+\putbox(9,20)
+\put(0,22){\makebox(2,2){\small{\tt l1}}}
+\put(10,22){\makebox(2,2){\small{\tt l7}}}
+\putbox(1,24)
+\put(1,28){\makebox(2,2){\small{\tt in}}}
+
+\put(2,28){\vector(0,-1){2}}
+\put(2,24){\vector(0,-1){2}}
+\put(2,20){\vector(0,-1){2}}
+\put(2,16){\vector(0,-1){2}}
+\put(2,12){\vector(0,-1){2}}
+\put(2,8){\vector(0,-1){2}}
+\put(2,4){\vector(0,-1){2}}
+
+\put(2,11){\circle*{0.2}}
+\put(2,11){\line(1,0){4}}
+\put(6,11){\vector(0,1){5}}
+\put(6,18){\line(0,1){1}}
+\put(6,19){\line(-1,0){3}}
+\put(3,19){\vector(0,-1){1}}
+\put(2,7){\circle*{0.2}}
+\put(2,7){\line(1,0){8}}
+\put(10,7){\vector(0,1){13}}
+\put(10,22){\line(0,1){1}}
+\put(10,23){\line(-1,0){7}}
+\put(3,23){\vector(0,-1){1}}
+\end{picture}
+\end{center}}
+
+\noindent
+We could unwind {\small\verb%l1%} but then we would get stuck. If we break at
+{\small\verb%l2%} or {\small\verb%l7%} we will still get stuck because of the
+inner loop. If we break at {\small\verb%l5%} we can unwind {\small\verb%l7%},
+but then get stuck. If we break at {\small\verb%l6%} we get stuck because of
+the outer loop. However, if we break at {\small\verb%l3%} or {\small\verb%l4%}
+both loops are broken and we can unwind fully to leave a recursive equation
+for either {\small\verb%l3%} or {\small\verb%l4%} and an equation for
+{\small\verb%out%} in terms of that line. So, the choice of where to break a
+loop may determine how far the unwinding can go.
+
+\ml{UNWIND\_AUTO\_CONV} attempts to break every loop in the circuit using the
+minimum number of breaks, so that there are as few equations left as possible.
+The function also gives priority to non-internal lines when determining where
+to break, so that if possible the recursive equations are in terms of these
+lines.
+
+The algorithm used determines from the term a list of line variables. Each
+line variable has a right-hand side of an equation associated with it. The
+free variables in each right-hand side are computed and those that are also
+line variables are placed in the dependency list for the corresponding line.
+From the dependency structure, the loops are determined. Lines are then
+eliminated so that all loops are broken.
+
+A study of the following circuit reveals why {\em all\/} loops have to be
+broken. If not all loops are broken, then a remaining loop can make the
+breaking of other loops fruitless.
+
+{\setlength{\unitlength}{4mm}
+\begin{center}
+\begin{picture}(12,30)(0,0)
+\put(1,0){\makebox(2,2){\small{\tt out}}}
+\putbox(1,4)
+\put(0,6){\makebox(2,2){\small{\tt l5}}}
+\putbox(1,8)
+\put(0,10){\makebox(2,2){\small{\tt l4}}}
+\putbox(1,12)
+\putbox(9,12)
+\put(0,14){\makebox(2,2){\small{\tt l3}}}
+\put(10,14){\makebox(2,2){\small{\tt l7}}}
+\putbox(1,16)
+\putbox(5,16)
+\put(0,18){\makebox(2,2){\small{\tt l2}}}
+\put(6,18){\makebox(2,2){\small{\tt l6}}}
+\putbox(1,20)
+\put(0,22){\makebox(2,2){\small{\tt l1}}}
+\putbox(1,24)
+\put(1,28){\makebox(2,2){\small{\tt in}}}
+
+\put(2,28){\vector(0,-1){2}}
+\put(2,24){\vector(0,-1){2}}
+\put(2,20){\vector(0,-1){2}}
+\put(2,16){\vector(0,-1){2}}
+\put(2,12){\vector(0,-1){2}}
+\put(2,8){\vector(0,-1){2}}
+\put(2,4){\vector(0,-1){2}}
+
+\put(2,11){\circle*{0.2}}
+\put(2,11){\line(1,0){4}}
+\put(6,11){\vector(0,1){5}}
+\put(6,18){\line(0,1){1}}
+\put(6,19){\line(-1,0){3}}
+\put(3,19){\vector(0,-1){1}}
+\put(2,7){\circle*{0.2}}
+\put(2,7){\line(1,0){8}}
+\put(10,7){\vector(0,1){5}}
+\put(10,14){\line(0,1){1}}
+\put(10,15){\line(-1,0){7}}
+\put(3,15){\vector(0,-1){1}}
+\end{picture}
+\end{center}}
+
+\noindent
+The dependency structure for the circuit is:
+
+\begin{small}\begin{verbatim}
+   l1, []
+   l2, [l1]
+   l3, [l2;l6]
+   l4, [l3;l7]
+   l5, [l4]
+   l6, [l4]
+   l7, [l5]
+   out,[l5]
+\end{verbatim}\end{small}
+
+\noindent
+The loops for the circuit are:
+
+\begin{small}\begin{verbatim}
+   [l3;l4;l6]
+   [l4;l5;l7]
+\end{verbatim}\end{small}
+
+\noindent
+Both loops can be broken by eliminating {\small\verb%l4%}:
+
+\begin{small}\begin{verbatim}
+   l1, []
+   l2, [l1]
+   l3, [l2;l6]
+   l5, []
+   l6, []
+   l7, [l5]
+   out,[l5]
+\end{verbatim}\end{small}
+
+\noindent
+We can now unwind {\small\verb%l1%}, {\small\verb%l5%} and {\small\verb%l6%}:
+
+\begin{small}\begin{verbatim}
+   l2, []
+   l3, [l2]
+   l7, []
+   out,[]
+\end{verbatim}\end{small}
+
+\noindent
+and then unwind {\small\verb%l2%}, {\small\verb%l7%} and {\small\verb%out%},
+followed by unwinding with {\small\verb%l3%} to yield a recursive equation for
+{\small\verb%l4%} and all other equations in terms of {\small\verb%l4%}. All
+the internal lines except for {\small\verb%l4%} can be pruned. This leaves
+equations for {\small\verb%l4%} and {\small\verb%out%} only.
+
+The technique does not always yield a single recursive equation. Mutual
+recursion is also possible. This is illustrated by the following example:
+
+{\setlength{\unitlength}{4mm}
+\begin{center}
+\begin{picture}(10,30)(0,0)
+\put(1,0){\makebox(2,2){\small{\tt out}}}
+\putbox(1,4)
+\put(0,6){\makebox(2,2){\small{\tt l5}}}
+\putbox(1,8)
+\put(0,10){\makebox(2,2){\small{\tt l4}}}
+\putbox(1,12)
+\putbox(5,10)
+\put(0,14){\makebox(2,2){\small{\tt l3}}}
+\put(6,12){\makebox(2,2){\small{\tt l7}}}
+\putbox(1,16)
+\put(0,18){\makebox(2,2){\small{\tt l2}}}
+\putbox(1,20)
+\putbox(5,18)
+\put(0,22){\makebox(2,2){\small{\tt l1}}}
+\put(6,20){\makebox(2,2){\small{\tt l6}}}
+\putbox(1,24)
+\put(1,28){\makebox(2,2){\small{\tt in}}}
+
+\put(2,28){\vector(0,-1){2}}
+\put(2,24){\vector(0,-1){2}}
+\put(2,20){\vector(0,-1){2}}
+\put(2,16){\vector(0,-1){2}}
+\put(2,12){\vector(0,-1){2}}
+\put(2,8){\vector(0,-1){2}}
+\put(2,4){\vector(0,-1){2}}
+
+\put(2,15){\circle*{0.2}}
+\put(2,15){\line(1,0){4}}
+\put(6,15){\vector(0,1){3}}
+\put(6,20){\line(0,1){2}}
+\put(6,22){\vector(-1,0){3}}
+\put(2,7){\circle*{0.2}}
+\put(2,7){\line(1,0){4}}
+\put(6,7){\vector(0,1){3}}
+\put(6,12){\line(0,1){2}}
+\put(6,14){\vector(-1,0){3}}
+\put(6,7){\circle*{0.2}}
+\put(6,7){\line(1,0){4}}
+\put(10,7){\line(0,1){16}}
+\put(10,23){\line(-1,0){7}}
+\put(3,23){\vector(0,-1){1}}
+\end{picture}
+\end{center}}
+
+There are three loops, but breaking at {\small\verb%l2%} and {\small\verb%l4%}
+is sufficient to break all the loops. The result is three equations: an
+equation for {\small\verb%l2%} in terms of itself and {\small\verb%l4%}, an
+equation for {\small\verb%l4%} in terms of itself and {\small\verb%l2%}, and
+an equation for {\small\verb%out%} in terms of {\small\verb%l4%}. So, it can
+be seen that the loop analysis technique used by \ml{UNWIND\_AUTO\_CONV} does
+not eliminate loops; it simply `shrinks' them.

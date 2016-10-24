@@ -1,0 +1,22 @@
+\DOC ALL_STACKS
+
+\TYPE {ALL_STACKS : (void -> string list)}
+
+\SYNOPSIS
+Lists all the available stacks.
+
+\LIBRARY window
+
+\DESCRIBE
+{ALL_STACKS ()} lists the names of all the stacks recorded in the system.
+That is all those stacks created by {BEGIN_STACK} and {BEGIN_STACK_TAC},
+and not yet destroyed by {END_STACK} or {END_STACK_TAC}.
+You may use {SET_STACK} to make any one of these stacks the current stack.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+create_win, BEGIN_STACK, END_STACK, SET_STACK, CURRENT_NAME
+
+\ENDDOC

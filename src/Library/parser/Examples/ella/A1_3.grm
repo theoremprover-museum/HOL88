@@ -1,0 +1,23 @@
+% A1.3 DECLARATIONS %
+
+declaration --> [TYPE] typedec more_typedecs {MK_one(`declaration`,POP)}
+              | [FN] fndec more_fndecs {MK_one(`declaration`,POP)}
+              | [INT] intdec more_intdecs {MK_one(`declaration`,POP)}
+              | [CONST] constdec more_constdecs {MK_one(`declaration`,POP)}
+              | [MAC] macdec more_macdecs {MK_one(`declaration`,POP)}.
+
+more_typedecs --> [,] {add_to_list(POP,typedec)} more_typedecs
+                | {MK_one(`typedecs`,POP)}.
+
+more_fndecs --> [,] {add_to_list(POP,fndec)} more_fndecs
+              | {MK_one(`fndecs`,POP)}.
+
+more_intdecs --> [,] {add_to_list(POP,intdec)} more_intdecs
+               | {MK_one(`intdecs`,POP)}.
+
+more_constdecs --> [,] {add_to_list(POP,constdec)} more_constdecs
+                 | {MK_one(`constdecs`,POP)}.
+
+more_macdecs --> [,] {add_to_list(POP,macdec)} more_macdecs
+               | {MK_one(`macdecs`,POP)}.
+

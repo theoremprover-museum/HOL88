@@ -1,0 +1,28 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: v11_lib							%
+%									%
+% DESCRIPTION: Version 11 libraries.					%
+%									%
+% AUTHORS: see the individual subdirectories.				%
+%									%
+% DATE: 91.01.15							%
+% --------------------------------------------------------------------- %
+
+This directory contains four libraries from version 1.11 of HOL that the
+Cambridge group have been unable to rebuild in HOL version 12, namely:
+
+   card   well_order   zet   csp
+
+The first three are difficult to rebuild because of changes in version 12 to
+resolution.  They rely very heavily on the order in which the assumptions of
+goals appear, and can be updated for version 12 only by their author.  
+
+The fourth library uses the set library, which has been substantially
+modified in version 12.  This library must likewise be revised by its 
+author.
+
+These libraries have therefore been temporarily put here in contrib,
+pending revision for version 12.
+
+(tfm)
+

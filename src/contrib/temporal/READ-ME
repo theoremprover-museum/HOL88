@@ -1,0 +1,23 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: temporal							%
+%									%
+% DESCRIPTION: Temporal logic in HOL.					%
+%									%
+% AUTHOR: Amit Jasuja							%
+%									%
+% ADDRESS: University of California Davis,				%
+%	   Davis, CA 95616, U.S.A.					%
+%									%
+%	   email: jasuja@edu.ucdavis.iris				%
+%									%
+% DATE: 90.08.03							%
+% --------------------------------------------------------------------- %
+
+temporal.ml:  This file contains the ML code (along with the
+              proof sessions) of the theory `temporal`.  It is
+              a formalization of the propositional temporal
+              logic proof system as proposed by Manna & Pnueli.
+
+paper ref: Verification of Concurrent Programs: A temporal Proof
+           System (Zohar Manna, Amir Pnueli) - Proceeding of
+           the 4th School of Advanced Programming, Amsterdam June '82.

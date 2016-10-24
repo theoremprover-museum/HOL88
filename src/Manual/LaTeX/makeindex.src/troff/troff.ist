@@ -1,0 +1,54 @@
+keyword "IX:"
+preamble
+".\\\" start of index output
+
+.SH
+.ce
+\\s+2INDEX\\s-2
+
+.2C
+.de IS
+.sp 0.5
+\\s+2\\fB
+.ce
+..
+.de IE
+.sp 0.5
+\\s-2\\fP
+..
+.de I1
+.ti 0.25i
+..
+.de 1I
+.ti 0.25i
+..
+.de I2
+.ti 0.5i
+..
+.de 2I
+.ti 0.5i
+..\n"
+postamble		"\n\n.\\\" end of index output\n"
+setpage_prefix		"\n.nr % 1\n"
+setpage_suffix		""
+group_skip		"\n.sp"
+headings_flag		1
+heading_prefix		"\n\n\n.IS\n"
+heading_suffix		"\n.IE\n"
+item_0			"\n.br\n"
+item_1			"\n.I1\n"
+item_2			"\n.I2\n"
+item_01			"\n.I1\n"
+item_x1			"\n.1I\n"
+item_12			"\n.I2\n"
+item_x2			"\n.2I\n"
+delim_0			", "
+delim_1			", "
+delim_2			", "
+delim_r			"-"
+delim_t			"."
+encap_prefix		"\\fB"
+encap_infix		""
+encap_suffix		"\\fP"
+indent_space		"	"
+indent_length		8

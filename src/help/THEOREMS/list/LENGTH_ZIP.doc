@@ -1,0 +1,5 @@
+\THEOREM LENGTH_ZIP list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (LENGTH(ZIP(l1,l2)) = LENGTH l1) /\ (LENGTH(ZIP(l1,l2)) = LENGTH l2)
+\ENDTHEOREM

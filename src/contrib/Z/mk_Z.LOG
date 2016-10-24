@@ -1,0 +1,590 @@
+
+
+===============================================================================
+         HOL88 Version 2.02 (SUN4/AKCL: pre-release), built on 26/1/94
+===============================================================================
+
+
+() : void
+
+..........................false : bool
+
+
+File hol-init loaded
+() : void
+
+#####() : void
+
+######.........() : void
+
+##Loading library sets ...
+Updating search path.
+Updating help search path.
+Declaring theory sets a new parent
+Theory sets loaded
+.....................
+Library sets loaded.
+() : void
+
+#Loading library string ...
+Updating search path
+.Updating help search path
+.Declaring theory string a new parent
+Theory string loaded
+......
+Library string loaded.
+() : void
+
+#Loading library taut ...
+Updating help search path
+........................................
+Library taut loaded.
+() : void
+
+#Loading library reduce ...
+Extending help search path.
+Loading boolean conversions........
+Loading arithmetic conversions..................
+Loading general conversions, rule and tactic.....
+Library reduce loaded.
+() : void
+
+#Loading library arith ...
+reduce already loaded
+.Updating help search path
+.......................................................................................................................................................................................................................................................................................
+Library arith loaded.
+() : void
+
+##.....() : void
+
+#######SET_SPEC_RULE = - : (thm -> thm)
+SET_SPEC_TAC = - : tactic
+
+########APPLY_ASMS_TAC = - : ((thm -> thm) -> tactic)
+
+##REWRITE_ASMS_TAC = - : (thm list -> tactic)
+
+###REWRITE_ALL_TAC = - : (thm list -> tactic)
+
+########RW_ASM_THEN = - : (thm_tactic -> proof list -> proof -> tactic)
+
+#############POP_ASSUMS = - : (int -> (thm list -> tactic) -> tactic)
+
+#####ITER = - : (int -> tactic -> tactic)
+
+########FILTER_STRIP_ASSUME_TAC = - : ((term -> bool) -> thm_tactic)
+
+####FILTER_IMP_RES_TAC = - : ((term -> bool) -> thm_tactic)
+
+####FILTER_RES_TAC = - : ((term -> bool) -> tactic)
+
+##no_imp = - : (term -> bool)
+
+##LITE_IMP_RES_TAC = - : thm_tactic
+
+#########() : void
+
+##() : void
+
+#() : void
+
+#() : void
+
+##() : void
+
+#() : void
+
+##() : void
+
+#() : void
+
+##() : void
+
+#() : void
+
+#() : void
+
+#() : void
+
+#() : void
+
+#() : void
+
+#() : void
+
+#() : void
+
+#() : void
+
+##() : void
+
+##sets already loaded
+() : void
+
+###############Theorem IN_UNION autoloading from theory `sets` ...
+IN_UNION = |- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+
+Theorem IN_DIFF autoloading from theory `sets` ...
+IN_DIFF = |- !s t x. x IN (s DIFF t) = x IN s /\ ~x IN t
+
+Theorem EXTENSION autoloading from theory `sets` ...
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+() : void
+
+DIFF_UNION = |- !s t u. s DIFF (t UNION u) = (s DIFF t) DIFF u
+
+#########Theorem list_Axiom autoloading from theory `list` ...
+list_Axiom = 
+|- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+
+() : void
+
+CONJL = |- (CONJL[] = T) /\ (!b bl. CONJL(CONS b bl) = b /\ CONJL bl)
+
+##() : void
+
+SCHEMA = |- !decs body. SCHEMA decs body = CONJL decs /\ CONJL body
+
+##|- true = T
+
+##() : void
+
+##() : void
+
+##() : void
+
+|-? = 
+|- !assumptions conclusion.
+    assumptions |-? conclusion = CONJL assumptions ==> conclusion
+
+######() : void
+
+##() : void
+
+:: = |- !x s. x :: s = x IN s
+
+##() : void
+
+##() : void
+
+=/= = |- !x y. x =/= y = ~(x = y)
+
+##########Theorem MEMBER_NOT_EMPTY autoloading from theory `sets` ...
+MEMBER_NOT_EMPTY = |- !s. (?x. x IN s) = ~(s = {})
+
+Definition CHOICE_DEF autoloading from theory `sets` ...
+CHOICE_DEF = |- !s. ~(s = {}) ==> (CHOICE s) IN s
+
+() : void
+
+CHOICE = |- !s. s =/= {} = (CHOICE s) IN s
+
+##() : void
+
+NOT_IN = |- !x s. x NOT_IN s = ~x IN s
+
+######() : void
+
+FORALL_RESTRICT = |- !s b. FORALL_RESTRICT s b = (!x. x IN s ==> b x)
+
+##() : void
+
+EXISTS_RESTRICT = |- !s b. EXISTS_RESTRICT s b = (?x. x IN s /\ b x)
+
+##() : void
+
+#() : void
+
+##() : void
+
+RES_FORALL = |- !P B. RES_FORALL P B = (!x. P x ==> B x)
+
+#() : void
+
+RES_EXISTS = |- !P B. RES_EXISTS P B = (?x. P x /\ B x)
+
+##() : void
+
+##() : void
+
+|-> = |- !x y. x |-> y = x,y
+
+##() : void
+
+dom = |- !R. dom R = {x | ?y. (x |-> y) IN R}
+
+################() : void
+
+dom_UNION = |- !X Y. dom(X UNION Y) = (dom X) UNION (dom Y)
+
+#######Theorem NOT_IN_EMPTY autoloading from theory `sets` ...
+NOT_IN_EMPTY = |- !x. ~x IN {}
+
+() : void
+
+dom_EMPTY = |- dom{} = {}
+
+############Theorem IN_SING autoloading from theory `sets` ...
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+() : void
+
+dom_SING = |- !x y. dom{x |-> y} = {x}
+
+#####() : void
+
+dom_SING_Cor = |- !x y. x IN (dom{x |-> y})
+
+##() : void
+
+ran = |- !R. ran R = {y | ?x. (x |-> y) IN R}
+
+#######() : void
+
+ran_EMPTY = |- ran{} = {}
+
+############() : void
+
+ran_SING = |- !x y. ran{x |-> y} = {y}
+
+################() : void
+
+ran_UNION = |- !X Y. ran(X UNION Y) = (ran X) UNION (ran Y)
+
+##() : void
+
+P = |- !X. P X = {Y | Y SUBSET X}
+
+##########Definition SUBSET_DEF autoloading from theory `sets` ...
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+() : void
+
+DIFF_IN_P = |- !s t. (s DIFF t) IN (P s)
+
+##() : void
+
+##() : void
+
+>< = |- !X Y. X >< Y = {(x,y) | x IN X /\ y IN Y}
+
+##() : void
+
+##() : void
+
+<-> = |- !X Y. X <-> Y = P(X >< Y)
+
+##() : void
+
+#####() : void
+
+-+> = 
+|- !X Y.
+    X -+> Y =
+    {f | 
+     f IN (X <-> Y) /\
+     (!x y1 y2. (x |-> y1) IN f /\ (x |-> y2) IN f ==> (y1 = y2))}
+
+##() : void
+
+##########() : void
+
+--> = |- !X Y. X --> Y = {f | f IN (X -+> Y) /\ (dom f = X)}
+
+###########() : void
+
+domPfun = |- !f X Y x. f IN (X -+> Y) /\ x IN (dom f) ==> x IN X
+
+########() : void
+
+domPfunIN = |- !f X Y. f IN (X -+> Y) ==> (dom f) IN (P X)
+
+############() : void
+
+SING_Pfun = |- !x y X Y. x IN X /\ y IN Y ==> {x |-> y} IN (X -+> Y)
+
+########################() : void
+
+UNION_SING_Pfun = 
+|- !f X Y x y.
+    f IN (X -+> Y) /\ x IN X /\ y IN Y /\ ~x IN (dom f) ==>
+    (f UNION {x |-> y}) IN (X -+> Y)
+
+################() : void
+
+UNION_SING_IN_P = 
+|- !f X Y x y.
+    f IN (X -+> Y) /\ x IN X /\ y IN Y ==>
+    (dom(f UNION {x |-> y})) IN (P X)
+
+#############() : void
+
+domTotalFun = |- !f X Y. f IN (X --> Y) ==> (dom f = X)
+
+########() : void
+
+IN_Fun_Pfun = |- !f X Y. f IN (X --> Y) ==> f IN (X -+> Y)
+
+###########() : void
+
+ranPfun = |- !f X Y y. f IN (X -+> Y) /\ y IN (ran f) ==> y IN Y
+
+############() : void
+
+ranPfunIN = |- !f X Y. f IN (X -+> Y) ==> (ran f) IN (P Y)
+
+##() : void
+
+Ap = |- !f x. Ap f x = (@y. (x,y) IN f)
+
+##() : void
+
+##() : void
+
+^^ = |- $^^ = Ap
+
+###########() : void
+
+Ap_UNION1 = 
+|- !x1 x2 v X. ~(x1 = x2) ==> ((X UNION {x1 |-> v}) ^^ x2 = X ^^ x2)
+
+##########() : void
+
+Ap_UNION2 = |- !x v X. ~x IN (dom X) ==> ((X UNION {x |-> v}) ^^ x = v)
+
+#########() : void
+
+Ap_SING = |- !x v. {x |-> v} ^^ x = v
+
+########################() : void
+
+ApFun = 
+|- !f X Y x.
+    f IN (X -+> Y) /\ x IN (dom f) ==> (!y. (f ^^ x = y) = (x,y) IN f)
+
+#########() : void
+
+domFun = |- !f x y. (x,y) IN f ==> x IN (dom f)
+
+########() : void
+
+ApFunCor = |- !f X Y x y. f IN (X -+> Y) /\ (x,y) IN f ==> (f ^^ x = y)
+
+#################() : void
+
+ApIN = |- !X Y f x. f IN (X -+> Y) /\ x IN (dom f) ==> (f ^^ x) IN Y
+
+###########() : void
+
+IN_dom_ran = 
+|- !f X Y x y. f IN (X -+> Y) /\ (x,y) IN f ==> x IN X /\ y IN Y
+
+##########() : void
+
+IN_P = |- !x f X Y. x IN (dom f) /\ f IN (X -+> Y) ==> x IN X
+
+##################() : void
+
+domAp = 
+|- !X Y f. f IN (X -+> Y) ==> (!x. x IN (dom f) = (x,f ^^ x) IN f)
+
+##() : void
+
+###() : void
+
+<+ = |- !S R. S <+ R = {x |-> y | ~x IN S /\ (x |-> y) IN R}
+
+##() : void
+
+###() : void
+
++> = |- !R T. R +> T = {x |-> y | (x |-> y) IN R /\ ~y IN T}
+
+##########() : void
+
+RangeAntiResSING = |- !x y. {x |-> y} +> {y} = {}
+
+##################() : void
+
+RangeAntiResPfun = 
+|- !X Y f y. f IN (X -+> Y) ==> (f +> {y}) IN (X -+> Y)
+
+##############() : void
+
+domRangeAntiResPfun = 
+|- !X Y f y. f IN (X -+> Y) ==> (dom(f +> {y})) IN (P X)
+
+##() : void
+
+##() : void
+
+(+) = |- !f g. f (+) g = ((dom g) <+ f) UNION g
+
+##########################################################################() : void
+
+OverrideIsFun = 
+|- !X Y f g. f IN (X --> Y) /\ g IN (X --> Y) ==> (f (+) g) IN (X --> Y)
+
+###########################################################() : void
+
+OverrideIsPfun = 
+|- !X Y f g. f IN (X -+> Y) /\ g IN (X -+> Y) ==> (f (+) g) IN (X -+> Y)
+
+###################################() : void
+
+domOverride = 
+|- !X Y f g.
+    f IN (X -+> Y) /\ g IN (X -+> Y) ==>
+    (dom(f (+) g) = (dom f) UNION (dom g))
+
+###################################() : void
+
+ApOverride1 = 
+|- !f g X Y x.
+    f IN (X -+> Y) /\ g IN (X -+> Y) /\ x IN ((dom f) DIFF (dom g)) ==>
+    ((f (+) g) ^^ x = f ^^ x)
+
+#############################() : void
+
+ApOverride2 = 
+|- !f g X Y x.
+    f IN (X -+> Y) /\ g IN (X -+> Y) /\ x IN (dom g) ==>
+    ((f (+) g) ^^ x = g ^^ x)
+
+##() : void
+
+##() : void
+
+|\/| = |- !f1 f2 x. (f1 |\/| f2)x = f1 x \/ f2 x
+
+##() : void
+
+##() : void
+
+|/\| = |- !f1 f2 x. (f1 |/\| f2)x = f1 x /\ f2 x
+
+##() : void
+
+##() : void
+
+|==>| = |- !f1 f2 x. (f1 |==>| f2)x = f1 x ==> f2 x
+
+##() : void
+
+##() : void
+
+|~| = |- !f x. |~| f x = ~f x
+
+##() : void
+
+NN = |- NN = {n | n >= 0}
+
+##() : void
+
+NN_1 = |- NN_1 = {n | n > 0}
+
+##() : void
+
+to = |- !m n i. (m to n)i = m <= i /\ i <= n
+
+##() : void
+
+##() : void
+
+.. = |- !m n. m .. n = {i | m <= i /\ i <= n}
+
+##########() : void
+
+Interval_to = 
+|- !m n.
+    (FORALL_RESTRICT(m .. n) = RES_FORALL(m to n)) /\
+    (EXISTS_RESTRICT(m .. n) = RES_EXISTS(m to n))
+
+########() : void
+
+IncInterval = |- 1 to (n + 1) = (1 to n) |\/| ((n + 1) to (n + 1))
+
+######() : void
+
+UnitInterval = |- (n to n)x = (x = n)
+
+####################() : void
+
+IntervalDIFFLemma = 
+|- !f X n x v.
+    f IN (NN_1 --> X) /\ (1 to n)x ==>
+    x IN ((dom f) DIFF (dom{(n + 1) |-> v}))
+
+#######() : void
+
+IN_NN = |- !n. n IN NN
+
+#######() : void
+
+IN_NN_1 = |- !n. (n + 1) IN NN_1
+
+##############() : void
+
+IntervalApLemma1 = 
+|- !f X n x v.
+    f IN (NN_1 --> X) /\ (1 to n)x /\ v IN X ==>
+    ((f (+) {(n + 1) |-> v}) ^^ x = f ^^ x)
+
+################() : void
+
+IntervalApLemma2 = 
+|- !f X n v.
+    f IN (NN_1 --> X) /\ v IN X ==>
+    ((f (+) {(n + 1) |-> v}) ^^ (n + 1) = v)
+
+######() : void
+
+IntervalSINGLemma = |- !n x v. (1 to n)x ==> ~x IN (dom{(n + 1) |-> v})
+
+#######() : void
+
+IncINTERVAL = |- 1 .. (n + 1) = (1 .. n) UNION ((n + 1) .. (n + 1))
+
+#######() : void
+
+UnitINTERVAL = |- x IN (n .. n) = (x = n)
+
+#######() : void
+
+IN_INTERVAL = |- x IN (m .. n) = m <= x /\ x <= n
+
+########() : void
+
+IN_Interval = |- !i m n. i IN (m .. n) = (m to n)i
+
+###########() : void
+
+OverrideSingPfun = 
+|- !X f x.
+    f IN (NN_1 -+> X) /\ x IN X ==>
+    (f (+) {(n + 1) |-> x}) IN (NN_1 -+> X)
+
+########() : void
+
+UNION_NN_1_SUC = |- !n. NN_1 UNION {n + 1} = NN_1
+
+################() : void
+
+OverrideSingFun = 
+|- !X f x.
+    f IN (NN_1 --> X) /\ x IN X ==>
+    (f (+) {(n + 1) |-> x}) IN (NN_1 --> X)
+
+#
+Correctable error: Console interrupt.
+Signalled by an anonymous function.
+If continued: Type :r to resume execution, or :q to quit to top level.
+Broken at SYSTEM:TERMINAL-INTERRUPT.  Type :H for Help.
+>>
+Correctable error: Console interrupt.
+Signalled by SYSTEM:UNIVERSAL-ERROR-HANDLER.
+If continued: Type :r to resume execution, or :q to quit to top level.
+Broken at SYSTEM:TERMINAL-INTERRUPT.
+>>>

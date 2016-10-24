@@ -1,0 +1,3 @@
+\THEOREM ELL_PRE_LENGTH list
+|- !l. ~(l = []) ==> (ELL(PRE(LENGTH l))l = HD l)
+\ENDTHEOREM

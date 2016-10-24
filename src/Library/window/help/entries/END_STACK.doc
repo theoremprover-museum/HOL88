@@ -1,0 +1,21 @@
+\DOC END_STACK
+
+\TYPE {END_STACK : (string -> void)}
+
+\SYNOPSIS
+Destroys a window stack.
+
+\LIBRARY window
+
+\DESCRIBE
+{END_STACK `name`} destroyes the window stack with name {`name`}.
+If {`name`} is the name of the current stack, then 
+{END_STACK `name`} leaves you with no current stack.
+
+\FAILURE
+{END_STACK `name`} fails if there is no stack called {`name`}.
+
+\SEEALSO
+create_win, BEGIN_STACK, SET_STACK, ALL_STACKS, CURRENT_NAME
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM num_CASES arithmetic
+|- !m. (m = 0) \/ (?n. m = SUC n)
+\ENDTHEOREM

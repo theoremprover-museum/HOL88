@@ -1,0 +1,22 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  24 JUN 1992 17:04
+**tutorial
+(tutorial.tex
+! Interruption.
+l.1 
+    % =====================================================================
+? 
+! Emergency stop.
+l.1 
+    % =====================================================================
+End of file on the terminal!
+
+ 
+Here is how much of TeX's memory you used:
+ 4 strings out of 4463
+ 24 string characters out of 63169
+ 22848 words of memory out of 262141
+ 1972 multiletter control sequences out of 9500
+ 18996 words of font info for 72 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 1i,0n,0p,82b,6s stack positions out of 300i,100n,60p,3000b,4000s
+No pages of output.

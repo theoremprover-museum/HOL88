@@ -1,0 +1,47 @@
+FIRST_CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+             A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+             *`.
+
+CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+       A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+       1 2 3 4 5 6 7 8 9 0 *`.
+
+tyname --> {mk_type_name(TOKEN)}.
+
+tyvar --> {mk_type_var(TOKEN)}.
+
+MAIN_LOOP --> typ [EOF].
+
+typ --> type1 more_type.
+
+more_type --> [#] {add_to_list(type1,POP)} more_prod_type sum_or_fun_type
+            | [->] {MK_bin_type(`fun`,POP,typ)}
+            | [+] type1 more_sum_type fun_type
+            | [].
+
+more_prod_type --> [#] {add_to_list(type1,POP)} more_prod_type
+                 | {MK_defd_type(POP,`prod`)}.
+
+sum_or_fun_type --> [+] {MK_bin_type(`sum`,POP,typ)}
+                  | [->] {MK_bin_type(`fun`,POP,typ)}
+                  | [].
+
+more_sum_type --> [+] {add_to_list_rev(POP,POP)} type1 more_sum_type
+                | [#] {add_to_list(type1,POP)} more_prod_type more_sum_type
+                | {add_to_list_rev(POP,POP)} {MK_defd_type(POP,`sum`)}.
+
+fun_type --> [->] {MK_bin_type(`fun`,POP,typ)}
+           | [].
+
+type1 --> [(] typ poss_cmpnd_type
+        | tyname more_type1
+        | tyvar more_type1.
+
+poss_cmpnd_type --> [)] more_type1
+                  | [,] {add_to_list(POP,typ)} rest_of_cmpnd.
+
+rest_of_cmpnd --> [,] {add_to_list(POP,typ)} rest_of_cmpnd
+                | [)] {MK_type(POP,TOKEN)} more_type1.
+
+more_type1 --> {MK_type(POP,TOKEN)} more_type1
+             | [].

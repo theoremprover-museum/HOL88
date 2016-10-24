@@ -1,0 +1,35 @@
+\DOC new_type
+
+\TYPE {new_type : (int -> string -> void)}
+
+\SYNOPSIS
+Declares a new type or type constructor.
+
+\DESCRIBE
+A call {new_type n `t`} declares a new {n}-ary type constructor called {t} in
+the current theory segment. If {n} is zero, this is just a new base type.
+
+\FAILURE
+Fails if HOL is not in draft mode, or if the name is not a valid type
+name, or there is already a type operator of that name in the current theory.
+
+\EXAMPLE
+A version of ZF set theory might declare a new type {set} and start using it as
+follows:
+{
+   #new_theory `ZF`;;
+   () : void
+
+   #new_type 0 `set`;;
+   () : void
+
+   #new_infix(`mem`,":set->set->bool");;
+   () : void
+
+   #new_axiom(`ext`,"(!z. z mem x = z mem y) ==> (x = y)");;
+   |- !x y. (!z. z mem x = z mem y) ==> (x = y)
+}
+\SEEALSO
+types, type_abbrevs, new_type_abbrev.
+
+\ENDDOC

@@ -1,0 +1,23 @@
+\DOC special_symbols
+
+\TYPE {special_symbols : (void -> string list)}
+
+\SYNOPSIS
+Returns a list of special symbols.
+
+\DESCRIBE
+An identifier, at the ML or object level, is either alphanumeric, e.g. {true}
+or {T}, or consists of a special symbol which starts with a non-alphanumeric
+character, e.g. {==>} or {+}. It is a consequence of the non-backtracking
+implementation of lexical analysis that any (non-null) initial segment of a
+special symbol is also a special symbol, so from the above we know that {==}
+and {=} are. The function {special_symbols} returns a list of special symbols;
+all non-null initial prefixes of them are also special symbols.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+new_special_symbol.
+
+\ENDDOC

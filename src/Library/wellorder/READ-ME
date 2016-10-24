@@ -1,0 +1,56 @@
+%============================================================================%
+% LIBRARY:     wellorder                                                     %
+%                                                                            %
+% DESCRIPTION: (1) Versions of the Axiom of Choice                           %
+%              (2) Theorems about wosets, including recursion theorem        %
+%                                                                            %
+% AUTHOR:      John Harrison                                                 %
+%              University of Cambridge Computer Laboratory                   %
+%              New Museums Site                                              %
+%              Pembroke Street                                               %
+%              Cambridge CB2 3QG                                             %
+%              England.                                                      %
+%                                                                            %
+%              jrh@cl.cam.ac.uk                                              %
+%                                                                            %
+% DATE:        30th May 1992    [Original version written]                   %
+% REVISED:     31st Mar 1993    [Recursion theorem added]                    %
+%                                                                            %
+% DETAILS:     The versions of the axiom of choice proved bere are:          %
+%                                                                            %
+%              1. Kuratowski's Lemma:                                        %
+%                 Every chain is a poset can be extended to a maximal        %
+%                 chain.                                                     %
+%                                                                            %
+%              2. Hausdorff Maximum Principle:                               %
+%                 Every poset has a maximal chain.                           %
+%                                                                            %
+%              3. Zorn's Lemma:                                              %
+%                 A poset where every chain has an upper bound, has a        %
+%                 maximal element.                                           %
+%                                                                            %
+%              4. Cantor-Zermelo well-ordering theorem:                      %
+%                 Every set can be wellordered.                              %
+%                                                                            %
+%              Proofs follow quite closely those in "R.R. Stoll - Set        %
+%              Theory and Logic - Dover 1979"                                %
+%                                                                            %
+%              The recursion theorem justifies arbitrary recursive           %
+%              definitions:                                                  %
+%                                                                            %
+%                ?!f. f a = h f a                                            %
+%                                                                            %
+%              provided one can prove that for some wellfounded              %
+%              "measure" function, the value of |h f a| depends              %
+%              only on the values of |f| at values of lower measure          %
+%              than |a|.                                                     %
+%============================================================================%
+
+This library is intended to supersede an earlier library of the same name
+written by Ton Kalker, which stopped working in HOL version 1.12. Its format
+and the structure of the proofs is somewhat different, providing three maximal
+principles: Kuratowski's Lemma, Hausdorff's Maximal Principle and Zorn's Lemma,
+en route to the Well-Ordering Theorem. The revised version also includes a
+theorem justifying transfinite recursion.
+
+For full documentation, see "Manual/wellorder.dvi".

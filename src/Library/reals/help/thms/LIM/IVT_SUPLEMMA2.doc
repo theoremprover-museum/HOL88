@@ -1,0 +1,7 @@
+\THEOREM IVT_SUPLEMMA2 LIM
+|- a <= b /\
+   ((f a) <= y /\ y <= (f b)) /\
+   (!x. a <= x /\ x <= b ==> f contl x) ==>
+   a <= (sup(\x. a <= x /\ x <= b /\ (f x) <= y)) /\
+   (sup(\x. a <= x /\ x <= b /\ (f x) <= y)) <= b
+\ENDTHEOREM

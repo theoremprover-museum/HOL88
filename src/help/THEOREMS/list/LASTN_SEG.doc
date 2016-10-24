@@ -1,0 +1,3 @@
+\THEOREM LASTN_SEG list
+|- !n l. n <= (LENGTH l) ==> (LASTN n l = SEG n((LENGTH l) - n)l)
+\ENDTHEOREM

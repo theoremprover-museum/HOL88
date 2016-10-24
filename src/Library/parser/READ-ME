@@ -1,0 +1,52 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: parser						|
+|									|
+| DESCRIPTION   : A parser-generator for the HOL system.		|
+|									|
+| AUTHOR	: J.P. Van Tassel					|
+| DATE		: 90.07.15						|
+|									|
+| MODIFIED      : 							|
+| DATE		: 							|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    parser.ml	       defines the functions that make up the parser-
+		       generator, and exports the top level one.
+
+    general.ml	       defines a suite of functions used by all generated
+		       parsers.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) EITHER copy the files *_ml.o in this library into your current
+      working directory, OR put the pathname of this library on the
+      internal hol search path.
+
+   2) To load the library, load the file `parser`.
+
+
+

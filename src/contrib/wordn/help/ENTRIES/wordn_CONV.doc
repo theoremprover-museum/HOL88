@@ -1,0 +1,28 @@
+\DOC wordn_CONV
+
+\TYPE {wordn_CONV : conv}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Definition scheme for wordn constants.
+
+\DESCRIBE
+{wordn_CONV "#b1...bn"} returns
+{
+   |- #b1...bn = WORDn [b1;...;bn]
+}
+
+\FAILURE
+
+
+\EXAMPLE
+{wordn_CONV "#110"} returns the following theorem:
+{
+   |- #110 = WORD3 [T; T; F]
+}
+
+\SEEALSO
+{define_wordn_type}, {wordn_NVAL_CONV}, {wordn_NWORD_CONV}.
+
+\ENDDOC

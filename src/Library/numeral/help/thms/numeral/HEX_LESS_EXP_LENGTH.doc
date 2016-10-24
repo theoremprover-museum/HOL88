@@ -1,0 +1,3 @@
+\THEOREM HEX_LESS_EXP_LENGTH numeral
+|- !l. IS_HEX l ==> (HEX l) < (16 EXP (LENGTH l))
+\ENDTHEOREM

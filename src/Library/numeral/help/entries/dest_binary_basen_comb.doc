@@ -1,0 +1,31 @@
+\DOC dest_binary_basen_comb
+
+\TYPE {dest_binary_basen_comb : term -> thm}
+
+\SYNOPSIS
+Takes apart a term containing a binary operation on BASEN numerals, and returns
+the parts.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term containing an operation applied to two BASEN numerals, returns the
+operation, the radix of the two numerals, the numerals themselves, and the
+numerals' digits (in two forms).
+
+\EXAMPLE
+{
+#dest_binary_basen_comb "$*" "BASEN 10 [2;3;4] * BASEN 10 [6;7;8;9]";;
+("10",
+ "BASEN 10[2;3;4]",
+ "[2;3;4]",
+ ["2"; "3"; "4"],
+ "BASEN 10[6;7;8;9]",
+ "[6;7;8;9]",
+ ["6"; "7"; "8"; "9"])
+: (term # term # term # term list # term # term # term list)
+}
+\FAILURE
+Fails if the numerals have different radices.
+
+\ENDDOC

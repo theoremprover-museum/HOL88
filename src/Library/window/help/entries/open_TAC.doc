@@ -1,0 +1,44 @@
+\DOC open_TAC
+
+\TYPE {open_TAC : (path -> thm list -> (window -> window) -> tactic)}
+
+\SYNOPSIS
+Do some window inference on the current goal of the subgoals package.
+
+\LIBRARY window
+
+\DESCRIBE
+{open_TAC path thms fn} is a tactic will allows the window inference system
+to be called from within the subgoals package.
+A subwindow is opened on that subterm of the goal, {goal}, selected by {path}.
+The window will have the assumptions of the goal as it's assumptions, as
+well as any assumptions which follow from it's context.
+The window will have {thms} as it's set of relevant theorems.
+The relation preserved by the subwindow is chosen so that transforming the
+subwindow, with {fn}, transforms {goal} to {goal'}, generating the theorem
+{(H |- goal' ==> goal')}.
+The subwindow is then closed and the goal is transformed from {goal} to
+{goal'}.
+
+\FAILURE
+{open_TAC path thms fn} will fail if the goal stack is empty or if
+{path} denotes a position which is not present in the current goal.
+
+\EXAMPLE
+{
+   #set_goal ([], "A \/ (B \/ F)");;
+   "A \/ B \/ F"
+   
+   () : void
+   
+   #e (open_TAC [RAND] [] (rewrite_win []));;
+   OK..
+   "A \/ B"
+   
+   () : void
+}
+
+\SEEALSO
+BEGIN_STACK_TAC, END_STACK_TAC
+
+\ENDDOC

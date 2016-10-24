@@ -1,0 +1,32 @@
+\DOC prove_NWORD_MOD
+
+\TYPE {prove_NWORD_MOD : int -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Proves a theorem stating the periodicity of the function {NWORDn}.
+
+\DESCRIBE
+{prove_NWORD_MOD n} proves a theorem about the num-to-word conversion
+{NWORDn} which takes the following form:
+{
+   |- !m. NWORDn m = NWORDn (m MOD e)
+}
+\noindent where {e} is a constant number whose value equals to {2 EXP n}.
+
+\FAILURE
+Fails if the type {:wordn} or the conversion function {NWORDn}
+has not been defined.
+
+\EXAMPLE
+The following HOL session illustrates the use of this function:
+{
+   # let word3_NWORD_MOD = prove_NWORD_MOD 3;;
+   word3_NWORD_MOD = |- !m. NWORD3 m = NWORD3(m MOD 8)
+}
+
+\SEEALSO
+{define_wordn_type}, {define_word_val}, {prove_word_val}.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM wo_subset WELLORDER
+|- !P Q. P subset Q = (!x. P x ==> Q x)
+\ENDTHEOREM

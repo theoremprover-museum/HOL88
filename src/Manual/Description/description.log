@@ -1,0 +1,561 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 09:45
+**description.tex
+(description.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/makeidx.sty
+Document style option `makeidx' - released 21 Oct 91
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../LaTeX/alltt.sty) (../LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+) (../LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+)
+\@indexfile=\write3
+
+Writing index file description.idx 
+(description.aux (title.aux) (preface.aux) (../LaTeX/ack.aux) (contents.aux)
+(ML.aux) (logic.aux) (semantics.aux) (system.aux) (drules.aux) (conv.aux)
+(tactics.aux) (see.aux) (references.aux) (version2.aux) (index.aux)) (title.tex
+(../LaTeX/cover_info.tex
+
+     The title page being created is a LaTeX approximation of a fancy
+     PostScript cover page. All the fancy cover pages for the HOL
+     Manual may be generated if you have (1) a PostScript printer,
+     (2) the "psfig" TeX macros, and (3) a DVI to PostScript converter
+     that understands these macros. The cover pages may be found in
+     ../LaTeX/Covers, and shoud be made pursuant to the instructions
+     given in ../LaTeX/Covers/READ-ME.
+
+) [1
+
+
+] [2]) (preface.tex [3
+
+
+
+] [4]) [5] (../LaTeX/ack.tex [6
+
+
+
+]) [7] (contents.tex
+[8
+
+
+
+] (description.toc [9] [10] [11] [12]
+Overfull \hbox (4.17778pt too wide) detected at line 200
+\twlrm 11.11.10 
+
+\hbox(7.73332+0.0)x37.59956
+.\twlrm 1
+.\twlrm 1
+.\twlrm .
+.\twlrm 1
+.\twlrm 1
+.etc.
+
+[13] [14] [15])
+\tf@toc=\write4
+) [16] [1
+
+
+] [2] (ML.tex (mlpreface.tex
+Chapter 1.
+[3
+
+
+] [4]) (ml1.tex [5] [6
+
+]
+Chapter 2.
+[7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20] [21])
+(ml2.tex [22]
+Chapter 3.
+[23
+
+] [24] [25] [26] [27] [28] [29]) (ml3.tex [30]
+Chapter 4.
+[31
+
+] [32] [33] [34] [35] [36] [37]) (ml4.tex [38]
+Chapter 5.
+[39
+
+] [40] [41] [42] [43] [44] [45] [46] [47] [48] [49]) (ml5.tex [50]
+Chapter 6.
+[51
+
+] [52] [53]) (ml6.tex [54]
+Chapter 7.
+[55
+
+] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65] [66]) (ml7.tex [67]
+[68
+
+]
+Chapter 8.
+[69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80] [81] [82] [83]
+[84] [85] [86] [87] [88] [89] [90] [91] [92] [93] [94]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 5.15111
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.43333)x455.24408, glue set 0.12032
+..\twlrm a
+..\twlrm l
+..\twlrm w
+..\kern-0.32639
+..\twlrm a
+..etc.
+.\glue(\baselineskip) 4.56667
+.\hbox(9.0+3.0)x455.24408, glue set 0.0792
+..\twlrm A
+..\glue 3.91663 plus 1.95634 minus 1.30684
+..\twlrm v
+..\kern-0.65277
+..\twlrm a
+..etc.
+.\penalty 150
+.etc.
+
+ [95]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 6.55283
+.\glue(\topskip) 0.0
+.\hbox(127.37068+121.37068)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(127.37068+121.37068)x455.04408
+...\mathon
+...\vbox(127.37068+121.37068)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [96]))
+[97] [98
+
+
+] [99] [100] (logic.tex
+Chapter 9.
+[101
+
+
+]
+\ttX=\skip43
+ [102] [103] [104] [105] [106] [107] [108] [109] [110] [111] [112]
+[113]) [114] (semantics.tex
+Chapter 10.
+[115
+
+
+
+] [116] [117] [118] [119] [120] [121] [122] [123] [124] [125] [126]
+[127] [128] [129] [130] [131] [132] [133] [134] [135]) [136] [137
+
+
+] [138]
+(system.tex
+Chapter 11.
+[139
+
+
+] [140] [141] [142] [143] [144] [145] [146] [147] [148] [149] [150]
+[151] [152] [153] [154] [155] [156] [157] [158] [159] [160] [161] [162]
+[163] [164] [165] [166] [167] [168] [169] [170] [171] [172] [173] [174]
+[175] [176] [177] [178] [179] [180] [181] [182] [183] [184] [185] [186]
+[187] [188] [189] [190] [191] [192] [193] [194] [195] [196] [197] [198]
+[199] [200] [201] [202] [203] [204] [205] [206] [207] [208] [209] [210]
+[211] [212] [213] [214]) [215] [216
+
+
+] [217] [218] (drules.tex
+Chapter 12.
+[219
+
+
+] [220] [221] [222] [223] [224] [225] [226] [227] [228] [229] [230]
+[231] [232] [233] [234] [235] [236] [237]) [238] (conv.tex
+Chapter 13.
+[239
+
+
+
+] [240] [241] [242] [243] [244] [245] [246] [247] [248] [249] [250]
+[251] [252] [253] [254]
+Underfull \hbox (badness 10000) in paragraph at lines 1188--1188
+[] []
+
+\hbox(0.0+0.0)x448.84409
+.\hbox(0.0+0.0)x0.0
+.\glue 0.0
+.\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\glue 0.0
+..\glue -5.87494
+..\hbox(0.0+0.0)x0.0
+..\glue 5.87494
+.\penalty 0
+.\glue(\rightskip) 0.0
+
+
+Overfull \hbox (5.30225pt too wide) in paragraph at lines 1188--1188
+[]   \elvtt FILTER_PURE_ASM_REWRITE_RULE      : (term -> bool) -> thm list -> t
+hm -> thm[] 
+
+\hbox(7.60416+1.04173)x448.84409
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 5.74869
+.\penalty 10000
+.\glue 5.74869
+.etc.
+
+
+Overfull \hbox (5.30225pt too wide) in paragraph at lines 1188--1188
+[]   \elvtt FILTER_ONCE_ASM_REWRITE_RULE      : (term -> bool) -> thm list -> t
+hm -> thm[] 
+
+\hbox(7.60416+1.04173)x448.84409
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 5.74869
+.\penalty 10000
+.\glue 5.74869
+.etc.
+
+
+Overfull \hbox (5.30225pt too wide) in paragraph at lines 1188--1188
+[]   \elvtt FILTER_PURE_ONCE_ASM_REWRITE_RULE : (term -> bool) -> thm list -> t
+hm -> thm[] 
+
+\hbox(7.60416+1.04173)x448.84409
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 5.74869
+.\penalty 10000
+.\glue 5.74869
+.etc.
+
+) [255] (tactics.tex [256
+
+
+
+]
+Chapter 14.
+[257] [258] [259] [260] [261] [262] [263] [264] [265] [266] [267] [268]
+[269] [270] [271] [272] [273] [274] [275] [276] [277] [278] [279] [280]
+[281] [282] [283] [284] [285] [286] [287]) [288] (see.tex) (references.tex
+[289
+
+
+
+
+
+]) [290] (version2.tex
+Appendix A.
+[291
+
+
+
+] [292] [293] [294] [295] [296] [297] [298] [299] [300] [301] [302]
+[303] [304] [305] [306] [307] [308] [309] [310] [311] [312] [313]) [314]
+(index.tex
+Overfull \hbox (11.11429pt too wide) in paragraph at lines 3--4
+[][] \twlrm (ab-bre-vi-a-tion, of \elvrm HOL \twlrm the-ory part names),
+
+\hbox(9.0+3.0)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\hbox(5.80956+0.0)x5.74869
+..\elvtt -
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm (
+.\twlrm a
+.etc.
+
+
+Overfull \hbox (1.94638pt too wide) in paragraph at lines 29--31
+[][]\elvtt !! \twlrm (fail-ure trap, it-er-a-tive se-lec-tive, in \elvrm ML\twl
+rm ),
+
+\hbox(9.0+3.0)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\hbox(0.0+0.0)x0.0
+.\elvtt !
+.\elvtt !
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[315
+
+
+
+] [316] [317]
+Overfull \hbox (2.4202pt too wide) in paragraph at lines 293--294
+[]\twlrm characteristic func-tion, of type def-i-ni-tions,
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm c
+.\kern-0.32639
+.\twlrm h
+.\twlrm a
+.etc.
+
+
+Overfull \hbox (7.31598pt too wide) in paragraph at lines 294--295
+[]\twlrm characteristic pred-i-cate, of type def-i-ni-tions,
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm c
+.\kern-0.32639
+.\twlrm h
+.\twlrm a
+.etc.
+
+
+Overfull \hbox (8.32034pt too wide) in paragraph at lines 297--298
+[]| \twlrm for finitely-branching or-dered trees, 190 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\rule(*+*)x0.0
+.\penalty 10000
+.\glue 20.0
+.\glue 0.0
+.etc.
+
+[318] [319]
+Overfull \hbox (2.8198pt too wide) in paragraph at lines 387--388
+[]\twlrm constant def-i-ni-tion ex-ten-sion, of \elvrm HOL \twlrm logic 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm c
+.\twlrm o
+.\twlrm n
+.\twlrm s
+.etc.
+
+
+Overfull \hbox (2.42813pt too wide) in paragraph at lines 443--444
+[]\twlrm customization of \elvrm HOL \twlrm sys-tem, 83, 85, 211--
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm c
+.\twlrm u
+.\twlrm s
+.\twlrm t
+.etc.
+
+[320]
+Overfull \hbox (6.73682pt too wide) in paragraph at lines 464--465
+[][]\twlrm , \twlbf 154\twlrm , 297 
+
+\hbox(7.73332+2.43333)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\hbox(6.69167+2.43333)x166.71194
+..\elvtt d
+..\elvtt e
+..\elvtt f
+..\elvtt i
+..\elvtt n
+..etc.
+.\twlrm ,
+.\glue 3.91663 plus 2.44789 minus 1.04443
+.\twlbf 1
+.etc.
+
+[321]
+Overfull \hbox (5.05649pt too wide) in paragraph at lines 605--606
+[]| \twlrm by con-stant spec-i-fi-ca-tion, 127--129, 165 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\rule(*+*)x0.0
+.\penalty 10000
+.\glue 20.0
+.\glue 0.0
+.etc.
+
+[322] [323] [324]
+Overfull \hbox (0.1607pt too wide) in paragraph at lines 792--793
+[]| \twlrm tim-ing and count-ing in-fer-ences in, 215 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\rule(*+*)x0.0
+.\penalty 10000
+.\glue 20.0
+.\glue 0.0
+.etc.
+
+[325] [326]
+Overfull \hbox (6.4021pt too wide) in paragraph at lines 938--939
+[]\twlrm justifications, in goal-directed proof search,
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm j
+.\twlrm u
+.\twlrm s
+.\twlrm t
+.etc.
+
+[327] [328]
+Overfull \hbox (6.73682pt too wide) in paragraph at lines 1150--1151
+[][]\twlrm , \twlbf 183\twlrm , 185 
+
+\hbox(7.73332+2.43333)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\hbox(6.69167+2.43333)x166.71194
+..\elvtt n
+..\elvtt e
+..\elvtt w
+..\elvtt _
+..\elvtt i
+..etc.
+.\twlrm ,
+.\glue 3.91663 plus 2.44789 minus 1.04443
+.\twlbf 1
+.etc.
+
+[329]
+Overfull \hbox (0.1607pt too wide) in paragraph at lines 1188--1189
+[]| \twlrm type def-i-ni-tion pack-age ver-sion of, 196 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\rule(*+*)x0.0
+.\penalty 10000
+.\glue 20.0
+.\glue 0.0
+.etc.
+
+[330]
+Overfull \hbox (5.19498pt too wide) in paragraph at lines 1308--1309
+[]| \twlrm au-to-mated use of, in \elvrm HOL \twlrm sys-tem, 182--
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\rule(*+*)x0.0
+.\penalty 10000
+.\glue 20.0
+.\glue 0.0
+.etc.
+
+
+Overfull \hbox (7.71558pt too wide) in paragraph at lines 1312--1313
+[]\twlrm primitive re-cur-sive def-i-ni-tions, in \elvrm HOL \twlrm logic 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm p
+.\twlrm r
+.\twlrm i
+.\twlrm m
+.etc.
+
+[331]
+Overfull \hbox (4.24796pt too wide) in paragraph at lines 1383--1384
+[]\twlrm proof func-tions (same as jus-ti-fi-ca-tions, val-
+
+\hbox(9.0+3.0)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm p
+.\twlrm r
+.\twlrm o
+.\kern0.32639
+.etc.
+
+[332]
+Overfull \hbox (4.83545pt too wide) in paragraph at lines 1429--1430
+[]\twlrm recursive def-i-ni-tions, in clas-si-cal log-ics, 182 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm r
+.\twlrm e
+.\twlrm c
+.\twlrm u
+.etc.
+
+
+Overfull \hbox (1.5968pt too wide) in paragraph at lines 1473--1474
+[]| \twlrm main tac-tic for, 260--261, 270--271, 277 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\rule(*+*)x0.0
+.\penalty 10000
+.\glue 20.0
+.\glue 0.0
+.etc.
+
+[333] [334] [335]
+Overfull \hbox (1.05731pt too wide) in paragraph at lines 1678--1679
+[]\twlrm term con-struc-tors, in \elvrm HOL \twlrm logic, 143, 146--
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\twlrm t
+.\twlrm e
+.\twlrm r
+.\twlrm m
+.etc.
+
+[336] [337]
+Overfull \hbox (0.42181pt too wide) in paragraph at lines 1862--1863
+[]| \twlrm tools for con-struc-tion of, 186, 193, 197 
+
+\hbox(8.33331+2.33331)x210.12204, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\rule(*+*)x0.0
+.\penalty 10000
+.\glue 20.0
+.\glue 0.0
+.etc.
+
+[338] [339]) (description.aux (title.aux) (preface.aux) (../LaTeX/ack.aux)
+(contents.aux) (ML.aux) (logic.aux) (semantics.aux) (system.aux) (drules.aux)
+(conv.aux) (tactics.aux) (see.aux) (references.aux) (version2.aux) (index.aux))
+ ) 
+Here is how much of TeX's memory you used:
+ 792 strings out of 11977
+ 6507 string characters out of 87025
+ 51289 words of memory out of 262141
+ 2440 multiletter control sequences out of 9500
+ 20554 words of font info for 78 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 20i,15n,20p,620b,570s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on description.dvi (355 pages, 1044264 bytes).

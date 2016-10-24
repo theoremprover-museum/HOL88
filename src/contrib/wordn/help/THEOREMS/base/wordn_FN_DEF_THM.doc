@@ -1,0 +1,5 @@
+\THEOREM wordn_FN_DEF_THM wordn_base
+|- !n ABS REP.
+    (!a. ABS(REP a) = a) /\ (!r. (LENGTH r = n) = (REP(ABS r) = r)) ==>
+    (!f. ?! fn. !r. (LENGTH r = n) ==> (fn(ABS r) = f r))
+\ENDTHEOREM

@@ -1,0 +1,7 @@
+\THEOREM IMP_CLAUSES \none
+|- !t. (T ==> t) = t /\
+       (t ==> T) = T /\
+       (F ==> t) = T /\
+       (t ==> t) = t /\
+       (t ==> F) = ~t
+\ENDTHEOREM

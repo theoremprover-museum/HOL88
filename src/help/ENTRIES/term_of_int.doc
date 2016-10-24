@@ -1,0 +1,27 @@
+\DOC term_of_int
+
+\TYPE {term_of_int : (int -> term)}
+
+\SYNOPSIS
+Maps an ML integer to the corresponding numeric term.
+
+\DESCRIBE
+When given a non-negative integer, {term_of_int} returns a logical
+term of type {:num}  representing the number.
+
+\FAILURE
+Fails if the argument is less than 0.
+
+\EXAMPLE
+{
+  #term_of_int 2;;
+  "2" : term
+
+  #term_of_int (-2);;
+  evaluation failed     mk_const: -2 not a constant
+}
+
+\SEEALSO
+int_of_term, int_of_string, string_of_int.
+
+\ENDDOC

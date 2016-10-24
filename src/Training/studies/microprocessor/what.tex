@@ -1,0 +1,154 @@
+\section{What has been proved ?}
+
+We have described three different correctness theorems for the
+design of \Tamarack.  The first two theorems state correctness
+results for the operation of \Tamarack\ in fully synchronous mode.
+These two theorems differ only in how they define a timing relationship
+between different levels of specification.
+The third theorem states correctness results for the operation of
+\Tamarack\ in fully asynchronous mode.
+As mentioned earlier, we have not formally considered the operation of
+\Tamarack\ in extended cycle mode.
+
+Each correctness theorem includes explicit assumptions about
+the external environment, in particular,
+a behavourial model of external memory and how it is interfaced
+to the microprocessor.
+In each case, the correctness theorem states that
+the predicate \verb"TamarackBeh" is an abstract
+model of the internal architecture as specified
+by the predicate \verb"TamarackImp".
+Therefore, true statements about the behaviour of the abstract model
+can be related to
+true statements about the specification of the internal architecture.
+
+In the course of establishing these general results,
+we have obtained some more specific results about
+particular aspects of the design including:
+
+\begin{itemize}
+\item
+That the system bus is never multiply-driven by more than one bus
+device at any one time.
+
+\item
+That the microprocessor design correctly implements
+the sender part of the handshaking protocol.
+
+\item
+A precise description of
+the next-instruction signal marking
+the end of an instruction cycle (which might not be obvious
+in the case of fully asynchronous mode).
+\end{itemize}
+
+Most of the proof effort concerns the fetch-decode-execute sequence
+for each programming level operation during an instruction cycle.
+But the proof goes further than this by considering the
+overall operation of the microprocessor,
+that is, how one instruction cycle is related to the next instruction
+cycle.
+For instance, it shows that an interrupt request does not interrupt
+the completion of a memory interaction (i.e. the repeat-loop in state 0).
+It also shows that an interrupt request take precedence,
+as one would expect,
+over the normal flow of program control
+(when a previous interrupt is not still being serviced).
+
+It is also important to describe the limitations of this
+proof of correctness.
+As we remarked earlier,
+the formal verification of \Tamarack\ focuses very specifically
+on the register-transfer level operation of the internal architecture.
+Below and above this level
+there are aspects of a complete design
+for \Tamarack\ which are not formally considered.
+
+Section~\ref{sec-bottom}
+described some aspects of the semantic gap between
+the abstract view of sequential behaviour in our
+lowest level of formal specification and
+timing relationships in actual hardware.
+This gap is bridged by a number of informal assumptions
+which are {\it not} explicitedly mentioned in the correctness results.
+Although our formal theory could be extended with
+several more, increasingly detailed levels of timing,
+\footnote{
+Herbert \cite{Herbert:thesis}
+describes proofs techniques in the \HOL\ logic
+for relating more detailed levels of timing to
+synchronous level models.
+Leeser \cite{Leeser:thesis} describes similar work
+in a temporal logic framework.}
+there will always be a gap between formal proof (a mathematical concept)
+and actual hardware (a physical device).
+As Cohn \cite{Cohn:banff87} remarks,
+
+\begin{quotation}
+\ldots a material device can only be observed and measured, not verified.
+It can be described in an abstracted way, and the simplified description
+verified, but again, there is no way to assure the accuracy of the
+description.
+\end{quotation}
+
+There is also a gap between our behavioural models of external
+memory and the operation of real memory devices.
+But in the case of fully asynchronous memory,
+this gap is more an instance of
+over-simplification than well-conceived abstraction.
+The model of fully asynchronous memory completely ignores the possibility
+of any kind of failure in the handshaking protocol.
+This simplification allows us to prove, for instance, that every
+memory interaction runs to completion even though \Tamarack\
+does not have a time-out mechanism to handle failures
+in the handshaking protocol.
+\footnote{
+The absence of a time-out mechanism is merely a case of simplification.
+There is no intrinsic reason why a time-out mechanism would be
+difficult to reason about in the formal verification of a microprocessor
+design (see suggested exercise in Section~\ref{sec-exer}).}
+
+It is also important to understand that our formal theory
+says nothing,
+with the exception of
+two assumptions which appear
+explicitly in the correctness theorems,
+about the basic data types used to represent
+data in the microprocessor and primitive operations
+involving these data types.
+It may surprise some readers that these details do not need to be known,
+but their unimportance underlines
+the fact that very little few aspects of the computation
+performed by the hardware is actually taken account of in the formal
+proof.
+The only significant forms of computation considered in the proof are:
+
+\begin{itemize}
+\item
+Computation of microinstruction addresses by the next address logic.
+\item
+Resolving decentralized control over
+access to the system bus in the datapath.
+\item
+Extraction of individual bits and other sub-fields from
+microinstruction words by decoding logic.
+\end{itemize}
+
+This lack of detail about basic types and primitive operations
+should not be seen as a shortcoming or unfinished step in
+our formal proof.
+We have deliberately avoided these details to clearly demarcate
+the boundaries between what has and what has not been considered
+in the formal verification of \Tamarack.
+Building more details than necessary into the
+computation model
+would have risked the
+false impression that these details have been
+considered in the formal proof.
+Instead, other levels of concern should be considered
+in separate theories.
+The next section suggests how a hierarchy of
+parameterized theories
+(in the non-technical, general sense)
+could be stacked upon one another linked together through
+representation variables.

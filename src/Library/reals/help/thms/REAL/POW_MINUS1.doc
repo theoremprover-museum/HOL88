@@ -1,0 +1,3 @@
+\THEOREM POW_MINUS1 REAL
+|- !n. (--(& 1)) pow (2 num_mul n) = & 1
+\ENDTHEOREM

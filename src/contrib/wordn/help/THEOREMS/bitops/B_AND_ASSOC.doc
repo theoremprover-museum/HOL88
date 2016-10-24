@@ -1,0 +1,5 @@
+\THEOREM B_AND_ASSOC wordn_bitops
+|- !l1 l2 l3.
+    (LENGTH l1 = LENGTH l2) /\ (LENGTH l2 = LENGTH l3) ==>
+    (B_AND l1(B_AND l2 l3) = B_AND(B_AND l1 l2)l3)
+\ENDTHEOREM

@@ -1,0 +1,10 @@
+\DOC Default
+
+\TYPE {Default : loop_limit}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

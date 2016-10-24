@@ -1,0 +1,86 @@
+% A1.9 SERIES %
+
+series --> [BEGIN] BEGIN_steps [END] {MK_one(`series`,POP)}
+         | [(] bracket_steps [)] {MK_one(`series`,POP)}.
+
+BEGIN_steps --> [OUTPUT] {MK_one(`series_BEGINEND`,unit)}
+              | step [.] more_B_steps.
+
+more_B_steps --> [OUTPUT] {MK_two(`series_BEGINEND`,unit,POP)}
+               | {add_to_list(POP,step)} [.] more_B_steps.
+
+bracket_steps --> [OUTPUT] {MK_one(`series_brackets`,unit)}
+                | step [.] more_br_steps.
+
+more_br_steps --> [OUTPUT] {MK_two(`series_brackets`,unit,POP)}
+                | {add_to_list(POP,step)} [.] more_br_steps.
+
+step --> [MAKE] makeitem more_makeitems {MK_one(`step_MAKE`,POP)}
+         {MK_one(`step`,POP)}
+       | [LET] letitem more_letitems {MK_one(`step_LET`,POP)}
+         {MK_one(`step`,POP)}
+       | [FOR] {MK_one(`multiplier`,multiplier)} {MK_two(`step`,POP,joinstep)} 
+       | {MK_one(`step`,joinstep)}
+       | [PRINT] printitem more_printitems {MK_one(`step_PRINT`,POP)}
+         {MK_one(`step`,POP)}
+       | [FAULT] faultitem more_faultitems {MK_one(`step_FAULT`,POP)}
+         {MK_one(`step`,POP)}
+       | declaration {MK_one(`step`,POP)}.
+
+makeitem --> [\[] int [\]] makeitem_body unit_names [:] name more_item_names
+             {MK_one(`names`,POP)} {MK_four(`makeitem`,POP,POP,POP,POP)}
+           | makeitem_body unit_names [:] name more_item_names
+             {MK_one(`names`,POP)} {MK_three(`makeitem`,POP,POP,POP)}.
+
+makeitem_body --> {MK_one(`makeitem_body`,fnname)} 
+                | macname make_mac.
+
+make_mac --> [\{] macparams [\}] snd_macparams
+           | {MK_one(`makeitem_body`,POP)}.
+
+snd_macparams --> [\{] macparams [\}] {MK_three(`makeitem_body`,POP,POP,POP)}
+                | {MK_two(`makeitem_body`,POP,POP)}.
+
+more_makeitems --> [,] {add_to_list(POP,makeitem)} more_makeitems
+                 | [].
+
+more_item_names --> {add_to_list(POP,name)} more_item_names
+                  | [].
+
+letitem --> name [=] {MK_two(`letitem`,POP,unit)}.
+
+more_letitems --> [,] {add_to_list(POP,letitem)} more_letitems | [].
+
+joinstep --> [JOIN] joinitem more_joinitems {MK_one(`step_JOIN`,POP)}.
+
+multiplier --> [INT] name [=] int [..] {MK_three(`multiplier_INT`,POP,POP,int)}
+               more_multipliers.
+
+more_multipliers --> [INT] name [=] int [..] 
+                     {MK_three(`multiplier_INT`,POP,POP,int)}
+                     {add_to_list(POP,POP)} more_multipliers
+                   | [].
+
+joinitem --> unit [->] name rest_of_joinitem.
+
+rest_of_joinitem --> [\[] int [\]] second_join_int 
+                   | {MK_two(`joinitem`,POP,POP)}.
+
+second_join_int --> [\[] int [\]] {MK_four(`joinitem`,POP,POP,POP,POP)}
+                  | {MK_three(`joinitem`,POP,POP,POP)}.
+
+more_joinitems --> [,] {add_to_list(POP,joinitem)} more_joinitems
+                 | [].
+
+printitem --> [IF] boolean [THEN] printable more_printables [FI]
+              {MK_two(`printitem`,POP,POP)}
+            | printable more_printables {MK_one(`printitem`,POP)}.
+
+more_printables --> {add_to_list(POP,printable)} more_printables | [].
+
+more_printitems --> [,] {add_to_list(POP,printitem)} more_printitems | [].
+
+faultitem --> {MK_one(`faultitem`,printitem)}.
+
+more_faultitems --> [,] {add_to_list(POP,faultitem)} more_faultitems | [].
+

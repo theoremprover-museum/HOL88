@@ -1,0 +1,1115 @@
+\chapter{The parser Library}
+
+\begin{quote}
+\it That which can be conceived can be created. \rm -- Enzo Ferrari
+\end{quote}
+
+\section{Introduction}
+
+  We describe a generic parser-generator to aid in the
+  embedding of languages in \HOL.
+  The need for such a tool is becoming readily apparent as support for various
+  languages in \HOL\ has either been implemented or is in progress.  The 
+  parser-generator described in this document was written to fulfill the needs
+  of various projects underway in the Computer Laboratory dealing with either 
+  hardware description or programming languages.
+
+  The input to the generator is a form of modified {\small BNF}
+  notation consisting 
+  of terminals, non-terminals, and action symbols.  Users familiar with the
+  definite clause grammar ({\small DCG}) notation of Prolog will see 
+  similarities here.  This input is not, however, a full attribute grammar, and
+  may originate either from the user's terminal or a file.  The output of
+  the generator is an \ML\ program that builds an object of user-defined type
+  from input that meets the syntax specified by the grammar.
+
+  The discussion of the generator that follows will first cover the syntax 
+  of the input language.  An overview of the translation process will 
+  then be delivered.  It will be followed by a presentation of the 
+  generator's reserved words, and an exposition of the construction
+  of action symbols.
+  We will conclude with some extended examples to demonstrate the use of
+  the parser-generator.
+
+\section{Syntax}
+
+The generator is meant to deal with non left-recursive context free grammars.
+There is no checking for left-recursion, and any input employing it will 
+necessarily cause an infinite loop to be generated.  Action symbols are then
+embedded in the grammar to construct the user's semantics for the
+syntax.  If these symbols are not present, a simple recogniser for the 
+language in question will be created.
+
+\newpage
+As an example, if we wished to specify a grammar for a prefix representation
+of a subset of Boolean logic, the following {\small BNF}
+description might be used:
+\small
+\begin{center}
+\begin{boxed}
+\begin{tabular}{lcl}
+bool & ::= & term {\it EOF} \\
+term & ::= & neg $|$ imp $|$ conj $|$ disj
+               $|$ {\it var} \\
+neg & ::= & {\bf NEG} term \\
+imp & ::= & {\bf IMP} term term \\
+conj & ::= & {\bf CONJ} term term \\
+disj & ::= & {\bf DISJ} term term \\
+\end{tabular}
+\end{boxed}
+\end{center}
+\normalsize
+where terminal symbols appear in boldface, {\it var} represents a Boolean
+variable, and {\it EOF} shows where the end of the input stream should occur.
+
+The above grammar may be represented as input to the 
+parser-generator as follows:
+\small
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+FIRST_CHARS  `a b`. 
+CHARS `a b c d`. 
+
+MAIN_LOOP --> term [EOF]. 
+
+term --> neg | imp | conj | disj | {mk_var(TOKEN,":bool")}. 
+
+conj --> [CONJ] {mk_conj(term,term)}.
+
+disj --> [DISJ] {mk_disj(term,term)}.
+
+neg --> [NEG] {mk_neg(term)}.
+
+imp --> [IMP] {mk_imp(term,term)}.
+\end{verbatim}
+\end{boxed}
+\end{center}
+\normalsize
+\verb"FIRST_CHARS"\autoindex{FIRST\_CHARS@{\ptt FIRST\_CHARS}} and 
+\verb"CHARS"\autoindex{CHARS@{\ptt CHARS}} are declarations which define the 
+legal 
+first and other characters of the language's identifiers.  Within the grammar
+itself, action symbols are enclosed by braces (\verb"{}") whilst
+terminal symbols are delimited with square brackets (\verb"[]"), and 
+conditional 
+branches are separated by
+vertical bars (\verb"|").  The non-terminal 
+\verb"MAIN_LOOP"\autoindex{MAIN\_LOOP@{\ptt MAIN\_LOOP}} is a reserved
+symbol defining the start of the parser.  The terminal symbol 
+\verb"EOF"\autoindex{EOF@{\ptt EOF}} is
+also reserved, and marks where the end of file should occur.  The
+{\small BNF} syntax for the parser-generator's input language is provided in
+Section~\ref{BNFsec}, and the system's reserved words (including 
+\verb"MAIN_LOOP" and \verb"EOF") are described in Section~\ref{reserved}.
+
+\section{Generating Parsers}
+
+The parser-generator may be incorporated into the \HOL\ system by loading 
+in the library \verb"parser".
+Once loaded, the generator is invoked by the function
+\verb"parse"\autoindex{parse@{\ptt parse}}.  Continuing with the Boolean logic
+example, the following
+session shows how a parser is generated from the grammar just specified.
+\setcounter{sessioncount}{1}
+\small
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#parse();;
+Input file:  bool.grm
+Output file: bool 
+Opening the file bool.ml (MAIN OUTPUT) 
+Opening the file bool_decls.ml (DECLARATIONS) 
+Load the declarations file before the main output. 
+See the file bool_load.ml for a sample. 
+See the file ./Makefile.bool for a sample Makefile. 
+Output type: term 
+
+  Generating PARSE_file and PARSE_text (MAIN_LOOP used). 
+
+() : void 
+
+#quit();; 
+\end{verbatim}
+\end{session}
+\end{center}
+\normalsize
+The generator prompts for an input file containing the grammar.  It is
+assumed that the Boolean logic grammar is found in the file 
+\verb"bool.grm".  The second file is the beginning of the file name for
+the output of the generator.  Since we want to create a \HOL\ term using
+the generated parser, the appropritate type is supplied when prompted.
+The generator keys on the use of the non-terminal 
+\verb"MAIN_LOOP"\autoindex{MAIN\_LOOP@{\ptt MAIN\_LOOP}} to
+construct
+two functions to invoke the generated parser.  
+\verb"PARSE_text"\autoindex{PARSE\_text@{\ptt PARSE\_text}} allows 
+target language constructs to be parsed from a \ML\ string.
+\verb"PARSE_file"\autoindex{PARSE\_file@{\ptt PARSE\_file}} provides the same 
+functionality for input files containing these same objects.
+
+\subsection {Auxiliary Files}
+
+The first file created by the generator (\verb"bool_load.ml") 
+is one that will load the parts of the
+newly-constructed parser into the \HOL\ system in the proper order.
+In the current
+example, there are no user-specified actions.  We therefore have no need
+to include any files other than the ones output by the parser-generator.
+The inital file loaded (\verb"general.ml") contains 
+functions used by all generated parsers to provide basic operations. 
+Once these functions have been loaded,
+declarations for each production are incorporated via the file
+{\tt bool\_decls.ml}.  They are in turn followed by a file holding the 
+functions describing each production ({\tt bool.ml}).  
+The rationale behind the creation of these last two files is discussed in 
+Section~\ref{Internals}.
+
+\small
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+% Generated parser load file 
+
+  First load some basic definitions: %
+loadf `/usr/groups/hol/hol2/Library/parser/general`;;
+
+% Insert any other files you want loaded here: %
+
+% Now load the declarations: %
+loadf `bool_decls`;;
+
+% Finally load in the function definitions: %
+loadf `bool`;; 
+\end{verbatim}
+\end{boxed}
+\end{center}
+\normalsize
+
+No editing of the generated {\tt Makefile} (\verb"./Makefile.bool") is 
+required either.  It simply compiles the generated files in the same order
+that they should be loaded.  While compilation is not essential to use the
+generated parser, it is recommended.  The system will run much faster.
+In order to make a compiled version of the parser, we need only execute the 
+command \verb"make -f Makefile.bool all" at the Unix prompt.
+\small
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+# Generated parser Makefile
+
+# Version of HOL to be used:
+HOL=/usr/groups/hol/hol2/hol
+
+# General definitions for all generated parsers:
+GENERAL=/usr/groups/hol/hol2/Library/parser/general
+
+# Insert entries for user-defined stuff here:
+# Remember to insert the appropriate dependencies and "load"'s below.
+
+# Now compile the declarations:
+bool_decls_ml.o: bool_decls.ml
+        echo 'set_flag(`abort_when_fail`,true);;'\
+             'loadf `$(GENERAL)`;;'\
+             'compilet `bool_decls`;;'\
+             'quit();;' | $(HOL) 
+
+# Finally do the actual functions
+bool_ml.o: bool.ml bool_decls_ml.o
+        echo 'set_flag(`abort_when_fail`,true);;'\
+             'loadf `$(GENERAL)`;;'\
+             'loadf `bool_decls`;;'\
+             'compilet `bool`;;'\
+             'quit();;' | $(HOL)
+
+all: bool_ml.o
+        @echo '===> Parser "bool" built.
+\end{verbatim}
+\end{boxed}
+\end{center}
+\normalsize
+{\bf NB:} Both the load and make files are created every time the generator
+is run. It is therefore advisable to save a copy of each once their contents
+has been fixed.
+
+\subsection{Running the Generated Parser}
+
+We use the generated load file to install the parser in the \HOL\ system.  
+Note that
+the parser-generator is no longer needed.  Invoking the function 
+\verb"PARSE_text"\autoindex{PARSE\_text@{\ptt PARSE\_text}}
+will then run the parser on the desired input.  We have supplied a null list
+as both the second and third arguments to 
+\verb"PARSE_text"\autoindex{PARSE\_text@{\ptt PARSE\_text}}.  
+The result is that only the default whitespace list (space, tab, and newline)
+is used to separate tokens.  We will fully describe the nature of these 
+arguments in Section~\ref{reserved}, and an example their use appears in
+Section~\ref{SEPS}.
+\setcounter{sessioncount}{1}
+\small
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#loadf `bool_load`;;
+................................................() : void
+
+#PARSE_text(`IMP CONJ a b CONJ b a`,[],[]);;
+"a /\ b ==> b /\ a" : term
+\end{verbatim}
+\end{session}
+\end{center}
+\normalsize
+
+We now introduce an error\autoindex{errors@error\ messages} in the input to 
+demonstrate the use of the
+debugging\autoindex{debugging@debugging} features of the system.  
+The function \verb"debug_on"\autoindex{debug\_on@{\ptt debug\_on}}
+puts the parser into debugging mode, and returns the previous debug state.
+Its converse is \verb"debug_off"\autoindex{debug\_off@{\ptt debug\_off}}.
+\small
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#PARSE_text(`IMP CON a b CONJ b a`,[],[]);;
+evaluation failed     fail
+
+#debug_on();;
+false : bool
+
+#PARSE_text (`IMP CON a b CONJ b a`,[],[]);;
+ENTERING prdn "MAIN_LOOP": Curr. Token = "IMP"; Expected = "nil".
+ENTERING prdn "term": Curr. Token = "IMP"; Expected = "nil".
+ENTERING prdn "neg": Curr. Token = "IMP"; Expected = "nil".
+ENTERING prdn "imp": Curr. Token = "IMP"; Expected = "nil".
+ENTERING prdn "term": Curr. Token = "CON"; Expected = "nil".
+ENTERING prdn "neg": Curr. Token = "CON"; Expected = "nil".
+ENTERING prdn "imp": Curr. Token = "CON"; Expected = "nil".
+ENTERING prdn "conj": Curr. Token = "CON"; Expected = "nil".
+ENTERING prdn "disj": Curr. Token = "CON"; Expected = "nil".
+ENTERING prdn "conj": Curr. Token = "IMP"; Expected = "nil".
+ENTERING prdn "disj": Curr. Token = "IMP"; Expected = "nil".
+evaluation failed     fail
+
+#debug_off();;
+true : bool
+
+#PARSE_text(`IMP CONJ a b CONJ b a`,[],[]);;
+"a /\ b ==> b /\ a" : term
+\end{verbatim}
+\end{session}
+\end{center}
+\normalsize
+The only mysterious part of the debugger is the \verb"Expected" statement.
+It shows the character or language construct that should immediately follow 
+the string currently being parsed.  \verb"nil" represents a ``don't care''
+case.
+
+\section{Error Messages}
+
+The parser-generator is quite sensitive to the context in which an 
+error\autoindex{errors@error\ messages}
+within the input grammar appears.  Should an error be present, a message of the
+following form will occur.
+\begin{center}
+\begin{boxed}
+\verb+ERROR: symbol "+{\it symbol}$\;$\verb+" encountered in the wrong place.+ \\
+\hspace*{4ex}\verb+-- Production: +{\it production} \\
+\hspace*{4ex}\verb+-- Diagnostic: +{\it reason}
+\end{boxed}
+\end{center}
+{\it symbol} is the token that caused the error, {\it production} is the
+production in which it occurred, and {\it reason} is the reason that the
+parser-generator thinks might have caused the error.
+
+\section{Internals}\label{Internals}
+
+  We now present a short discussion of the internals of the parser-generator,
+  as well as the design decisions that were made.  The following were the main
+  goals during the development of the generator.
+  \begin{itemize}
+  \item The order in which productions are specified should not be important
+  \item Mutual recursion of productions should be allowed.
+  \item Non-determinism within a given production should be possible
+        (i.e. not just regular grammars).
+  \item The output of any generated parser should be an object of
+        user-defined type.
+  \item The generator ought to operate in one pass.
+  \end{itemize}
+
+  Obstacles were presented to the first two of these goals by the way
+  in which \ML\ functions are declared and used.  The difficulty is based on
+  the fact that functions may
+  not be used before they are defined, otherwise typechecking becomes
+  problematic.  As an illustration, if production {\it A} was to 
+  reference production {\it B},
+  then the function describing {\it B} must be defined in the \ML\ system
+  before the one specifying {\it A}.  The result, therefore, is
+  that production {\it B} would have to appear in the input
+  grammar before production {\it A}.  Even if the restriction of confining the
+  user to a particular ordering of productions was adopted, it would
+  still be insufficient to deal with the case where {\it A} and {\it B} are
+  mutually recursive.  The use of a gigantic {\tt let}--{\tt and} in \ML\
+  would take care of the mutual recursion problem, but does not allow for
+  the operation to be spread accross multiple files should one decide
+  to structure one's grammar in that manner.
+
+  To overcome these problems, the following translation scheme was developed:
+  \begin{itemize}
+  \item Each production specified by the user generates two objects, each 
+        in a separate file.
+  \item Objects in the first file are \ML\ {\tt letref} declarations 
+        specifying the input and output types of the function that will 
+        be generated.  
+  \item Objects in the second file are $\lambda$-expressions representing the
+        functions that describe the productions.
+  \item Objects from the second file are bound to objects in the first file
+        via assignment.
+  \item When a generated parser is compiled, the file containing the
+        declarations is loaded first.  The one containing the 
+        $\lambda$-expressions
+        and their assignments to an object from the first file is loaded 
+        afterwards.
+  \end{itemize}
+  The result of the above process is that all functions are declared before 
+  they are
+  used.  The productions that the user specifies may therefore reference
+  each other in any order.  Furthermore, should the user wish to describe 
+  a parser
+  in many files, the productions may reference each other across those files.
+  The proviso is, of course, that all generated declarations are loaded into 
+  the system first when the generated parser is run.
+
+  Each generated parser maintains an internal stack of intermediate results. 
+  It is simply a list of \ML\ objects of a user-defined type
+  that have been built up during the course of the parser's execution.  
+  This results stack is
+  the only method of building the final object that is returned to the user,
+  and is accessed via the \verb"POP"\autoindex{POP@{\ptt POP}} reserved 
+  symbol mentioned in 
+  Section~\ref{reserved} and described in Section~\ref{actions}.  It is 
+  modified through action symbols that the user imbeds in the grammar.
+
+  The parser-generator will handle non-determinism
+  in productions.
+  In order to implement this feature, it was necessary to build a backtracking 
+  mechanism into all generated parsers.  It is based on \ML\
+  failure-trapping, and simply creates a fail trap for each
+  branch of a production.  These traps are guaranteed to be hierarchical in
+  nature by the way in which an input grammar is specified.  A one character
+  look-ahead is used to determine if the syntactic object currently being
+  parsed is followed by useful input.  If it is not, a failure results, and the
+  backtracking mechanism is invoked.
+
+\section{Reserved Words}\label{reserved}
+
+The generator makes use of several reserved words.  They are all in upper case,
+and since the parser-generator is case-sensitive, will not conflict with
+user-defined functions of the same name expressed in either mixed or lower
+case.
+
+  \begin{itemize}
+     \item {\small NON-TERMINAL:} $\;$
+     \begin{itemize}
+     \item \verb"MAIN_LOOP"\autoindex{MAIN\_LOOP@{\ptt MAIN\_LOOP}}     
+        \normalsize---
+        a production that the user 
+        specifies to describe the top-level parse loop.  The generator senses
+        its presence and outputs two wrappers to call the generated parser 
+        in a properly initialised state.  It
+        may not be called from within the grammar at any time.
+     \end{itemize}
+     \item {\small TERMINAL:} $\;$
+     \begin{itemize}
+     \item \verb"EOF"\autoindex{EOF@{\ptt EOF}}            \normalsize--- 
+        specifies when the end of file may occur.
+     \end{itemize}
+     \item {\small ARGUMENTS:} The following can only appear as arguments
+        to action symbols.  Their presence anywhere else in the input grammar
+        will cause a fatal error.  Their types are given parenthetically.
+     \begin{itemize}
+     \item \verb"POP"\autoindex{POP@{\ptt POP}} (\verb":"{\it user-defined})
+         \normalsize--- 
+         returns the most recent previously constructed result from the results
+         list.
+     \item \verb"TOKEN"\autoindex{TOKEN@{\ptt TOKEN}} (\verb":string") 
+         \normalsize--- returns a legal
+         token identifier as specified using the constructs below.  Successive
+         calls to \verb"TOKEN" will cause new identifiers to be obtained
+         from the input source.
+     \item \verb"WORD"\autoindex{WORD@{\ptt WORD}} (\verb":string") 
+         \normalsize--- returns the current
+         string in the input stream.  No checking of any kind is performed.
+         The construct is particularly useful for dealing with arbitrary
+         objects in the language that the user wants to treat specially.
+     \end{itemize}
+     \item {\small DECLARATIONS:} Both 
+        \verb"FIRST_CHARS"\autoindex{FIRST\_CHARS@{\ptt FIRST\_CHARS}} and 
+        \verb"CHARS"\autoindex{CHARS@{\ptt CHARS}}
+        below must appear for the
+        parser-generator to construct a tokeniser.  If one is present without
+        the other, a fatal error results.  They may not be multiply
+        defined within the same grammar.
+     \begin{itemize}
+     \item \verb"FIRST_CHARS"\autoindex{FIRST\_CHARS@{\ptt FIRST\_CHARS}
+   }    \normalsize--- 
+        Used to specify a whitespace-separated string of characters 
+        representing
+        the legal first characters of identifiers.  It may not be empty.
+     \item \verb"CHARS"\autoindex{CHARS@{\ptt CHARS}}    \normalsize--- 
+        Used to specify a whitespace-separated string of characters
+        representing
+        the other legal characters of identifiers.  It may not be empty.
+     \item \verb"USEFUL"\autoindex{USEFUL@{\ptt USEFUL}} \normalsize---
+        Used to tell the generated parser those characters delineating a useful
+        block of text which should be concatenated into a single string.  It
+        takes the form of an association list, where each member of the list
+        has the type \verb"(string#string)".  The first element of the pair is
+        the character which begins the block, and the second is the one that
+        terminates it.  The generator does not check the
+        syntax or type of the list, and it is incumbent upon the user to make
+        sure that it is well-formed.
+     \item \verb"IGNORE"\autoindex{IGNORE@{\ptt IGNORE}} \normalsize--
+        The converse of \verb"USEFUL".  It is an association list of the
+        same form as \verb"USEFUL", but is used to specify the 
+        beginning
+        and ending of blocks of text which may be thrown away by
+        generated parser as it is reading in input.  The declaration is
+        particularly useful in removing comments from an input stream before
+        it is passed to the parser.
+     \end{itemize} 
+     \item {\small FUNCTIONS:} $\;$
+     \begin{itemize}
+     \item \verb"PARSE_file"\autoindex{PARSE\_file@{\ptt PARSE\_file}}     
+        \normalsize
+        --- The first
+        function derived from
+        the production \verb"MAIN_LOOP"\autoindex{MAIN\_LOOP@{\ptt MAIN\_LOOP}}.  Its 
+        name therefore cannot be used
+        as the name of a non-terminal, or as an argument to an action symbol.
+        The function takes three arguments.  The first is the name of the
+        input file, and is a standard \ML\ string.  If terminal {\small I/O} 
+        is desired, \verb"`nil`" should be supplied.  The second argument is
+        of type \verb"string list", and represents the whitespace used
+        by the language.  Supplying a null list (\verb"[]") will trigger the 
+        use of the default list of blank, tab and newline.  The final argument
+        is used to describe special delimiting characters and those that may
+        follow them to make a valid token.
+        It is an association list of type
+        \verb"(string # string list) list" where the first element of
+        each pair is the delimiting character, and the second is the list
+        of following characters.  A null following list means that the special
+        character is a token by itself. If a null list is provided as the 
+        argument, the only separators used will be those contained in the 
+        whitespace list.
+     \item \verb"PARSE_text"\autoindex{PARSE\_text@{\ptt PARSE\_text}}
+        \normalsize
+        --- Another
+        function created by the production 
+        \verb"MAIN_LOOP"\autoindex{MAIN\_LOOP@{\ptt MAIN\_LOOP}}.  Its 
+        arguments are the same as for 
+        \verb"PARSE_file"\autoindex{PARSE\_file@{\ptt PARSE\_file}} with the 
+        exception
+        of the first one.  Here the language constructs
+        to be parsed are directly stated as a \ML\ string.
+        It is important to remember to include the standard escape 
+        character in these strings when required.  Failure to do so, can cause
+        much frustration.
+     \item \verb"TOKEN"\autoindex{TOKEN@{\ptt TOKEN}}
+        \normalsize--- The name of the generated tokeniser function.
+     \item \verb"TOKEN_1"\autoindex{TOKEN\_1@{\ptt TOKEN\_1}}        
+        \normalsize--- The name of a helping
+        function for \verb"TOKEN".
+     \item {\raggedright \verb"chop_off", \verb"close_file", 
+        \verb"complete_separator",
+        \verb"debug_enter", \verb"debug_off",\\ \verb"debug_on",
+        \verb"debug_return", \verb"determine_lst", \verb"do_return",
+        \verb"do_return_1",\\ \verb"eat_terminal", \verb"e_w_s",
+        \verb"e_w_s_ok",
+        \verb"get_word", \verb"get_word1", \verb"get_word2", \verb"gnt",\\
+        \verb"open_file", \verb"pop", \verb"push", \verb"read_char",
+        \verb"read_input", \verb"write_string"} --- 
+        These are functions that are used by all
+        generated parsers, and cannot be used as names for the user's action
+        symbols or productions.
+        \autoindex{chop\_off@{\ptt chop\_off}}
+        \autoindex{close\_file@{\ptt close\_file}}
+        \autoindex{complete\_separator@{\ptt complete\_separator}}
+        \autoindex{debug\_enter@{\ptt debug\_enter}}
+        \autoindex{debug\_off@{\ptt debug\_off}}
+        \autoindex{debug\_on@{\ptt debug\_on}}
+        \autoindex{debug\_return@{\ptt debug\_return}}
+        \autoindex{determine\_lst@{\ptt deterimine\_lst}}
+        \autoindex{do\_return@{\ptt do\_return}}
+        \autoindex{do\_return\_1@{\ptt do\_return\_1}}
+        \autoindex{eat\_terminal@{\ptt eat\_terminal}}
+        \autoindex{e\_w\_w@{\ptt e\_w\_s}}
+        \autoindex{e\_w\_s\_ok@{\ptt e\_w\_s\_ok}}
+        \autoindex{get\_word@{\ptt get\_word}}
+        \autoindex{get\_word1@{\ptt get\_word1}}
+        \autoindex{get\_word2@{\ptt get\_word2}}
+        \autoindex{gnt@{\ptt gnt}}
+        \autoindex{open\_file@{\ptt open\_file}}
+        \autoindex{pop@{\ptt pop}}
+        \autoindex{push@{\ptt push}}
+        \autoindex{read\_char@{\ptt read\_char}}
+        \autoindex{read\_input@{\ptt read\_input}}
+        \autoindex{write\_string@{\ptt write\_string}}
+     \end{itemize}
+  \end{itemize}
+
+\section{Action Symbols}\label{actions}\autoindex{action@{action\ symbols}}
+
+  These are specified by the user outside the context of
+  the grammar (i.e. in a separate file).  Their arguments may be any of the
+  reserved arguments just mentioned, non-terminals, or actual \ML\
+  expressions.  The parser-generator assumes that these functions exist, and 
+  simply creates a call to them.  It is up to the user to make sure that the
+  actual functions are well-typed with respect to the generated call.
+  \begin{description}
+  \item[{\small EXAMPLES:}] $\;$
+  \begin{itemize}
+    \item \verb"{action}" --- Generates a call to the user-defined function
+      {\tt action}.  It is assumed that {\tt action} has
+      {\tt ()} as its argument.
+    \item \verb"{action(prdn)}" --- Generates a call to the user-defined 
+      function
+      {\tt action}, with the result of the elaboration of the non-terminal 
+      {\tt prdn} as its argument.  Since the execution of a non-terminal 
+      results in an object of user-defined type, the function {\tt action} 
+      should reflect this in its specification.
+    \item \verb"{action(prdn1,prdn2)}" --- Same as above.  The
+      non-terminals {\tt prdn1} and {\tt prdn2} are evaluated in sequence 
+      before the results are passed to {\tt action}.
+    \item \verb"{action(TOKEN)}"\autoindex{TOKEN@{\ptt TOKEN}} --- Evalutates
+      the current input string as an
+      identifier as specified by 
+      \verb"FIRST_CHARS"\autoindex{FIRST\_CHARS@{\ptt FIRST\_CHARS}} and 
+      \verb"CHARS"\autoindex{CHARS@{\ptt CHARS}} and passes
+      the result to {\tt action}.  If
+      there is no current string, one is fetched from the input source.
+    \item \verb"{action(TOKEN,TOKEN)}"\autoindex{TOKEN@{\ptt TOKEN}} --- Same
+      as above.  The current string
+      and the next one read from the input source are evaluated as identifiers,
+      and passed to {\tt action} in left-to-right order as arguments.
+    \item \verb"{action(POP)}"\autoindex{POP@{\ptt POP}} --- The most recent 
+      previous result is removed
+      from the result list, and passed as an argument to {\tt action}.
+    \item \verb"{action(POP,POP)}"\autoindex{POP@{\ptt POP}} --- Same as 
+      above.  The most recent previous
+      result is passed as the second argument to {\tt action}, while the one
+      before it is sent as the first argument.
+    \item \verb"{action(POP,TOKEN,prdn,POP)}"\autoindex{POP@{\ptt POP}} --- The
+      calls to \verb"POP" are first elaborated in the manner just described
+      (i.e. the most recent previous result will be passed as the last argument
+      to {\tt action}, while the one before that will be the first one).
+      \verb"TOKEN"\autoindex{TOKEN@{\ptt TOKEN}} is then executed before the
+      non-terminal {\tt prdn} is
+      expanded.  After {\tt prdn} returns, the four results are passed to
+      {\tt action}.
+   \end{itemize}
+   \end{description}
+
+\section{Examples} \label{ex}
+
+In the examples that follow, we assume that the parser-generator has been 
+loaded into the \HOL\ system.
+
+\subsection{Terminal Input and Errors} \label{ex:errs}
+
+The following session demonstrates the generator's ability to understand 
+input from the user's console.  Providing \verb"nil" as the input file allows
+the user to specify a grammmar in an interactive manner.  In the current
+example, there is an error in the grammar which causes an error message
+to be output\autoindex{errors@error\ messages}.
+\setcounter{sessioncount}{1}
+\small
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#parse();;
+Input file:  nil
+Output file: foo
+Opening the file foo.ml (MAIN OUTPUT)
+Opening the file foo_decls.ml (DECLARATIONS)
+Load the declarations file before the main output.
+See the file foo_load.ml for a sample.
+See the file ./Makefile.foo for a sample Makefile.
+Output type: term 
+foo --> [A] get_word.
+evaluation failed
+
+ERROR: symbol "get_word" encountered in the wrong place.
+   -- Production: foo 
+   -- Diagnostic: "get_word" is a system function.
+\end{verbatim}
+\end{session}
+\end{center}
+\normalsize
+Similar messages will be output for various classes of errors.  An effort
+was made to trap all possible errors, and generate an appropriate message.
+The user should note, however, that there are probably unforeseen combinations
+of inputs not reflected in the trapping mechanism.
+
+\subsection{HOL Types}
+
+We now present a more complex example, the subject of which is a 
+re-implementation of the \HOL\ type parser.  Points of interest include
+user-defined action symbols,
+operator precedences,
+and seamless integration of the parser with the \HOL\ system.
+
+\subsubsection{The Grammar}
+
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+FIRST_CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+             A B C D E F G H I J K L M N O P Q R S T U V W X Y Z *`.
+
+CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+       A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+       1 2 3 4 5 6 7 8 9 0 *`.
+
+tyname --> {mk_type_name(TOKEN)}.
+
+tyvar --> {mk_type_var(TOKEN)}.
+
+MAIN_LOOP --> typ [EOF].
+
+typ --> type1 more_type.
+
+more_type --> [#] {add_to_list(type1,POP)} more_prod_type sum_or_fun_type
+            | [->] {MK_bin_type(`fun`,POP,typ)}
+            | [+] type1 more_sum_type fun_type
+            | [].
+
+more_prod_type --> [#] {add_to_list(type1,POP)} more_prod_type
+                 | {MK_defd_type(POP,`prod`)}.
+
+sum_or_fun_type --> [+] {MK_bin_type(`sum`,POP,typ)}
+                  | [->] {MK_bin_type(`fun`,POP,typ)}
+                  | [].
+
+more_sum_type --> [+] {add_to_list_rev(POP,POP)} type1 more_sum_type
+                | [#] {add_to_list(type1,POP)} more_prod_type more_sum_type
+                | {add_to_list_rev(POP,POP)} {MK_defd_type(POP,`sum`)}.
+
+fun_type --> [->] {MK_bin_type(`fun`,POP,typ)} | [].
+
+type1 --> [(] typ poss_cmpnd_type | tyname more_type1 | tyvar more_type1.
+
+poss_cmpnd_type --> [)] more_type1 | [,] {add_to_list(POP,typ)} rest_of_cmpnd.
+
+rest_of_cmpnd --> [,] {add_to_list(POP,typ)} rest_of_cmpnd
+                | [)] {MK_type(POP,TOKEN)} more_type1.
+
+more_type1 --> {MK_type(POP,TOKEN)} more_type1 | [].
+\end{verbatim}
+\end{boxed}
+\end{center}
+
+The grammar used to specify the type parser is slightly more complex
+to specify than the Boolean logic example.  The main difference is in
+the need to have a notion of operator precedence (\verb"->" $>$ \verb"+" $>$
+\verb"#").  In order to preserve the ordering, it becomes necessary to
+make separate productions for each operator.
+
+The action symbols used in the grammar all create an object of type 
+\verb"type list".  The reason for creating lists of types rather than
+types by themselves is based on the need to gather together arbitrarily 
+many types to
+form a single one.  This grouping into a list is a standard ploy when 
+developing grammars for parsers where the final object to be created is
+dependent upon an unknown number of like objects.
+
+\subsubsection{Running the Generator}
+
+The parser-generator is run in exactly the same fashion as for the
+Boolean logic example.  The only difference is in supplying \verb"type list" as
+the output type of the generated parser.
+\setcounter{sessioncount}{1}
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#parse();;
+Input file:  types.grm
+Output file: types
+Opening the file types.ml (MAIN OUTPUT)
+Opening the file types_decls.ml (DECLARATIONS)
+Load the declarations file before the main output.
+See the file types_load.ml for a sample.
+See the file ./Makefile.types for a sample Makefile.
+Output type: type list
+
+
+ Generating PARSE_file and PARSE_text (MAIN_LOOP used).
+
+() : void
+
+#quit();;
+\end{verbatim}
+\end{session}
+\end{center}
+
+\subsubsection{Auxiliary Files}\label{SEPS}
+
+The first auxiliary file is not machine-generated.  It contains all the
+functions used as action symbols within the grammar.  \verb"mk_type_name" and
+\verb"mk_type_var" are the lowest-level functions, and create type lists from
+primitive types and type variables.  \verb"add_to_list" and 
+\verb"add_to_list_rev" group individual type lists into a single monolithic 
+one.  A reversed list of types is required to make sure that subcomponents of
+types associate properly.  \verb"MK_type" is the same as the standard \ML\
+function \verb"mk_type" with the exception that it returns a type list.
+\verb"MK_bin_type" is used to return a type list resulting from the creation
+of a type from a binary type operator.  \verb"MK_defd_type" uses 
+\verb"fix_defd" to create a properly associated type from a reversed list of
+types.
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+let mk_type_name thing = [mk_type(thing,[])]
+and mk_type_var thing = [mk_vartype thing]
+and add_to_list (lst,thing) = append lst thing
+and add_to_list_rev (lst,thing) = append thing lst
+and MK_type(lst,op) = [mk_type(op,lst)]
+and MK_bin_type(op,type1,typ) = [mk_type(op,(append type1 typ))];;
+
+letrec fix_defd(lst,op,result) =
+    if null lst then result
+    else fix_defd(tl lst,op,mk_type(op,[hd lst;result]));;
+
+let MK_defd_type(lst,op) =
+    [fix_defd(tl (tl lst),op,mk_type(op,[hd (tl lst);hd lst]))];;
+\end{verbatim}
+\end{boxed}
+\end{center}
+
+Several additions have been made to the generated load file.  The first is to
+load in the file of action function definitions just described 
+(\verb"types_help.ml").  Next, we have defined a list of separators to allow
+the lexical analyzer to break up the input stream into meaningful tokens in
+the possible absence of standard whitespace.  The function 
+\verb"parse"\autoindex{parse@{\ptt parse}} is
+defined to call \verb"PARSE_text"\autoindex{PARSE\_text@{\ptt PARSE\_text}} 
+with the 
+appropriate arguments, and to
+return the head of the result of its computation (a \HOL\ type).  
+\verb"new_syntax_block" is a function provided as a part of \HOL\ Version 1.12,
+and passes the string between its first and second arguments to the function
+named by its third.  While not strictly necessary, the functionality provided
+by \verb"new_syntax_block" makes input to the generated parser visually 
+more appealing.
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+% Generated parser load file
+
+  First load some basic definitions: %
+loadf `/usr/groups/hol/hol2/Library/parser/general`;;
+
+% Insert any other files you want loaded here: %
+loadf `types_help`;;
+
+% Now load the declarations: %
+loadf `types_decls`;;
+
+% Finally load in the function definitions: %
+loadf `types`;;
+
+let SEPS = [(`(`,[]);(`)`,[]);(`#`,[]);(`-`,[`>`]);(`+`,[]);(`,`,[])];;
+
+let parse thing = hd (PARSE_text(thing,[],SEPS));;
+
+new_syntax_block(`<<`,`>>`,`parse`);;
+\end{verbatim}
+\end{boxed}
+\end{center}
+
+The changes to the generated \verb"Makefile" (\verb"Makefile.types") are less
+extensive.  We have added a rule to deal with the compilation of the file
+of action functions.  The new rule has then been linked into the
+dependencies of the parser's compilation through its inclusion on the
+object list of \verb"types_decls_ml.o".
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+# Generated parser Makefile
+
+# Version of HOL to be used:
+HOL=/usr/groups/hol/hol2/hol
+
+# General definitions for all generated parsers:
+GENERAL=/usr/groups/hol/hol2/Library/parser/general
+
+# Insert entries for user-defined stuff here:
+# Remember to insert the appropriate dependencies and "load"'s below.
+types_help_ml.o: types_help.ml
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadf `$(GENERAL)`;;'\
+	     'compilet `types_help`;;'\
+	     'quit();;' | $(HOL)
+
+# Now compile the declarations:
+types_decls_ml.o: types_decls.ml types_help_ml.o
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadf `$(GENERAL)`;;'\
+	     'loadf `types_help`;;'\
+	     'compilet `types_decls`;;'\
+	     'quit();;' | $(HOL)
+
+# Finally do the actual functions
+types_ml.o: types.ml types_decls_ml.o
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadf `$(GENERAL)`;;'\
+	     'loadf `types_help`;;'\
+	     'loadf `types_decls`;;'\
+	     'compilet `types`;;'\
+	     'quit();;' | $(HOL)
+
+all: types_ml.o
+	@echo '===> Parser "types" built.'
+\end{verbatim}
+\end{boxed}
+\end{center}
+
+\subsubsection{Running the Generated Parser}
+
+Running the parser is the much same as for the Boolean logic example.  The
+only significant change is in the mode of input, which has been provided by
+\verb"new_syntax_block".  The first part of the following session deals with
+loading in the generated parser into the \HOL\ system, and presents an example 
+input.
+\setcounter{sessioncount}{1}
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#loadf `loader`;;
+...................................................................() : void
+
+#":bool";;
+":bool" : type
+
+#<< bool >>;;
+":bool" : type
+\end{verbatim}
+\end{session}
+\end{center}
+
+Since we have re-implemented the \HOL\ type parser, we have every reason
+to expect that our parser constructs types that are indistinguishable from
+those created by the system.  We should also anticipate that our parser
+will not construct invalid types, while at the same time remaining sensitive
+to any additional ones created by the user.  The continuation of the previous
+session demonstrates these properties.  Also shown is the way in which the
+\verb"SEPS" list (declared in the load file) permits a more natural style
+of input.
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#":((* # (ind -> bool))list list + *list # * list -> *)list";;
+":(((* # (ind -> bool))list)list + *list # (*)list -> *)list" : type
+
+#<< ((* # (ind -> bool))list list + *list # * list -> *)list >>;;
+":(((* # (ind -> bool))list)list + *list # (*)list -> *)list" : type
+
+#":((bool,ind)fun,(*,*1)prod)sum";;
+":(bool -> ind) + * # *1" : type
+
+#<< ((bool,ind)fun,(*,*1)prod)sum >>;;
+":(bool -> ind) + * # *1" : type
+
+#":(bool,ind,*)tri";;
+evaluation failed     mk_type in quotation
+
+#<< (bool,ind,*)tri >>;;
+evaluation failed     fail
+
+#new_theory`tri`; new_type 3 `tri`;;
+() : void
+
+#":(bool,ind,*)tri";;
+":(bool,ind,*)tri" : type
+
+#<< (bool,ind,*)tri >>;;
+":(bool,ind,*)tri" : type
+\end{verbatim}
+\end{session}
+\end{center}
+
+\subsection{Blocks}
+ 
+Here we demonstrate the use of the block declarations 
+\verb"IGNORE"\autoindex{IGNORE@{\ptt IGNORE}} and 
+\verb"USEFUL"\autoindex{USEFUL@{\ptt USEFUL}}.  While the grammar will be 
+trivial, the concept it shows is
+important.  We will only present the grammar, and examples of the generated
+parser.  The generation process is the same as for the previous examples.
+
+\subsubsection{The Grammar}
+
+The following grammar shows the pattern of input that is of interest.  Note
+that no specification of legal characters is given, with the result that no
+token recogniser is generated.  The 
+\verb"USEFUL"\autoindex{USEFUL@{\ptt USEFUL}} declaration states that
+all sequences of characters enclosed by single quotes should be concatenated
+into a single string.  
+\verb"IGNORE"\autoindex{IGNORE@{\ptt IGNORE}} describes the blocks that can 
+be thrown
+away.  The action symbol is a standard \ML\ function that returns type 
+\verb"void", which is also the type which should be provided to the generator.
+\begin{center}
+\begin{boxed}
+\begin{verbatim}
+USEFUL [(`'`,`'`)].
+
+IGNORE [(`"`,`"`)].
+
+MAIN_LOOP --> foo [EOF].
+
+foo --> ['] {print_string(WORD)} ['] foo | [].
+\end{verbatim}
+\end{boxed}
+\end{center}
+
+\subsubsection{Running the Generated Parser}
+
+We provide below some sample input to the generated parser.  It performs
+as expected.
+\setcounter{sessioncount}{1}
+\begin{center}
+\begin{session}
+\begin{verbatim}
+#loadf `blocks_load`;;
+....................................() : void
+
+#PARSE_text(`'a;lsdkfj'`,[],[]);;
+a;lsdkfj() : void
+
+#PARSE_text(`'a;lsdkfj'"IIIIII'III"'MMMMM"""'`,[],[]);;
+a;lsdkfjMMMMM"""() : void
+\end{verbatim}
+\end{session}
+\end{center}
+
+\subsection{Other Examples}
+
+More examples are provided in the \verb"Examples" directory distributed with 
+the current version of the generator.  See the \verb"READ-ME" file associated
+with each for a brief description of the features.  These additional examples
+are:
+\begin{itemize}
+\item \verb"Examples/HOL" --- A subset of the \HOL\ term parser.
+\item \verb"Examples/ella" --- A parser for the the {\small ELLA} hardware
+description language.
+\item \verb"Examples/tiny" --- A for the programming language
+from the \verb"prog_logic88" library.
+\item \verb"Examples/user_guide" --- Examples used in this document:
+\begin{itemize}
+\item \verb"blocks" --- The use of 
+\verb"USEFUL"\autoindex{USEFUL@{\ptt USEFUL}} and 
+\verb"IGNORE"\autoindex{IGNORE@{\ptt IGNORE}}.
+\item \verb"bool" --- Boolean logic.
+\item \verb"types" --- The \HOL\ type parser.
+\end{itemize}
+\end{itemize}
+
+\newpage
+\section{The Parser-Generating Language}\label{BNFsec}
+
+The {\small BNF} syntax for the parser-generator's input grammar is described by the following 
+productions.  
+Items in {\tt typewriter} font are the terminal symbols.  A comment beginning
+and ending with the character \verb"%" may appear anywhere in the grammar
+input to the generator.
+\small
+\begin{center}
+\begin{boxed}
+\begin{tabular}{l}
+      grammar ::= declarations productions $|$ productions declarations $|$ productions 
+\end{tabular} \\
+\begin{tabular}{l}
+      declarations ::=  first\_chars chars blocks $|$  chars blocks first\_chars $|$ blocks first\_chars chars
+\end{tabular} \\
+\begin{tabular}{l}
+      first\_chars ::= \verb"FIRST_CHARS" hol\_string {\tt .}
+\end{tabular} \\
+\begin{tabular}{l}
+      chars ::= \verb"CHARS" hol\_string {\tt .}
+\end{tabular} \\
+\begin{tabular}{l}
+      hol\_string ::= {\it (a standard \ML\ string of whitespace-separated characters)}
+\end{tabular} \\
+\begin{tabular}{l}
+      blocks ::= useful ignore $|$ ignore useful $|$ useful $|$ ignore $|$ $\epsilon$
+\end{tabular} \\
+\begin{tabular}{l}
+      useful ::= \verb"USEFUL" assoc\_list {\tt .}
+\end{tabular} \\
+\begin{tabular}{l}
+      ignore ::= \verb"IGNORE" assoc\_list {\tt .}
+\end{tabular} \\
+\begin{tabular}{l}
+      assoc\_list ::= {\it (a standard \ML\ list of type (string{\small \#}string))}
+\end{tabular}\\
+\begin{tabular}{lrl}
+      productions & ::= & production\_name \verb"-->" production productions \\
+                  &   $|$ & $\epsilon$
+\end{tabular} \\
+\begin{tabular}{lrl}
+      production & ::= & terminal prdn\_with\_choice \\
+                 &   $|$ & one\_liner
+\end{tabular} \\
+\begin{tabular}{l}
+      terminal ::= {\tt [} terminal\_symbol {\tt ]}
+\end{tabular} \\
+\begin{tabular}{lrl}
+      terminal\_symbol & ::= & {\it (any alphanumeric character)} terminal\_symbol \\
+                      &   $|$ & \verb"\" special\_symbol terminal\_symbol \\
+                      & $|$ & $\epsilon$
+\end{tabular} \\
+\begin{tabular}{l}
+      special\_symbol ::= \verb"{" $|$ \verb"}" $|$ \verb"\" $|$ \verb"[" $|$ \verb"]"
+\end{tabular} \\
+\begin{tabular}{l}
+      production\_name ::= lead\_char {\it (any sequence of alphanumeric characters)}
+\end{tabular} \\
+\begin{tabular}{l}
+      lead\_char ::= {\it (any alphabetic character)}
+\end{tabular} \\
+\begin{tabular}{l}
+      action\_symbol ::= {\tt \{} action\_name optional\_args {\tt \}}
+\end{tabular} \\
+\begin{tabular}{l}
+optional\_args ::= {\tt (} args {\tt )} $|$ $\epsilon$
+\end{tabular}\\
+\begin{tabular}{l}
+      action\_name ::= lead\_char {\it (any sequence of alphanumeric characters)}
+\end{tabular} \\
+\begin{tabular}{l}
+      args ::= arg {\tt ,} args $|$ arg
+\end{tabular} \\
+\begin{tabular}{lrl}
+      arg & ::= & {\tt TOKEN} \\
+	    & $|$ & {\tt WORD} \\
+            & $|$ & {\tt POP} \\
+            & $|$ & production\_name \\
+            & $|$ & {\it ($\;$\HOL\ string or term)}
+\end{tabular} \\
+\begin{tabular}{lrl}
+      prdn\_with\_choice & ::= & terminal prdn\_with\_choice \\
+                       &  $|$ & action\_symbol prdn\_with\_choice \\
+                       &  $|$ & production\_name prdn\_with\_choice \\
+                       &  $|$ & \verb"|" prdn\_with\_choice \\
+                       &  $|$ & \verb"."
+\end{tabular} \\
+\begin{tabular}{lrl}
+      one\_liner & ::= & action\_symbol one\_liner \\
+                &  $|$ & production\_name one\_liner \\
+                &  $|$ & {\tt .}
+\end{tabular}
+\end{boxed}
+\end{center}
+\normalsize
+

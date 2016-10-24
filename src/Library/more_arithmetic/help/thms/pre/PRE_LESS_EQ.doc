@@ -1,0 +1,3 @@
+\THEOREM PRE_LESS_EQ pre
+|- !n. (PRE n) <= n
+\ENDTHEOREM

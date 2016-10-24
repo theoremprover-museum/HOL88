@@ -1,0 +1,3 @@
+\THEOREM SUBSET_ANTISYM WELLORDER
+|- !P Q. P subset Q /\ Q subset P ==> (P = Q)
+\ENDTHEOREM

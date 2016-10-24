@@ -1,0 +1,6 @@
+\THEOREM CONS_DEF list
+|- !h t.
+    CONS h t =
+    ABS_list
+    ((\m. ((m = 0) => h | FST(REP_list t)(PRE m))),SUC(SND(REP_list t)))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM real_TY_DEF REALAX
+|- ?rep. TYPE_DEFINITION(\c. ?x. c = $treal_eq x)rep
+\ENDTHEOREM

@@ -1,0 +1,46 @@
+\appendix
+\newpage % PBHACK
+
+\section{Supporting theories}
+
+\begin{verbatim}
+The Theory plusm_subm
+Parents --  HOL     int     myarith     
+
+Definitions --
+  plusm
+    |- !a b m.
+        plusm(a,b,m) =
+        abs((((Int a) MODI m) plus ((Int b) MODI m)) MODI m)
+  N
+    |- (!m. N 0 m = 0) /\
+       (!n m.
+         N(SUC n)m = ((N n m = 0) => (N n m) + (m - 1) | (N n m) - 1))
+  subm  |- !a b m. subm(a,b,m) = plusm(a,N b m,m)
+
+Theorems -- are quoted in the case study text as necessary.
+
+******************** plusm_subm ********************
+\end{verbatim}
+
+\begin{verbatim}
+The Theory hdi_tli
+Parents --  HOL     myarith     
+
+Definitions --
+  TLo  |- !l. TLo l = ((~NULL l) => TL l | [])
+  TLI  |- (!l. TLI 0 l = l) /\ (!n l. TLI(SUC n)l = TLo(TLI n l))
+  HDI  |- !n l. HDI n l = HD(TLI n l)
+  
+Theorems --
+  LENGTH_TL  |- !l. ~NULL l ==> (LENGTH(TL l) = (LENGTH l) - 1)
+  NULL_LENGTH_0  |- !l. NULL l ==> (LENGTH l = 0)
+  APPEND_NIL  |- !l. APPEND l[] = l
+  TLI_NIL  |- !n. TLI n[] = []
+  HDI_TLI_1
+    |- !x l. ~NULL(TLI x l) ==> (APPEND[HDI x l](TLI(x + 1)l) = TLI x l)
+  HDI_TLI_2  |- !x y l. TLI x(TLI y l) = TLI(x + y)l
+  HDI_TLI_3  |- !x l. LENGTH(TLI x l) = (LENGTH l) - x
+  
+******************** hdi_tli ********************
+\end{verbatim}

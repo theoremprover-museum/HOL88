@@ -1,0 +1,44 @@
+\DOC lisp
+
+\TYPE {lisp : (string -> void)}
+
+\SYNOPSIS
+Executes a lisp command from ML.
+
+\DESCRIBE
+{lisp} executes a lisp s-expression (written as an ML string).  Returned
+values do not appear on the standard output, unless they are explicitly
+printed.
+
+\FAILURE
+Fails if the s-expression is improperly constructed or fails when
+evaluated by lisp.
+
+\EXAMPLE
+{
+#lisp `(princ "hello")`;;
+hello() : void
+
+#lisp `(cons 'a 'b)`;;
+() : void
+
+#lisp `(princ (cons 'a 'b))`;;
+(A . B)() : void
+
+#lisp `(car 'a)`;;
+Error: Attempt to take the car of A which is not a cons.
+evaluation failed     lisp -- NIL
+
+#lisp `(princ "hello"`;;
+Error: eof encountered on input stream #<string input stream  @ #x869fe6>
+evaluation failed     lisp -- NIL
+}
+\COMMENTS
+{lisp} is not meant for general use, and should be treated with great
+care.  If one is not wary, it is entirely possible to corrupt HOL by
+using it.
+
+\SEEALSO
+dropout, lsp.
+
+\ENDDOC

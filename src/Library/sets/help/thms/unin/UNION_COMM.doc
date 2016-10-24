@@ -1,0 +1,3 @@
+\THEOREM UNION_COMM sets
+|- !s t. s UNION t = t UNION s
+\ENDTHEOREM

@@ -1,0 +1,7 @@
+\THEOREM wo_poset WELLORDER
+|- !l.
+    poset l =
+    (!x. fl l x ==> l(x,x)) /\
+    (!x y z. l(x,y) /\ l(y,z) ==> l(x,z)) /\
+    (!x y. l(x,y) /\ l(y,x) ==> (x = y))
+\ENDTHEOREM

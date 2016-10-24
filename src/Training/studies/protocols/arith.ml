@@ -1,0 +1,418 @@
+% RCO converted to HOL88 31/v/89%
+% FILE		: mk_arith.ml						%
+% DESCRIPTION   : Creates the theory "arith.th" containing some basic	%
+%		  definitions and theorems that really ought to be in	%
+%		  "arithmetic.th".					%
+%									%
+% DEPENDS ON	: conv.ml, tactics.ml					%
+% READS FILES	: <none>						%
+% WRITES FILES	: arith.th						%
+%									%
+% AUTHOR	: T. Melham						%
+% DATE		: 87.02.26						%
+
+% Create the new theory.						%
+new_theory `arith`;;
+
+% No definitions.							%
+close_theory();;
+
+let SUB_MONO_EQ =
+    prove_thm
+    (`SUB_MONO_EQ`,
+     "!n m. (SUC n) - (SUC m) = (n - m)",
+     INDUCT_TAC THENL
+     [REWRITE_TAC [SUB;LESS_0];
+      ASM_REWRITE_TAC [SUB;LESS_MONO_EQ]]);;
+
+let SUB_PLUS = 
+   prove_thm
+   (`SUB_PLUS`,
+    "!a b c. a - (b + c) = (a - b) - c",
+    REPEAT INDUCT_TAC THEN
+    REWRITE_TAC [SUB_0;ADD_CLAUSES;SUB_MONO_EQ] THEN
+    ASSUM_LIST (REWRITE_TAC o (map (SYM o SPEC_ALL))) THEN
+    REWRITE_TAC [ADD_CLAUSES]);;
+
+let INV_PRE_LESS = 
+   prove_thm
+   (`INV_PRE_LESS`,
+    "!m n. 0 < m /\ 0 < n ==> ((PRE m < PRE n) = (m < n))",
+   REPEAT INDUCT_TAC THEN
+   REWRITE_TAC[LESS_REFL;SUB;LESS_0;PRE] THEN
+   MATCH_ACCEPT_TAC (SYM(SPEC_ALL LESS_MONO_EQ)));;
+
+let INV_PRE_LESS_EQ = 
+   prove_thm
+   (`INV_PRE_LESS_EQ`,
+    "!m n. 0 < m /\ 0 < n ==> ((PRE m <= PRE n) = (m <= n))",
+   REPEAT INDUCT_TAC THEN
+   REWRITE_TAC[LESS_REFL;SUB;LESS_0;PRE] THEN
+   REWRITE_TAC [ADD1;LESS_EQ_MONO_ADD_EQ]);;
+
+let SUB_LESS_EQ = 
+    prove_thm
+    (`SUB_LESS_EQ`,
+     "!n m. (n - m) <= n",
+     REWRITE_TAC [SYM(SPEC_ALL SUB_EQ_0);SYM(SPEC_ALL SUB_PLUS)] THEN
+     CONV_TAC (ONCE_DEPTH_CONV (REWRITE_CONV ADD_SYM)) THEN
+     REWRITE_TAC [SUB_EQ_0;LESS_EQ_ADD]);;
+
+let LESS_EQUAL_ANTISYM = 
+    prove_thm
+    (`LESS_EQUAL_ANTISYM`,
+     "!n m. n <= m /\ m <= n ==> (n = m)",
+     REWRITE_TAC [LESS_OR_EQ] THEN
+     REPEAT STRIP_TAC THENL
+     [IMP_RES_TAC LESS_ANTISYM;
+      ASM_REWRITE_TAC[]]);;
+
+let SUB_EQ_EQ_0 = %fixed for HOL12 on 18/iii/91%
+    prove_thm
+    (`SUB_EQ_EQ_0`,
+     "!m n. (m - n = m) = ((m = 0) \/ (n = 0))",
+     REPEAT INDUCT_TAC THEN
+     REWRITE_TAC [SUB_0;NOT_SUC] THEN
+     REWRITE_TAC [SUB] THEN
+     ASM_CASES_TAC "m<SUC n" THENL
+     [CONV_TAC (ONCE_DEPTH_CONV (REWRITE_CONV EQ_SYM_EQ)) THEN
+      ASM_REWRITE_TAC [NOT_SUC];
+      ASM_REWRITE_TAC [INV_SUC_EQ;NOT_SUC] THEN
+      POP_ASSUM (ASSUME_TAC o REWRITE_RULE [NOT_LESS]) THEN
+      IMP_RES_TAC OR_LESS THEN IMP_RES_TAC LESS_ADD_1 THEN
+      POP_ASSUM(ASSUME_TAC o REWRITE_RULE[ADD_ASSOC]) THEN
+      ASM_REWRITE_TAC[REWRITE_RULE[ADD1]NOT_SUC] ] );;
+
+let SUB_LESS_0 = 
+    prove_thm
+    (`SUB_LESS_0`,
+     "!n m. (m < n) = 0 < (n - m)",
+     REPEAT STRIP_TAC THEN EQ_TAC THENL
+     [DISCH_THEN (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+      REWRITE_TAC [num_CONV "1";ADD_CLAUSES;SUB] THEN
+      REWRITE_TAC [REWRITE_RULE [SYM(SPEC_ALL NOT_LESS)] LESS_EQ_ADD;LESS_0];
+      CONV_TAC CONTRAPOS_CONV THEN
+      REWRITE_TAC [NOT_LESS;LESS_OR_EQ;NOT_LESS_0;SUB_EQ_0]]);;
+
+
+let SUB_LESS_OR = 
+    prove_thm
+    (`SUB_LESS_OR`,
+     "!m n. n < m ==> n <= (m - 1)",
+     REPEAT GEN_TAC THEN
+     DISCH_THEN (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+     REWRITE_TAC [SYM (SPEC_ALL PRE_SUB1)] THEN
+     REWRITE_TAC [PRE;num_CONV "1";ADD_CLAUSES;LESS_EQ_ADD]);;
+
+let LESS_ADD_SUC = 
+    prove_thm
+    (`LESS_ADD_SUC`,
+     "!m n. m < m + SUC n",
+     INDUCT_TAC THENL
+     [REWRITE_TAC [LESS_0;ADD_CLAUSES];
+      POP_ASSUM (ASSUME_TAC o REWRITE_RULE [ADD_CLAUSES]) THEN
+      ASM_REWRITE_TAC [LESS_MONO_EQ;ADD_CLAUSES]]);;
+
+let LESS_SUB_ADD_LESS = 
+    prove_thm
+    (`LESS_SUB_ADD_LESS`,
+     "!n m i. (i < (n - m)) ==> ((i + m) < n)",
+     INDUCT_TAC THENL
+     [REWRITE_TAC [SUB_0;NOT_LESS_0];
+      REWRITE_TAC [SUB] THEN
+      REPEAT GEN_TAC THEN
+      ASM_CASES_TAC "n < m" THEN
+      ASM_REWRITE_TAC [NOT_LESS_0;LESS_THM] THEN
+      REPEAT STRIP_TAC THENL
+      [POP_ASSUM SUBST1_TAC THEN
+       DISJ1_TAC THEN
+       MATCH_MP_TAC SUB_ADD THEN
+       ASM_REWRITE_TAC [SYM(SPEC_ALL NOT_LESS)];
+       RES_TAC THEN ASM_REWRITE_TAC[]]]);;
+
+let EXP_ADD = %modified rco 18/iii/91%
+    prove_thm
+    (`EXP_ADD`,
+     "!p q n. n EXP (p+q) = (n EXP p) * (n EXP q)",
+     INDUCT_TAC THEN
+     ASM_REWRITE_TAC [EXP;ADD_CLAUSES;MULT_CLAUSES;MULT_ASSOC]);;
+
+let MULT_SUC_EQ = 
+    prove_thm
+    (`MULT_SUC_EQ`,
+     "!p m n. ((n * (SUC p)) = (m * (SUC p))) = (n = m)",
+     REPEAT STRIP_TAC THEN
+     STRIP_ASSUME_TAC (REWRITE_RULE [LESS_OR_EQ] (SPEC_ALL LESS_CASES)) THEN
+     ASM_REWRITE_TAC [] THENL
+     [ALL_TAC;
+      ONCE_REWRITE_TAC [INST_TYPE [":num",":*"] EQ_SYM_EQ] THEN
+     	      POP_ASSUM MP_TAC THEN 
+                (MAP_EVERY SPEC_TAC ["m:num","m:num";"n:num","n:num"])THEN
+	      MAP_EVERY X_GEN_TAC ["m:num";"n:num"] THEN DISCH_TAC] THEN
+     IMP_RES_TAC LESS_NOT_EQ THEN
+     POP_ASSUM (\th. REWRITE_TAC [NOT_EQ_SYM th]) THEN
+     POP_ASSUM (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+     REWRITE_TAC [MULT_CLAUSES;SYM(SPEC_ALL ADD_ASSOC)] THEN
+     ONCE_REWRITE_TAC [ADD_SYM] THEN REWRITE_TAC [EQ_MONO_ADD_EQ] THEN
+     REWRITE_TAC [RIGHT_ADD_DISTRIB;MULT_CLAUSES] THEN
+     ONCE_REWRITE_TAC [SPEC "p * q" ADD_SYM] THEN 
+     ONCE_REWRITE_TAC [EQ_SYM_EQ] THEN
+     REWRITE_TAC [ADD_ASSOC; 
+ 	         REWRITE_RULE [ADD_CLAUSES] (SPEC "0" EQ_MONO_ADD_EQ)] THEN
+     ONCE_REWRITE_TAC [EQ_SYM_EQ] THEN 
+     REWRITE_TAC [num_CONV "1";ADD_CLAUSES;NOT_SUC]);;
+
+let MULT_EXP_MONO = 
+    prove_thm
+    (`MULT_EXP_MONO`,
+     "!p q n m.((n * ((SUC q) EXP p)) = (m * ((SUC q) EXP p))) = (n = m)",
+     INDUCT_TAC THENL
+     [REWRITE_TAC [EXP;MULT_CLAUSES;ADD_CLAUSES];
+      ASM_REWRITE_TAC [EXP;MULT_ASSOC;MULT_SUC_EQ]]);;
+
+let NOT_ODD_EQ_EVEN = 
+    prove_thm
+    (`NOT_ODD_EQ_EVEN`,
+     "!n m. ~(SUC(n + n) = (m + m))",
+     REPEAT (INDUCT_TAC THEN REWRITE_TAC [ADD_CLAUSES]) THENL
+     [MATCH_ACCEPT_TAC NOT_SUC;
+      REWRITE_TAC [INV_SUC_EQ;NOT_EQ_SYM (SPEC_ALL NOT_SUC)];
+      REWRITE_TAC [INV_SUC_EQ;NOT_SUC];
+      ASM_REWRITE_TAC [INV_SUC_EQ]]);;
+
+let TIMES_2 = 
+    prove_thm
+    (`TIMES_2`,
+     "!n. 2 * n = n + n",
+     CONV_TAC (REDEPTH_CONV num_CONV) THEN
+     PURE_REWRITE_TAC [MULT_CLAUSES] THEN
+     INDUCT_TAC THEN ASM_REWRITE_TAC [ADD_CLAUSES]);;
+
+let LESS_MULT_MONO = 
+    prove_thm  
+   (`LESS_MULT_MONO`,
+    "!m i n. ((SUC n) * m) < ((SUC n) * i) = (m < i)",
+    REWRITE_TAC [MULT_CLAUSES] THEN
+    INDUCT_TAC THENL
+    [INDUCT_TAC THEN REWRITE_TAC [MULT_CLAUSES;ADD_CLAUSES;LESS_0];
+     INDUCT_TAC THENL
+     [REWRITE_TAC [MULT_CLAUSES;ADD_CLAUSES;NOT_LESS_0];
+      INDUCT_TAC THENL
+      [REWRITE_TAC [MULT_CLAUSES;ADD_CLAUSES];
+       REWRITE_TAC [LESS_MONO_EQ;ADD_CLAUSES;MULT_CLAUSES] THEN
+       REWRITE_TAC [SYM(SPEC_ALL ADD_ASSOC)] THEN
+       PURE_ONCE_REWRITE_TAC [ADD_SYM] THEN
+       REWRITE_TAC [LESS_MONO_ADD_EQ] THEN
+       REWRITE_TAC [ADD_ASSOC] THEN
+       let th = SYM(el 5 (CONJUNCTS(SPEC_ALL MULT_CLAUSES))) in
+       PURE_ONCE_REWRITE_TAC [th] THEN
+       ASM_REWRITE_TAC[]]]]);;
+
+
+let MULT_MONO_EQ = 
+    prove_thm
+    (`MULT_MONO_EQ`,
+     "!m i n. (((SUC n) * m) = ((SUC n) * i)) = (m = i)",
+     REWRITE_TAC [MULT_CLAUSES] THEN
+     INDUCT_TAC THENL
+     [INDUCT_TAC THEN REWRITE_TAC [MULT_CLAUSES;ADD_CLAUSES;
+	    		           NOT_EQ_SYM(SPEC_ALL NOT_SUC)];
+      INDUCT_TAC THENL
+      [REWRITE_TAC [MULT_CLAUSES;ADD_CLAUSES;NOT_SUC];
+       INDUCT_TAC THENL
+       [REWRITE_TAC [MULT_CLAUSES;ADD_CLAUSES];
+        REWRITE_TAC [INV_SUC_EQ;ADD_CLAUSES;MULT_CLAUSES] THEN
+        REWRITE_TAC [SYM(SPEC_ALL ADD_ASSOC)] THEN
+	PURE_ONCE_REWRITE_TAC [ADD_SYM] THEN
+	REWRITE_TAC [EQ_MONO_ADD_EQ] THEN
+	REWRITE_TAC [ADD_ASSOC] THEN
+	let th = SYM(el 5 (CONJUNCTS(SPEC_ALL MULT_CLAUSES))) in
+	PURE_ONCE_REWRITE_TAC [th] THEN
+	ASM_REWRITE_TAC[]]]]);;
+
+let ADD_SUB = 
+    prove_thm
+     (`ADD_SUB`,  "!a c. (a + c) - c = a",
+       INDUCT_TAC THEN REWRITE_TAC [ADD_CLAUSES] THENL
+       [INDUCT_TAC THEN REWRITE_TAC [SUB;LESS_SUC_REFL];
+        ASSUME_TAC (REWRITE_RULE [SYM (SPEC_ALL NOT_LESS)] LESS_EQ_ADD) THEN
+	PURE_ONCE_REWRITE_TAC [ADD_SYM] THEN
+	ASM_REWRITE_TAC [SUB;INV_SUC_EQ] THEN
+	PURE_ONCE_REWRITE_TAC [ADD_SYM] THEN	
+	FIRST_ASSUM ACCEPT_TAC]);;
+
+let LESS_EQ_ADD_SUB =
+    prove_thm
+    (`LESS_EQ_ADD_SUB`,
+     "!c b. (c <= b) ==> !a. (((a + b) - c) = (a + (b - c)))",
+     PURE_ONCE_REWRITE_TAC [LESS_OR_EQ] THEN
+     REPEAT STRIP_TAC THENL
+     [POP_ASSUM (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+      CONV_TAC (ONCE_DEPTH_CONV num_CONV) THEN
+      SUBST1_TAC (SPECL ["c:num";"p + (SUC 0)"] ADD_SYM) THEN
+      REWRITE_TAC [ADD_ASSOC;ADD_SUB];
+      POP_ASSUM SUBST1_TAC THEN CONV_TAC SYM_CONV THEN
+      REWRITE_TAC [ADD_SUB;ADD_INV_0_EQ;SUB_EQ_0;LESS_EQ_REFL]]);;
+
+% |- !c. c - c = 0							%
+let SUB_EQUAL_0 =
+    save_thm 
+    (`SUB_EQUAL_0`, REWRITE_RULE [ADD_CLAUSES] (SPEC "0" ADD_SUB));;
+
+let LESS_EQ_SUB_LESS =
+    prove_thm
+    (`LESS_EQ_SUB_LESS`,
+     "!a b. (b <= a) ==> !c. ((a - b) < c) = (a < (b + c))",
+     PURE_ONCE_REWRITE_TAC [LESS_OR_EQ] THEN
+     REPEAT STRIP_TAC THENL
+     [POP_ASSUM (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+      CONV_TAC (ONCE_DEPTH_CONV num_CONV) THEN
+      SUBST1_TAC (SPECL ["b:num";"p + (SUC 0)"] ADD_SYM) THEN
+      SUBST1_TAC (SPECL ["b:num";"c:num"] ADD_SYM) THEN
+      REWRITE_TAC [ADD_SUB;LESS_MONO_ADD_EQ];
+      POP_ASSUM SUBST1_TAC THEN REWRITE_TAC [SUB_EQUAL_0] THEN
+      REPEAT_TCL STRIP_THM_THEN SUBST1_TAC (SPEC "c:num" num_CASES) THEN
+      REWRITE_TAC [ADD_CLAUSES;LESS_REFL;LESS_0;LESS_ADD_SUC]]);;
+
+let NOT_SUC_LESS_EQ = 
+    prove_thm
+     (`NOT_SUC_LESS_EQ`,
+      "!n m.(~(SUC n) <= m) = (m <= n)",
+      REWRITE_TAC [SYM (SPEC_ALL LESS_EQ);NOT_LESS]);;
+
+let SUB_SUB = 
+    prove_thm
+    (`SUB_SUB`,
+     "!b c. (c <= b) ==> !a. ((a - (b - c)) = ((a + c) - b))",
+     PURE_ONCE_REWRITE_TAC [LESS_OR_EQ] THEN REPEAT STRIP_TAC THENL
+     [POP_ASSUM (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+      CONV_TAC (ONCE_DEPTH_CONV num_CONV) THEN
+      SUBST_OCCS_TAC [[1],(SPECL ["c:num";"p + (SUC 0)"] ADD_SYM)] THEN
+      REWRITE_TAC [ADD_SUB] THEN REWRITE_TAC [SUB_PLUS;ADD_SUB];
+      POP_ASSUM SUBST1_TAC THEN REWRITE_TAC [SUB_EQUAL_0] THEN
+      REWRITE_TAC [ADD_SUB;SUB_0]]);;
+
+let LESS_IMP_LESS_ADD = 
+    prove_thm
+    (`LESS_IMP_LESS_ADD`,
+     "!n m. n < m ==> !p. n < (m + p)",
+     REPEAT GEN_TAC THEN
+     DISCH_THEN (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+     REWRITE_TAC [SYM(SPEC_ALL ADD_ASSOC);num_CONV "1"] THEN
+     PURE_ONCE_REWRITE_TAC [ADD_CLAUSES] THEN
+     PURE_ONCE_REWRITE_TAC [ADD_CLAUSES] THEN
+     GEN_TAC THEN MATCH_ACCEPT_TAC LESS_ADD_SUC);;
+
+let LESS_EQ_IMP_LESS_SUC = 
+    prove_thm
+    (`LESS_EQ_IMP_LESS_SUC`,
+     "!n m. (n <= m) ==> (n < (SUC m))",
+     REWRITE_TAC [LESS_OR_EQ] THEN
+     REPEAT STRIP_TAC THENL
+     [IMP_RES_TAC LESS_SUC; ASM_REWRITE_TAC [LESS_SUC_REFL]]);;
+     
+let SUB_LESS_EQ_ADD = 
+    prove_thm
+    (`SUB_LESS_EQ_ADD`,
+     "!m p. (m <= p) ==> !n. (((p - m) <= n) = (p <= (m + n)))",
+     REPEAT STRIP_TAC THEN
+     IMP_RES_TAC LESS_EQ_SUB_LESS THEN
+     IMP_RES_TAC (SPEC "n:num" ADD_EQ_SUB) THEN
+     ASM_REWRITE_TAC [LESS_OR_EQ] THEN
+     SUBST_OCCS_TAC [[3], SPECL ["m:num";"n:num"] ADD_SYM] THEN
+     CONV_TAC (RAND_CONV (ONCE_DEPTH_CONV SYM_CONV)) THEN
+     ASM_REWRITE_TAC [] THEN
+     CONV_TAC (RAND_CONV (ONCE_DEPTH_CONV SYM_CONV)) THEN
+     REFL_TAC);;
+
+let SUB_CANCEL = 
+    prove_thm
+    (`SUB_CANCEL`,
+     "!p n m.((n <= p) /\ (m <= p)) ==> (((p - n) = (p - m)) = (n = m))",
+     REWRITE_TAC [LESS_OR_EQ] THEN REPEAT STRIP_TAC THENL
+     [POP_ASSUM (STRIP_THM_THEN SUBST_ALL_TAC o MATCH_MP LESS_ADD_1) THEN
+      SUBST_OCCS_TAC [[2], SPECL ["m:num";"p'+1"] ADD_SYM] THEN
+      REWRITE_TAC [ADD_SUB] THEN IMP_RES_TAC LESS_IMP_LESS_OR_EQ THEN
+% the following generates too many assumptions in HOL88 - use MP instead %
+%      IMP_RES_TAC (SPEC (p'+1)" ADD_EQ_SUB) %
+      POP_ASSUM (ASSUME_TAC o 
+         (MP (SPECL ["(p'+1)";"n:num";"m+(p'+1)"] ADD_EQ_SUB))) THEN
+      CONV_TAC (RATOR_CONV(RAND_CONV SYM_CONV)) THEN
+      POP_ASSUM (SUBST1_TAC o SYM  ) THEN  
+      SUBST1_TAC (SPECL ["p'+1";"n:num"] ADD_SYM) THEN
+      MATCH_ACCEPT_TAC EQ_MONO_ADD_EQ;
+      POP_ASSUM SUBST_ALL_TAC THEN REWRITE_TAC [SUB_EQUAL_0;SUB_EQ_0] THEN
+      ASM_REWRITE_TAC [SYM(SPEC_ALL NOT_LESS)] THEN
+      IMP_RES_TAC LESS_NOT_EQ;
+      POP_ASSUM MP_TAC THEN POP_ASSUM SUBST1_TAC THEN
+      PURE_ONCE_REWRITE_TAC [SUB_EQUAL_0] THEN
+      DISCH_THEN (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1) THEN
+      REWRITE_TAC [ADD_INV_0_EQ] THEN
+      SUBST1_TAC (SPECL ["m:num";"p'+1"] ADD_SYM) THEN 
+      REWRITE_TAC [ADD_SUB] THEN MATCH_ACCEPT_TAC EQ_SYM_EQ;
+      ASM_REWRITE_TAC [SUB_EQUAL_0]]);;
+
+
+let CANCEL_SUB = 
+    prove_thm
+    (`CANCEL_SUB`,
+     "!p n m.((p <= n) /\ (p <= m)) ==> (((n - p) = (m - p)) = (n = m))",
+     REWRITE_TAC [LESS_OR_EQ] THEN REPEAT STRIP_TAC THENL
+     [REPEAT (POP_ASSUM (STRIP_THM_THEN SUBST1_TAC o MATCH_MP LESS_ADD_1))THEN
+      PURE_ONCE_REWRITE_TAC [ADD_SYM] THEN
+      REWRITE_TAC [ADD_SUB;EQ_MONO_ADD_EQ];
+      ASM_REWRITE_TAC [SUB_EQUAL_0;SUB_EQ_0] THEN
+      POP_ASSUM SUBST_ALL_TAC THEN IMP_RES_TAC LESS_NOT_EQ THEN
+      CONV_TAC (RAND_CONV SYM_CONV) THEN
+      ASM_REWRITE_TAC [SYM(SPEC_ALL NOT_LESS)];
+      POP_ASSUM MP_TAC THEN ASM_REWRITE_TAC [SUB_EQUAL_0] THEN
+      DISCH_TAC THEN CONV_TAC(RATOR_CONV(RAND_CONV SYM_CONV)) THEN
+      IMP_RES_TAC LESS_NOT_EQ THEN
+      ASM_REWRITE_TAC [SUB_EQ_0;SYM(SPEC_ALL NOT_LESS)];
+      POP_ASSUM_LIST (MAP_EVERY (ASSUME_TAC o SYM)) THEN
+      ASM_REWRITE_TAC [SUB_EQUAL_0]]);;
+
+let Not_EXP_0 = 
+    prove_thm
+    (`Not_EXP_0`,
+     "!m n. ~(((SUC n) EXP m) = 0)",
+    INDUCT_TAC THEN REWRITE_TAC [EXP] THENL
+    [CONV_TAC (ONCE_DEPTH_CONV num_CONV) THEN REWRITE_TAC [NOT_SUC];
+     STRIP_TAC THEN POP_ASSUM (ASSUME_TAC o SPEC_ALL) THEN
+     let th = (SYM(el 2 (CONJUNCTS (SPECL ["SUC n";"1"] MULT_CLAUSES)))) in
+     SUBST1_TAC th THEN ASM_REWRITE_TAC [MULT_MONO_EQ]]);;
+
+let Zero_LESS_EXP = 
+    prove_thm
+    (`Zero_LESS_EXP`,
+     "!m n. 0 < ((SUC n) EXP m)",
+     REPEAT STRIP_TAC THEN
+     STRIP_ASSUME_TAC (SPEC "(SUC n) EXP m" LESS_0_CASES) THEN
+     ASM_REWRITE_TAC [] THEN
+     POP_ASSUM (MP_TAC o SYM) THEN
+     REWRITE_TAC [Not_EXP_0]);;
+
+let Odd_Or_Even = 
+    prove_thm
+    (`Odd_Or_Even`,
+     "!n. ?m. (n = (SUC(SUC 0) * m)) \/ (n = ((SUC(SUC 0) * m) + 1))",
+     CONV_TAC (ONCE_DEPTH_CONV num_CONV) THEN
+     INDUCT_TAC THENL
+     [EXISTS_TAC "0" THEN REWRITE_TAC [ADD_CLAUSES;MULT_CLAUSES];
+      POP_ASSUM STRIP_ASSUME_TAC THENL
+      [EXISTS_TAC "m:num" THEN ASM_REWRITE_TAC[ADD_CLAUSES];
+       EXISTS_TAC "SUC m" THEN ASM_REWRITE_TAC[MULT_CLAUSES;ADD_CLAUSES]]]);;
+
+let less_EXP_lemma = 
+    prove_thm
+    (`less_EXP_lemma`,
+     "!n m.((SUC(SUC m)) EXP n) < ((SUC(SUC m)) EXP (SUC n))",
+     INDUCT_TAC THEN PURE_ONCE_REWRITE_TAC [EXP] THENL
+     [REWRITE_TAC [EXP;ADD_CLAUSES;MULT_CLAUSES] THEN
+      CONV_TAC (ONCE_DEPTH_CONV num_CONV) THEN
+      REWRITE_TAC [ADD_CLAUSES;LESS_MONO_EQ;LESS_0];
+      ASM_REWRITE_TAC [LESS_MULT_MONO]]);;
+
+close_theory();;
+
+quit();;

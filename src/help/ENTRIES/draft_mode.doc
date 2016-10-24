@@ -1,0 +1,33 @@
+\DOC draft_mode
+
+\TYPE {draft_mode : (void -> bool)}
+
+\SYNOPSIS
+Tests whether HOL is currently in draft mode.
+
+\DESCRIBE
+The call {draft_mode()} returns {true} if HOL is in draft mode (see DESCRIPTION
+for an explanation of what this means), and {false} otherwise.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The following session assumes HOL is not in draft mode initially.
+{
+   #draft_mode();;
+   false : bool
+
+   #new_theory `spong`;;
+   () : void
+
+   #draft_mode();;
+   true : bool
+
+   #close_theory();;
+   () : void
+
+   #draft_mode();;
+   false : bool
+}
+\ENDDOC

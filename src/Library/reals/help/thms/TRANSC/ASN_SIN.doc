@@ -1,0 +1,3 @@
+\THEOREM ASN_SIN TRANSC
+|- !y. (--(& 1)) <= y /\ y <= (& 1) ==> (sin(asn y) = y)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM DELETE_DEF finite_sets
+|- !s x. s DELETE x = s DIFF {{x}}
+\ENDTHEOREM

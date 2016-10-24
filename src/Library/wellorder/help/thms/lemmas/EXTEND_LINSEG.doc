@@ -1,0 +1,7 @@
+\THEOREM EXTEND_LINSEG WELLORDER
+|- !l a.
+    woset l /\ fl l a ==>
+    (\(x,y).
+      linseg l a(x,y) \/ (y = a) /\ (fl(linseg l a)x \/ (x = a))) inseg
+    l
+\ENDTHEOREM

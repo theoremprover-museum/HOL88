@@ -1,0 +1,3 @@
+\THEOREM LESS_LESS_SUC arithmetic
+|- !m n. ~(m < n /\ n < (SUC m))
+\ENDTHEOREM

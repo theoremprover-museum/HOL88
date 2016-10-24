@@ -1,0 +1,10 @@
+\DOC N_box
+
+\TYPE {N_box : * print_box}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

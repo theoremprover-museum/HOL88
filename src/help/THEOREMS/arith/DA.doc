@@ -1,0 +1,3 @@
+\THEOREM DA arithmetic
+|- !k n. 0 < n ==> (?r q. (k = (q * n) + r) /\ r < n)
+\ENDTHEOREM

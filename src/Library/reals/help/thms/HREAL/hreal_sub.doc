@@ -1,0 +1,3 @@
+\THEOREM hreal_sub HREAL
+|- !Y X. Y hreal_sub X = hreal(\w. ?x. ~cut X x /\ cut Y(x hrat_add w))
+\ENDTHEOREM

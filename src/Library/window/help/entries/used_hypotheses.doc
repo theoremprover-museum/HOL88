@@ -1,0 +1,23 @@
+\DOC used_hypotheses
+
+\TYPE {used_hypotheses : (window -> term list)}
+
+\SYNOPSIS
+The used hypotheses of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+Those hypotheses of a window that have actually been used in the transformation
+of the window.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+The set returned by {used_hypotheses} for a given window need not be a
+subset of the set returned by {hypotheses} for the same window.
+This is because {used_hypotheses} will also contain any conjectures which
+have been used in the transformation of the window.
+
+\ENDDOC

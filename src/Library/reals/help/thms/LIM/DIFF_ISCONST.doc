@@ -1,0 +1,7 @@
+\THEOREM DIFF_ISCONST LIM
+|- !f a b.
+    a < b /\
+    (!x. a <= x /\ x <= b ==> f contl x) /\
+    (!x. a < x /\ x < b ==> (f diffl (& 0))x) ==>
+    (!x. a <= x /\ x <= b ==> (f x = f a))
+\ENDTHEOREM

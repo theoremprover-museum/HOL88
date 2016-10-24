@@ -1,0 +1,3 @@
+\THEOREM TREAL_ADD_LINV REALAX
+|- !x. ((treal_neg x) treal_add x) treal_eq treal_0
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM RES_EXISTS bool
+|- !P B. RES_EXISTS P B = (?x. P x /\ B x)
+\ENDTHEOREM

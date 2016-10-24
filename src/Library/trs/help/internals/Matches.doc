@@ -1,0 +1,10 @@
+\DOC Matches
+
+\TYPE {Matches : (wildvar -> termpattern -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

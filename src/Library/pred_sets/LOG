@@ -1,0 +1,834 @@
+rm -f *_ml.o *_ml.l *.th 
+===> library pred_sets: all object code and theory files deleted
+rm -f pred_sets.th
+echo 'set_flag(`abort_when_fail`,true);;'\
+     'loadt `mk_pred_sets`;;' | ../../hol 
+
+           __  _     _    __   __  _   __     _  _   __   _
+   |___   |    |    /_\  |__  |__  |  |       |__|  |  |  |
+   |      |__  |__ /   \  __|  __| |  |__     |  |  |__|  |__
+
+          HOL88 Version 2.01 (Franz: pre-release), built on Jun 25 1992
+
+#false : bool
+
+
+() : void
+
+SPECIFICATION = |- !P x. x IN P = P x
+
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+NOT_EQUAL_SETS = |- !s t. ~(s = t) = (?x. x IN t = ~x IN s)
+
+GSPEC_DEF_LEMMA = |- ?g. !f v. v IN (g f) = (?x. v,T = f x)
+
+GSPECIFICATION = |- !f v. v IN (GSPEC f) = (?x. v,T = f x)
+
+
+Section SET_SPEC_CONV begun
+
+dest_tuple = - : (term -> term list)
+
+MK_PAIR = - : (* list -> conv)
+
+EXISTS_TUPLE_CONV = - : (term list -> conv)
+
+PAIR_EQ_CONV = - : conv
+
+ELIM_EXISTS_CONV = - : conv
+
+PROVE_EXISTS = - : conv
+
+list_variant = - : (term list -> term list -> term list)
+
+SET_SPEC_CONV = - : conv
+
+- : conv
+
+Section SET_SPEC_CONV ended
+
+SET_SPEC_CONV = - : conv
+
+
+File gspec.ml loaded
+() : void
+
+() : void
+
+true : bool
+
+EMPTY_DEF = |- EMPTY = (\x. F)
+
+NOT_IN_EMPTY = |- !x. ~x IN EMPTY
+
+MEMBER_NOT_EMPTY = |- !s. (?x. x IN s) = ~(s = EMPTY)
+
+UNIV_DEF = |- UNIV = (\x. T)
+
+IN_UNIV = |- !x. x IN UNIV
+
+UNIV_NOT_EMPTY = |- ~(UNIV = EMPTY)
+
+EMPTY_NOT_UNIV = |- ~(EMPTY = UNIV)
+
+EQ_UNIV = |- (!x. x IN s) = (s = UNIV)
+
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+SUBSET_TRANS = |- !s t u. s SUBSET t /\ t SUBSET u ==> s SUBSET u
+
+SUBSET_REFL = |- !s. s SUBSET s
+
+SUBSET_ANTISYM = |- !s t. s SUBSET t /\ t SUBSET s ==> (s = t)
+
+EMPTY_SUBSET = |- !s. EMPTY SUBSET s
+
+SUBSET_EMPTY = |- !s. s SUBSET EMPTY = (s = EMPTY)
+
+SUBSET_UNIV = |- !s. s SUBSET UNIV
+
+UNIV_SUBSET = |- !s. UNIV SUBSET s = (s = UNIV)
+
+PSUBSET_DEF = |- !s t. s PSUBSET t = s SUBSET t /\ ~(s = t)
+
+PSUBSET_TRANS = |- !s t u. s PSUBSET t /\ t PSUBSET u ==> s PSUBSET u
+
+PSUBSET_IRREFL = |- !s. ~s PSUBSET s
+
+NOT_PSUBSET_EMPTY = |- !s. ~s PSUBSET EMPTY
+
+NOT_UNIV_PSUBSET = |- !s. ~UNIV PSUBSET s
+
+PSUBSET_UNIV = |- !s. s PSUBSET UNIV = (?x. ~x IN s)
+
+UNION_DEF = |- !s t. s UNION t = {x | x IN s \/ x IN t}
+
+IN_UNION = |- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+
+UNION_ASSOC = |- !s t u. (s UNION t) UNION u = s UNION (t UNION u)
+
+UNION_IDEMPOT = |- !s. s UNION s = s
+
+UNION_COMM = |- !s t. s UNION t = t UNION s
+
+SUBSET_UNION = 
+|- (!s t. s SUBSET (s UNION t)) /\ (!s t. s SUBSET (t UNION s))
+
+SUBSET_UNION_ABSORPTION = |- !s t. s SUBSET t = (s UNION t = t)
+
+UNION_EMPTY = |- (!s. EMPTY UNION s = s) /\ (!s. s UNION EMPTY = s)
+
+UNION_UNIV = |- (!s. UNIV UNION s = UNIV) /\ (!s. s UNION UNIV = UNIV)
+
+EMPTY_UNION = |- !s t. (s UNION t = EMPTY) = (s = EMPTY) /\ (t = EMPTY)
+
+INTER_DEF = |- !s t. s INTER t = {x | x IN s /\ x IN t}
+
+IN_INTER = |- !s t x. x IN (s INTER t) = x IN s /\ x IN t
+
+INTER_ASSOC = |- !s t u. (s INTER t) INTER u = s INTER (t INTER u)
+
+INTER_IDEMPOT = |- !s. s INTER s = s
+
+INTER_COMM = |- !s t. s INTER t = t INTER s
+
+INTER_SUBSET = 
+|- (!s t. (s INTER t) SUBSET s) /\ (!s t. (t INTER s) SUBSET s)
+
+SUBSET_INTER_ABSORPTION = |- !s t. s SUBSET t = (s INTER t = s)
+
+INTER_EMPTY = 
+|- (!s. EMPTY INTER s = EMPTY) /\ (!s. s INTER EMPTY = EMPTY)
+
+INTER_UNIV = |- (!s. UNIV INTER s = s) /\ (!s. s INTER UNIV = s)
+
+UNION_OVER_INTER = 
+|- !s t u. s INTER (t UNION u) = (s INTER t) UNION (s INTER u)
+
+INTER_OVER_UNION = 
+|- !s t u. s UNION (t INTER u) = (s UNION t) INTER (s UNION u)
+
+DISJOINT_DEF = |- !s t. DISJOINT s t = (s INTER t = EMPTY)
+
+IN_DISJOINT = |- !s t. DISJOINT s t = ~(?x. x IN s /\ x IN t)
+
+DISJOINT_SYM = |- !s t. DISJOINT s t = DISJOINT t s
+
+DISJOINT_EMPTY = |- !s. DISJOINT EMPTY s /\ DISJOINT s EMPTY
+
+DISJOINT_EMPTY_REFL = |- !s. (s = EMPTY) = DISJOINT s s
+
+DISJOINT_UNION = 
+|- !s t u. DISJOINT(s UNION t)u = DISJOINT s u /\ DISJOINT t u
+
+DIFF_DEF = |- !s t. s DIFF t = {x | x IN s /\ ~x IN t}
+
+IN_DIFF = |- !s t x. x IN (s DIFF t) = x IN s /\ ~x IN t
+
+DIFF_EMPTY = |- !s. s DIFF EMPTY = s
+
+EMPTY_DIFF = |- !s. EMPTY DIFF s = EMPTY
+
+DIFF_UNIV = |- !s. s DIFF UNIV = EMPTY
+
+DIFF_DIFF = |- !s t. (s DIFF t) DIFF t = s DIFF t
+
+DIFF_EQ_EMPTY = |- !s. s DIFF s = EMPTY
+
+INSERT_DEF = |- !x s. x INSERT s = {y | (y = x) \/ y IN s}
+
+() : void
+
+IN_INSERT = |- !x y s. x IN (y INSERT s) = (x = y) \/ x IN s
+
+COMPONENT = |- !x s. x IN (x INSERT s)
+
+SET_CASES = |- !s. (s = {}) \/ (?x t. (s = x INSERT t) /\ ~x IN t)
+
+DECOMPOSITION = |- !s x. x IN s = (?t. (s = x INSERT t) /\ ~x IN t)
+
+ABSORPTION = |- !x s. x IN s = (x INSERT s = s)
+
+INSERT_INSERT = |- !x s. x INSERT (x INSERT s) = x INSERT s
+
+INSERT_COMM = |- !x y s. x INSERT (y INSERT s) = y INSERT (x INSERT s)
+
+INSERT_UNIV = |- !x. x INSERT UNIV = UNIV
+
+NOT_INSERT_EMPTY = |- !x s. ~(x INSERT s = {})
+
+NOT_EMPTY_INSERT = |- !x s. ~({} = x INSERT s)
+
+INSERT_UNION = 
+|- !x s t.
+    (x INSERT s) UNION t = (x IN t => s UNION t | x INSERT (s UNION t))
+
+INSERT_UNION_EQ = |- !x s t. (x INSERT s) UNION t = x INSERT (s UNION t)
+
+INSERT_INTER = 
+|- !x s t.
+    (x INSERT s) INTER t = (x IN t => x INSERT (s INTER t) | s INTER t)
+
+DISJOINT_INSERT = 
+|- !x s t. DISJOINT(x INSERT s)t = DISJOINT s t /\ ~x IN t
+
+INSERT_SUBSET = |- !x s t. (x INSERT s) SUBSET t = x IN t /\ s SUBSET t
+
+SUBSET_INSERT = 
+|- !x s. ~x IN s ==> (!t. s SUBSET (x INSERT t) = s SUBSET t)
+
+INSERT_DIFF = 
+|- !s t x.
+    (x INSERT s) DIFF t = (x IN t => s DIFF t | x INSERT (s DIFF t))
+
+DELETE_DEF = |- !s x. s DELETE x = s DIFF {x}
+
+IN_DELETE = |- !s x y. x IN (s DELETE y) = x IN s /\ ~(x = y)
+
+DELETE_NON_ELEMENT = |- !x s. ~x IN s = (s DELETE x = s)
+
+IN_DELETE_EQ = 
+|- !s x x'.
+    (x IN s = x' IN s) = (x IN (s DELETE x') = x' IN (s DELETE x))
+
+EMPTY_DELETE = |- !x. {} DELETE x = {}
+
+DELETE_DELETE = |- !x s. (s DELETE x) DELETE x = s DELETE x
+
+DELETE_COMM = |- !x y s. (s DELETE x) DELETE y = (s DELETE y) DELETE x
+
+DELETE_SUBSET = |- !x s. (s DELETE x) SUBSET s
+
+SUBSET_DELETE = |- !x s t. s SUBSET (t DELETE x) = ~x IN s /\ s SUBSET t
+
+SUBSET_INSERT_DELETE = 
+|- !x s t. s SUBSET (x INSERT t) = (s DELETE x) SUBSET t
+
+DIFF_INSERT = |- !s t x. s DIFF (x INSERT t) = (s DELETE x) DIFF t
+
+PSUBSET_INSERT_SUBSET = 
+|- !s t. s PSUBSET t = (?x. ~x IN s /\ (x INSERT s) SUBSET t)
+
+lemma = |- ~(a = b) = (b = ~a)
+
+PSUBSET_MEMBER = 
+|- !s t. s PSUBSET t = s SUBSET t /\ (?y. y IN t /\ ~y IN s)
+
+DELETE_INSERT = 
+|- !x y s.
+    (x INSERT s) DELETE y =
+    ((x = y) => s DELETE y | x INSERT (s DELETE y))
+
+INSERT_DELETE = |- !x s. x IN s ==> (x INSERT (s DELETE x) = s)
+
+DELETE_INTER = |- !s t x. (s DELETE x) INTER t = (s INTER t) DELETE x
+
+DISJOINT_DELETE_SYM = 
+|- !s t x. DISJOINT(s DELETE x)t = DISJOINT(t DELETE x)s
+
+CHOICE_EXISTS = |- ?CHOICE. !s. ~(s = {}) ==> (CHOICE s) IN s
+
+CHOICE_DEF = |- !s. ~(s = {}) ==> (CHOICE s) IN s
+
+REST_DEF = |- !s. REST s = s DELETE (CHOICE s)
+
+CHOICE_NOT_IN_REST = |- !s. ~(CHOICE s) IN (REST s)
+
+CHOICE_INSERT_REST = 
+|- !s. ~(s = {}) ==> ((CHOICE s) INSERT (REST s) = s)
+
+REST_SUBSET = |- !s. (REST s) SUBSET s
+
+lemma = |- (P /\ Q = P) = P ==> Q
+
+REST_PSUBSET = |- !s. ~(s = {}) ==> (REST s) PSUBSET s
+
+SING_DEF = |- !s. SING s = (?x. s = {x})
+
+SING = |- !x. SING{x}
+
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+NOT_SING_EMPTY = |- !x. ~({x} = {})
+
+NOT_EMPTY_SING = |- !x. ~({} = {x})
+
+EQUAL_SING = |- !x y. ({x} = {y}) = (x = y)
+
+DISJOINT_SING_EMPTY = |- !x. DISJOINT{x}{}
+
+INSERT_SING_UNION = |- !s x. x INSERT s = {x} UNION s
+
+SING_DELETE = |- !x. {x} DELETE x = {}
+
+DELETE_EQ_SING = |- !s x. x IN s ==> ((s DELETE x = {}) = (s = {x}))
+
+CHOICE_SING = |- !x. CHOICE{x} = x
+
+REST_SING = |- !x. REST{x} = {}
+
+SING_IFF_EMPTY_REST = |- !s. SING s = ~(s = {}) /\ (REST s = {})
+
+IMAGE_DEF = |- !f s. IMAGE f s = {f x | x IN s}
+
+IN_IMAGE = |- !y s f. y IN (IMAGE f s) = (?x. (y = f x) /\ x IN s)
+
+IMAGE_IN = |- !x s. x IN s ==> (!f. (f x) IN (IMAGE f s))
+
+IMAGE_EMPTY = |- !f. IMAGE f{} = {}
+
+IMAGE_ID = |- !s. IMAGE(\x. x)s = s
+
+Theorem o_THM autoloading from theory `combin` ...
+o_THM = |- !f g x. (f o g)x = f(g x)
+
+IMAGE_COMPOSE = |- !f g s. IMAGE(f o g)s = IMAGE f(IMAGE g s)
+
+IMAGE_INSERT = |- !f x s. IMAGE f(x INSERT s) = (f x) INSERT (IMAGE f s)
+
+IMAGE_EQ_EMPTY = |- !s f. (IMAGE f s = {}) = (s = {})
+
+IMAGE_DELETE = |- !f x s. ~x IN s ==> (IMAGE f(s DELETE x) = IMAGE f s)
+
+IMAGE_UNION = 
+|- !f s t. IMAGE f(s UNION t) = (IMAGE f s) UNION (IMAGE f t)
+
+IMAGE_SUBSET = 
+|- !s t. s SUBSET t ==> (!f. (IMAGE f s) SUBSET (IMAGE f t))
+
+IMAGE_INTER = 
+|- !f s t. (IMAGE f(s INTER t)) SUBSET ((IMAGE f s) INTER (IMAGE f t))
+
+INJ_DEF = 
+|- !f s t.
+    INJ f s t =
+    (!x. x IN s ==> (f x) IN t) /\
+    (!x y. x IN s /\ y IN s ==> (f x = f y) ==> (x = y))
+
+INJ_ID = |- !s. INJ(\x. x)s s
+
+INJ_COMPOSE = |- !f g s t u. INJ f s t /\ INJ g t u ==> INJ(g o f)s u
+
+INJ_EMPTY = |- !f. (!s. INJ f{}s) /\ (!s. INJ f s{} = (s = {}))
+
+SURJ_DEF = 
+|- !f s t.
+    SURJ f s t =
+    (!x. x IN s ==> (f x) IN t) /\
+    (!x. x IN t ==> (?y. y IN s /\ (f y = x)))
+
+SURJ_ID = |- !s. SURJ(\x. x)s s
+
+SURJ_COMPOSE = 
+|- !f g s t u. SURJ f s t /\ SURJ g t u ==> SURJ(g o f)s u
+
+SURJ_EMPTY = 
+|- !f. (!s. SURJ f{}s = (s = {})) /\ (!s. SURJ f s{} = (s = {}))
+
+IMAGE_SURJ = |- !f s t. SURJ f s t = (IMAGE f s = t)
+
+BIJ_DEF = |- !f s t. BIJ f s t = INJ f s t /\ SURJ f s t
+
+BIJ_ID = |- !s. BIJ(\x. x)s s
+
+BIJ_EMPTY = 
+|- !f. (!s. BIJ f{}s = (s = {})) /\ (!s. BIJ f s{} = (s = {}))
+
+BIJ_COMPOSE = |- !f g s t u. BIJ f s t /\ BIJ g t u ==> BIJ(g o f)s u
+
+lemma1 = 
+|- !f s.
+    (!x y. x IN s /\ y IN s ==> (f x = f y) ==> (x = y)) =
+    (!y. y IN s ==> (!x. x IN s /\ (f x = f y) = y IN s /\ (x = y)))
+
+lemma2 = |- !f s. ?g. !t. INJ f s t ==> (!x. x IN s ==> (g(f x) = x))
+
+LINV_DEF = |- !f s t. INJ f s t ==> (!x. x IN s ==> (LINV f s(f x) = x))
+
+lemma3 = |- !f s. ?g. !t. SURJ f s t ==> (!x. x IN t ==> (f(g x) = x))
+
+RINV_DEF = 
+|- !f s t. SURJ f s t ==> (!x. x IN t ==> (f(RINV f s x) = x))
+
+FINITE_DEF = 
+|- !s.
+    FINITE s = (!P. P{} /\ (!s'. P s' ==> (!e. P(e INSERT s'))) ==> P s)
+
+FINITE_EMPTY = |- FINITE{}
+
+FINITE_INSERT = |- !s. FINITE s ==> (!x. FINITE(x INSERT s))
+
+SIMPLE_FINITE_INDUCT = 
+|- !P.
+    P{} /\ (!s. P s ==> (!e. P(e INSERT s))) ==> (!s. FINITE s ==> P s)
+
+lemma = 
+|- P{} /\
+   (!s. FINITE s /\ P s ==> (!e. FINITE(e INSERT s) /\ P(e INSERT s))) ==>
+   (!s. FINITE s ==> P s)
+
+FINITE_INDUCT = 
+|- !P.
+    P{} /\ (!s. FINITE s /\ P s ==> (!e. ~e IN s ==> P(e INSERT s))) ==>
+    (!s. FINITE s ==> P s)
+
+
+SET_INDUCT_TAC = - : tactic
+
+
+File set_ind loaded
+() : void
+
+FINITE_DELETE = |- !s. FINITE s ==> (!x. FINITE(s DELETE x))
+
+INSERT_FINITE = |- !x s. FINITE(x INSERT s) ==> FINITE s
+
+FINITE_INSERT = |- !x s. FINITE(x INSERT s) = FINITE s
+
+DELETE_FINITE = |- !x s. FINITE(s DELETE x) ==> FINITE s
+
+FINITE_DELETE = |- !x s. FINITE(s DELETE x) = FINITE s
+
+UNION_FINITE = |- !s. FINITE s ==> (!t. FINITE t ==> FINITE(s UNION t))
+
+FINITE_UNION_LEMMA = 
+|- !s. FINITE s ==> (!t. FINITE(s UNION t) ==> FINITE t)
+
+FINITE_UNION = |- !s t. FINITE(s UNION t) ==> FINITE s /\ FINITE t
+
+FINITE_UNION = |- !s t. FINITE(s UNION t) = FINITE s /\ FINITE t
+
+INTER_FINITE = |- !s. FINITE s ==> (!t. FINITE(s INTER t))
+
+SUBSET_FINITE = |- !s. FINITE s ==> (!t. t SUBSET s ==> FINITE t)
+
+PSUBSET_FINITE = |- !s. FINITE s ==> (!t. t PSUBSET s ==> FINITE t)
+
+FINITE_DIFF = |- !s. FINITE s ==> (!t. FINITE(s DIFF t))
+
+FINITE_SING = |- !x. FINITE{x}
+
+SING_FINITE = |- !s. SING s ==> FINITE s
+
+IMAGE_FINITE = |- !s. FINITE s ==> (!f. FINITE(IMAGE f s))
+
+card_rel_def = 
+"(!s. R s 0 = (s = {})) /\
+ (!s n. R s(SUC n) = (?x. x IN s /\ R(s DELETE x)n))"
+: term
+
+Theorem num_Axiom autoloading from theory `prim_rec` ...
+num_Axiom = |- !e f. ?! fn. (fn 0 = e) /\ (!n. fn(SUC n) = f(fn n)n)
+
+CARD_REL_EXISTS = 
+|- ?R.
+    (!s. R s 0 = (s = {})) /\
+    (!s n. R s(SUC n) = (?x. x IN s /\ R(s DELETE x)n))
+
+CARD_REL_DEL_LEMMA = 
+.. |- !n s x.
+       x IN s ==> R(s DELETE x)n ==> (!y. y IN s ==> R(s DELETE y)n)
+
+Theorem INV_SUC_EQ autoloading from theory `prim_rec` ...
+INV_SUC_EQ = |- !m n. (SUC m = SUC n) = (m = n)
+
+Theorem NOT_SUC autoloading from theory `num` ...
+NOT_SUC = |- !n. ~(SUC n = 0)
+
+CARD_REL_UNIQUE = .. |- !n s. R s n ==> (!m. R s m ==> (n = m))
+
+CARD_REL_EXISTS_LEMMA = .. |- !s. FINITE s ==> (?n. R s n)
+
+CARD_REL_THM = .. |- !m s. FINITE s ==> (((@n. R s n) = m) = R s m)
+
+CARD_EXISTS = 
+|- ?CARD.
+    (CARD{} = 0) /\
+    (!s.
+      FINITE s ==>
+      (!x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s))))
+
+CARD_DEF = 
+|- (CARD{} = 0) /\
+   (!s.
+     FINITE s ==>
+     (!x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s))))
+
+CARD_EMPTY = |- CARD{} = 0
+
+CARD_INSERT = 
+|- !s.
+    FINITE s ==>
+    (!x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s)))
+
+CARD_EQ_0 = |- !s. FINITE s ==> ((CARD s = 0) = (s = {}))
+
+Theorem num_CASES autoloading from theory `arithmetic` ...
+num_CASES = |- !m. (m = 0) \/ (?n. m = SUC n)
+
+Theorem SUC_SUB1 autoloading from theory `arithmetic` ...
+SUC_SUB1 = |- !m. (SUC m) - 1 = m
+
+CARD_DELETE = 
+|- !s.
+    FINITE s ==>
+    (!x. CARD(s DELETE x) = (x IN s => (CARD s) - 1 | CARD s))
+
+Theorem LESS_MONO_EQ autoloading from theory `arithmetic` ...
+LESS_MONO_EQ = |- !m n. (SUC m) < (SUC n) = m < n
+
+Definition LESS_OR_EQ autoloading from theory `arithmetic` ...
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+
+lemma1 = |- !n m. (SUC n) <= (SUC m) = n <= m
+
+Theorem LESS_THM autoloading from theory `prim_rec` ...
+LESS_THM = |- !m n. m < (SUC n) = (m = n) \/ m < n
+
+lemma2 = |- !n m. n <= (SUC m) = n <= m \/ (n = SUC m)
+
+Theorem LESS_EQ_REFL autoloading from theory `arithmetic` ...
+LESS_EQ_REFL = |- !m. m <= m
+
+CARD_INTER_LESS_EQ = 
+|- !s. FINITE s ==> (!t. (CARD(s INTER t)) <= (CARD s))
+
+Theorem ADD_CLAUSES autoloading from theory `arithmetic` ...
+ADD_CLAUSES = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+
+CARD_UNION = 
+|- !s.
+    FINITE s ==>
+    (!t.
+      FINITE t ==>
+      ((CARD(s UNION t)) + (CARD(s INTER t)) = (CARD s) + (CARD t)))
+
+lemma = |- !n m. n <= (SUC m) = n <= m \/ (n = SUC m)
+
+Theorem LESS_0 autoloading from theory `prim_rec` ...
+LESS_0 = |- !n. 0 < (SUC n)
+
+CARD_SUBSET = 
+|- !s. FINITE s ==> (!t. t SUBSET s ==> (CARD t) <= (CARD s))
+
+Theorem LESS_EQ autoloading from theory `arithmetic` ...
+LESS_EQ = |- !m n. m < n = (SUC m) <= n
+
+CARD_PSUBSET = 
+|- !s. FINITE s ==> (!t. t PSUBSET s ==> (CARD t) < (CARD s))
+
+CARD_SING = |- !x. CARD{x} = 1
+
+SING_IFF_CARD1 = |- !s. SING s = (CARD s = 1) /\ FINITE s
+
+Theorem SUB_PLUS autoloading from theory `arithmetic` ...
+SUB_PLUS = |- !a b c. a - (b + c) = (a - b) - c
+
+Theorem SUB_0 autoloading from theory `arithmetic` ...
+SUB_0 = |- !m. (0 - m = 0) /\ (m - 0 = m)
+
+CARD_DIFF = 
+|- !t.
+    FINITE t ==>
+    (!s. FINITE s ==> (CARD(s DIFF t) = (CARD s) - (CARD(s INTER t))))
+
+Theorem NOT_LESS autoloading from theory `arithmetic` ...
+NOT_LESS = |- !m n. ~m < n = n <= m
+
+Theorem SUB_LESS_0 autoloading from theory `arithmetic` ...
+SUB_LESS_0 = |- !n m. m < n = 0 < (n - m)
+
+LESS_CARD_DIFF = 
+|- !t.
+    FINITE t ==>
+    (!s. FINITE s ==> (CARD t) < (CARD s) ==> 0 < (CARD(s DIFF t)))
+
+INFINITE_DEF = |- !s. INFINITE s = ~FINITE s
+
+NOT_IN_FINITE = |- INFINITE UNIV = (!s. FINITE s ==> (?x. ~x IN s))
+
+INVERSE_LEMMA = 
+|- !f.
+    (!x y. (f x = f y) ==> (x = y)) ==>
+    ((\x. @y. x = f y) o f = (\x. x))
+
+IMAGE_11_INFINITE = 
+|- !f.
+    (!x y. (f x = f y) ==> (x = y)) ==>
+    (!s. INFINITE s ==> INFINITE(IMAGE f s))
+
+INFINITE_SUBSET = |- !s. INFINITE s ==> (!t. s SUBSET t ==> INFINITE t)
+
+Theorem IMP_DISJ_THM autoloading from theory `arithmetic` ...
+IMP_DISJ_THM = |- !t1 t2. t1 ==> t2 = ~t1 \/ t2
+
+IN_INFINITE_NOT_FINITE = 
+|- !s t. INFINITE s /\ FINITE t ==> (?x. x IN s /\ ~x IN t)
+
+gdef = 
+["g 0 = {}"; "!n. g(SUC n) = (@x. ~x IN (g n)) INSERT (g n)"]
+: term list
+
+g_finite = .. |- !n. FINITE(g n)
+
+g_subset = . |- !n x. x IN (g n) ==> (!i. x IN (g(n + i)))
+
+lemma = |- (A \/ B) /\ ~B = A /\ ~B
+
+Theorem LESS_SUC_REFL autoloading from theory `prim_rec` ...
+LESS_SUC_REFL = |- !n. n < (SUC n)
+
+g_cases = 
+.. |- (!s. FINITE s ==> (?x. ~x IN s)) ==>
+      (!x. (?n. x IN (g n)) ==> (?m. x IN (g(SUC m)) /\ ~x IN (g m)))
+
+z_in_g1 = .. |- (@x. ~x IN {}) IN (g(SUC 0))
+
+Theorem ADD_SYM autoloading from theory `arithmetic` ...
+ADD_SYM = |- !m n. m + n = n + m
+
+Theorem ADD1 autoloading from theory `arithmetic` ...
+ADD1 = |- !m. SUC m = m + 1
+
+z_in_gn = .. |- !n. (@x. ~x IN {}) IN (g(SUC n))
+
+in_lemma = . |- !n. (@x. ~x IN (g n)) IN (g(SUC n))
+
+not_in_lemma = 
+.. |- (!s. FINITE s ==> (?x. ~x IN s)) ==>
+      (!i n. ~(@x. ~x IN (g(n + i))) IN (g n))
+
+Theorem LESS_NOT_EQ autoloading from theory `prim_rec` ...
+LESS_NOT_EQ = |- !m n. m < n ==> ~(m = n)
+
+Theorem LESS_REFL autoloading from theory `prim_rec` ...
+LESS_REFL = |- !n. ~n < n
+
+less_lemma = |- !m n. ~(m = n) = m < n \/ n < m
+
+Theorem LESS_ADD_1 autoloading from theory `arithmetic` ...
+LESS_ADD_1 = |- !m n. n < m ==> (?p. m = n + (p + 1))
+
+gn_unique = 
+.. |- (!s. FINITE s ==> (?x. ~x IN s)) ==>
+      (!n m. ((@x. ~x IN (g n)) = (@x. ~x IN (g m))) = (n = m))
+
+x_unique = 
+.. |- !n x y.
+       ~x IN (g n) /\ ~y IN (g n) ==>
+       x IN (g(SUC n)) ==>
+       y IN (g(SUC n)) ==>
+       (x = y)
+
+fdef = 
+"\x.
+  ((?n. x IN (g n)) => 
+   (@y. ~y IN (g(SUC(@n. x IN (g(SUC n)) /\ ~x IN (g n))))) | 
+   x)"
+: term
+
+cases = |- !x. (?n. x IN (g n)) \/ (!n. ~x IN (g n))
+
+INF_IMP_INFINITY = 
+|- (!s. FINITE s ==> (?x. ~x IN s)) ==>
+   (?f. (!x y. (f x = f y) ==> (x = y)) /\ (?y. !x. ~(f x = y)))
+
+prth = 
+|- ?fn. (!f x. fn f x 0 = x) /\ (!f x n. fn f x(SUC n) = f(fn f x n))
+
+prmth = |- !x f. ?fn. (fn 0 = x) /\ (!n. fn(SUC n) = f(fn n))
+
+num_fn_thm = 
+|- (?f. (!x y. (f x = f y) ==> (x = y)) /\ (?y. !x. ~(f x = y))) ==>
+   (?fn. !n m. (fn n = fn m) ==> (n = m))
+
+Theorem LESS_IMP_LESS_ADD autoloading from theory `arithmetic` ...
+LESS_IMP_LESS_ADD = |- !n m. n < m ==> (!p. n < (m + p))
+
+Theorem LESS_ADD_SUC autoloading from theory `arithmetic` ...
+LESS_ADD_SUC = |- !m n. m < (m + (SUC n))
+
+finite_N_bounded = |- !s. FINITE s ==> (?m. !n. n IN s ==> n < m)
+
+N_lemma = |- INFINITE UNIV
+
+main_lemma = 
+|- !s.
+    FINITE s ==>
+    (!f. (!n m. (f n = f m) ==> (n = m)) ==> (?n. ~(f n) IN s))
+
+INFINITY_IMP_INF = 
+|- (?f. (!x y. (f x = f y) ==> (x = y)) /\ (?y. !x. ~(f x = y))) ==>
+   (!s. FINITE s ==> (?x. ~x IN s))
+
+INFINITE_UNIV = 
+|- INFINITE UNIV =
+   (?f. (!x y. (f x = f y) ==> (x = y)) /\ (?y. !x. ~(f x = y)))
+
+FINITE_PSUBSET_INFINITE = 
+|- !s. INFINITE s = (!t. FINITE t ==> t SUBSET s ==> t PSUBSET s)
+
+FINITE_PSUBSET_UNIV = 
+|- INFINITE UNIV = (!s. FINITE s ==> s PSUBSET UNIV)
+
+INFINITE_DIFF_FINITE = 
+|- !s t. INFINITE s /\ FINITE t ==> ~(s DIFF t = {})
+
+Theorem NOT_LESS_0 autoloading from theory `prim_rec` ...
+NOT_LESS_0 = |- !n. ~n < 0
+
+FINITE_ISO_NUM = 
+|- !s.
+    FINITE s ==>
+    (?f.
+      (!n m. n < (CARD s) /\ m < (CARD s) ==> (f n = f m) ==> (n = m)) /\
+      (s = {f n | n < (CARD s)}))
+
+echo 'set_flag(`abort_when_fail`,true);;'\
+     'load_theory `pred_sets`;;'\
+     'compilet `set_ind`;;'\
+     'quit();;' | ../../hol
+
+           __  _     _    __   __  _   __     _  _   __   _
+   |___   |    |    /_\  |__  |__  |  |       |__|  |  |  |
+   |      |__  |__ /   \  __|  __| |  |__     |  |  |__|  |__
+
+          HOL88 Version 2.01 (Franz: pre-release), built on Jun 25 1992
+
+#false : bool
+
+Theory pred_sets loaded
+() : void
+
+
+SET_INDUCT_TAC = - : tactic
+
+Calling Lisp compiler
+
+File set_ind compiled
+() : void
+
+#echo 'set_flag(`abort_when_fail`,true);;'\
+     'load_theory `pred_sets`;;'\
+     'compilet `gspec`;;'\
+     'quit();;' | ../../hol
+
+           __  _     _    __   __  _   __     _  _   __   _
+   |___   |    |    /_\  |__  |__  |  |       |__|  |  |  |
+   |      |__  |__ /   \  __|  __| |  |__     |  |  |__|  |__
+
+          HOL88 Version 2.01 (Franz: pre-release), built on Jun 25 1992
+
+#false : bool
+
+Theory pred_sets loaded
+() : void
+
+
+
+dest_tuple = - : (term -> term list)
+
+MK_PAIR = - : (* list -> conv)
+
+EXISTS_TUPLE_CONV = - : (term list -> conv)
+
+PAIR_EQ_CONV = - : conv
+
+ELIM_EXISTS_CONV = - : conv
+
+PROVE_EXISTS = - : conv
+
+list_variant = - : (term list -> term list -> term list)
+
+SET_SPEC_CONV = - : conv
+
+- : conv
+
+
+SET_SPEC_CONV = - : conv
+
+Calling Lisp compiler
+
+File gspec compiled
+() : void
+
+#echo 'set_flag(`abort_when_fail`,true);;'\
+     'load_theory `pred_sets`;;'\
+     'compilet `fset_conv`;;'\
+     'quit();;' | ../../hol
+
+           __  _     _    __   __  _   __     _  _   __   _
+   |___   |    |    /_\  |__  |__  |  |       |__|  |  |  |
+   |      |__  |__ /   \  __|  __| |  |__     |  |  |__|  |__
+
+          HOL88 Version 2.01 (Franz: pre-release), built on Jun 25 1992
+
+#false : bool
+
+Theory pred_sets loaded
+() : void
+
+
+FINITE_CONV = - : conv
+
+IN_CONV = - : (conv -> conv)
+
+DELETE_CONV = - : (conv -> conv)
+
+UNION_CONV = - : (conv -> conv)
+
+INSERT_CONV = - : (conv -> conv)
+
+IMAGE_CONV = - : (conv -> conv -> conv)
+
+Calling Lisp compiler
+
+File fset_conv compiled
+() : void
+
+#===> library pred_sets rebuilt

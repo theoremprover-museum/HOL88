@@ -1,0 +1,10 @@
+\DOC thm_set_equal
+
+\TYPE {thm_set_equal : (thm list -> thm list -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

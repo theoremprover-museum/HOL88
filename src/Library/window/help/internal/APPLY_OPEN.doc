@@ -1,0 +1,10 @@
+\DOC APPLY_OPEN
+
+\TYPE {APPLY_OPEN : (win_path -> (win_path -> window -> ...) -> void)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

@@ -1,0 +1,54 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: finite_sets						|
+|									|
+| DESCRIPTION   : Theory of finite sets					|
+|									|
+| AUTHORS       : Phil Windley, Philippe Leveilley			|
+| DATE          : 12 May, 1989					        |
+| REVISED       : T Melham, February 1992 for HOL version 2.01	        |
+|									|
+| NOTE		: This library has been completely rewritten for HOL    |
+|  		  version 2.01.  See the file "CHANGES".		|
++ =====================================================================	+
+
++ --------------------------------------------------------------------- +
+| FILES:								|
++ --------------------------------------------------------------------- +
+    
+    mk_finite_sets.ml     creates the theory of sets
+    fset_conv.ml          conversions for finite sets
+    set_ind.ml	          induction tactic for finite sets
+    finite_sets.ml	  loadfile for the finite_sets library
+    load_finite_sets.ml   auxiliary loadfile for the finite_sets library
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clobber"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `finite_sets`  
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   * User Manual: Manual/finite_sets.dvi
+
+   * Changes since HOL version 2.0: ./CHANGES
+

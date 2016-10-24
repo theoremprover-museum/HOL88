@@ -1,0 +1,3 @@
+\THEOREM SUBSET_DEF sets
+|- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+\ENDTHEOREM

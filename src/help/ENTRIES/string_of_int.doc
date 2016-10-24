@@ -1,0 +1,19 @@
+\DOC string_of_int
+
+\TYPE {string_of_int : (int -> string)}
+
+\SYNOPSIS
+Maps an integer to the corresponding decimal string.
+
+\DESCRIBE
+When given an integer, {string_of_int} returns a string representing
+the number in standard decimal notation, with a leading minus sign
+if the number is negative, and no leading zeros.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+ascii, ascii_code, int_of_string.
+
+\ENDDOC

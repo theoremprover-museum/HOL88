@@ -1,0 +1,1046 @@
+
+	  __________________________________________________
+	  |                                                |
+	  |              A BAG THEORY IN HOL               |
+	  |________________________________________________|
+
+
+
+			by Philippe Leveilley
+			      June 1989
+
+
+1 Introduction
+==============
+
+	Bags, which are sometimes called multisets,  are collections of elements
+which may occur several times in the same bag. (Whereas, in a  set, each element
+may not occur more than once.) This  theory is quite similar to  the set theory.
+Among the slight  differences,  we have the  equal-multiplicity relation and two
+definitions for  the  union  of  two  bags.   I  have not heard   or read of any
+definition or use of bag cardinality, this is why I did not define  it. However,
+it  is possible  to define a  cardinal    for bags  which   takes into   account
+multiplicity in the same way I did for sets.
+
+
+
+
+1.1 Bag theory vocabulary
+-------------------------
+
+	A bag  is  a finite  or  infinite   collection of elements in   which we
+disregard the order of occurrence of the elements,  but regard their multiplicity
+(i.e.  the number of occurrences) of each element as  significant.  Thus, whereas
+the bag {B,A,A} is  considered to be equal  to  the bag {A,B,A}, we  distinguish
+between the bag {A,B,B}, in which B occurs twice, and the  bag {A,B}, in which B
+occurs only once.
+
+	Bags are sometimes called  multisets,for bag theory   closely resembles
+set theory.
+
+empty bag:		the empty bag, denoted as {} is a bag with no elements.
+
+member predicate: 	x e B means the element x is ``in'' the bag B.
+
+insertion function:	x o B  is  the bag one  gets  by  inserting the element
+			x in B.
+
+equal-multiplicity predicate: 	(eqmult x B C) holds if x has the same number of
+				occurrences in B and in C.
+
+sum function:	 	B |+| C is the bag one gets by putting the elements from
+			B        and  those      from     C     together,   thus
+			{x,y,y}|+|{y}={x,y,y,y}
+
+union function:		B|U|C is the bags whose elements are either in B or in C
+			and  have a multiplicity  which  equals  the maximum  of
+			their   multiplicity    in    B      or   in C.     Thus
+			{x,y,y}|U|{y}={x,y,y}.
+
+intersection function:	B |I| C is the bags whose elements are either in B or in
+			C and have  a multiplicity which  equals the minimum  of
+			their  multiplicity   in    B    or    in      C.   Thus
+			{x,y,y}|I|{y}={x,y}
+
+subbag predicate:	B|SUB|C means all elements of B are in C and their occur
+			less times in B than in C.
+
+proper subbag predicate:B |PSUB| C means B |SUB| C and B <> C.
+
+choice function:	choice B is a single element which is in B.
+
+rest function:		rest B is the bag such that  (choice B) o (rest B) is B.
+
+
+
+1.2 Reference
+-------------
+
+	This bag theory  is based  on Manna  and  Waldinger's  bag theory.   The
+definitions are quite different, for Wanna and Waldinger's theory  is for finite
+bags.  But  all axioms  and theorem  of this  previous theory  are proved  here.
+However, the induction axiom is irrelevant for infinite bags.
+
+
+
+2. Definition of the type (*)bag
+================================
+
+2.1 Representing bags
+---------------------
+
+	Bags  are   represented in HOL  by  "*->num"  functions.  The function F
+represents the bags of all elements x such that (F  x) is the multiplicity of x.
+Therefore every function of the kind represents a bag.
+
+
+
+2.2 The type definition
+-----------------------
+
+	We first prove there  exist bags, that  is there exists a  function that
+represents a bag. (Which is trivial, of course)
+
+***
+(bag exists)
+There exists a ":*->num" function which represents a bag.
+***
+
+
+	Then we can derive the abstraction and representation functions:
+
+ABS":(*->num)->(*)bag" takes  a  function as argument  and  returns  the bag  it
+represents.
+
+REP":(*)bag->(*->num)" takes  a  bag as argument and  returns the function which
+represents it.
+
+	This is done by  the ML  function new_type_definition which also derives
+the  bag axiom from  "is  bag  rep"  and "bag   exists".  ABS and  REP are  type
+isomorphisms. This means that  they are one-one onto functions  from one type to
+another one. Moreover, they are  inverse functions. The define_type_isomorphisms
+ML  function  applied to bag exists proves  the  properties  which are described
+above.
+
+
+
+
+3.3 Basic notions: empty bag, member relation, insertion
+========================================================
+
+***
+(empty bag definition)
+{} is the bag represented by the function (\x. 0)
+***
+
+
+
+	The binary predicate x e B denotes the member relation, which is true if
+the element x belongs to the bag B. We  will use the  binary predicate x ~e B to
+denote the negation of the member relation.
+
+***
+(in definition)
+for all element x,
+for all bag B,
+x e B if and only if (REP B x) <> 0.
+***
+
+
+
+	The binary function symbol x o B denotes the insertion function. x o B is
+the bag one gets by inserting the element x in the bag B. If x is not in B, then
+its multiplicity in x o B will be 1, otherwise its multiplicity in  x o B equals
+its multiplicity  in B plus  1. If y  does  not equal  x,  then its multiplicity
+(which may be 0) is the same in x o B and in B.
+
+***
+(insertion definition)
+for all element x,
+for all bag B,
+x o B = ABS (\y. ((y=x) => (REP B x)+1 | REP B x)).
+***
+
+
+
+	Insertion  and  member relation are  linked   together by  the following
+theorem:
+
+***
+(in)
+for all elements x and y,
+x ~e {}.
+
+for all element x,
+for all bag B,
+x e (y o B) if and only if x=y or x e B.
+***
+
+
+
+\\\proof
+x e {} 	<==> REP {} x <> 0 (in definition)
+	<==> REP (ABS (\x. 0)) s <> 0 (empty bag definition)
+	<==> (\x. 0)x <> 0, which is false.
+
+x=y or x e B <==> x=y or REP B x <>0
+x e (y o B)
+<==>	REP (ABS (\x. (x=y => (REP B x )+1 | REP B x))) x <> 0 (in definition)
+<==>	(\x. (x=y => (REP B x )+1 | REP B x)) x <> 0 (REP and ABS are inverse)
+<==> 	(x=y => (REP B x)+1 | REP B x) <> 0
+--- first case: x=y
+then x e (y o B) <==> (REP B x)+1<>0  which is true.
+and x=y or x e B is true.
+--- second case x=y
+then x e (x o B) <==> REP B x <> 0
+and x=y or REP B x <> 0 <==> REP B x <> 0.
+///
+
+
+
+	A bag which contains a element is not the empty bag.
+
+***
+(member implies nonempty)
+for all element x,
+for all bag B,
+if x e B then B <> {}.
+***
+
+\\\proof
+we shall show the contraposition: if B = {} then x ~e B
+assume B = {}
+x ~e B <==> x ~e {} and (in).
+///
+
+
+
+	The order in  which one inserts  elements into a  bag  does not  matter.
+(There is no "first" nor "nth" element in a bag.)
+
+***
+(insert associativity)
+for all elements x and y,
+for all bag B,
+x o (y o B) = y o (x o B).
+***
+
+
+\\\proof
+rewrite x o (y o B) = y o  (x o B) with insert  definition and  use the fact REP
+and ABS are inverse isomorphisms.
+///
+
+
+4. The equal-multiplicity relation - bag equality
+=================================================
+
+	The  ternary    predicate    symbol  (eqmult    x  B C)  denotes     the
+equal-multiplicity relation, which holds if the element x has the same number of
+occurrences in the bag B and in the bag C. Thus
+
+		(eqmult x {x;x;y;y} {x;x;y}) is true,
+
+because there is two occurrences of x in both bags; on the other hand,
+
+		(eqmult y {x;x;y;y} {x;x;y}) is false,
+
+because y occurs twice in the first bag but only once in the second one.
+
+***
+(eqmult definition)
+for all element x,
+for all bags B and C,
+(eqmult x B C) if and only if (REP B x)=(REP C x).
+***
+
+
+
+	It is obvious that the order of B  and C  in the eqmult formula does not
+matter.
+
+***
+(eqmult symmetry)
+for all element x,
+for all bags B and C,
+(eqmult x B C) <==> (eqmult x C B)
+***
+
+\\\proof
+apply eqmult definition.
+///
+
+
+
+	The relationship   between  insertion  and  equal-multiplicity  is fully
+stated in the following theorem
+
+***
+(eqmult)
+for all element x,
+(eqmult x {} {}).
+
+for all element x,
+for all bag B,
+~(eqmult x {} (x o B)).
+
+for all elements x and y,
+for all bags B and C,
+(eqmult x (y o B) (y o C)) <==> (eqmult x B C).
+
+for all elements x and y,
+for all bags B and C,
+if x<>y then (eqmult x (y o B) C) <==> (eqmult x B C)
+***
+
+\\\proof
+it follows   directly from   eqmult definition, empty bag definition,  insertion
+definition, and the properties of REP and ABS.
+///
+
+
+
+***
+(eqmult reflexive)
+for all element x,
+for all bag B,
+(eqmult x B B) is true.
+***
+
+\\\proof: eqmult definition.
+
+
+
+***
+(eqmult member)
+for all element x,
+for all bags B and C,
+if (eqmult x B C) then x e B <==> x e C.
+***
+
+\\\proof:
+(x e B <==> x e C) <==> ((REP B x)<>0 <==> (REP C x)<>0)
+assume (eqmult x B C), which is REP B x = REP C x: the second member is true.
+///
+
+
+
+***
+(eqmult nonmember)
+for all element x,
+for all bags B and C,
+if x ~e B then (eqmult x B C) <==> x ~e C
+***
+
+\\\proof:
+we are to prove: (in definition and eqmult definition)
+REP B x =0 ==> ((REP B x = REP C x) <==> (REP C x)=0)
+which holds.
+///
+
+
+
+	The following theorem is very usefull to prove that two bags are equal
+
+***
+(bag equality)
+for all bags B and C,
+B=C if and only if for all element x, (eqmult x B C).
+***
+
+\\\proof
+from eqmult definition: (eqmult x B C) <==> REP B x = REP C x
+hence (!x. (eqmult x B C)) <==> REP B = REP C <==> B=C because REP is one-one.
+///
+
+
+
+	A bag in which one has inserted an element is not the empty bag.
+
+***
+(bag distinct)
+for all element x,
+for all bag B,
+{} <> x o B.
+***
+
+\\\proof
+{} <> x o B
+<==> (\y. 0) <> (\y. REP (ABS (\y. y=x => (REP B y)+1 | (REP B y))) y)
+	(empty bag definition, insertion definition)
+<==> ~(!y 0 = (y=x => (REP B y)+1 | (REP B y)))
+<==> ?y 0 <> (y=x => (REP B y)+1 | (REP B y))
+consider the case y=x:
+the second member is equal to 0 <> (REP B x)+1, which is true.
+hence {} <> x o B.
+///
+
+
+
+	Compare the  following property with  the insertion absorption  property
+for sets.
+
+***
+(insertion uniqueness)
+for all element x,
+for all bags B and C,
+x o B = x o C if and only if B=C.
+***
+
+\\\proof
+x o B = x o C 	<==> !y. (eqmult y (x o B) (x o C))  (bag equality)
+		<==> !y (eqmult y B C)  (eqmult third clause)
+		<==> B = C.
+///
+
+
+
+	If a bag is  not the empty  bag,  there is  at  least one element inside
+it (!)
+
+***
+(nonempty bag member)
+for all bag B,
+if B <> {} then there exists an element x such that x e B.
+***
+
+\\\proof
+we shall prove the contraposition, which is: (!x x ~e B) ==> B = {}
+assume x ~e B, which means REP B x = 0 (in definition)
+B = {}	<==> !x. REP B x = REP {} x  (bag equality and eqmult definition)
+	<==> !x. 0 = REP (ABS (\x 0)) x  (empty bag definition)
+	<==> !x. 0 = (\x 0)x  (REP and ABS are inverse)
+
+	If a element x is in a bag B, then there is a bag from which one can get
+B by inserting x.
+
+***
+(member decomposition)
+for all element x,
+for all bag B,
+if x e B, then there exists a bag C such that B = x o C.
+***
+
+\\\proof
+assume x e B, which is REP B x <> 0.
+B = x o C <==> !y. REP B y = (y=x => (REP C y)+1 | REP C y)
+let C = ABS(\y. y=x => (REP B y)-1 | (REP B y))
+let y be an element
+we have to prove REP B y = (y=x => (REP C y)+1 | REP C y) (#)
+--- first case: y=x
+(#) is REP B y 	= (REP C y)+1
+		=((REP B y)-1)+ 1 
+as REP B x <> 0, we have ((REP B x)-1)+1 = REP B x
+-- second case: y<>x
+(#) is REP B y = REP B y.
+///
+
+
+
+
+5. The count function
+=====================
+
+	The function symbol (count B  x) denotes the number  of occurrences of x
+in B. Thus count is the same function as REP. Therefore, we  will not expose the
+properties of the count function in this paper, since  they are those of the REP
+function we always use in our  proofs. However,  the HOL version  of the theory
+contains these properties for I thought REP was not a convenient name for a user
+of the theory.
+
+
+
+
+
+6. Subbags
+==========
+
+	The binary predicate symbol B |SUB| C denotes the subbag relation, which
+holds if, for each occurrence  of an element in  the bag  B, there corresponds a
+distinct occurrence of the same element in the bag C. Thus
+			      {x;y}|SUB|{x,x,y,z}
+			 but not {x,y,y}|SUB|{x,x,y,z}.
+
+***
+(subbag definition)
+for all bags B and C,
+B|SUB|C if and only if, for all element x, (REP B x)<=(REP C x).
+***
+
+
+
+	The empty bag is a subbag of every bag.
+
+***
+(subbag empty)
+for all bag B,
+{}|SUB|B.
+***
+
+\\\proof
+{}|SUB|B <==> !x. REP (ABS (\x. 0)) x <= REP B x
+		(empty bag definition, subbag definition)
+	<==> !x. 0 <= REP B x, which holds.
+///
+
+
+	The subbag relation is closed under the insertion of the same element in
+its two arguments.
+
+***
+(subbag insert)
+for all element x,
+for all bags B and C,
+(x o B)|SUB|(x o C) <==> B|SUB|C.
+***
+
+\\\proof
+(x o B)|SUB|(x o C)
+<==> (!y. (y=x => (REP B y)+1 | REP B y) <= (y=x => (REP C y)+1 | REP C y)) (#)
+<==> (y=x => (REP B y)+1 <= (REP C y)+1 | (REP B y) <= (REP C y))           (##)
+<==> (y=x => (REP B y) <= (REP C y) | (REP B y) <= (REP C y))    (&)
+<==> (REP B y) <= (REP C y)      (&&)
+<==> B|SUB|C. 
+note: in HOL, we need a lemma which proves (#)<==>(##) and (&)<==>(&&)
+///
+
+
+
+***
+(subbag member)
+for all element x,
+for all bags B and C,
+(x o B)|SUB|C ==> x e C.
+***
+
+\\\proof
+assume (x o B)|SUB|C,
+which is (!y. (REP (ABS(\y. y=x => (REP B y)+1 | REP B y)) y) <= REP C y)
+or (!y. (y=x => (REP B y)+1 | REP B y) <= REP C x)
+we are to prove REP C x <> 0
+but, according to the assumption, (REP B x)+1<=(REP C x) 
+therefore REP C x <> 0
+///
+
+
+
+	With the subbag relation, we have an another way to express bag equality
+
+***
+(subbag equality)
+for all bags B and C,
+B = C <==> B|SUB|C and C|SUB|B.
+***
+
+\\\proof
+B = C <==> (!x. REP B x = REP C x)
+B|SUB|C and C|SUB|B <==> (!x. REP B x <= REP C x) and (!x. REP C x <= REP B x)
+which is true because <= is antisymmetric.
+note: the last step of this  proof  is not as  obvious in HOL: you have  to poke
+through the goal and the assumptions.
+
+	I give here the definition of a proper subbag, though I do  not think it
+is an interseting notion:
+
+***
+(proper subbag definition)
+for all bags B and C,
+B|PSUB|C if and only if B|SUB|C and B<>C
+***
+
+7. The choice and rest functions
+================================
+
+	For a nonempty bag B, (choice B) is an arbitrary  member  of B and (rest
+B) is the bag of all remaining occurrences of B. choice is defined with Hilbert's
+epsilon function. choice and rest are functions. Thus, though there is no way to
+foretell which of the elements is to be chosen, it will always  be the same: if
+B=C then (choice B)=(choice C)
+
+***
+(choice definition)
+for all bag B,
+choice B = @x. x e B.
+***
+
+
+***
+(rest definition)
+for all bag B,
+rest B = (@C. B = ((choice B) o C))
+***
+
+
+	Note  that (choice  {})  and (rest  {})  are defined.  (choice {}) is an
+arbitrary  element and (rest  {}) is the  empty bag. However,  we shall  not use
+these definition for B={}.
+
+	choice and rest have the same properties than in set theory.
+
+***
+(choice member)
+for all bag B,
+if B<>{} then (choice B) e B.
+***
+
+\\\proof
+assume B<>{}
+choice B = @x. x e B
+as B<>{} there exists an x such that x e B (nonempty bag member)
+hence (@x. x e B) e B.
+///
+
+
+
+***
+(choice decomposition)
+for all bag B,
+if B<>{} then B = (choice B) o (rest B).
+***
+
+\\\proof
+assume B<>{}
+rest B = (@C. B = ((choice B) o C))
+we have (choice B) e B (choice member)
+therefore there exists a bag C such that:
+(#) B = (choice B) o C  (member decomposition)
+hence (@C. (#)) holds (#)
+that is B = (choice B) o (rest B).
+///
+
+
+
+
+8. Functions over bags
+======================
+
+8.1 The sum function. 
+--------------------
+
+	The binary function symbol B|+|C denotes the sum of the  two  bags B and
+C. The number of occurrences of an element x of  B|+|C is the  numeric sum of the
+number of occurrences of x in B and the number of occurrences of x in C. Thus
+			  {x,y,y}|+|{x,z}={x,x,y,y,z}.
+
+***
+(sum definition)
+for all bags B and C,
+B|+|C = ABS(\x. (REP B x)+(REP C x)).
+***
+
+
+
+	Inserting an element in an argument of  a sum  of two bags is equivalent
+to inserting this element in the sum itself.
+
+***
+(sum)
+for all bag B,
+{}|+|B = B.
+
+for all element x,
+for all bags B and C,
+(x o B)|+|C = x o B|+|C.
+***
+
+\\\proof
+Though rewriting our goals with using empty  bag definition, sum definition, bag
+equality, insertion definition, eqmult definition and the properties  of REP and
+ABS is quite tedious, it proves the theorem.
+///
+
+
+
+8.2 The union function.
+----------------------
+
+	The binary function symbol B|U|C denotes the union of the two bags B and
+C. The number  of occurrences of an element  x  of B|U|C is   the maximum of  the
+number of occurrences of x in B and the number of occurrences of x in C. Thus
+       {x,y,y}|U|{x,z}={x,y,y,z} (compare with the example given for |+|)
+
+***
+(union definition)
+for all bags B and C,
+B|U|C = ABS(\x. max(REP B x,REP C x)).
+***
+
+
+
+	The two following  theorems  show the relationship between insertion and
+union.
+
+***
+(union member)
+for all element x,
+for all bags B and C,
+(x o B)|U|(x o C) = x o B|U|C.
+***
+
+\\\proof
+as usual, rewrite with union definition, insert definition and properties of REP
+and ABS.
+this leads to
+(x o B)|U|(x o C) = x o B|U|C
+	<==> (max((REP B x)+1,(REP C x)+1) = max(REP B x,REP C x)+1
+		and (!y<>x max(REP B y,REP C y) = max(REP B y,REP C y))
+the  first part of the second  member is achieved  in  HOL by a theorem from the
+theory  `more_arithmetic` which  was  specially build  for deriving  the  theory
+`bags`. This theory contains properties of the max and min functions.
+///
+
+
+
+***
+(union nonmember)
+for all element x,
+for all bags B and C,
+if x ~e C then (x o B)|U|C = x o B|U|C
+***
+
+\\\proof
+it starts as above
+assuming REP C x = 0, we get:
+(x o B)|U|C = x o B|U|C
+	<==> max((REP B x)+1,REP C x)=max(REP B x,REP C x)+1
+		and (!y<>x max(REP B\ y,REP C y) = max(REP B y,REP C y))
+	<==> max((REP B x)+1,0)=max(REP B x,0)+1
+		which is true since, for all n max(n,0)=0.
+///
+
+
+
+
+8.3 The intersection function
+-----------------------------
+
+	The binary function symbol   B|I|C denotes the  intersection of  the two
+bags B and C. The number of occurrences of an  element x  of B|I|C is the minimum
+of the number of occurrences of x in B and the number of occurrences of  x in C.
+Thus
+			    {x,x,y}|I|{x,y,z}={x,y}
+
+***
+(intersection definition)
+for all bags B and C,
+B|I|C = ABS(\y. min(REP B y,REP C y).
+***
+
+
+
+	The properties  of intersection are rather similar  to  those  of union,
+while the proofs follow the same  patterns.  The only thing one has  to do is to
+replace max with min.
+
+***
+(intersection empty)
+for all bag B,
+{}|I|B = B.
+***
+
+
+
+***
+(intersection member)
+for all element x,
+for all bags B and C,
+(x o B)|I|(x o C) = x o B|I|C.
+***
+
+
+
+***
+(intersection nonmember)
+for all element x,
+for all bags B and C,
+if x ~e C then (x o B)|I|C = B|I|C.
+***
+
+
+
+
+9. Finite bags
+==============
+
+	We shall now give a  definition of finite  bags  and derive an induction
+property.
+	Intuitively, a   finite bag is   a  bag  for  which   you can count  the
+occurrences. Therefore, we shall first introduce the has_card  relation, denoted
+by the binary predicate symbol (has_card B n), and  which holds if  the elements
+of bag B totalize n occurrences. Thus
+			has_card {x,x,y,z,z} 5 is true.
+
+	The has_card predicate can be used as a basis  to define cardinality for
+bags. But I do not know if this definition is interesting.
+
+***
+(has_card)
+there exists a unique predicate has_card such that:
+has_card B 0 <==> B={}
+and
+has_card B n+1 <==> for some element x and some bag C, B=x o C and has_card C n.
+***
+
+
+
+
+	Then we shall introduce the unary (finite B) predicate symbol, which holds if the bag B is finite. We will say that B is finite if there exists an n such that (has_card B n) is true.
+
+***
+(finite definition)
+for all bag B,
+finite B if and only if there exists an n such that (has_card B n).
+***
+
+
+
+	Deriving  the  induction   theorem for finite  bags. We  first prove the
+following lemma
+
+***
+(bag induction lemma)
+for all predicate P over bags,
+if P {} is true
+and
+if for all finite bag B, and all element x,
+P B ==> P (x o B)
+then
+for all bag C and natural number n,
+has_card C n ==> P C.
+***
+
+\\\proof
+assume P {}
+and (#) (!B x. if finite B then P B ==> P (x o B))
+	i.e. (!B x. $n. has_card B n ==> (P B ==> P (x o B)))
+induction over n
+---  base case
+assume has_card C 0
+then C = {} (has_card), but we have P {}
+hence has_card C 0 ==> P C
+
+---  induction step
+assume for all C, has_card C n ==> P C
+assume has_card C n+1 
+then for some C' and x, C = x o C' and (has_card C' n)
+therefore: P C'
+but, ?n. (has_card C' n), finite C'
+hence from (#) P C' ==> P (x o C')
+therefore P C.
+///
+
+
+
+
+	We can now prove the bag induction theorem, from which we  shall be able
+to build a bag-induction tactic in HOL. (see bags.ml file for further details).
+
+***
+(bag induction)
+for all predicate P over bags,
+if P {} is true
+and
+if for all finite bag B, and all element x,
+P B ==> P (x o B)
+then
+for all bag C, finite C ==> P C.
+***
+
+\\\proof: assume the theorem assumptions and finite C
+then for some n, has_card C n
+hence (bag induction lemma) P C.
+///
+
+
+_______________________________________________________________________________
+
+		  APPENDIX A: the HOL `bags` theory
+_______________________________________________________________________________
+
+The Theory bags
+Parents --  more_arithmetic     more_arithmetic     
+Types --  ":(*)bag"     
+Constants --
+  IN_B ":* -> ((*)bag -> bool)"
+  INSERT_B ":* -> ((*)bag -> (*)bag)"
+  SUBBAG ":(*)bag -> ((*)bag -> bool)"
+  PSUBBAG ":(*)bag -> ((*)bag -> bool)"
+  SUM_B ":(*)bag -> ((*)bag -> (*)bag)"
+  UNION_B ":(*)bag -> ((*)bag -> (*)bag)"
+  INTER_B ":(*)bag -> ((*)bag -> (*)bag)"
+  IS_BAG_REP ":(* -> num) -> bool"
+  REP_bag ":(*)bag -> (* -> num)"
+  ABS_bag ":(* -> num) -> (*)bag"     EMPTY_BAG ":(*)bag"
+  EQ_MULT ":* -> ((*)bag -> ((*)bag -> bool))"
+  COUNT ":(*)bag -> (* -> num)"     CHOICE_B ":(*)bag -> *"
+  REST_B ":(*)bag -> (*)bag"
+  HAS_CARD_B ":(*)bag -> (num -> bool)"
+  FINITE_B ":(*)bag -> bool"     
+Curried Infixes --
+  IN_B ":* -> ((*)bag -> bool)"
+  INSERT_B ":* -> ((*)bag -> (*)bag)"
+  SUBBAG ":(*)bag -> ((*)bag -> bool)"
+  PSUBBAG ":(*)bag -> ((*)bag -> bool)"
+  SUM_B ":(*)bag -> ((*)bag -> (*)bag)"
+  UNION_B ":(*)bag -> ((*)bag -> (*)bag)"
+  INTER_B ":(*)bag -> ((*)bag -> (*)bag)"     
+Definitions --
+  IS_BAG_REP  |- !b. IS_BAG_REP b = T
+  bag_TY_DEF  |- ?rep. TYPE_DEFINITION IS_BAG_REP rep
+  REP_bag
+    |- REP_bag =
+       (@rep.
+         (!x' x''. (rep x' = rep x'') ==> (x' = x'')) /\
+         (!x. IS_BAG_REP x = (?x'. x = rep x')))
+  ABS_bag  |- !x. ABS_bag x = (@x'. x = REP_bag x')
+  EMPTY_BAG_DEF  |- EMPTY_BAG = ABS_bag(\x. 0)
+  IN_B_DEF  |- !x b. x IN_B b = ~(REP_bag b x = 0)
+  INSERT_B_DEF
+    |- !x b.
+        x INSERT_B b =
+        ABS_bag(\y. ((y = x) => SUC(REP_bag b y) | REP_bag b y))
+  EQ_MULT_DEF  |- !x b c. EQ_MULT x b c = (REP_bag b x = REP_bag c x)
+  COUNT_DEF  |- COUNT = REP_bag
+  SUBBAG  |- !b c. b SUBBAG c = (!x. (REP_bag b x) <= (REP_bag c x))
+  PSUBBAG_DEF  |- !b c. b PSUBBAG c = b SUBBAG c /\ ~(b = c)
+  CHOICE_B_DEF  |- !b. CHOICE_B b = (@x. x IN_B b)
+  REST_B_DEF  |- !b. REST_B b = (@c. b = (CHOICE_B b) INSERT_B c)
+  SUM_B_DEF
+    |- !b c. b SUM_B c = ABS_bag(\x. (REP_bag b x) + (REP_bag c x))
+  UNION_B_DEF
+    |- !b c. b UNION_B c = ABS_bag(\x. MAX(REP_bag b x)(REP_bag c x))
+  INTER_B_DEF
+    |- !b c. b INTER_B c = ABS_bag(\x. MIN(REP_bag b x)(REP_bag c x))
+  HAS_CARD_B_DEF
+    |- (!b. HAS_CARD_B b 0 = (b = EMPTY_BAG)) /\
+       (!b n.
+         HAS_CARD_B b(SUC n) =
+         (?x c. (b = x INSERT_B c) /\ HAS_CARD_B c n))
+  FINITE_B  |- !b. FINITE_B b = (?n. HAS_CARD_B b n)
+  
+Theorems --
+  DISJ_ASSOC  |- !t1 t2 t3. t1 \/ t2 \/ t3 = (t1 \/ t2) \/ t3
+  COND_LEM_1
+    |- !s t1 t2 u1 u2.
+        ((s => t1 | t2) = (s => u1 | u2)) = (s => (t1 = u1) | (t2 = u2))
+  COND_LEM_2  |- !t1 t2. (t1 => t2 | t2) = t2
+  COND_LEM_3
+    |- !s t1 t2 u1 u2.
+        (s => t1 | t2) <= (s => u1 | u2) = (s => t1 <= u1 | t2 <= u2)
+  BAG_REP_EX  |- ?b. IS_BAG_REP b
+  R_11  |- !a a'. (REP_bag a = REP_bag a') = (a = a')
+  R_ONTO  |- !r. IS_BAG_REP r = (?a. r = REP_bag a)
+  A_ONTO  |- !a. ?r. (a = ABS_bag r) /\ IS_BAG_REP r
+  R_A  |- !t. REP_bag(ABS_bag t) = t
+  A_11  |- !r r'. (ABS_bag r = ABS_bag r') = (r = r')
+  IN_B
+    |- (!x. x IN_B EMPTY_BAG = F) /\
+       (!x y b. x IN_B (y INSERT_B b) = (x = y) \/ x IN_B b)
+  MEMBER_IMP_NONEMPTY_BAG  |- !x b. x IN_B b ==> ~(b = EMPTY_BAG)
+  INSERT_B_ASSOC
+    |- !x y b. x INSERT_B (y INSERT_B b) = y INSERT_B (x INSERT_B b)
+  EQ_MULT_SYM  |- !x b c. EQ_MULT x b c = EQ_MULT x c b
+  EQ_MULT
+    |- (!x. EQ_MULT x EMPTY_BAG EMPTY_BAG = T) /\
+       (!b x. ~EQ_MULT x EMPTY_BAG(x INSERT_B b)) /\
+       (!x y b c. EQ_MULT x(y INSERT_B b)(y INSERT_B c) = EQ_MULT x b c) /\
+       (!x y b c.
+         ~(x = y) ==> (EQ_MULT x(y INSERT_B b)c = EQ_MULT x b c))
+  EQ_MULT_REFL  |- !x b. EQ_MULT x b b
+  EQ_MULT_MEMBER  |- !x b c. EQ_MULT x b c ==> (x IN_B b = x IN_B c)
+  EQ_MULT_NONMEMBER
+    |- !x b. ~x IN_B b ==> (!c. EQ_MULT x b c = ~x IN_B c)
+  BAG_EQ  |- !b1 b2. (b1 = b2) = (!x. EQ_MULT x b1 b2)
+  COUNT
+    |- (!x. COUNT EMPTY_BAG x = 0) /\
+       (!x y b.
+         COUNT(y INSERT_B b)x = ((x = y) => SUC(COUNT b x) | COUNT b x))
+  COUNT_MEMBER  |- !x b. x IN_B b = ~(COUNT b x = 0)
+  COUNT_EQ  |- !b c. (b = c) = (!x. COUNT b x = COUNT c x)
+  COMPONENT_B  |- !x. x IN_B (x INSERT_B b)
+  DISTINCT_BAG  |- !x b. ~(x INSERT_B b = EMPTY_BAG)
+  INSERTION  |- !x b c. (x INSERT_B b = x INSERT_B c) = (b = c)
+  NONEMPTY_BAG_MEMBER  |- !b. ~(b = EMPTY_BAG) ==> (?x. x IN_B b)
+  MEMBER_DECOMP  |- !x b. x IN_B b ==> (?c. b = x INSERT_B c)
+  SUBBAG_EMPTY  |- !b. EMPTY_BAG SUBBAG b
+  SUBBAG_INSERT
+    |- !x b c. (x INSERT_B b) SUBBAG (x INSERT_B c) = b SUBBAG c
+  SUBBAG_MEMBER  |- !x b c. (x INSERT_B b) SUBBAG c ==> x IN_B c
+  SUBBAG_COUNT  |- !b c. b SUBBAG c = (!x. (COUNT b x) <= (COUNT c x))
+  LESS_OR_EQ_ANTISYM1  |- !n p. n <= p /\ p <= n ==> (n = p)
+  SUBBAG_EQ  |- !b c. (b = c) = b SUBBAG c /\ c SUBBAG b
+  CHOICE_B_MEMBER  |- !b. ~(b = EMPTY_BAG) ==> (CHOICE_B b) IN_B b
+  CHOICE_B_DECOMP
+    |- !b. ~(b = EMPTY_BAG) ==> (b = (CHOICE_B b) INSERT_B (REST_B b))
+  SUM_B
+    |- (!b. EMPTY_BAG SUM_B b = b) /\
+       (!x b c. (x INSERT_B b) SUM_B c = x INSERT_B (b SUM_B c))
+  EMPTY_BAG_UNION  |- !b. EMPTY_BAG UNION_B b = b
+  UNION_B_MEMBER_INSERT
+    |- !x b c.
+        (x INSERT_B b) UNION_B (x INSERT_B c) = x INSERT_B (b UNION_B c)
+  UNION_B_NONMEMBER
+    |- !x b c.
+        ~x IN_B c ==>
+        ((x INSERT_B b) UNION_B c = x INSERT_B (b UNION_B c))
+  UNION_COUNT
+    |- !x b c. COUNT(b UNION_B c)x = MAX(COUNT b x)(COUNT c x)
+  EMPTY_BAG_INTER  |- !b. EMPTY_BAG INTER_B b = EMPTY_BAG
+  INTER_B_MEMBER_INSERT
+    |- !x b c.
+        (x INSERT_B b) INTER_B (x INSERT_B c) = x INSERT_B (b INTER_B c)
+  INTER_B_NONMEMBER
+    |- !x b c. ~x IN_B c ==> ((x INSERT_B b) INTER_B c = b INTER_B c)
+  INTER_COUNT
+    |- !x b c. COUNT(b INTER_B c)x = MIN(COUNT b x)(COUNT c x)
+  BAG_INDUCT_LEMMA
+    |- !f.
+        f EMPTY_BAG /\
+        (!b. FINITE_B b ==> f b ==> (!x. f(x INSERT_B b))) ==>
+        (!n c. HAS_CARD_B c n ==> f c)
+  BAG_INDUCT
+    |- !f.
+        f EMPTY_BAG /\
+        (!b. FINITE_B b ==> f b ==> (!x. f(x INSERT_B b))) ==>
+        (!c. FINITE_B c ==> f c)
+  
+
+
+
+
+_______________________________________________________________________________
+
+	      APPENDIX B:  the theory `more_arithmetic`
+_______________________________________________________________________________
+
+
+
+	The theory more_arithmetic is a parent of the theory  `bags`. It gives a
+definition of the max and min functions, which  respectively  denote the greater
+and smaller of  to natural number.  Properties of max  and min which are used in
+bag theory are derived.
+
+
+The Theory more_arithmetic
+Parents --  HOL     
+Constants --
+  MAX ":num -> (num -> num)"     MIN ":num -> (num -> num)"     
+Definitions --
+  MAX_DEF  |- !n p. MAX n p = (n <= p => p | n)
+  MIN_DEF  |- !n p. MIN n p = (n <= p => n | p)
+  
+Theorems --
+  SUC_PRE  |- !n. ~(n = 0) ==> (SUC(PRE n) = n)
+  LESS_EQ_SUC_SUC  |- !m n. (SUC m) <= (SUC n) = m <= n
+  LESS_EQ_0  |- !n. 0 <= n
+  MAX_0  |- !n. MAX 0 n = n
+  MAX_SYM  |- !n p. MAX n p = MAX p n
+  MAX_REFL  |- !n. MAX n n = n
+  MAX_SUC  |- !n. MAX n(SUC n) = SUC n
+  MIN_0  |- !n. MIN 0 n = 0
+  MIN_SYM  |- !n p. MIN n p = MIN p n
+  MIN_REFL  |- !n. MIN n n = n
+  MIN_SUC  |- !n. MIN n(SUC n) = n
+  SUC_MAX  |- !n p. MAX(SUC n)(SUC p) = SUC(MAX n p)
+  SUC_MIN  |- !n p. MIN(SUC n)(SUC p) = SUC(MIN n p)
+  

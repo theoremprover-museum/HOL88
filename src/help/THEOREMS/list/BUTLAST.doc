@@ -1,0 +1,3 @@
+\THEOREM BUTLAST list
+|- !x l. BUTLAST(SNOC x l) = l
+\ENDTHEOREM

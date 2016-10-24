@@ -1,0 +1,3 @@
+\THEOREM EXP_LE_X TRANSC
+|- !x. (& 0) <= x ==> ((& 1) + x) <= (exp x)
+\ENDTHEOREM

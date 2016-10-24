@@ -1,0 +1,32 @@
+\DOC add_relation
+
+\TYPE {add_relation : ((thm # thm) -> void)}
+
+\SYNOPSIS
+Declares a new relation for use with the window system.
+
+\LIBRARY window
+
+\DESCRIBE
+Before the window inference system can be used to preserve a given relation,
+the system must know that the relation is reflexive and transitive.
+Initially the system knows about the reflexivity and transitivity of
+equality, implication and backward implication.  To inform the system of the
+reflexivity and transitivity of some new relation, {NEW}, the user should
+first prove to new theorems {NEW_REFL_THM} and {NEW_TRANS_THM}.  These
+theorems should have a form analogous to that of {IMP_REFL_THM} and
+{IMP_TRANS_THM} respectively.  The user should then execute the following
+command:
+
+\noindent{
+	add_relation (NEW_REFL_THM,NEW_TRANS_THM)
+}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+EQ_REFL, EQ_TRANS, IMP_REFL_THM, IMP_TRANS_THM, PMI_REFL_THM, PMI_TRANS_THM,
+add_weak.
+
+\ENDDOC

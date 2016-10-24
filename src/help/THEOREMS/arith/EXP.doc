@@ -1,0 +1,3 @@
+\THEOREM EXP arithmetic
+|- (!m. m EXP 0 = 1) /\ (!m n. m EXP (SUC n) = m * (m EXP n))
+\ENDTHEOREM

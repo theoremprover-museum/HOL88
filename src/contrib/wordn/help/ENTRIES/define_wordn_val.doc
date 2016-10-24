@@ -1,0 +1,74 @@
+\DOC define_word_val
+
+\TYPE {define_word_val : int -> thm list}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Defines two constants for converting between the type {:wordn} and {:num}.
+
+\DESCRIBE
+{define_word_val} takes a single argument, a positive integer {n}. It
+defines two logical  constants for converting between the types
+{:wordn} and {:num}. The constants are named {NVALn} and {NWORDn}, and
+they have the types {:wordn -> num} and {:num -> wordn}, respectively.
+Natural numbers are represented by an n-bit word in a big-endian
+format, for example, {#001} denotes 1 as a 3-bit word, and the
+following expressions are true:
+{
+   NVAL3 #001 = 1
+   NWORD3 1 = #001
+}
+
+These constants are defined in terms of {VAL} and {WORDN}, which are
+the generic conversion 
+functions between the represention type of the n-bit words, namely
+{:(bool)list}, and the type {:num}. The definitions of these generic
+conversion functions are as follows:
+{
+   |- (VAL[] = 0) /\
+      (!b bs. VAL(CONS b bs) = ((BV b) * (2 EXP (LENGTH bs))) + (VAL bs))
+   |- !n m. (LENGTH(WORDN n m) = n) /\ (VAL(WORDN n m) = m MOD (2 EXP n))
+}
+
+For a particular word length {n}, the conversion from  {:wordn} to
+{:num} is defined to be
+{
+   !w. NVALn w = VAL(BITSn w)
+}
+and the conversion from {:num} to {:wordn} is defined to be
+{
+   !m. NWORDn m = WORDn(WORDN n m)
+}
+
+The functions {NVALn} converting words to natural numbers are one-one
+and onto, but the functions {NWORDn} are not one-one due to the finite
+length of a word. From the definition of {WORDN}, the theorem
+{
+   |- !m. NWORDn m = NWORDn (m MOD (2 EXP n))
+}
+can be deduced. The conversions can be better characterized by the
+theorem
+{
+   |- (!w. NWORDn(NVALn w) = w) /\
+      (!m. m < (2 EXP m) ==> (NVALn(NWORDn m) = m))
+}
+which can be obtained by calling the function {prove_word_val}.
+
+\FAILURE
+Fails if the type {:wordn} of the specified word length {n} has not
+been defined.
+
+\EXAMPLE
+The following HOL session illustrates the use of this function:
+{
+   # let [NVAL3_DEF; NWORD3_DEF] = define_word_val 3;;
+
+   NVAL3_DEF = |- !w. NVAL3 w = VAL(BITS3 w)
+   NWORD3_DEF = |- !n. NWORD3 n = WORD3(WORDN 3 n)
+}
+
+\SEEALSO
+{define_wordn_type}, {prove_word_val}.
+
+\ENDDOC

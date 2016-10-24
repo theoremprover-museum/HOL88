@@ -1,0 +1,273 @@
+\chapter{Primitive ML Identifier Bindings}
+\label{MLprims}
+
+\index{identifiers, in ML@identifiers, in \ML!binding of|(}
+The primitive \ML\ identifier bindings are described in this chapter.
+Some useful derived functions are in Chapter~\ref{MLfuns}.
+The primitive bindings are of two kinds:
+
+\begin{itemize}
+\item ordinary bindings;
+\item dollared bindings (which are preceded by {\small\verb%$%})
+having prefix or infix status.
+\end{itemize}
+
+The description of the \ML\ value to which an identifier is bound
+is omitted if the semantics is clear from the identifier name and type 
+given.  For
+those functions whose application may fail, the failure string\index{failure strings, in ML@failure strings, in \ML!of primitive identifiers} is the
+function identifier.
+
+\index{predeclared bindings, in ML@predeclared bindings, in \ML|(}
+Predeclared identifiers\index{identifiers, in ML@identifiers, in \ML!predeclared|(}
+ are not regarded as constants of
+the language.  As with all other \ML\ identifiers, the user is free to
+rebind them, by \ml{let}, \ml{letref}, \etc, but note that in the
+case of infix or prefix operators rebinding the dollared operator will
+affect even its non-dollared uses.  Predeclared bindings\index{bindings, in ML@bindings, in \ML!predeclared|(} are to be
+understood as if they had been bound by \ml{let}, rather than 
+by \ml{letref}. In
+particular, therefore, none of them can be changed by assignment
+(except, of course, within the scope of a rebinding of the identifier by
+a \ml{letref}-declaration).
+
+\section{Predeclared ordinary identifiers}
+\label{avra_predeclared}
+
+
+\begin{boxed}
+\index{fst@\ml{fst}|pin}
+\index{snd@\ml{snd}|pin}
+\index{null@\ml{null}|pin}
+\index{hd@\ml{hd}|pin}
+\index{tl@\ml{tl}|pin}
+\index{inl@\ml{inl}|pin}
+\index{inr@\ml{inr}|pin}
+\index{outr@\ml{outr}|pin}
+\index{outl@\ml{outl}|pin}
+\index{isl@\ml{isl}|pin}
+\begin{verbatim}
+   fst  : * # ** -> *
+   snd  : * # ** -> **
+
+   null : * list -> bool
+   hd   : * list -> *
+   tl   : * list -> * list
+
+   inl  : * -> * + **
+   inr  : ** -> * + **
+   outl : * + ** -> *
+   outr : * + ** -> **
+   isl  : * + ** -> bool
+\end{verbatim}\end{boxed}
+
+\noindent The functions \ml{hd} and \ml{tl} fail if their argument is an empty
+list. The functions \ml{outl} and \ml{outr} fail if their arguments are not
+in the left or right summand, respectively. A function \ml{isr} is not
+provided because it is just the complement of \ml{isl}.
+
+\begin{boxed}
+\index{explode@\ml{explode}|pin}
+\index{implode@\ml{implode}|pin}
+\begin{verbatim}
+   explode : string -> string list
+   implode : string list -> string 
+\end{verbatim}\end{boxed}
+
+
+The function \ml{explode} maps a string into the list of its single character
+strings in order. The function \ml{implode} maps a list of single character 
+strings (fails if
+any string is not of length one) into the string obtained by
+concatenating these characters.  For example:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#explode `whosit`;;
+[`w`; `h`; `o`; `s`; `i`; `t`] : string list
+
+#implode [`c`;`a`;`t`];;
+`cat` : string
+
+#implode [`cd`;`ab`;`tu`];;
+evaluation failed     implode
+\end{verbatim}\end{session}
+
+
+\begin{boxed}
+\index{ascii@\ml{ascii}|pin}
+\index{ascii_code@\ml{ascii\_code}|pin}
+\begin{verbatim}
+   ascii      : int -> string
+   ascii_code : string -> int
+\end{verbatim}\end{boxed}
+
+The function \ml{ascii} returns the one character string whose 
+{\small ASCII} code corresponds to its
+argument, which must be non-negative and less than \ml{128}. The function
+\ml{ascii\_code} returns the {\small ASCII} code of the first character 
+of its argument,
+which must be a non-empty string.
+
+\begin{boxed}
+\index{string_of_int@\ml{string\_of\_int}|pin}
+\index{int_of_string@\ml{int\_of\_string}|pin}
+\begin{verbatim}
+   string_of_int : int -> string
+   int_of_string : string -> int
+\end{verbatim}\end{boxed}
+
+These are bound to the obvious type coercion functions, 
+with \ml{int\_of\_string}
+failing if its argument is not a non-negative integer string.
+
+\begin{boxed}
+\index{ml_curried_infix@\ml{ml\_curried\_infix}|pin}
+\index{ml_paired_infix@\ml{ml\_paired\_infix}|pin}
+\begin{verbatim}
+   ml_curried_infix : string -> void
+   ml_paired_infix  : string -> void
+\end{verbatim}\end{boxed}\label{MLinfixfns}
+
+The functions \ml{ml\_curried\_infix} and \ml{ml\_paired\_infix} declare their
+argument strings to the \ML\ parser as having {\it infix status\/}.
+Infixed\index{infixes, in ML@infixes, in \ML!currying of} functions
+can either be curried\index{currying, in ML@currying, in \ML} or take a pair as an argument.
+For example, after executing:
+
+\begin{hol}\begin{verbatim}
+   ml_paired_infix `plus`;;
+   let x plus y = x+y;;
+\end{verbatim}\end{hol}
+
+\noindent \ml{1\ plus\ 2} is synonymous with {\small\verb%$plus(1,2)%} 
+and after executing
+
+\begin{hol}\begin{verbatim}
+   ml_curried_infix `plus` ;;
+   let x plus y = x+y ;;
+\end{verbatim}\end{hol}
+
+\noindent \ml{1\ plus\ 2} is synonymous with 
+{\small\verb%$plus 1 2%}.\footnote{Only ordinary identifiers 
+and certain single character, non-digit,
+non-layout strings can be used as infixes; infixing other
+strings may have unpredictable effects on the parser.}\index{bindings, in ML@bindings, in \ML!predeclared|)}
+
+\section{Predeclared dollared identifiers}
+
+\index{prefixes, in ML@prefixes, in \ML|(}
+\index{identifiers, in ML@identifiers, in \ML!dollared|(}
+The following prefix\index{prefixes, in ML@prefixes, in \ML} and infix\index{infixes, in ML@infixes, in \ML}
+ operators are provided as primitives
+(where the dollar\index{dollared infixes, in ML@dollared infixes, in \ML} symbol is omitted from the table; the constants
+are {\small\verb%$do%}, and so on):
+
+\begin{boxed}
+\index{list constructor, in ML@list constructor, in \ML}
+\index{do@\ml{do}|pin}
+\index{not@\ml{not}|pin}
+\index{ multiplication, in ML@{\small\verb+*+} (multiplication, in \ML)|pin}
+\index{ division, in ML@{\small\verb+/+} (division, in \ML)|pin}
+\index{ addition, in ML@{\small\verb7+7} (addition, in \ML)|pin}
+\index{ subtraction, in ML@{\small\verb+-+} (subtraction, in \ML)|pin}
+\index{ greater than, in ML@{\small\verb+>+} (greater than, in \ML)|pin}
+\index{ less than, in ML@{\small\verb+<+} (less than, in \ML)|pin}
+\index{ equality, in ML@{\small\verb+=+} (equality, in \ML)|pin}
+\index{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)|pin}
+\index{concatenation, of lists!in ML@in \ML}
+\index{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)|pin}
+\begin{verbatim}
+   do         : * -> void
+   not        : bool -> bool
+   *, /, +, - : int # int -> int
+   >, <       : int # int -> bool
+    =         : * # * -> bool
+    @         : * list # * list -> * list
+    .         : * # * list -> * list
+\end{verbatim}\end{boxed}
+
+\noindent
+Clarifying remarks:
+
+\begin{itemize}
+\item {\small\verb%$do%} is equivalent to {\small\verb%\x.()%};
+\ml{do$\ e$} evaluates $e$ for its side effects.
+
+\item {\small\verb%/%} returns the integer part of the result of a division, 
+for example:
+
+{\small\begin{verbatim}
+   $/(7,3)  =  7/3  =  2 
+   $/(-7,3) = -7/3  = -2
+\end{verbatim}}
+
+The failure string\index{failure strings, in ML@failure strings, in \ML!for division by zero} for division by zero is \ml{`div`}.
+
+\item \ml{-} is the binary subtraction function. Negation (unary minus) is not
+available as a predeclared function of \ML, only as a prefix operator.
+Of course, the user can define negation if he or she wishes---e.g. by
+
+{\small\begin{verbatim}
+   let minus x = -x 
+\end{verbatim}}
+
+
+\item Not all dollared infix operators are included above: {\small\verb%$,%} 
+is not
+provided since it would be equivalent (as a function) to the identity
+on pairs, nor is {\small\verb%&%} as it has no corresponding call-by-value
+function (because $e\ ${\small\verb%&%}$\  e'$ 
+evaluates to \ml{false} when $e$ does even if
+evaluation of $e'$ would fail to terminate), nor is \ml{or} analogously.
+
+\item The period symbol `\ml{.}' is an infixed Lisp cons:
+
+\[ x\ml{.[}x_1\ml{;}\ \ldots\ \ml{;}x_n\ml{]} =
+\ml{[}x\ml{;}x_1\ml{;}\ \ldots\ \ml{;}x_n\ml{]} \]
+
+\item \ml{=}\index{equality, in ML@equality, in \ML!weakness of}
+ is bound to the expected predicate for an equality test at
+non-function types, but is necessarily rather weak, and may
+give surprising results, at function types.
+You can be sure that
+semantically (\ie\ extensionally) different functions\index{equality, in ML@equality, in \ML!at function types}
+ are not equal,
+and that semantically equivalent functions are equal when they
+originate from the same evaluation of the same textual occurrence
+of a function-denoting expression; for other cases the equality of
+functions is unreliable (\ie\ implementation dependent).  For
+example, after the top-level declarations
+
+{\small\begin{verbatim}
+   let f x = x+1 and g x = x+2;;
+
+   let f' = f and h x = f x and h' x = x+1;;
+\end{verbatim}}
+
+\ml{f=f'} evaluates to \ml{true} and \ml{f=g} evaluates to \ml{false}, 
+but the truth values of \ml{f=h}, \ml{f=h'},
+and \ml{h=h'} are unreliable. Furthermore, after declaring
+
+{\small\begin{verbatim}
+   let plus = \x.\y.x+y;;
+
+   let f = plus 1 and g = plus 1;;
+\end{verbatim}}
+
+the truth value of \ml{f=g} is also unreliable.
+
+\item \ml{@}\index{list concatenation, in ML@list concatenation, in \ML!parser status of}
+ is a predeclared list concatenation operator; the symbol
+\ml{@}\index{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)}\index{concatenation, of lists!in ML@in \ML}
+has a special parser status and cannot be redeclared as a curried infix.
+
+\end{itemize}
+\index{identifiers, in ML@identifiers, in \ML!binding of|)}
+\index{identifiers, in ML@identifiers, in \ML!dollared|)}
+\index{identifiers, in ML@identifiers, in \ML!predeclared|)}
+\index{predeclared bindings, in ML@predeclared bindings, in \ML|)}
+\index{prefixes, in ML@prefixes, in \ML|)}
+
+
+

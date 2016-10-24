@@ -1,0 +1,18 @@
+\DOC distinct
+
+\TYPE {distinct : (* list -> bool)}
+
+\SYNOPSIS
+Checks whether the elements of a list are all distinct.
+
+\DESCRIBE
+If all the elements in a list are distinct, returns {true}, otherwise returns
+{false}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+setify.
+
+\ENDDOC

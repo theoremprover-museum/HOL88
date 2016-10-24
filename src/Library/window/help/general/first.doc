@@ -1,0 +1,26 @@
+\DOC first
+
+\TYPE {first : (int -> * list -> * list)}
+
+\SYNOPSIS
+Returns the first n elements of a list.
+
+\LIBRARY window
+
+\DESCRIBE
+{first n l} returns the first {n} elements of the list {l}.
+If {l} is less than {n} long, then the whole of {l} is returned.
+
+\FAILURE
+Fails if given a negative length.
+
+\EXAMPLE
+{
+   #first 5 [1;2;3;4;5;6;7;8;9;10];;
+   [1; 2; 3; 4; 5] : int list
+}
+
+\SEEALSO
+last
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM INDUCTION num
+|- !P. P 0 /\ (!n. P n ==> P(SUC n)) ==> (!n. P n)
+\ENDTHEOREM

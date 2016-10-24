@@ -1,0 +1,30 @@
+\DOC MATCH_TRANSFORM_WIN
+
+\TYPE {MATCH_TRANSFORM_WIN : (thm -> void)}
+
+\SYNOPSIS
+Transform the focus of the current window.
+
+\LIBRARY window
+
+\DESCRIBE
+{MATCH_TRANSFORM_WIN (H |- !x1...xn. g R f)} specialises the quantified
+variables {x1} ... {xn} and then instantiates the free variables so that
+{f} matches the focus of the current window.   The focus is then transformed to
+{g} (with the same substitutions applied).
+
+\FAILURE
+{TRANSFORM_WIN (H |- g R f)} will fail if {f} can not be instantiated
+to the focus of the window.
+{TRANSFORM_WIN (H |- g R f)} will fail if {H} is not a subset of the
+context of the window.
+{TRANSFORM_WIN (H |- g R f)} will fail if {R} is not equal to or
+stronger than the relation that the window is supposed to maintain.
+
+\SEEALSO
+transform_win, TRANSFORM_WIN, match_transform_win,
+convert_win, CONVERT_WIN, rule_win, RULE_WIN,
+thm_rule_win, THM_RULE_WIN, foc_rule_win, FOC_RULE_WIN,
+tactic_win, TACTIC_WIN, rewrite_win, REWRITE_WIN
+
+\ENDDOC

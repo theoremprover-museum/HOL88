@@ -1,0 +1,449 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{The type definition}
+\THEOREM FINITE\_SET\_DEF finite\_sets
+|- (!x. ~x IN {}) /\
+   (!x y s. x IN (y INSERT s) = (x = y) \/ x IN s) /\
+   (!x s. x INSERT (x INSERT s) = x INSERT s) /\
+   (!x y s. x INSERT (y INSERT s) = y INSERT (x INSERT s)) /\
+   (!P. P{} /\ (!s. P s ==> (!e. P(e INSERT s))) ==> (!s. P s))
+\ENDTHEOREM
+\THEOREM IS\_SET\_REP finite\_sets
+|- IS_SET_REP(\x. F) /\
+   (!s. IS_SET_REP s ==> (!x. IS_SET_REP(\y. (y = x) \/ s y))) /\
+   (!P.
+     P(\x. F) /\ (!t. P t ==> (!x. P(\y. (y = x) \/ t y))) ==>
+     (!s. IS_SET_REP s ==> P s))
+\ENDTHEOREM
+\THEOREM set\_TY\_DEF finite\_sets
+|- ?rep. TYPE_DEFINITION IS_SET_REP rep
+\ENDTHEOREM
+\section{Basic properties of {\tt EMPTY}, {\tt INSERT}, and {\tt IN}}
+\THEOREM ABSORPTION finite\_sets
+|- !x s. x IN s = (x INSERT s = s)
+\ENDTHEOREM
+\THEOREM COMPONENT finite\_sets
+|- !x s. x IN (x INSERT s)
+\ENDTHEOREM
+\THEOREM DECOMPOSITION finite\_sets
+|- !s x. x IN s = (?t. (s = x INSERT t) /\ ~x IN t)
+\ENDTHEOREM
+\THEOREM EXTENSION finite\_sets
+|- !s t. (s = t) = (!x. x IN s = x IN t)
+\ENDTHEOREM
+\THEOREM INSERT\_COMM finite\_sets
+|- !x y s. x INSERT (y INSERT s) = y INSERT (x INSERT s)
+\ENDTHEOREM
+\THEOREM INSERT\_INSERT finite\_sets
+|- !x s. x INSERT (x INSERT s) = x INSERT s
+\ENDTHEOREM
+\THEOREM IN\_INSERT finite\_sets
+|- !x y s. x IN (y INSERT s) = (x = y) \/ x IN s
+\ENDTHEOREM
+\THEOREM MEMBER\_NOT\_EMPTY finite\_sets
+|- !s. (?x. x IN s) = ~(s = {})
+\ENDTHEOREM
+\THEOREM NOT\_EMPTY\_INSERT finite\_sets
+|- !x s. ~({} = x INSERT s)
+\ENDTHEOREM
+\THEOREM NOT\_EQUAL\_SETS finite\_sets
+|- !s t. ~(s = t) = (?x. x IN t = ~x IN s)
+\ENDTHEOREM
+\THEOREM NOT\_INSERT\_EMPTY finite\_sets
+|- !x s. ~(x INSERT s = {})
+\ENDTHEOREM
+\THEOREM NOT\_IN\_EMPTY finite\_sets
+|- !x. ~x IN {}
+\ENDTHEOREM
+\THEOREM NUM\_SET\_WOP finite\_sets
+|- !s. (?n. n IN s) = (?n. n IN s /\ (!m. m IN s ==> n <= m))
+\ENDTHEOREM
+\THEOREM SET\_CASES finite\_sets
+|- !s. (s = {}) \/ (?x t. (s = x INSERT t) /\ ~x IN t)
+\ENDTHEOREM
+\THEOREM SET\_INDUCT finite\_sets
+|- !P.
+    P{} /\ (!s. P s ==> (!e. ~e IN s ==> P(e INSERT s))) ==> (!s. P s)
+\ENDTHEOREM
+\THEOREM SET\_MINIMUM finite\_sets
+|- !s M. (?x. x IN s) = (?x. x IN s /\ (!y. y IN s ==> (M x) <= (M y)))
+\ENDTHEOREM
+\section{Set inclusion}
+\THEOREM EMPTY\_SUBSET finite\_sets
+|- !s. {} SUBSET s
+\ENDTHEOREM
+\THEOREM INSERT\_SUBSET finite\_sets
+|- !x s t. (x INSERT s) SUBSET t = x IN t /\ s SUBSET t
+\ENDTHEOREM
+\THEOREM NOT\_PSUBSET\_EMPTY finite\_sets
+|- !s. ~s PSUBSET {}
+\ENDTHEOREM
+\THEOREM PSUBSET\_DEF finite\_sets
+|- !s t. s PSUBSET t = s SUBSET t /\ ~(s = t)
+\ENDTHEOREM
+\THEOREM PSUBSET\_INSERT\_SUBSET finite\_sets
+|- !s t. s PSUBSET t = (?x. ~x IN s /\ (x INSERT s) SUBSET t)
+\ENDTHEOREM
+\THEOREM PSUBSET\_IRREFL finite\_sets
+|- !s. ~s PSUBSET s
+\ENDTHEOREM
+\THEOREM PSUBSET\_MEMBER finite\_sets
+|- !s t. s PSUBSET t = s SUBSET t /\ (?y. y IN t /\ ~y IN s)
+\ENDTHEOREM
+\THEOREM PSUBSET\_TRANS finite\_sets
+|- !s t u. s PSUBSET t /\ t PSUBSET u ==> s PSUBSET u
+\ENDTHEOREM
+\THEOREM SUBSET\_ANTISYM finite\_sets
+|- !s t. s SUBSET t /\ t SUBSET s ==> (s = t)
+\ENDTHEOREM
+\THEOREM SUBSET\_DEF finite\_sets
+|- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+\ENDTHEOREM
+\THEOREM SUBSET\_EMPTY finite\_sets
+|- !s. s SUBSET {} = (s = {})
+\ENDTHEOREM
+\THEOREM SUBSET\_INSERT finite\_sets
+|- !x s. ~x IN s ==> (!t. s SUBSET (x INSERT t) = s SUBSET t)
+\ENDTHEOREM
+\THEOREM SUBSET\_REFL finite\_sets
+|- !s. s SUBSET s
+\ENDTHEOREM
+\THEOREM SUBSET\_TRANS finite\_sets
+|- !s t u. s SUBSET t /\ t SUBSET u ==> s SUBSET u
+\ENDTHEOREM
+\section{Intersection and union}
+\THEOREM DELETE\_INTER finite\_sets
+|- !s t x. (s DELETE x) INTER t = (s INTER t) DELETE x
+\ENDTHEOREM
+\THEOREM EMPTY\_UNION finite\_sets
+|- !s t. (s UNION t = {}) = (s = {}) /\ (t = {})
+\ENDTHEOREM
+\THEOREM INSERT\_INTER finite\_sets
+|- !x s t.
+    (x INSERT s) INTER t = (x IN t => x INSERT (s INTER t) | s INTER t)
+\ENDTHEOREM
+\THEOREM INSERT\_UNION finite\_sets
+|- !x s t.
+    (x INSERT s) UNION t = (x IN t => s UNION t | x INSERT (s UNION t))
+\ENDTHEOREM
+\THEOREM INSERT\_UNION\_EQ finite\_sets
+|- !x s t. (x INSERT s) UNION t = x INSERT (s UNION t)
+\ENDTHEOREM
+\THEOREM INTER\_ASSOC finite\_sets
+|- !s t u. (s INTER t) INTER u = s INTER (t INTER u)
+\ENDTHEOREM
+\THEOREM INTER\_COMM finite\_sets
+|- !s t. s INTER t = t INTER s
+\ENDTHEOREM
+\THEOREM INTER\_EMPTY finite\_sets
+|- (!s. {} INTER s = {}) /\ (!s. s INTER {} = {})
+\ENDTHEOREM
+\THEOREM INTER\_IDEMPOT finite\_sets
+|- !s. s INTER s = s
+\ENDTHEOREM
+\THEOREM INTER\_OVER\_UNION finite\_sets
+|- !s t u. s UNION (t INTER u) = (s UNION t) INTER (s UNION u)
+\ENDTHEOREM
+\THEOREM INTER\_SUBSET finite\_sets
+|- (!s t. (s INTER t) SUBSET s) /\ (!s t. (t INTER s) SUBSET s)
+\ENDTHEOREM
+\THEOREM IN\_INTER finite\_sets
+|- !s t x. x IN (s INTER t) = x IN s /\ x IN t
+\ENDTHEOREM
+\THEOREM IN\_UNION finite\_sets
+|- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+\ENDTHEOREM
+\THEOREM SUBSET\_INTER\_ABSORPTION finite\_sets
+|- !s t. s SUBSET t = (s INTER t = s)
+\ENDTHEOREM
+\THEOREM SUBSET\_UNION finite\_sets
+|- (!s t. s SUBSET (s UNION t)) /\ (!s t. s SUBSET (t UNION s))
+\ENDTHEOREM
+\THEOREM SUBSET\_UNION\_ABSORPTION finite\_sets
+|- !s t. s SUBSET t = (s UNION t = t)
+\ENDTHEOREM
+\THEOREM UNION\_ASSOC finite\_sets
+|- !s t u. (s UNION t) UNION u = s UNION (t UNION u)
+\ENDTHEOREM
+\THEOREM UNION\_COMM finite\_sets
+|- !s t. s UNION t = t UNION s
+\ENDTHEOREM
+\THEOREM UNION\_EMPTY finite\_sets
+|- (!s. {} UNION s = s) /\ (!s. s UNION {} = s)
+\ENDTHEOREM
+\THEOREM UNION\_IDEMPOT finite\_sets
+|- !s. s UNION s = s
+\ENDTHEOREM
+\THEOREM UNION\_OVER\_INTER finite\_sets
+|- !s t u. s INTER (t UNION u) = (s INTER t) UNION (s INTER u)
+\ENDTHEOREM
+\section{Set difference}
+\THEOREM DIFF\_DIFF finite\_sets
+|- !s t. (s DIFF t) DIFF t = s DIFF t
+\ENDTHEOREM
+\THEOREM DIFF\_EMPTY finite\_sets
+|- !s. s DIFF {} = s
+\ENDTHEOREM
+\THEOREM DIFF\_EQ\_EMPTY finite\_sets
+|- !s. s DIFF s = {}
+\ENDTHEOREM
+\THEOREM EMPTY\_DIFF finite\_sets
+|- !s. {} DIFF s = {}
+\ENDTHEOREM
+\THEOREM IN\_DIFF finite\_sets
+|- !s t x. x IN (s DIFF t) = x IN s /\ ~x IN t
+\ENDTHEOREM
+\section{Deletion of an element}
+\THEOREM DELETE\_COMM finite\_sets
+|- !x y s. (s DELETE x) DELETE y = (s DELETE y) DELETE x
+\ENDTHEOREM
+\THEOREM DELETE\_DEF finite\_sets
+|- !s x. s DELETE x = s DIFF {x}
+\ENDTHEOREM
+\THEOREM DELETE\_DELETE finite\_sets
+|- !x s. (s DELETE x) DELETE x = s DELETE x
+\ENDTHEOREM
+\THEOREM DELETE\_INSERT finite\_sets
+|- !x y s.
+    (x INSERT s) DELETE y =
+    ((x = y) => s DELETE y | x INSERT (s DELETE y))
+\ENDTHEOREM
+\THEOREM DELETE\_NON\_ELEMENT finite\_sets
+|- !x s. ~x IN s = (s DELETE x = s)
+\ENDTHEOREM
+\THEOREM DELETE\_SUBSET finite\_sets
+|- !x s. (s DELETE x) SUBSET s
+\ENDTHEOREM
+\THEOREM DIFF\_INSERT finite\_sets
+|- !s t x. s DIFF (x INSERT t) = (s DELETE x) DIFF t
+\ENDTHEOREM
+\THEOREM EMPTY\_DELETE finite\_sets
+|- !x. {} DELETE x = {}
+\ENDTHEOREM
+\THEOREM INSERT\_DELETE finite\_sets
+|- !x s. x IN s ==> (x INSERT (s DELETE x) = s)
+\ENDTHEOREM
+\THEOREM IN\_DELETE finite\_sets
+|- !s x y. x IN (s DELETE y) = x IN s /\ ~(x = y)
+\ENDTHEOREM
+\THEOREM IN\_DELETE\_EQ finite\_sets
+|- !s x x'.
+    (x IN s = x' IN s) = (x IN (s DELETE x') = x' IN (s DELETE x))
+\ENDTHEOREM
+\THEOREM SUBSET\_DELETE finite\_sets
+|- !x s t. s SUBSET (t DELETE x) = ~x IN s /\ s SUBSET t
+\ENDTHEOREM
+\THEOREM SUBSET\_INSERT\_DELETE finite\_sets
+|- !x s t. s SUBSET (x INSERT t) = (s DELETE x) SUBSET t
+\ENDTHEOREM
+\section{Disjoint sets}
+\THEOREM DISJOINT\_DEF finite\_sets
+|- !s t. DISJOINT s t = (s INTER t = {})
+\ENDTHEOREM
+\THEOREM DISJOINT\_DELETE\_SYM finite\_sets
+|- !s t x. DISJOINT(s DELETE x)t = DISJOINT(t DELETE x)s
+\ENDTHEOREM
+\THEOREM DISJOINT\_EMPTY finite\_sets
+|- !s. DISJOINT {} s /\ DISJOINT s {}
+\ENDTHEOREM
+\THEOREM DISJOINT\_EMPTY\_REFL finite\_sets
+|- !s. (s = {}) = DISJOINT s s
+\ENDTHEOREM
+\THEOREM DISJOINT\_INSERT finite\_sets
+|- !x s t. DISJOINT(x INSERT s)t = DISJOINT s t /\ ~x IN t
+\ENDTHEOREM
+\THEOREM DISJOINT\_SYM finite\_sets
+|- !s t. DISJOINT s t = DISJOINT t s
+\ENDTHEOREM
+\THEOREM DISJOINT\_UNION finite\_sets
+|- !s t u. DISJOINT(s UNION t)u = DISJOINT s u /\ DISJOINT t u
+\ENDTHEOREM
+\THEOREM IN\_DISJOINT finite\_sets
+|- !s t. DISJOINT s t = ~(?x. x IN s /\ x IN t)
+\ENDTHEOREM
+\section{The {\tt CHOICE} and {\tt REST} functions}
+\THEOREM CHOICE\_DEF finite\_sets
+|- !s. ~(s = {}) ==> (CHOICE s) IN s
+\ENDTHEOREM
+\THEOREM CHOICE\_INSERT\_REST finite\_sets
+|- !s. ~(s = {}) ==> ((CHOICE s) INSERT (REST s) = s)
+\ENDTHEOREM
+\THEOREM CHOICE\_NOT\_IN\_REST finite\_sets
+|- !s. ~(CHOICE s) IN (REST s)
+\ENDTHEOREM
+\THEOREM CHOICE\_SING finite\_sets
+|- !x. CHOICE{x} = x
+\ENDTHEOREM
+\THEOREM REST\_DEF finite\_sets
+|- !s. REST s = s DELETE (CHOICE s)
+\ENDTHEOREM
+\THEOREM REST\_PSUBSET finite\_sets
+|- !s. ~(s = {}) ==> (REST s) PSUBSET s
+\ENDTHEOREM
+\THEOREM REST\_SING finite\_sets
+|- !x. REST{x} = {}
+\ENDTHEOREM
+\THEOREM REST\_SUBSET finite\_sets
+|- !s. (REST s) SUBSET s
+\ENDTHEOREM
+\THEOREM SING\_IFF\_EMPTY\_REST finite\_sets
+|- !s. SING s = ~(s = {}) /\ (REST s = {})
+\ENDTHEOREM
+\section{Image of a function on a set}
+\THEOREM IMAGE\_COMPOSE finite\_sets
+|- !f g s. IMAGE(f o g)s = IMAGE f(IMAGE g s)
+\ENDTHEOREM
+\THEOREM IMAGE\_DELETE finite\_sets
+|- !f x s. ~x IN s ==> (IMAGE f(s DELETE x) = IMAGE f s)
+\ENDTHEOREM
+\THEOREM IMAGE\_EMPTY finite\_sets
+|- !f. IMAGE f{} = {}
+\ENDTHEOREM
+\THEOREM IMAGE\_EQ\_EMPTY finite\_sets
+|- !s f. (IMAGE f s = {}) = (s = {})
+\ENDTHEOREM
+\THEOREM IMAGE\_ID finite\_sets
+|- !s. IMAGE(\x. x)s = s
+\ENDTHEOREM
+\THEOREM IMAGE\_IN finite\_sets
+|- !x s. x IN s ==> (!f. (f x) IN (IMAGE f s))
+\ENDTHEOREM
+\THEOREM IMAGE\_INSERT finite\_sets
+|- !f x s. IMAGE f(x INSERT s) = (f x) INSERT (IMAGE f s)
+\ENDTHEOREM
+\THEOREM IMAGE\_INTER finite\_sets
+|- !f s t. (IMAGE f(s INTER t)) SUBSET ((IMAGE f s) INTER (IMAGE f t))
+\ENDTHEOREM
+\THEOREM IMAGE\_SUBSET finite\_sets
+|- !s t. s SUBSET t ==> (!f. (IMAGE f s) SUBSET (IMAGE f t))
+\ENDTHEOREM
+\THEOREM IMAGE\_UNION finite\_sets
+|- !f s t. IMAGE f(s UNION t) = (IMAGE f s) UNION (IMAGE f t)
+\ENDTHEOREM
+\THEOREM IN\_IMAGE finite\_sets
+|- !f s y. y IN (IMAGE f s) = (?x. (y = f x) /\ x IN s)
+\ENDTHEOREM
+\section{Mappings between sets}
+\THEOREM BIJ\_COMPOSE finite\_sets
+|- !f g s t u. BIJ f s t /\ BIJ g t u ==> BIJ(g o f)s u
+\ENDTHEOREM
+\THEOREM BIJ\_DEF finite\_sets
+|- !f s t. BIJ f s t = INJ f s t /\ SURJ f s t
+\ENDTHEOREM
+\THEOREM BIJ\_EMPTY finite\_sets
+|- !f. (!s. BIJ f{}s = (s = {})) /\ (!s. BIJ f s{} = (s = {}))
+\ENDTHEOREM
+\THEOREM BIJ\_ID finite\_sets
+|- !s. BIJ(\x. x)s s
+\ENDTHEOREM
+\THEOREM IMAGE\_SURJ finite\_sets
+|- !f s t. SURJ f s t = (IMAGE f s = t)
+\ENDTHEOREM
+\THEOREM INJ\_COMPOSE finite\_sets
+|- !f g s t u. INJ f s t /\ INJ g t u ==> INJ(g o f)s u
+\ENDTHEOREM
+\THEOREM INJ\_DEF finite\_sets
+|- !f s t.
+    INJ f s t =
+    (!x. x IN s ==> (f x) IN t) /\
+    (!x y. x IN s /\ y IN s ==> (f x = f y) ==> (x = y))
+\ENDTHEOREM
+\THEOREM INJ\_EMPTY finite\_sets
+|- !f. (!s. INJ f{}s) /\ (!s. INJ f s{} = (s = {}))
+\ENDTHEOREM
+\THEOREM INJ\_ID finite\_sets
+|- !s. INJ(\x. x)s s
+\ENDTHEOREM
+\THEOREM LINV\_DEF finite\_sets
+|- !f s t. INJ f s t ==> (!x. x IN s ==> (LINV f s(f x) = x))
+\ENDTHEOREM
+\THEOREM RINV\_DEF finite\_sets
+|- !f s t. SURJ f s t ==> (!x. x IN t ==> (f(RINV f s x) = x))
+\ENDTHEOREM
+\THEOREM SURJ\_COMPOSE finite\_sets
+|- !f g s t u. SURJ f s t /\ SURJ g t u ==> SURJ(g o f)s u
+\ENDTHEOREM
+\THEOREM SURJ\_DEF finite\_sets
+|- !f s t.
+    SURJ f s t =
+    (!x. x IN s ==> (f x) IN t) /\
+    (!x. x IN t ==> (?y. y IN s /\ (f y = x)))
+\ENDTHEOREM
+\THEOREM SURJ\_EMPTY finite\_sets
+|- !f. (!s. SURJ f{}s = (s = {})) /\ (!s. SURJ f s{} = (s = {}))
+\ENDTHEOREM
+\THEOREM SURJ\_ID finite\_sets
+|- !s. SURJ(\x. x)s s
+\ENDTHEOREM
+\section{Singleton sets}
+\THEOREM DELETE\_EQ\_SING finite\_sets
+|- !s x. x IN s ==> ((s DELETE x = {}) = (s = {x}))
+\ENDTHEOREM
+\THEOREM DISJOINT\_SING\_EMPTY finite\_sets
+|- !x. DISJOINT{x}{}
+\ENDTHEOREM
+\THEOREM EQUAL\_SING finite\_sets
+|- !x y. ({x} = {y}) = (x = y)
+\ENDTHEOREM
+\THEOREM INSERT\_SING\_UNION finite\_sets
+|- !s x. x INSERT s = {x} UNION s
+\ENDTHEOREM
+\THEOREM IN\_SING finite\_sets
+|- !x y. x IN {y} = (x = y)
+\ENDTHEOREM
+\THEOREM NOT\_EMPTY\_SING finite\_sets
+|- !x. ~({} = {x})
+\ENDTHEOREM
+\THEOREM NOT\_SING\_EMPTY finite\_sets
+|- !x. ~({x} = {})
+\ENDTHEOREM
+\THEOREM SING finite\_sets
+|- !x. SING{x}
+\ENDTHEOREM
+\THEOREM SING\_DEF finite\_sets
+|- !s. SING s = (?x. s = {x})
+\ENDTHEOREM
+\THEOREM SING\_DELETE finite\_sets
+|- !x. {x} DELETE x = {}
+\ENDTHEOREM
+\section{Cardinality of sets}
+\THEOREM CARD\_DEF finite\_sets
+|- (CARD{} = 0) /\
+   (!s x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s)))
+\ENDTHEOREM
+\THEOREM CARD\_DELETE finite\_sets
+|- !s x. CARD(s DELETE x) = (x IN s => (CARD s) - 1 | CARD s)
+\ENDTHEOREM
+\THEOREM CARD\_DIFF finite\_sets
+|- !t s. CARD(s DIFF t) = (CARD s) - (CARD(s INTER t))
+\ENDTHEOREM
+\THEOREM CARD\_EMPTY finite\_sets
+|- CARD{} = 0
+\ENDTHEOREM
+\THEOREM CARD\_EQ\_0 finite\_sets
+|- !s. (CARD s = 0) = (s = {})
+\ENDTHEOREM
+\THEOREM CARD\_INSERT finite\_sets
+|- !s x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s))
+\ENDTHEOREM
+\THEOREM CARD\_INTER\_LESS\_EQ finite\_sets
+|- !s t. (CARD(s INTER t)) <= (CARD s)
+\ENDTHEOREM
+\THEOREM CARD\_PSUBSET finite\_sets
+|- !s t. t PSUBSET s ==> (CARD t) < (CARD s)
+\ENDTHEOREM
+\THEOREM CARD\_SING finite\_sets
+|- !x. CARD{x} = 1
+\ENDTHEOREM
+\THEOREM CARD\_SUBSET finite\_sets
+|- !s t. t SUBSET s ==> (CARD t) <= (CARD s)
+\ENDTHEOREM
+\THEOREM CARD\_UNION finite\_sets
+|- !s t. (CARD(s UNION t)) + (CARD(s INTER t)) = (CARD s) + (CARD t)
+\ENDTHEOREM
+\THEOREM LESS\_CARD\_DIFF finite\_sets
+|- !t s. (CARD t) < (CARD s) ==> 0 < (CARD(s DIFF t))
+\ENDTHEOREM
+\THEOREM SING\_IFF\_CARD1 finite\_sets
+|- !s. SING s = (CARD s = 1)
+\ENDTHEOREM

@@ -1,0 +1,4 @@
+\THEOREM real_neg REALAX
+|- !g00023.
+    -- g00023 = mk_real($treal_eq(treal_neg($@(dest_real g00023))))
+\ENDTHEOREM

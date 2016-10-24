@@ -1,0 +1,3 @@
+\THEOREM EL_SEG list
+|- !n l. n < (LENGTH l) ==> (EL n l = HD(SEG 1 n l))
+\ENDTHEOREM

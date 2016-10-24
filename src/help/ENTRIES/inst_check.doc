@@ -1,0 +1,29 @@
+\DOC inst_check
+
+\TYPE {inst_check : (((type # type) list # term list) -> term list)}
+
+\SYNOPSIS
+Checks the validity of type instantiations.
+
+\DESCRIBE
+If the {t1...tn} are types (monomorphic or polymorphic), the {v1...vn} type
+variables (e.g. {":*"}), and {tm1...tmn} terms, the call
+{
+   inst_check ([(t1,v1);...;(tn,vn)],[tm1;...;tmn])
+}
+\noindent will return a list of the variables free in the {tm1...tmn}, provided
+none of the type variables {v1...vn} are free in {tm1...tmn}. If this condition
+is not met, or any of the {v}'s are not simply type variables, the call fails.
+
+\FAILURE
+Fails if any of the {v}'s are not simple type variables, or if any of them are
+free in the terms {v1...vn}.
+
+\USES
+Checking the validity of type instantiations (for example, if the terms are the
+hypotheses of a theorem).
+
+\SEEALSO
+inst, inst_rename_list, inst_type, INST_TYPE.
+
+\ENDDOC

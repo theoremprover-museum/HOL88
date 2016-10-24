@@ -1,0 +1,3 @@
+\THEOREM RES_ABSTRACT bool
+|- !P B. RES_ABSTRACT P B = (\x. (P x => B x | ARB))
+\ENDTHEOREM

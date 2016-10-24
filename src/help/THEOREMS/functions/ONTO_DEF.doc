@@ -1,0 +1,3 @@
+\THEOREM ONTO_DEF bool
+|- !f. ONTO f = (!y. ?x. y = f x)
+\ENDTHEOREM

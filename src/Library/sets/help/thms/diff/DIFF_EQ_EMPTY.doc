@@ -1,0 +1,3 @@
+\THEOREM DIFF_EQ_EMPTY sets
+|- !s. s DIFF s = {{}}
+\ENDTHEOREM

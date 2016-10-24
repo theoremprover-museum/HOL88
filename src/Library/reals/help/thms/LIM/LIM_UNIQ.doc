@@ -1,0 +1,3 @@
+\THEOREM LIM_UNIQ LIM
+|- !f l m x. (f --> l)x /\ (f --> m)x ==> (l = m)
+\ENDTHEOREM

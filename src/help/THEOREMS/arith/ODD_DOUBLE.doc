@@ -1,0 +1,3 @@
+\THEOREM ODD_DOUBLE arithmetic
+|- !n. ODD(SUC(2 * n))
+\ENDTHEOREM

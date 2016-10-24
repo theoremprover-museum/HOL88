@@ -1,0 +1,14 @@
+.
+.de IX
+.ie '\\n(.z'' .tm IX: \\$1 \\$2 \\$3 \\$4 \\$5 \\$6 \\$7 \\$8 \\$9	{\\n(PN}
+.el \\!.IX \\$1 \\$2 \\$3 \\$4 \\$5 \\$6 \\$7 \\$8 \\$9	{\\n(PN}
+..
+
+This is a sample file to test the \fImakeindex\fP(1L) program, and see
+.IX {indexing!programs!C language}
+.IX {makeindex@\fImakeindex\fP(1L)}
+.bp
+.rs
+.IX {Knuth}
+.IX {typesetting!computer-aided}
+how well if functions in the \fItroff\fP(1) environment.

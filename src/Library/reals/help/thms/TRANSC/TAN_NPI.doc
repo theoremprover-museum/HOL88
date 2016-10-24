@@ -1,0 +1,3 @@
+\THEOREM TAN_NPI TRANSC
+|- !n. tan((& n) * pi) = & 0
+\ENDTHEOREM

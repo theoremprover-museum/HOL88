@@ -1,0 +1,3 @@
+\THEOREM FOLDL_SNOC list
+|- !f e x l. FOLDL f e(SNOC x l) = f(FOLDL f e l)x
+\ENDTHEOREM

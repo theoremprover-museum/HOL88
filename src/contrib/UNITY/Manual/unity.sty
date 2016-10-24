@@ -1,0 +1,147 @@
+% File: unity.sty
+% Unity macros
+\typeout{Document Style `UNITY' <25 Sep 91>.}
+
+%
+% This style defines an environment for type-setting Unity programs.
+%
+% The layout of a program is as follows:
+%
+% program <name>
+%   declare
+%     <v, ..., v> : <type>
+%      ...
+%     <v, ..., v> : <type>
+%   initially
+%     <v, ..., v> = <e, ..., e>
+%      ...
+%     <v, ..., v> = <e, ..., e>
+%   always
+%     <v, ..., v> = <e, ..., e>
+%      ...
+%     <v, ..., v> = <e, ..., e>
+%   assign
+%     <v, ..., v> := <e, ..., e>
+%   ||
+%     <v, ..., v> := <e, ..., e> if <e>
+%   []
+%     <v, ..., v> := <e, ..., e> if <e>
+%                 ~  <e, ..., e> if <e>
+% end
+%
+
+% \begin{Program}{<name>}
+%   \declare[<keyword>]
+%      \dcl{v, ..., v}{type}
+%      ...
+%      \dcl{v, ..., v}{type}
+%   \initial[<keyword>]
+%      \init{v, ..., v}{e, ..., e}
+%      ...
+%      \init{v, ..., v}{e, ..., e}
+%   \assign
+%      \asg{v, ..., v}{e, ..., e}
+%      \ifasg{v, ..., v}{e, ..., e}{e}
+%      \elseasg{v, ..., v}{e}
+%      \interleave
+%      \parallel
+% \end{Program}
+%
+
+% Not implemented yet!
+
+%
+% Name: p unless (stable q) in Pgm
+%
+
+% \begin{unitySpec}{name}
+%   \unless{p}{q}{P}
+%   \stable{p}{P}
+%   \invariant{p}{P}
+%   \ensures{p}{q}{P}
+%   \leadsto{p}{q}{P}
+%   \until{p}{q}{P}
+%   \detects{p}{q}{P}
+%   \fix{p}{P}
+%   \cspec{hyps}{conc}
+% \end{unitySpec}
+
+
+
+% Unity fonts
+\def\variablefont{\it}%		variables      in italic
+\def\keywordfont{\bf}%		keywords       in bold face
+\def\predeffont{\rm}%		predefined     in roman
+\def\paramfont{\sf}%		parameters     in sans serif
+\def\metafont{\sl}%		meta variables in slanted
+
+% Unity font boxes
+\newcommand\var[1]{{\variablefont #1}}%	variables      in italic
+\newcommand\pred[1]{{\predeffont  #1}}%	predefined     in roman
+\newcommand\param[1]{{\paramfont  #1}}%	parameters     in sans serif
+\newcommand\meta[1]{{\metafont    #1}}%	meta variables in slanted
+
+% Unity program environment
+\newenvironment{unityProgram}[1]{%
+\vspace{\baselineskip}\begin{math}\begin{array}{llllll}%
+  \multicolumn{6}{l}{{\keywordfont program}\ {\variablefont #1}}%
+}{%
+\\\multicolumn{6}{l}{\keywordfont end}%
+\end{array}\end{math}\vspace{\baselineskip}
+}
+
+% Declare with default value
+\def\declare{\@ifnextchar [% ]
+{\@declare}{\@declare[declare]}}
+
+\def\@declare[#1]{%
+\\ \multicolumn{5}{l}{\hspace{0.1in}\keywordfont#1}%
+}
+
+\def\dcl#1#2{%
+\\ \hspace{0.2in} #1 & & : & #2%
+}
+
+% Initial with default value
+\def\initial{\@ifnextchar [ % ]
+{\@initial}{\@initial[initially]}}
+
+\def\@initial[#1]{%
+\\ \multicolumn{5}{l}{\hspace{0.1in}\keywordfont#1}%
+}
+
+\def\init#1#2{%
+\\ \hspace{0.2in} #1 & & = & #2%
+}
+
+% Assign
+\def\assign{%
+\\ \multicolumn{6}{l}{\hspace{0.1in}\keywordfont assign}%
+}
+
+% Assign constructions
+\def\asg#1#2#3{%
+\\\hspace{0.2in}#1\!\!&\!\!#2\!&\!:=\!&\!#3\!%
+}
+
+\def\ifasg#1#2#3#4{%
+\\\hspace{0.2in}#1\!\!&\!\!#2\!&\!:=\!&\!#3\!&\keywordfont\!if\!&\!#4\!%
+                                             
+}
+
+\def\elseifasg#1#2#3#4{%
+\\\hspace{0.2in}#1\!\!&\!\!#2\!&\!\sim\!&\!#3\!&\keywordfont\!if\!&\!#4\!%
+}
+
+\def\elseasg#1#2#3{%
+\\\hspace{0.2in}#1\!\!&\!\!#2\!&\!\sim\!&\!#3\!%
+}
+
+\def\allasg#1#2#3#4#5{%
+\\\hspace{0.2in}#1\!\!&\!\!#2\!&\!#3\!&\keywordfont\!#4\!&\!#5\!%
+}
+
+\def\interleave{\\\hspace{0.1in}[\hspace{-0.1em}]}
+
+\def\parallel{\\\hspace{0.1in}|\hspace{-0.1em}|}
+

@@ -1,0 +1,3 @@
+\THEOREM INV_SUC_EQ prim_rec
+|- !m n. (SUC m = SUC n) = (m = n)
+\ENDTHEOREM

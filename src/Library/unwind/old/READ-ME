@@ -1,0 +1,41 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: unwind						|
+|									|
+| DESCRIPTION   : derived inference rules for expanding and simplifying	|
+| 	          hardware structural specifications.			|
+|									|
+| WARNING	: uses mk_thm.						|
+|									|
++ =====================================================================	+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+   unwind.ml 	       definitions of derived rules (from old HOL)
+
+   des-unwind.ml       improved version of unwind.ml
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   Load unwind.ml

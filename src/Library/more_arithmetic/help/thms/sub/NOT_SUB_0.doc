@@ -1,0 +1,3 @@
+\THEOREM NOT_SUB_0 sub
+|- !m n. m < n ==> ~(n - m = 0)
+\ENDTHEOREM

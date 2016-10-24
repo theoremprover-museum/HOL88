@@ -1,0 +1,29 @@
+\DOC EXISTS_PMI
+
+\TYPE {EXISTS_PMI : (term -> thm -> thm)}
+
+\SYNOPSIS
+Existentially quantifies the antecedent and consequent of backward implication.
+
+\LIBRARY window
+
+\KEYWORDS
+rule, quantifier, existential.
+
+\DESCRIBE
+When applied to a variable {x} and a theorem {A |- t1 <== t2}, the
+inference rule {EXISTS_PMI} returns the theorem {A |- (?x. t1) <== (?x. t2)},
+provided {x} is not free in the assumptions.
+{
+         A |- t1 <== t2
+   --------------------------  EXISTS_IMP "x"   [where x is not free in A]
+    A |- (?x.t1) <== (?x.t2)
+}
+\FAILURE
+Fails if the theorem is a backward implication, or if the term is not a
+variable, or if the term is a variable but is free in the assumption list.
+
+\SEEALSO
+EXISTS_EQ, EXISTS_IMP, PMI_DEF.
+
+\ENDDOC

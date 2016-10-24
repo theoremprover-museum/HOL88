@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_01 REAL
+|- (& 0) < (& 1)
+\ENDTHEOREM

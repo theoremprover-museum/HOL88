@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Copyright 1991 by Norman Ramsey.  All rights reserved.
+# See file COPYRIGHT for more information.
+# set -x
+LIB=|LIBDIR|
+$LIB/markup $* | awk '
+/^@defn / { chunk=substr($0,7) ; defined[chunk]=1 }
+/^@use /  { chunk=substr($0,6) ; used[chunk]=1 }
+END {
+  for (chunk in defined) {
+    if (defined[chunk]==1 && used[chunk]==0) printf "<<%s>>\n", chunk
+  }
+}'

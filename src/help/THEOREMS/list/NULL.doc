@@ -1,0 +1,3 @@
+\THEOREM NULL list
+|- NULL[] /\ (!h t. ~NULL(CONS h t))
+\ENDTHEOREM

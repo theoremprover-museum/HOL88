@@ -1,0 +1,3 @@
+\THEOREM SEQ_BOUNDED SEQ
+|- !s. bounded(mr1,$num_ge)s = (?k. !n. (abs(s n)) < k)
+\ENDTHEOREM

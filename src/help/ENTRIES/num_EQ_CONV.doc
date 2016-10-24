@@ -1,0 +1,39 @@
+\DOC num_EQ_CONV
+
+\TYPE {num_EQ_CONV : conv}
+
+\SYNOPSIS
+Proves equality or inequality of two natural number constants.
+
+\KEYWORDS
+conversion, number, arithmetic.
+
+\DESCRIBE
+If {n} and {m} are two distinct numeral constants (e.g. {0}, {1}, {2},
+{3},...), then {num_EQ_CONV "n = m"} returns the theorem:
+{
+   |- (n = m) = F
+}
+\noindent If {n} and {m} are successors of numeral constants (e.g. {SUC 0},
+{SUC 1}, {SUC(SUC 1)} etc.), then {num_EQ_CONV "n = m"} returns one of:
+{
+   |- (n = m) = T       or       |- (n = m) = F
+}
+\noindent depending on whether the natural numbers represented by {n} and {m}
+are equal or not equal, respectively. Finally, for any term {"n"} of type
+{num}, evaluating {num_EQ_CONV "n = n"} returns {|- (n = n) = T}.
+
+\FAILURE
+{num_EQ_CONV tm} fails if {tm} is not of the form {"n = m"}, where {n} and {m}
+are either numerals or repeated applications of {SUC} to numerals unless {n}
+and {m} are syntactically identical terms of type {num}.
+
+\EXAMPLE
+{
+#num_EQ_CONV "1 = SUC 2";;
+|- (1 = SUC 2) = F
+
+#num_EQ_CONV "SUC 1 = 2";;
+|- (SUC 1 = 2) = T
+}
+\ENDDOC

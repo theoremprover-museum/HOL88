@@ -1,0 +1,3 @@
+\THEOREM INSEG_PROPER_SUBSET_FL WELLORDER
+|- !l m. m inseg l /\ ~(l = m) ==> (?a. fl l a /\ ~fl m a)
+\ENDTHEOREM

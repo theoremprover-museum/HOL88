@@ -1,0 +1,33 @@
+\DOC wordn_EQ_CONV
+
+\TYPE {wordn_EQ_CONV : thm -> conv}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Derives a theorem stating the equality of two words.
+
+\DESCRIBE
+{wordn_EQ_CONV wordn "w1 = w2"} returns a theorem
+{
+   |- (w1 = w2) = T
+}
+if and only if {w1} is equal to {w2}, otherwise, it returns
+{
+   |-  (w1 = w2) = F
+}
+{wordn} is the type definition theorem returned by {define_wordn_type}.
+
+\FAILURE
+
+
+\EXAMPLE
+{wordn_EQ_CONV word3 "#010 = #110";;} return the following theorem:
+{
+   |- (#010 = #110) = F
+}
+
+\SEEALSO
+{define_wordn_type}, {wordn_CONV}.
+
+\ENDDOC

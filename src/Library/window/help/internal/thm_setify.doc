@@ -1,0 +1,10 @@
+\DOC thm_setify
+
+\TYPE {thm_setify :  (thm list -> thm list)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

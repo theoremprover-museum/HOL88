@@ -1,0 +1,3 @@
+\THEOREM ZERO_LESS_EQ arithmetic
+|- !n. 0 <= n
+\ENDTHEOREM

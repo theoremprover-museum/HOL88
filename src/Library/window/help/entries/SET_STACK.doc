@@ -1,0 +1,19 @@
+\DOC SET_STACK
+
+\TYPE {SET_STACK : (string -> void)}
+
+\SYNOPSIS
+Sets the current stack.
+
+\LIBRARY window
+
+\DESCRIBE
+{SET_STACK `name`} sets the current stack to the one called {`name`}.
+
+\FAILURE
+{SET_STACK `name`} fails if there is no stack called {`name`}.
+
+\SEEALSO
+create_win, BEGIN_STACK, END_STACK, ALL_STACKS, CURRENT_NAME
+
+\ENDDOC

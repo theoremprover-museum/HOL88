@@ -1,0 +1,7 @@
+\THEOREM cauchy SEQ
+|- !f.
+    cauchy f =
+    (!e.
+      (& 0) < e ==>
+      (?N. !m n. m num_ge N /\ n num_ge N ==> (abs((f m) - (f n))) < e))
+\ENDTHEOREM

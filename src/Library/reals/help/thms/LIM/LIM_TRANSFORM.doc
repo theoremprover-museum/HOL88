@@ -1,0 +1,4 @@
+\THEOREM LIM_TRANSFORM LIM
+|- !f g x0 l.
+    ((\x. (f x) - (g x)) --> (& 0))x0 /\ (g --> l)x0 ==> (f --> l)x0
+\ENDTHEOREM

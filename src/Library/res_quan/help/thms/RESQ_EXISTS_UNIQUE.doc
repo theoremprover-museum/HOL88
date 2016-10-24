@@ -1,0 +1,3 @@
+\THEOREM RESQ_EXISTS_UNIQUE res_quan
+|- !P j. (?i :: $= j. P i) = P j
+\ENDTHEOREM

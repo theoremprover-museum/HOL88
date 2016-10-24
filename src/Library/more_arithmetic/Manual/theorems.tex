@@ -1,0 +1,416 @@
+\chapter{Pre-proved Theorems}\label{thms}
+\input{theorems-intro}
+\section{Theorems about Inequalities}
+\THEOREM GEN\_INDUCTION ineq
+|- !P. P 0 /\ (!n. (!m. m < n ==> P m) ==> P n) ==> (!n. P n)
+\ENDTHEOREM
+\THEOREM GREATER\_EQ\_ANTISYM ineq
+|- !n m. ~(n >= m /\ n < m)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_LESS\_EQ\_EQ ineq
+|- !m n. m <= n /\ n <= m = (m = n)
+\ENDTHEOREM
+\THEOREM LESS\_IS\_NOT\_LESS\_OR\_EQ ineq
+|- !x y. x < y = ~y <= x
+\ENDTHEOREM
+\THEOREM NOT\_EQ\_LESS\_EQ ineq
+|- !a b. ~(a = b) = a < b \/ b < a
+\ENDTHEOREM
+\THEOREM NOT\_LESS\_AND\_GREATER ineq
+|- !n m. n < m ==> ~m < n
+\ENDTHEOREM
+\section{Theorems about {\tt 0}}
+\THEOREM GREATER\_NOT\_ZERO zero\_ineq
+|- !x. 0 < x ==> ~(x = 0)
+\ENDTHEOREM
+\THEOREM LESS1EQ0 zero\_ineq
+|- !m. m < 1 = (m = 0)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_0\_EQ zero\_ineq
+|- !m. m <= 0 ==> (m = 0)
+\ENDTHEOREM
+\THEOREM M\_LESS\_0\_LESS zero\_ineq
+|- !m n. m < n ==> 0 < n
+\ENDTHEOREM
+\THEOREM NOT\_0\_AND\_MORE zero\_ineq
+|- !x. ~((x = 0) /\ 0 < x)
+\ENDTHEOREM
+\THEOREM NOT\_EQ\_0 zero\_ineq
+|- !m. ~(m = 0) ==> m >= 1
+\ENDTHEOREM
+\section{Theorems about {\tt SUC}}
+\THEOREM LESS\_EQ\_LESS\_SUC suc
+|- !m n. m <= n = m < (SUC n)
+\ENDTHEOREM
+\THEOREM NOT\_0\_GREATER\_EQ\_SUC suc
+|- !n. ~0 >= (SUC n)
+\ENDTHEOREM
+\THEOREM NOT\_FORALL\_SUC\_LESS\_EQ suc
+|- ~(!n m. (SUC m) <= n)
+\ENDTHEOREM
+\THEOREM NOT\_SUC\_LESS\_EQ\_SELF suc
+|- !n. ~(SUC n) <= n
+\ENDTHEOREM
+\THEOREM SUC\_0 suc
+|- 1 = SUC 0
+\ENDTHEOREM
+\THEOREM SUC\_GREATER\_EQ\_SUC suc
+|- !n m. (SUC m) >= (SUC n) = m >= n
+\ENDTHEOREM
+\THEOREM SUC\_LESS\_EQ suc
+|- !m n. m <= n /\ ~(m = n) ==> (SUC m) <= n
+\ENDTHEOREM
+\THEOREM SUC\_NOT\_0 suc
+|- !n. ~(SUC n = 0)
+\ENDTHEOREM
+\section{Theorems about {\tt PRE}}
+\THEOREM LESS\_IMP\_LESS\_EQ\_PRE pre
+|- !m n. 0 < n ==> (m < n = m <= (PRE n))
+\ENDTHEOREM
+\THEOREM PRE\_ADD pre
+|- !n m. 0 < n ==> (PRE(n + m) = (PRE n) + m)
+\ENDTHEOREM
+\THEOREM PRE\_K\_K pre
+|- !k. 0 < k ==> (PRE k) < k
+\ENDTHEOREM
+\THEOREM PRE\_LESS pre
+|- !b. 0 < b /\ b < a ==> (PRE b) < a
+\ENDTHEOREM
+\THEOREM PRE\_LESS\_EQ pre
+|- !n. (PRE n) <= n
+\ENDTHEOREM
+\THEOREM PRE\_MONO pre
+|- !m n. (PRE m) < (PRE n) ==> m < n
+\ENDTHEOREM
+\THEOREM PRE\_MONO\_LESS\_EQ pre
+|- !m n. m < n ==> (PRE m) <= (PRE n)
+\ENDTHEOREM
+\THEOREM SUC\_LESS\_EQ\_PRE pre
+|- !m n. 0 < n ==> (SUC m) <= n ==> m <= (PRE n)
+\ENDTHEOREM
+\THEOREM SUC\_LESS\_PRE pre
+|- !m n. (SUC m) < n ==> m < (PRE n)
+\ENDTHEOREM
+\THEOREM SUC\_PRE pre
+|- !n. 0 < n ==> (SUC(PRE n) = n)
+\ENDTHEOREM
+\section{Theorems about Addition}
+\THEOREM ADDL\_GREATER add
+|- !m n p. m < n ==> m < (p + n)
+\ENDTHEOREM
+\THEOREM ADDL\_GREATER\_EQ add
+|- !m n p. m <= n ==> m <= (p + n)
+\ENDTHEOREM
+\THEOREM ADDR\_GREATER add
+|- !m n p. m < n ==> m < (n + p)
+\ENDTHEOREM
+\THEOREM ADDR\_GREATER\_EQ add
+|- !m n p. m <= n ==> m <= (n + p)
+\ENDTHEOREM
+\THEOREM ADD\_EQ\_LESS\_EQ add
+|- !m n p. (m + n = p) ==> m <= p
+\ENDTHEOREM
+\THEOREM ADD\_EQ\_LESS\_IMP\_LESS add
+|- !n m k l. (k + m = l + n) /\ k < l ==> n < m
+\ENDTHEOREM
+\THEOREM ADD\_GREATER\_EQ add
+|- !m n. (m + n) >= m
+\ENDTHEOREM
+\THEOREM ADD\_MONO\_LESS add
+|- !m n p. (m + p) < (m + n) = p < n
+\ENDTHEOREM
+\THEOREM ADD\_SUC\_0 add
+|- !m. SUC m = (SUC 0) + m
+\ENDTHEOREM
+\THEOREM ADD\_SYM\_ASSOC add
+|- !a b c. a + (b + c) = b + (a + c)
+\ENDTHEOREM
+\THEOREM GREATER\_EQ\_SPLIT add
+|- !m n p. p >= (m + n) ==> p >= n /\ p >= m
+\ENDTHEOREM
+\THEOREM LESS\_ADD1 add
+|- !a. a < (a + 1)
+\ENDTHEOREM
+\THEOREM LESS\_ADD\_ASSOC add
+|- !a b c d. a < (b + c) ==> a < (b + (c + d))
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_ADD1 add
+|- !p n. p <= (n + p)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_MONO\_ADD\_EQ0 add
+|- !m n p. m <= n = (p + m) <= (p + n)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_MONO\_ADD\_EQ1 add
+|- !m p. (m + p) <= p = m <= 0
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_SPLIT add
+|- !m n p. (m + n) <= p ==> n <= p /\ m <= p
+\ENDTHEOREM
+\THEOREM LESS\_LESS\_EQ add
+|- !a b. a < b = (a + 1) <= b
+\ENDTHEOREM
+\THEOREM LESS\_LESS\_EQ\_MONO add
+|- (!m n p q. m < p /\ n <= q ==> (m + n) < (p + q)) /\
+   (!m n p q. m <= p /\ n < q ==> (m + n) < (p + q))
+\ENDTHEOREM
+\THEOREM LESS\_LESS\_MONO add
+|- !m n p q. m < p /\ n < q ==> (m + n) < (p + q)
+\ENDTHEOREM
+\THEOREM LESS\_TRANS\_ADD add
+|- !m n p q. m < (n + p) /\ p < q ==> m < (n + q)
+\ENDTHEOREM
+\THEOREM NOT\_1\_TWICE add
+|- !n. ~(1 = n + n)
+\ENDTHEOREM
+\THEOREM NOT\_ADD\_LESS add
+|- !m n. ~(m + n) < n
+\ENDTHEOREM
+\THEOREM NOT\_LESS\_IMP\_LESS\_EQ\_ADD1 add
+|- !a b. ~a < b ==> b <= (a + 1)
+\ENDTHEOREM
+\THEOREM SUC\_LESS\_N\_LESS add
+|- !m n. (m + 1) < n ==> m < n
+\ENDTHEOREM
+\THEOREM SUM\_LESS add
+|- !m n p. (m + n) < p ==> m < p /\ n < p
+\ENDTHEOREM
+\section{Theorems about Subtraction}
+\THEOREM ADD\_EQ\_IMP\_SUB\_EQ sub
+|- !a b c. (a = b + c) ==> (a - b = c)
+\ENDTHEOREM
+\THEOREM ADD\_LESS\_EQ\_SUB sub
+|- !n m p. n <= p ==> ((n + m) <= p = m <= (p - n))
+\ENDTHEOREM
+\THEOREM ADD\_SUB\_SYM sub
+|- !a c. (c + a) - c = a
+\ENDTHEOREM
+\THEOREM GREATER\_EQ\_SUB\_LESS\_TO\_ADD sub
+|- !n m p. p >= n ==> ((p - n) < m = p < (n + m))
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_ADD\_SUB1 sub
+|- !m n p. p <= n ==> (m + (n - p) = (m + n) - p)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_SUB\_1 sub
+|- !a b. a <= b ==> (a - 1) <= (b - 1)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_SUB\_ADD sub
+|- !m n p. p <= m ==> ((m - p) + n = (m + n) - p)
+\ENDTHEOREM
+\THEOREM LESS\_PRE sub
+|- !i m. i < (m - 1) ==> i < m
+\ENDTHEOREM
+\THEOREM LESS\_SUB\_IMP\_INV sub
+|- !k l. 0 < (k - l) ==> l < k
+\ENDTHEOREM
+\THEOREM LESS\_SUB\_IMP\_SUM\_LESS sub
+|- !i m. i < (m - 1) /\ 1 < m ==> (i + 1) < m
+\ENDTHEOREM
+\THEOREM LESS\_SUB\_TO\_ADDL\_LESS sub
+|- !m n p. n <= m ==> (p < (m - n) = (n + p) < m)
+\ENDTHEOREM
+\THEOREM LESS\_SUB\_TO\_ADDR\_LESS sub
+|- !m n p. p <= m ==> (n < (m - p) = (n + p) < m)
+\ENDTHEOREM
+\THEOREM LESS\_TWICE\_IMP\_LESS\_SUB sub
+|- !a b m. a < m /\ b < m /\ m <= (a + b) ==> ((a + b) - m) < m
+\ENDTHEOREM
+\THEOREM NOT\_0\_SUB sub
+|- !m n. ~(m - n = 0) ==> ~(m = 0)
+\ENDTHEOREM
+\THEOREM NOT\_LESS\_SUB sub
+|- !m n. ~m < (m - n)
+\ENDTHEOREM
+\THEOREM NOT\_SUB\_0 sub
+|- !m n. m < n ==> ~(n - m = 0)
+\ENDTHEOREM
+\THEOREM PRE\_LESS\_LESS\_SUC sub
+|- !i m. i < (m - 1) /\ 0 < m ==> (i + 1) < m
+\ENDTHEOREM
+\THEOREM PRE\_SUB\_SUC sub
+|- !m n. m < n ==> (PRE(n - m) = n - (SUC m))
+\ENDTHEOREM
+\THEOREM SMALLER\_SUM sub
+|- !m n p. m < p /\ n < p ==> ~((m + n) - p) > m
+\ENDTHEOREM
+\THEOREM SUB\_1\_LESS sub
+|- !m n. ~(m = 0) /\ m < (SUC n) ==> (m - 1) < n
+\ENDTHEOREM
+\THEOREM SUB\_1\_LESS\_EQ sub
+|- !m n. m < n ==> (n - 1) >= m
+\ENDTHEOREM
+\THEOREM SUB\_ADD\_SELF sub
+|- !m n. ~m < n ==> ((m - n) + n = m)
+\ENDTHEOREM
+\THEOREM SUB\_BOTH\_SIDES sub
+|- !m n p. (m = n) ==> (m - p = n - p)
+\ENDTHEOREM
+\THEOREM SUB\_EQ\_SUB\_ADD\_SUB sub
+|- !a b c. a <= b /\ b <= c ==> (c - a = (c - b) + (b - a))
+\ENDTHEOREM
+\THEOREM SUB\_GREATER\_0 sub
+|- !a b. a < b ==> (b - a) > 0
+\ENDTHEOREM
+\THEOREM SUB\_GREATER\_EQ\_ADD sub
+|- !n m p. p >= n ==> ((p - n) >= m = p >= (n + m))
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_BOTH\_SIDES sub
+|- !m n p. p <= m /\ m < n ==> (m - p) < (n - p)
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_EQ\_SUB1 sub
+|- !x. x > 0 ==> (!a. (a - x) <= (a - 1))
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_EQ\_SUB\_SUC sub
+|- !a b c n. 0 < c /\ a <= (b - n) ==> (a - c) <= (b - (SUC n))
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_TO\_LESS\_ADDL sub
+|- !m n p. n <= m ==> ((m - n) < p = m < (n + p))
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_TO\_LESS\_ADDR sub
+|- !m n p. p <= m ==> ((m - p) < n = m < (n + p))
+\ENDTHEOREM
+\THEOREM SUB\_LE\_ADD sub
+|- !n m p. n <= p ==> (m <= (p - n) = (n + m) <= p)
+\ENDTHEOREM
+\THEOREM SUB\_PRE\_SUB\_1 sub
+|- !a b. 0 < b ==> ((a - (PRE b)) - 1 = a - b)
+\ENDTHEOREM
+\THEOREM SUB\_SUB\_ID sub
+|- !k l. l < k ==> (k - (k - l) = l)
+\ENDTHEOREM
+\THEOREM SUB\_SUC sub
+|- !k m. m < k ==> (k - m = SUC(k - (SUC m)))
+\ENDTHEOREM
+\THEOREM SUB\_SUC\_PRE\_SUB sub
+|- !n m. 0 < n ==> (n - (SUC m) = (PRE n) - m)
+\ENDTHEOREM
+\THEOREM SUC\_SUB sub
+|- !m n.
+    (m < n ==> ((SUC m) - n = 0)) /\
+    (~m < n ==> ((SUC m) - n = SUC(m - n)))
+\ENDTHEOREM
+\section{Theorems about Multiplication and Exponential Functions}
+\THEOREM EXP1 mult
+|- !n. n EXP 1 = n
+\ENDTHEOREM
+\THEOREM LESS\_MONO\_MULT1 mult
+|- !m n p. m <= n ==> (p * m) <= (p * n)
+\ENDTHEOREM
+\THEOREM LESS\_MULT\_PLUS\_DIFF mult
+|- !n k l. k < l ==> ((k * n) + n) <= (l * n)
+\ENDTHEOREM
+\THEOREM NOT\_MULT\_LESS\_0 mult
+|- !m n. 0 < m /\ 0 < n ==> 0 < (m * n)
+\ENDTHEOREM
+\THEOREM ONE\_LESS\_EQ\_TWO\_EXP mult
+|- !n. 1 <= (2 EXP n)
+\ENDTHEOREM
+\THEOREM ONE\_LESS\_TWO\_EXP\_SUC mult
+|- !n. 1 < (2 EXP (SUC n))
+\ENDTHEOREM
+\THEOREM ZERO\_LESS\_TWO\_EXP mult
+|- !n. 0 < (2 EXP n)
+\ENDTHEOREM
+\section{Theorems about Division}
+\THEOREM ADD\_DIV\_ADD\_DIV div\_mod
+|- !n. 0 < n ==> (!x r. ((x * n) + r) DIV n = x + (r DIV n))
+\ENDTHEOREM
+\THEOREM ADD\_DIV\_SUC\_DIV div\_mod
+|- !n. 0 < n ==> (!r. (n + r) DIV n = SUC(r DIV n))
+\ENDTHEOREM
+\THEOREM DIV\_DIV\_DIV\_MULT div\_mod
+|- !m n. 0 < m /\ 0 < n ==> (!x. (x DIV m) DIV n = x DIV (m * n))
+\ENDTHEOREM
+\THEOREM DIV\_ONE div\_mod
+|- !q. q DIV (SUC 0) = q
+\ENDTHEOREM
+\THEOREM LESS\_DIV\_EQ\_ZERO div\_mod
+|- !r n. r < n ==> (r DIV n = 0)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_MONO\_DIV div\_mod
+|- !n. 0 < n ==> (!p q. p <= q ==> (p DIV n) <= (q DIV n))
+\ENDTHEOREM
+\THEOREM MOD\_MULT\_MOD div\_mod
+|- !m n. 0 < n /\ 0 < m ==> (!x. (x MOD (n * m)) MOD n = x MOD n)
+\ENDTHEOREM
+\THEOREM MULT\_DIV div\_mod
+|- !n q. 0 < n ==> ((q * n) DIV n = q)
+\ENDTHEOREM
+\THEOREM SUC\_DIV\_CASES div\_mod
+|- !n.
+    0 < n ==>
+    (!x. ((SUC x) DIV n = x DIV n) \/ ((SUC x) DIV n = SUC(x DIV n)))
+\ENDTHEOREM
+\THEOREM SUC\_DIV\_SELF div\_mod
+|- !n. (SUC n) DIV (SUC n) = 1
+\ENDTHEOREM
+\THEOREM SUC\_MOD div\_mod
+|- !n m. (SUC n) < m ==> ((SUC n) MOD m = SUC(n MOD m))
+\ENDTHEOREM
+\THEOREM SUC\_MOD\_SELF div\_mod
+|- !n. (SUC n) MOD (SUC n) = 0
+\ENDTHEOREM
+\section{Theorems about Maximum and Minimum}
+\THEOREM MAX\_0 min\_max
+|- !n. MAX 0 n = n
+\ENDTHEOREM
+\THEOREM MAX\_DEF min\_max
+|- !n p. MAX n p = (n <= p => p | n)
+\ENDTHEOREM
+\THEOREM MAX\_REFL min\_max
+|- !n. MAX n n = n
+\ENDTHEOREM
+\THEOREM MAX\_SUC min\_max
+|- !n. MAX n(SUC n) = SUC n
+\ENDTHEOREM
+\THEOREM MAX\_SYM min\_max
+|- !n p. MAX n p = MAX p n
+\ENDTHEOREM
+\THEOREM MIN\_0 min\_max
+|- !n. MIN 0 n = 0
+\ENDTHEOREM
+\THEOREM MIN\_DEF min\_max
+|- !n p. MIN n p = (n <= p => n | p)
+\ENDTHEOREM
+\THEOREM MIN\_REFL min\_max
+|- !n. MIN n n = n
+\ENDTHEOREM
+\THEOREM MIN\_SUC min\_max
+|- !n. MIN n(SUC n) = n
+\ENDTHEOREM
+\THEOREM MIN\_SYM min\_max
+|- !n p. MIN n p = MIN p n
+\ENDTHEOREM
+\THEOREM SUC\_MAX min\_max
+|- !n p. MAX(SUC n)(SUC p) = SUC(MAX n p)
+\ENDTHEOREM
+\THEOREM SUC\_MIN min\_max
+|- !n p. MIN(SUC n)(SUC p) = SUC(MIN n p)
+\ENDTHEOREM
+\section{Theorems about Odd and Even Numbers}
+\THEOREM EVEN\_MULT odd\_even
+|- !n m. EVEN n \/ EVEN m ==> EVEN(n * m)
+\ENDTHEOREM
+\THEOREM EVEN\_ODD\_0 odd\_even
+|- EVEN 0 /\ ~ODD 0
+\ENDTHEOREM
+\THEOREM EVEN\_ODD\_PLUS\_CASES odd\_even
+|- !n m.
+    (ODD n /\ ODD m ==> EVEN(n + m)) /\
+    (ODD n /\ EVEN m ==> ODD(n + m)) /\
+    (EVEN n /\ EVEN m ==> EVEN(n + m))
+\ENDTHEOREM
+\THEOREM EVEN\_ODD\_SUC odd\_even
+|- !n. (EVEN(SUC n) = ODD n) /\ (ODD(SUC n) = EVEN n)
+\ENDTHEOREM
+\THEOREM MULT\_EVEN odd\_even
+|- !n m. EVEN(n * m) ==> EVEN n \/ EVEN m
+\ENDTHEOREM
+\THEOREM MULT\_ODD odd\_even
+|- !n m. ODD(n * m) ==> ODD n /\ ODD m
+\ENDTHEOREM
+\THEOREM NOT\_EVEN\_ODD\_SUC\_EVEN\_ODD odd\_even
+|- !n. (~EVEN(SUC n) = EVEN n) /\ (~ODD(SUC n) = ODD n)
+\ENDTHEOREM
+\THEOREM ODD\_MULT odd\_even
+|- !n m. ODD n /\ ODD m ==> ODD(n * m)
+\ENDTHEOREM

@@ -1,0 +1,10 @@
+\DOC close_window
+
+\TYPE {close_window : (window_stack -> window_stack)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

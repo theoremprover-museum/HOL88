@@ -1,0 +1,61 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: set	   						|
+| 									|
+| DESCRIPTION   : Definition of set theory.	                        |
+|									|
+| AUTHOR	: T. kalker						|
+| DATE		: 8 JUNE 1989  			         		|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    
+    mk_set_defs.ml    elementary definitions of set theory.
+
+    mk_set.ml         elementary theorems of set theory.
+
+    set.ml            loads the library into hol.
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+Sets are modeled as predicates on types.
+The empty set is borrowed from "fixpoints" where
+it is called BOT.
+The constructed is mainly concerned with theorems on
+functions on sets. The boolean algebra of sets is hardly
+considered, and is left to the taste of the user.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+                                      
+   0) necessary libraries: fixpoints, auxiliary
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `set`;;
+
+

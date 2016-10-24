@@ -1,0 +1,3 @@
+\THEOREM FORALL_DEF bool
+|- $! = (\P. P = (\x. T))
+\ENDTHEOREM

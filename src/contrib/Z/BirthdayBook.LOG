@@ -1,0 +1,262 @@
+
+
+===============================================================================
+         HOL88 Version 2.02 (SUN4/AKCL: pre-release), built on 26/1/94
+===============================================================================
+
+
+() : void
+
+.........................false : bool
+
+
+File hol-init loaded
+() : void
+
+##########.............................Loading library sets ...
+Updating search path.
+Updating help search path.
+Theory sets loaded
+.....................
+Library sets loaded.
+.Loading library string ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+....
+Library string loaded.
+.Loading library taut ...
+Updating help search path
+........................................
+Library taut loaded.
+.Loading library reduce ...
+Extending help search path.
+Loading boolean conversions........
+Loading arithmetic conversions..................
+Loading general conversions, rule and tactic.....
+Library reduce loaded.
+.Loading library arith ...
+reduce already loaded
+.Updating help search path
+.......................................................................................................................................................................................................................................................................................
+Library arith loaded.
+.Loading library unwind ...
+Updating help search path
+..................................
+Library unwind loaded.
+.......Theory Z loaded
+......................................................................................................................................................................................................................() : void
+
+######() : void
+
+######() : void
+
+########"BirthdayBook" : term
+
+##########"AddBirthday" : term
+
+######known :: (P NAME), birthday :: (NAME -+> DATE), name? :: NAME, 
+date? :: DATE, (dom(birthday UNION {name? |-> date?})) :: (P NAME), 
+(birthday UNION {name? |-> date?}) :: (NAME -+> DATE) 
+|- pre AddBirthday = (known = dom birthday) /\ ~name? IN (dom birthday)
+
+#########Theorem dom_SING autoloading from theory `Z` ...
+dom_SING = |- !x y. dom{x |-> y} = {x}
+
+Theorem dom_UNION autoloading from theory `Z` ...
+dom_UNION = |- !X Y. dom(X UNION Y) = (dom X) UNION (dom Y)
+
+() : void
+
+known_UNION = AddBirthday |- known' = known UNION {name?}
+
+##########"FindBirthday" : term
+
+#############Theorem Ap_UNION2 autoloading from theory `Z` ...
+Ap_UNION2 = |- !x v X. ~x IN (dom X) ==> ((X UNION {x |-> v}) ^^ x = v)
+
+() : void
+
+SEQ_AddBirthday_FindBirthday = 
+AddBirthday SEQ FindBirthday |- date! = date?
+
+#########"Remind" : term
+
+#######"InitBirthdayBook" : term
+
+######() : void
+
+REPORT_Axiom = 
+|- !e0 e1 e2.
+    ?! fn.
+     (fn ok = e0) /\ (fn already_known = e1) /\ (fn not_known = e2)
+
+REPORT = |- REPORT = UNIV
+
+#######"Success" : term
+
+##########"AlreadyKnown" : term
+
+####"RAddBirthday" : term
+
+######known :: (P NAME), birthday :: (NAME -+> DATE), name? :: NAME, 
+date? :: DATE 
+|- pre RAddBirthday =
+   (?known' birthday' result!.
+     (known' :: (P NAME) /\
+      birthday' :: (NAME -+> DATE) /\
+      result! :: REPORT) /\
+     ((known = dom birthday) /\
+      (known' = dom birthday') /\
+      ~name? IN known /\
+      (birthday' = birthday UNION {name? |-> date?}) /\
+      (result! = ok) \/
+      (known = dom birthday) /\
+      (known' = dom birthday') /\
+      ((birthday' = birthday) /\ (known' = known)) /\
+      name? :: known /\
+      (result! = already_known)))
+
+####################Theorem UNION_SING_Pfun autoloading from theory `Z` ...
+UNION_SING_Pfun = 
+|- !f X Y x y.
+    f IN (X -+> Y) /\ x IN X /\ y IN Y /\ ~x IN (dom f) ==>
+    (f UNION {x |-> y}) IN (X -+> Y)
+
+Theorem IN_UNIV autoloading from theory `sets` ...
+IN_UNIV = |- !x. x IN UNIV
+
+Theorem domPfunIN autoloading from theory `Z` ...
+domPfunIN = |- !f X Y. f IN (X -+> Y) ==> (dom f) IN (P X)
+
+Definition :: autoloading from theory `Z` ...
+:: = |- !x s. x :: s = x IN s
+
+() : void
+
+pre_RAddBirthday = BirthdayBook, sig RAddBirthday |- pre RAddBirthday
+
+########################() : void
+
+RAddBirthdayLemma = 
+|- RAddBirthday =
+   SCHEMA
+   [known :: (P NAME);birthday :: (NAME -+> DATE);known' :: (P NAME);
+    birthday' :: (NAME -+> DATE);name? :: NAME;date? :: DATE;
+    result! :: REPORT]
+   [known = dom birthday;known' = dom birthday';
+    ~name? IN known /\
+    (birthday' = birthday UNION {name? |-> date?}) /\
+    (result! = ok) \/
+    name? IN known /\
+    (birthday' = birthday) /\
+    (result! = already_known)]
+
+##########"NotKnown" : term
+
+####"RFindBirthday" : term
+
+####"RRemind" : term
+
+#################"BirthdayBook1" : term
+
+#########"Abs" : term
+
+############"AddBirthday1" : term
+
+#########"FindBirthday1" : term
+
+#########"AbsCards" : term
+
+###########"Remind1" : term
+
+#######"InitBirthdayBook1" : term
+
+####################################################Theorem IntervalApLemma2 autoloading from theory `Z` ...
+IntervalApLemma2 = 
+|- !f X n v.
+    f IN (NN_1 --> X) /\ v IN X ==>
+    ((f (+) {(n + 1) |-> v}) ^^ (n + 1) = v)
+
+Theorem IntervalApLemma1 autoloading from theory `Z` ...
+IntervalApLemma1 = 
+|- !f X n x v.
+    f IN (NN_1 --> X) /\ (1 to n)x /\ v IN X ==>
+    ((f (+) {(n + 1) |-> v}) ^^ x = f ^^ x)
+
+Theorem IntervalSINGLemma autoloading from theory `Z` ...
+IntervalSINGLemma = |- !n x v. (1 to n)x ==> ~x IN (dom{(n + 1) |-> v})
+
+Definition |\/| autoloading from theory `Z` ...
+|\/| = |- !f1 f2 x. (f1 |\/| f2)x = f1 x \/ f2 x
+
+Theorem UnitInterval autoloading from theory `Z` ...
+UnitInterval = |- (n to n)x = (x = n)
+
+Theorem IncInterval autoloading from theory `Z` ...
+IncInterval = |- 1 to (n + 1) = (1 to n) |\/| ((n + 1) to (n + 1))
+
+Theorem IN_NN autoloading from theory `Z` ...
+IN_NN = |- !n. n IN NN
+
+Theorem OverrideSingFun autoloading from theory `Z` ...
+OverrideSingFun = 
+|- !X f x.
+    f IN (NN_1 --> X) /\ x IN X ==>
+    (f (+) {(n + 1) |-> x}) IN (NN_1 --> X)
+
+Theorem IN_Interval autoloading from theory `Z` ...
+IN_Interval = |- !i m n. i IN (m .. n) = (m to n)i
+
+Theorem Interval_to autoloading from theory `Z` ...
+Interval_to = 
+|- !m n.
+    (FORALL_RESTRICT(m .. n) = RES_FORALL(m to n)) /\
+    (EXISTS_RESTRICT(m .. n) = RES_EXISTS(m to n))
+
+() : void
+
+AbsThm1 = 
+|- FORALL
+   [BirthdayBook;BirthdayBook1;name? :: NAME;date? :: DATE]
+   (pre AddBirthday /\ Abs ==> pre AddBirthday1)
+
+###########################################################Theorem Ap_UNION1 autoloading from theory `Z` ...
+Ap_UNION1 = 
+|- !x1 x2 v X. ~(x1 = x2) ==> ((X UNION {x1 |-> v}) ^^ x2 = X ^^ x2)
+
+Theorem IN_SING autoloading from theory `sets` ...
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Theorem IN_UNION autoloading from theory `sets` ...
+IN_UNION = |- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+
+Theorem EXTENSION autoloading from theory `sets` ...
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+() : void
+
+AbsThm2 = 
+|- FORALL
+   [BirthdayBook;BirthdayBook1;BirthdayBook1';name? :: NAME;
+    date? :: DATE]
+   (pre AddBirthday /\ Abs /\ AddBirthday1 ==>
+    EXISTS BirthdayBook'(Abs' /\ AddBirthday))
+
+#############################() : void
+
+AddFindSeq = 
+|- FORALL
+   [BirthdayBook'']
+   (EXISTS[AddBirthday](theta BirthdayBook' = theta BirthdayBook'') ==>
+    EXISTS[FindBirthday](theta BirthdayBook = theta BirthdayBook''))
+
+###################################() : void
+
+AddFindSeq1 = 
+|- FORALL
+   [BirthdayBook1'']
+   (EXISTS[AddBirthday1](theta BirthdayBook1' = theta BirthdayBook1'') ==>
+    EXISTS[FindBirthday1](theta BirthdayBook1 = theta BirthdayBook1''))
+
+##

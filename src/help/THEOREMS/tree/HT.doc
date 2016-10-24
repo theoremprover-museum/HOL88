@@ -1,0 +1,3 @@
+\THEOREM HT tree
+|- !t. HT t = (@n. bht n t /\ (!m. m < n ==> ~bht m t))
+\ENDTHEOREM

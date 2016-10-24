@@ -1,0 +1,3 @@
+\THEOREM LASTN_MAP list
+|- !n l. n <= (LENGTH l) ==> (!f. LASTN n(MAP f l) = MAP f(LASTN n l))
+\ENDTHEOREM

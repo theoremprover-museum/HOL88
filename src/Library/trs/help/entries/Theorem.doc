@@ -1,0 +1,16 @@
+\DOC Theorem
+
+\TYPE {Theorem : thmkind}
+
+\SYNOPSIS
+Identifier denoting a `kind of theorem', specifically a derived theorem.
+
+\LIBRARY trs
+
+\USES
+Used to generate patterns that test the `kind' of a theorem.
+
+\SEEALSO
+Axiom, Definition, kind.
+
+\ENDDOC

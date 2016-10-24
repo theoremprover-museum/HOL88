@@ -1,0 +1,3 @@
+\THEOREM HRAT_EQ_LADD HREAL
+|- !x y z. (x hrat_add y = x hrat_add z) = (y = z)
+\ENDTHEOREM

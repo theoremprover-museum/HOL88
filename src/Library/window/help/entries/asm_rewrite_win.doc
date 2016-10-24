@@ -1,0 +1,25 @@
+\DOC asm_rewrite_win
+
+\TYPE {asm_rewrite_win :  (thm list -> window -> window)}
+
+\SYNOPSIS
+Repeatedly rewrite the focus with context, theorems and basic rewritings.
+
+\LIBRARY window
+
+\FAILURE
+{asm_rewrite_win thms} will fail if the
+hypotheses of any of the theorems in {thms} are not a subset of the
+conjectures of the window.
+This function may fail to terminate if {thms}, or the context,
+describe a circular rewriting.
+
+\SEEALSO
+gen_rewrite_win, pure_rewrite_win, rewrite_win, 
+pure_once_rewrite_win, once_rewrite_win,
+pure_asm_rewrite_win, pure_once_asm_rewrite_win,
+once_asm_rewrite_win, filter_pure_asm_rewrite_win,
+filter_asm_rewrite_win, filter_pure_once_asm_rewrite_win,
+filter_once_asm_rewrite_win
+
+\ENDDOC

@@ -1,0 +1,4 @@
+\THEOREM IS_EL_SEG list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==> (!x. IS_EL x(SEG n m l) ==> IS_EL x l)
+\ENDTHEOREM

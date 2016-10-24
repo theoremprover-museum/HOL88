@@ -1,0 +1,2019 @@
+\chapter{ML System Functions}
+\label{sysfuns}
+
+This chapter describes the system functions provided by \ML.
+Further system functions, for interfacing to the logic, can be
+found in Section~\ref{avramisc}.
+
+\section{Input and output}
+
+\subsection{Reading and writing files}
+
+Input and output to files in \ML\ is done via
+{\it ports\/}\index{ports, in ML input-output@ports, in \ML\ input-output},
+as in Lisp.  Ports are represented by the
+strings\index{strings, in ML@strings, in \ML!for input-output}
+that are returned by one of the functions: \ml{openi}, \ml{openw} and
+\ml{append\_openw}.
+
+An input port is created using the following function:
+
+\begin{boxed}
+\index{openi@\ml{openi}|pin}
+\begin{verbatim}
+   openi : string -> string
+\end{verbatim}\end{boxed}
+
+\noindent Executing \ml{openi\ `$file$`} returns a string that can be used by
+the function \ml{read} (see below) to read characters from the file $file$; and
+fails if the file does not exist on the current search path.
+
+\begin{boxed}
+\index{read@\ml{read}|pin}
+\begin{verbatim}
+   read : string -> string
+\end{verbatim}\end{boxed}
+
+\noindent Executing \ml{read\ `$port$`} reads a character from a port $port$
+which has been produced with \ml{openi}.
+
+An output port is created using one of the two functions:
+
+\begin{boxed}
+\index{append_openw@\ml{append\_openw}|pin}
+\index{openw@\ml{openw}|pin}
+\begin{verbatim}
+   openw        : string -> string
+   append_openw : string -> string
+\end{verbatim}\end{boxed}
+
+
+\noindent Executing \ml{openw\ `$file$`} creates a new file named $file$ for
+output (overwriting an existing file with the same name) and returns a string
+that can be used by \ml{write} to write characters to the file.
+
+To evaluate \ml{append\_openw `$file$`}: if no file named $file$ exists, a new
+one is created and a port for writing to it opened. If a file named $file$
+exists, then a port for writing to its end is returned.
+
+The function \ml{write} is used to write characters to a port.
+
+\begin{boxed}
+\index{write@\ml{write}|pin}
+\begin{verbatim}
+   write : string # string -> void
+\end{verbatim}\end{boxed}
+
+\noindent Executing \ml{write(`$port$`,`$chars$`)} writes $chars$ to port
+$port$ (which must have been produced by \ml{openw} or \ml{append\_openw}).
+
+The following function closes a port:
+
+\begin{boxed}
+\index{close@\ml{close}|pin}
+\begin{verbatim}
+   close : string -> void
+\end{verbatim}\end{boxed}
+
+\subsection{Terminal input and output}
+
+The following function reads a character from the terminal:
+
+\begin{boxed}
+\index{tty_read@\ml{tty\_read}|pin}
+\begin{verbatim}
+   tty_read : void -> string
+\end{verbatim}\end{boxed}
+
+\noindent while the next one writes a string to the terminal:
+
+\begin{boxed}
+\index{tty_write@\ml{tty\_write}|pin}
+\begin{verbatim}
+   tty_write : string -> void
+\end{verbatim}\end{boxed}
+
+
+
+
+\subsection{Loading ML files}
+
+
+It is possible to load \ML\ code from a file, rather than to type interactively
+at the console. There is a user-programmable search path%
+\index{search path!for \HOL\ system|(}%
+\index{HOL system@\HOL\ system!search path for|(}%
+mechanism which determines how \ML\ finds a file with a given name.
+This is used when:
+
+\begin{myenumerate}
+\item The system searches for files (via \ml{load}
+and \ml{compile}, see below).
+\item The system loads or reads theories.
+\end{myenumerate}
+
+A file is searched for by first looking in the current working directory (\ie\
+the one where \HOL\ was run).  If the file is not found there,  then the search
+path is invoked by successively concatenating its members to the  file name (so
+members of the search path must end with {\small\verb%/%}).
+
+When the \HOL\ system is built, the  search path  is initially  set to contain:
+the empty string (for absolute path names), 
+the string {\small\verb%`~/`%} (\ie\ the user's home directory) and
+the directory where the built-in
+theory files live.\index{theories, in HOL logic@theories, in \HOL\ logic!directory of built-in}   Its current
+value is given by the \ML\ function:
+
+\begin{boxed}
+\index{search_path@\ml{search\_path}|pin}
+\begin{verbatim}
+   search_path : void -> string list
+\end{verbatim}\end{boxed}
+
+The search path can be changed by:
+
+\begin{boxed}
+\index{set_search_path@\ml{set\_search\_path}|pin}
+\begin{verbatim}
+   set_search_path : string list -> void
+\end{verbatim}\end{boxed}
+
+The result of a search is given by:
+
+\begin{boxed}
+\index{find_file@\ml{find\_file}|pin}
+\begin{verbatim}
+   find_file : string -> string
+\end{verbatim}\end{boxed}
+
+\noindent This function takes a file name (\eg\ \ml{foo}, \ml{foo.ml} or
+\ml{foo.th} \etc) and returns the result of searching for it using the search
+path. It fails if the file cannot be found.
+
+The functions:
+
+
+\begin{boxed}
+\index{find_theory@\ml{find\_theory}|pin}
+\index{find_ml_file@\ml{find\_ml\_file}|pin}
+\begin{verbatim}
+   find_ml_file : string -> string
+   find_theory  : string -> string
+\end{verbatim}\end{boxed}
+
+\noindent find the file that would be loaded by \ml{load} (and \ml{loadt},
+\ml{loadf} \etc---see below for all of these), and the theory file that would
+be loaded, respectively.  For example,
+
+\begin{hol}\begin{verbatim}
+   find_ml_file `file`
+\end{verbatim}\end{hol}
+
+\noindent might return {\small\verb%`~turkey/wonk/file.ml`%} 
+or {\small\verb%`~turkey/wonk/file_ml.o`%}.
+
+The main file loading function is:
+
+\begin{boxed}
+\index{load@\ml{load}|pin}
+\begin{verbatim}
+   load : string # bool -> void
+\end{verbatim}\end{boxed}
+
+Evaluating \ml{load(`$filename$`,$prflag$)} reads phrases from the first file
+named $filename$ on the current search path and evaluates them exactly as if
+they had been typed by the user at top-level.  If $prflag$ is \ml{true} then
+the result of each evaluation is printed exactly as is done interactively; if
+$prflag$ is \ml{false} then only a dot is printed for each top-level expression
+or declaration.
+
+The file named $filename$ is searched for as follows:
+\begin{itemize}
+\item If $filename$ is a string not ending in
+{\small\verb%.ml%}, then the system first tries to find a compiled file
+\ml{$filename$\_ml.o}; if that does not exist, then it looks for 
+\ml{$filename$.ml}.
+\item If $filename$ does end in {\small\verb%.ml%} then the system does
+not concatenate an extra {\small\verb%.ml%} (as it would in 
+older versions of \HOL), 
+but it looks
+for a $filename$ (and ignores \ml{$filename$\_ml.o} if this exists).
+\end{itemize}
+All this is done in
+turn for each directory on the search path.
+If any failure occurs during
+loading, the call of \ml{load} fails without the rest of the file being read.
+Calls of \ml{load} can be nested, \ie\ a file being input by \ml{load}
+can itself contain calls of \ml{load}.%
+\index{search path!for \HOL\ system|)}%
+\index{HOL system@\HOL\ system!search path for|)}%
+
+
+The following special cases of \ml{load} are provided for convenience:
+
+
+\begin{boxed}
+\index{loadt@\ml{loadt}|pin}
+\index{loadf@\ml{loadf}|pin}
+\begin{verbatim}
+   loadt : string -> void
+   loadf : string -> void
+\end{verbatim}\end{boxed}
+
+\noindent These are defined by:
+
+\begin{hol}\begin{verbatim}
+   let loadt filename = load(filename,true) 
+   and loadf filename = load(filename,false)
+\end{verbatim}\end{hol}
+
+
+\subsection{Compiling ML files}
+\label{MLcompile}
+
+In Common Lisp\index{Common Lisp HOL@Common Lisp \HOL}
+ versions of \HOL, \ML\ source code can be compiled on-the-fly by setting the
+flag {\small\verb%compile_on_the_fly%}\index{compile_on_the_fly@\ml{compile\_on\_the\_fly}}
+to \ml{true} (this has no effect in Franz
+Lisp\index{Franz Lisp HOL@Franz Lisp \HOL}
+versions of \HOL). In both Common Lisp and Franz Lisp 
+versions of \HOL, \ML\
+files can be compiled and the result saved in an
+object code file. 
+An \ML\ file can be compiled using the functions:
+
+\begin{boxed}
+
+\index{compile@\ml{compile}|pin}
+\index{compilet@\ml{compilet}|pin}
+\index{compilef@\ml{compilef}|pin}
+\begin{verbatim}
+   compile  : string # bool -> void
+
+   compilet : string -> void
+   compilef : string -> void
+\end{verbatim}\end{boxed}
+
+The conventions are the same  as for  \ml{load}.   The \ML\  source file should
+always have a name  of the  form $filename${\small\verb%.ml%};  the object file
+will then have the name $filename${\small\verb%_ml.o%}.  The effect of invoking
+\ml{compile} (or \ml{compilet} or \ml{compilef}) is to  load, execute, compile,
+and save the  given file.   The  compiled code  (placed on  the current working
+directory) may  be  loaded  by  the  \ml{load}  function.     After  successful
+compilation, an invocation of the  \ml{load} command  is necessary  in order to
+load the compiled code.  It is  not advisable  to compile  files containing the
+\ml{compile} command, as this will not work in general.   Object  files must be
+loaded in the order in which they were compiled.  If this  is not  the case the
+following kind of error will result:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#loadt`~/hol/ml/lis`;;
+Undefined function called from compiled code   FUN%6915%59
+Lisp error during evaluation
+evaluation failed      
+\end{verbatim}\end{session}
+
+Functions with names like {\small\verb&FUN%6915%59&} are generated automatically by
+the \ML\ compiler as Lisp names for \ML\ lambda expressions. In the session above,
+the compiled file \ml{lis} was loaded before the object file defining
+{\small\verb&FUN%6915%59&} was loaded.
+
+
+
+\section{Output}
+
+\subsection{Pretty printing}
+\label{pretty-print}
+
+\index{pretty printing!of ML@of \ML|(}
+\index{ML@\ML!pretty printer for|(}
+The functions below have the side effect of printing
+their argument exactly as it would be printed at top-level, except that
+\begin{myenumerate}
+\item \ml{print\_string} does not print the 
+quotes that delimit\index{printing, of ML@printing, of \ML!of string quotes}
+strings, but \ml{print\_tok} does;
+\item \ml{print\_all\_thm} prints out the assumptions of theorems\index{theorems, printing of}, whereas
+\ml{print\_thm} just prints one dot (that is, period or full stop)
+per assumption, as at top-level
+(see Section~\ref{topprint} for how to change the top-level printing to use
+\ml{print\_all\_thm}).
+\end{myenumerate}
+
+
+\begin{boxed}
+\index{print_void@\ml{print\_void}|pin}
+\index{print_bool@\ml{print\_bool}|pin}
+\index{print_int@\ml{print\_int}|pin}
+\index{print_string@\ml{print\_string}|pin}
+\index{print_tok@\ml{print\_tok}|pin}
+\index{print_term@\ml{print\_term}|pin}
+\index{print_type@\ml{print\_type}|pin}
+\index{print_thm@\ml{print\_thm}|pin}
+\index{print_all_thm@\ml{print\_all\_thm}|pin}
+\begin{verbatim}
+   print_void    : void   -> void
+   print_bool    : bool   -> void
+   print_int     : int    -> void
+   print_string  : string -> void
+   print_tok     : string -> void
+   print_term    : term   -> void
+   print_type    : type   -> void
+   print_thm     : thm    -> void
+   print_all_thm : thm    -> void
+\end{verbatim}\end{boxed}
+
+
+All text printed by \ML\ goes through a pretty-printer, controllable by the
+user using the commands below. The pretty-printer queues the text until it
+determines where line breaks will be needed; at any point, the queue may hold
+up to three lines of text. The text consists of nested blocks; a block that
+cannot fit on one line is broken at designated places.
+
+
+\begin{boxed}
+\index{print_begin@\ml{print\_begin}|pin}
+\index{print_ibegin@\ml{print\_ibegin}|pin}
+\begin{verbatim}
+   print_begin  : int -> void
+   print_ibegin : int -> void
+\end{verbatim}\end{boxed}
+
+\noindent These functions begin printing blocks in which
+breaks\index{breaks, in ML pretty printing@breaks, in \ML\ pretty printing} 
+ are {\it consistent\/}
+or {\it inconsistent\/}, respectively. Consistent breaks cause a uniform
+indentation at each break; inconsistent breaks pack onto a line and 
+break only when
+there is no more space available. For example, if there is a consistent break
+after each semicolon in \ml{[1;2;3;4;5;6;7;8;9]} then that list is printed as
+
+\begin{hol}\begin{verbatim}
+   [1;
+    2;
+    3;
+    4;
+    5;
+    6;
+    7;
+    8;
+    9]
+\end{verbatim}\end{hol}
+
+\noindent but if the breaks are inconsistent then the list might,
+for example, be printed
+as
+
+\begin{hol}\begin{verbatim}
+   [1; 2; 3 ;4 ;5; 6;
+    7; 8; 9]
+\end{verbatim}\end{hol}
+
+\noindent A call of the form 
+\ml{print\_begin $offset$} signals the beginning of a block that should
+be broken consistently (or inconsistently using \ml{print\_ibegin}), 
+with $offset$ 
+added to the indentation of any lines broken inside.  The end of either kind of
+printing block is signalled by:
+
+\begin{boxed}
+\index{print_end@\ml{print\_end}|pin}
+\begin{verbatim}
+   print_end : void -> void
+\end{verbatim}\end{boxed}
+
+\noindent Calls to \ml{print\_begin} (and \ml{print\_ibegin}) and
+\ml{print\_end} should nest like brackets. When writing a recursive printing 
+routine, the user should include \ml{print\_begin\ 0} as its first command and 
+\ml{print\_end\ ()} as its last. 
+
+Breaks are generated with the functions:
+
+
+\begin{boxed}
+\index{print_newline@\ml{print\_newline}|pin}
+\index{print_break@\ml{print\_break}|pin}
+\begin{verbatim}
+   print_break   : int # int -> void
+   print_newline : void -> void
+\end{verbatim}\end{boxed}
+
+\noindent A call \ml{print\_break($width$,$offset$)} 
+tells the prettyprinter that the line may be 
+broken at that location, 
+if necessary. If the line is broken, then $offset$ is added to the
+current indentation; otherwise, $width$ determines the amount of blank space
+inserted horizontally. The function \ml{print\_newline} 
+prints all the queued text, followed
+by a carriage return. 
+The margin is taken by default to be at position 72, but can be changed with the
+function:
+
+\begin{boxed}
+\index{set_margin@\ml{set\_margin}|pin}
+\begin{verbatim}
+   set_margin : int -> int
+\end{verbatim}\end{boxed}
+
+\noindent The value of the 
+old margin is returned. As an example to illustrate the pretty
+printing primitives, the code for the following built-in \ML\ function will be
+given.
+
+\begin{boxed}
+\index{print_list@\ml{print\_list}|pin}
+\begin{verbatim}
+   print_list : bool -> string -> (* -> **) -> * list -> void
+\end{verbatim}\end{boxed}
+
+\noindent This function is used by the \HOL\ system for printing theories; it
+prints out a list using a supplied printing function for its elements. The list is
+preceded by the supplied string and two dashes \ml{--}.  The argument of type
+\ml{bool} determines whether the list is to be printed with consistent or
+inconsistent breaks. For example:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#set_margin 15;;
+72 : int
+
+#[1;2;3;4;5;6];;
+[1;
+ 2;
+ 3;
+ 4;
+ 5;
+ 6]
+: int list
+\end{verbatim}\end{session}
+
+\noindent The function \ml{print\_list} is defined after the next box.
+
+
+\begin{session}\begin{verbatim}
+#print_list true `Test1:` print_int [1;2;3;4;5;6];;
+Test1: --
+  6     5
+  4     3
+  2     1     
+() : void
+
+#print_list false `Test2:` print_int [1;2;3;4;5;6];;
+Test2: --
+  6
+  5
+  4
+  3
+  2
+  1
+  
+() : void
+\end{verbatim}\end{session}
+
+
+\noindent The definition of \ml{print\_list} is:
+
+\begin{hol}\begin{verbatim}
+   let print_list incon name prfn l =
+       if not (null l) then
+       do (print_begin 2;
+           print_string name;  print_string ` --`;
+           print_break (2,0);
+           if incon then print_ibegin 0 
+           else print_begin 0;
+           map (\x. prfn x; print_break (5,0)) (rev l);
+           print_end(); print_end();
+           print_newline())
+\end{verbatim}\end{hol}
+
+
+\noindent The maximum depth of block nesting is
+initially 500, but can be changed\index{printing, in HOL logic@printing, in \HOL\ logic!structural depth adjustment in} by:
+
+\begin{boxed}
+\index{max_print_depth@\ml{max\_print\_depth}|pin}
+\begin{verbatim}
+   max_print_depth : int -> int
+\end{verbatim}\end{boxed}
+
+\noindent The old value of the 
+maximum print depth is returned. When the current depth exceeds
+the maximum depth, the output is replaced by the holophrast {\small\verb%&%}.
+
+The following function first prints all remaining text in the print queue; then if
+the argument is \ml{true}, the pretty printer is reinitialized.
+
+
+\begin{boxed}
+\index{set_pretty_mode@\ml{set\_pretty\_mode}|pin}
+\begin{verbatim}
+   set_pretty_mode : bool -> void
+\end{verbatim}\end{boxed}
+\index{ML@\ML!pretty printer for|)}
+\index{pretty printing!of ML@of \ML|)}
+
+\section{Exiting and re-entering the system}
+
+A executable Lisp core\index{Lisp!core images}\index{core images, saving of}
+ image of the current session is dumped by the function:
+
+\begin{boxed}
+\index{save@\ml{save}|pin}
+\begin{verbatim}
+   save : string -> void
+\end{verbatim}\end{boxed}
+
+\noindent The argument to \ml{save} is the name of the executable 
+file produced.  Currently,
+an executable Franz Lisp\index{Franz Lisp HOL@Franz Lisp \HOL}
+ \HOL\ is about 3 megabytes and an 
+executable Common Lisp\index{Common Lisp HOL@Common Lisp \HOL}
+\HOL\ is about 7 megabytes (using the public domain Austin Kyoto Common Lisp).
+
+A \HOL\ session is terminated\index{termination, of HOL sessions@termination, of \HOL\ sessions}
+by executing \ml{quit()}, where:
+
+\begin{boxed}
+\index{quit@\ml{quit}|pin}
+\begin{verbatim}
+   quit : void -> void
+\end{verbatim}\end{boxed}
+
+\section{Autoloading}
+
+The \ML\ function
+
+\begin{boxed}
+\index{autoload@\ml{autoload}|pin}
+\begin{verbatim}
+   autoload : string # string # string list -> void
+\end{verbatim}\end{boxed}
+
+\noindent can be used to mark a string $x$ so that when it occurs as an \ML\
+variable, an action is done before the expression containing $x$ is evaluated.
+A common action is to load a definition or theorem named $x$ from a theory.
+
+Evaluating:
+
+\bigskip
+
+{\small
+\noindent\ml{\ \ \ autoload(`$x$`,\ `$fun$`,\ [`$s_1$`;$\ \ldots\ $;`$s_n$`])}
+}
+
+\bigskip
+
+\noindent marks $x$ so that whenever it is parsed as an \ML\ variable in a
+declaration or expression $E$, the \ML\ application 
+\ml{$fun$[`$s_1$`;$\ \ldots\ $;`$s_n$`]} is evaluated before $E$ is evaluated. 
+In the session below, the various
+outputs are explained in the comments that follow them.
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#let fn[x] =
+# print_newline();print_string x;print_newline();print_newline();`fn`;;
+fn = - : (string list -> string)
+
+#autoload(`Mike`,`fn`,[`Hello Mike`]);;autoload(`Mike`,`fn`,[`Hello Mike`]);;
+() : void
+
+#let Mike = 1;;      % Typed at top level                        %
+
+Hello Mike           % Printed by the autoloaded call of fn      %
+
+`fn` : string        % The value returned by the call of fn      %
+
+Mike = 1 : int       % The result of evaluating `let Mike = 1;;` %
+\end{verbatim}\end{session}
+
+\noindent The effect of:
+
+\begin{verbatim}
+   autoload(`Mike`,`fn`,[`Hello Mike`])
+\end{verbatim}
+
+\noindent is that whenever \ml{Mike} is parsed as a variable, the \ML\ 
+expression
+
+\begin{hol}\begin{verbatim}
+   fn[`Hello Mike`]
+\end{verbatim}\end{hol}
+
+\noindent is put into the input stream as though it has been input before the
+expression containing \ml{Mike} was input.  Subsequent occurrences of \ml{Mike}
+will also cause \ml{fn[`Hello Mike`]} to be evaluated.
+
+\begin{session}\begin{verbatim}
+#Mike+1;;
+
+Hello Mike
+
+`fn` : string
+
+2 : int
+\end{verbatim}\end{session}
+
+The \ML\ function
+
+\begin{boxed}
+\index{undo_autoload@\ml{undo\_autoload}|pin}
+\begin{verbatim}
+   undo_autoload : string -> bool
+\end{verbatim}\end{boxed}
+
+\noindent removes the autoload action associated with a string; \ml{true} is
+returned if such an action has already been set up, \ml{false} if not.
+
+\begin{session}\begin{verbatim}
+#undo_autoload `Mike`;;
+true : bool
+
+#Mike+1;;
+2 : int
+\end{verbatim}\end{session}
+
+The intended use of this mechanism is to support predefined \ML\ variables\index{variables, in ML@variables, in \ML!loading of predefined}
+with their values only being loaded if they are actually used. This avoids,
+for example, the \HOL\ system becoming cluttered up with a lot of predefined
+theorems; the space for them is only used if they are actually needed. To
+program this autoloading, the following functions are useful.
+
+
+\begin{boxed}
+\index{let_before@\ml{let\_before}|pin}
+\index{let_after@\ml{let\_after}|pin}
+\begin{verbatim}
+   let_before : (string # string # string list) -> void
+   let_after  : (string # string # string list) -> void
+\end{verbatim}\end{boxed}
+
+Evaluating:
+
+\bigskip
+
+{\small
+\noindent\ \ \ \ml{let\_before(`$MLname$`, `$MLfn$`,[`$s_1$`;$\ldots$;`$s_n$`])}
+}
+
+\bigskip
+
+\noindent causes the declaration:
+
+\bigskip
+
+{\small
+
+\noindent\ \ \ \ml{let $MLname$ = $MLfn$[`$s_1$`;$\ \ldots\ $;`$s_n$`]}
+}
+
+\bigskip
+
+\noindent to be put at the beginning of the list of pending top-level
+evaluations.  As soon as the current top-level evaluation is completed (i.e.
+the one that invoked the call to \ml{let\_before}), the declaration or
+expression at the front of this list of pending evaluations is executed. The
+\ML\ function \ml{let\_after} is like \ml{let\_before}, except that the
+declaration above is put at the end of the list of pending evaluations.
+
+To illustrate the use of \ml{autoload} for autoloading theorems, suppose a
+theory \ml{triv} has previously been created which contains theorems named
+\ml{Th1}, \ml{Th2} and \ml{Th3}.
+
+\begin{session}\begin{verbatim}
+#load_theory`triv`;;
+Theory triv loaded
+() : void
+
+#Th1;;
+
+unbound or non-assignable variable Th1
+1 error in typing
+typecheck failed      
+\end{verbatim}\end{session}
+
+\noindent To arrange for \ml{Th1}, \ml{Th2} and \ml{Th3} to be autoloaded,
+one first defines:
+
+\begin{session}\begin{verbatim}
+#let theorem_list_fn[thy;thname] = theorem thy thname;;
+theorem_list_fn = - : (string list -> thm)
+\end{verbatim}\end{session}
+
+\noindent This is a version of the \ML\ function \ml{theorem} that takes its arguments as a
+list. Then one defines:
+
+\begin{session}\begin{verbatim}
+#let load_thm[thy;thname] = 
+# let_before(thname, `theorem_list_fn`, [thy;thname]);;
+load_thm = - : (string list -> void)
+\end{verbatim}\end{session}
+
+\noindent This defines \ml{load\_thm} to be a function that will load and
+bind \ml{thname} from the theory \ml{thy}. Finally, one defines:
+
+\begin{session}\begin{verbatim}
+#let autoload_thm thy thname = 
+# autoload(thname,`load_thm`,[thy;thname]);;
+autoload_thm = - : (string -> string -> void)
+\end{verbatim}\end{session}
+
+\noindent This takes a theory and a theorem name and sets up the autoloading
+of the theorem from the given theory. The three theorems can now be set up for
+autoloading as follows:
+
+\begin{session}\begin{verbatim}
+#map (autoload_thm `triv`) (words `Th1 Th2 Th3`);;
+[(); (); ()] : void list
+\end{verbatim}\end{session}
+
+\noindent Then if \ml{Th1}, \ml{Th2} or \ml{Th3} occur, they will be
+autoloaded.  This is illustrated below, with the output followed by
+explanatory comments.
+
+\begin{session}\begin{verbatim}
+#REWRITE_RULE[Th2;Th3]Th1;;      % Expression input to top level ML %
+() : void                        % result of load_thm[`triv`;`Th1`] %
+Th1 = . |- x = (y * 1) + 0       % Th1 autoloaded                   %
+
+() : void                        % result of load_thm[`triv`;`Th3`] %
+
+Th3 = |- m * 1 = m               % Th3 autoloaded                   %
+
+() : void                        % result of load_thm[`triv`;`Th2`] %
+
+Th2 = |- m + 0 = m               % Th2 autoloaded                   %
+
+. |- x = y                       % Result of input expression       %
+\end{verbatim}\end{session}
+
+This implementation of autoloading illustrates the general principles, but has
+the disadvantage that theorems are always reloaded whenever they occur. As an
+exercise, the reader might wish to consider how to modify the definitions above
+(using \ml{undo\_autoload}) so that theorems are only loaded once per session.
+
+A special purpose autoloading function, for axioms, definitions and theorems,
+is provided as standard. This is coded to provide a more pleasing output than
+given by the definitions above, and it only autoloads once. The function is:
+
+\begin{boxed}
+\index{autoload_theory@\ml{autoload\_theory}|pin}
+\begin{verbatim}
+   autoload_theory  : (string # string # string) -> void
+\end{verbatim}\end{boxed}
+
+The first argument must be one of the strings \ml{`axiom`}, \ml{`definition`}
+or \ml{`theorem`}; the second argument a theory; and the third argument the
+name of an axiom, definition or theorem from the theory. The result is a
+side-effect that sets up the autoloading of the axiom, definition or theorem
+from the given theory.
+
+
+
+\section{Interpreting lists of numbers as ML input}
+
+The \ML\ function:
+
+\begin{boxed}
+\index{inject_input@\ml{inject\_input}|pin}
+\begin{verbatim}
+   inject_input : int list -> void
+\end{verbatim}\end{boxed}
+
+\noindent concatenates its argument (considered as a list of {\small ASCII}
+characters) onto the front of the input character stream. The function:
+
+\begin{boxed}
+\index{ML_eval@\ML\ml{\_eval}|pin}
+\begin{verbatim}
+   ML_eval : string -> void
+\end{verbatim}\end{boxed}
+
+\noindent is defined in terms of \ml{inject\_input}; it converts its argument
+string to a list of {\small ASCII} characters and then injects these into the
+input stream. The implementation of \ml{ML\_eval} has not been finalised yet;
+see \REFERENCE\ for more details.
+
+Suppose, for example, that the following \ML\ bindings are made:
+
+\setcounter{sessioncount}{1}
+
+\begin{session}\begin{verbatim}
+#let space = ascii_code ` `;;
+space = 32 : int
+
+#let ascii_ize tok =
+#    itlist (\n l. map ascii_code (explode n)@[space]@l)
+#           (words tok)
+#           [];;
+ascii_ize = - : (string -> int list)
+
+#let ML_eval = inject_input o ascii_ize;;
+ML_eval = - : (string -> void)
+\end{verbatim}\end{session}
+
+\noindent Then, for example:
+
+\begin{session}\begin{verbatim}
+#ML_eval `let x=1;;`;;
+() : void
+
+#
+x = 1 : int
+\end{verbatim}\end{session}
+
+
+\section{Initialization}\label{hol-init}
+\index{initialization of HOL@initialization of \HOL}
+\index{hol-init.ml@\ml{hol-init.ml}}
+
+
+When \HOL\ is first run, it looks to see if can find a file \ml{hol-init.ml}
+(using the search path mechanism) and if it finds one, it is loaded (using
+\ml{loadt}).
+
+\section{Operating system calls from ML}
+
+\index{operating systems functions, from HOL@operating systems functions, from \HOL|(}
+There is a miscellaneous collection of operating system calls
+available from \ML. Some of these may not work in some systems
+(\eg\ non Unix versions of \HOL\index{HOL system@\HOL\ system!non-Unix versions of}).
+
+\begin{boxed}
+\index{system@\ml{system}|pin}
+\begin{verbatim}
+   system : string -> int
+\end{verbatim}\end{boxed}
+
+This executes the string argument in a separate process. The number returned by the
+process is returned by the \ML\ function \ml{system}. For example, if
+\ml{foo14} exists on the current directory, then:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#system `rm foo14`;;
+0 : int
+
+#system `rm foo14`;;
+rm: foo14: No such file or directory
+1 : int
+\end{verbatim}\end{session}
+\vfill
+\newpage
+
+\begin{boxed}
+\index{host_name@\ml{host\_name}|pin}
+\begin{verbatim}
+   host_name : void -> string
+\end{verbatim}\end{boxed}
+
+This returns the name of the host machine.
+
+\begin{boxed}
+\index{link@\ml{link}|pin}
+\begin{verbatim}
+   link : string # string -> void
+\end{verbatim}\end{boxed}
+
+\ml{link(`$old$`,`$new$`)} links the file $old$ to $new$; and fails
+if $old$ does not exist.
+
+\begin{boxed}
+\index{unlink@\ml{unlink}|pin}
+\begin{verbatim}
+   unlink : string -> void
+\end{verbatim}\end{boxed}
+
+This unlinks (\ie\ deletes) a file; and fails if the file doesn't exist.
+\index{operating systems functions, from HOL@operating systems functions, from \HOL|)}
+
+\section{Getting the version number}
+
+\index{HOL system@\HOL\ system!version number of}
+The \ML\ function:
+
+\begin{boxed}
+\index{version@\ml{version}|pin}
+\begin{verbatim}
+   version : void -> int
+\end{verbatim}\end{boxed}
+
+\noindent returns the version 
+number\index{version number, of HOL system@version number, of \HOL\ system}
+of the \HOL\ system as an integer less than
+1000 (\ie\ in {\small\verb%HOL88 Version%} {\small\verb% 1.%}$mn$, 
+evaluating \ml{version()} returns \ml{1}$mn$). For example, in version
+1.10:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#version();;
+110 : int
+\end{verbatim}\end{session}
+
+\section{Ordering of ML values}
+
+A predefined \ML\ infix 
+
+\begin{boxed}
+\index{ value comparison, in ML@{\small\verb+<<+} (value comparison, in
+\ML)|pin} 
+\begin{verbatim}
+   $<< : * -> ** -> int
+\end{verbatim}\end{boxed}
+
+\noindent is provided for comparing values; this is substitutive with
+respect to \ML's equality (\ie\ if \ml{$t_1$<<$t_2$} and 
+\ml{$t_1$=$t_1'$} and \ml{$t_2$=$t_2'$}
+then \ml{$t_1'$<<$t_2'$}).
+
+\begin{session}\begin{verbatim}
+#"x+1" << "x+2";;
+true : bool
+
+#"x+2" << "x+1";;
+false : bool
+\end{verbatim}\end{session}
+
+
+\section{Printing defined types}\index{defined types in ML@defined types in \ML!printing of}
+
+The \ML\ function:
+
+\begin{boxed}
+\index{print_defined_types@\ml{print\_defined\_types}|pin}
+\begin{verbatim}
+   print_defined_types : void -> void
+\end{verbatim}\end{boxed}
+
+
+\noindent prints out the definitions of all currently defined  \ML\ types (\ie\
+all \ML\ types that have been  defined using  \ml{lettype}). It  also lists the
+abstract types\index{types, in ML@types, in \ML!printing of currently defined}
+\index{abstract types, in ML@abstract types, in \ML!listing current}
+ in the system.   The  printing of  \ml{lettype}-defined types on
+output can be partially suppressed by setting the  flag \ml{print\_lettypes}\index{print_lettypes@\ml{print\_lettypes}} to
+\ml{false} (the suppression is  only partial, in that  only the  outer level of
+defined types is expanded).  For example, if \ml{print\_lettypes} is
+\ml{false}, then instead of printing:
+
+\begin{hol}\begin{alltt}
+   \(\cdots\) : subgoals
+\end{alltt}\end{hol}
+
+\noindent\ML\ will print:
+
+
+\begin{hol}\begin{alltt}
+   \(\cdots\) : ((term list # term) list # proof)
+\end{alltt}\end{hol}
+
+\noindent The defined type \ml{proof} (namely, \ml{thm list -> thm}) is not expanded\index{printing, in HOL logic@printing, in \HOL\ logic!of proofs@of \ml{proof}s}.
+
+
+
+\section{Lisp in ML}
+
+It is  possible to connect\index{Lisp!accessing of, from HOL system@accessing of, from \HOL\ system}
+ to the  Lisp world  from \ML\  by
+ using the following function:
+
+\begin{boxed}
+\index{lisp@\ml{lisp}|pin}
+\begin{verbatim}
+   lisp : string -> void
+\end{verbatim}\end{boxed}
+
+This function interprets its argument string as an input to the Lisp interpreter.
+This permits arbitrary operating system operations. Beware: uncontrolled
+use of this feature may totally break \ML.
+
+\section{Fast arithmetic}
+
+\index{precision, in ML arithmetic@precision, in \ML\ arithmetic|(}
+\ML\ arithmetic\index{ML@\ML!arithmetic in}\index{arithmetic, in
+ML@arithmetic, in \ML} 
+ is normally done in arbitrary precision.
+It is possible to speed
+up arithmetic, when the user is sure that integers will not exceed the
+word length of the machine, by using the function:
+
+\begin{boxed}
+\index{fast_arith@\ml{fast\_arith}|pin}
+\begin{verbatim}
+   fast_arith : bool -> void
+\end{verbatim}\end{boxed}
+
+Applying \ml{fast\_arith} to \ml{true} switches \HOL\ to 
+a mode in which subsequent
+arithmetic operations are done using
+finite precision fast arithmetic; applying it
+to \ml{false} switches \HOL\ back to infinite 
+precision. Already defined functions are
+not affected by \ml{fast\_arith}. Here is a session that illustrates this:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#letrec exp m n = if n=0 then 1 else m*(exp m (n-1));;
+exp = - : (int -> int -> int)
+
+#exp 2 30, exp 2 31, exp 2 32;;
+(1073741824, 2147483648, 4294967296) : (int # int # int)
+
+#fast_arith true;;
+() : void
+
+#exp 2 30, exp 2 31, exp 2 32;;
+(1073741824, 2147483648, 4294967296) : (int # int # int)
+
+#letrec exp m n = if n=0 then 1 else m*(exp m (n-1));;
+exp = - : (int -> int -> int)
+
+#exp 2 30, exp 2 31, exp 2 32;;
+(1073741824, -2147483648, 0) : (int # int # int)
+
+#fast_arith false;;
+() : void
+
+#exp 2 30, exp 2 31, exp 2 32;;
+(1073741824, -2147483648, 0) : (int # int # int)
+
+#letrec exp m n = if n=0 then 1 else m*(exp m (n-1));;
+exp = - : (int -> int -> int)
+
+#exp 2 30, exp 2 31, exp 2 32;;
+(1073741824, 2147483648, 4294967296) : (int # int # int)
+\end{verbatim}\end{session}
+\index{precision, in ML arithmetic@precision, in \ML\ arithmetic|)}
+
+\noindent {\bf N.B.} \ml{fast\_arith} is only supported in Franz Lisp 
+implementations of \HOL; it may or may not work in other implementations.
+
+\section{Flags}
+\label{flags}
+
+A {\it flag\/} is a boolean state variable of the \HOL\ system.  For
+example, the state of the flag \ml{prompt} determines whether the \ML\
+prompt is printed\index{customization of HOL system@customization of
+\HOL\ system}.  Many of the flags listed below affect the way that
+quotations are parsed and printed.  These are described in detail in
+Chapter~\ref{HOLsyschapter}.  For example, if the flag
+\ml{print\_let}\index{print_let@\ml{print\_let}} is \ml{true} (the
+default) then
+\ml{let}-terms are printed in their  surface syntax;  if it  is \ml{false} then
+the `deep structure' is printed (see Section~\ref{let-exp}).
+
+Note that the flags \ml{print\_parse\_trees}, \ml{print\_sexpr},
+\ml{pp\_sexpr} and \ml{read\_sexpr} in the table below 
+are intended to support \HOL\ as an embedded system within
+Centaur\index{Centaur}, a tool from Inria  at Sofia Antipolis (France)
+that is being used for experiments with a new interface 
+(see Section~\ref{interface}). These flags
+are not intended for general use.
+
+\newpage %PBHACK
+
+\begin{center}
+\index{timing@\ml{timing}|pin}
+\index{show_types@\ml{show\_types}|pin}
+\index{sticky@\ml{sticky}|pin}
+\index{prompt@\ml{prompt}|pin}
+\index{preterm@\ml{preterm}!the flag|pin}
+\index{theory_pp@\ml{theory\_pp}|pin}
+\index{type_error@\ml{type\_error}|pin}
+\index{interface_print@\ml{interface\_print}|pin}
+\index{abort_when_fail@\ml{abort\_when\_fail}|pin}
+\index{print_top_types@\ml{print\_top\_types}|pin}
+\index{print_top_val@\ml{print\_top\_val}|pin}
+\index{print_all_subgoals@\ml{print\_all\_subgoals}|pin}
+\index{print_cond@\ml{print\_cond}|pin}
+\index{print_quant@\ml{print\_quant}|pin}
+\index{print_let@\ml{print\_let}|pin}
+\index{print_restrict@\ml{print\_restrict}|pin}
+\index{print_list@\ml{print\_list}}
+\index{print_set@\ml{print\_set}}
+\index{print_uncurry@\ml{print\_uncurry}|pin}
+\index{print_infix@\ml{print\_infix}|pin}
+\index{print_lettypes@\ml{print\_lettypes}|pin}
+\index{print_load@\ml{print\_load}|pin}
+\index{print_fasl@\ml{print\_fasl}|pin}
+\index{file_load_msg@\ml{file\_load\_msg}|pin}
+\index{print_lib@\ml{print\_lib}|pin}
+\index{compile_on_the_fly@\ml{compile\_on\_the\_fly}|pin}
+\index{ML@\ML!prompt character of}
+\index{evaluation, of ML constructs@evaluation, of \ML\ constructs!timing of}
+\index{evaluation, of ML constructs@evaluation, of \ML\ constructs!counting inference invoked by}
+\index{types, in ML@types, in \ML!printing of}
+\index{prompt, in ML@prompt, in \ML!printing of}
+\index{theory files!pretty printing of}
+\index{failure, in ML@failure, in \ML!to cause exit from HOL@to cause exit from \HOL}
+\index{top level, of ML@top level, of \ML!printing at}
+\index{types, in ML@types, in \ML!printing of}
+\index{flags, in ML@flags, in \ML}
+\index{compilation, in ML@compilation, in \ML}
+\index{libraries!loading of}
+\index{types, in ML@types, in \ML!printing of}
+\index{sticky types, in HOL logic@sticky types, in \HOL\ logic}
+\index{interface maps!in printing}
+\index{pretty printing!flags for, in HOL system@flags for, in \HOL\ system}
+\index{Common Lisp HOL@Common Lisp \HOL}
+\index{Franz Lisp HOL@Franz Lisp \HOL}
+\index{ML@\ML!top level of}
+\index{defined types in ML@defined types in \ML!flag for printing}
+\begin{tabular}{|l|l|l|} \hline
+\multicolumn{3}{|c|}{ } \\
+\multicolumn{3}{|c|}{\bf Settable system flags} \\
+\multicolumn{3}{|c|}{ } \\
+{\it Flag} & {\it Function} & {\it Default value} \\ \hline
+\ml{timing} &    Printing of evaluation times,& \ml{false}\\[-1mm]
+ &                       garbage collect times and &\\[-1mm]
+ &                       number of theorems proved &\\ \hline
+
+\ml{show\_types} &    Prints types in quotations   &    \ml{false}\\ \hline
+
+\ml{sticky}     &         Activates sticky types   &        \ml{false}\\ \hline
+
+\ml{prompt}    &          \ML\ prompt printed  &                 \ml{true}\\ \hline
+
+\ml{preterm}    &  Typecheck \HOL\ with \ml{preterm\_handler} & \ml{false}\\ \hline
+
+\ml{theory\_pp} & Pretty printing of theory files &   \ml{false} \\ \hline
+
+\ml{type\_error} & Verbose type checking errors in quotations& \ml{true} \\ \hline
+
+\ml{interface\_print}  &   Causes inverse of interface map &     \ml{true}\\[-1mm]
+ &                       to be used when printing & \\ \hline
+
+\ml{abort\_when\_fail} &    Modifies \HOL\ so that any \ML &    \ml{false}\\[-1mm]
+ &                       failure causes a quit & \\ \hline
+
+\ml{print\_top\_types} &    Determines whether \ML\ prints &   \ml{true}\\[-1mm]
+ &                       types at top level & \\ \hline
+
+\ml{print\_top\_val} &      Determines whether \ML\ prints &    \ml{true}\\[-1mm]
+ &                       value and type at top level & \\ \hline
+
+\ml{print\_cond} & Pretty print \HOL\ conditionals  &      \ml{true}\\ \hline
+
+\ml{print\_all\_subgoals} & Print all subgoals  &      \ml{true}\\ \hline
+
+\ml{print\_quant} &   Pretty print \HOL\ quantifications &     \ml{true}\\ \hline
+
+\ml{print\_let} &   Pretty print \HOL\ \ml{let}-expressions   &\ml{true}\\ \hline
+
+\ml{print\_restrict} &   Pretty print \HOL\ binder restrictions   &\ml{true}\\ \hline
+
+\ml{print\_list}   &       Pretty print \HOL\ lists &           \ml{true}\\ \hline
+
+\ml{print\_set}   &       Pretty print \HOL\ sets &           \ml{false}\\ \hline
+
+\ml{print\_uncurry} & Pretty print \HOL\ paired abstractions & \ml{true}\\ \hline
+
+\ml{print\_infix} &    Pretty print \HOL\ infixes & \ml{true}\\ \hline
+
+\ml{print\_lettypes} &  Print \ML\ defined types  &          \ml{true}\\ \hline
+
+\ml{print\_load} &       Flag set by the \ML\ function \ml{load} to &   \ml{true}\\[-1mm]
+  &                       determine printing when loading files& \\ \hline
+
+\ml{print\_fasl} &       Print fasl messages from lisp&  \ml{false}\\[-1mm]
+  &                        when loading files& \\ \hline
+
+\ml{file\_load\_msg} &    Print message after loading file&  \ml{false}\\ \hline
+
+\ml{print\_lib} & Verbose printing of library loading &     \ml{false}\\ \hline
+
+\ml{compile\_on\_the\_fly}  &Causes on-the-fly compilation &  \ml{false}\\[-1mm]
+ &                       in Common Lisp \HOL &\\[-1mm]
+ &                       (no effect in Franz Lisp \HOL)&\\ \hline
+\ml{print\_parse\_trees} & Print \ML\ parse tree &     \ml{false}\\ \hline
+\ml{print\_sexpr} & Print terms and theorems as Lisp &     \ml{false}\\ \hline
+\ml{pp\_sexpr} & Pretty print Lisp output  &     \ml{true}\\ \hline
+\ml{read\_sexpr} & Enable direct parse tree input &     \ml{false}\\ \hline
+\end{tabular}
+\end{center}
+
+
+The value of a flag\index{HOL system@\HOL\ system!flags in} is set with the \ML\ function:
+
+\begin{boxed}
+\index{set_flag@\ml{set\_flag}|pin}
+\begin{verbatim}
+   set_flag : (string # bool) -> bool
+\end{verbatim}\end{boxed}
+
+\noindent This function takes a pair \ml{(`$flag$`,$b$)},
+ where $b$ is \ml{true} or \ml{false}, and
+sets the value of the flag $flag$ to $b$. The previous value of the flag is
+returned.
+The settable flags in the system are those listed in the table above.
+
+
+The current value of a flag is returned by the \ML\ function:
+
+\begin{boxed}\index{get_flag_value@\ml{get\_flag\_value}|pin}
+\begin{verbatim}
+   get_flag_value : string -> bool
+\end{verbatim}\end{boxed}
+
+
+A new flag can be created with the \ML\ function:
+
+\begin{boxed}\index{new_flag@\ml{new\_flag}|pin}
+\begin{verbatim}
+   new_flag : (string # bool) -> void
+\end{verbatim}\end{boxed}
+
+\noindent The string is the flag's name and the boolean is its initial value;
+failure occurs if the flag already exists.
+
+\section{Modifying the ML read-eval-print loop}
+
+The top-level\index{top level, of ML@top level, of \ML!customization of}\index{ML@\ML!top level of}\index{HOL system@\HOL\ system!customization of|(}\index{customization of HOL system@customization of \HOL\ system}
+ of \ML\ can be customized in various ways.  Some of these concern
+the representation  of  the  \HOL\  logic:   see  Section~\ref{flags} above for
+various flags that control the parsing and printing of terms, see
+Section~\ref{change-lambda} for changing the concrete syntax for $\lambda$
+inside quotations, and see Section~\ref{turnstile} for changing the string
+that the printer uses to represent $\turn$.
+
+
+\subsection{Changing the ML prompt}
+
+
+The \ML\ prompt\index{ML@\ML!prompt character of} string\index{prompt, in ML@prompt, in \ML!changing of}
+\index{ prompt, in ML@{\small\verb+#+} (prompt, in \ML)}, default {\small\verb%#%}, can be dynamically changed
+with the function:
+
+\begin{boxed}
+\index{set_prompt@\ml{set\_prompt}|pin}
+\begin{verbatim}
+   set_prompt : string -> string
+\end{verbatim}\end{boxed}
+
+\noindent Executing \ml{set\_prompt `}$string$\ml{`}
+changes the ML prompt to $string$;
+the previous prompt string is returned. For example:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#set_prompt `hol88> `;;
+`#` : string
+
+hol88> 1+2;;
+3 : int
+
+hol88> 
+\end{verbatim}\end{session}
+
+Setting the flag \ml{prompt} to \ml{false} switches off the 
+printing of prompts.
+In some contexts flag \ml{prompt} being \ml{false} has the same 
+effect as setting
+the prompt to the empty string (\ml{``}), but in others (\eg\ in 
+some emacs\index{emacs} modes)
+it is different.
+
+\subsection{Changing the top-level printing of values in ML}
+\label{topprint}
+
+\index{abstract types, in ML@abstract types, in \ML!printing of|(}
+The printing\index{printing, of ML@printing, of \ML!user-modified}
+ of values in the \ML\ read-eval-print loop can be modified to 
+use a
+user-supplied printing function.  This is mainly useful for defining the
+printing of abstract types\index{abstract types, in ML@abstract types, in \ML!printing of}.
+
+If $foo$ is an \ML\ function with \ML\ type $ty$\ml{ -> }$ty'$, then
+ evaluating: \ml{top\_print }$foo$\index{top_print@\ml{top\_print}}
+at top-level will replace the default top-level printing 
+of values of type $ty$ by calls to $foo$. For example:
+
+\begin{hol}\begin{verbatim}
+   top_print print_all_thm
+\end{verbatim}\end{hol}
+
+\noindent will make the assumptions of theorems\index{printing, in HOL logic@printing, in \HOL\ logic!of hypotheses of theorems} be printed out 
+in full, rather than
+just as a period 
+(dot, full stop) (\ml{print\_all\_thm} is a function that prints out the
+assumptions and conclusions of a theorem). 
+
+Note that \ml{top\_print} is a construct of \ML, not an ordinary function. It
+should only be used at top-level; an error will result otherwise.
+
+The following example illustrates how
+abstract type values can be made to print nicely.
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#abstype two = void + void
+# with left = abs_two(inl())
+# and right = abs_two(inr())
+# and print_two x = print_string(isl(rep_two x) => `left` | `right`);;
+left = - : two
+right = - : two
+print_two = - : (two -> void)
+
+#left;;
+- : two
+
+#right;;
+- : two
+
+#top_print print_two;;
+- : (two -> void)
+
+#left;;
+left : two
+
+#right;;
+right : two
+\end{verbatim}\end{session}
+\vfill
+\newpage
+\begin{session}\begin{verbatim}
+#top_print (\x. print_string`Int<`; print_int x; print_string`>`);;
+- : (int -> void)
+
+#1;;
+Int<1> : int
+
+#[1;2;3];;
+[Int<1>; Int<2>; Int<3>] : int list
+\end{verbatim}\end{session}
+\index{abstract types, in ML@abstract types, in \ML!printing of|)}
+
+\subsection{Suppressing the printing of ML types}
+
+The flag \ml{print\_top\_types} determines whether \ML\ prints out the types of
+values at top level. For example, continuing the session above\index{print_top_types@\ml{print\_top\_types}}\index{types, in ML@types, in \ML!printing of}:
+
+\begin{session}\begin{verbatim}
+#set_flag(`print_top_types`,false);;
+true 
+
+#1;;
+Int<1> 
+
+#[1;2;3];;
+[Int<1>; Int<2>; Int<3>] 
+\end{verbatim}\end{session}
+\index{HOL system@\HOL\ system!customization of|)}
+
+
+\section{The help system}\index{help@\ml{help}|pin}\index{help system|(}
+
+The help system accesses a database containing a description of every \ML\
+function predefined in \HOL. This database is in the directory \ml{help} and
+also provides the sources for \REFERENCE.  The help system is invoked with the
+function:
+
+\begin{boxed}\index{help@\ml{help}|pin}
+\begin{verbatim}
+   help : string -> void
+\end{verbatim}\end{boxed}
+Evaluating \ml{help `$foo$`} concatenates the
+contents of the help file associated with \ml{$foo$} into the
+current session. For example:
+\vfill
+\newpage
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#help `length`;;
+
+length : * list -> int
+
+SYNOPSIS
+
+Computes the length of a list: length [x1;...;xn] returns n.
+
+FAILURE CONDITIONS
+
+Never fails.
+\end{verbatim}\end{session}
+
+
+The help system uses the Unix \ml{cat} as the default for displaying help
+files. This default can be changed with the \ML\ function:
+
+\begin{boxed}\index{set_help@\ml{set\_help}|pin}
+\begin{verbatim}
+   set_help : string -> string
+\end{verbatim}\end{boxed}
+
+\noindent This installs a new user-supplied help function, and returns the
+previous one as result. The effect of \ml{help `$file$`} is to pipe the
+appropriate help file derived from $file${\small\verb%.doc%} into the current
+help function, with the top level of \ML\ being the standard output.  For
+example,
+
+\begin{hol}\begin{verbatim}
+   set_help `lpr`
+\end{verbatim}\end{hol}
+
+\noindent will cause the help file to be printed instead of being displayed and
+
+\begin{hol}\begin{verbatim}
+   set_help `lpr -Pfoo`
+\end{verbatim}\end{hol}
+
+\noindent will cause it to be printed to the printer \ml{foo}.
+
+
+Two new functions:
+
+\begin{boxed}
+\index{set_help_search_path@\ml{set\_help\_search\_path}|pin}
+\index{help_search_path@\ml{help\_search\_path}|pin}
+\begin{verbatim}
+   set_help_search_path : string list -> void
+   help_search_path     : void -> string list
+\end{verbatim}\end{boxed}
+
+\noindent have been added to the system for accessing the internal search path
+used by \HOL\ to find online help files.  The help search path has precisely
+the same format as the regular search path, and these two functions are
+analogous to the \ML\ functions \ml{search\_path} and
+\ml{set\_search\_path}.\index{help system|)}\index{search path!for help
+system}\index{HOL system@\HOL\ system!help search path for}
+
+\section{Syntax blocks}
+
+\index{syntax blocks|(}
+A syntax block starts with a keyword and ends with a terminator and is
+associated with a function on strings. When such a block is
+encountered in the input stream, all the characters between the start
+keyword and the terminator are made into a string to which the
+associated function is applied. Syntax blocks can be used with the
+parser generator library {\small\verb%parser%} to parse user-specified
+languages into \HOL\ terms. See the documentation of the library for
+details and examples.
+
+The ML function:
+
+\begin{boxed}\index{new_syntax_block@\ml{new\_syntax\_block}|pin}
+\begin{verbatim}
+   new_syntax_block : string # string # string -> void
+\end{verbatim}\end{boxed}
+
+
+\noindent declares a new syntax block. The first argument is the start keyword
+of the block, the second argument is the terminator and the third
+argument is the name of a function having a type which is an instance
+of {\small\verb%string->*%}. The effect of
+
+\begin{hol}
+{\small\verb%   new_syntax_block(`XXX`, `YYY`, `%}$f${\small\verb%`);;%}
+\end{hol}
+
+\noindent is that if subsequently
+
+\begin{hol}\begin{verbatim}
+   XXX   ...   YYY
+\end{verbatim}\end{hol}
+
+\noindent occurs in the input, then it is as though
+
+\begin{hol}
+{\small\verb%   %}$f${\small\verb% `   ...   `%}
+\end{hol}
+
+\noindent were input instead. For example:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#let foo s = print_string `Hello: `; print_string s; print_newline();;
+foo = - : (string -> void)
+
+#new_syntax_block(`<<`,`>>`, `foo`);;
+() : void
+ 
+#<< Mike >>;;
+Hello: Mike
+() : void
+
+\end{verbatim}\end{session}
+
+The function \ml{set\_string\_escape} (see Section~\ref{MLconexp}) 
+is useful with syntax blocks,
+because it enables backslash ({\small\verb%\%}) to be included in
+strings.\index{syntax blocks|)}
+
+\section{Relocating HOL}
+
+
+The built-in \ML\ function:
+
+\begin{boxed}
+\index{install@\ml{install}|pin}
+\begin{verbatim}
+   install : string -> void
+\end{verbatim}\end{boxed}
+
+\noindent reconfigures a running \HOL\
+system\index{HOL system@\HOL\ system!root directory of} to a new root
+directory\index{root directory, of HOL system@root directory, of \HOL\
+system}.  The string argument to \ml{install} should be the absolute
+path name to the directory in which the \HOL\ system is located.
+Chapter 1 of \TUTORIAL\ (`Getting and Installing \HOL') describes in
+detail how to configure \HOL.
+
+Executing \ml{install `$directory$`} does the following:
+
+\begin{itemize}
+
+\item Sets the search path to: 
+{\small\verb%[``; `~/`; `%}\ml{$directory$}{\small\verb%/theories/`]%}%
+\index{search path!for \HOL\ system}%
+\index{HOL system@\HOL\ system!search path for}%
+\item Sets up the internal search path used by
+\HOL\ to find online help files.
+\item Sets up the internal search path used by \HOL\ to find libraries.
+\end{itemize}
+
+\section{Libraries}
+\label{Libraries}
+
+The \HOL\ system has a library mechanism which allows useful theories and tools
+to be loaded on demand in a uniform way. A library is loaded with the function:
+
+\begin{boxed}
+\index{load_library@\ml{load\_library}|pin}
+\begin{verbatim}
+   load_library : string -> void
+\end{verbatim}\end{boxed}
+
+\noindent A call to \ml{load\_library `\m{lib}`} will do nothing if the library
+$lib$ is already loaded. Otherwise it will load into \HOL\ the {\it library
+load file\/}\index{libraries!load files for} associated with the library
+\m{lib}. Ordinarily, this load file is called \ml{\m{lib}/\m{lib}.ml}.  If,
+however, the string supplied to \ml{load\_library} contains a colon, as in
+
+\begin{hol}\begin{alltt}
+   load_library `\m{lib}:\m{part}`;;
+\end{alltt}\end{hol}
+
+\noindent then the load file will be called \ml{\m{lib}/\m{part}.ml}.  
+
+The%
+\index{search path!for libraries|(}%
+\index{HOL system@\HOL\ system!library search path for|(}
+system searches for the load file in the library directories specified by an
+internal search path called the {\it library search path}.  This is a list of
+directory names which has precisely the same format as the regular search path.
+Associated with the library seach path are two functions:
+
+\begin{boxed}
+\index{set_library_search_path@\ml{set\_library\_search\_path}|pin}
+\index{library_search_path@\ml{library\_search\_path}|pin}
+\begin{verbatim}
+   set_library_search_path : string list -> void
+   library_search_path     : void -> string list
+\end{verbatim}\end{boxed}
+
+\noindent These are analogous to the \ML\ functions \ml{search\_path} and
+\ml{set\_search\_path}; they set the library search path and retrieve the
+library search path, respectively.  The library search path is intended to
+support the use of local libraries. If the library search path is, for example:
+
+\begin{hol}\begin{verbatim}
+   [`~/library/`; `/usr/lib/hol/Library/`]
+\end{verbatim}\end{hol}
+
+\noindent where {\small\verb!~/library/!} is the pathname of the directory in
+which a user's local libraries reside and \ml{/usr/lib/hol/Library/} is the
+\HOL\ system library directory, then evaluating \ml{load\_library `\m{lib}`}
+will load the file {\small\verb!~!}\ml{/library/\m{lib}/\m{lib}.ml} if it
+exists and otherwise load the file \ml{/usr/hol/Library/\m{lib}/\m{lib}.ml}. If
+neither file exists, then the call to \ml{load\_library}
+fails.\index{search path!for libraries|)}% 
+\index{HOL system@\HOL\ system!library search path for|)}
+
+The output during the loading of a library is determined by the flag
+\ml{print\_lib}\index{print_lib@\ml{print\_lib}}. If this is \ml{true}, then
+the output is verbose. For consistency, libraries should be set up so that any
+loading of \ML\ files done by library load files is done by:
+
+\begin{hol}
+\index{load@\ml{load}}
+\begin{alltt}
+   load(`\m{file}`, get_flag_value `print_lib`)
+\end{alltt}\end{hol}
+
+\noindent This makes verbose printing during the loading of \m{file}
+conditional on the current value of the flag \ml{print\_lib}.
+
+A list of the currently loaded libraries can be obtained using:
+
+\begin{boxed}
+\index{libraries@\ml{libraries}|pin}
+\begin{verbatim}
+   libraries : void -> string list
+\end{verbatim}\end{boxed}
+
+\subsection{Library load files}
+
+\index{libraries!load files for|(}
+
+It is the responsibility of the author of a library to create an appropriate
+load file. This file must contain \ML\ code that carries out all the actions
+necessary to make the contents of the library available in \HOL. For example,
+for a library $lib$ that contains both executable code and theory files, the
+standard sequence of events would be:
+
+\begin{myenumerate}
+\item add to the search path the absolute pathname to the library $lib$.
+
+\item add to the help search path any pathnames to directories containing
+online help files specific to the library $lib$.
+
+\item if the user is in draft mode, then
+
+\begin{itemize}
+    \item make the theories of the library new parents of the current theory.
+    \item activate autoloading from these theories.
+    \item load any \ML\ code that is part of the library.
+\end{itemize}
+
+\item if the user is {\it not\/} in draft mode, but the theories in $lib$ are
+descendents of the current theory, then:
+
+\begin{itemize}
+    \item make the main library theory the current theory.
+    \item activate autoloading from library theories.
+    \item load any \ML\ code that is part of the library.
+\end{itemize}
+
+\item if the user is not in draft mode and the theories in $lib$ are not
+descendents of the current theory, then these theories cannot at this stage be
+loaded into \HOL. In this case, the load file should cause a function to be
+defined (e.g.\ `\ml{load\_\m{lib}}') which, when called, will activate
+autoloading for the library theories and load the library's \ML\ code.
+
+\end{myenumerate}
+
+\noindent It is intended that calls to \ml{load\_library} of the form
+
+\begin{hol}\begin{alltt}
+   load_library `\m{lib}`;;
+\end{alltt}\end{hol}
+
+\noindent will load an entire library, and the corresponding load file
+\ml{\m{lib}/\m{lib}.ml} should be set up to do so.  Calls of the form
+
+\begin{hol}\begin{alltt}
+   load_library `\m{lib}:\m{part}`;;
+\end{alltt}\end{hol}
+
+\noindent are intended to load only a part of the library \m{lib}, for which
+the corresponding load file \ml{\m{lib}/\m{part}.ml} will be responsible.
+\index{libraries!load files for|)}
+
+\subsection{Libraries available in Version 2.0}
+
+The libraries in {\small HOL88.2.0} are shown in the following table:
+\begin{center}
+\index{string library@\ml{string} library}
+\index{eval library@\ml{eval} library}
+\index{unwind library@\ml{unwind} library}
+\index{taut library@\ml{taut} library}
+\index{fixpoints library@\ml{fixpoints} library}
+\index{prog_logic88 library@\ml{prog\_logic88} library}
+\index{group library@\ml{group} library}
+\index{integer library@\ml{integer} library}
+\index{sets library@\ml{sets} library}
+\index{pred_sets library@\ml{pred\_sets} library}
+\index{finite_sets library@\ml{finite\_sets} library}
+\index{bags library@\ml{bags} library}
+\index{convert library@\ml{convert} library}
+\index{auxiliary library@\ml{auxiliary} library}
+\index{quotient library@\ml{quotient} library}
+\index{parser library@\ml{parser} library}
+\index{prettyp library@\ml{prettyp} library}
+\index{trs library@\ml{trs} library}
+%\index{well_order library@\ml{well\_order} library}
+%\index{card library@\ml{card} library}
+%\index{zet library@\ml{zet} library}
+\index{Hoare logic library}
+\index{group theory library}
+\index{integers (from groups) library}
+\index{set theory libraries}
+\index{conversion and unwinding library}
+\index{set theory (of predicates) library}
+\index{quotient types library}
+\index{well-ordering library}
+\index{cardinals library}
+\index{integers (as quotient types) library}
+\index{fixed point theory library}
+\index{tautology checker library}
+\index{unwinding rule library}
+\index{wordn library@word$n$ library}
+\index{ASCII@{\small ASCII}}
+
+
+\begin{tabular}{|l|l|l|} \hline
+\multicolumn{3}{|c|}{ } \\
+\multicolumn{3}{|c|}{\bf Libraries in HOL88.2.0} \\
+\multicolumn{3}{|c|}{ } \\
+{\it Library} & {\it Brief description} & 
+{\it Author} \\ \hline
+
+\ml{string} & \ml{ASCII} characters \& strings&  T. Melham  (Camb.)\\ 
+
+\ml{eval}&\ml{word}$n$ types from \LCFLSM& M. Gordon \& T. Melham (Camb.)\\
+
+\ml{unwind} & Structure unwinding rules& M. Gordon \& T. Melham  (Camb.) \\ 
+
+\ml{taut} & Tautology checker & R. Boulton (Camb.) \\ 
+
+\ml{fixpoints}    & General theory of fixed points& M. Gordon (Camb.) \\ 
+
+\ml{prog\_logic88} & Hoare Logic \& Dijkstra \con{Wp}& M. Gordon (Camb.) \\ 
+
+\ml{group} & Group theory &  E. Gunter (Penn.) \\ 
+
+\ml{integer}  & Integers derived from groups&   E. Gunter (Penn.) \\
+
+\ml{finite\_sets} &   Theory of finite sets& P. Windley (UC Davis) \\
+
+\ml{sets}&Manna \& Waldinger set theory& P. Leveilley (Ecole Polytechnique) \\
+
+\ml{bags} & Manna \& Waldinger bag theory& P. Leveilley (Ecole Polytechnique) \\
+
+\ml{convert} &   Conversion \& unwinding tools& D. Shepherd (Inmos) \\
+
+\ml{auxiliary} &   General rules, tactics \& theorems& T. Kalker (Philips, ERL) \\
+
+\ml{set} &   Set theory of predicates&    T. Kalker (Philips, ERL) \\
+
+\ml{quotient} & Tools for quotient types&   T. Kalker (Philips, ERL) \\
+
+\ml{parser} & Parser generator &   J. Van Tassel (Camb.) \\
+
+\ml{prettyp} & Pretty-printer generator&   R. Boulton (Camb.) \\
+
+\ml{trs} & Theorem retrieval system &   R. Boulton (Camb.) \\ \hline
+\end{tabular}
+\end{center}
+
+\noindent Four libraries from Version 1.11 of HOL have been temporarily withdrawn,
+because the Cambridge group have been unable to rebuild them in Version 2.0.
+These are:
+
+\begin{hol}\begin{verbatim}
+   card   well_order   zet   csp
+\end{verbatim}\end{hol}
+
+\noindent The first three are difficult to rebuild because of changes to
+resolution.  They rely very heavily on the order in which the
+assumptions of goals appear.  The fourth library uses the
+{\small\verb%set%} library, which has been substantially modified.
+These four libraries have been moved to
+{\small\verb%contrib%} until they are updated by their authors.
+
+The libraries \ml{eval} and \ml{unwind} are of historical interest only and
+will eventually be replaced.
+
+\subsection{Location of libraries}\label{libloc}
+
+The function 
+
+\begin{boxed}\index{library_pathname@\ml{library\_pathname}|pin}
+\begin{verbatim}
+   library_pathname : void -> string
+\end{verbatim}\end{boxed}
+
+\noindent returns the internal pathname used by \HOL\ to load libraries.  This
+pathname, which is site-specific and is given an initial value when the system
+is built, is ordinarily the absolute pathname to the \HOL\ system library
+directory.  This pathname will typically have the form:
+
+\begin{hol}\begin{alltt}
+   `\(directory\)/hol/Library`
+\end{alltt}\end{hol}
+
+\noindent where $directory$ is the site-specific absolute pathname in which the
+\HOL\ distribution directory (`\ml{hol}') resides. This default value returned
+by \ml{library\_pathname} can be changed by users only via the \ml{install}
+function.
+
+Normally, \ml{library\_pathname} just returns the absolute pathname to the HOL
+system library.  But during the evaluation of a call to \ml{load\_library}, the
+string returned by any call to \ml{library\_pathname} will be the library
+directory in which the library being loaded resides.
+
+The string returned by \ml{library\_pathname} is primarily used in library load
+files\index{libraries!load files for} to update the \HOL\ search path and help
+search path.  For example, suppose that in a library \m{lib} there is a
+directory \ml{help} which contains online help files specific to this library.
+The load file \ml{\m{lib}.ml} can then update the help search path as follows:
+
+\begin{hol}\begin{alltt}
+   let path = library_pathname() ^ `/\m{lib}/help/` in
+       set_help_search_path (path . help_search_path())
+\end{alltt}\end{hol}
+
+\noindent This will make the help files of the library \m{lib} available for
+online help whenever the library is loaded.  Furthermore, because during a call
+to \ml{load\_library}, the function \ml{library\_pathname} returns the
+directory pathname of the library being loaded, this code is completely
+portable.  The entire library \m{lib} can be moved between library directories
+(e.g. from a local library into the system library) without having to edit
+pathnames.
+
+\subsection{Adding a new library}
+
+System libraries reside in the \HOL\ distribution directory \ml{hol/Library}.
+If $lib$ is a library, then the directory\index{libraries!directory of}
+\ml{hol/Library/$lib$} needs to contain the following files (in addition to the
+various files making up the library):
+
+\begin{myenumerate}
+\item a file \ml{READ-ME}, which gives details of the library.
+\item a library load file\index{libraries!load files for}
+\ml{\m{lib}.ml}. This is the file loaded by \ml{load\_library `\m{lib}`};
+it should load the entire library into \HOL.
+\item A \ml{Makefile} which tells how to rebuild theories and 
+compile \ML.  The \ml{Makefile} should set up such that 
+\begin{itemize}
+\item \ml{make all} completely rebuilds the library.
+\item \ml{make clean} deletes all object code in the library.
+\item \ml{make clobber} deletes all object code and
+theory files in the library.
+\end{itemize}
+\end{myenumerate}
+
+\noindent In addition, \m{lib} may optionally contain a directory \ml{help}
+containing help files in the standard \ml{.doc} format.  Furthermore,
+alternative load files for loading only parts of the library may also be put
+into \m{lib}.  Similar conventions should be followed for local libraries.
+
+To install\index{libraries!installation of} a new library $lib$ in the \HOL\
+system library, the directory $lib$ should be added to \ml{hol/Library} and the
+following files modified:
+
+\begin{myenumerate}
+\item\ml{hol/Library/Makefile}: add \m{lib} to the list of libraries given
+by the makefile macro \ml{Libraries}.
+\item\ml{hol/Versions.$m$.$n$}: add an entry to document the addition of $lib$.
+\end{myenumerate}
+
+\noindent The simplest way to make a library is to copy an existing one (\eg\
+\ml{hol/Library/string}) and then to edit the various files.  This will result
+in a uniform format.
+
+\section{Experimental support for a new interface}\label{interface}
+\index{interface, new|(}
+\index{HOL system@\HOL\ system!new interface for|(}
+The material in this section supports a new and experimental interface
+to \HOL\ being developed at Inria in Sofia Antipoles (France). For
+details, contact:
+
+\begin{center}
+\begin{tabular}{l}
+Gilles Kahn ({\tt email:} Gilles.Kahn@fr.inria.mirsa)\\
+INRIA --- Sophia Antipolis\\
+2004, route des Lucioles\\
+B.P. 109\\
+06561 Valbonne C\'edex\\
+France
+\end{tabular}
+\end{center}
+
+\noindent This interface is implemented using a tool called 
+Centaur\index{Centaur} and will support full colour graphic input
+including, for example, the selection of subterms, goal assumptions
+etc by mouse pointing. During 1991 experiments are being conducted to
+determine whether such an interface will actually improve proof
+productivity. Only when this is known will a production version be
+produced.
+
+
+\begin{center}\it
+\begin{quote}
+The facilities described in the rest of this section are not intended
+for general use. They describe the data formats being used to
+communicate with Centaur and are likely to change.
+\end{quote}
+\end{center}
+
+Flags have been set up to enable \HOL\ to interact by sending and
+receiving S-expressions from Centaur.
+
+If the flag \ml{print\_parse\_trees} is set to \ml{true} then \ML\ prints out the
+parse tree of the expression or declaration just input. Note that this
+is usually the value in {\small\verb+%pt+}, 
+but not always, because in some cases the
+read-eval-print loop of \ML\ destructively modifies {\small\verb+%pt+}. 
+A variable {\small\verb+%pt1+}
+holds the parse tree that is printed; this variable is only maintained
+(by \ml{okpass} in \ml{f-tml.l}) if the flag \ml{print\_parse\_trees} 
+is \ml{true}.
+
+If the flag \ml{print\_sexpr} is set to \ml{true}, then an S-expression
+representing the value of a term or theorem is printed instead of the
+normal output.  The printing of types is suppressed for all values.
+
+The printing in the two cases above is pretty if the flag \ml{pp\_sexpr}
+is \ml{true} (the default) and non-pretty otherwise.
+Here is an example session:
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#let x = 1;;
+x = 1 : int
+
+#set_flag(`print_parse_trees`,true);;
+false : bool
+
+(mk-empty)
+
+#let x = 1;;
+x = 1 : int
+
+(mk-let ((mk-var x) mk-intconst 1))
+\end{verbatim}\end{session}
+If \ml{read\_sexpr} 
+is set to \ml{true}, then parse trees may be input
+ between \ml{begin\_parse\_tree} and \ml{end\_parse\_tree}. For example:
+\begin{hol}\begin{verbatim}
+   begin_parse_tree
+    (mk-let ((mk-var x) mk-quot (MK=CONST T)))
+   end_parse_tree
+\end{verbatim}\end{hol}
+is equivalent to:
+\begin{hol}\begin{verbatim}
+   let x = "T"
+\end{verbatim}\end{hol}
+Continuing the session:
+\begin{session}\begin{verbatim}
+#set_flag(`read_sexpr`, true);;
+false : bool
+
+(mk-appn
+ (mk-var set_flag) 
+ (mk-dupl (mk-tokconst read_sexpr) (mk-boolconst t)))
+
+#begin_parse_tree (mk-let ((mk-var x) mk-intconst 1)) end_parse_tree;;
+x = 1 : int
+
+(mk-let ((mk-var x) mk-intconst 1))
+
+#set_flag(`print_parse_trees`,false);;
+true : bool
+
+#begin_parse_tree
+# (mk-let ((mk-var x) mk-quot (MK=CONST T)))
+#end_parse_tree;;
+x = "T" : term
+\end{verbatim}\end{session}
+
+\noindent Terms can also be input in the form printed out when \ml{print\_sexpr} is
+\ml{true}, by enclosing them between \ml{begin\_term} and \ml{end\_term}. 
+For example:
+\begin{hol}\begin{verbatim}
+   begin_term
+   (comb (comb (const + (fun (num) (fun (num) (num))))
+               (var x (num))
+               (fun (num) (num)))
+         (const |1| (num))
+         (num)) 
+   end_term
+\end{verbatim}\end{hol}
+is equivalent to:
+\begin{hol}\begin{verbatim}
+   "x+1"
+\end{verbatim}\end{hol}
+
+\noindent Continuing the session:
+\begin{session}\begin{verbatim}
+#begin_term
+#  (comb (comb (const + (fun (num) (fun (num) (num))))
+#              (var x (num))
+#              (fun (num) (num)))
+#        (const |1| (num))
+#        (num)) 
+#  end_term;;
+"x + 1" : term
+
+#set_flag(`print_sexpr`, true);;
+false 
+
+#"x+1";;
+(comb (comb (const + (fun (num) (fun (num) (num))))
+            (var x (num))
+            (fun (num) (num)))
+      (const |1| (num))
+      (num)) 
+  
+#[1;2;3];;
+[1; 2; 3] 
+\end{verbatim}\end{session}\index{interface, new|)}\index{HOL system@\HOL\ system!new interface for|)}
+
+
+
+It is expected that the exact details of the format used to
+communicate between \HOL\ and Centaur will change. For example, it is
+likely that in future releases all types, except those on variables,
+will be suppressed in S-expression output.

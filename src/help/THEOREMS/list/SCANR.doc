@@ -1,0 +1,5 @@
+\THEOREM SCANR list
+|- (!f e. SCANR f e[] = [e]) /\
+   (!f e x l.
+     SCANR f e(CONS x l) = CONS(f x(HD(SCANR f e l)))(SCANR f e l))
+\ENDTHEOREM

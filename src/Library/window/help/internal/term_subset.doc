@@ -1,0 +1,10 @@
+\DOC term_subset
+
+\TYPE {term_subset : (term list -> term list -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

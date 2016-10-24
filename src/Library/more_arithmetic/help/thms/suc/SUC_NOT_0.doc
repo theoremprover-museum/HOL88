@@ -1,0 +1,3 @@
+\THEOREM SUC_NOT_0 suc
+|- !n. ~(SUC n = 0)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM SUFFIX_DEF list
+|- !P l. SUFFIX P l = FOLDL(\l' x. (P x => SNOC x l' | []))[]l
+\ENDTHEOREM

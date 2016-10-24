@@ -1,0 +1,26 @@
+\DOC EXPAND_THOBS_TAC
+
+\TYPE {EXPAND_THOBS_TAC : (string -> tactic)}
+
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS 
+Expands a goal using the abstract definition and theory
+obligations for the named theory.
+
+\DESCRIBE When applied to a goal {A ?- thob_def(rep)}, where
+{thob_def} is a theory obligation and {rep} is a representation, the
+tactic expands the definition of the theory obligation and reduces the
+terms resulting from the abstract definitions.  This tactic is usually the
+first step in proving that a given representation meets the abstract theory
+obligations.
+
+\FAILURE
+Fails if the named theory is not an ancestor.
+
+
+\SEEALSO
+new_theory_obligations, new_abstract_representation
+
+\ENDDOC

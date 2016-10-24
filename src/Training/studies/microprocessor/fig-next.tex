@@ -1,0 +1,48 @@
+% ===== Next Instruction Signal ========================================
+% ======================================================================
+\setlength{\unitlength}{1mm}
+\begin{picture}(70,77)(0,0)
+
+  {\thicklines {\put(0,20){\framebox(70,30){
+\begin{minipage}[c]{25mm}
+\begin{center}
+interpreter\\
+control part
+\end{center}
+\end{minipage}
+}}}}
+
+  \put(10,9){\vector(0,1){11}}
+  \put(35,20){\vector(0,-1){11}}
+  \put(60,9){\vector(0,1){11}}
+
+  \put(10,8){\makebox(0,0)[t]{
+    \begin{minipage}[c]{25mm}
+    \begin{center}
+    end of\\
+    execution
+    \end{center}
+    \end{minipage}
+    }}
+
+  \put(35,8){\makebox(0,0)[t]{commands}}
+  \put(60,8){\makebox(0,0)[t]{status}}
+
+  \put(10,50){\vector(0,1){11}}
+  \put(35,61){\vector(0,-1){11}}
+  \put(60,50){\vector(0,1){11}}
+
+  \put(10,62){\makebox(0,0)[b]{
+    \begin{minipage}[c]{25mm}
+    \begin{center}
+    next
+    instruction
+    request
+    \end{center}
+    \end{minipage}
+    }}
+
+  \put(35,62){\makebox(0,0)[b]{instructions}}
+  \put(60,62){\makebox(0,0)[b]{status}}
+
+\end{picture}

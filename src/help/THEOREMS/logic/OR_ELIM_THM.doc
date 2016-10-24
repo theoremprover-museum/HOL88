@@ -1,0 +1,3 @@
+\THEOREM OR_ELIM_THM \none
+|- !t t1 t2. (t1 \/ t2) ==> (t1 ==> t) ==> (t2 ==> t) ==> t 
+\ENDTHEOREM

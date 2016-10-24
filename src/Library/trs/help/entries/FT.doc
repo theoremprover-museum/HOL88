@@ -1,0 +1,29 @@
+\DOC FT
+
+\TYPE {FT : (thmpattern -> source -> searchstep)}
+
+\SYNOPSIS
+The main searching function. Performs the first step of a search.
+Abbreviation for {find_theorems}.
+
+\LIBRARY trs
+
+\DESCRIBE
+A search can be initiated using the function {FT}. It takes a pattern and a
+source as arguments, and performs the first step of the search. If the source
+was a list of theorems there is only one step. Otherwise, the steps correspond
+to searches of individual theory segments.
+
+\FAILURE
+Fails if any theory segment in the source is not an ancestor of the current
+theory segment. Also fails if a side-condition in the pattern attempts to test
+the binding of a variable that does not occur in the main part of the pattern.
+The function may fail for other similar reasons. Since the user may supply
+his/her own side-condition functions, an exhaustive list of possible failures
+cannot be given.
+
+\SEEALSO
+find_theorems, continue_search, CS, show_step, run_search, full_search,
+search_until_find, search_n_theories, search_n_until_find.
+
+\ENDDOC

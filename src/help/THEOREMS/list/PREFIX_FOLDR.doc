@@ -1,0 +1,3 @@
+\THEOREM PREFIX_FOLDR list
+|- !P l. PREFIX P l = FOLDR(\x l'. (P x => CONS x l' | []))[]l
+\ENDTHEOREM

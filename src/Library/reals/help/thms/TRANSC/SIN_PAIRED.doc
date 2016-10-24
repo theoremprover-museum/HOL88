@@ -1,0 +1,7 @@
+\THEOREM SIN_PAIRED TRANSC
+|- !x.
+    (\n.
+      (((--(& 1)) pow n) / (&(FACT((2 num_mul n) num_add 1)))) *
+      (x pow ((2 num_mul n) num_add 1))) sums
+    (sin x)
+\ENDTHEOREM

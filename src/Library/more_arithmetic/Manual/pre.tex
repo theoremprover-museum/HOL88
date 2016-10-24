@@ -1,0 +1,24 @@
+\section{The Theory {\tt pre}}
+
+The theory \ml{pre}\index{pre, theory@{\ptt pre}, theory} contains an
+\adhoc\ collection of 
+theorems about \ml{PRE}. It contains no new definitions.
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+\begin{hol}
+\index{SUC\_PRE@{\ptt SUC\_PRE}}
+\index{PRE\_MONO@{\ptt PRE\_MONO}}
+\index{PRE\_LESS\_EQ@{\ptt PRE\_LESS\_EQ}}
+\index{PRE\_ADD@{\ptt PRE\_ADD}}
+\index{PRE\_K\_K@{\ptt PRE\_K\_K}}
+\begin{verbatim}
+  SUC_PRE      |- !n. 0 < n ==> (SUC(PRE n) = n)
+
+  PRE_MONO     |- !m n. (PRE m) < (PRE n) ==> m < n
+
+  PRE_LESS_EQ  |- !n. (PRE n) <= n
+
+  PRE_ADD      |- !n m. 0 < n ==> (PRE(n + m) = (PRE n) + m)
+
+  PRE_K_K      |- !k. 0 < k ==> (PRE k) < k
+\end{verbatim}\end{hol}

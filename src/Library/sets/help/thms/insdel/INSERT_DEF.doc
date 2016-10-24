@@ -1,0 +1,3 @@
+\THEOREM INSERT_DEF sets
+|- !x s. x INSERT s = {{y | (y = x) \/ y IN s}}
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM HREAL_LT_ADD2 REALAX
+|- !x1 x2 y1 y2.
+    x1 hreal_lt y1 /\ x2 hreal_lt y2 ==>
+    (x1 hreal_add x2) hreal_lt (y1 hreal_add y2)
+\ENDTHEOREM

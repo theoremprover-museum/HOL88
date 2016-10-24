@@ -1,0 +1,21 @@
+\DOC UNDO_WIN
+
+\TYPE {UNDO_WIN : (void -> void)}
+
+\SYNOPSIS
+Pops the window stack.
+
+\LIBRARY window
+
+\DESCRIBE
+{UNDO_WIN ()} is used to undo the opening of a subwindow and every
+transformation performed on the subwindow.
+{UNDO_WIN ()} will return the user to the unchanged parent window.
+
+\FAILURE
+{UNDO_WIN ()} will fail no windows have been opened on the window stack.
+
+\SEEALSO
+UNDO
+
+\ENDDOC

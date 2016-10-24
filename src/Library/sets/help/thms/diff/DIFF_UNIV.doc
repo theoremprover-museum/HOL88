@@ -1,0 +1,3 @@
+\THEOREM DIFF_UNIV sets
+|- !s. s DIFF UNIV = {{}}
+\ENDTHEOREM

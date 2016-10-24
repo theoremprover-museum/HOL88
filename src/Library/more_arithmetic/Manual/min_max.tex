@@ -1,0 +1,47 @@
+\section{The Theory {\tt min\_max}}
+
+The theory \ml{min\_max}\index{min\_max, theory@{\ptt min\_max}, theory} contains
+definitions of predicates which test for the maximum and minimum of two
+numbers. Associated theorems are also pre-proved. 
+\ml{MAX}\index{MAX@{\ptt MAX}} returns the largest of its two arguments.
+\ml{MIN}\index{MIN@{\ptt MIN}} returns the smallest of its two arguments.
+They are defined in \HOL\ as follows.
+
+\begin{hol}
+\index{MAX\_DEF@{\ptt MAX\_DEF}}
+\index{MIN\_DEF@{\ptt MIN\_DEF}}
+\begin{verbatim}
+  MAX_DEF  |- !n p. MAX n p = (n <= p => p | n)
+
+  MIN_DEF  |- !n p. MIN n p = (n <= p => n | p)
+\end{verbatim}\end{hol}
+
+
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+
+\begin{hol}
+\index{MAX\_0@{\ptt MAX\_0}}
+\index{MAX\_SYM@{\ptt MAX\_SYM}}
+\index{MAX\_REFL@{\ptt MAX\_REFL}}
+\index{MIN\_0@{\ptt MIN\_0}}
+\index{MIN\_SYM@{\ptt MIN\_SYM}}
+\index{MIN\_REFL@{\ptt MIN\_REFL}}
+\begin{verbatim}
+  MAX_0     |- !n. MAX 0 n = n
+
+  MAX_SYM   |- !n p. MAX n p = MAX p n
+
+  MAX_REFL  |- !n. MAX n n = n
+
+  MIN_0     |- !n. MIN 0 n = 0
+
+  MIN_SYM   |- !n p. MIN n p = MIN p n
+
+  MIN_REFL  |- !n. MIN n n = n
+\end{verbatim}\end{hol}
+
+\noindent \ml{MAX} and \ml{MIN} are also defined in the \ml{bags} library
+(that is where these definitions were taken from) so incompatibility problems
+may arise if the two libraries are used at once. 
+

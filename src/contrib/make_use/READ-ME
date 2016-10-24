@@ -1,0 +1,42 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: make_use                                                   %
+%                                                                       %
+% DESCRIPTION: A small utility to automatically generate a file         %
+%    containing autoloading commands for a theory                       %
+%                                                                       %
+% AUTHOR: Donald Syme                                                   %
+%                                                                       %
+% ADDRESS: Department of Computer Science                               %
+%          Australian National University                               %
+%          GPO Box 4,                                                   %
+%          Canberra, Australia, 2601                                    %
+%                                                                       %
+%          email: symdchon@cs.anu.edu.au                                %
+%  Also contact mcn@cs.anu.edu.au (Malcolm Newey)                       %
+% DATE: 92.11.25                                                        %
+% --------------------------------------------------------------------- %
+
+
+NOTE:
+   This contrib submission was developed under HOL88 2.0.
+
+This small utility automatically produces a "theory.use.ml" file
+for a theory file "theory.ml".  The .use.ml file will contain
+autoloading commands for all of the theorems, axioms and definitions
+in the theory.  The advantages of autoloading are enormous - loading
+a .use.ml file takes virtually no time at all, and means that you
+know that *all* your theorems and definitions will be accessible
+*all* the time, without you having to think about it.  This
+is even better when the update of .use.ml files is performed
+by a makefile.
+
+The facility is used by calling the shell script
+  make_use theory
+
+where "theory" is the theory name without the .th extension.
+
+Some notes:
+   All libraries used in the theory must have their .th files
+soft-linked to the current working directory (This
+is how it works for me anyway).
+

@@ -1,0 +1,9 @@
+\DOC store_binders
+
+\TYPE {store_binders : (term list -> thm)}
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC

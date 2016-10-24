@@ -1,0 +1,24 @@
+\DOC is_pmi
+
+\TYPE {is_pmi : (term -> bool)}
+
+\SYNOPSIS
+Tests a term to see if it is a backward implication.
+
+\LIBRARY window
+
+\DESCRIBE
+{is_pmi "t1 <== t2"} returns {true}.
+If the argument is not a backward implication it returns {false}.
+
+\COMMENTS
+Unlike {is_imp}, {is_pmi} does not consider negation to be a special case
+of implication.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_imp, PMI_DEF
+
+\ENDDOC

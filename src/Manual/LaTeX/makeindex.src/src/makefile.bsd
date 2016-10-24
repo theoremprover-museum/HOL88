@@ -1,0 +1,141 @@
+#
+#  Makefile for the program `makeindex'
+#
+#  Copyright (C) 1987	Pehong Chen	(phc@renoir.berkeley.edu)
+#  Computer Science Division
+#  University of California, Berkeley
+#
+
+BINDIR	      = /usr/local/bin
+
+CP	      = /bin/cp
+
+MANDIR	      = /usr/local/man/man1
+
+MANUAL	      = makeindex.l
+
+DOC	      = makeindex.tex
+
+EXTHDRS	      = /usr/include/ctype.h \
+		/usr/include/stdio.h
+
+HDRS	      = genind.h \
+		mkind.h \
+		scanid.h \
+		scanst.h
+
+CFLAGS	      = -O
+
+LDFLAGS	      = $(CFLAGS)
+
+LIBS	      =
+
+LINKER	      = $(CC)
+
+MAKEFILE      = Makefile
+
+OBJS	      = genind.o \
+		mkind.o \
+		qsort.o \
+		scanid.o \
+		scanst.o \
+		sortid.o
+
+PRINT	      = psgrind
+
+RM	      = /bin/rm -f
+
+SRCS	      = genind.c \
+		mkind.c \
+		qsort.c \
+		scanid.c \
+		scanst.c \
+		sortid.c
+
+PROGRAM	      = makeindex
+
+TAR	      = $(PROGRAM).tar
+
+SHAR	      = $(PROGRAM).shar
+
+ALL	      = $(MAKEFILE) $(DOC) $(MANUAL) $(HDRS) $(SRCS)
+
+$(PROGRAM):     $(OBJS)
+	@ $(RM) -f $(PROGRAM)
+	$(LINKER) $(LDFLAGS) $(OBJS) $(LIBS) -o $(PROGRAM)
+	@size $(PROGRAM)
+
+install:	$(PROGRAM)
+	install -c -s -m 0755 $(PROGRAM) $(BINDIR)
+	install -c -m 0744 ../doc/makeindex.l $(MANDIR)/makeindex.1
+	@ls -lgs $(BINDIR)/$(PROGRAM)
+
+cp-install:
+	$(CP) $(PROGRAM) $(BINDIR)
+	strip $(BINDIR)/$(PROGRAM)
+	chmod 755 $(BINDIR)/$(PROGRAM)
+	$(CP) ../doc/makeindex.l $(MANDIR)/makeindex.1
+	chmod 744 $(MANDIR)/makeindex.1
+
+uninstall:
+	$(RM) $(BINDIR)/$(PROGRAM)
+	$(RM) $(MANDIR)/makeindex.1
+
+tar:
+	@ $(RM) -f $(TAR)
+	tar -cf $(TAR) $(ALL)
+
+shar:
+	@ $(RM) -f $(SHAR)
+	shar $(SHAR) $(ALL)
+
+dist:
+	cp $(PROGRAM) $(BINDIR)
+	rcp $(PROGRAM) monet:$(BINDIR)
+	rcp $(PROGRAM) arpa:$(BINDIR)
+	rcp $(PROGRAM) harrison@vangogh:bin
+
+clean:
+	- $(RM) $(OBJS)
+	- $(RM) core
+	- $(RM) $(PROGRAM)
+	- $(RM) *.out
+
+clobber:	clean
+
+depend:
+	@ $(RM) -f .#*.[chly]
+	mkmf -f $(MAKEFILE) PROGRAM=$(PROGRAM) BINDIR=$(BINDIR)
+
+index:
+	@ctags -wx $(HDRS) $(SRCS)
+
+print:
+	@$(PRINT) $(HDRS) $(SRCS)
+
+man:
+	ptroff -man $(MANUAL)
+
+program:        $(PROGRAM)
+
+tags:           $(HDRS) $(SRCS)
+	@ctags $(HDRS) $(SRCS)
+
+update:		$(BINDIR)/$(PROGRAM)
+
+$(BINDIR)/$(PROGRAM): $(SRCS) $(HDRS) $(EXTHDRS)
+	@make -f $(MAKEFILE) BINDIR=$(BINDIR) install
+
+.DEFAULT:
+	co $@
+###
+genind.o: mkind.h /usr/include/stdio.h /usr/include/ctype.h \
+	genind.h
+mkind.o: mkind.h /usr/include/stdio.h /usr/include/ctype.h
+qsort.o: mkind.h /usr/include/stdio.h
+scanid.o: mkind.h /usr/include/stdio.h /usr/include/ctype.h \
+	scanid.h
+scanst.o: mkind.h /usr/include/stdio.h /usr/include/ctype.h \
+	scanst.h
+sortid.o: mkind.h /usr/include/stdio.h /usr/include/ctype.h
+

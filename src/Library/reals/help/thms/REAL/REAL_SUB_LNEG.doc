@@ -1,0 +1,3 @@
+\THEOREM REAL_SUB_LNEG REAL
+|- !x y. (-- x) - y = --(x + y)
+\ENDTHEOREM

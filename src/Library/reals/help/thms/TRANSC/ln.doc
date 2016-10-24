@@ -1,0 +1,3 @@
+\THEOREM ln TRANSC
+|- !x. ln x = (@u. exp u = x)
+\ENDTHEOREM

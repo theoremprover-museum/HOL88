@@ -1,0 +1,3 @@
+\THEOREM EXISTS_UNIQUE_DEF bool
+|- $?! = (\P. $? P /\ (!x y. P x /\ P y ==> (x = y)))
+\ENDTHEOREM

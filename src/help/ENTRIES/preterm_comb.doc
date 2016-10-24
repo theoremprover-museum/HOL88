@@ -1,0 +1,31 @@
+\DOC preterm_comb
+
+\TYPE {preterm_comb : ((preterm # preterm) -> preterm)}
+
+\SYNOPSIS
+Constructs combination (function application) preterm.
+
+\DESCRIBE
+{preterm_comb} is analogous to the oft-used ML function {mk_comb}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {mk_comb} are not encountered until the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#preterm_comb(preterm_comb(preterm_const `+`,preterm_var `x`),
+              preterm_const `1`);;
+preterm_comb((preterm_comb((preterm_const `+`), preterm_var `x`)),
+             preterm_const `1`)
+: preterm
+
+#preterm_to_term it;;
+"x + 1" : term
+}
+\SEEALSO
+mk_comb, preterm_abs, preterm_antiquot, preterm_const, preterm_typed,
+preterm_var, preterm_to_term.
+
+\ENDDOC

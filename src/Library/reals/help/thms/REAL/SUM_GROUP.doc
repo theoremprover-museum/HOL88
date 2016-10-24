@@ -1,0 +1,3 @@
+\THEOREM SUM_GROUP REAL
+|- !n k f. Sum(0,n)(\m. Sum(m num_mul k,k)f) = Sum(0,n num_mul k)f
+\ENDTHEOREM

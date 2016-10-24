@@ -1,0 +1,3 @@
+\THEOREM LIM_INV LIM
+|- !f l. (f --> l)x /\ ~(l = & 0) ==> ((\x. inv(f x)) --> (inv l))x
+\ENDTHEOREM

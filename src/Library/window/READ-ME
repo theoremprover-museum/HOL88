@@ -1,0 +1,69 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: window						|
+|									|
+| DESCRIPTION   : This library provides support for a transformational  |
+|                 style of reasoning. Users can transform an expression |
+|                 or focus their attention on a subexpression and       |
+|                 transform that. The system allows you to assume       |
+|                 information from the context of a subexpression. This |
+|                 library is designed to be customised and extended.    |
+|									|
+| AUTHOR	: Jim Grundy                                            |
+|									|
+| VERSION       : 1.1                                                   |
+| DATE		: 8 October 1991                                        |
+|									|
+| VERSION       : 2.1                                                   |
+| DATE		: 20 November 1992                                      |
+|									|
+| VERSION       : 3.1                                                   |
+| DATE		: 7 December 1993                                       |
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+   basic_close.ml       Generic window inference rules.
+   eq_close.ml          Window inference rules that preserve equality.
+   imp_close.ml		Window inference rules that preserve implication.
+   inter.ml		Provides the interactive front end to the libarary.
+   load_code.ml		Loads all the other files.
+   load_window.ml	Defines a function to load the library.
+   mk_win_th.ml		Makes win.th - defines reverse implication.
+   ml_ext.ml		Generic ml functions for lists and sets and stuff.
+   tables.ml		Sets up tables of data on refexivity, trasitivity ...
+   tactic.ml		Defines a tactic interface to the window library
+   thms.ml		Miscelaneous theorems.
+   win.ml		The functional guts of the whole thing.
+   window.ml		The file you want to load to get it going.
+   xlabel.ml		A segement that will set the window label under X.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
+   (If you are fortunate enough to be using RCS, why not uncomment the  )
+   (relevant entries from the Makefile.                                 )
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+
+   Add the relevant path to your LIBRARY_SEARCH_PATH and type:
+     load_library `window`;;

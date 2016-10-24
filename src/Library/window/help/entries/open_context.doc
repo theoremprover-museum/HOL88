@@ -1,0 +1,33 @@
+\DOC open_context
+
+\TYPE {open_context : (term -> path -> (window -> window) -> window -> window)}
+
+\SYNOPSIS
+Derive a new lemma by applying a transformation to a subwindow on
+one of the assumptions, lemmas or conjectures.
+
+\LIBRARY window
+
+\DESCRIBE
+{open_context tm path fn win} opens a subwindow on the
+assumption, lemma or conjecture {tm} at the position described by {path}.
+The window transforming function {fn} is then applied to the resulting
+subwindow.
+The relationship preserved by the subwindow will be chosen so that
+transforming the subwindow will transform {tm} to {tm'} generating the
+theorem {.|- tm' <== tm}.
+The subwindow is then closed thereby making {tm'} an additional lemma of
+the parent window.
+The parent window with its new lemma is returned as the result.
+
+\FAILURE
+{open_context tm path fn win} will fail if {tm} is not an assumption, lemma
+or conjecture of {win}.
+{open_context tm path fn win} will fail if {path} describes a position which
+is not present in {tm}.
+
+\SEEALSO
+open_win, OPEN_WIN, CLOSE_WIN, OPEN_CONTEXT, establish, ESTABLISH,
+gen_open_win, GEN_OPEN_WIN
+
+\ENDDOC

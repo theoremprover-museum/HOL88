@@ -1,0 +1,3 @@
+\THEOREM FCOMM_DEF fun
+|- !f g. FCOMM f g = (!x y z. g x(f y z) = f(g x y)z)
+\ENDTHEOREM

@@ -1,0 +1,4 @@
+\THEOREM wo_ordinal WELLORDER
+|- !l.
+    ordinal l = woset l /\ (!x. fl l x ==> (x = (@y. ~less l(y,x)))))
+\ENDTHEOREM

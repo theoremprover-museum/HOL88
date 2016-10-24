@@ -1,0 +1,10 @@
+\DOC add_context
+
+\TYPE {add_context : (string -> (string # int) list -> (string # int) list)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

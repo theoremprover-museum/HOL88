@@ -1,0 +1,22 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{Definitions}
+\THEOREM PMI\_DEF win
+|- !a b. a <== b = b ==> a
+\ENDTHEOREM
+\section{Theorems}
+\THEOREM IMP\_REFL\_THM win
+|- !x. x ==> x
+\ENDTHEOREM
+\THEOREM IMP\_TRANS\_THM win
+|- !x y z. (x ==> y) /\ (y ==> z) ==> x ==> z
+\ENDTHEOREM
+\THEOREM PMI\_DEF win
+|- !a b. a <== b = b ==> a
+\ENDTHEOREM
+\THEOREM PMI\_REFL\_THM win
+|- !x. x <== x
+\ENDTHEOREM
+\THEOREM PMI\_TRANS\_THM win
+|- !x y z. (x <== y) /\ (y <== z) ==> x <== z
+\ENDTHEOREM

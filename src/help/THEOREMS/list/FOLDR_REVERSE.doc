@@ -1,0 +1,3 @@
+\THEOREM FOLDR_REVERSE list
+|- !f e l. FOLDR f e(REVERSE l) = FOLDL(\x y. f y x)e l
+\ENDTHEOREM

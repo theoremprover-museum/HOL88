@@ -1,0 +1,3 @@
+\THEOREM SOME_EL_FOLDL_MAP list
+|- !P l. SOME_EL P l = FOLDL $\/ F(MAP P l)
+\ENDTHEOREM

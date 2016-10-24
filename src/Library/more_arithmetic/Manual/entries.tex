@@ -1,0 +1,149 @@
+\chapter{ML Functions in the more\_arithmetic Library}
+\input{entries-intro}
+\DOC{GEN\_INDUCT\_RULE}
+
+\TYPE {\small\verb%GEN_INDUCT_RULE : (thm -> thm -> thm)%}\egroup
+
+\SYNOPSIS
+Performs a proof by general mathematical induction on the natural numbers.
+
+\DESCRIBE
+The derived inference rule {\small\verb%GEN_INDUCT_RULE%} implements the rule of general
+mathematical induction:
+{\par\samepage\setseps\small
+\begin{verbatim}
+    A1 |- P[0/n]      A2 |- !n. (!m. m < n ==> P[m/n]) ==> P
+   ----------------------------------------------------------  GEN_INDUCT_RULE
+                        A1 u A2 |- !n. P
+\end{verbatim}
+}
+\noindent When supplied with a theorem {\small\verb%A1 |- P[0/n]%}, which asserts the base
+case of a proof of the proposition {\small\verb%P%} by general induction on {\small\verb%n%}, and the
+ theorem
+{\par\samepage\setseps\small
+\begin{verbatim}
+   A2 |- !n. (!m. m < n ==> P[m/n]) ==> P
+\end{verbatim}
+}
+
+\noindent which asserts the step case in the induction on
+{\small\verb%n%}, the inference rule {\small\verb%GEN_INDUCT_RULE%} returns {\small\verb%A1 u A2 |- !n. P%}.
+
+\FAILURE
+A call to {\small\verb%GEN_INDUCT_RULE th1 th2%} fails if the theorems {\small\verb%th1%} and {\small\verb%th2%} do
+ not have the forms
+{\small\verb%A1 |- P[0/n]%} and {\small\verb%A2 |- !n. (!m. m < n ==> P[m/n]) ==> P%} respectively.
+
+\SEEALSO
+GEN_INDUCT_TAC, INDUCT.
+
+\ENDDOC
+\DOC{GEN\_INDUCT\_TAC}
+
+\TYPE {\small\verb%GEN_INDUCT_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Performs tactical proof by general mathematical induction on the natural numbers.
+
+\DESCRIBE
+{\small\verb%GEN_INDUCT_TAC%} reduces a goal {\small\verb%!n.P%}, where {\small\verb%n%} has type {\small\verb%num%}, to two
+subgoals corresponding to the base and step cases in a proof by general mathematical induction on {\small\verb%n%}. The induction hypothesis appears among the assumptions of the
+subgoal for the step case.  The specification of {\small\verb%GEN_INDUCT_TAC%} is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+                          A ?- !n. P
+   ========================================================  GEN_INDUCT_TAC
+    A ?- P[0/n]     A u {!m. m < n' ==> P[m/n]} ?- P[n'/n]
+\end{verbatim}
+}
+\noindent where {\small\verb%n'%} is a primed variant of {\small\verb%n%} that does not appear free in
+the assumptions {\small\verb%A%} (usually, {\small\verb%n'%} just equals {\small\verb%n%}). When {\small\verb%GEN_INDUCT_TAC%} is
+applied to a goal of the form {\small\verb%!n.P%}, where {\small\verb%n%} does not appear free in {\small\verb%P%},
+the subgoals are just {\small\verb%A ?- P%} and {\small\verb%A u {!m. m < n' ==> P} ?- P%}.
+
+\FAILURE
+{\small\verb%GEN_INDUCT_TAC g%} fails unless the conclusion of the goal {\small\verb%g%} has the form
+{\small\verb%!n.t%},
+where the variable {\small\verb%n%} has type {\small\verb%num%}.
+
+\SEEALSO
+GEN_INDUCT_RULE, INDUCT_TAC.
+
+\ENDDOC
+\DOC{NUM\_EQ\_PLUS\_CONV}
+
+\TYPE {\small\verb%NUM_EQ_PLUS_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Adds a given expression of type {\small\verb%:num%} to both sides of an equality between
+natural numbers.
+
+\DESCRIBE
+When applied to terms of the form {\small\verb%"n"%} and {\small\verb%"p = q"%}, where
+{\small\verb%n%}, {\small\verb%p%} and {\small\verb%q%} have type {\small\verb%:num%}, the conversion
+{\small\verb%NUM_EQ_PLUS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |-  (p = q) = (p + n = q + n)
+\end{verbatim}
+}
+
+\FAILURE
+Fails if the first term does not have type {\small\verb%:num%} or the second does not have
+the form {\small\verb%"p = q"%}, where {\small\verb%p%} and {\small\verb%q%} are terms of type {\small\verb%:num%}.
+
+\SEEALSO
+NUM_LESS_EQ_PLUS_CONV, NUM_LESS_PLUS_CONV.
+
+\ENDDOC
+\DOC{NUM\_LESS\_EQ\_PLUS\_CONV}
+
+\TYPE {\small\verb%NUM_LESS_EQ_PLUS_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Adds a given expression of type {\small\verb%:num%} to both sides of a less-than-or-equal
+expression. 
+
+\DESCRIBE
+When applied to terms of the form {\small\verb%"n"%} and {\small\verb%"p <= q"%}, where
+{\small\verb%n%}, {\small\verb%p%} and {\small\verb%q%} have type {\small\verb%:num%}, the conversion
+{\small\verb%NUM_LESS_EQ_PLUS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |-  p <= q = (p + n) <= (q + n)
+\end{verbatim}
+}
+
+\FAILURE
+Fails if the first term does not have type {\small\verb%:num%} or the second does not have
+the form {\small\verb%"p <= q"%}.
+
+\SEEALSO
+NUM_EQ_PLUS_CONV, NUM_LESS_PLUS_CONV.
+
+\ENDDOC
+\DOC{NUM\_LESS\_PLUS\_CONV}
+
+\TYPE {\small\verb%NUM_LESS_PLUS_CONV : (term -> conv)%}\egroup
+
+\SYNOPSIS
+Adds a given expression of type {\small\verb%:num%} to both sides of a less expression.
+
+\DESCRIBE
+When applied to terms of the form {\small\verb%"n"%} and {\small\verb%"p < q"%}, where
+{\small\verb%n%}, {\small\verb%p%} and {\small\verb%q%} have type {\small\verb%:num%}, the conversion
+{\small\verb%NUM_LESS_PLUS_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |-  p < q = (p + n) < (q + n)
+\end{verbatim}
+}
+
+\FAILURE
+Fails if the first term does not have type {\small\verb%:num%} or the second does not have
+the form {\small\verb%"p < q"%}.
+
+\SEEALSO
+NUM_EQ_PLUS_CONV, NUM_LESS_EQ_PLUS_CONV.
+
+\ENDDOC

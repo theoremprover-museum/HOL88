@@ -1,0 +1,79 @@
+This is TeX, C Version 2.93 (preloaded format=lplain 89.7.20)  7 MAY 1991 12:05
+**&lplain casestudy.tex
+(casestudy.tex
+LaTeX Version 2.09 <26 Apr 1988>
+(/usr/local/lib/tex/inputs/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/local/lib/tex/inputs/art12.sty)
+\c@part=\count78
+\c@section=\count79
+\c@subsection=\count80
+\c@subsubsection=\count81
+\c@paragraph=\count82
+\c@subparagraph=\count83
+\c@figure=\count84
+\c@table=\count85
+) (/usr/local/lib/tex/inputs/fleqn.sty
+\mathindent=\dimen99
+)
+(layout.sty) (commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count86
+) (casestudy.aux) (sect1.tex [1
+
+] (casestudy.toc)
+\tf@toc=\write3
+
+[2] [3] [4]) (sect2.tex [5] [6] [7] [8] [9] [10] [11]) (sect3.tex [12] [13]
+[14] [15]
+Underfull \vbox (badness 2644) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.98164
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.44945
+..\hbox(0.0+0.0)x11.38109
+..\twlrm T
+..\twlrm h
+..\twlrm e
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..etc.
+.\penalty 10000
+.\glue(\baselineskip) 3.83337
+.\hbox(8.33331+2.33331)x455.24408, glue set 1.00267
+..\twltt a
+..\twltt c
+..\twltt k
+..\twltt R
+..\glue 6.175
+..etc.
+.etc.
+
+ [16]
+[17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29]
+Underfull \vbox (badness 1596) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.52136
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 120.54968fil
+..\hbox(0.0+0.0)x11.38109
+..\twlrm T
+..\twlrm h
+..\twlrm e
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..etc.
+.\penalty -51
+.\glue 10.0 plus 5.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [30]
+[31] [32] [33] [34] [35]) (appendix.tex [36]) [37] (casestudy.aux) 
+Here is how much of TeX's memory you used:
+ 281 strings out of 4612
+ 2294 string characters out of 64083
+ 40639 words of memory out of 262141
+ 2196 multiletter control sequences out of 9500
+ 19612 words of font info for 74 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 17i,12n,17p,193b,454s stack positions out of 300i,40n,60p,2000b,4000s
+
+Output written on casestudy.dvi (37 pages, 94348 bytes).

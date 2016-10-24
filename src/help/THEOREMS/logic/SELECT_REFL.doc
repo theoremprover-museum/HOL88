@@ -1,0 +1,3 @@
+\THEOREM SELECT_REFL \none
+|- !x. (@y. y = x) = x
+\ENDTHEOREM

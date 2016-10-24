@@ -1,0 +1,3 @@
+\THEOREM ODD_MULT arithmetic
+|- !m n. ODD(m * n) = ODD m /\ ODD n
+\ENDTHEOREM

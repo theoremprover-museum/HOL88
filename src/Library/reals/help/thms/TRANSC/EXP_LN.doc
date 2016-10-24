@@ -1,0 +1,3 @@
+\THEOREM EXP_LN TRANSC
+|- !x. (exp(ln x) = x) = (& 0) < x
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM list_TY_DEF list
+|- ?rep. TYPE_DEFINITION IS_list_REP rep
+\ENDTHEOREM

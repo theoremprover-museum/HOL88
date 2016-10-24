@@ -1,0 +1,3 @@
+\THEOREM MOD_MULT_MOD div_mod
+|- !m n. 0 < n /\ 0 < m ==> (!x. (x MOD (n * m)) MOD n = x MOD n)
+\ENDTHEOREM

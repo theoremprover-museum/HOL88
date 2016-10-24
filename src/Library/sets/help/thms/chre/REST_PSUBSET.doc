@@ -1,0 +1,3 @@
+\THEOREM REST_PSUBSET sets
+|- !s. ~(s = {{}}) ==> (REST s) PSUBSET s
+\ENDTHEOREM

@@ -1,0 +1,7 @@
+\THEOREM MTOP_TENDS NETS
+|- !d g x x0.
+    (x tends x0)(mtop d,g) =
+    (!e.
+      (real_of_num 0) real_lt e ==>
+      (?n. g n n /\ (!m. g m n ==> (dist d(x m,x0)) real_lt e)))
+\ENDTHEOREM

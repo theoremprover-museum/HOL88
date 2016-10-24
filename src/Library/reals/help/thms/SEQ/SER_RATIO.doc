@@ -1,0 +1,6 @@
+\THEOREM SER_RATIO SEQ
+|- !f c N.
+    c < (& 1) /\
+    (!n. n num_ge N ==> (abs(f(SUC n))) <= (c * (abs(f n)))) ==>
+    summable f
+\ENDTHEOREM

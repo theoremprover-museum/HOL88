@@ -1,0 +1,3 @@
+\THEOREM DIFF_XM1 LIM
+|- !x. ~(x = & 0) ==> ((\x. inv x) diffl (--((inv x) pow 2)))x
+\ENDTHEOREM

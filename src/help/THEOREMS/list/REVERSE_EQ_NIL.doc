@@ -1,0 +1,3 @@
+\THEOREM REVERSE_EQ_NIL list
+|- !l. (REVERSE l = []) = (l = [])
+\ENDTHEOREM

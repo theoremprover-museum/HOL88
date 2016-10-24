@@ -1,0 +1,10 @@
+\DOC autotermpattern
+
+\TYPE {autotermpattern : (term -> termpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

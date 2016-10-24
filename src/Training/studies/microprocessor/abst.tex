@@ -1,0 +1,325 @@
+\section{Abstract description and specification}
+\label{sec-abst}
+
+The informal description of \Tamarack\ introduced a set of
+basic data types and operations involving these data types.
+Specific details such as the number of
+bits in a machine word were avoided
+by regarding these data types and
+operations as uninterpreted types and uninterpreted primitives.
+In this section, we briefly explain some of the motivations for using
+uninterpreted types and uninterpreted primitives in our approach
+to formal specification.
+A more complete explanation may be found in \cite{Joyce:thesis}.
+We also describe a formal basis for using uninterpreted types and
+uninterpreted primitives in the \HOL\ formulation of higher-order logic.
+
+\subsection{Motivation}
+
+The formal verification of \Tamarack\ focuses very specifically
+on the register-transfer level operation of the internal architecture.
+Below and above this level
+there are aspects of a complete design
+for \Tamarack\ which are not formally considered.
+For instance, the formal proof does not consider whether
+the register-transfer components have been designed correctly.
+Similarly, the formal proof only shows that the design satisfies
+the semantics of the instruction set but it does not consider whether
+these instructions could be combined to write useful programs.
+
+To clearly demarcate the boundaries between what has and what has not
+been formally considered in this proof,
+we have taken an abstract approach to both the informal description
+and formal specification of \Tamarack.
+\footnote{
+This abstract approach to the specification of \Tamarack\
+was prompted by discussions with
+researchers at SRI International, Menlo Park.
+The EHDM verification system developed at SRI also supports
+a form of abstract specification using parameterized modules \cite{EHDM}.
+Eveking has similarly advocated `the separation of concerns'
+as a general principle of hardware verification \cite{Eveking:glasgow}.}
+Very few details are given about the basic data types
+and primitive operations used to describe the design and operation
+of \Tamarack.
+
+This is quite different than conventional microprocessor descriptions
+which are usually very specific about details such as word size
+and various operations performed on data.
+Nevertheless, it is possible to explain and
+reason about a great deal of the
+internal architecture without specifying these details.
+The ability to make use of this abstract description without knowing
+these details is one way in which formal verification is distinguished
+from conventional simulation where these details would
+generally need to be known.
+
+Because we do not specify details about basic data types and
+operations on basic data types,
+computational aspects of
+our formal theory are somewhat transparent.
+This is illustrated by the \verb"add" operation which
+appears in both the bottom and top levels of description.
+At the bottom level, it is used to describe
+one of the functions performed by the ALU.
+At the top level, it is used to give
+the semantics of the \Tamarack\ ADD instruction.
+The name of this operation strongly suggests that it has
+something to do with arithmetic addition,
+but the exact nature of this operation depends on
+both the word size and the particular representation of numbers,
+e.g., addition of unsigned 16-bit words.
+Although the name \verb"add" is used to denote this operation,
+no particular meaning is associated with this operation except its type:
+it is only known to be an operation on a pair of machine words which
+yields another machine word as a result.
+The formal proof only shows that the ADD instruction
+is correctly implemented in the sense that the \verb"add" operation
+is applied to the correct operands and the result
+stored in the correct destination by the end of the instruction cycle.
+
+Another motivation for our abstract approach is pragmatic.
+A great deal of extra infrastructure in the formal theory
+can be avoided by
+using uninterpreted data types and
+uninterpreted primitive operations.
+The specification of \Tamarack\ differs in this respect
+from earlier versions of this example
+\cite{Gordon:tech42,Joyce:tech100,Joyce:calgary86}
+as well as the verification of \Viper\ \cite{Cohn:calgary86,Cohn:banff87}
+by not using the
+built-in \HOL\ types
+and postulated axioms (inherited from the {\small LCF\_LSM} system)
+for bit-patterns and machine words.
+This also means that this example can be re-produced
+in other formalisms which lack infra-structure
+for reasoning about hardware.
+
+The cost of using uninterpreted types and uninterpreted primitives
+is surprisely small: just two assumptions
+about the data types and primitive operations
+are needed to verify \Tamarack.
+One of these assumptions,
+for instance, states that the numerical value of
+every 3-bit word is less than eight.
+These two assumptions appear explicitly in
+the correctness theorems.
+
+As mentioned earlier,
+there is one more benefit of our abstract approach.
+By not specifying any details about word size or
+the primitive operations performed on data,
+we have an informal description and formal specification which are
+generalized over a whole range of possible word sizes and possible
+interpretations for the primitive operations.
+
+\subsection{Formal basis}
+\label{sec-basis}
+
+Our use of the prefix \verb"*"
+for uninterpreted data types
+in the informal description of \Tamarack, e.g., \verb":*word",
+hinted at our intention to use polymorphic types
+for uninterpreted types in the formal specification.
+We also need a formal basis for uninterpreted primitives, e.g., \verb"add",
+which denote operations on these basic data types.
+
+One possibility would be to simply introduce the names of these
+operations as constants in the formal theory.
+With this approach, the operations denoted by these constants
+would have fixed, unknown values.
+Although this approach is appealingly simple,
+the association of operation names with fixed, unknown values would
+be inconvenient if we ever wanted to extend the formal theory
+by giving an interpretation to the
+heretofore uninterpreted data types and primitive operations.
+\footnote{
+There is also a technical reason why this scheme might not work
+very well for the \HOL\ system, in particular,
+that unbound type variables are not allowed in definitions.}
+
+Instead of a theory with constants denoting fixed, unknown values
+for primitive operations, we would like to `parameterize', in an
+intuitive sense, the theory by the data types and primitive operations
+mentioned in the theory.
+The theory could be `instantiated' by
+giving an interpretation to the data types and primitive operations
+(as we show in Section~\ref{sec-relate}).
+This would be useful when combining correctness results for
+register-transfer architecture of \Tamarack\ with another theory
+about the implementation of various register-transfer level components.
+
+Although it is not possible, in a literal sense,
+to parameterize a \HOL\ theory,
+the desired effect can be achieved in the \HOL\ logic by parameterizing
+definitions in the theory by an extra variable, \verb"rep", which
+denotes the `representation' of a theory.
+
+The representation parameter can be thought of as a package containing
+values for each of the primitive operations.
+A particular operation can be specified by applying a selector function
+to the representation.
+To avoid introducing more names than necessary,
+we have just re-used names from the informal description
+for the corresponding selector functions.
+Whereas these names were used in the informal description to
+directly refer to primitive operations,
+they are used in the formal specification to
+denote selector functions which must be applied
+to the representation variable.
+Instead of saying,
+
+\begin{quote}
+`the operation denoted by \verb"add"'
+\end{quote}
+
+\noindent
+we refer to this operation as:
+
+\begin{quote}
+`the operation selected by \verb"add"'
+\end{quote}
+
+For instance, the terms \verb"inc", \verb"add" and \verb"sub" denote
+selector functions for the three operations performed by the ALU.
+Applying each of these terms to the representation variable \verb"rep"
+yields the three ALU operations specified by the representation
+variable \verb"rep".
+
+Like any other term in the \HOL\ logic, the representation variable \verb"rep"
+is associated with a type.
+We have taken the straightforward approach of representing this variable
+in the \HOL\ logic as an \mbox{n-tuple} where each element corresponds
+to one of the primitive operations on uninterpreted data types.
+Selectors for primitive operations are defined in the formal theory
+by composing various sequences of the two selectors \verb"FST" and
+\verb"SND".
+
+The ML variable \verb"rep_ty"
+is used throughout the formal specification to
+denote the compound type of the representation variable.
+When it appears
+inside a HOL term preceded by a caret \verb"^"
+(ML anti-quotation),
+it is expanded to the type expression shown below.
+This use of ML anti-quotation is unfortunate, but
+proper type abbreviation cannot be introduced here because
+this type expression contains polymorphic variables.
+
+\begintt
+let rep_ty =
+  ":(*wordn->bool)#                       % iszero %
+    (*wordn->*wordn)#                     % inc %
+    (*wordn#*wordn->*wordn)#              % add %
+    (*wordn#*wordn->*wordn)#              % sub %
+    (num->*wordn) #                       % wordn %
+    (*wordn->num) #                       % valn %
+    (*wordn->*word3)#                     % opcode %
+    (*word3->num)#                        % val3 %
+    (*wordn->*address)#                   % address %
+    (*memory#*address->*wordn)#           % fetch %
+    (*memory#*address#*wordn->*memory)#   % store %
+    (num->*word4)#                        % word4 %
+    (*word4->num)";;                      % val4 %
+\endtt
+
+The particular ordering of elements in this \mbox{n-tuple} is completely
+arbitrary.
+While a less concrete representation could be used,
+any extra effort in this regard is probably not worthwhile.
+Details of this particular representation are isolated to
+a very small part of
+the formalization, in particular, the following definitions of the
+selector functions for each of the primitive operations.
+
+\begintt
+let iszero = new_definition (
+	`iszero`,
+	"iszero (rep:^rep_ty) = FST rep");;
+
+let inc = new_definition(
+	`inc`,
+	"inc (rep:^rep_ty) = FST(SND rep)");;
+
+let add = new_definition (
+	`add`,
+	"add (rep:^rep_ty) = FST(SND(SND rep))");;
+
+let sub = new_definition (
+	`sub`,
+	"sub (rep:^rep_ty) = FST(SND(SND(SND rep)))");;
+
+let wordn = new_definition (
+	`wordn`,
+	"wordn (rep:^rep_ty) = FST(SND(SND(SND(SND rep))))");;
+
+let valn = new_definition (
+	`valn`,
+	"valn (rep:^rep_ty) = FST(SND(SND(SND(SND(SND rep)))))");;
+\endtt
+
+\newpage % PBHACK
+
+\begintt
+let opcode = new_definition (
+	`opcode`,
+	"opcode (rep:^rep_ty) =
+	  FST(SND(SND(SND(SND(SND(SND rep))))))");;
+
+let val3 = new_definition (
+	`val3`,
+	"val3 (rep:^rep_ty) =
+	  FST(SND(SND(SND(SND(SND(SND(SND rep)))))))");;
+
+let address = new_definition (
+	`address`,
+	"address (rep:^rep_ty) =
+	  FST(SND(SND(SND(SND(SND(SND(SND(SND rep))))))))");;
+
+let fetch = new_definition (
+	`fetch`,
+	"fetch (rep:^rep_ty) =
+	  FST(SND(SND(SND(SND(SND(SND(SND(SND(SND rep)))))))))");;
+
+let store = new_definition (
+	`store`,
+	"store (rep:^rep_ty) =
+	  FST(SND(SND(SND(SND(SND(SND(SND(SND(SND(SND rep))))))))))");;
+
+let word4 = new_definition (
+	`word4`,
+	"word4 (rep:^rep_ty) =
+	  FST(SND(SND(SND(SND(SND(SND(SND(SND(SND(SND(SND rep)))))))))))");;
+
+let val4 = new_definition (
+	`val4`,
+	"val4 (rep:^rep_ty) =
+	  SND(SND(SND(SND(SND(SND(SND(SND(SND(SND(SND(SND rep)))))))))))");;
+\endtt
+
+\newpage % PBHACK
+
+As just mentioned,
+two assumptions about uninterpreted types and
+uninterpreted primitives are needed to verify \Tamarack.
+These assumptions are expressed by predicates
+\verb"Val3_CASES_ASM" and \verb"Val4Word4_ASM" which are both
+parameterized by the representation variable \verb"rep".
+
+\begintt
+let Val3_CASES_ASM = new_definition (
+  `Val3_CASES_ASM`,
+  "Val3_CASES_ASM (rep:^rep_ty) = \(\forall\)w. ((val3 rep) w) < 8");;
+
+let Val4Word4_ASM = new_definition (
+  `Val4Word4_ASM`,
+  "Val4Word4_ASM (rep:^rep_ty) =
+   \(\forall\)n. n < 16 ==> (((val4 rep) ((word4 rep) n)) = n)");;
+\endtt
+
+The predicate \verb"Val3_CASES_ASM" expresses the assumption
+that the numerical value of
+every 3-bit word is less than eight.
+The predicate \verb"Val4Word4_ASM" expresses the assumption
+that \verb":val4" and \verb":word4" are inverses for numbers
+less than sixteen.

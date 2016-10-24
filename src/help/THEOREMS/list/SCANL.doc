@@ -1,0 +1,4 @@
+\THEOREM SCANL list
+|- (!f e. SCANL f e[] = [e]) /\
+   (!f e x l. SCANL f e(CONS x l) = CONS e(SCANL f(f e x)l))
+\ENDTHEOREM

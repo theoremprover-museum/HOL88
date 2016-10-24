@@ -1,0 +1,3 @@
+\THEOREM MULT_LEFT_1 arithmetic
+|- !m. 1 * m = m
+\ENDTHEOREM

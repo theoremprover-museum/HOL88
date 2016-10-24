@@ -1,0 +1,3 @@
+\THEOREM INL sum
+|- !x. ISL x ==> (INL(OUTL x) = x)
+\ENDTHEOREM

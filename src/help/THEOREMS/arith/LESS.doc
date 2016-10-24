@@ -1,0 +1,3 @@
+\THEOREM LESS prim_rec
+|- !m n. m < n = (?P. (!n'. P(SUC n') ==> P n') /\ P m /\ ~P n)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM HEX_EMPTY_EQ_0 numeral
+|- !l. IS_NORMALIZED l ==> ((HEX l = 0) = (l = []))
+\ENDTHEOREM

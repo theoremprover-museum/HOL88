@@ -1,0 +1,3 @@
+\THEOREM I_THM combin
+|- !x. I x = x
+\ENDTHEOREM

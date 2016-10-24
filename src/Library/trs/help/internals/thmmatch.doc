@@ -1,0 +1,10 @@
+\DOC thmmatch
+
+\TYPE {thmmatch : (thmpattern -> foundthm -> bool)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

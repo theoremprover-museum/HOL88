@@ -1,0 +1,46 @@
+\DOC list_EQ_CONV
+
+\TYPE {list_EQ_CONV : (conv -> conv)}
+
+\SYNOPSIS
+Prove equality or inequality of two lists.
+
+\KEYWORDS
+conversion.
+
+\DESCRIBE
+{list_EQ_CONV c} implements a decision procedure for equality of lists of type
+{(ty)list} where the conversion {c} decides equality of values of type {ty}.
+More precisely, the argument to {list_EQ_CONV} is expected to be a conversion
+{c} which implements a decision procedure for values of some base type {ty}, in
+the sense that {c "t1 = t2"} returns {|- (t1 = t2) = T} if {t1} denotes the
+same value as {t2} and {|- (t1 = t2) = F} if {t1} and {t2} denote different
+values.  Given such a conversion {c}, evaluating:
+{
+   list_EQ_CONV c "[t1;...;tn] = [u1;...;um]"
+}
+\noindent where all the {ti} and {ui} have type {ty}, returns:
+{
+   |- ([t1;...;tn] = [u1;...;um]) = F
+}
+\noindent if {n} is not equal to {m} (i.e. if the two lists have different
+lengths) or if {n} = {m} and the conversion {c} proves {|- (ti = ui) = F} for
+some {i} between {1} and {n}. The theorem:
+{
+   |- ([t1;...;tn] = [u1;...;um]) = T
+}
+\noindent is returned if {n} equals {m} and for all {i} from {1} to {n} either
+{ti} is syntactically identical to {ui} or {c} proves {|- (ti = ui) = T}
+
+\FAILURE
+{list_EQ_CONV t} fails if {t} is not a term of the form
+{"[t1;...;tn] = [u1;...;um]"}, or if {n} equals {m} and some {ti} is not
+syntactically identical to {ui} but {c} fails to prove either of the
+theorems {|- (ti = ui) = T} or {|- (ti = ui) = F} when applied to {"ti = ui"}.
+
+\EXAMPLE
+{
+#list_EQ_CONV num_EQ_CONV "[1;SUC 1;3] = [1;2;3]";;
+|- ([1;SUC 1;3] = [1;2;3]) = T
+}
+\ENDDOC

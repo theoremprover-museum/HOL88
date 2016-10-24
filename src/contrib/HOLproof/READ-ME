@@ -1,0 +1,44 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: HOLproof                                                   %
+%                                                                       %
+% DESCRIPTION: A formalisation of higher order logic proofs in HOL      %
+%                                                                       %
+% AUTHOR: Joakim von Wright                                             %
+%                                                                       %
+% ADDRESS: SHH Vasa                                                     %
+%          P.O. Box 287                                                 %
+%          SF-65410 Vasa                                                %
+%          Finland.                                                     %
+%                                                                       %
+%          email: jwright@wasa.shh.fi                                   %
+%                                                                       %
+% DATE: 93.09.24                                                        %
+% --------------------------------------------------------------------- %
+
+
+The ideas of this contribution are described in the file HOLproof.dvi.
+
+The HOLproof contribution has a number of parts, each with its own directory
+Proofaux:  auxiliary functions, needed in the rest of the theories
+Type:      a theory of higher order logic types
+Pterm:     a theory of higher order logic terms
+Inference: a theory of higher order logic basic inferences
+Proof:     provability and proofs
+Derived:   derived rules of inference, proofs with derived rules
+Rules:     functions for automatic correctness proofs for hol proofs
+
+The whole theory is built in one session
+1. start HOL
+2. build all theories by loading the file mk_proof.ml
+3. exit HOL
+Now, the theory can be loaded inside HOL by loading the file ld_proof.ml.
+
+The file defs/defs.ml contains abbreviations and definitions that are used
+both in theorems and in examples.
+These have accumulated over the years, so many of them may duplicate theorems
+in existing libraries.
+The theory uses the taut, pair, string, more_lists and finite-sets libraries.
+
+Before long, there will be a Cambridge University Computer Lab Technical Report 
+documenting the work behind this theory.
+

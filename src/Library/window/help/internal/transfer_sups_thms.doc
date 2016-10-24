@@ -1,0 +1,10 @@
+\DOC transfer_sups_thms
+
+\TYPE {transfer_sups_thms : (window -> window -> window)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM DISJOINT_EMPTY finite_sets
+|- !s. DISJOINT {{}} s /\ DISJOINT s {{}}
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM NOT_0_GREATER_EQ_SUC suc
+|- !n. ~0 >= (SUC n)
+\ENDTHEOREM

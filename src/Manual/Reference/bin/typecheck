@@ -1,0 +1,17 @@
+#=============================================================================#
+# Crude typechecking script for HOL documentation files                       #
+#                                                                             #
+# It should be given a list of files to typecheck, e.g. "*.doc", and will     #
+# check the "\TYPE" field against the results given by the HOL system. It     #
+# will not check whether the type field is there in each file, or corresponds #
+# to the filename. It is not very robust, but can be quite useful.            #
+#=============================================================================#
+
+(grep -h '\\TYPE' "$@" | sed -e 's/^[^{]*{//; s/}//' |
+  expand | tee /tmp/.ourtypes$$ |  sed -e 's/:.*/;;/'; echo 'quit();;') |
+  hol | grep -e ': ' >/tmp/.systypes$$
+
+paste /tmp/.ourtypes$$ /tmp/.systypes$$ | sed -e 's/: .* : /: /' |
+  diff /tmp/.ourtypes$$ -
+
+rm /tmp/.ourtypes$$ /tmp/.systypes$$

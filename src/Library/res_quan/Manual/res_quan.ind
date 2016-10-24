@@ -1,0 +1,96 @@
+\begin{theindex}
+
+  \item {\ptt AND\_RESQ\_FORALL\_CONV}, 11
+  \item \ml{associate\_restriction}, 2
+
+  \indexspace
+
+  \item {\ptt COND\_REWR\_CANON}, 15
+  \item {\ptt COND\_REWR\_CONV}, 16
+  \item {\ptt COND\_REWR\_TAC}, 17
+  \item {\ptt COND\_REWRITE1\_CONV}, 11
+  \item {\ptt COND\_REWRITE1\_TAC}, 13
+
+  \indexspace
+
+  \item {\ptt dest\_resq\_abstract}, 20
+  \item {\ptt dest\_resq\_exists}, 21
+  \item {\ptt dest\_resq\_forall}, 21
+  \item {\ptt dest\_resq\_select}, 22
+  \item {\ptt DISJ\_RESQ\_EXISTS\_DIST}, 55
+
+  \indexspace
+
+  \item {\ptt GGEN\_TAC}, 22
+  \item {\ptt GQSPEC}, 23
+  \item {\ptt GQSPEC\_ALL}, 25
+  \item {\ptt GQSPECL}, 24
+
+  \indexspace
+
+  \item {\ptt IMP\_RESQ\_FORALL\_CONV}, 25
+  \item {\ptt is\_resq\_abstract}, 26
+  \item {\ptt is\_resq\_exists}, 26
+  \item {\ptt is\_resq\_forall}, 27
+  \item {\ptt is\_resq\_select}, 27
+
+  \indexspace
+
+  \item {\ptt list\_mk\_rerq\_forall}, 28
+  \item {\ptt list\_mk\_resq\_exists}, 28
+  \item {\ptt LIST\_RESQ\_FORALL\_CONV}, 29
+
+  \indexspace
+
+  \item {\ptt mk\_resq\_abstract}, 29
+  \item {\ptt mk\_resq\_exists}, 30
+  \item {\ptt mk\_resq\_forall}, 30
+  \item {\ptt mk\_resq\_select}, 31
+
+  \indexspace
+
+  \item {\ptt new\_binder\_resq\_definition}, 31
+  \item {\ptt new\_infix\_resq\_definition}, 32
+  \item {\ptt new\_resq\_definition}, 34
+
+  \indexspace
+
+  \item {\ptt RESQ\_EXISTS\_CONV}, 36
+  \item {\ptt RESQ\_EXISTS\_DISJ\_DIST}, 55
+  \item {\ptt RESQ\_EXISTS\_REORDER}, 55
+  \item {\ptt RESQ\_EXISTS\_TAC}, 36
+  \item {\ptt RESQ\_EXISTS\_UNIQUE}, 55
+  \item {\ptt RESQ\_FORALL\_AND\_CONV}, 37
+  \item {\ptt RESQ\_FORALL\_CONJ\_DIST}, 55
+  \item {\ptt RESQ\_FORALL\_CONV}, 37
+  \item {\ptt RESQ\_FORALL\_DISJ\_DIST}, 55
+  \item {\ptt RESQ\_FORALL\_FORALL}, 55
+  \item {\ptt RESQ\_FORALL\_REORDER}, 55
+  \item {\ptt RESQ\_FORALL\_SWAP\_CONV}, 38
+  \item {\ptt RESQ\_FORALL\_UNIQUE}, 55
+  \item {\ptt RESQ\_GEN}, 38
+  \item {\ptt RESQ\_GEN\_ALL}, 40
+  \item {\ptt RESQ\_GEN\_TAC}, 40
+  \item {\ptt RESQ\_GENL}, 39
+  \item {\ptt RESQ\_HALF\_EXISTS}, 41
+  \item {\ptt RESQ\_HALF\_GEN\_TAC}, 41
+  \item {\ptt RESQ\_HALF\_SPEC}, 42
+  \item {\ptt RESQ\_IMP\_RES\_TAC}, 43
+  \item {\ptt RESQ\_IMP\_RES\_THEN}, 43
+  \item {\ptt RESQ\_MATCH\_MP}, 44
+  \item {\ptt RESQ\_RES\_TAC}, 45
+  \item {\ptt RESQ\_RES\_THEN}, 45
+  \item {\ptt RESQ\_REWR\_CANON}, 48
+  \item {\ptt RESQ\_REWRITE1\_CONV}, 46
+  \item {\ptt RESQ\_REWRITE1\_TAC}, 47
+  \item {\ptt RESQ\_SPEC}, 48
+  \item {\ptt RESQ\_SPEC\_ALL}, 50
+  \item {\ptt RESQ\_SPECL}, 49
+
+  \indexspace
+
+  \item {\ptt search\_top\_down}, 51
+  \item {\ptt strip\_resq\_exists}, 52
+  \item {\ptt strip\_resq\_forall}, 52
+
+\end{theindex}

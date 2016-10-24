@@ -1,0 +1,3 @@
+\THEOREM sums SEQ
+|- !f s. f sums s = (\n. Sum(0,n)f) --> s
+\ENDTHEOREM

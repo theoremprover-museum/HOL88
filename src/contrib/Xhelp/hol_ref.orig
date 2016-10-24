@@ -1,0 +1,27 @@
+
+# following two lines used for customization
+
+FULLSED=ORIG_DIR/h_ref.sed
+DEFHOLHELPPATH=ORIG_HELP_PATH/ENTRIES
+CUR_HELP_PATH=`echo ${HOL_HELP_PATH} ${DEFHOLHELPPATH} |sed 's/ /:/g'`
+
+
+for i in `echo $CUR_HELP_PATH | sed 's/^:/.:/
+				s/::/:.:/g
+				s/:$/:./
+				s/:/ /g'`
+do
+	for j in $i/${1}.doc
+	do
+	if test -f $j
+	then
+		sed -f $FULLSED $j
+		echo ""
+	fi
+	done
+done
+
+
+
+
+

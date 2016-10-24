@@ -1,0 +1,10 @@
+\DOC Patt_child
+
+\TYPE {Patt_child : (print_patt_tree -> child_metavar)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

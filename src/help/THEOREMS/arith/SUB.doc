@@ -1,0 +1,3 @@
+\THEOREM SUB arithmetic
+|- (!m. 0 - m = 0) /\ (!m n. (SUC m) - n = (m < n => 0 | SUC(m - n)))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM treal_neg REALAX
+|- !x y. treal_neg(x,y) = y,x
+\ENDTHEOREM

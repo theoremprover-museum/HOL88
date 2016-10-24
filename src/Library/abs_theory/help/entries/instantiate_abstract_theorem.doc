@@ -1,0 +1,31 @@
+\DOC instantiate_abstract_theorem
+
+\TYPE {instantiate_abstract_theorem : string -> string -> (term # term) list -> (thm) list) -> thm}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Instantiates an abstract theorem. 
+
+\DESCRIBE
+
+The call {instantiate_abstract_theorem `thy` `th` tpl val}
+instantiates the theorem {th} from the abstract theory {thy} using
+the instantiation {tpl} and validation {val}, where {tpl} is a
+list of paired terms where the first term is the variable to be
+instantiated and the second term is the instantiation and {val} is a
+proof that the instantiation meets the theory obligations for the source
+abstract theorem. The instantiation works whether the theory obligations
+were made implicit or explicit in the original goal.  The resulting theorem
+is {\em not} automatically saved in the current theory segment, but must be
+explicitly saved using {save_thm}.
+
+\FAILURE
+Fails if the instantiation cannot be resolved with the source theorem or
+the validation does not match the instantiation.  Fails if the {thy}
+is not an ancestor or the {th} is not found in {thy}. 
+
+\SEEALSO
+instantiate_abstract_definition, save_thm
+
+\ENDDOC

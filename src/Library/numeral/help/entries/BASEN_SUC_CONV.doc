@@ -1,0 +1,35 @@
+\DOC BASEN_SUC_CONV
+
+\TYPE {BASEN_SUC_CONV : term -> thm}
+
+\SYNOPSIS
+Converts the successor function on a numeral into an add-one in the same radix.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} is a list of digits in base {r}, and {m} is a list of digits in base
+{r}, then {BASEN_SUC_CONV "SUC (BASEN r m)"} returns the theorem:
+{
+        |- SUC (BASEN r m) = BASEN r m + BASEN r [1]
+}
+\FAILURE
+The argument to {BASEN_SUC_CONV} must be of the form {"SUC (BASEN r [...])"},
+and the radix must be a numeric constant that is at least 2, and all elements
+of the digit lists must be numeric constants, and must be less than the radix.
+
+\EXAMPLE
+{
+#BASEN_SUC_CONV "SUC (BASEN 10 [3;4;5])";;
+|- SUC(BASEN 10[3;4;5]) = BASEN 10[3;4;6]
+
+#BASEN_SUC_CONV "SUC (BASEN 2 [1;1;1;1])";;
+|- SUC(BASEN 2[1;1;1;1]) = BASEN 2 [1;0;0;0;0]
+
+#BASEN_SUC_CONV "SUC (BASEN 16 [8;10;14])";;
+|- SUC(BASEN 16[8;10;14]) = BASEN 16[8;10;15]
+}
+\SEEALSO
+BASEN_ADD_CONV, BASEN_PRE_CONV.
+
+\ENDDOC

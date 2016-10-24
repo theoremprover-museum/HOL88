@@ -1,0 +1,4 @@
+\THEOREM EQ_IMP_THM \none
+|- !t1 t2. (t1 = t2) = (t1 ==> t2) /\ (t2 ==> t1)
+\ENDTHEOREM
+

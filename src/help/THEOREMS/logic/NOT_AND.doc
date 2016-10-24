@@ -1,0 +1,3 @@
+\THEOREM NOT_AND \none
+|- !t. ~(t /\ ~t) 
+\ENDTHEOREM

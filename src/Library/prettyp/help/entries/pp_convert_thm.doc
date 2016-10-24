@@ -1,0 +1,33 @@
+\DOC pp_convert_thm
+
+\TYPE {pp_convert_thm : (thm -> print_tree)}
+
+\SYNOPSIS
+Function for converting a HOL theorem into a print-tree.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{pp_convert_thm} converts a theorem into a print-tree. The hypotheses
+(assumptions) of the theorem are not included in the print-tree. Instances of
+the HOL constant {UNCURRY} in the theorem are converted into an appropriate use
+of ordered pairs in the print-tree. The amount of type information included in
+the print-tree is determined by the value of the HOL system flag {show_types}.
+If {show_types} is {true}, then `useful' types are included in the print-tree.
+Otherwise, only `hidden' types are included.
+
+`Useful' type information is type information on the bound variables of
+abstractions and on one occurrence of every free variable. Type information is
+only included for constants if the constant is a function and it is not fully
+applied.
+
+`Hidden' types are rare. They only occur on variables which, although free,
+without type information appear to be bound.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_convert_all_thm, pp_convert_type, pp_convert_term, thm_to_print_tree.
+
+\ENDDOC

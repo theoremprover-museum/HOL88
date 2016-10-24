@@ -1,0 +1,3 @@
+\THEOREM OR_EL_FOLDL list
+|- !l. OR_EL l = FOLDL $\/ F l
+\ENDTHEOREM

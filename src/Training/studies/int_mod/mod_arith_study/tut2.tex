@@ -1,0 +1,910 @@
+\section{Basic modular arithmetic}
+
+By working through the previous section, you acquired some practice
+proving group-theoretic results within the framework of the integers.
+In particular, you proved that the set of multiples of a fixed integer
+forms a normal subgroup of the integers.  In this section, we shall
+use this result to define the set of integers mod {\small\tt n}, and to
+demonstrate that they form a group.  After this, we shall import the
+first-order group theory from the group theory library, and thus
+create an enriched computational environment for modular arithmetic.
+
+Once again we shall assume that the computing environment in which we
+will be working includes an emacs editor, and that you are familiar
+with its use.  And once again, I strongly recommend that as you are
+working, you write all your commands in a file (this time named
+something like {\small\verb+int_mod.show.ml+}) and then copy your work
+into the shell window running \HOL.  This will provide you both with a
+transcript of your work and a file which you could execute to rebuild
+the results we will be proving.  You can find a file containing
+essentially the same work as you will be doing in
+\begin{verbatim}
+   hol/Library/int_mod/int_mod.show.ml
+\end{verbatim}
+and a copy of the shell script created by doing the work discussed in
+this section in
+\begin{verbatim}
+   hol/Training/studies/int_mod/int_mod.shell
+\end{verbatim}
+Feel free to examine these as we go along.
+
+In this section, we want to create a new theory file, named
+{\small\verb+int_mod.th+}.  As before, once you have started up \HOL,
+you initialize this file by executing
+\begin{session}
+\begin{verbatim}
+faulkner% hol88
+
+       _  _    __    _      __    __
+|___   |__|   |  |   |     |__|  |__|
+|      |  |   |__|   |__   |__|  |__|
+
+  Version 1.07, built on Jul 13 1989
+
+#new_theory `int_mod`;;
+() : void
+\end{verbatim}
+\end{session}
+
+Once again we will be needing the group theory and the integer theory,
+so you want to load them.
+\begin{session}
+\begin{verbatim}
+#load_library `group`;;
+Loading library `group` ...
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+#load_library `integer`;;
+Loading library `integer` ...
+\end{verbatim}
+\end{session}
+
+In addition, we will be needing access to the results from the
+previous section.  As a consequence of the work you did in the
+previous section, there should be a file named
+{\small\verb+int_sbgp.th+} located in the same directory as the one
+you are currently working in.  To have access to the results in that
+file, you should execute 
+\begin{session}
+\begin{verbatim}
+#new_parent `int_sbgp`;;
+Theory int_sbgp loaded
+() : void
+
+#include_theory `int_sbgp`;;
+() : void
+\end{verbatim}
+\end{session}
+
+The command {\small\verb+include_theory `int_sbgp`;;+} will make it
+possible for you to refer to the theorems and definitions of the
+previous section by using the names under which they were stored.
+
+In this section, we wish to develop the arithmetic theory of modular
+arithmetic under modular addition.  The first thing we must do is make
+a collection of definitions that say what we are talking about.  The
+set of integers mod {\small\tt n} is the quotient of the integers by
+the normal subgroup consisting of the multiples of {\small\tt n}.
+From the last section, we can express the set of multiples of
+{\small\tt n} by 
+\begin{verbatim}
+   int_mult_set n
+\end{verbatim}
+The group of the integers (under addition) is expressed by
+\begin{verbatim}
+   (\N:integer.T),plus)
+\end{verbatim}
+The way we express the quotient set of the integers by the multiples
+of {\small\tt n} is
+\begin{verbatim}
+   quot_set((\N.T),plus)(int_mult_set n)
+\end{verbatim}
+Therefore, we can define the set of integers mod {\small\tt n} by
+\begin{session}
+\begin{verbatim}
+#let INT_MOD_DEF = new_definition(`INT_MOD_DEF`,
+#"int_mod n = quot_set((\N.T),plus)(int_mult_set n)");;
+INT_MOD_DEF = |- !n. int_mod n = quot_set((\N. T),$plus)(int_mult_set n)
+\end{verbatim}
+\end{session}
+Similarly, we can express the quotient product (addition mod
+{\small\tt n}) by 
+\begin{verbatim}
+   quot_prod((\N.T),plus)(int_mult_set n)
+\end{verbatim}
+and we define addition mod {\small\tt n} by
+\begin{session}
+\begin{verbatim}
+#let PLUS_MOD_DEF = new_definition(`PLUS_MOD_DEF`,
+#"plus_mod n = quot_prod((\N.T),plus)(int_mult_set n)");;
+PLUS_MOD_DEF = 
+|- !n. plus_mod n = quot_prod((\N. T),$plus)(int_mult_set n)
+\end{verbatim}
+\end{session}
+
+Now, an element of the set of integers mod {\small\tt n} is an
+equivalence class; it is again a set.  Using group theory we can
+identify this set as the (left) coset of the multiples {\small\tt n}
+by {\small\tt m}, where {\small\tt m} is a representative of the
+equivalence class.  (The quotient set of a group by a normal subgroup
+was defined to be the set of left cosets of the normal subgroup.)  Let
+us define a function that will take an integer to the associated left
+coset.  Such a definition will allow us to phrase theorems in ways in
+which we are more accustomed to think.  The left coset in the integers
+of the multiples of {\small\tt n} by {\small\tt m} is denoted by 
+\begin{verbatim}
+   LEFT_COSET((\N.T),$plus)(int_mult_set n)m
+\end{verbatim}
+and so the definition we want to make is
+\begin{session}
+\begin{verbatim}
+#let MOD_DEF = new_definition(`MOD_DEF`,
+#"mod n m = LEFT_COSET((\N.T),$plus)(int_mult_set n)m");;
+MOD_DEF = |- !n m. mod n m = LEFT_COSET((\N. T),$plus)(int_mult_set n)m
+\end{verbatim}
+\end{session}
+
+Let us prove a lemma that says that the elements of the integers mod
+{\small\tt n} (as we have defined them) are precisely those sets that
+are of the form {\small\verb+mod n m+}, for some {\small\tt m}.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"(!m.int_mod n (mod n m)) /\
+              (int_mod n q ==> ?m.(q = mod n m))");;
+"(!m. int_mod n(mod n m)) /\ (int_mod n q ==> (?m. q = mod n m))"
+
+() : void
+\end{verbatim}
+\end{session}
+
+This follows almost immediately from the definitions we just made,
+together with the definition of {\small\verb+quot_set+}.  The
+definition of {\small\verb+quot_set+} requires that the set that we
+are quotienting by be a normal subgroup.  However, from the previous
+section, we have that the set of multiples of {\small\tt n} is a
+normal subgroup of the integers.  So, let us begin by rewriting with
+all of these definitions, together with this fact. 
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC
+#         [INT_MOD_DEF;MOD_DEF;QUOTIENT_SET_DEF;INT_MULT_SET_NORMAL]);;
+Theorem INT_MULT_SET_NORMAL autoloaded from theory `int_sbgp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"!m.
+  ?x.
+   LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+   LEFT_COSET((\N. T),$plus)(int_mult_set n)x"
+
+() : void
+\end{verbatim}
+\end{session}
+
+Clearly, for each {\small\tt m} the required {\small\tt x} is just
+{\small\tt m}.  So we can finish this off by
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN (EXISTS_TAC "m:integer") THEN REFL_TAC);;
+OK..
+goal proved
+|- !m.
+    ?x.
+     LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+     LEFT_COSET((\N. T),$plus)(int_mult_set n)x
+|- (!m. int_mod n(mod n m)) /\ (int_mod n q ==> (?m. q = mod n m))
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+Having finished developing the proof, we want to save the result for
+future use.
+\begin{session}
+\begin{verbatim}
+#let INT_MOD_MOD_LEMMA = prove_thm(`INT_MOD_MOD_LEMMA`,
+#"(!m.int_mod n (mod n m)) /\ (int_mod n q ==> ?m.(q = mod n m))",
+#((REWRITE_TAC
+#  [INT_MOD_DEF;MOD_DEF;QUOTIENT_SET_DEF;INT_MULT_SET_NORMAL]) THEN
+# GEN_TAC THEN (EXISTS_TAC "m:integer") THEN REFL_TAC));;
+INT_MOD_MOD_LEMMA = 
+|- (!m. int_mod n(mod n m)) /\ (int_mod n q ==> (?m. q = mod n m))
+\end{verbatim}
+\end{session}
+
+Another thing that we want to know about the definitions that we've
+made is that if we add two integers mod {\small\tt n} the result is
+the same as if we add the integers and then compute the result mod
+{\small\tt n}.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"!x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)");;
+"!x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+First, let us expand out the definitions of {\small\verb+plus_mod+} and
+{\small\verb+mod+}.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [PLUS_MOD_DEF;MOD_DEF]);;
+OK..
+"!x y.
+  quot_prod
+  ((\N. T),$plus)
+  (int_mult_set n)
+  (LEFT_COSET((\N. T),$plus)(int_mult_set n)x)
+  (LEFT_COSET((\N. T),$plus)(int_mult_set n)y) =
+  LEFT_COSET((\N. T),$plus)(int_mult_set n)(x plus y)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+This current goal is a specific instance of the final conclusion of
+the theorem {\small\verb+QUOT_PROD+}.  Unfortunately, this theorem is
+not simply of the form hypothesis implies final conclusion, so we must
+modify it before we can use {\small\verb+MATCH_MP_IMP_TAC+} on it.
+That is, we need to undischarge the first hypothesis.
+\begin{session}
+\begin{verbatim}
+#expand (MATCH_MP_IMP_TAC (UNDISCH QUOT_PROD));;
+expand (MATCH_MP_IMP_TAC (UNDISCH QUOT_PROD));;
+Theorem QUOT_PROD autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+2 subgoals
+"NORMAL((\N. T),$plus)(int_mult_set n)"
+
+"(\N. T)x /\ (\N. T)y"
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+This returns us two subgoals.  The first subgoal 
+{\small\verb+(\N. T)x /\ (\N. T)y+} is essentially trivial.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC []);;
+OK..
+goal proved
+|- (\N. T)x /\ (\N. T)y
+
+Previous subproof:
+"NORMAL((\N. T),$plus)(int_mult_set n)"
+
+() : void
+\end{verbatim}
+\end{session}
+The other goal is almost precisely what
+{\small\verb+INT_MULT_SET_NORMAL+} gives us.
+\begin{session}
+\begin{verbatim}
+#expand (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL));;
+OK..
+goal proved
+|- NORMAL((\N. T),$plus)(int_mult_set n)
+|- !x y.
+    quot_prod
+    ((\N. T),$plus)
+    (int_mult_set n)
+    (LEFT_COSET((\N. T),$plus)(int_mult_set n)x)
+    (LEFT_COSET((\N. T),$plus)(int_mult_set n)y) =
+    LEFT_COSET((\N. T),$plus)(int_mult_set n)(x plus y)
+|- !x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+Let's save our work as {\small\verb+PLUS_MOD_LEMMA+}.
+\begin{session}
+\begin{verbatim}
+#let PLUS_MOD_LEMMA = prove_thm(`PLUS_MOD_LEMMA`,
+# "!x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)",
+#((REWRITE_TAC [PLUS_MOD_DEF;MOD_DEF]) THEN
+# (MATCH_MP_IMP_TAC (UNDISCH QUOT_PROD)) THENL
+# [(REWRITE_TAC []);
+#  (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL))]));;
+PLUS_MOD_LEMMA = |- !x y. plus_mod n(mod n x)(mod n y) = mod n(x plus y)
+\end{verbatim}
+\end{session}
+
+Since we want to import the first order group theory, we need to show
+that {\small\verb+int_mod n+} actually forms a group under
+{\small\verb+plus_mod n+}.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"GROUP(int_mod n,plus_mod n)");;
+"GROUP(int_mod n,plus_mod n)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+As usual, let us begin by expanding out the definitions of
+{\small\verb+int_mod n+} and {\small\verb+plus_mod n+}.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]);;
+OK..
+"GROUP
+ (quot_set((\N. T),$plus)(int_mult_set n),
+  quot_prod((\N. T),$plus)(int_mult_set n))"
+
+() : void
+\end{verbatim}
+\end{session}
+
+The subgoal that this gives us back is an instance of the consequent
+of the {\small\verb+QUOTIENT_GROUP+}.  Therefore, we can once again use
+{\small\verb+MATCH_MP_IMP_TAC+} to reduce this goal.
+\begin{session}
+\begin{verbatim}
+#expand (MATCH_MP_IMP_TAC QUOTIENT_GROUP);;
+Theorem QUOTIENT_GROUP autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"NORMAL((\N. T),$plus)(int_mult_set n)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+This leaves us, once again, with a goal which is essentially the
+theorem {\small\verb+INT_MULT_SET_NORMAL+}.
+\begin{session}
+\begin{verbatim}
+#expand (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL));;
+OK..
+goal proved
+|- NORMAL((\N. T),$plus)(int_mult_set n)
+|- GROUP
+   (quot_set((\N. T),$plus)(int_mult_set n),
+    quot_prod((\N. T),$plus)(int_mult_set n))
+|- GROUP(int_mod n,plus_mod n)
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+And again, let us store our work.
+\begin{session}
+\begin{verbatim}
+#let int_mod_as_GROUP = prove_thm(`int_mod_as_GROUP`,
+#"GROUP(int_mod n,plus_mod n)",
+#((PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]) THEN
+# (MATCH_MP_IMP_TAC QUOTIENT_GROUP) THEN
+# (ACCEPT_TAC (SPEC_ALL INT_MULT_SET_NORMAL))));;
+int_mod_as_GROUP = |- GROUP(int_mod n,plus_mod n)
+\end{verbatim}
+\end{session}
+
+Before we set about importing the group theory, it will be useful to
+have some theorems that will allow us to rewrite things expressed in
+group-theoretic terms using more familiar terms.  To get these results
+it will be useful to note that {\small\verb+mod n+} is a group
+homomorphism, the natural homomorphism.  (In fact, we essentially
+already have that {\small\verb+mod n+} is a homomorphism by
+{\small\verb+PLUS_MOD_LEMMA+}.) 
+\begin{session}
+\begin{verbatim}
+#set_goal([],"mod n = NAT_HOM((\N.T),$plus)(int_mult_set n)");;
+"mod n = NAT_HOM((\N. T),$plus)(int_mult_set n)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+To show that these two functions are the same, we want to show that
+they behave the same on all arguments.  The tactic that allows us to
+make this reduction is {\small\verb+EXT_TAC+}.
+\begin{session}
+\begin{verbatim}
+#expand (EXT_TAC "m:integer");;
+OK..
+"!m. mod n m = NAT_HOM((\N. T),$plus)(int_mult_set n)m"
+
+() : void
+\end{verbatim}
+\end{session}
+
+To reduce this goal, we want to rewrite with the definitions of
+{\small\verb+NAT_HOM+} and {\small\verb+mod+}.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [NAT_HOM_DEF;MOD_DEF]);;
+Definition NAT_HOM_DEF autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"!m.
+  LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+  (\y.
+    GROUP((\N. T),$plus) /\
+    NORMAL((\N. T),$plus)(int_mult_set n) /\
+    LEFT_COSET((\N. T),$plus)(int_mult_set n)m y)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+To reduce the resultant subgoal, we need to remove the conditions
+that the integers form a group, and that the set of  multiples of
+{\small\tt n} is a normal subgroup from the right-hand side of the
+equation.  We also will need to rewrite the right-hand side with the
+eta axiom.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [integer_as_GROUP;INT_MULT_SET_NORMAL;ETA_AX]);;
+Theorem integer_as_GROUP autoloaded from theory `integer`.
+integer_as_GROUP = |- GROUP((\N. T),$plus)
+
+OK..
+goal proved
+|- !m.
+    LEFT_COSET((\N. T),$plus)(int_mult_set n)m =
+    (\y.
+      GROUP((\N. T),$plus) /\
+      NORMAL((\N. T),$plus)(int_mult_set n) /\
+      LEFT_COSET((\N. T),$plus)(int_mult_set n)m y)
+|- !m. mod n m = NAT_HOM((\N. T),$plus)(int_mult_set n)m
+|- mod n = NAT_HOM((\N. T),$plus)(int_mult_set n)
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+This finishes off the whole goal.  Putting all this together, we have
+\begin{session}
+\begin{verbatim}
+#let MOD_NAT_HOM_LEMMA = prove_thm(`MOD_NAT_HOM_LEMMA`,
+#"mod n = NAT_HOM((\N.T),$plus)(int_mult_set n)",
+#((EXT_TAC "m:integer") THEN
+# (REWRITE_TAC [NAT_HOM_DEF;MOD_DEF]) THEN
+# (REWRITE_TAC [integer_as_GROUP;INT_MULT_SET_NORMAL;ETA_AX])));;
+MOD_NAT_HOM_LEMMA = |- mod n = NAT_HOM((\N. T),$plus)(int_mult_set n)
+\end{verbatim}
+\end{session}
+
+Let us now use the fact that {\small\verb+mod n+} is the natural
+homomorphism to show that the group identity is the image of
+{\small\verb+(INT 0)+}.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"ID(int_mod n,plus_mod n) = mod n (INT 0)");;
+"ID(int_mod n,plus_mod n) = mod n(INT 0)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+Before we start reducing this goal, let's add to the assumptions the
+various theorems that we repeatedly used in the previous work.  In
+particular, let us add the fact that the integers form a group, the
+fact that the integers mod {\small\tt n} form a group, and the fact
+that the set of multiples of {\small\tt n} is a normal subgroup.  The
+tactic that allows you to add a list of theorems as assumptions to a
+goal is {\small\verb+ASSUME_LIST_TAC+}.
+\begin{session}
+\begin{verbatim}
+#expand (ASSUME_LIST_TAC
+#  [integer_as_GROUP;int_mod_as_GROUP;(SPEC_ALL INT_MULT_SET_NORMAL)]);;
+OK..
+"ID(int_mod n,plus_mod n) = mod n(INT 0)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, let us rewrite with the lemma that we just proved.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [MOD_NAT_HOM_LEMMA]);;
+OK..
+"ID(int_mod n,plus_mod n) =
+ NAT_HOM((\N. T),$plus)(int_mult_set n)(INT 0)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+If we first rewrote {\small\verb+(INT 0)+} as the additive inverse of
+the integers, then, by {\small\verb+HOM_ID_INV_LEMMA+}, we should be
+able to reduce the subgoal returned to one of showing that
+{\small\verb+NAT_HOM+} is a group homomorphism.  However, the tactic
+{\small\verb+MATCH_MP_IMP_TAC+} is a little too restrictive to apply
+directly.  A tactic that we can use instead, and which is a bit more
+general, is {\small\verb+NEW_MATCH_ACCEPT_TAC+}.  To use
+{\small\verb+NEW_MATCH_ACCEPT_TAC+} in place of
+{\small\verb+MATCH_MP_IMP_TAC+} you need to first undischarge the
+antecedent of the implication.  In our case, we want to use
+{\small\verb+NEW_MATCH_ACCEPT_TAC+} with the first conjunct of the
+result of undischarging the antecedent of
+{\small\verb+HOM_ID_INV_LEMMA+}, swapped around using {\small\verb+SYM+}. 
+\begin{session}
+\begin{verbatim}
+#expand ((PURE_ONCE_REWRITE_TAC[(SYM ID_EQ_0)]) THEN
+#  (NEW_MATCH_ACCEPT_TAC
+#     (SYM (CONJUNCT1 (UNDISCH HOM_ID_INV_LEMMA)))));;
+Theorem HOM_ID_INV_LEMMA autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"GP_HOM
+ ((\N. T),$plus)
+ (int_mod n,plus_mod n)
+ (NAT_HOM((\N. T),$plus)(int_mult_set n))"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, we would like to use {\small\verb+NAT_HOM_THM+} to deal with this
+goal, but first we must change {\small\verb+int_mod+} and
+{\small\verb+plus_mod+} into {\small\verb+quot_set+} and
+{\small\verb+quot_prod+}.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]);;
+OK..
+"GP_HOM
+ ((\N. T),$plus)
+ (quot_set((\N. T),$plus)(int_mult_set n),
+  quot_prod((\N. T),$plus)(int_mult_set n))
+ (NAT_HOM((\N. T),$plus)(int_mult_set n))"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The fact that {\small\verb+NAT_HOM+} is a group homomorphism is given to us
+by {\small\verb+NAT_HOM_THM+}, but again we have hypotheses to be dealt with
+and the conclusion is not in exactly the right form for
+{\small\verb+MATCH_MP_IMP_TAC+}.
+\begin{session}
+\begin{verbatim}
+#expand (NEW_MATCH_ACCEPT_TAC (CONJUNCT1 (UNDISCH NAT_HOM_THM)));;
+Theorem NAT_HOM_THM autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"GROUP((\N. T),$plus) /\ NORMAL((\N. T),$plus)(int_mult_set n)"
+    [ "GROUP((\N. T),$plus)" ]
+    [ "GROUP(int_mod n,plus_mod n)" ]
+    [ "NORMAL((\N. T),$plus)(int_mult_set n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+This last goal follows immediately from the assumptions.
+\begin{session}
+\begin{verbatim}
+#expand (ASM_REWRITE_TAC []);;
+OK..
+goal proved
+.. |- GROUP((\N. T),$plus) /\ NORMAL((\N. T),$plus)(int_mult_set n)
+.. |- GP_HOM
+      ((\N. T),$plus)
+      (quot_set((\N. T),$plus)(int_mult_set n),
+       quot_prod((\N. T),$plus)(int_mult_set n))
+      (NAT_HOM((\N. T),$plus)(int_mult_set n))
+.. |- GP_HOM
+      ((\N. T),$plus)
+      (int_mod n,plus_mod n)
+      (NAT_HOM((\N. T),$plus)(int_mult_set n))
+.. |- ID(int_mod n,plus_mod n) =
+      NAT_HOM((\N. T),$plus)(int_mult_set n)(INT 0)
+.. |- ID(int_mod n,plus_mod n) = mod n(INT 0)
+|- ID(int_mod n,plus_mod n) = mod n(INT 0)
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+To store the work,
+\begin{session}
+\begin{verbatim}
+#let ID_EQ_MOD_0 = prove_thm(`ID_EQ_MOD_0`,
+#"ID(int_mod n,plus_mod n) = mod n (INT 0)",
+#((ASSUME_LIST_TAC
+#  [integer_as_GROUP;int_mod_as_GROUP;
+#   (SPEC_ALL INT_MULT_SET_NORMAL)]) THEN
+# (REWRITE_TAC [MOD_NAT_HOM_LEMMA]) THEN
+# (PURE_ONCE_REWRITE_TAC[(SYM ID_EQ_0)]) THEN
+# (NEW_MATCH_ACCEPT_TAC
+#  (SYM (CONJUNCT1 (UNDISCH HOM_ID_INV_LEMMA)))) THEN
+# (PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]) THEN
+# (NEW_MATCH_ACCEPT_TAC (CONJUNCT1 (UNDISCH NAT_HOM_THM))) THEN
+# (ASM_REWRITE_TAC [])));;
+ID_EQ_MOD_0 = |- ID(int_mod n,plus_mod n) = mod n(INT 0)
+\end{verbatim}
+\end{session}
+
+The next result we would like to prove along these lines is that the
+group inverse of an element in the integers mod {\small\tt n} corresponds to
+{\small\verb+mod n+} of the negative of a representative.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"!m.(INV(int_mod n,plus_mod n)(mod n m) = mod n (neg m))");;
+"!m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)"
+
+() : void
+\end{verbatim}
+\end{session}
+
+Try proving this result yourself. The proof is essentially the same as
+the one just finished.  (You might want to have a look at
+{\small\verb+neg_DEF+} from the theory integer.)  If you get stuck,
+remember that you can always take a look in
+\begin{verbatim}
+   hol/Training/studies/int_mod/int_mod.shell
+\end{verbatim}
+to see what was done.  The composite result of the work follows.
+\begin{session}
+\begin{verbatim}
+#let INV_EQ_MOD_NEG = prove_thm(`INV_EQ_MOD_NEG`,
+#"!m.(INV(int_mod n,plus_mod n)(mod n m) = mod n (neg m))",
+#((ASSUME_LIST_TAC
+#  [integer_as_GROUP;int_mod_as_GROUP;
+#   (SPEC_ALL INT_MULT_SET_NORMAL)]) THEN
+# (REWRITE_TAC [MOD_NAT_HOM_LEMMA]) THEN
+# (PURE_ONCE_REWRITE_TAC[neg_DEF]) THEN
+# (NEW_MATCH_ACCEPT_TAC (SYM (UNDISCH (SPEC_ALL
+#    (CONJUNCT2 (UNDISCH HOM_ID_INV_LEMMA)))))) THENL
+# [((PURE_ONCE_REWRITE_TAC[INT_MOD_DEF;PLUS_MOD_DEF]) THEN
+#   (NEW_MATCH_ACCEPT_TAC (CONJUNCT1 (UNDISCH NAT_HOM_THM))) THEN
+#   (ASM_REWRITE_TAC []));
+#  (REWRITE_TAC [])]));;
+INV_EQ_MOD_NEG = 
+|- !m. INV(int_mod n,plus_mod n)(mod n m) = mod n(neg m)
+\end{verbatim}
+\end{session}
+
+One last definition and theorem before we do the import.  Let us
+define {\small\verb+minus_mod n+} as the result of adding
+{\small\verb+mod n+} the inverse.
+\begin{session}
+\begin{verbatim}
+#let MINUS_MOD_DEF = new_definition(`MINUS_MOD_DEF`,
+#"minus_mod n m p = plus_mod n m (INV(int_mod n,plus_mod n)p)");;
+MINUS_MOD_DEF = 
+|- !n m p. minus_mod n m p = plus_mod n m(INV(int_mod n,plus_mod n)p)
+\end{verbatim}
+\end{session}
+
+The obvious theorem we want is
+\begin{session}
+\begin{verbatim}
+#set_goal([], "!m p. minus_mod n (mod n m) (mod n p) = mod n (m minus p)");;
+"!m p. minus_mod n(mod n m)(mod n p) = mod n(m minus p)"
+
+() : void
+\end{verbatim}
+\end{session}
+This follows immediately from definitions and results we already have.
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [MINUS_MOD_DEF;INV_EQ_MOD_NEG;
+#	   MINUS_DEF;PLUS_MOD_LEMMA]);;
+Definition MINUS_DEF autoloaded from theory `integer`.
+MINUS_DEF = |- !M N. M minus N = M plus (neg N)
+
+OK..
+goal proved
+|- !m p. minus_mod n(mod n m)(mod n p) = mod n(m minus p)
+
+Previous subproof:
+goal proved
+() : void
+
+#let MINUS_MOD_LEMMA = prove_thm(`MINUS_MOD_LEMMA`,
+#"!m p. minus_mod n (mod n m) (mod n p) = mod n (m minus p)",
+#(REWRITE_TAC [MINUS_MOD_DEF;INV_EQ_MOD_NEG;
+#              MINUS_DEF;PLUS_MOD_LEMMA]));;
+MINUS_MOD_LEMMA = 
+|- !m p. minus_mod n(mod n m)(mod n p) = mod n(m minus p)
+\end{verbatim}
+\end{session}
+
+Now let us turn to the business of importing the group theory.  In the
+file
+\begin{verbatim}
+   hol/Library/group/inst_gp.ml
+\end{verbatim}
+there is a collection of functions to facilitate incorporating the
+first-order group theory into any given example of a group.  They are
+also described in Appendix C.  The particular function we will use
+here is {\small\verb+return_GROUP_theory+}.  This function takes a
+string which acts a prefix for the names of the theorems to be
+returned, it takes a theorem stating that the desired example is a
+group, and it takes a list of theorems which it will use to rewrite
+the returned list of theorems into a more desirable form.  It returns
+a list of pairs of strings and theorems.  The strings are intended to
+be the names under which the corresponding theorems will be stored.
+The function {\small\verb+include_GROUP_theory+} of this same file
+behaves much the same as {\small\verb+return_GROUP_theory+}, except
+that it actually stores the theorems in the current theory.  We do not 
+wish to use this function because we will wish to do a bit more
+cleaning up of the returned list of theorems before saving them.
+
+To begin with, let us bind a variable such as {\small\verb+thm_list+}
+with the result of using {\small\verb+return_GROUP_theory+} with the
+prefix {\small\verb+`INT_MOD`+}, the theorem
+{\small\verb+int_mod_as_GROUP+}, and the rewrite theorems
+{\small\verb+ID_EQ_MOD_0+} and {\small\verb+(SYM (SPEC_ALL MINUS_MOD_DEF))+}.
+\begin{session}
+\begin{verbatim}
+#let thm_list = return_GROUP_theory `INT_MOD` int_mod_as_GROUP
+# [ID_EQ_MOD_0;(SYM (SPEC_ALL MINUS_MOD_DEF))];;
+thm_list = 
+[(`INT_MOD_CLOSURE`,
+  |- !x y. int_mod n x /\ int_mod n y ==> int_mod n(plus_mod n x y));
+\end{verbatim}
+\evdots
+\end{session}
+
+Throughout the theorems that the previous function returned there
+is the hypothesis {\small\verb+int_mod n x+}.  In this, {\small\tt x}
+is an arbitrary set of integers.  However, for all these theorems, we
+are not interested in what they say about arbitrary sets of integers,
+but rather only those sets that are of the form {\small\verb+mod n m+}
+for some integer {\small\tt m}.  In this instance we know that we have
+{\small\verb+int_mod n (mod n m)+} by the first conjunct of
+{\small\verb+INT_MOD_MOD_LEMMA+}.  We want to strip each of these
+theorems by using {\small\verb+IMP_CANON+}, which will return a list
+of theorems.  To each theorem in each of the lists we then want to
+instantiate the variables {\small\tt x}, {\small\tt y}, and
+{\small\tt z} with {\small\verb+mod n m1+}, {\small\verb+mod n m2+},
+and {\small\verb+mod n m3+} respectively, and then rewrite everything
+with both the first conjunct of {\small\verb+INT_MOD_MOD_LEMMA+} and
+{\small\verb+INV_EQ_MOD_NEG+}.  Now, to do this we will need to create
+a function to do all this to the theorem in each of the pairs and then
+map this function over {\small\verb+thm_list+}.  The following does
+all this and binds the result to {\small\verb+thl1+}. The
+{\small\verb+and_then+} is an infix that takes the argument to a
+function on the left and the function on the right.  The function
+{\small\verb+STRONG_INST+} is the same as {\small\verb+INST+} except that it
+instantiates free variables in the hypotheses, rather than failing.
+\begin{session}
+\begin{verbatim}
+#let thl1 = map (\ (name,thm).(name,
+#(IMP_CANON thm) and_then
+# (map (\thm1.
+#  (STRONG_INST
+#   [("mod n m1","x:integer -> bool");
+#    ("mod n m2","y:integer -> bool");
+#    ("mod n m3","z:integer -> bool")] thm1) and_then
+#  (REWRITE_RULE[(CONJUNCT1 INT_MOD_MOD_LEMMA);
+#                 INV_EQ_MOD_NEG]))))) thm_list;;
+thl1 = 
+[(`INT_MOD_CLOSURE`, [|- int_mod n(plus_mod n(mod n m1)(mod n m2))]);
+\end{verbatim}
+\evdots
+\end{session}
+
+Next we want to put each of the lists of theorems back together as a
+theorem using {\small\verb+LIST_CONJ+}.  We can also remove the superfluous
+clause {\small\tt T} that occurs in {\small\verb+INT_MOD_ID_LEMMA+} by doing a
+{\small\verb+(REWRITE_RULE [])+} on each of the resultant theorems.
+\begin{session}
+\begin{verbatim}
+#let thl2 = map (\ (name,thl).(name,
+# (LIST_CONJ thl) and_then (REWRITE_RULE []))) thl1;;
+thl2 = 
+[(`INT_MOD_CLOSURE`, |- int_mod n(plus_mod n(mod n m1)(mod n m2)));
+\end{verbatim}
+\evdots
+\end{session}
+
+Before saving these theorems we would like bind all the free variables, 
+except for {\small\tt n}, which we wish to think of as a global variable.
+The function {\small\verb+GENL+} takes a list of variables and a theorem,
+and returns the result of binding each of these variables in the theorem.
+The function {\small\verb+frees+} takes a term and returns a list of all
+variables occurring free in the term.  So, we want to take
+{\small\verb+frees+} of the conclusion ({\small\verb+concl+}) of each
+theorem, then use {\small\verb+filter+} to remove any occurrence of
+{\small\tt n}, then pass it to {\small\verb+GENL+} and apply the resulting
+function to the original theorem.  And we want to  do this to each theorem
+in the list. 
+\begin{session}
+\begin{verbatim}
+#let thl3 = map (\ (name,thm).(name,
+# GENL (filter (\x.not(x = "n:integer")) (frees (concl thm))) thm))
+# thl2;;
+thl3 = 
+[(`INT_MOD_CLOSURE`,
+  |- !m1 m2. int_mod n(plus_mod n(mod n m1)(mod n m2)));
+\end{verbatim}
+\evdots
+\end{session}
+
+Finally, before saving these theorems, we want to filter out all
+occurrences of the theorem {\small\verb+|- T+}.  (In this case it is only
+{\small\verb+INT_MOD_INV_CLOSURE+} we will be removing .)
+\begin{session}
+\begin{verbatim}
+#let thl4 = filter (\ (name,thm).not((concl thm) = "T")) thl3;;
+thl4 = 
+[(`INT_MOD_CLOSURE`,
+  |- !m1 m2. int_mod n(plus_mod n(mod n m1)(mod n m2)));
+\end{verbatim}
+\evdots
+\end{session}
+
+Now, to save each of these theorems, we can just use {\small\verb+save_thm+}.
+If we want to also bind each of them to the name it is paired with
+(and to be stored under), we need to the function
+{\small\verb+autoload_theory+} with arguments {\small\verb+`theorem`+} and the
+name of the current theory.
+\begin{session}
+\begin{verbatim}
+#map (\ (name,thm).
+#  (save_thm (name,thm));
+#  (autoload_theory (`theorem`,(current_theory()), name))) thl4;;
+[(); (); (); (); (); (); (); (); (); (); (); (); (); ()] : void list
+\end{verbatim}
+\end{session}
+
+We now have at our disposal a fairly considerable collection theorems
+that will facilitate doing arithmetic computations when doing further
+theorem proving with the integers mod {\small\tt n}.  You might think
+about writing functions {\small\verb+return_INT_MOD+} and
+{\small\verb+include_INT_MOD+} which behave in a manner similar to
+{\small\verb+return_GROUP_THEORY+} and
+{\small\verb+include_GROUP_THEORY+}.  The arguments they would take would 
+be a bit different.  For example they would probably need to take a
+term which would be the value for {\small\tt n}.   You can find one way of
+writing such functions in the file
+\begin{verbatim}
+   hol/Library/int_mod/inst_int_mod.ml
+\end{verbatim}
+
+To shut down
+\begin{session}
+\begin{verbatim}
+#close_theory `int_mod`;;
+() : void
+
+#quit();;
+faulkner%
+\end{verbatim}
+\end{session}
+

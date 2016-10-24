@@ -1,0 +1,3 @@
+\THEOREM LINSEG_WOSET WELLORDER
+|- !l a. woset l ==> woset(linseg l a)
+\ENDTHEOREM

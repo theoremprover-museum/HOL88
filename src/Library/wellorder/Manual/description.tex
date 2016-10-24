@@ -1,0 +1,338 @@
+\newcommand{\implies}{\Longrightarrow}
+\newcommand{\Union}{\bigcup}
+\newcommand{\union}{\cup}
+\newcommand{\Intersect}{\bigcap}
+\newcommand{\intersect}{\cap}
+\newcommand{\ba}{\begin{array}[t]{l}}
+\newcommand{\ea}{\end{array}}
+\newcommand{\logand}{\wedge}
+\newcommand{\logor}{\vee}
+
+\chapter{The wellorder library}
+
+The wellorder library develops a small theory of orderings, particularly
+wellorderings. This theory is used to prove a theorem justifying definitions by
+recursion over a wellordering. One can use an arbitrary recursion equation:
+
+\begin{session}\begin{alltt}
+?!f. !a. f(a) = h f a
+\end{alltt}\end{session}
+
+provided one can show that the value of {\tt h f a} depends only on the
+values of {\tt f} for values with lower measure than {\tt a}, where the measure
+is some function into the range of a wellordering.
+
+The library also contains some frequently used forms of the Axiom Of Choice,
+namely:
+
+\begin{itemize}
+
+\item The Well-Ordering Principle: every set can be well-ordered.
+
+\item Hausdorff's Maximal Principle: every poset has a maximal chain.
+
+\item Zorn's Lemma: a poset in which every chain has an upper bound contains a
+maximal element.
+
+\item Kuratowski's Lemma: every chain in a poset is contained in a maximal
+chain.
+
+\end{itemize}
+
+The names attached to the above theorems are probably the most conventional,
+but are no indication of priority. In fact the `maximal' principles were
+independently discovered by various people. The Well-Ordering theorem was first
+stated by Cantor, who regarded it as self-evident, and first proved by Zermelo
+using the Axiom Of Choice. More details of the history of the Axiom of Choice
+can be found in \cite{moore}.
+
+The HOL logic includes a strong form of the Axiom as standard (namely
+{\tt SELECT\_AX} which specifies the behaviour of ther Hilbert
+$\varepsilon$-operator). From this, the above four theorems are deduced.
+The proofs are not original: they mainly follow the proofs in the set theory
+chapter of Dudley's book \cite{dudley}, with a few ideas (e.g. the simple
+characterization of wellordering) taken from \cite{stoll}. The latter book,
+like \cite{DP}, proves the results in a different way starting from a fixpoint
+theorem for CPOs due to Bourbaki \cite{bourbaki}. However the proof of that
+theorem is rather ugly.
+
+\section{Loading the library}
+
+Assuming \HOL\ is installed properly, it is only necessary to execute the
+following \ML\ command:
+
+\begin{session}\begin{alltt}
+#load_library `wellorder`;;
+\end{alltt}\end{session}
+
+The theorems and definitions are then set up to autoload as described latter in
+this document.
+
+\section{Basic definitions and theorems in the wellorder library}
+
+The theorems in the library are all couched in terms of ordering relations, so
+the library begins with some preliminary definitions concerned with ordered
+sets. To make it easier for a user to massage the theorems as required for a
+particular application, all the definitions are prefixed with {\tt wo\_} so
+they are unlikely to clash with any others. The library provides functions {\tt
+set\_wo\_map} and {\tt unset\_wo\_map} to set and remove an interface map to
+hide this from the user. In the succeeding discussion, we ignore {\tt wo\_}
+prefixes.
+
+\subsection{Definitions about sets}
+
+We consider predicates as sets rather than define a new type. In the following
+discussion, we will generally use set notation: $x \in P$ rather than
+$P x$ or $P(x)$. The only two purely set-theoretic definitions made are:
+
+\begin{itemize}
+
+\item $ P \subseteq Q \equiv \forall x.\ x \in P \implies x \in Q $
+
+\item $ \Union P \equiv \lambda x.\ \exists p.\ p \in P \logand x \in p $
+
+\end{itemize}
+
+\subsection{Definitions about orders}
+
+The usual definition of an ordered set is a pair $(P,\leq)$ where
+$\leq$ is a subset of the Cartesian product $P \times P$. Continual
+manipulation of pairs makes the proofs rather more awkward, so we identify an
+ordered set with the $\leq$ relation itself. (In the following, we will for
+example use the terms `wellorder' and `woset' without discrimination.) If
+required, the underlying set $P$ can be recovered by the $fl$ (field) function,
+defined as:
+
+$$ fl(\leq) x = \exists y.\ x \leq y \logor y \leq x $$
+
+Since orders (partial or otherwise) are always symmetric, this is equivalent to
+
+$$ fl(\leq) x = x \leq x $$
+
+However it is useful to have the above definition available to prove something
+{\em is} an order.
+
+Now a partially ordered set (poset) is defined to be a binary relation which is
+reflexive, transitive and antisymmetric:
+
+$$ poset(\leq) =
+  \ba (\forall x \in fl(\leq).\ x \leq x) \logand                              \\
+      (\forall x y z.\ x \leq y \logand y \leq z \implies x \leq z) \logand      \\
+      (\forall x y.\ x \leq y \logand y \leq x \implies (x = y))
+  \ea $$
+
+A well-ordered set (woset) has the two additional properties of being total
+and wellfounded:
+
+$$ woset(\leq) =
+ \ba (\forall x \in fl(\leq).\ x \leq x) \logand                               \\
+     (\forall x y z.\ x \leq y \logand y \leq z \implies x \leq z) \logand       \\
+     (\forall x y.\ x \leq y \logand y \leq x \implies (x = y)) \logand          \\
+     (\forall x \in fl(\leq),\ y \in fl(\leq).\
+           x \leq y \logor y \leq x)) \logand \\
+     (\forall P \subseteq fl(\leq).\ (P \not= \emptyset) \implies
+       \exists y \in fl(\leq).\ P y \logand \forall z \in P.\ y \leq z)
+ \ea $$
+
+We also define a chain in a poset as a set whose elements are all comparable
+under the ordering, i.e.
+
+$$ chain(\leq) C = \forall x \in C,\ y \in C.\ x \leq y \logor y \leq x $$
+
+It would be more consistent to define a chain as a total order which is a
+subset of $\leq$, but since we have little interest in the chain as an ordered
+set, we use a subset of the field instead.
+
+Next is the property of one relation being an initial segment of another. This
+is defined as
+
+$$ \leq' inseg \leq =
+   \forall x y.\ x \leq' y = x \leq y \logand y \in fl(\leq') $$
+
+A special form of initial segment is the set of all elements less than some
+given element, thus:
+
+$$ linseg(\leq) a = \{ (x,y) | x \leq y \logand y < a $$
+
+Finally, it is convenient to have a function {\tt less} which converts a
+reflexive partial order into an irreflexive one:
+
+$$ less(\leq)(x,y) = x \leq y \wedge x \not= y $$
+
+We define an {\em ordinal} to be a woset such that each element is chosen
+canonically using the choice operator applied to the complement of its
+predecessors (compare the von Neumann definition in set theory where each
+element is actually its set of predecessors).
+
+$$ ordinal(\leq) = woset(\leq) \logand
+                   \forall x \in fl(\leq).\ x = \varepsilon y.\ y \not < x $$
+
+
+\section{A Useful lemma}
+
+Before embarking on the main proofs, we prove a few lemmas. One of these is
+quite interesting and useful. The following theorem reduces from 5 to 2 the
+number of properties we need to establish to show that a relation is a
+wellorder. It states that a relation is a wellorder iff it is antisymmetric and
+wellfounded (in the sense of every set having a {\em least}, not just minimal,
+element).
+
+$$ woset(\leq) =
+ \ba (\forall x y.\ x \leq y \logand y \leq x \implies (x = y)) \logand     \\
+     (\forall P \subseteq fl(\leq).\ (P \not= \emptyset) \implies
+       \exists y \in fl(\leq).\ P y \logand \forall z \in P.\ y \leq z)
+ \ea $$
+
+{\em Proof:} Clearly it is sufficient to prove that a relation $\leq$ that is
+antisymmetric and wellfounded is also total, reflexive and transitive. The
+relation is total because for any $x$ and $y$ in its field, the set $\{x,y\}$
+has a least member, so either $x \leq y$ or $y \leq x$. Reflexivity is a
+special case of totality, where $x$ and $y$ are the same. Finally, if $\leq$ is
+not transitive, then there exist $x$, $y$ and $z$ in the field such that
+
+$$ x \leq y \logand y \leq z \logand x \not\leq z $$
+
+By totality, $z \leq x$, so we have
+
+$$ x \leq y \logand y \leq z \logand z \leq x $$
+
+Clearly $\{x,y,z\} \subseteq fl(\leq)$, and so has a least element $w$. There
+are now three essentially identical cases to consider, according as $w$ is $x$,
+$y$ or $z$. It is easy to show that in each case we get $x = y = z$, so
+$x \leq z$, which is a contradiction.
+
+\section{The Recursion Theorem}
+
+The Recursion theorem is proved in three stages:
+
+\begin{itemize}
+
+\item Any two functions which satisfy the recursion equation for some
+downward-closed subset of the measure (i.e. for all arguments whose measures
+are less than some value) agree on the common `domain'. This is an easy proof
+by induction.
+
+\item For any value, one can indeed define such a function which `locally'
+satisfies the recursion equation. Again this can be proved by induction.
+
+\item Now a global function exists. This can be defined as the `union' of all
+the local functions, since by the first theorem, they all agree on any common
+domain.
+
+\end{itemize}
+
+\section{Main theorems in the wellorder library}
+
+We list here the four versions of the Axiom Of Choice, and sketch their proof.
+
+\subsection{The Well-Ordering principle}
+
+Every set can be wellordered, i.e.
+
+$$ \forall P.\ \exists \leq.\ woset(\leq) \logand (fl(\leq) = P) $$
+
+{\em Proof:} In fact the HOL proof first shows that the universal set of every
+type can be wellordered. Then one can order a subset simply by the restriction
+of the wellorder to that subset. This makes the proofs in HOL simpler, so in
+the description that follows, $P$ is actually a universal set of some type.
+
+The proof exploits the canonicality of ordinals. The crucial result is that for
+any two ordinals, one is an initial segment of the other. We first prove two
+theorems which are closely related to two basic properties of `real' ordinals:
+
+\begin{itemize}
+
+\item The union of any set of ordinals is an ordinal
+
+\item Each ordinal which does not correspond to the type universe has a
+`successor' which arises by adding on the canonically chosen element.
+
+\end{itemize}
+
+We also show that the union of initial segments of an order is again an initial
+segment. All these proofs are quite easy by using the definitions directly.
+
+Now suppose $\leq$ and $\leq'$ are two ordinals. Take the union of the set of
+all ordinals which are initial segments of $\leq$ and $\leq'$. By the above
+remarks, this is also an ordinal and hence the largest ordinal which is an
+initial segment of both. We claim that in fact it must be either the whole of
+$\leq$ or the whole of $\leq'$, because if not, we could form a successor.
+Because of the canonicality property, this successor is also an initial segment
+of both $\leq$ and $\leq'$, which yields a contradiction.
+
+Now our wellordering is simply the union of all ordinals (of that type).
+Because of the above property, this gives a welldefined ordinal, and it is easy
+to see again that it must be the whole type or we could form its successor.
+
+\subsection{Hausdorff's Maximal Principle}
+
+Every poset has a maximal chain (under inclusion), i.e.
+
+$$ \exists C.\ chain(\leq) C \logand
+          \forall C'.\ chain(\leq) C' \logand C \subseteq C' \implies (C' = C) $$
+
+{\em Proof:} The idea is to use transfinite recursion to produce a maximal
+chain. If $fl(\leq)$ is empty we are finished (the empty set serves).
+Otherwise, wellorder the whole of the type using the wellordering principle;
+call this wellordering $\leq_w$, and let $\bot$ be the $\leq_w$-least element
+of $fl(\leq)$. Now we can define a function over the whole type by recursion as
+follows:
+
+$$ f(x) = \left\{ \begin{array}{ll}
+        x & \mbox{if $x \in fl(\leq)$ and $\forall y.\ y <_w x \implies x \leq
+f(y) \logor f(y) \leq x$}\\
+     \bot & \mbox{otherwise}
+                 \end{array} \right. $$
+
+We claim that the image under $f$ of the whole type is a chain, i.e. that
+$f(x)$ and $f(y)$ are $\leq$-comparable for any $x$ and $y$. Firstly it is easy
+to see that $f(\bot) = \bot$, and by construction every $f(x)$ is
+$\leq$-comparable with $\bot$. Furthermore each $f(x)$ is in $fl(\leq)$.
+Now it is quite easy to see that the result holds. If $x = y$ then it is
+immediate that $f(x) \leq f(y)$ as $\leq$ is reflexive on its field. Otherwise
+suppose $y <_w x$ (the other case is similar). By construction either $f(x) =
+\bot$, in which case we have already seen that comparability holds, or $f(x) =
+x$ and we know that $x$ (and hence $f(x)$) is comparable to $f(y)$ since
+$y <_w x$. Consequently the range of $f$ is a chain, and it is easy to see that
+it must be a maximal one, because if $z$ is comparable to all members of the
+chain, it is certainly comparable to those elements $<_w$-less than it. Hence
+by construction it would have been added to the chain.
+\subsection{Zorn's Lemma}
+
+A poset in which each chain has an upper bound has a maximal element.
+
+$$ \ba (\forall C.\ chain(\leq) C \implies \exists m \in fl(\leq).\
+            \forall x \in C.\ x \leq m) \\
+     \implies
+       \exists m \in fl(\leq).\
+            \forall x \in fl(\leq).\ m \leq x \implies (m = x)
+   \ea $$
+
+{\em Proof:} Suppose $\leq$ is a poset with the property that every chain has an
+upper bound. By Hausdorff's Maximal Principle, we can find a maximal chain $C$,
+and by hypothesis, we can find an upper bound for it, say $m$.
+
+We claim that $m$ is a maximal element. For suppose there is an $x \in fl(\leq)$ with
+$m \leq x$. Evidently $C \union \{x\}$ is then a chain, but since $C$ is a
+{\em maximal} chain, we must have $C \union \{x\} = C$, in other words
+$x \in C $. But since $m$ is an upper bound for $C$, we have $x \leq m$. Now by
+antisymmetry of $\leq$, we have $m = x$ as required.
+
+\subsection{Kuratowski's Lemma}
+
+Every chain in a poset is contained in a maximal chain (under inclusion), i.e.
+
+$$ \forall C.\ chain(\leq) C \implies
+     \exists C'.\ \ba (chain(\leq) C' \logand C \subseteq C') \logand \\
+                      \forall C''.\ (chain(\leq) C'' \logand C' \subseteq C'')
+                                \implies (C'' = C')
+          \ea $$
+
+{\em Proof:} This could have been proved by a slight elaboration of the proof
+of the Hausdorff Maximal Principle, or by applying that principle to the
+partial order of elements not in, but comparable to all elements of, the chain.
+However the simplest seems to be a direct application of Zorn's lemma. Simply
+order the set of chains extending $C$. Zorn's Lemma assures us of a
+$\subseteq$-maximal chain extending $C$, provided we can show that a chain $P$
+of chains extending $C$ has another such chain as its upper bound. But this is
+easy: if $P$ is empty then take $C$, otherwise take the union of $P$.

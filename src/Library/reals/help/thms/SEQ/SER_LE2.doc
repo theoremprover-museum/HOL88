@@ -1,0 +1,5 @@
+\THEOREM SER_LE2 SEQ
+|- !f g.
+    (!n. (abs(f n)) <= (g n)) /\ summable g ==>
+    summable f /\ (suminf f) <= (suminf g)
+\ENDTHEOREM

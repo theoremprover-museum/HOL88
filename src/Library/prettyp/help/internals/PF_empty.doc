@@ -1,0 +1,10 @@
+\DOC PF_empty
+
+\TYPE {PF_empty : print_format}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

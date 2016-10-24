@@ -1,0 +1,54 @@
+\DOC =
+
+\TYPE {$= : ((* # *) -> bool)}
+
+\SYNOPSIS
+Performs an equality test on two ML values.
+
+\KEYWORDS
+equality.
+
+\DESCRIBE
+{$=} works as expected on non-function types.  It may give unexpected results
+when applied to function types (or types containing them, such as a pair of
+functions), and should be considered unreliable in those situations.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#1 = 2;;
+false : bool
+
+#1 = 1;;
+true : bool
+
+#let f x = x + 1 and g x = x + 2;;
+f = - : (int -> int)
+g = - : (int -> int)
+
+#let f' = f and h x = f x and h' x = x + 1;;
+f' = - : (int -> int)
+h = - : (int -> int)
+h' = - : (int -> int)
+
+#f=f;;
+true : bool
+
+#f = f';;
+true : bool
+
+#f = g;;
+false : bool
+
+#f =h;;
+false : bool
+
+#f=h';;
+false : bool
+
+#h = h';;
+false : bool
+}
+\ENDDOC

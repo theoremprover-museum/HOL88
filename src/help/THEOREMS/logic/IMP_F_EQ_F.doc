@@ -1,0 +1,4 @@
+\THEOREM IMP_F_EQ_F \none
+|- !t. t ==> F = (t = F)
+\ENDTHEOREM
+

@@ -1,0 +1,49 @@
+\DOC PP_to_ML
+
+\TYPE {PP_to_ML : (bool -> string -> string -> void)}
+
+\SYNOPSIS
+Function to compile pretty-printing rules into ML datastructures.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+The function {PP_to_ML} invokes the parser for the pretty-printing language.
+Its first argument indicates whether or not the output is to be appended to the
+destination file. If the argument is {false} and the destination file existed
+previously, the file is overwritten. The second and third arguments specify
+the names of the source and destination files respectively. For example, the
+ML function call:
+{
+   PP_to_ML false `xxxx.pp` ``;;
+}
+\noindent compiles the file {xxxx.pp} to a file called {xxxx_pp.ml},
+overwriting any previous version.
+
+The `{.pp}' extension can be omitted. So, the following has precisely the same
+effect as the previous `command':
+{
+   PP_to_ML false `xxxx` ``;;
+}
+\noindent If the last argument is anything other than the empty string, it is
+used as the name of the destination file. So,
+{
+   PP_to_ML false `xxxx` `test.ml`;;
+}
+\noindent compiles the file {xxxx.pp} to the file {test.ml}.
+
+\FAILURE
+The compiler may fail to parse the source code. In this case the error message
+specifies the kind of symbol the compiler was expecting and the kind of symbol
+it received. In addition, the compiler displays a few lines of the source file
+following the point at which the failure occurred. This should facilitate the
+location of the fault.
+
+The second kind of error occurs after the parse has completed successfully. At
+this point the compiler is converting the parse-tree into ML. Faults at this
+point are due to additional restrictions not being met, and the error messages
+are correspondingly ad hoc. The part of the parse-tree under conversion is
+printed in the pretty-printing language. This may or may not be helpful,
+depending on the size of the tree.
+
+\ENDDOC

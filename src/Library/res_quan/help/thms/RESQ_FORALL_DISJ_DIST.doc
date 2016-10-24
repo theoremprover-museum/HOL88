@@ -1,0 +1,4 @@
+\THEOREM RESQ_FORALL_DISJ_DIST res_quan
+|- !P Q R.
+   (!i :: \i. P i \/ Q i. R i) = (!i :: P. R i) /\ (!i :: Q. R i)
+\ENDTHEOREM

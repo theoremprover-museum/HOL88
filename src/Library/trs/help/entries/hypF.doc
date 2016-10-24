@@ -1,0 +1,26 @@
+\DOC hypF
+
+\TYPE {hypF : (term list -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern for testing the hypotheses of a theorem (full match).
+
+\LIBRARY trs
+
+\DESCRIBE
+{hypF ts} returns a pattern that matches a theorem if and only if the
+terms {ts}, when interpreted as patterns, match the hypotheses of the theorem.
+Each term pattern must match to a distinct hypothesis, and all the hypotheses
+must be matched. Variables in a term {t} match any term of a matching type.
+Type variables in {t} match any type. If a variable or type variable occurs
+more than once in the list {ts}, it must match to the same object at each
+occurrence. If not, the match will not succeed.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+hypP, conc, kind, thryname, thmname, Andalso, Orelse, Not, Where, BigAnd,
+BigOr.
+
+\ENDDOC

@@ -1,0 +1,7 @@
+% A1.2 TEXT (MAIN_LOOP is the text non-terminal) %
+
+MAIN_LOOP --> declaration [.] more_decs {MK_one(`text`,POP)}.
+
+more_decs --> {add_to_list(POP,declaration)} [.] more_decs 
+            | [].
+

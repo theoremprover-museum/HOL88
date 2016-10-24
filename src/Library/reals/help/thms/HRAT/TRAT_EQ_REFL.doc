@@ -1,0 +1,3 @@
+\THEOREM TRAT_EQ_REFL HRAT
+|- !p. p trat_eq p
+\ENDTHEOREM

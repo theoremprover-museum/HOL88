@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_INV REAL
+|- !x y. (& 0) < x /\ x < y ==> (inv y) < (inv x)
+\ENDTHEOREM

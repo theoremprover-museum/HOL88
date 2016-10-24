@@ -1,0 +1,380 @@
+\indexentry{latex_all_theorems_to@\idxname{\pttfamily }{latex_all_theorems_to}}{5}
+\indexentry{insuffix@\idxname{\pttfamily }{insuffix}}{7}
+\indexentry{outsuffixmweave@\idxname{\pttfamily }{outsuffixmweave}}{7}
+\indexentry{command line options}{7}
+\indexentry{command line options!-h@{\tt -h}}{8}
+\indexentry{command line options!-H@{\tt -H}}{8}
+\indexentry{command line options!-v@{\tt -v}}{8}
+\indexentry{command line options!-s@{\tt -s}}{8}
+\indexentry{command line options!-I@{\tt -L}}{8}
+\indexentry{command line options!-I@{\tt -I}}{8}
+\indexentry{command line options!-D@{\tt -D}}{8}
+\indexentry{command line options!-m@{\tt -m}}{8}
+\indexentry{command line options!-f@{\tt -f}}{8}
+\indexentry{command line options!-d@{\tt -d}}{8}
+\indexentry{command line options!-r@{\tt -r}}{8}
+\indexentry{command line options!-p@{\tt -p}}{8}
+\indexentry{command line options!-p@{\tt -l}}{8}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{8}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{8}
+\indexentry{begin_star_section@\idxname{\sfc }{begin_star_section}}{8}
+\indexentry{begin_ml_section@\idxname{\sfc }{begin_ml_section}}{8}
+\indexentry{begin_anon_section@\idxname{\sfc }{begin_anon_section}}{8}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{9}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{9}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{9}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{9}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{9}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{9}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{9}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{9}
+\indexentry{begin_star_section@\idxname{\sfc }{begin_star_section}}{9}
+\indexentry{begin_ml_section@\idxname{\sfc }{begin_ml_section}}{9}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{10}
+\indexentry{char_begin_sec@\idxname{\pttfamily }{char_begin_sec}}{10}
+\indexentry{incl_file@\idxname{\sfc }{incl_file}}{10}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{10}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{10}
+\indexentry{char_begin_para@\idxname{\pttfamily }{char_begin_para}}{10}
+\indexentry{char_end_para@\idxname{\pttfamily }{char_end_para}}{10}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{10}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{10}
+\indexentry{ml_comm_begin@\idxname{\pttfamily }{ml_comm_begin}}{10}
+\indexentry{ml_comm_end@\idxname{\pttfamily }{ml_comm_end}}{10}
+\indexentry{begin_tag@\idxname{\sfc }{begin_tag}}{10}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{11}
+\indexentry{ml_comm_begin@\idxname{\pttfamily }{ml_comm_begin}}{11}
+\indexentry{ml_comm_end@\idxname{\pttfamily }{ml_comm_end}}{11}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{11}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{11}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{11}
+\indexentry{mac_before_tag@\idxname{\pttfamily }{mac_before_tag}}{11}
+\indexentry{mac_after_tag@\idxname{\pttfamily }{mac_after_tag}}{11}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{11}
+\indexentry{mac_begin_env@\idxname{\pttfamily }{mac_begin_env}}{11}
+\indexentry{mac_line@\idxname{\pttfamily }{mac_line}}{11}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{12}
+\indexentry{mac_begin_sec@\idxname{\pttfamily }{mac_begin_sec}}{12}
+\indexentry{mac_begin_doc@\idxname{\pttfamily }{mac_begin_doc}}{12}
+\indexentry{begin_tag@\idxname{\sfc }{begin_tag}}{12}
+\indexentry{mac_before_tag@\idxname{\pttfamily }{mac_before_tag}}{12}
+\indexentry{mac_after_tag@\idxname{\pttfamily }{mac_after_tag}}{12}
+\indexentry{mac_end_doc@\idxname{\pttfamily }{mac_end_doc}}{12}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{12}
+\indexentry{mac_begin_env@\idxname{\pttfamily }{mac_begin_env}}{12}
+\indexentry{mac_changed@\idxname{\pttfamily }{mac_changed}}{12}
+\indexentry{mac_line@\idxname{\pttfamily }{mac_line}}{12}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{12}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{12}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{12}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{12}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{12}
+\indexentry{mac_line@\idxname{\pttfamily }{mac_line}}{12}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{12}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{12}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{12}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{12}
+\indexentry{mac_end_env@\idxname{\pttfamily }{mac_end_env}}{12}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{12}
+\indexentry{mac_end_sec@\idxname{\pttfamily }{mac_end_sec}}{12}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{12}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{12}
+\indexentry{LATEX file@\LaTeX\ file}{12}
+\indexentry{operation modes}{12}
+\indexentry{operation modes!document only}{13}
+\indexentry{operation modes!filter}{13}
+\indexentry{operation modes!ML only}{13}
+\indexentry{begin_ml_section@\idxname{\sfc }{begin_ml_section}}{13}
+\indexentry{operation modes!raw text}{13}
+\indexentry{mac_spec_char@\idxname{\pttfamily }{mac_spec_char}}{13}
+\indexentry{spec_chars@\idxname{\pttfamily }{spec_chars}}{13}
+\indexentry{operation modes!parallel}{13}
+\indexentry{mac_begin_other@\idxname{\pttfamily }{mac_begin_other}}{13}
+\indexentry{mac_end_other@\idxname{\pttfamily }{mac_end_other}}{13}
+\indexentry{mac_begin_native@\idxname{\pttfamily }{mac_begin_native}}{13}
+\indexentry{mac_end_native@\idxname{\pttfamily }{mac_end_native}}{13}
+\indexentry{operation modes!line}{13}
+\indexentry{language_part@\idxname{\sfc }{language_part}}{14}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{14}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{14}
+\indexentry{language_part@\idxname{\sfc }{language_part}}{14}
+\indexentry{native-part@\idxname{\sfc }{native-part}}{14}
+\indexentry{mac_begin_lang@\idxname{\pttfamily }{mac_begin_lang}}{14}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{14}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{14}
+\indexentry{mac_end_lang@\idxname{\pttfamily }{mac_end_lang}}{14}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{14}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{14}
+\indexentry{begin_anon_section@\idxname{\sfc }{begin_anon_section}|ul}{15}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{15}
+\indexentry{begin_ml_section@\idxname{\sfc }{begin_ml_section}|ul}{15}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{15}
+\indexentry{ml_only@\idxname{\pttfamily }{ml_only}}{15}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}|ul}{15}
+\indexentry{mac_sec@\idxname{\pttfamily }{mac_sec}}{15}
+\indexentry{mac_sec_default@\idxname{\pttfamily }{mac_sec_default}}{15}
+\indexentry{end_sec@\idxname{\sfc }{end_sec}}{15}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{15}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{15}
+\indexentry{begin_star_section@\idxname{\sfc }{begin_star_section}|ul}{16}
+\indexentry{mac_star_sec@\idxname{\pttfamily }{mac_star_sec}}{16}
+\indexentry{end_sec@\idxname{\sfc }{end_sec}}{16}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{16}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{16}
+\indexentry{begin_tag@\idxname{\sfc }{begin_tag}|ul}{16}
+\indexentry{end_tag@\idxname{\sfc }{end_tag}}{16}
+\indexentry{mac_before_tag@\idxname{\pttfamily }{mac_before_tag}}{16}
+\indexentry{mac_after_tag@\idxname{\pttfamily }{mac_after_tag}}{16}
+\indexentry{end_section@\idxname{\sfc }{end_section}|ul}{16}
+\indexentry{mac_begin_env@\idxname{\pttfamily }{mac_begin_env}}{16}
+\indexentry{mac_end_env@\idxname{\pttfamily }{mac_end_env}}{16}
+\indexentry{end_tag@\idxname{\sfc }{end_tag}|ul}{16}
+\indexentry{begin_block@\idxname{\sfc }{begin_block}}{16}
+\indexentry{incl_file@\idxname{\sfc }{incl_file}|ul}{17}
+\indexentry{language_part@\idxname{\sfc }{language_part}|ul}{17}
+\indexentry{char_begin_para@\idxname{\pttfamily }{char_begin_para}}{17}
+\indexentry{char_end_para@\idxname{\pttfamily }{char_end_para}}{17}
+\indexentry{char_str_quote@\idxname{\pttfamily }{char_str_quote}}{17}
+\indexentry{end_sec@\idxname{\sfc }{end_sec}}{17}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{17}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{17}
+\indexentry{language_part@\idxname{\sfc }{language_part}}{17}
+\indexentry{native_part@\idxname{\sfc }{native_part}|ul}{17}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{17}
+\indexentry{end_sec@\idxname{\sfc }{end_sec}}{17}
+\indexentry{end_sec@\idxname{\sfc }{end_sec}}{17}
+\indexentry{other_part@\idxname{\sfc }{other_part}|ul}{18}
+\indexentry{para_def@\idxname{\sfc }{para_def}|ul}{18}
+\indexentry{para_def@\idxname{\sfc }{para_def}}{18}
+\indexentry{char_str_quote@\idxname{\pttfamily }{char_str_quote}}{18}
+\indexentry{char_begin_para@\idxname{\pttfamily }{char_begin_para}}{18}
+\indexentry{char_end_para@\idxname{\pttfamily }{char_end_para}}{18}
+\indexentry{char_str_esc@\idxname{\pttfamily }{char_str_esc}}{18}
+\indexentry{char_sstr_esc@\idxname{\pttfamily }{char_sstr_esc}}{19}
+\indexentry{mac_sec@\idxname{\pttfamily }{mac_sec}}{19}
+\indexentry{char_anon_sec@\idxname{\pttfamily }{char_anon_sec}|ul}{19}
+\indexentry{begin_anon_section@\idxname{\sfc }{begin_anon_section}}{19}
+\indexentry{char_begin_para@\idxname{\pttfamily }{char_begin_para}|ul}{19}
+\indexentry{char_begin_sec@\idxname{\pttfamily }{char_begin_sec}|ul}{19}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{19}
+\indexentry{char_begin_star_sec@\idxname{\pttfamily }{char_begin_star_sec}|ul}{19}
+\indexentry{begin_star_section@\idxname{\sfc }{begin_star_section}}{19}
+\indexentry{char_begin_tag@\idxname{\pttfamily }{char_begin_tag}|ul}{19}
+\indexentry{begin_tag@\idxname{\sfc }{begin_tag}}{19}
+\indexentry{char_cmd@\idxname{\pttfamily }{char_cmd}|ul}{19}
+\indexentry{char_end_para@\idxname{\pttfamily }{char_end_para}|ul}{19}
+\indexentry{char_end_sec@\idxname{\pttfamily }{char_end_sec}|ul}{20}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{20}
+\indexentry{char_end_tag@\idxname{\pttfamily }{char_end_tag}|ul}{20}
+\indexentry{end_tag@\idxname{\sfc }{end_tag}}{20}
+\indexentry{char_incl_file@\idxname{\pttfamily }{char_incl_file}|ul}{20}
+\indexentry{incl_file@\idxname{\sfc }{incl_file}}{20}
+\indexentry{char_lang@\idxname{\pttfamily }{char_lang}|ul}{20}
+\indexentry{language_part@\idxname{\sfc }{language_part}}{20}
+\indexentry{char_ml_sec@\idxname{\pttfamily }{char_ml_sec}|ul}{20}
+\indexentry{begin_ml_section@\idxname{\sfc }{begin_ml_section}}{20}
+\indexentry{char_new@\idxname{\pttfamily }{char_new}|ul}{20}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{20}
+\indexentry{char_old@\idxname{\pttfamily }{char_old}|ul}{20}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{20}
+\indexentry{char_para_def@\idxname{\pttfamily }{char_para_def}|ul}{20}
+\indexentry{para_def@\idxname{\sfc }{para_def}}{20}
+\indexentry{char_str_esc@\idxname{\pttfamily }{char_str_esc}|ul}{21}
+\indexentry{char_str_quote@\idxname{\pttfamily }{char_str_quote}}{21}
+\indexentry{char_str_quote@\idxname{\pttfamily }{char_str_quote}|ul}{21}
+\indexentry{doc_only_mode@\idxname{\pttfamily }{doc_only_mode}|ul}{21}
+\indexentry{filter_mode@\idxname{\pttfamily }{filter_mode}|ul}{21}
+\indexentry{insuffix@\idxname{\pttfamily }{insuffix}|ul}{21}
+\indexentry{line_mode@\idxname{\pttfamily }{line_mode}|ul}{22}
+\indexentry{mac_after_tag@\idxname{\pttfamily }{mac_after_tag}|ul}{22}
+\indexentry{mac_before_tag@\idxname{\pttfamily }{mac_before_tag}|ul}{22}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}|ul}{22}
+\indexentry{mac_begin_doc@\idxname{\pttfamily }{mac_begin_doc}|ul}{22}
+\indexentry{mac_begin_env@\idxname{\pttfamily }{mac_begin_env}|ul}{22}
+\indexentry{mac_begin_lang@\idxname{\pttfamily }{mac_begin_lang}|ul}{22}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{22}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{22}
+\indexentry{mac_begin_native@\idxname{\pttfamily }{mac_begin_native}|ul}{22}
+\indexentry{mac_begin_other@\idxname{\pttfamily }{mac_begin_other}|ul}{23}
+\indexentry{mac_changed@\idxname{\pttfamily }{mac_changed}|ul}{23}
+\indexentry{mac_begin_env@\idxname{\pttfamily }{mac_begin_env}}{23}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}|ul}{23}
+\indexentry{mac_end_doc@\idxname{\pttfamily }{mac_end_doc}|ul}{23}
+\indexentry{mac_end_env@\idxname{\pttfamily }{mac_end_env}|ul}{23}
+\indexentry{mac_end_lang@\idxname{\pttfamily }{mac_end_lang}|ul}{23}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{23}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{23}
+\indexentry{mac_end_native@\idxname{\pttfamily }{mac_end_native}|ul}{23}
+\indexentry{mac_end_other@\idxname{\pttfamily }{mac_end_other}|ul}{23}
+\indexentry{mac_end_sec@\idxname{\pttfamily }{mac_end_sec}|ul}{24}
+\indexentry{mac_filler@\idxname{\pttfamily }{mac_filler}|ul}{24}
+\indexentry{mac_begin_env@\idxname{\pttfamily }{mac_begin_env}}{24}
+\indexentry{mac_line@\idxname{\pttfamily }{mac_line}|ul}{24}
+\indexentry{mac_native_line@\idxname{\pttfamily }{mac_native_line}|ul}{24}
+\indexentry{mac_other_line@\idxname{\pttfamily }{mac_other_line}|ul}{24}
+\indexentry{mac_sec@\idxname{\pttfamily }{mac_sec}|ul}{24}
+\indexentry{mac_sec_default@\idxname{\pttfamily }{mac_sec_default}|ul}{24}
+\indexentry{mac_spec_char@\idxname{\pttfamily }{mac_spec_char}|ul}{24}
+\indexentry{mac_star_sec@\idxname{\pttfamily }{mac_star_sec}|ul}{24}
+\indexentry{ml_comm_begin@\idxname{\pttfamily }{ml_comm_begin}|ul}{25}
+\indexentry{ml_comm_end@\idxname{\pttfamily }{ml_comm_end}|ul}{25}
+\indexentry{ml_line_count@\idxname{\pttfamily }{ml_line_count}|ul}{25}
+\indexentry{ml_line_length@\idxname{\pttfamily }{ml_line_length}|ul}{25}
+\indexentry{ml_only@\idxname{\pttfamily }{ml_only}|ul}{25}
+\indexentry{outsuffixmtangle@\idxname{\pttfamily }{outsuffixmtangle}|ul}{25}
+\indexentry{outsuffixmweave@\idxname{\pttfamily }{outsuffixmweave}|ul}{25}
+\indexentry{outsuffixwinnow@\idxname{\pttfamily }{outsuffixwinnow}|ul}{25}
+\indexentry{parallel_mode@\idxname{\pttfamily }{parallel_mode}|ul}{26}
+\indexentry{mac_begin_other@\idxname{\pttfamily }{mac_begin_other}}{26}
+\indexentry{mac_end_other@\idxname{\pttfamily }{mac_end_other}}{26}
+\indexentry{mac_begin_native@\idxname{\pttfamily }{mac_begin_native}}{26}
+\indexentry{mac_end_native@\idxname{\pttfamily }{mac_end_native}}{26}
+\indexentry{spec_chars@\idxname{\pttfamily }{spec_chars}|ul}{26}
+\indexentry{mac_spec_char@\idxname{\pttfamily }{mac_spec_char}}{26}
+\indexentry{str_blank@\idxname{\pttfamily }{str_blank}|ul}{26}
+\indexentry{raw_text_mode@\idxname{\pttfamily }{raw_text_mode}|ul}{26}
+\indexentry{mac_spec_char@\idxname{\pttfamily }{mac_spec_char}}{26}
+\indexentry{spec_chars@\idxname{\pttfamily }{spec_chars}}{26}
+\indexentry{tab_spaces@\idxname{\pttfamily }{tab_spaces}|ul}{26}
+\indexentry{tangle_lang@\idxname{\pttfamily }{tangle_lang}|ul}{26}
+\indexentry{@ \@lb <infilename>_<seccount>\@rb @\idxname{\pttfamily }{@ \@lb <infilename>_<seccount>\@rb }}{29}
+\indexentry{@t\@lb <infilename>_<seccount>\@rb @\idxname{\pttfamily }{@t\@lb <infilename>_<seccount>\@rb }}{29}
+\indexentry{@N@\idxname{\pttfamily }{@N}}{29}
+\indexentry{@-@\idxname{\pttfamily }{@-}}{29}
+\indexentry{@ \@lb {\pdollar }<infilename>_<seccount>\@rb @\idxname{\pttfamily }{@ \@lb {\pdollar }<infilename>_<seccount>\@rb }}{29}
+\indexentry{@t\@lb {\pdollar }<infilename>_<seccount>\@rb @\idxname{\pttfamily }{@t\@lb {\pdollar }<infilename>_<seccount>\@rb }}{29}
+\indexentry{@N@\idxname{\pttfamily }{@N}}{29}
+\indexentry{@-@\idxname{\pttfamily }{@-}}{29}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}|ul}{31}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{31}
+\indexentry{out_begin_sec_cmd@\idxname{\pttfamily }{out_begin_sec_cmd}}{31}
+\indexentry{infilename@\idxname{\pttfamily }{infilename}}{31}
+\indexentry{seccount@\idxname{\pttfamily }{seccount}}{31}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{31}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{31}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{31}
+\indexentry{char_begin_tag@\idxname{\pttfamily }{char_begin_tag}}{31}
+\indexentry{infilename@\idxname{\pttfamily }{infilename}}{31}
+\indexentry{seccount@\idxname{\pttfamily }{seccount}}{31}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{31}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{31}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{31}
+\indexentry{out_char_new_cmd@\idxname{\pttfamily }{out_char_new_cmd}}{31}
+\indexentry{char_end_sec@\idxname{\sfc }{char_end_sec}}{31}
+\indexentry{char_hol_prompt@\idxname{\pttfamily }{char_hol_prompt}}{31}
+\indexentry{char_end_hol_in@\idxname{\pttfamily }{char_end_hol_in}}{31}
+\indexentry{char_hol_begin_comment@\idxname{\pttfamily }{char_hol_begin_comment}}{31}
+\indexentry{char_hol_end_comment@\idxname{\pttfamily }{char_hol_end_comment}}{31}
+\indexentry{end_section@\idxname{\sfc }{end_section}|ul}{31}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{31}
+\indexentry{out_end_sec_cmd@\idxname{\pttfamily }{out_end_sec_cmd}}{31}
+\indexentry{begin_ml_section@\idxname{\sfc }{begin_ml_section}|ul}{31}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{31}
+\indexentry{out_begin_sec_cmd@\idxname{\pttfamily }{out_begin_sec_cmd}}{31}
+\indexentry{char_hide_indicator@\idxname{\pttfamily }{char_hide_indicator}}{31}
+\indexentry{infilename@\idxname{\pttfamily }{infilename}}{31}
+\indexentry{seccount@\idxname{\pttfamily }{seccount}}{31}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{31}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{31}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{31}
+\indexentry{char_begin_tag@\idxname{\pttfamily }{char_begin_tag}}{31}
+\indexentry{char_hide_indicator@\idxname{\pttfamily }{char_hide_indicator}}{31}
+\indexentry{infilename@\idxname{\pttfamily }{infilename}}{31}
+\indexentry{seccount@\idxname{\pttfamily }{seccount}}{31}
+\indexentry{mac_begin_arg@\idxname{\pttfamily }{mac_begin_arg}}{31}
+\indexentry{mac_end_arg@\idxname{\pttfamily }{mac_end_arg}}{31}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{31}
+\indexentry{out_char_new_cmd@\idxname{\pttfamily }{out_char_new_cmd}}{31}
+\indexentry{char_end_hide@\idxname{\sfc }{char_end_hide}}{31}
+\indexentry{end_hide_hol_section@\idxname{\sfc }{end_hide_hol_section}|ul}{32}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}}{32}
+\indexentry{out_end_sec_cmd@\idxname{\pttfamily }{out_end_sec_cmd}}{32}
+\indexentry{para_def@\idxname{\sfc }{para_def}}{32}
+\indexentry{command line options!-D@{\tt -D}}{32}
+\indexentry{char_begin_sec@\idxname{\pttfamily }{char_begin_sec}|ul}{32}
+\indexentry{begin_section@\idxname{\sfc }{begin_section}}{32}
+\indexentry{char_cmd@\idxname{\pttfamily }{char_cmd}|ul}{32}
+\indexentry{char_end_sec@\idxname{\pttfamily }{char_end_sec}|ul}{32}
+\indexentry{end_section@\idxname{\sfc }{end_section}}{32}
+\indexentry{char_begin_star_sec@\idxname{\pttfamily }{char_begin_star_sec}|ul}{32}
+\indexentry{insuffix@\idxname{\pttfamily }{insuffix}|ul}{32}
+\indexentry{char_ml_sec@\idxname{\pttfamily }{char_ml_sec}|ul}{32}
+\indexentry{begin_ml_section@\idxname{\sfc }{begin_ml_section}}{32}
+\indexentry{filter_mode@\idxname{\pttfamily }{filter_mode}|ul}{33}
+\indexentry{out_char_cmd@\idxname{\pttfamily }{out_char_cmd}|ul}{33}
+\indexentry{out_begin_sec_cmd@\idxname{\pttfamily }{out_begin_sec_cmd}|ul}{33}
+\indexentry{begin_section@\idxname{\pttfamily }{begin_section}}{33}
+\indexentry{out_end_sec_cmd@\idxname{\pttfamily }{out_end_sec_cmd}|ul}{33}
+\indexentry{char_end_sec@\idxname{\pttfamily }{char_end_sec}}{33}
+\indexentry{out_char_new_cmd@\idxname{\pttfamily }{out_char_new_cmd}|ul}{33}
+\indexentry{native_part@\idxname{\pttfamily }{native_part}}{33}
+\indexentry{out_ml_sec@\idxname{\pttfamily }{out_ml_sec}|ul}{33}
+\indexentry{begin_ml_section@\idxname{\pttfamily }{begin_ml_section}}{33}
+\indexentry{char_hol_prompt@\idxname{\pttfamily }{char_hol_prompt}|ul}{33}
+\indexentry{char_end_hol_in@\idxname{\pttfamily }{char_end_hol_in}|ul}{33}
+\indexentry{char_hol_begin_comment@\idxname{\pttfamily }{char_hol_begin_comment}|ul}{33}
+\indexentry{char_hol_end_comment@\idxname{\pttfamily }{char_hol_end_comment}|ul}{33}
+\indexentry{char_end_hide@\idxname{\pttfamily }{char_end_hide}|ul}{33}
+\indexentry{end_hide_hol_section@\idxname{\sfc }{end_hide_hol_section}}{33}
+\indexentry{char_hide_indicator@\idxname{\pttfamily }{char_hide_indicator}|ul}{34}
+\indexentry{LATEX file@\LaTeX\ file}{35}
+\indexentry{C identifiers!paratab@\idxname{\pttfamily }{paratab}}{36}
+\indexentry{char_cmd@\idxname{\pttfamily }{char_cmd}}{36}
+\indexentry{C identifiers!Pchar_cmd@\idxname{\pttfamily }{Pchar_cmd}}{36}
+\indexentry{C identifiers!set_para@\idxname{\pttfamily }{set_para}}{36}
+\indexentry{C identifiers!get_para@\idxname{\pttfamily }{get_para}}{36}
+\indexentry{C identifiers!special_ptab@\idxname{\pttfamily }{special_ptab}}{36}
+\indexentry{C identifiers!proc_para_def@\idxname{\pttfamily }{proc_para_def}}{36}
+\indexentry{para_def@\idxname{\sfc }{para_def}}{36}
+\indexentry{para_def@\idxname{\sfc }{para_def}}{36}
+\indexentry{C identifiers!init@\idxname{\pttfamily }{init}}{36}
+\indexentry{C identifiers!proginit@\idxname{\pttfamily }{proginit}}{36}
+\indexentry{C identifiers!proc_incl_file@\idxname{\pttfamily }{proc_incl_file}}{37}
+\indexentry{C identifiers!proc_para_def@\idxname{\pttfamily }{proc_para_def}}{37}
+\indexentry{C identifiers!infilename@\idxname{\pttfamily }{infilename}}{37}
+\indexentry{C identifiers!outfilename@\idxname{\pttfamily }{outfilename}}{37}
+\indexentry{C identifiers!fileinit@\idxname{\pttfamily }{fileinit}}{37}
+\indexentry{C identifiers!instream@\idxname{\pttfamily }{instream}}{37}
+\indexentry{C identifiers!outstream@\idxname{\pttfamily }{outstream}}{37}
+\indexentry{C identifiers!linecount@\idxname{\pttfamily }{linecount}}{37}
+\indexentry{C identifiers!seccount@\idxname{\pttfamily }{seccount}}{37}
+\indexentry{C identifiers!proc_sec@\idxname{\pttfamily }{proc_sec}}{37}
+\indexentry{C identifiers!status@\idxname{\pttfamily }{status}}{37}
+\indexentry{C identifiers!NULL@\idxname{\pttfamily }{NULL}}{37}
+\indexentry{C identifiers!status@\idxname{\pttfamily }{status}}{37}
+\indexentry{C identifiers!NEW@\idxname{\pttfamily }{NEW}}{37}
+\indexentry{C identifiers!status@\idxname{\pttfamily }{status}}{37}
+\indexentry{C identifiers!proc_sec@\idxname{\pttfamily }{proc_sec}}{37}
+\indexentry{C identifiers!proc_sec@\idxname{\pttfamily }{proc_sec}}{37}
+\indexentry{C identifiers!is_command@\idxname{\pttfamily }{is_command}}{37}
+\indexentry{C identifiers!status@\idxname{\pttfamily }{status}}{37}
+\indexentry{C identifiers!IN_DOC@\idxname{\pttfamily }{IN_DOC}}{37}
+\indexentry{other_part@\idxname{\sfc }{other_part}}{37}
+\indexentry{native_part@\idxname{\sfc }{native_part}}{37}
+\indexentry{C identifiers!status@\idxname{\pttfamily }{status}}{37}
+\indexentry{C identifiers!IN_O@\idxname{\pttfamily }{IN_O}}{37}
+\indexentry{C identifiers!IN_N@\idxname{\pttfamily }{IN_N}}{37}
+\indexentry{C identifiers!store_buf@\idxname{\pttfamily }{store_buf}}{38}
+\indexentry{C identifiers!old_buf@\idxname{\pttfamily }{old_buf}}{38}
+\indexentry{C identifiers!new_buf@\idxname{\pttfamily }{new_buf}}{38}
+\indexentry{C identifiers!incltext@\idxname{\pttfamily }{incltext}}{38}
+\indexentry{C identifiers!tags@\idxname{\pttfamily }{tags}}{38}
+\indexentry{C identifiers!LINE@\idxname{\pttfamily }{LINE}}{38}
+\indexentry{C identifiers!LINE@\idxname{\pttfamily }{LINE}}{38}
+\indexentry{C identifiers!tags@\idxname{\pttfamily }{tags}}{38}
+\indexentry{C identifiers!incltext@\idxname{\pttfamily }{incltext}}{38}
+\indexentry{C identifiers!incltext@\idxname{\pttfamily }{incltext}}{38}
+\indexentry{C identifiers!tagptr@\idxname{\pttfamily }{tagptr}}{38}
+\indexentry{C identifiers!textptr@\idxname{\pttfamily }{textptr}}{38}
+\indexentry{C identifiers!tags@\idxname{\pttfamily }{tags}}{38}
+\indexentry{C identifiers!incltext@\idxname{\pttfamily }{incltext}}{38}
+\indexentry{begin_tag@\idxname{\sfc }{begin_tag}}{38}
+\indexentry{C identifiers!proc_incl_file@\idxname{\pttfamily }{proc_incl_file}}{38}
+\indexentry{C identifiers!tags@\idxname{\pttfamily }{tags}}{38}
+\indexentry{C identifiers!state@\idxname{\pttfamily }{state}}{38}
+\indexentry{C identifiers!INTAG@\idxname{\pttfamily }{INTAG}}{38}
+\indexentry{end_tag@\idxname{\sfc }{end_tag}}{38}
+\indexentry{C identifiers!incltext@\idxname{\pttfamily }{incltext}}{38}
+\indexentry{begin_tag@\idxname{\sfc }{begin_tag}}{38}
+\indexentry{C identifiers!proc_tag@\idxname{\pttfamily }{proc_tag}}{38}
+\indexentry{C identifiers!tags@\idxname{\pttfamily }{tags}}{38}

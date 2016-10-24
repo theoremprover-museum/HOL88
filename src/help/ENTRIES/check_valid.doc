@@ -1,0 +1,21 @@
+\DOC check_valid
+
+\TYPE {check_valid : (goal -> subgoals -> bool)}
+
+\SYNOPSIS
+Checks whether a prospective proof is valid.
+
+\DESCRIBE
+{check_valid (A,t) ([A1,t1;...;An,tn],prf)} checks whether the applying the
+proof {prf} to the list of theorems {[(A1 |- t1);...;(An |- tn)]} would produce
+a theorem alpha-equivalent to {A |- t}. This check is done by creating this
+list of theorems using {chktac} and then applying the proof {prf}.
+
+\FAILURE
+Never fails, unless the proof {prf} fails or the assignable variable {chktac}
+has been rebound to a function that fails.
+
+\SEEALSO
+chktac, VALID.
+
+\ENDDOC

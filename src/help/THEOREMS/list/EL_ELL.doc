@@ -1,0 +1,3 @@
+\THEOREM EL_ELL list
+|- !n l. n < (LENGTH l) ==> (EL n l = ELL(PRE((LENGTH l) - n))l)
+\ENDTHEOREM

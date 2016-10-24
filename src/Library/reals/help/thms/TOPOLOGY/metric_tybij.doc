@@ -1,0 +1,3 @@
+\THEOREM metric_tybij TOPOLOGY
+|- (!a. metric(dist a) = a) /\ (!r. ismet r = (dist(metric r) = r))
+\ENDTHEOREM

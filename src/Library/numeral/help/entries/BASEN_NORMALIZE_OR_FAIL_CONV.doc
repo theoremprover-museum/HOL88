@@ -1,0 +1,41 @@
+\DOC BASEN_NORMALIZE_OR_FAIL_CONV
+
+\TYPE {BASEN_NORMALIZE_OR_FAIL_CONV : term -> thm}
+
+\SYNOPSIS
+Proves that a numeral is equal to itself with leading zeros removed.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} is a list of base {r} digits, and {n} is the same list with leading
+zeros removed, then {BASEN_NORMALIZE_OR_FAIL_CONV "BASEN r m"} returns the
+theorem:
+{
+        |- BASEN r m = BASEN r n
+}
+\FAILURE
+The argument to {BASEN_CONV} must be of the form {"BASEN r [...]"}, and the
+radix must be a numeric constant with a value of at least 2, and all elements
+of the digit list must be numeric constants less than the radix.  If the
+argument is already normalized, {BASEN_NORMALIZE_OR_FAIL_CONV} fails.
+
+\EXAMPLE
+{
+#BASEN_NORMALIZE_OR_FAIL_CONV "BASEN 16 [0;12;0;0]";;
+|- BASEN 16 [0;12;0;0] = BASEN 16 [12;0;0]
+
+#BASEN_NORMALIZE_OR_FAIL_CONV "BASEN 16 [0;0;0;0;3]";;
+|- BASEN 16 [0;0;0;0;3] = BASEN 16 [3]
+
+#BASEN_NORMALIZE_OR_FAIL_CONV "BASEN 8 [7;7;5;3;4]";;
+evaluation failed       BASEN_NORMALIZE_OR_FAIL_CONV
+}
+\COMMENTS
+{BASEN_NORMALIZE_OR_FAIL_CONV} is needed to avoid looping in higher-level
+operations (like {NUM_ARITH_CONV}).
+
+\SEEALSO
+BASEN_NORMALIZE_CONV, IS_NORMALIZED_CONV, IS_BASEN_CONV.
+
+\ENDDOC

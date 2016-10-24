@@ -1,0 +1,3 @@
+\THEOREM DIFF_X LIM
+|- !x. ((\x. x) diffl (& 1))x
+\ENDTHEOREM

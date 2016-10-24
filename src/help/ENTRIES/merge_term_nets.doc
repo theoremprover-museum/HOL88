@@ -1,0 +1,9 @@
+\DOC merge_term_nets
+
+\TYPE {merge_term_nets : (* term_net -> * term_net -> * term_net)}
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC

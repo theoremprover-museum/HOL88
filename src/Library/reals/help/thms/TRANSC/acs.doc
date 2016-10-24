@@ -1,0 +1,3 @@
+\THEOREM acs TRANSC
+|- !y. acs y = (@x. (& 0) <= x /\ x <= pi /\ (cos x = y))
+\ENDTHEOREM

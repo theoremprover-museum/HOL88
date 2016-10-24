@@ -1,0 +1,32 @@
+#!/bin/sh
+#============================================================================#
+# Shellscript to create theorem .doc files for HOL theory                    #
+#                                                                            #
+# This script should be given as its argument the name of a HOL theory (e.g. #
+# bool). It will create in the directory from which it is run all the .doc   #
+# files for the theorems (including axioms and definitions) in that theory.  #
+# See the "Authors' Guide to writing HOL documentation" (in                  #
+# [HOL]/Manual/Guide) for further details. The "hol" image name may need to  #
+# be changed to give an explicit pathname to the image.                      #
+#============================================================================#
+
+HOL=/usr/groups/hol/HOL22/hol
+
+cat | ($HOL | sed -e '1,/!!/d; /??/,$d' | sh) <<.
+let create_doc_files thy =
+  let create_doc_file (thname,th) =
+    print_string (\`cat <<\\\\. >\`^thname^\`.doc\`); print_newline();
+    print_string (\`\\\\THEOREM \`^thname^\` \`^thy); print_newline();
+    print_thm th; print_newline();
+    print_string \`\\\\ENDTHEOREM\`; print_newline();
+    print_string \`.\`; print_newline()
+  and thl = theorems thy
+  and axl = axioms thy
+  and del = definitions thy in
+  do map create_doc_file (thl@axl@del) in
+  let ok = (new_theory \`dummy$$\`; new_parent \`$1\`; true) ? false in
+    print_string \`!!\`; print_newline();
+    ok => create_doc_files \`$1\` | print_string \`echo Failed\`;
+    print_newline(); print_string \`??\`; print_newline();
+    quit();;
+.

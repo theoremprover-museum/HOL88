@@ -1,0 +1,40 @@
+\DOC find_match
+
+\TYPE {find_match: (term -> term -> ((term # term) list # (type # type) list))}
+
+\SYNOPSIS
+Determines whether a term matches a subterm of another term.
+
+\DESCRIBE
+Recursively destructs its second argument and attempts to match the resulting
+subterms with the first term. It returns a list of differing instances of
+free variables and types in the matched terms. The search is done in
+a depth-first, left-to-right order.
+
+\FAILURE
+Fails if the none of the subterms of the second argument match the first.
+
+\EXAMPLE
+{
+#find_match "a:num" "a:num";;
+([], []) : ((term # term) list # (type # type) list)
+
+#find_match "a:*" "T";;
+([("T", "a")], [(":bool", ":*")])
+: ((term # term) list # (type # type) list)
+
+#find_match "x:num" "n < 2 ==> (a /\ b)";;
+([("n", "x")], []) : ((term # term) list # (type # type) list)
+
+#find_match "x:bool" "n < 2 ==> (a /\ b)";;
+([("n < 2 ==> a /\ b", "x")], [])
+: ((term # term) list # (type # type) list)
+
+#find_match "x /\ y" "1 < 2 ==> (a /\ b)";;
+([("b", "y"); ("a", "x")], [])
+: ((term # term) list # (type # type) list)
+}
+\SEEALSO
+match, find_term, find_terms
+
+\ENDDOC

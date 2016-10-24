@@ -1,0 +1,3 @@
+\THEOREM HREAL_MUL_LID HREAL
+|- !X. hreal_1 hreal_mul X = X
+\ENDTHEOREM

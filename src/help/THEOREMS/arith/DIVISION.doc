@@ -1,0 +1,4 @@
+\THEOREM DIVISION arithmetic
+|- !n.
+    0 < n ==> (!k. (k = ((k DIV n) * n) + (k MOD n)) /\ (k MOD n) < n)
+\ENDTHEOREM

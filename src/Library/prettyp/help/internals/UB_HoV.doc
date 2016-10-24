@@ -1,0 +1,14 @@
+\DOC UB_HoV
+
+\BLTYPE
+UB_HoV : (((int -> int -> * print_box) #
+           ((nat # print_indent # nat) # (int -> int -> * print_box)) list) ->
+          * unbuilt_box)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

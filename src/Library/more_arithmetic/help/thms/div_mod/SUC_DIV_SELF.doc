@@ -1,0 +1,3 @@
+\THEOREM SUC_DIV_SELF div_mod
+|- !n. (SUC n) DIV (SUC n) = 1
+\ENDTHEOREM

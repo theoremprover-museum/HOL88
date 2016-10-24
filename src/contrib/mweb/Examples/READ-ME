@@ -1,0 +1,15 @@
+This directory contains a couple of examples of using mweb utilities.
+The files having suffix .m are master files. They can be processed by
+mweave to generate LaTeX files. 
+
+The file simple.m is a simple example which consists of
+a single master file. The latex file generated from it, namely
+simple.tex can be formatted directly by LaTeX.
+
+The file lmem.m is another simple example. The LaTeX file generated
+from it cannot be formatted directly. It is to be included in a larger
+document. The file main.tex is a wrapper to include lmem.tex. This can
+serve as a template for other applications.
+
+The LaTeX macro file holmacs.tex used in these examples can be found
+in the latex-hol library. 

@@ -1,0 +1,3 @@
+\THEOREM wo_inseg WELLORDER
+|- !l m. l inseg m = (!x y. l(x,y) = m(x,y) /\ fl l y))
+\ENDTHEOREM

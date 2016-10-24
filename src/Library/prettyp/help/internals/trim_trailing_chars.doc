@@ -1,0 +1,10 @@
+\DOC trim_trailing_chars
+
+\TYPE {trim_trailing_chars : (string list -> string -> string)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

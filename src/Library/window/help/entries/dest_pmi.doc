@@ -1,0 +1,24 @@
+\DOC dest_pmi
+
+\TYPE {dest_pmi : (term -> (term # term))}
+
+\SYNOPSIS
+Breaks apart a backward implication into antecedent and consequent.
+
+\LIBRARY window
+
+\DESCRIBE
+{dest_pmi} is a term destructor for backward negations.
+{dest_pmi "t1 <== t2"} returns {("t1","t2")}.
+
+\COMMENTS
+Unlike {dest_imp}, {dest_pmi} does not consider negation to be a special case
+of implication.
+
+\FAILURE
+Fails if the term is not a backward implication.
+
+\SEEALSO
+dest_imp, PMI_DEF.
+
+\ENDDOC

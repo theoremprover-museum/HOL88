@@ -1,0 +1,7 @@
+\THEOREM COS_CONVERGES TRANSC
+|- !x.
+    (\n.
+      ((\n. (EVEN n => ((--(& 1)) pow (n DIV 2)) / (&(FACT n)) | & 0))n) *
+      (x pow n)) sums
+    (cos x)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM ROOT_LN TRANSC
+|- !n x. (& 0) < x ==> (!n. root(SUC n)x = exp((ln x) / (&(SUC n))))
+\ENDTHEOREM

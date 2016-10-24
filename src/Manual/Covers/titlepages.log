@@ -1,0 +1,78 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:32
+**titlepages
+(titlepages.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/article.sty
+Standard Document Style `article' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/art11.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (titlepages.sty) (warning.tex
+
+     WARNING: These fancy cover and end pages require that the psfig macros
+              for the inclusion of PostScript in TeX be in the default TeX
+              include search path.
+
+) (/usr/lib/tex/macros/psfig/psfig.tex
+\@unused=\write3
+
+psfig/tex 1.9
+\ps@stream=\read1
+\p@intvaluex=\dimen99
+\p@intvaluey=\dimen100
+)
+No file titlepages.aux.
+psfig: searching TUTORIAL.ps for bounding box
+psfig: including TUTORIAL.ps 
+psfig: searching dsto.ps for bounding box
+psfig: including dsto.ps 
+psfig: searching arms.ps for bounding box
+psfig: including arms.ps 
+psfig: searching CRC.ps for bounding box
+psfig: including CRC.ps 
+[1
+
+]
+psfig: searching DESCRIPTION.ps for bounding box
+psfig: including DESCRIPTION.ps 
+psfig: searching dsto.ps for bounding box
+psfig: including dsto.ps 
+psfig: searching arms.ps for bounding box
+psfig: including arms.ps 
+psfig: searching CRC.ps for bounding box
+psfig: including CRC.ps 
+[2]
+psfig: searching REFERENCE.ps for bounding box
+psfig: including REFERENCE.ps 
+psfig: searching dsto.ps for bounding box
+psfig: including dsto.ps 
+psfig: searching arms.ps for bounding box
+psfig: including arms.ps 
+psfig: searching CRC.ps for bounding box
+psfig: including CRC.ps 
+[3]
+psfig: searching LIBRARIES.ps for bounding box
+psfig: including LIBRARIES.ps 
+psfig: searching dsto.ps for bounding box
+psfig: including dsto.ps 
+psfig: searching arms.ps for bounding box
+psfig: including arms.ps 
+psfig: searching CRC.ps for bounding box
+psfig: including CRC.ps 
+[4] [5] [6] [7] [8] (titlepages.aux) ) 
+Here is how much of TeX's memory you used:
+ 508 strings out of 11977
+ 4273 string characters out of 87025
+ 30517 words of memory out of 262141
+ 2317 multiletter control sequences out of 9500
+ 18996 words of font info for 72 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 16i,8n,16p,153b,163s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on titlepages.dvi (8 pages, 4112 bytes).

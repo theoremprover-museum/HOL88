@@ -1,0 +1,7 @@
+\THEOREM COS_PAIRED TRANSC
+|- !x.
+    (\n.
+      (((--(& 1)) pow n) / (&(FACT(2 num_mul n)))) *
+      (x pow (2 num_mul n))) sums
+    (cos x)
+\ENDTHEOREM

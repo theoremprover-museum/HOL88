@@ -1,0 +1,29 @@
+\DOC bound_name
+
+\TYPE {bound_name : (string -> (string # int) list -> print_binding -> string)}
+
+\SYNOPSIS
+Obtains the node-name bound to a pretty-printer metavariable.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{bound_name} can be used to obtain the data item bound to a named metavariable.
+It takes the name of a metavariable (less the preceding {*}, {**}, or {***}) as
+its first argument and returns a function of type:
+{
+   (string # int) list -> print_binding -> string
+}
+\noindent When given the current environment as arguments, this function yields
+the node-name bound to the specified metavariable. The parameter list is not
+used, but is present for consistency.
+
+\FAILURE
+The function fails if the specified metavariable is not bound to a single
+node-name. It also fails if the metavariable cannot be found in the binding.
+
+\SEEALSO
+bound_names, bound_child, bound_children, is_a_member_of, bound_number,
+bound_context.
+
+\ENDDOC

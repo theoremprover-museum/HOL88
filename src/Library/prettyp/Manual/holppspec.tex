@@ -1,0 +1,701 @@
+
+\chapter{Pretty-printing HOL terms}
+
+It is interesting to note that pretty-printing is not the exact inverse of
+parsing. Some of the issues of parsing are of no significance to
+pretty-printing. For example, alternative forms for the same expression may be
+allowed on input, but only one form used on output. An example of this is the
+use of extra pairs of parentheses. On the other hand, one of the most difficult
+problems in pretty-printing, that of how the text should be laid out and broken
+between lines, is not a problem in parsing. In parsing, two or more spaces can
+be considered to be just one space, and line-breaks are usually just treated as
+white space too.
+
+This is a description of the pretty-printing of terms of Higher Order Logic.
+The terms are taken to be those used in the \HOL\ system. The pretty-printing
+described follows closely the behaviour of the \HOL\ system pretty-printer, but
+there are some differences. For completeness, the pretty-printing of \HOL\
+types and theorems is described in addition to the pretty-printing of terms.
+Types are described first.
+
+
+\section{HOL types}
+
+A \HOL\ type can be either a variable type or it can be a compound type
+consisting of a constant type constructor and a list of sub-types. A typical
+variable type is {\small\verb%":*"%}. All variable types begin with an
+asterisk, and the asterisk is part of the name, so pretty-printing simply
+involves displaying the name.
+
+Typical compound types are {\small\verb%":(num)list"%},
+{\small\verb%":bool"%}, and {\small\verb%":* -> bool"%}. The first consists of
+the monadic constructor {\small\verb%list%} applied to the sub-type
+{\small\verb%num%}. The second is a special case of compound types in which
+the constructor is of zero arity. The empty list of sub-types is omitted
+rather than being printed as {\small\verb%()%}. The constructor of a compound
+type normally appears postfixed after the list of sub-types which are printed
+as {\small\verb%(...,...,...)%}. There are however three exceptions. The
+diadic constructors {\small\verb%fun%}, {\small\verb%prod%}, and
+{\small\verb%sum%} are printed as the special infix symbols {\small\verb%->%},
+{\small\verb%#%}, and {\small\verb%+%} respectively.
+
+Where required, parentheses are put around compound types constructed with an
+infix. The parentheses are used if the type is a sub-type of an infix
+constructor of higher or the same precedence. This applies even when the two
+constructors are the same, so we might have:
+
+\begin{small}\begin{verbatim}
+   ":bool # (bool # bool)"
+\end{verbatim}\end{small}
+
+\noindent
+or:
+
+\begin{small}\begin{verbatim}
+   ":(bool # bool) # bool"
+\end{verbatim}\end{small}
+
+\noindent
+but not:
+
+\begin{small}\begin{verbatim}
+   ":bool # bool # bool"
+\end{verbatim}\end{small}
+
+\noindent
+{\small\verb%#%} has a higher precedence than {\small\verb%+%}, which in turn
+has a higher precedence than {\small\verb%->%}.
+
+Parentheses are not used around types which appear in the list of sub-types of
+a postfix type constructor.
+
+As can be seen from the examples, the whole type is preceded by a colon, and
+if not used as part of a term, is enclosed in double quotation-marks.
+
+
+\section{HOL terms}
+
+\HOL\ terms are constructed from variables, constants, abstractions and
+function applications. We shall consider terms to be trees constructed from
+{\small\verb%VAR%}, {\small\verb%CONST%}, {\small\verb%ABS%}, and
+{\small\verb%COMB%} nodes:
+
+\begin{small}\begin{verbatim}
+             CONST           VAR            COMB           ABS
+               |              |             /  \           / \
+              name           name       rator  rand      bv  body
+\end{verbatim}\end{small}
+
+\noindent
+The type information has been ignored.
+
+
+\subsection{Precedence}
+
+\index{precedence!in HOL terms}
+We begin by looking at the precedence table for the constants and other
+constructs built into the \HOL\ system (Table~\ref{termprecs}). All the
+built-in infixes and binders are covered, but I am not sure about the
+appropriateness of some of the precedences. In particular, {\small\verb%o%},
+{\small\verb%Sum%}, and {\small\verb%IS_ASSUMPTION_OF%} have been given the
+same low precedence because I do not know what should be done with them.
+
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+{\it Construct}          & {\it Description} \\
+\hline\hline
+Abstractions             & \\
+Bindings                 & \\
+\hline
+{\tt o}                  & function composition \\
+{\tt Sum}                & \\
+\verb%IS_ASSUMPTION_OF%  & \\
+\hline
+{\tt =}                  & equality \\
+\hline
+{\tt ==>}                & implication \\
+\hline
+\verb%\/%                & logical {\tt OR} \\
+\hline
+\verb%/\%                & logical {\tt AND} \\
+\hline
+{\tt <}                  & less than \\
+{\tt >}                  & greater than \\
+{\tt <=}                 & less than or equal to \\
+{\tt >=}                 & greater than or equal to \\
+\hline
+{\tt +}                  & addition \\
+{\tt -}                  & subtraction \\
+\hline
+{\tt *}                  & multiplication \\
+{\tt DIV}                & integer division \\
+{\tt MOD}                & remainder from integer division \\
+\hline
+{\tt EXP}                & exponentiation \\
+\hline
+{\tt LET}                & {\tt let ... and ... in ...} \\
+\hline
+{\tt COND}               & {\tt ... => ... | ...} \\
+\hline
+{\tt ,}                  & tuples \\
+\hline
+\verb%~%                 & logical {\tt NOT} \\
+\hline
+User-defined infixes     & \\
+\hline
+{\tt :}                  & type information \\
+\hline
+All other functions      & \\
+\hline
+\end{tabular}
+\end{center}
+\caption{HOL term precedences\label{termprecs}}
+\end{table}
+
+The precedences do not necessarily match those of the \HOL\ system. For
+example, in the \HOL\ system, the arithmetic operators do not appear to be
+given their own precedences, but appear to be treated as user-defined
+functions.
+
+The constructs and constants are given as groups in increasing order of
+precedence. Within a group the constructs and constants have the same
+precedence.
+
+The precedence rules are used so that an expression is enclosed within
+parentheses if it is of a lower or the same precedence as the expression it
+is a component of. For example,
+
+\begin{small}\begin{verbatim}
+   "a /\ (b \/ c)"
+\end{verbatim}\end{small}
+
+\noindent
+is printed as:
+
+\begin{small}\begin{verbatim}
+   "a /\ (b \/ c)"
+\end{verbatim}\end{small}
+
+\noindent
+whereas:
+
+\begin{small}\begin{verbatim}
+   "(a /\ b) \/ c"
+\end{verbatim}\end{small}
+
+\noindent
+is printed as:
+
+\begin{small}\begin{verbatim}
+   "a /\ b \/ c"
+\end{verbatim}\end{small}
+
+\noindent
+We would also expect:
+
+\begin{small}\begin{verbatim}
+   "a /\ (b /\ c)"
+\end{verbatim}\end{small}
+
+\noindent
+to be printed as:
+
+\begin{small}\begin{verbatim}
+   "a /\ (b /\ c)"
+\end{verbatim}\end{small}
+
+\noindent
+since an operator has the same precedence as itself. However, when the
+operator is associative, the parentheses are unnecessary. We would still like
+to be able to distinguish between the above and:
+
+\begin{small}\begin{verbatim}
+   "(a /\ b) /\ c"
+\end{verbatim}\end{small}
+
+\noindent
+however, so we take associative operators to be right associative, giving us
+the two possible forms:
+
+\begin{small}\begin{verbatim}
+   "a /\ b /\ c"
+   "(a /\ b) /\ c"
+\end{verbatim}\end{small}
+
+\noindent
+One problem with this is that theorems about the associativity of operators
+are not as clear as they could be.
+
+The associative\index{associative operators in HOL terms} operators are:
+
+\begin{small}\begin{verbatim}
+   /\  \/  o  +  *  EXP  ,
+\end{verbatim}\end{small}
+
+\noindent
+When a large expression involving an associative operator has to be broken
+between lines of the output, the breaking is done consistently. That is we
+get (for example):
+
+\begin{small}\begin{verbatim}
+   (...) /\
+   (...) /\
+   (...) /\
+   (...)
+\end{verbatim}\end{small}
+
+\noindent
+rather than:
+
+\begin{small}\begin{verbatim}
+   (...) /\ (...) /\
+       (...) /\ (...)
+\end{verbatim}\end{small}
+
+
+\subsection{Type information}
+
+When type information is requested, it is provided for the bound variables of
+abstractions and for one occurrence of every free variable. It is also provided
+for constants which are of a function type, but which are not fully applied
+within the term. So, for example, the {`}{\small\verb%=%}{'} in
+{\small\verb%"1%}~{\small\verb%=%}~{\small\verb%2"%} would not be adorned with
+type information, but the {`}{\small\verb%=%}{'} in
+{\small\verb%"$=%}~{\small\verb%1"%} would.
+
+This differs from the \HOL\ system pretty-printer, which appears to provide
+type information for bound variables, provided the bound variable does not
+appear as part of a tuple by use of {\small\verb%UNCURRY%}. Free variables
+only appear to be displayed with a type if they form the whole of the body of
+an abstraction. Partial function applications seem to be given a type if the
+type is polymorphic (variable).
+
+It is possible to construct an abstraction in which the bound variable has the
+same name but a different type to a variable in the body. In such a case the
+two variables are considered to be distinct. Without type information such a
+term can be very misleading, so it is a good idea to provide type information
+for the free variable whether or not type information has been explicitly
+requested.
+
+
+\subsection{Dollared constants}
+
+When an infix operator is not used as an infix, or when logical
+{\small\verb%NOT%} ({\small\verb%~%}) or a binder appear unapplied, the
+constant concerned is printed prefixed by a dollar sign ({\small\verb%$%}).
+
+
+\subsection{Special prefixes and infixes}
+
+Logical {\small\verb%NOT%} ({\small\verb%~%}) and the pairing operator
+({\small\verb%,%}) are printed differently from other prefixes and infixes. No
+space is printed between the constant and its argument(s). Note also that the
+pairing operator is taken to be right associative.
+
+
+\subsection{Uncurried arguments\label{uncurry}}
+
+The abstraction {\small\verb%"\(x,y). body"%} is represented by:
+
+\begin{small}\begin{verbatim}
+                                     COMB
+                                     /  \
+                                 CONST  ABS
+                                   /    / \
+                             UNCURRY  VAR ABS
+                                      /   / \
+                                     x  VAR body
+                                        /
+                                       y
+\end{verbatim}\end{small}
+
+\noindent
+which makes pretty-printing difficult because the tree structure above is
+disimilar to the parse-tree for the term. This becomes particularly apparent
+for abstractions of more than one (curried) argument, or where the arguments
+which are tuples are not just pairs. The problem is best handled by converting
+the above tree into the following, prior to pretty-printing:
+
+\begin{small}\begin{verbatim}
+                                        ABS
+                                        / \
+                                     COMB body
+                                     /  \
+                                  COMB  VAR
+                                  /  \    \
+                              CONST  VAR   y
+                                /      \
+                               ,        x
+\end{verbatim}\end{small}
+
+\noindent
+Note that the result is not a valid term. Having applied the transformation,
+a new tree of the first form may have been produced, so the transformation has
+to be applied repeatedly until all applications of {\small\verb%UNCURRY%} have
+been removed.
+
+
+\subsection{Abstractions and bindings\label{abstractions}}
+
+An abstraction such as:
+
+\begin{small}\begin{verbatim}
+                                     ABS
+                                     / \
+                                  VAR body
+                                   /
+                                  x
+\end{verbatim}\end{small}
+
+\noindent
+is printed as {\small\verb%"\x. body"%}. The term
+{\small\verb%"\x. \y. body"%} is abbreviated to {\small\verb%"\x y. body"%}.
+The application of a binder to an abstraction is printed as for the
+abstraction, but with the {\small\verb%\%} replaced by the name of the binder.
+
+If the constant {\small\verb%UNCURRY%} is used to make the bound variables
+into tuples, then the operation described in Section~\ref{uncurry} must be
+performed. Once this has been done printing simply involves allowing for
+tuples in place of the bound variables. Actually, we choose to always have
+such tuples appear within parentheses, e.g.~{\small\verb%"\x (y,z) w. body"%}.
+This requires the precedence of the abstraction to appear higher than that of
+tuples for the purpose of printing the bound variables (but not for printing
+the body).
+
+
+\subsection{Function applications}
+
+If a function application is not dealt with in one of the special ways
+described elsewhere, it is dealt with as follows. The application is highly
+unlikely to appear within parentheses since the function has a higher
+precedence than any other operator. This also means that the arguments to the
+function, if not simply identifiers, appear within parentheses (There are one
+or two exceptions such as lists.). If the function itself is an abstraction,
+rather than just an identifier, it too appears within parentheses. The
+function and its arguments all appear separated by one space, or by a
+line-break.
+
+
+\subsection{Lists}
+
+The constant {\small\verb%NIL%}, when not used as the second argument of
+{\small\verb%CONS%}, is printed as {\small\verb%[]%}.
+
+The term:
+
+\begin{small}\begin{verbatim}
+                                     COMB
+                                     /  \
+                                  COMB  CONST
+                                  /  \      \
+                              CONST  CONST  NIL
+                                /      \
+                             CONS       1
+\end{verbatim}\end{small}
+
+\noindent
+represents the list {\small\verb%"[1]"%}. Replacing the:
+
+\begin{small}\begin{verbatim}
+                                    CONST
+                                      |
+                                     NIL
+\end{verbatim}\end{small}
+
+\noindent
+with the tree:
+
+\begin{small}\begin{verbatim}
+                                     COMB
+                                     /  \
+                                  COMB  CONST
+                                  /  \      \
+                              CONST  CONST  NIL
+                                /      \
+                             CONS       2
+\end{verbatim}\end{small}
+
+\noindent
+would give us the list {\small\verb%"[1;2]"%}.
+
+When a list has to be broken between lines, the breaking is done consistently.
+So, the list {\small\verb%"[1;2;3;4]"%} would appear as:
+
+\begin{small}\begin{verbatim}
+   [1;
+    2;
+    3;
+    4]
+\end{verbatim}\end{small}
+
+\noindent
+rather than as (say):
+
+\begin{small}\begin{verbatim}
+   [1;2;
+    3;4]
+\end{verbatim}\end{small}
+
+\noindent
+The precedence of lists is dealt with separately from other precedences. This
+is not essential, but seems to be convenient because the brackets of the list
+notation remove any need for the list to be enclosed within parentheses.
+Inside the list, the elements of the list are also printed without enclosing
+parentheses. This corresponds to assigning the list separator
+({\small\verb%;%}) a precedence lower than any other construct.
+
+
+\subsection{Conditionals}
+
+A tree of the form:
+
+\begin{small}\begin{verbatim}
+                                         COMB
+                                         /  \
+                                      COMB   y
+                                      /  \
+                                   COMB   x
+                                   /  \
+                                CONST  b
+                                /
+                             COND
+\end{verbatim}\end{small}
+
+\noindent
+represents the conditional term {\small\verb%"b => x | y"%}. If a conditional
+has to be broken between lines it is done so that each sub-term appears on a
+separate line, that is as:
+
+\begin{small}\begin{verbatim}
+   b =>
+   x |
+   y
+\end{verbatim}\end{small}
+
+\noindent
+This is also how the \HOL\ system prints conditionals. The precedence of the
+conditional appears the same to all three sub-terms. It might be more
+appropriate to have the precedence of the conditional appear differently to
+the sub-term {\small\verb%b%} than to {\small\verb%x%} and {\small\verb%y%}.
+
+
+\subsection{Let statements}
+
+The representations of {\small\verb%let%} statements as raw \HOL\ terms are
+exceedingly complicated. It is not practical to draw the trees for the terms.
+Instead we use a textual representation of the trees. As an example of this,
+the tree:
+
+\begin{small}\begin{verbatim}
+                                     COMB
+                                     /  \
+                                 rator  rand
+\end{verbatim}\end{small}
+
+\noindent
+is represented by {\small\verb%COMB(rator,rand)%}.
+
+Let's consider a simple {\small\verb%let%} statement:
+
+\begin{small}\begin{verbatim}
+   "let x = 1 in (x + 2)"
+\end{verbatim}\end{small}
+
+\noindent
+This has the underlying structure:
+
+\begin{small}\begin{verbatim}
+   COMB(COMB(CONST(LET),
+             ABS(VAR(x),
+                 COMB(COMB(CONST(+),VAR(x)),
+                      CONST(2)))),
+        CONST(1))
+\end{verbatim}\end{small}
+
+\noindent
+We see that {\small\verb%LET%} has two arguments. The first is an abstraction
+made from the body of the {\small\verb%let%} statement, with the variable
+being declared ({\small\verb%x%}) used as the bound variable. The second
+argument is the term to which {\small\verb%x%} is declared to be equal.
+
+A more complicated {\small\verb%let%} statement declares functions:
+
+\begin{small}\begin{verbatim}
+   "let f x y = (x /\ y) in (f T F)"
+\end{verbatim}\end{small}
+
+\noindent
+This has the underlying representation:
+
+\begin{small}\begin{verbatim}
+   COMB(COMB(CONST(LET),
+             ABS(VAR(f),
+                 COMB(COMB(VAR(f),CONST(T)),
+                      CONST(F)))),
+        ABS(VAR(x),
+            ABS(VAR(y),
+                COMB(COMB(CONST(/\),VAR(x)),VAR(y)))))
+\end{verbatim}\end{small}
+
+\noindent
+Observe that only the second argument has changed non-trivially. It now
+consists of an abstraction with bound variables which are the parameters of
+the declared function. The body is the body of the declaration.
+
+We can also have multiple decalarations:
+
+\begin{small}\begin{verbatim}
+   "let f x y = (x /\ y)
+    and g z = (~z)
+    and h = T
+    in F"
+\end{verbatim}\end{small}
+
+\noindent
+This has the representation:
+
+\begin{small}\begin{verbatim}
+   COMB(COMB(CONST(LET),
+             COMB(COMB(CONST(LET),
+                       COMB(COMB(CONST(LET),
+                                 ABS(VAR(f),
+                                     ABS(VAR(g),
+                                         ABS(VAR(h),
+                                             CONST(F))))),
+                            ABS(VAR(x),
+                                ABS(VAR(y),
+                                    COMB(COMB(CONST(/\),VAR(x)),
+                                         VAR(y)))))),
+                  ABS(VAR(z),COMB(CONST(~),VAR(z))))),
+        CONST(T))
+\end{verbatim}\end{small}
+
+\noindent
+The rather simplistic choice for the {\small\verb%in%} body is intended to
+keep the above tree as small as possible. The {\small\verb%in%} body is now
+part of a multivariable abstraction. The bound variables of this abstraction
+are the variables declared in the {\small\verb%let%} statement,
+i.e.~{\small\verb%f%}, {\small\verb%g%}, and {\small\verb%h%}. The second
+argument to each application of {\small\verb%LET%} is, as before, an
+abstraction or just a body, representing the value which is to be bound to the
+variable being declared.
+
+Observe that as we go more deeply into the representation, the variables being
+declared are encountered in the order {\small\verb%f%}, {\small\verb%g%},
+{\small\verb%h%}. This is the order in which they appear textually. However,
+the values to which they are being bound are encountered in the reverse order.
+This makes pretty-printing very difficult, as does the splitting up of
+information which is to appear in close proximity in the textual
+representation.
+
+The situation is not made any easier by the necessity to print the first
+declaration as {\small\verb%let...%} and all subsequent declarations as
+{\small\verb%and...%}
+
+A further problem with pretty-printing occurs if the {\small\verb%in%} body of
+the {\small\verb%let%} statement is an abstraction, e.g.,
+
+\begin{small}\begin{verbatim}
+   "let f x y = (x /\ y)
+    and g z = (~z)
+    and h = T
+    in (\z. z \/ F)"
+\end{verbatim}\end{small}
+
+\noindent
+The problem is with the chain of abstractions whose bound variables are the
+identifiers being declared. The chain now appears as:
+
+\begin{small}\begin{verbatim}
+   ... ABS(VAR(f),
+           ABS(VAR(g),
+               ABS(VAR(h),
+                   ABS(VAR(z),
+                       COMB(COMB(CONST(\/),VAR(z)),
+                            CONST(F))))))), ...
+\end{verbatim}\end{small}
+
+\noindent
+In order to realise that {\small\verb%z%} is not one of the identifiers being
+declared in the {\small\verb%let%} statement, the pretty-printer needs to know
+that there are only three, not four, applications of the constant
+{\small\verb%LET%}. We choose to follow the pretty-printer of the \HOL\
+system, and in these circumstances abandon any attempt to use special syntax
+for applications of {\small\verb%LET%}. That is to say the term appears with
+explicit applications of {\small\verb%LET%} and with the abstractions in the
+above trees appearing as abstractions.
+
+On a similar topic, a term entered as:
+
+\begin{small}\begin{verbatim}
+   "let x = (\y. ~y) in x"
+\end{verbatim}\end{small}
+
+\noindent
+will be printed as:
+
+\begin{small}\begin{verbatim}
+   "let x y = ~y in x"
+\end{verbatim}\end{small}
+
+\noindent
+There is one further complication. The bound variables of the abstractions
+may be tuples rather than single identifiers. This is dealt with as for
+abstractions (see Section~\ref{abstractions}). We make the tuples appear
+within parentheses, contrary to the precedence rules. The \HOL\ system
+pretty-printer does not use parentheses around the tuples. Tuples which
+appear in the declaration bodies or in the {\small\verb%in%} body follow the
+precedence rules.
+
+
+\subsection{Term quotes}
+
+A term is enclosed within double quotation-marks when it does not appear as
+part of a theorem. Parentheses are not used around the term.
+
+
+\section{HOL theorems}
+
+Theorems are either printed with the hypotheses (assumptions) given in full,
+or with each hypothesis abbreviated to a dot. No quotes are printed around the
+terms which represent the hypotheses and conclusion of the theorem.
+
+When the hypotheses are abbreviated, the dots appear followed by a turnstile
+({\small\verb%|-%}) on the same line of the output. The conclusion also begins
+on the same line. A single space is inserted between the dots and the
+turnstile and between the turnstile and the conclusion. So a theorem with two
+hypotheses would appear as:
+
+\begin{small}\begin{verbatim}
+   .. |- T = T
+\end{verbatim}\end{small}
+
+\noindent
+but the conclusion could be broken between lines, as in:
+
+\begin{small}\begin{verbatim}
+   .. |- T =
+         T
+\end{verbatim}\end{small}
+
+\noindent
+When the hypotheses are given in full, all but the last hypothesis are
+followed by a comma. The hypotheses, turnstile, and conclusion appear on the
+same line if there is space. If not, each hypothesis begins on a new line, and
+the turnstile and conclusion appear on a line together. For example, we might
+get:
+
+\begin{small}\begin{verbatim}
+   T \/ T, T /\ T |- T = T
+\end{verbatim}\end{small}
+
+\noindent
+or:
+
+\begin{small}\begin{verbatim}
+   T \/ T,
+   T /\ T
+   |- T = T
+\end{verbatim}\end{small}

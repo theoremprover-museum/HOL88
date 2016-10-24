@@ -1,0 +1,3 @@
+\THEOREM SUB_SUC sub
+|- !k m. m < k ==> (k - m = SUC(k - (SUC m)))
+\ENDTHEOREM

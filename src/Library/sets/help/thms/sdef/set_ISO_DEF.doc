@@ -1,0 +1,3 @@
+\THEOREM set_ISO_DEF sets
+|- (!a. SPEC(CHF a) = a) /\ (!r. (\p. T)r = (CHF(SPEC r) = r))
+\ENDTHEOREM

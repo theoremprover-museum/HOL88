@@ -1,0 +1,3 @@
+\THEOREM SND_DEF bool
+|- !p. SND p = (@y. ?x. MK_PAIR x y = REP_prod p)
+\ENDTHEOREM

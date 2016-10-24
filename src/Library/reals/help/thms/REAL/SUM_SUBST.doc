@@ -1,0 +1,5 @@
+\THEOREM SUM_SUBST REAL
+|- !f g m n.
+    (!p. m num_le p /\ p num_lt (m num_add n) ==> (f p = g p)) ==>
+    (Sum(m,n)f = Sum(m,n)g)
+\ENDTHEOREM

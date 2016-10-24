@@ -1,0 +1,17 @@
+\DOC is_basen
+
+\TYPE {is_basen : term -> thm}
+
+\SYNOPSIS
+Tests whether a term is a BASEN numeral.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term, {is_basen} returns {true} if the term is a BASEN numeral, and
+returns {false} otherwise.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

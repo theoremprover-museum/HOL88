@@ -1,0 +1,27 @@
+\DOC dest_let
+
+\TYPE {dest_let : (term -> (term # term))}
+
+\SYNOPSIS
+Breaks apart a let-expression.
+
+\DESCRIBE
+{dest_let} is a term destructor for general let-expressions:
+{dest_let "LET f x"} returns {("f","x")}.
+
+\FAILURE
+Fails with {dest_let} if term is not a {let}-expression or of the more general
+{"LET f x"} form.
+
+\EXAMPLE
+{
+#dest_let "LET ($= 1) 2";;
+("$= 1", "2") : (term # term)
+
+#dest_let "let x = 2 in (x = 1)";;
+("\x. x = 1", "2") : (term # term)
+}
+\SEEALSO
+mk_let, is_let.
+
+\ENDDOC

@@ -1,0 +1,2458 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{Definitions of Basic Logical Constants}
+\THEOREM AND\_DEF bool
+|- $/\ = (\t1 t2. !t. (t1 ==> t2 ==> t) ==> t)
+\ENDTHEOREM
+\THEOREM EXISTS\_DEF bool
+|- $? = (\P. P($@ P))
+\ENDTHEOREM
+\THEOREM EXISTS\_UNIQUE\_DEF bool
+|- $?! = (\P. $? P /\ (!x y. P x /\ P y ==> (x = y)))
+\ENDTHEOREM
+\THEOREM FORALL\_DEF bool
+|- $! = (\P. P = (\x. T))
+\ENDTHEOREM
+\THEOREM F\_DEF bool
+|- F = (!t. t)
+\ENDTHEOREM
+\THEOREM NOT\_DEF bool
+|- $~ = (\t. t ==> F)
+\ENDTHEOREM
+\THEOREM OR\_DEF bool
+|- $\/ = (\t1 t2. !t. (t1 ==> t) ==> (t2 ==> t) ==> t)
+\ENDTHEOREM
+\THEOREM T\_DEF bool
+|- T = ((\x. x) = (\x. x))
+\ENDTHEOREM
+\section{Constants for syntactic abbreviations}
+\THEOREM ARB bool
+|- ARB = (@x. T)
+\ENDTHEOREM
+\THEOREM COND\_DEF bool
+|- COND =
+   (\t t1 t2. @x. ((t = T) ==> (x = t1)) /\ ((t = F) ==> (x = t2)))
+\ENDTHEOREM
+
+\THEOREM LET\_DEF bool
+|- LET = (\f x. f x)
+\ENDTHEOREM
+\THEOREM RES\_ABSTRACT bool
+|- !P B. RES_ABSTRACT P B = (\x. (P x => B x | ARB))
+\ENDTHEOREM
+\THEOREM RES\_EXISTS bool
+|- !P B. RES_EXISTS P B = (?x. P x /\ B x)
+\ENDTHEOREM
+\THEOREM RES\_FORALL bool
+|- !P B. RES_FORALL P B = (!x. P x ==> B x)
+\ENDTHEOREM
+\THEOREM RES\_SELECT bool
+|- !P B. RES_SELECT P B = (@x. P x /\ B x)
+\ENDTHEOREM
+\section{Axioms}
+\THEOREM ARB\_THM bool
+|- $= = $=
+\ENDTHEOREM
+\THEOREM BOOL\_CASES\_AX bool
+|- !t. (t = T) \/ (t = F)
+\ENDTHEOREM
+\THEOREM ETA\_AX bool
+|- !t. (\x. t x) = t
+\ENDTHEOREM
+\THEOREM IMP\_ANTISYM\_AX bool
+|- !t1 t2. (t1 ==> t2) ==> (t2 ==> t1) ==> (t1 = t2)
+\ENDTHEOREM
+\THEOREM INFINITY\_AX ind
+|- ?f. ONE_ONE f /\ ~ONTO f
+\ENDTHEOREM
+\THEOREM SELECT\_AX bool
+|- !P x. P x ==> P($@ P)
+\ENDTHEOREM
+\section{Logical tautologies}
+\THEOREM AND1\_THM {\none}
+|- !t1 t2. t1 /\ t2 ==> t1 
+\ENDTHEOREM
+\THEOREM AND2\_THM {\none}
+|- !t1 t2. t1 /\ t2 ==> t2 
+\ENDTHEOREM
+\THEOREM AND\_CLAUSES {\none}
+|- !t. (T /\ t) = t /\
+       (t /\ T) = t /\
+       (F /\ t) = F /\
+       (t /\ F) = F /\
+       (t /\ t) = t
+\ENDTHEOREM
+\THEOREM AND\_IMP\_INTRO {\none}
+|- !t1 t2 t3. t1 ==> t2 ==> t3 = t1 /\ t2 ==> t3
+\ENDTHEOREM
+
+\THEOREM AND\_INTRO\_THM {\none}
+|- !t1 t2. t1 ==> t2 ==> t1 /\ t2
+\ENDTHEOREM
+\THEOREM BOOL\_EQ\_DISTINCT {\none}
+|- ~(T = F) /\ ~(F = T)
+\ENDTHEOREM
+
+\THEOREM COND\_ABS {\none}
+|- !b f g. (\x. (b => f x | g x)) = (b => f | g)
+\ENDTHEOREM
+
+\THEOREM COND\_CLAUSES {\none}
+|- !t1 t2. ((T => t1 | t2) = t1) /\ ((F => t1 | t2) = t2)
+\ENDTHEOREM
+
+\THEOREM COND\_EXPAND {\none}
+|- !b t1 t2. (b => t1 | t2) = (~b \/ t1) /\ (b \/ t2)
+\ENDTHEOREM
+
+\THEOREM COND\_ID {\none}
+|- !b t. (b => t | t) = t
+\ENDTHEOREM
+
+\THEOREM COND\_RAND {\none}
+|- !f b x y. f(b => x | y) = (b => f x | f y)
+\ENDTHEOREM
+
+\THEOREM COND\_RATOR {\none}
+|- !b f g x. (b => f | g)x = (b => f x | g x)
+\ENDTHEOREM
+
+\THEOREM CONJ\_ASSOC {\none}
+|- !t1 t2 t3. t1 /\ (t2 /\ t3) = (t1 /\ t2) /\ t3
+\ENDTHEOREM
+\THEOREM CONJ\_SYM {\none}
+|- !t1 t2. (t1 /\ t2) = (t2 /\ t1)
+\ENDTHEOREM
+\THEOREM DE\_MORGAN\_THM {\none}
+|- !t1 t2. (~(t1 /\ t2) = ~t1 \/ ~t2) /\ (~(t1 \/ t2) = ~t1 /\ ~t2)
+\ENDTHEOREM
+
+\THEOREM DISJ\_ASSOC {\none}
+|- !t1 t2 t3. t1 \/ t2 \/ t3 = (t1 \/ t2) \/ t3
+\ENDTHEOREM
+
+\THEOREM DISJ\_SYM {\none}
+|- !t1 t2. t1 \/ t2 = t2 \/ t1
+\ENDTHEOREM
+
+\THEOREM EQ\_CLAUSES {\none}
+|- !t.
+    ((T = t) = t) /\ ((t = T) = t) /\ ((F = t) = ~t) /\ ((t = F) = ~t)
+\ENDTHEOREM
+
+\THEOREM EQ\_EXPAND {\none}
+|- !t1 t2. (t1 = t2) = t1 /\ t2 \/ ~t1 /\ ~t2
+\ENDTHEOREM
+
+\THEOREM EQ\_IMP\_THM {\none}
+|- !t1 t2. (t1 = t2) = (t1 ==> t2) /\ (t2 ==> t1)
+\ENDTHEOREM
+
+\THEOREM EQ\_REFL {\none}
+|- !x:*. x = x
+\ENDTHEOREM
+\THEOREM EQ\_SYM {\none}
+|- !x:* y:*. (x = y) ==> (y = x)
+\ENDTHEOREM
+\THEOREM EQ\_SYM\_EQ {\none}
+|- !x y. (x = y) = (y = x)
+\ENDTHEOREM
+
+\THEOREM EQ\_TRANS {\none}
+|- !x:* y:* z:*. (x = y) /\ (y = z) ==> (x = z)
+\ENDTHEOREM
+\THEOREM EXCLUDED\_MIDDLE {\none}
+|- !t. t \/ ~t
+\ENDTHEOREM
+\THEOREM EXISTS\_SIMP {\none}
+|- !t. (?x. t) = t
+\ENDTHEOREM
+
+\THEOREM FALSITY {\none}
+|- !t. F ==> t
+\ENDTHEOREM
+\THEOREM FORALL\_SIMP {\none}
+|- !t. (!x. t) = t
+\ENDTHEOREM
+
+\THEOREM F\_IMP {\none}
+|- !t. ~t ==>(t ==> F)
+\ENDTHEOREM
+\THEOREM IMP\_CLAUSES {\none}
+|- !t. (T ==> t) = t /\
+       (t ==> T) = T /\
+       (F ==> t) = T /\
+       (t ==> t) = t /\
+       (t ==> F) = ~t
+\ENDTHEOREM
+\THEOREM IMP\_DISJ\_THM {\none}
+|- !t1 t2. t1 ==> t2 = ~t1 \/ t2
+\ENDTHEOREM
+
+\THEOREM IMP\_F {\none}
+|- !t.(t ==> F) ==> ~t
+\ENDTHEOREM
+\THEOREM IMP\_F\_EQ\_F {\none}
+|- !t. t ==> F = (t = F)
+\ENDTHEOREM
+
+\THEOREM IS\_ASSUMPTION\_OF bool
+|- !t1 t2. t1 IS_ASSUMPTION_OF t2 = t1 ==> t2
+\ENDTHEOREM
+\THEOREM LEFT\_AND\_OVER\_OR {\none}
+|- !t1 t2 t3. t1 /\ (t2 \/ t3) = t1 /\ t2 \/ t1 /\ t3
+\ENDTHEOREM
+\THEOREM LEFT\_OR\_OVER\_AND {\none}
+|- !t1 t2 t3. t1 \/ t2 /\ t3 = (t1 \/ t2) /\ (t1 \/ t3)
+\ENDTHEOREM
+\THEOREM NOT\_AND {\none}
+|- !t. ~(t /\ ~t) 
+\ENDTHEOREM
+\THEOREM NOT\_CLAUSES {\none}
+|- (!t. ~~t = t) /\ (~T = F) /\ (~F = T) 
+\ENDTHEOREM
+
+\THEOREM NOT\_F {\none}
+|- !t. ~t ==> (t=F) 
+\ENDTHEOREM
+\THEOREM NOT\_IMP {\none}
+|- !t1 t2. ~(t1 ==> t2) = t1 /\ ~t2
+\ENDTHEOREM
+
+\THEOREM OR\_CLAUSES {\none}
+|- !t. (T \/ t) = T /\
+       (t \/ T) = T /\
+       (F \/ t) = t /\
+       (t \/ F) = t /\
+       (t \/ t) = t
+\ENDTHEOREM
+\THEOREM OR\_ELIM\_THM {\none}
+|- !t t1 t2. (t1 \/ t2) ==> (t1 ==> t) ==> (t2 ==> t) ==> t 
+\ENDTHEOREM
+\THEOREM OR\_IMP\_THM {\none}
+|- !t1 t2. (t1 = t2 \/ t1) = t2 ==> t1
+\ENDTHEOREM
+
+\THEOREM OR\_INTRO\_THM1 {\none}
+|- !t1 t2. t1 ==> t1 \/ t2
+\ENDTHEOREM
+\THEOREM OR\_INTRO\_THM2 {\none}
+|- !t1 t2. t2 ==> t1 \/ t2
+\ENDTHEOREM
+\THEOREM REFL\_CLAUSE {\none}
+|- !x. (x = x) = T
+\ENDTHEOREM
+
+\THEOREM RIGHT\_AND\_OVER\_OR {\none}
+|- !t1 t2 t3. (t2 \/ t3) /\ t1 = t2 /\ t1 \/ t3 /\ t1
+\ENDTHEOREM
+\THEOREM RIGHT\_OR\_OVER\_AND {\none}
+|- !t1 t2 t3. t2 /\ t3 \/ t1 = (t2 \/ t1) /\ (t3 \/ t1)
+\ENDTHEOREM
+\THEOREM SELECT\_REFL {\none}
+|- !x. (@y. y = x) = x
+\ENDTHEOREM
+\THEOREM SELECT\_UNIQUE {\none}
+|- !P x. (!y. P y = (y = x)) ==> ($@ P = x)
+\ENDTHEOREM
+\THEOREM TRUTH {\none}
+|- T
+\ENDTHEOREM
+\section{Theorems about functions}
+\THEOREM ABS\_SIMP {\none}
+|- !t1 t2. (\x. t1)t2 = t1
+\ENDTHEOREM
+
+\THEOREM ASSOC\_CONJ fun
+|- ASSOC $/\
+\ENDTHEOREM
+\THEOREM ASSOC\_DEF fun
+|- !f. ASSOC f = (!x y z. f x(f y z) = f(f x y)z)
+\ENDTHEOREM
+\THEOREM ASSOC\_DISJ fun
+|- ASSOC $\/
+\ENDTHEOREM
+\THEOREM COMM\_DEF fun
+|- !f. COMM f = (!x y. f x y = f y x)
+\ENDTHEOREM
+\THEOREM EQ\_EXT {\none}
+|- !f g. (!x. f x = g x) ==> (f = g)
+\ENDTHEOREM
+\THEOREM FCOMM\_ASSOC fun
+|- !f. FCOMM f f = ASSOC f
+\ENDTHEOREM
+\THEOREM FCOMM\_DEF fun
+|- !f g. FCOMM f g = (!x y z. g x(f y z) = f(g x y)z)
+\ENDTHEOREM
+\THEOREM FUN\_EQ\_LEMMA arithmetic
+|- !f x1 x2. f x1 /\ ~f x2 ==> ~(x1 = x2)
+\ENDTHEOREM
+
+\THEOREM LEFT\_ID\_DEF fun
+|- !f e. LEFT_ID f e = (!x. f e x = x)
+\ENDTHEOREM
+\THEOREM MONOID\_CONJ\_T fun
+|- MONOID $/\ T
+\ENDTHEOREM
+\THEOREM MONOID\_DEF fun
+|- !f e. MONOID f e = ASSOC f /\ RIGHT_ID f e /\ LEFT_ID f e
+\ENDTHEOREM
+\THEOREM MONOID\_DISJ\_F fun
+|- MONOID $\/ F
+\ENDTHEOREM
+\THEOREM ONE\_ONE\_DEF bool
+|- !f. ONE_ONE f = (!x1 x2. (f x1 = f x2) ==> (x1 = x2))
+\ENDTHEOREM
+\THEOREM ONTO\_DEF bool
+|- !f. ONTO f = (!y. ?x. y = f x)
+\ENDTHEOREM
+\THEOREM RIGHT\_ID\_DEF fun
+|- !f e. RIGHT_ID f e = (!x. f x e = x)
+\ENDTHEOREM
+\section{Theorems about the type {\tt one}}
+\THEOREM one one
+|- !v. v = one
+\ENDTHEOREM
+\THEOREM one\_Axiom one
+|- !e. ?! fn. fn one = e
+\ENDTHEOREM
+\THEOREM one\_axiom one
+|- !f g. f = g
+\ENDTHEOREM
+\THEOREM one\_DEF one
+|- one = (@x. T)
+\ENDTHEOREM
+\THEOREM one\_TY\_DEF one
+|- ?rep. TYPE_DEFINITION(\b. b)rep
+\ENDTHEOREM
+\section{Theorems about combinators}
+\THEOREM I\_DEF combin
+|- I = S K K
+\ENDTHEOREM
+\THEOREM I\_o\_ID combin
+|- !f. (I o f = f) /\ (f o I = f)
+\ENDTHEOREM
+\THEOREM I\_THM combin
+|- !x. I x = x
+\ENDTHEOREM
+\THEOREM K\_DEF combin
+|- K = (\x y. x)
+\ENDTHEOREM
+\THEOREM K\_THM combin
+|- !x y. K x y = x
+\ENDTHEOREM
+\THEOREM o\_ASSOC combin
+|- !f g h. f o (g o h) = (f o g) o h
+\ENDTHEOREM
+\THEOREM o\_DEF combin
+|- !f g. f o g = (\x. f(g x))
+\ENDTHEOREM
+\THEOREM o\_THM combin
+|- !f g x. (f o g)x = f(g x)
+\ENDTHEOREM
+\THEOREM S\_DEF combin
+|- S = (\f g x. f x(g x))
+\ENDTHEOREM
+\THEOREM S\_THM combin
+|- !f g x. S f g x = f x(g x)
+\ENDTHEOREM
+\section{Theorems about pairs}
+\THEOREM COMMA\_DEF bool
+|- !x y. x,y = (@p. REP_prod p = MK_PAIR x y)
+\ENDTHEOREM
+\THEOREM CURRY\_DEF bool
+|- !f x y. CURRY f x y = f(x,y)
+\ENDTHEOREM
+\THEOREM FST bool
+|- !x y. FST(x,y) = x
+\ENDTHEOREM
+\THEOREM FST\_DEF bool
+|- !p. FST p = (@x. ?y. MK_PAIR x y = REP_prod p)
+\ENDTHEOREM
+\THEOREM IS\_PAIR\_DEF bool
+|- !p. IS_PAIR p = (?x y. p = MK_PAIR x y)
+\ENDTHEOREM
+\THEOREM PAIR bool
+|- !x. FST x,SND x = x
+\ENDTHEOREM
+\THEOREM PAIR\_EQ bool
+|- !x y a b. (x,y = a,b) = (x = a) /\ (y = b)
+\ENDTHEOREM
+\THEOREM PAIR\_EXISTS bool
+|- ?p. IS_PAIR p
+\ENDTHEOREM
+\THEOREM prod\_TY\_DEF bool
+|- ?rep. TYPE_DEFINITION IS_PAIR rep
+\ENDTHEOREM
+\THEOREM REP\_prod bool
+|- REP_prod =
+   (@rep.
+     (!p' p''. (rep p' = rep p'') ==> (p' = p'')) /\
+     (!p. IS_PAIR p = (?p'. p = rep p')))
+\ENDTHEOREM
+\THEOREM SND bool
+|- !x y. SND(x,y) = y
+\ENDTHEOREM
+\THEOREM SND\_DEF bool
+|- !p. SND p = (@y. ?x. MK_PAIR x y = REP_prod p)
+\ENDTHEOREM
+\THEOREM UNCURRY\_DEF bool
+|- !f x y. UNCURRY f(x,y) = f x y
+\ENDTHEOREM
+\section{Theorems about disjoint sums}
+\THEOREM INL sum
+|- !x. ISL x ==> (INL(OUTL x) = x)
+\ENDTHEOREM
+\THEOREM INL\_DEF sum
+|- !e. INL e = ABS_sum(\b x y. (x = e) /\ b)
+\ENDTHEOREM
+\THEOREM INR sum
+|- !x. ISR x ==> (INR(OUTR x) = x)
+\ENDTHEOREM
+\THEOREM INR\_DEF sum
+|- !e. INR e = ABS_sum(\b x y. (y = e) /\ ~b)
+\ENDTHEOREM
+\THEOREM ISL sum
+|- (!x. ISL(INL x)) /\ (!y. ~ISL(INR y))
+\ENDTHEOREM
+\THEOREM ISL\_OR\_ISR sum
+|- !x. ISL x \/ ISR x
+\ENDTHEOREM
+\THEOREM ISR sum
+|- (!x. ISR(INR x)) /\ (!y. ~ISR(INL y))
+\ENDTHEOREM
+\THEOREM IS\_SUM\_REP sum
+|- !f.
+    IS_SUM_REP f =
+    (?v1 v2.
+      (f = (\b x y. (x = v1) /\ b)) \/ (f = (\b x y. (y = v2) /\ ~b)))
+\ENDTHEOREM
+\THEOREM OUTL sum
+|- !x. OUTL(INL x) = x
+\ENDTHEOREM
+\THEOREM OUTR sum
+|- !x. OUTR(INR x) = x
+\ENDTHEOREM
+\THEOREM sum\_Axiom sum
+|- !f g. ?! h. (!x. h(INL x) = f x) /\ (!x. h(INR x) = g x)
+\ENDTHEOREM
+\THEOREM sum\_axiom sum
+|- !f g. ?! h. (h o INL = f) /\ (h o INR = g)
+\ENDTHEOREM
+\THEOREM sum\_ISO\_DEF sum
+|- (!a. ABS_sum(REP_sum a) = a) /\
+   (!r. IS_SUM_REP r = (REP_sum(ABS_sum r) = r))
+\ENDTHEOREM
+\THEOREM sum\_TY\_DEF sum
+|- ?rep. TYPE_DEFINITION IS_SUM_REP rep
+\ENDTHEOREM
+\section{Theorems about arithmetic}
+\THEOREM ADD arithmetic
+|- (!n. 0 + n = n) /\ (!m n. (SUC m) + n = SUC(m + n))
+\ENDTHEOREM
+\THEOREM ADD1 arithmetic
+|- !m. SUC m = m + 1
+\ENDTHEOREM
+\THEOREM ADD\_0 arithmetic
+|- !m. m + 0 = m
+\ENDTHEOREM
+\THEOREM ADD\_ASSOC arithmetic
+|- !m n p. m + (n + p) = (m + n) + p
+\ENDTHEOREM
+\THEOREM ADD\_CLAUSES arithmetic
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+\ENDTHEOREM
+\THEOREM ADD\_EQ\_0 arithmetic
+|- !m n. (m + n = 0) = (m = 0) /\ (n = 0)
+\ENDTHEOREM
+\THEOREM ADD\_EQ\_SUB arithmetic
+|- !m n p. n <= p ==> ((m + n = p) = (m = p - n))
+\ENDTHEOREM
+\THEOREM ADD\_INV\_0 arithmetic
+|- !m n. (m + n = m) ==> (n = 0)
+\ENDTHEOREM
+\THEOREM ADD\_INV\_0\_EQ arithmetic
+|- !m n. (m + n = m) = (n = 0)
+\ENDTHEOREM
+\THEOREM ADD\_MONO\_LESS\_EQ arithmetic
+|- !m n p. (m + n) <= (m + p) = n <= p
+\ENDTHEOREM
+\THEOREM ADD\_SUB arithmetic
+|- !a c. (a + c) - c = a
+\ENDTHEOREM
+\THEOREM ADD\_SUC arithmetic
+|- !m n. SUC(m + n) = m + (SUC n)
+\ENDTHEOREM
+\THEOREM ADD\_SYM arithmetic
+|- !m n. m + n = n + m
+\ENDTHEOREM
+\THEOREM ASSOC\_ADD arithmetic
+|- ASSOC $+
+\ENDTHEOREM
+\THEOREM ASSOC\_MULT arithmetic
+|- ASSOC $*
+\ENDTHEOREM
+\THEOREM CANCEL\_SUB arithmetic
+|- !p n m. p <= n /\ p <= m ==> ((n - p = m - p) = (n = m))
+\ENDTHEOREM
+\THEOREM DA arithmetic
+|- !k n. 0 < n ==> (?r q. (k = (q * n) + r) /\ r < n)
+\ENDTHEOREM
+\THEOREM DIVISION arithmetic
+|- !n.
+    0 < n ==> (!k. (k = ((k DIV n) * n) + (k MOD n)) /\ (k MOD n) < n)
+\ENDTHEOREM
+\THEOREM DIV\_LESS\_EQ arithmetic
+|- !n. 0 < n ==> (!k. (k DIV n) <= k)
+\ENDTHEOREM
+\THEOREM DIV\_MULT arithmetic
+|- !n r. r < n ==> (!q. ((q * n) + r) DIV n = q)
+\ENDTHEOREM
+\THEOREM DIV\_UNIQUE arithmetic
+|- !n k q. (?r. (k = (q * n) + r) /\ r < n) ==> (k DIV n = q)
+\ENDTHEOREM
+\THEOREM EQ\_LESS prim\_rec
+|- !n. (SUC m = n) ==> m < n
+\ENDTHEOREM
+\THEOREM EQ\_LESS\_EQ arithmetic
+|- !m n. (m = n) = m <= n /\ n <= m
+\ENDTHEOREM
+\THEOREM EQ\_MONO\_ADD\_EQ arithmetic
+|- !m n p. (m + p = n + p) = (m = n)
+\ENDTHEOREM
+\THEOREM EVEN arithmetic
+|- (EVEN 0 = T) /\ (!n. EVEN(SUC n) = ~EVEN n)
+\ENDTHEOREM
+\THEOREM EVEN\_ADD arithmetic
+|- !m n. EVEN(m + n) = (EVEN m = EVEN n)
+\ENDTHEOREM
+\THEOREM EVEN\_AND\_ODD arithmetic
+|- !n. ~(EVEN n /\ ODD n)
+\ENDTHEOREM
+\THEOREM EVEN\_DOUBLE arithmetic
+|- !n. EVEN(2 * n)
+\ENDTHEOREM
+\THEOREM EVEN\_EXISTS arithmetic
+|- !n. EVEN n = (?m. n = 2 * m)
+\ENDTHEOREM
+\THEOREM EVEN\_MULT arithmetic
+|- !m n. EVEN(m * n) = EVEN m \/ EVEN n
+\ENDTHEOREM
+\THEOREM EVEN\_ODD arithmetic
+|- !n. EVEN n = ~ODD n
+\ENDTHEOREM
+\THEOREM EVEN\_ODD\_EXISTS arithmetic
+|- !n. (EVEN n ==> (?m. n = 2 * m)) /\ (ODD n ==> (?m. n = SUC(2 * m)))
+\ENDTHEOREM
+\THEOREM EVEN\_OR\_ODD arithmetic
+|- !n. EVEN n \/ ODD n
+\ENDTHEOREM
+\THEOREM EXP arithmetic
+|- (!m. m EXP 0 = 1) /\ (!m n. m EXP (SUC n) = m * (m EXP n))
+\ENDTHEOREM
+\THEOREM EXP\_ADD arithmetic
+|- !p q n. n EXP (p + q) = (n EXP p) * (n EXP q)
+\ENDTHEOREM
+\THEOREM FACT arithmetic
+|- (FACT 0 = 1) /\ (!n. FACT(SUC n) = (SUC n) * (FACT n))
+\ENDTHEOREM
+\THEOREM FACT\_LESS arithmetic
+|- !n. 0 < (FACT n)
+\ENDTHEOREM
+\THEOREM FUN\_EQ\_LEMMA arithmetic
+|- !f x1 x2. f x1 /\ ~f x2 ==> ~(x1 = x2)
+\ENDTHEOREM
+\THEOREM GREATER arithmetic
+|- !m n. m > n = n < m
+\ENDTHEOREM
+\THEOREM GREATER\_EQ arithmetic
+|- !n m. n >= m = m <= n
+\ENDTHEOREM
+\THEOREM GREATER\_OR\_EQ arithmetic
+|- !m n. m >= n = m > n \/ (m = n)
+\ENDTHEOREM
+\THEOREM INDUCTION num
+|- !P. P 0 /\ (!n. P n ==> P(SUC n)) ==> (!n. P n)
+\ENDTHEOREM
+\THEOREM INV\_PRE\_EQ arithmetic
+|- !m n. 0 < m /\ 0 < n ==> ((PRE m = PRE n) = (m = n))
+\ENDTHEOREM
+\THEOREM INV\_PRE\_LESS arithmetic
+|- !m. 0 < m ==> (!n. (PRE m) < (PRE n) = m < n)
+\ENDTHEOREM
+\THEOREM INV\_PRE\_LESS\_EQ arithmetic
+|- !n. 0 < n ==> (!m. (PRE m) <= (PRE n) = m <= n)
+\ENDTHEOREM
+\THEOREM INV\_SUC num
+|- !m n. (SUC m = SUC n) ==> (m = n)
+\ENDTHEOREM
+\THEOREM INV\_SUC\_EQ prim\_rec
+|- !m n. (SUC m = SUC n) = (m = n)
+\ENDTHEOREM
+\THEOREM IS\_NUM\_REP num
+|- !m.
+    IS_NUM_REP m =
+    (!P. P ZERO_REP /\ (!n. P n ==> P(SUC_REP n)) ==> P m)
+\ENDTHEOREM
+\THEOREM LEFT\_ADD\_DISTRIB arithmetic
+|- !m n p. p * (m + n) = (p * m) + (p * n)
+\ENDTHEOREM
+\THEOREM LEFT\_ID\_ADD\_0 arithmetic
+|- LEFT_ID $+ 0
+\ENDTHEOREM
+\THEOREM LEFT\_ID\_MULT\_1 arithmetic
+|- LEFT_ID $* 1
+\ENDTHEOREM
+\THEOREM LEFT\_SUB\_DISTRIB arithmetic
+|- !m n p. p * (m - n) = (p * m) - (p * n)
+\ENDTHEOREM
+\THEOREM LESS prim\_rec
+|- !m n. m < n = (?P. (!n'. P(SUC n') ==> P n') /\ P m /\ ~P n)
+\ENDTHEOREM
+\THEOREM LESS\_0 prim\_rec
+|- !n. 0 < (SUC n)
+\ENDTHEOREM
+\THEOREM LESS\_0\_0 prim\_rec
+|- 0 < (SUC 0)
+\ENDTHEOREM
+\THEOREM LESS\_0\_CASES arithmetic
+|- !m. (0 = m) \/ 0 < m
+\ENDTHEOREM
+\THEOREM LESS\_ADD arithmetic
+|- !m n. n < m ==> (?p. p + n = m)
+\ENDTHEOREM
+\THEOREM LESS\_ADD\_1 arithmetic
+|- !m n. n < m ==> (?p. m = n + (p + 1))
+\ENDTHEOREM
+\THEOREM LESS\_ADD\_NONZERO arithmetic
+|- !m n. ~(n = 0) ==> m < (m + n)
+\ENDTHEOREM
+\THEOREM LESS\_ADD\_SUC arithmetic
+|- !m n. m < (m + (SUC n))
+\ENDTHEOREM
+\THEOREM LESS\_ANTISYM arithmetic
+|- !m n. ~(m < n /\ n < m)
+\ENDTHEOREM
+\THEOREM LESS\_CASES arithmetic
+|- !m n. m < n \/ n <= m
+\ENDTHEOREM
+\THEOREM LESS\_CASES\_IMP arithmetic
+|- !m n. ~m < n /\ ~(m = n) ==> n < m
+\ENDTHEOREM
+\THEOREM LESS\_EQ arithmetic
+|- !m n. m < n = (SUC m) <= n
+\ENDTHEOREM
+\THEOREM LESS\_EQUAL\_ADD arithmetic
+|- !m n. m <= n ==> (?p. n = m + p)
+\ENDTHEOREM
+\THEOREM LESS\_EQUAL\_ANTISYM arithmetic
+|- !n m. n <= m /\ m <= n ==> (n = m)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_0 arithmetic
+|- !n. n <= 0 = (n = 0)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_ADD arithmetic
+|- !m n. m <= (m + n)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_ADD\_SUB arithmetic
+|- !c b. c <= b ==> (!a. (a + b) - c = a + (b - c))
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_ANTISYM arithmetic
+|- !m n. ~(m < n /\ n <= m)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_CASES arithmetic
+|- !m n. m <= n \/ n <= m
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_EXISTS arithmetic
+|- !m n. m <= n = (?p. n = m + p)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_IMP\_LESS\_SUC arithmetic
+|- !n m. n <= m ==> n < (SUC m)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_LESS\_EQ\_MONO arithmetic
+|- !m n p q. m <= p /\ n <= q ==> (m + n) <= (p + q)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_LESS\_TRANS arithmetic
+|- !m n p. m <= n /\ n < p ==> m < p
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_MONO arithmetic
+|- !n m. (SUC n) <= (SUC m) = n <= m
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_MONO\_ADD\_EQ arithmetic
+|- !m n p. (m + p) <= (n + p) = m <= n
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_REFL arithmetic
+|- !m. m <= m
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_SUB\_LESS arithmetic
+|- !a b. b <= a ==> (!c. (a - b) < c = a < (b + c))
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_SUC\_REFL arithmetic
+|- !m. m <= (SUC m)
+\ENDTHEOREM
+\THEOREM LESS\_EQ\_TRANS arithmetic
+|- !m n p. m <= n /\ n <= p ==> m <= p
+\ENDTHEOREM
+\THEOREM LESS\_EXP\_SUC\_MONO arithmetic
+|- !n m. ((SUC(SUC m)) EXP n) < ((SUC(SUC m)) EXP (SUC n))
+\ENDTHEOREM
+\THEOREM LESS\_IMP\_LESS\_ADD arithmetic
+|- !n m. n < m ==> (!p. n < (m + p))
+\ENDTHEOREM
+\THEOREM LESS\_IMP\_LESS\_OR\_EQ arithmetic
+|- !m n. m < n ==> m <= n
+\ENDTHEOREM
+\THEOREM LESS\_LEMMA1 prim\_rec
+|- !m n. m < (SUC n) ==> (m = n) \/ m < n
+\ENDTHEOREM
+\THEOREM LESS\_LEMMA2 prim\_rec
+|- !m n. (m = n) \/ m < n ==> m < (SUC n)
+\ENDTHEOREM
+\THEOREM LESS\_LESS\_CASES arithmetic
+|- !m n. (m = n) \/ m < n \/ n < m
+\ENDTHEOREM
+\THEOREM LESS\_LESS\_EQ\_TRANS arithmetic
+|- !m n p. m < n /\ n <= p ==> m < p
+\ENDTHEOREM
+\THEOREM LESS\_LESS\_SUC arithmetic
+|- !m n. ~(m < n /\ n < (SUC m))
+\ENDTHEOREM
+\THEOREM LESS\_MOD arithmetic
+|- !n k. k < n ==> (k MOD n = k)
+\ENDTHEOREM
+\THEOREM LESS\_MONO prim\_rec
+|- !m n. m < n ==> (SUC m) < (SUC n)
+\ENDTHEOREM
+\THEOREM LESS\_MONO\_ADD arithmetic
+|- !m n p. m < n ==> (m + p) < (n + p)
+\ENDTHEOREM
+\THEOREM LESS\_MONO\_ADD\_EQ arithmetic
+|- !m n p. (m + p) < (n + p) = m < n
+\ENDTHEOREM
+\THEOREM LESS\_MONO\_ADD\_INV arithmetic
+|- !m n p. (m + p) < (n + p) ==> m < n
+\ENDTHEOREM
+\THEOREM LESS\_MONO\_EQ arithmetic
+|- !m n. (SUC m) < (SUC n) = m < n
+\ENDTHEOREM
+\THEOREM LESS\_MONO\_MULT arithmetic
+|- !m n p. m <= n ==> (m * p) <= (n * p)
+\ENDTHEOREM
+\THEOREM LESS\_MONO\_REV arithmetic
+|- !m n. (SUC m) < (SUC n) ==> m < n
+\ENDTHEOREM
+\THEOREM LESS\_MULT2 arithmetic
+|- !m n. 0 < m /\ 0 < n ==> 0 < (m * n)
+\ENDTHEOREM
+\THEOREM LESS\_MULT\_MONO arithmetic
+|- !m i n. ((SUC n) * m) < ((SUC n) * i) = m < i
+\ENDTHEOREM
+\THEOREM LESS\_NOT\_EQ prim\_rec
+|- !m n. m < n ==> ~(m = n)
+\ENDTHEOREM
+\THEOREM LESS\_NOT\_SUC arithmetic
+|- !m n. m < n /\ ~(n = SUC m) ==> (SUC m) < n
+\ENDTHEOREM
+\THEOREM LESS\_OR arithmetic
+|- !m n. m < n ==> (SUC m) <= n
+\ENDTHEOREM
+\THEOREM LESS\_OR\_EQ arithmetic
+|- !m n. m <= n = m < n \/ (m = n)
+\ENDTHEOREM
+\THEOREM LESS\_OR\_EQ\_ADD arithmetic
+|- !n m. n < m \/ (?p. n = p + m)
+\ENDTHEOREM
+\THEOREM LESS\_REFL prim\_rec
+|- !n. ~n < n
+\ENDTHEOREM
+\THEOREM LESS\_SUB\_ADD\_LESS arithmetic
+|- !n m i. i < (n - m) ==> (i + m) < n
+\ENDTHEOREM
+\THEOREM LESS\_SUC prim\_rec
+|- !m n. m < n ==> m < (SUC n)
+\ENDTHEOREM
+\THEOREM LESS\_SUC\_EQ\_COR arithmetic
+|- !m n. m < n /\ ~(SUC m = n) ==> (SUC m) < n
+\ENDTHEOREM
+\THEOREM LESS\_SUC\_IMP prim\_rec
+|- !m n. m < (SUC n) ==> ~(m = n) ==> m < n
+\ENDTHEOREM
+\THEOREM LESS\_SUC\_NOT arithmetic
+|- !m n. m < n ==> ~n < (SUC m)
+\ENDTHEOREM
+\THEOREM LESS\_SUC\_REFL prim\_rec
+|- !n. n < (SUC n)
+\ENDTHEOREM
+\THEOREM LESS\_SUC\_SUC prim\_rec
+|- !m. m < (SUC m) /\ m < (SUC(SUC m))
+\ENDTHEOREM
+\THEOREM LESS\_THM prim\_rec
+|- !m n. m < (SUC n) = (m = n) \/ m < n
+\ENDTHEOREM
+\THEOREM LESS\_TRANS arithmetic
+|- !m n p. m < n /\ n < p ==> m < p
+\ENDTHEOREM
+\THEOREM MOD\_EQ\_0 arithmetic
+|- !n. 0 < n ==> (!k. (k * n) MOD n = 0)
+\ENDTHEOREM
+\THEOREM MOD\_MOD arithmetic
+|- !n. 0 < n ==> (!k. (k MOD n) MOD n = k MOD n)
+\ENDTHEOREM
+\THEOREM MOD\_MULT arithmetic
+|- !n r. r < n ==> (!q. ((q * n) + r) MOD n = r)
+\ENDTHEOREM
+\THEOREM MOD\_ONE arithmetic
+|- !k. k MOD (SUC 0) = 0
+\ENDTHEOREM
+\THEOREM MOD\_PLUS arithmetic
+|- !n. 0 < n ==> (!j k. ((j MOD n) + (k MOD n)) MOD n = (j + k) MOD n)
+\ENDTHEOREM
+\THEOREM MOD\_TIMES arithmetic
+|- !n. 0 < n ==> (!q r. ((q * n) + r) MOD n = r MOD n)
+\ENDTHEOREM
+\THEOREM MOD\_UNIQUE arithmetic
+|- !n k r. (?q. (k = (q * n) + r) /\ r < n) ==> (k MOD n = r)
+\ENDTHEOREM
+\THEOREM MONOID\_ADD\_0 arithmetic
+|- MONOID $+ 0
+\ENDTHEOREM
+\THEOREM MONOID\_MULT\_1 arithmetic
+|- MONOID $* 1
+\ENDTHEOREM
+\THEOREM MULT arithmetic
+|- (!n. 0 * n = 0) /\ (!m n. (SUC m) * n = (m * n) + n)
+\ENDTHEOREM
+\THEOREM MULT\_0 arithmetic
+|- !m. m * 0 = 0
+\ENDTHEOREM
+\THEOREM MULT\_ASSOC arithmetic
+|- !m n p. m * (n * p) = (m * n) * p
+\ENDTHEOREM
+\THEOREM MULT\_CLAUSES arithmetic
+|- !m n.
+    (0 * m = 0) /\
+    (m * 0 = 0) /\
+    (1 * m = m) /\
+    (m * 1 = m) /\
+    ((SUC m) * n = (m * n) + n) /\
+    (m * (SUC n) = m + (m * n))
+\ENDTHEOREM
+\THEOREM MULT\_EQ\_0 arithmetic
+|- !m n. (m * n = 0) = (m = 0) \/ (n = 0)
+\ENDTHEOREM
+\THEOREM MULT\_EXP\_MONO arithmetic
+|- !p q n m. (n * ((SUC q) EXP p) = m * ((SUC q) EXP p)) = (n = m)
+\ENDTHEOREM
+\THEOREM MULT\_LEFT\_1 arithmetic
+|- !m. 1 * m = m
+\ENDTHEOREM
+\THEOREM MULT\_LESS\_EQ\_SUC arithmetic
+|- !m n p. m <= n = ((SUC p) * m) <= ((SUC p) * n)
+\ENDTHEOREM
+\THEOREM MULT\_MONO\_EQ arithmetic
+|- !m i n. ((SUC n) * m = (SUC n) * i) = (m = i)
+\ENDTHEOREM
+\THEOREM MULT\_RIGHT\_1 arithmetic
+|- !m. m * 1 = m
+\ENDTHEOREM
+\THEOREM MULT\_SUC arithmetic
+|- !m n. m * (SUC n) = m + (m * n)
+\ENDTHEOREM
+\THEOREM MULT\_SUC\_EQ arithmetic
+|- !p m n. (n * (SUC p) = m * (SUC p)) = (n = m)
+\ENDTHEOREM
+\THEOREM MULT\_SYM arithmetic
+|- !m n. m * n = n * m
+\ENDTHEOREM
+\THEOREM NOT\_EXP\_0 arithmetic
+|- !m n. ~((SUC n) EXP m = 0)
+\ENDTHEOREM
+\THEOREM NOT\_GREATER arithmetic
+|- !m n. ~m > n = m <= n
+\ENDTHEOREM
+\THEOREM NOT\_GREATER\_EQ arithmetic
+|- !m n. ~m >= n = (SUC m) <= n
+\ENDTHEOREM
+\THEOREM NOT\_LEQ arithmetic
+|- !m n. ~m <= n = (SUC n) <= m
+\ENDTHEOREM
+\THEOREM NOT\_LESS arithmetic
+|- !m n. ~m < n = n <= m
+\ENDTHEOREM
+\THEOREM NOT\_LESS\_0 prim\_rec
+|- !n. ~n < 0
+\ENDTHEOREM
+\THEOREM NOT\_LESS\_EQ prim\_rec
+|- !m n. (m = n) ==> ~m < n
+\ENDTHEOREM
+\THEOREM NOT\_LESS\_EQUAL arithmetic
+|- !m n. ~m <= n = n < m
+\ENDTHEOREM
+\THEOREM NOT\_NUM\_EQ arithmetic
+|- !m n. ~(m = n) = (SUC m) <= n \/ (SUC n) <= m
+\ENDTHEOREM
+\THEOREM NOT\_ODD\_EQ\_EVEN arithmetic
+|- !n m. ~(SUC(n + n) = m + m)
+\ENDTHEOREM
+\THEOREM NOT\_SUC num
+|- !n. ~(SUC n = 0)
+\ENDTHEOREM
+\THEOREM NOT\_SUC\_ADD\_LESS\_EQ arithmetic
+|- !m n. ~(SUC(m + n)) <= m
+\ENDTHEOREM
+\THEOREM NOT\_SUC\_LESS\_EQ arithmetic
+|- !n m. ~(SUC n) <= m = m <= n
+\ENDTHEOREM
+\THEOREM NOT\_SUC\_LESS\_EQ\_0 arithmetic
+|- !n. ~(SUC n) <= 0
+\ENDTHEOREM
+\THEOREM num\_Axiom prim\_rec
+|- !e f. ?! fn. (fn 0 = e) /\ (!n. fn(SUC n) = f(fn n)n)
+\ENDTHEOREM
+\THEOREM num\_CASES arithmetic
+|- !m. (m = 0) \/ (?n. m = SUC n)
+\ENDTHEOREM
+\THEOREM num\_ISO\_DEF num
+|- (!a. ABS_num(REP_num a) = a) /\
+   (!r. IS_NUM_REP r = (REP_num(ABS_num r) = r))
+\ENDTHEOREM
+\THEOREM num\_TY\_DEF num
+|- ?rep. TYPE_DEFINITION IS_NUM_REP rep
+\ENDTHEOREM
+\THEOREM ODD arithmetic
+|- (ODD 0 = F) /\ (!n. ODD(SUC n) = ~ODD n)
+\ENDTHEOREM
+\THEOREM ODD\_ADD arithmetic
+|- !m n. ODD(m + n) = ~(ODD m = ODD n)
+\ENDTHEOREM
+\THEOREM ODD\_DOUBLE arithmetic
+|- !n. ODD(SUC(2 * n))
+\ENDTHEOREM
+\THEOREM ODD\_EVEN arithmetic
+|- !n. ODD n = ~EVEN n
+\ENDTHEOREM
+\THEOREM ODD\_EXISTS arithmetic
+|- !n. ODD n = (?m. n = SUC(2 * m))
+\ENDTHEOREM
+\THEOREM ODD\_MULT arithmetic
+|- !m n. ODD(m * n) = ODD m /\ ODD n
+\ENDTHEOREM
+\THEOREM ODD\_OR\_EVEN arithmetic
+|- !n. ?m. (n = (SUC(SUC 0)) * m) \/ (n = ((SUC(SUC 0)) * m) + 1)
+\ENDTHEOREM
+\THEOREM OR\_LESS arithmetic
+|- !m n. (SUC m) <= n ==> m < n
+\ENDTHEOREM
+\THEOREM PRE prim\_rec
+|- (PRE 0 = 0) /\ (!m. PRE(SUC m) = m)
+\ENDTHEOREM
+\THEOREM PRE\_DEF prim\_rec
+|- !m. PRE m = ((m = 0) => 0 | (@n. m = SUC n))
+\ENDTHEOREM
+\THEOREM PRE\_SUB arithmetic
+|- !m n. PRE(m - n) = (PRE m) - n
+\ENDTHEOREM
+\THEOREM PRE\_SUB1 arithmetic
+|- !m. PRE m = m - 1
+\ENDTHEOREM
+\THEOREM PRE\_SUC\_EQ arithmetic
+|- !m n. 0 < n ==> ((m = PRE n) = (SUC m = n))
+\ENDTHEOREM
+\THEOREM PRIM\_REC prim\_rec
+|- !x f m. PRIM_REC x f m = PRIM_REC_FUN x f m(PRE m)
+\ENDTHEOREM
+\THEOREM PRIM\_REC\_EQN prim\_rec
+|- !x f.
+    (!n. PRIM_REC_FUN x f 0 n = x) /\
+    (!m n. PRIM_REC_FUN x f(SUC m)n = f(PRIM_REC_FUN x f m(PRE n))n)
+\ENDTHEOREM
+\THEOREM PRIM\_REC\_FUN prim\_rec
+|- !x f. PRIM_REC_FUN x f = SIMP_REC(\n. x)(\fun n. f(fun(PRE n))n)
+\ENDTHEOREM
+\THEOREM PRIM\_REC\_THM prim\_rec
+|- !x f.
+    (PRIM_REC x f 0 = x) /\
+    (!m. PRIM_REC x f(SUC m) = f(PRIM_REC x f m)m)
+\ENDTHEOREM
+\THEOREM RIGHT\_ADD\_DISTRIB arithmetic
+|- !m n p. (m + n) * p = (m * p) + (n * p)
+\ENDTHEOREM
+\THEOREM RIGHT\_ID\_ADD\_0 arithmetic
+|- RIGHT_ID $+ 0
+\ENDTHEOREM
+\THEOREM RIGHT\_ID\_MULT\_1 arithmetic
+|- RIGHT_ID $* 1
+\ENDTHEOREM
+\THEOREM RIGHT\_SUB\_DISTRIB arithmetic
+|- !m n p. (m - n) * p = (m * p) - (n * p)
+\ENDTHEOREM
+\THEOREM SIMP\_REC prim\_rec
+|- !x f n. SIMP_REC x f n = SIMP_REC_FUN x f(SUC n)n
+\ENDTHEOREM
+\THEOREM SIMP\_REC\_EXISTS prim\_rec
+|- !x f n. ?fun. SIMP_REC_REL fun x f n
+\ENDTHEOREM
+\THEOREM SIMP\_REC\_FUN prim\_rec
+|- !x f n. SIMP_REC_FUN x f n = (@fun. SIMP_REC_REL fun x f n)
+\ENDTHEOREM
+\THEOREM SIMP\_REC\_FUN\_LEMMA prim\_rec
+|- (?fun. SIMP_REC_REL fun x f n) =
+   (SIMP_REC_FUN x f n 0 = x) /\
+   (!m. m < n ==> (SIMP_REC_FUN x f n(SUC m) = f(SIMP_REC_FUN x f n m)))
+\ENDTHEOREM
+\THEOREM SIMP\_REC\_REL prim\_rec
+|- !fun x f n.
+    SIMP_REC_REL fun x f n =
+    (fun 0 = x) /\ (!m. m < n ==> (fun(SUC m) = f(fun m)))
+\ENDTHEOREM
+\THEOREM SIMP\_REC\_THM prim\_rec
+|- !x f.
+    (SIMP_REC x f 0 = x) /\
+    (!m. SIMP_REC x f(SUC m) = f(SIMP_REC x f m))
+\ENDTHEOREM
+\THEOREM SUB arithmetic
+|- (!m. 0 - m = 0) /\ (!m n. (SUC m) - n = (m < n => 0 | SUC(m - n)))
+\ENDTHEOREM
+\THEOREM SUB\_0 arithmetic
+|- !m. (0 - m = 0) /\ (m - 0 = m)
+\ENDTHEOREM
+\THEOREM SUB\_ADD arithmetic
+|- !m n. n <= m ==> ((m - n) + n = m)
+\ENDTHEOREM
+\THEOREM SUB\_CANCEL arithmetic
+|- !p n m. n <= p /\ m <= p ==> ((p - n = p - m) = (n = m))
+\ENDTHEOREM
+\THEOREM SUB\_EQUAL\_0 arithmetic
+|- !c. c - c = 0
+\ENDTHEOREM
+\THEOREM SUB\_EQ\_0 arithmetic
+|- !m n. (m - n = 0) = m <= n
+\ENDTHEOREM
+\THEOREM SUB\_EQ\_EQ\_0 arithmetic
+|- !m n. (m - n = m) = (m = 0) \/ (n = 0)
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_ADD arithmetic
+|- !m n p. m + (n - p) = (n <= p => m | (m + n) - p)
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_EQ arithmetic
+|- !m n p. (m = n - p) = (m + p = n) \/ m <= 0 /\ n <= p
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_GREATER arithmetic
+|- !m n p. m > (n - p) = (m + p) > n /\ m > 0
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_GREATER\_EQ arithmetic
+|- !m n p. m >= (n - p) = (m + p) >= n
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_LESS arithmetic
+|- !m n p. m < (n - p) = (m + p) < n
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_LESS\_EQ arithmetic
+|- !m n p. m <= (n - p) = (m + p) <= n \/ m <= 0
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_SUB arithmetic
+|- !m n p. m - (n - p) = (n <= p => m | (m + p) - n)
+\ENDTHEOREM
+\THEOREM SUB\_LEFT\_SUC arithmetic
+|- !m n. SUC(m - n) = (m <= n => SUC 0 | (SUC m) - n)
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_0 arithmetic
+|- !n m. m < n = 0 < (n - m)
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_EQ arithmetic
+|- !n m. (n - m) <= n
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_EQ\_ADD arithmetic
+|- !m p. m <= p ==> (!n. (p - m) <= n = p <= (m + n))
+\ENDTHEOREM
+\THEOREM SUB\_LESS\_OR arithmetic
+|- !m n. n < m ==> n <= (m - 1)
+\ENDTHEOREM
+\THEOREM SUB\_MONO\_EQ arithmetic
+|- !n m. (SUC n) - (SUC m) = n - m
+\ENDTHEOREM
+\THEOREM SUB\_PLUS arithmetic
+|- !a b c. a - (b + c) = (a - b) - c
+\ENDTHEOREM
+\THEOREM SUB\_RIGHT\_ADD arithmetic
+|- !m n p. (m - n) + p = (m <= n => p | (m + p) - n)
+\ENDTHEOREM
+\THEOREM SUB\_RIGHT\_EQ arithmetic
+|- !m n p. (m - n = p) = (m = n + p) \/ m <= n /\ p <= 0
+\ENDTHEOREM
+\THEOREM SUB\_RIGHT\_GREATER arithmetic
+|- !m n p. (m - n) > p = m > (n + p)
+\ENDTHEOREM
+\THEOREM SUB\_RIGHT\_GREATER\_EQ arithmetic
+|- !m n p. (m - n) >= p = m >= (n + p) \/ 0 >= p
+\ENDTHEOREM
+\THEOREM SUB\_RIGHT\_LESS arithmetic
+|- !m n p. (m - n) < p = m < (n + p) /\ 0 < p
+\ENDTHEOREM
+\THEOREM SUB\_RIGHT\_LESS\_EQ arithmetic
+|- !m n p. (m - n) <= p = m <= (n + p)
+\ENDTHEOREM
+\THEOREM SUB\_RIGHT\_SUB arithmetic
+|- !m n p. (m - n) - p = m - (n + p)
+\ENDTHEOREM
+\THEOREM SUB\_SUB arithmetic
+|- !b c. c <= b ==> (!a. a - (b - c) = (a + c) - b)
+\ENDTHEOREM
+\THEOREM SUC\_ADD\_SYM arithmetic
+|- !m n. SUC(m + n) = (SUC n) + m
+\ENDTHEOREM
+\THEOREM SUC\_DEF num
+|- !m. SUC m = ABS_num(SUC_REP(REP_num m))
+\ENDTHEOREM
+\THEOREM SUC\_ID prim\_rec
+|- !n. ~(SUC n = n)
+\ENDTHEOREM
+\THEOREM SUC\_LESS prim\_rec
+|- !m n. (SUC m) < n ==> m < n
+\ENDTHEOREM
+\THEOREM SUC\_NOT arithmetic
+|- !n. ~(0 = SUC n)
+\ENDTHEOREM
+\THEOREM SUC\_ONE\_ADD arithmetic
+|- !n. SUC n = 1 + n
+\ENDTHEOREM
+\THEOREM SUC\_REP\_DEF num
+|- SUC_REP = (@f. ONE_ONE f /\ ~ONTO f)
+\ENDTHEOREM
+\THEOREM SUC\_SUB1 arithmetic
+|- !m. (SUC m) - 1 = m
+\ENDTHEOREM
+\THEOREM TIMES2 arithmetic
+|- !n. 2 * n = n + n
+\ENDTHEOREM
+\THEOREM WOP arithmetic
+|- !P. (?n. P n) ==> (?n. P n /\ (!m. m < n ==> ~P m))
+\ENDTHEOREM
+\THEOREM ZERO\_DEF num
+|- 0 = ABS_num ZERO_REP
+\ENDTHEOREM
+\THEOREM ZERO\_DIV arithmetic
+|- !n. 0 < n ==> (0 DIV n = 0)
+\ENDTHEOREM
+\THEOREM ZERO\_LESS\_EQ arithmetic
+|- !n. 0 <= n
+\ENDTHEOREM
+\THEOREM ZERO\_LESS\_EXP arithmetic
+|- !m n. 0 < ((SUC n) EXP m)
+\ENDTHEOREM
+\THEOREM ZERO\_MOD arithmetic
+|- !n. 0 < n ==> (0 MOD n = 0)
+\ENDTHEOREM
+\THEOREM ZERO\_REP\_DEF num
+|- ZERO_REP = (@x. !y. ~(x = SUC_REP y))
+\ENDTHEOREM
+\section{Theorems about lists}
+\THEOREM ALL\_EL list
+|- (!P. ALL_EL P[] = T) /\
+   (!P x l. ALL_EL P(CONS x l) = P x /\ ALL_EL P l)
+\ENDTHEOREM
+\THEOREM ALL\_EL\_APPEND list
+|- !P l1 l2. ALL_EL P(APPEND l1 l2) = ALL_EL P l1 /\ ALL_EL P l2
+\ENDTHEOREM
+\THEOREM ALL\_EL\_BUTFIRSTN list
+|- !P l.
+    ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(BUTFIRSTN m l))
+\ENDTHEOREM
+\THEOREM ALL\_EL\_BUTLASTN list
+|- !P l. ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(BUTLASTN m l))
+\ENDTHEOREM
+\THEOREM ALL\_EL\_CONJ list
+|- !P Q l. ALL_EL(\x. P x /\ Q x)l = ALL_EL P l /\ ALL_EL Q l
+\ENDTHEOREM
+\THEOREM ALL\_EL\_FIRSTN list
+|- !P l. ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(FIRSTN m l))
+\ENDTHEOREM
+\THEOREM ALL\_EL\_FOLDL list
+|- !P l. ALL_EL P l = FOLDL(\l' x. l' /\ P x)T l
+\ENDTHEOREM
+\THEOREM ALL\_EL\_FOLDL\_MAP list
+|- !P l. ALL_EL P l = FOLDL $/\ T(MAP P l)
+\ENDTHEOREM
+\THEOREM ALL\_EL\_FOLDR list
+|- !P l. ALL_EL P l = FOLDR(\x l'. P x /\ l')T l
+\ENDTHEOREM
+\THEOREM ALL\_EL\_FOLDR\_MAP list
+|- !P l. ALL_EL P l = FOLDR $/\ T(MAP P l)
+\ENDTHEOREM
+\THEOREM ALL\_EL\_LASTN list
+|- !P l. ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(LASTN m l))
+\ENDTHEOREM
+\THEOREM ALL\_EL\_MAP list
+|- !P f l. ALL_EL P(MAP f l) = ALL_EL(P o f)l
+\ENDTHEOREM
+\THEOREM ALL\_EL\_REPLICATE list
+|- !x n. ALL_EL($= x)(REPLICATE n x)
+\ENDTHEOREM
+\THEOREM ALL\_EL\_REVERSE list
+|- !P l. ALL_EL P(REVERSE l) = ALL_EL P l
+\ENDTHEOREM
+\THEOREM ALL\_EL\_SEG list
+|- !P l.
+    ALL_EL P l ==> (!m k. (m + k) <= (LENGTH l) ==> ALL_EL P(SEG m k l))
+\ENDTHEOREM
+\THEOREM ALL\_EL\_SNOC list
+|- !P x l. ALL_EL P(SNOC x l) = ALL_EL P l /\ P x
+\ENDTHEOREM
+\THEOREM AND\_EL\_DEF list
+|- AND_EL = ALL_EL I
+\ENDTHEOREM
+\THEOREM AND\_EL\_FOLDL list
+|- !l. AND_EL l = FOLDL $/\ T l
+\ENDTHEOREM
+\THEOREM AND\_EL\_FOLDR list
+|- !l. AND_EL l = FOLDR $/\ T l
+\ENDTHEOREM
+\THEOREM AP ltree
+|- (!l. AP[]l = []) /\
+   (!h t l. AP(CONS h t)l = CONS(h(HD l))(AP t(TL l)))
+\ENDTHEOREM
+
+\THEOREM APPEND list
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+\ENDTHEOREM
+\THEOREM APPEND\_ASSOC list
+|- !l1 l2 l3. APPEND l1(APPEND l2 l3) = APPEND(APPEND l1 l2)l3
+\ENDTHEOREM
+\THEOREM APPEND\_BUTLASTN\_BUTFIRSTN list
+|- !m n l.
+    (m + n = LENGTH l) ==> (APPEND(BUTLASTN m l)(BUTFIRSTN n l) = l)
+\ENDTHEOREM
+\THEOREM APPEND\_BUTLASTN\_LASTN list
+|- !n l. n <= (LENGTH l) ==> (APPEND(BUTLASTN n l)(LASTN n l) = l)
+\ENDTHEOREM
+\THEOREM APPEND\_BUTLAST\_LAST list
+|- !l. ~(l = []) ==> (APPEND(BUTLAST l)[LAST l] = l)
+\ENDTHEOREM
+\THEOREM APPEND\_FIRSTN\_BUTFIRSTN list
+|- !n l. n <= (LENGTH l) ==> (APPEND(FIRSTN n l)(BUTFIRSTN n l) = l)
+\ENDTHEOREM
+\THEOREM APPEND\_FIRSTN\_LASTN list
+|- !m n l. (m + n = LENGTH l) ==> (APPEND(FIRSTN n l)(LASTN m l) = l)
+\ENDTHEOREM
+\THEOREM APPEND\_FOLDL list
+|- !l1 l2. APPEND l1 l2 = FOLDL(\l' x. SNOC x l')l1 l2
+\ENDTHEOREM
+\THEOREM APPEND\_FOLDR list
+|- !l1 l2. APPEND l1 l2 = FOLDR CONS l2 l1
+\ENDTHEOREM
+\THEOREM APPEND\_LENGTH\_EQ list
+|- !l1 l1'.
+    (LENGTH l1 = LENGTH l1') ==>
+    (!l2 l2'.
+      (LENGTH l2 = LENGTH l2') ==>
+      ((APPEND l1 l2 = APPEND l1' l2') = (l1 = l1') /\ (l2 = l2')))
+\ENDTHEOREM
+\THEOREM APPEND\_NIL list
+|- (!l. APPEND l[] = l) /\ (!l. APPEND[]l = l)
+\ENDTHEOREM
+\THEOREM APPEND\_SNOC list
+|- !l1 x l2. APPEND l1(SNOC x l2) = SNOC x(APPEND l1 l2)
+\ENDTHEOREM
+\THEOREM ASSOC\_APPEND list
+|- ASSOC APPEND
+\ENDTHEOREM
+\THEOREM ASSOC\_FOLDL\_FLAT list
+|- !f.
+    ASSOC f ==>
+    (!e.
+      RIGHT_ID f e ==>
+      (!l. FOLDL f e(FLAT l) = FOLDL f e(MAP(FOLDL f e)l)))
+\ENDTHEOREM
+\THEOREM ASSOC\_FOLDR\_FLAT list
+|- !f.
+    ASSOC f ==>
+    (!e.
+      LEFT_ID f e ==>
+      (!l. FOLDR f e(FLAT l) = FOLDR f e(MAP(FOLDR f e)l)))
+\ENDTHEOREM
+\THEOREM BUTFIRSTN list
+|- (!l. BUTFIRSTN 0 l = l) /\
+   (!n x l. BUTFIRSTN(SUC n)(CONS x l) = BUTFIRSTN n l)
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_APPEND1 list
+|- !n l1.
+    n <= (LENGTH l1) ==>
+    (!l2. BUTFIRSTN n(APPEND l1 l2) = APPEND(BUTFIRSTN n l1)l2)
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_APPEND2 list
+|- !l1 n.
+    (LENGTH l1) <= n ==>
+    (!l2. BUTFIRSTN n(APPEND l1 l2) = BUTFIRSTN(n - (LENGTH l1))l2)
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_BUTFIRSTN list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==>
+    (BUTFIRSTN n(BUTFIRSTN m l) = BUTFIRSTN(n + m)l)
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_LASTN list
+|- !n l. n <= (LENGTH l) ==> (BUTFIRSTN n l = LASTN((LENGTH l) - n)l)
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_LENGTH\_APPEND list
+|- !l1 l2. BUTFIRSTN(LENGTH l1)(APPEND l1 l2) = l2
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_LENGTH\_NIL list
+|- !l. BUTFIRSTN(LENGTH l)l = []
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_REVERSE list
+|- !n l.
+    n <= (LENGTH l) ==> (BUTFIRSTN n(REVERSE l) = REVERSE(BUTLASTN n l))
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_SEG list
+|- !n l. n <= (LENGTH l) ==> (BUTFIRSTN n l = SEG((LENGTH l) - n)n l)
+\ENDTHEOREM
+\THEOREM BUTFIRSTN\_SNOC list
+|- !n l.
+    n <= (LENGTH l) ==>
+    (!x. BUTFIRSTN n(SNOC x l) = SNOC x(BUTFIRSTN n l))
+\ENDTHEOREM
+\THEOREM BUTLAST list
+|- !x l. BUTLAST(SNOC x l) = l
+\ENDTHEOREM
+\THEOREM BUTLASTN list
+|- (!l. BUTLASTN 0 l = l) /\
+   (!n x l. BUTLASTN(SUC n)(SNOC x l) = BUTLASTN n l)
+\ENDTHEOREM
+\THEOREM BUTLASTN\_1 list
+|- !l. ~(l = []) ==> (BUTLASTN 1 l = BUTLAST l)
+\ENDTHEOREM
+\THEOREM BUTLASTN\_APPEND1 list
+|- !l2 n.
+    (LENGTH l2) <= n ==>
+    (!l1. BUTLASTN n(APPEND l1 l2) = BUTLASTN(n - (LENGTH l2))l1)
+\ENDTHEOREM
+\THEOREM BUTLASTN\_APPEND2 list
+|- !n l1 l2.
+    n <= (LENGTH l2) ==>
+    (BUTLASTN n(APPEND l1 l2) = APPEND l1(BUTLASTN n l2))
+\ENDTHEOREM
+\THEOREM BUTLASTN\_BUTLAST list
+|- !n l.
+    n < (LENGTH l) ==> (BUTLASTN n(BUTLAST l) = BUTLAST(BUTLASTN n l))
+\ENDTHEOREM
+\THEOREM BUTLASTN\_BUTLASTN list
+|- !m n l.
+    (n + m) <= (LENGTH l) ==>
+    (BUTLASTN n(BUTLASTN m l) = BUTLASTN(n + m)l)
+\ENDTHEOREM
+\THEOREM BUTLASTN\_CONS list
+|- !n l.
+    n <= (LENGTH l) ==>
+    (!x. BUTLASTN n(CONS x l) = CONS x(BUTLASTN n l))
+\ENDTHEOREM
+\THEOREM BUTLASTN\_FIRSTN list
+|- !n l. n <= (LENGTH l) ==> (BUTLASTN n l = FIRSTN((LENGTH l) - n)l)
+\ENDTHEOREM
+\THEOREM BUTLASTN\_LASTN list
+|- !m n l.
+    m <= n /\ n <= (LENGTH l) ==>
+    (BUTLASTN m(LASTN n l) = LASTN(n - m)(BUTLASTN m l))
+\ENDTHEOREM
+\THEOREM BUTLASTN\_LASTN\_NIL list
+|- !n l. n <= (LENGTH l) ==> (BUTLASTN n(LASTN n l) = [])
+\ENDTHEOREM
+\THEOREM BUTLASTN\_LENGTH\_APPEND list
+|- !l2 l1. BUTLASTN(LENGTH l2)(APPEND l1 l2) = l1
+\ENDTHEOREM
+\THEOREM BUTLASTN\_LENGTH\_CONS list
+|- !l x. BUTLASTN(LENGTH l)(CONS x l) = [x]
+\ENDTHEOREM
+\THEOREM BUTLASTN\_LENGTH\_NIL list
+|- !l. BUTLASTN(LENGTH l)l = []
+\ENDTHEOREM
+\THEOREM BUTLASTN\_MAP list
+|- !n l.
+    n <= (LENGTH l) ==> (!f. BUTLASTN n(MAP f l) = MAP f(BUTLASTN n l))
+\ENDTHEOREM
+\THEOREM BUTLASTN\_REVERSE list
+|- !n l.
+    n <= (LENGTH l) ==> (BUTLASTN n(REVERSE l) = REVERSE(BUTFIRSTN n l))
+\ENDTHEOREM
+\THEOREM BUTLASTN\_SEG list
+|- !n l. n <= (LENGTH l) ==> (BUTLASTN n l = SEG((LENGTH l) - n)0 l)
+\ENDTHEOREM
+\THEOREM BUTLASTN\_SUC\_BUTLAST list
+|- !n l. n < (LENGTH l) ==> (BUTLASTN(SUC n)l = BUTLASTN n(BUTLAST l))
+\ENDTHEOREM
+\THEOREM BUTLAST\_DEF list
+|- !l. BUTLAST l = SEG(PRE(LENGTH l))0 l
+\ENDTHEOREM
+\THEOREM COMM\_ASSOC\_FOLDL\_REVERSE list
+|- !f. COMM f ==> ASSOC f ==> (!e l. FOLDL f e(REVERSE l) = FOLDL f e l)
+\ENDTHEOREM
+\THEOREM COMM\_ASSOC\_FOLDR\_REVERSE list
+|- !f. COMM f ==> ASSOC f ==> (!e l. FOLDR f e(REVERSE l) = FOLDR f e l)
+\ENDTHEOREM
+\THEOREM COMM\_MONOID\_FOLDL list
+|- !f.
+    COMM f ==>
+    (!e'. MONOID f e' ==> (!e l. FOLDL f e l = f e(FOLDL f e' l)))
+\ENDTHEOREM
+\THEOREM COMM\_MONOID\_FOLDR list
+|- !f.
+    COMM f ==>
+    (!e'. MONOID f e' ==> (!e l. FOLDR f e l = f e(FOLDR f e' l)))
+\ENDTHEOREM
+\THEOREM CONS list
+|- !l. ~NULL l ==> (CONS(HD l)(TL l) = l)
+\ENDTHEOREM
+\THEOREM CONS\_11 list
+|- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+\ENDTHEOREM
+\THEOREM CONS\_APPEND list
+|- !x l. CONS x l = APPEND[x]l
+\ENDTHEOREM
+\THEOREM CONS\_DEF list
+|- !h t.
+    CONS h t =
+    ABS_list
+    ((\m. ((m = 0) => h | FST(REP_list t)(PRE m))),SUC(SND(REP_list t)))
+\ENDTHEOREM
+\THEOREM EL list
+|- (!l. EL 0 l = HD l) /\ (!l n. EL(SUC n)l = EL n(TL l))
+\ENDTHEOREM
+\THEOREM ELL list
+|- (!l. ELL 0 l = LAST l) /\ (!n l. ELL(SUC n)l = ELL n(BUTLAST l))
+\ENDTHEOREM
+\THEOREM ELL\_0\_SNOC list
+|- !l x. ELL 0(SNOC x l) = x
+\ENDTHEOREM
+\THEOREM ELL\_APPEND1 list
+|- !l2 n.
+    (LENGTH l2) <= n ==>
+    (!l1. ELL n(APPEND l1 l2) = ELL(n - (LENGTH l2))l1)
+\ENDTHEOREM
+\THEOREM ELL\_APPEND2 list
+|- !n l2. n < (LENGTH l2) ==> (!l1. ELL n(APPEND l1 l2) = ELL n l2)
+\ENDTHEOREM
+\THEOREM ELL\_CONS list
+|- !n l. n < (LENGTH l) ==> (!x. ELL n(CONS x l) = ELL n l)
+\ENDTHEOREM
+\THEOREM ELL\_EL list
+|- !n l. n < (LENGTH l) ==> (ELL n l = EL(PRE((LENGTH l) - n))l)
+\ENDTHEOREM
+\THEOREM ELL\_IS\_EL list
+|- !n l. n < (LENGTH l) ==> IS_EL(EL n l)l
+\ENDTHEOREM
+\THEOREM ELL\_LAST list
+|- !l. ~NULL l ==> (ELL 0 l = LAST l)
+\ENDTHEOREM
+\THEOREM ELL\_LENGTH\_APPEND list
+|- !l1 l2. ~NULL l1 ==> (ELL(LENGTH l2)(APPEND l1 l2) = LAST l1)
+\ENDTHEOREM
+\THEOREM ELL\_LENGTH\_CONS list
+|- !l x. ELL(LENGTH l)(CONS x l) = x
+\ENDTHEOREM
+\THEOREM ELL\_LENGTH\_SNOC list
+|- !l x. ELL(LENGTH l)(SNOC x l) = (NULL l => x | HD l)
+\ENDTHEOREM
+\THEOREM ELL\_MAP list
+|- !n l f. n < (LENGTH l) ==> (ELL n(MAP f l) = f(ELL n l))
+\ENDTHEOREM
+\THEOREM ELL\_PRE\_LENGTH list
+|- !l. ~(l = []) ==> (ELL(PRE(LENGTH l))l = HD l)
+\ENDTHEOREM
+\THEOREM ELL\_REVERSE list
+|- !n l.
+    n < (LENGTH l) ==> (ELL n(REVERSE l) = ELL(PRE((LENGTH l) - n))l)
+\ENDTHEOREM
+\THEOREM ELL\_REVERSE\_EL list
+|- !n l. n < (LENGTH l) ==> (ELL n(REVERSE l) = EL n l)
+\ENDTHEOREM
+\THEOREM ELL\_SEG list
+|- !n l. n < (LENGTH l) ==> (ELL n l = HD(SEG 1(PRE((LENGTH l) - n))l))
+\ENDTHEOREM
+\THEOREM ELL\_SNOC list
+|- !n. 0 < n ==> (!x l. ELL n(SNOC x l) = ELL(PRE n)l)
+\ENDTHEOREM
+\THEOREM ELL\_SUC\_SNOC list
+|- !n x l. ELL(SUC n)(SNOC x l) = ELL n l
+\ENDTHEOREM
+\THEOREM EL\_APPEND1 list
+|- !n l1 l2. n < (LENGTH l1) ==> (EL n(APPEND l1 l2) = EL n l1)
+\ENDTHEOREM
+\THEOREM EL\_APPEND2 list
+|- !l1 n.
+    (LENGTH l1) <= n ==>
+    (!l2. EL n(APPEND l1 l2) = EL(n - (LENGTH l1))l2)
+\ENDTHEOREM
+\THEOREM EL\_CONS list
+|- !n. 0 < n ==> (!x l. EL n(CONS x l) = EL(PRE n)l)
+\ENDTHEOREM
+\THEOREM EL\_ELL list
+|- !n l. n < (LENGTH l) ==> (EL n l = ELL(PRE((LENGTH l) - n))l)
+\ENDTHEOREM
+\THEOREM EL\_IS\_EL list
+|- !n l. n < (LENGTH l) ==> IS_EL(EL n l)l
+\ENDTHEOREM
+\THEOREM EL\_LENGTH\_APPEND list
+|- !l2 l1. ~NULL l2 ==> (EL(LENGTH l1)(APPEND l1 l2) = HD l2)
+\ENDTHEOREM
+\THEOREM EL\_LENGTH\_SNOC list
+|- !l x. EL(LENGTH l)(SNOC x l) = x
+\ENDTHEOREM
+\THEOREM EL\_MAP list
+|- !n l. n < (LENGTH l) ==> (!f. EL n(MAP f l) = f(EL n l))
+\ENDTHEOREM
+\THEOREM EL\_PRE\_LENGTH list
+|- !l. ~(l = []) ==> (EL(PRE(LENGTH l))l = LAST l)
+\ENDTHEOREM
+\THEOREM EL\_REVERSE list
+|- !n l. n < (LENGTH l) ==> (EL n(REVERSE l) = EL(PRE((LENGTH l) - n))l)
+\ENDTHEOREM
+\THEOREM EL\_REVERSE\_ELL list
+|- !n l. n < (LENGTH l) ==> (EL n(REVERSE l) = ELL n l)
+\ENDTHEOREM
+\THEOREM EL\_SEG list
+|- !n l. n < (LENGTH l) ==> (EL n l = HD(SEG 1 n l))
+\ENDTHEOREM
+\THEOREM EL\_SNOC list
+|- !n l. n < (LENGTH l) ==> (!x. EL n(SNOC x l) = EL n l)
+\ENDTHEOREM
+\THEOREM EQ\_LIST list
+|- !h1 h2.
+    (h1 = h2) ==> (!l1 l2. (l1 = l2) ==> (CONS h1 l1 = CONS h2 l2))
+\ENDTHEOREM
+\THEOREM FCOMM\_FOLDL\_APPEND list
+|- !f g.
+    FCOMM f g ==>
+    (!e.
+      RIGHT_ID g e ==>
+      (!l1 l2. FOLDL f e(APPEND l1 l2) = g(FOLDL f e l1)(FOLDL f e l2)))
+\ENDTHEOREM
+\THEOREM FCOMM\_FOLDL\_FLAT list
+|- !f g.
+    FCOMM f g ==>
+    (!e.
+      RIGHT_ID g e ==>
+      (!l. FOLDL f e(FLAT l) = FOLDL g e(MAP(FOLDL f e)l)))
+\ENDTHEOREM
+\THEOREM FCOMM\_FOLDR\_APPEND list
+|- !g f.
+    FCOMM g f ==>
+    (!e.
+      LEFT_ID g e ==>
+      (!l1 l2. FOLDR f e(APPEND l1 l2) = g(FOLDR f e l1)(FOLDR f e l2)))
+\ENDTHEOREM
+\THEOREM FCOMM\_FOLDR\_FLAT list
+|- !g f.
+    FCOMM g f ==>
+    (!e.
+      LEFT_ID g e ==>
+      (!l. FOLDR f e(FLAT l) = FOLDR g e(MAP(FOLDR f e)l)))
+\ENDTHEOREM
+\THEOREM FILTER list
+|- (!P. FILTER P[] = []) /\
+   (!P x l.
+     FILTER P(CONS x l) = (P x => CONS x(FILTER P l) | FILTER P l))
+\ENDTHEOREM
+\THEOREM FILTER\_APPEND list
+|- !f l1 l2. FILTER f(APPEND l1 l2) = APPEND(FILTER f l1)(FILTER f l2)
+\ENDTHEOREM
+\THEOREM FILTER\_COMM list
+|- !f1 f2 l. FILTER f1(FILTER f2 l) = FILTER f2(FILTER f1 l)
+\ENDTHEOREM
+\THEOREM FILTER\_FILTER list
+|- !P Q l. FILTER P(FILTER Q l) = FILTER(\x. P x /\ Q x)l
+\ENDTHEOREM
+\THEOREM FILTER\_FLAT list
+|- !P l. FILTER P(FLAT l) = FLAT(MAP(FILTER P)l)
+\ENDTHEOREM
+\THEOREM FILTER\_FOLDL list
+|- !P l. FILTER P l = FOLDL(\l' x. (P x => SNOC x l' | l'))[]l
+\ENDTHEOREM
+\THEOREM FILTER\_FOLDR list
+|- !P l. FILTER P l = FOLDR(\x l'. (P x => CONS x l' | l'))[]l
+\ENDTHEOREM
+\THEOREM FILTER\_IDEM list
+|- !f l. FILTER f(FILTER f l) = FILTER f l
+\ENDTHEOREM
+\THEOREM FILTER\_MAP list
+|- !f1 f2 l. FILTER f1(MAP f2 l) = MAP f2(FILTER(f1 o f2)l)
+\ENDTHEOREM
+\THEOREM FILTER\_REVERSE list
+|- !P l. FILTER P(REVERSE l) = REVERSE(FILTER P l)
+\ENDTHEOREM
+\THEOREM FILTER\_SNOC list
+|- !P x l. FILTER P(SNOC x l) = (P x => SNOC x(FILTER P l) | FILTER P l)
+\ENDTHEOREM
+\THEOREM FIRSTN list
+|- (!l. FIRSTN 0 l = []) /\
+   (!n x l. FIRSTN(SUC n)(CONS x l) = CONS x(FIRSTN n l))
+\ENDTHEOREM
+\THEOREM FIRSTN\_APPEND1 list
+|- !n l1.
+    n <= (LENGTH l1) ==> (!l2. FIRSTN n(APPEND l1 l2) = FIRSTN n l1)
+\ENDTHEOREM
+\THEOREM FIRSTN\_APPEND2 list
+|- !l1 n.
+    (LENGTH l1) <= n ==>
+    (!l2. FIRSTN n(APPEND l1 l2) = APPEND l1(FIRSTN(n - (LENGTH l1))l2))
+\ENDTHEOREM
+\THEOREM FIRSTN\_BUTLASTN list
+|- !n l. n <= (LENGTH l) ==> (FIRSTN n l = BUTLASTN((LENGTH l) - n)l)
+\ENDTHEOREM
+\THEOREM FIRSTN\_FIRSTN list
+|- !m l.
+    m <= (LENGTH l) ==>
+    (!n. n <= m ==> (FIRSTN n(FIRSTN m l) = FIRSTN n l))
+\ENDTHEOREM
+\THEOREM FIRSTN\_LENGTH\_APPEND list
+|- !l1 l2. FIRSTN(LENGTH l1)(APPEND l1 l2) = l1
+\ENDTHEOREM
+\THEOREM FIRSTN\_LENGTH\_ID list
+|- !l. FIRSTN(LENGTH l)l = l
+\ENDTHEOREM
+\THEOREM FIRSTN\_REVERSE list
+|- !n l. n <= (LENGTH l) ==> (FIRSTN n(REVERSE l) = REVERSE(LASTN n l))
+\ENDTHEOREM
+\THEOREM FIRSTN\_SEG list
+|- !n l. n <= (LENGTH l) ==> (FIRSTN n l = SEG n 0 l)
+\ENDTHEOREM
+\THEOREM FIRSTN\_SNOC list
+|- !n l. n <= (LENGTH l) ==> (!x. FIRSTN n(SNOC x l) = FIRSTN n l)
+\ENDTHEOREM
+\THEOREM FLAT list
+|- (FLAT[] = []) /\ (!h t. FLAT(CONS h t) = APPEND h(FLAT t))
+\ENDTHEOREM
+\THEOREM FLAT\_APPEND list
+|- !l1 l2. FLAT(APPEND l1 l2) = APPEND(FLAT l1)(FLAT l2)
+\ENDTHEOREM
+\THEOREM FLAT\_FLAT list
+|- !l. FLAT(FLAT l) = FLAT(MAP FLAT l)
+\ENDTHEOREM
+\THEOREM FLAT\_FOLDL list
+|- !l. FLAT l = FOLDL APPEND[]l
+\ENDTHEOREM
+\THEOREM FLAT\_FOLDR list
+|- !l. FLAT l = FOLDR APPEND[]l
+\ENDTHEOREM
+\THEOREM FLAT\_REVERSE list
+|- !l. FLAT(REVERSE l) = REVERSE(FLAT(MAP REVERSE l))
+\ENDTHEOREM
+\THEOREM FLAT\_SNOC list
+|- !x l. FLAT(SNOC x l) = APPEND(FLAT l)x
+\ENDTHEOREM
+\THEOREM FOLDL list
+|- (!f e. FOLDL f e[] = e) /\
+   (!f e x l. FOLDL f e(CONS x l) = FOLDL f(f e x)l)
+\ENDTHEOREM
+\THEOREM FOLDL\_APPEND list
+|- !f e l1 l2. FOLDL f e(APPEND l1 l2) = FOLDL f(FOLDL f e l1)l2
+\ENDTHEOREM
+\THEOREM FOLDL\_FILTER list
+|- !f e P l. FOLDL f e(FILTER P l) = FOLDL(\x y. (P y => f x y | x))e l
+\ENDTHEOREM
+\THEOREM FOLDL\_FOLDR\_REVERSE list
+|- !f e l. FOLDL f e l = FOLDR(\x y. f y x)e(REVERSE l)
+\ENDTHEOREM
+\THEOREM FOLDL\_MAP list
+|- !f e g l. FOLDL f e(MAP g l) = FOLDL(\x y. f x(g y))e l
+\ENDTHEOREM
+\THEOREM FOLDL\_REVERSE list
+|- !f e l. FOLDL f e(REVERSE l) = FOLDR(\x y. f y x)e l
+\ENDTHEOREM
+\THEOREM FOLDL\_SINGLE list
+|- !f e x. FOLDL f e[x] = f e x
+\ENDTHEOREM
+\THEOREM FOLDL\_SNOC list
+|- !f e x l. FOLDL f e(SNOC x l) = f(FOLDL f e l)x
+\ENDTHEOREM
+\THEOREM FOLDL\_SNOC\_NIL list
+|- !l. FOLDL(\xs x. SNOC x xs)[]l = l
+\ENDTHEOREM
+\THEOREM FOLDR list
+|- (!f e. FOLDR f e[] = e) /\
+   (!f e x l. FOLDR f e(CONS x l) = f x(FOLDR f e l))
+\ENDTHEOREM
+\THEOREM FOLDR\_APPEND list
+|- !f e l1 l2. FOLDR f e(APPEND l1 l2) = FOLDR f(FOLDR f e l2)l1
+\ENDTHEOREM
+\THEOREM FOLDR\_CONS\_NIL list
+|- !l. FOLDR CONS[]l = l
+\ENDTHEOREM
+\THEOREM FOLDR\_FILTER list
+|- !f e P l. FOLDR f e(FILTER P l) = FOLDR(\x y. (P x => f x y | y))e l
+\ENDTHEOREM
+\THEOREM FOLDR\_FILTER\_REVERSE list
+|- !f.
+    (!a b c. f a(f b c) = f b(f a c)) ==>
+    (!e P l. FOLDR f e(FILTER P(REVERSE l)) = FOLDR f e(FILTER P l))
+\ENDTHEOREM
+\THEOREM FOLDR\_FOLDL list
+|- !f e. MONOID f e ==> (!l. FOLDR f e l = FOLDL f e l)
+\ENDTHEOREM
+\THEOREM FOLDR\_FOLDL\_REVERSE list
+|- !f e l. FOLDR f e l = FOLDL(\x y. f y x)e(REVERSE l)
+\ENDTHEOREM
+\THEOREM FOLDR\_MAP list
+|- !f e g l. FOLDR f e(MAP g l) = FOLDR(\x y. f(g x)y)e l
+\ENDTHEOREM
+\THEOREM FOLDR\_MAP\_REVERSE list
+|- !f.
+    (!a b c. f a(f b c) = f b(f a c)) ==>
+    (!e g l. FOLDR f e(MAP g(REVERSE l)) = FOLDR f e(MAP g l))
+\ENDTHEOREM
+\THEOREM FOLDR\_REVERSE list
+|- !f e l. FOLDR f e(REVERSE l) = FOLDL(\x y. f y x)e l
+\ENDTHEOREM
+\THEOREM FOLDR\_SINGLE list
+|- !f e x. FOLDR f e[x] = f x e
+\ENDTHEOREM
+\THEOREM FOLDR\_SNOC list
+|- !f e x l. FOLDR f e(SNOC x l) = FOLDR f(f x e)l
+\ENDTHEOREM
+\THEOREM GENLIST list
+|- (!f. GENLIST f 0 = []) /\
+   (!f n. GENLIST f(SUC n) = SNOC(f n)(GENLIST f n))
+\ENDTHEOREM
+\THEOREM HD list
+|- !h t. HD(CONS h t) = h
+\ENDTHEOREM
+\THEOREM IS\_EL list
+|- (!x. IS_EL x[] = F) /\
+   (!y x l. IS_EL y(CONS x l) = (y = x) \/ IS_EL y l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_APPEND list
+|- !l1 l2 x. IS_EL x(APPEND l1 l2) = IS_EL x l1 \/ IS_EL x l2
+\ENDTHEOREM
+\THEOREM IS\_EL\_BUTFIRSTN list
+|- !m l. m <= (LENGTH l) ==> (!x. IS_EL x(BUTFIRSTN m l) ==> IS_EL x l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_BUTLASTN list
+|- !m l. m <= (LENGTH l) ==> (!x. IS_EL x(BUTLASTN m l) ==> IS_EL x l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_DEF list
+|- !x l. IS_EL x l = SOME_EL($= x)l
+\ENDTHEOREM
+\THEOREM IS\_EL\_FILTER list
+|- !P x. P x ==> (!l. IS_EL x(FILTER P l) = IS_EL x l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_FIRSTN list
+|- !m l. m <= (LENGTH l) ==> (!x. IS_EL x(FIRSTN m l) ==> IS_EL x l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_FOLDL list
+|- !y l. IS_EL y l = FOLDL(\l' x. l' \/ (y = x))F l
+\ENDTHEOREM
+\THEOREM IS\_EL\_FOLDL\_MAP list
+|- !x l. IS_EL x l = FOLDL $\/ F(MAP($= x)l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_FOLDR list
+|- !y l. IS_EL y l = FOLDR(\x l'. (y = x) \/ l')F l
+\ENDTHEOREM
+\THEOREM IS\_EL\_FOLDR\_MAP list
+|- !x l. IS_EL x l = FOLDR $\/ F(MAP($= x)l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_LASTN list
+|- !m l. m <= (LENGTH l) ==> (!x. IS_EL x(LASTN m l) ==> IS_EL x l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_REPLICATE list
+|- !n. 0 < n ==> (!x. IS_EL x(REPLICATE n x))
+\ENDTHEOREM
+\THEOREM IS\_EL\_REVERSE list
+|- !x l. IS_EL x(REVERSE l) = IS_EL x l
+\ENDTHEOREM
+\THEOREM IS\_EL\_SEG list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==> (!x. IS_EL x(SEG n m l) ==> IS_EL x l)
+\ENDTHEOREM
+\THEOREM IS\_EL\_SNOC list
+|- !y x l. IS_EL y(SNOC x l) = (y = x) \/ IS_EL y l
+\ENDTHEOREM
+\THEOREM IS\_EL\_SOME\_EL list
+|- !x l. IS_EL x l = SOME_EL($= x)l
+\ENDTHEOREM
+\THEOREM IS\_list\_REP list
+|- !r. IS_list_REP r = (?f n. r = (\m. (m < n => f m | (@x. T))),n)
+\ENDTHEOREM
+\THEOREM IS\_PREFIX list
+|- (!l. IS_PREFIX l[] = T) /\
+   (!x l. IS_PREFIX[](CONS x l) = F) /\
+   (!x1 l1 x2 l2.
+     IS_PREFIX(CONS x1 l1)(CONS x2 l2) = (x1 = x2) /\ IS_PREFIX l1 l2)
+\ENDTHEOREM
+\THEOREM IS\_PREFIX\_APPEND list
+|- !l1 l2. IS_PREFIX l1 l2 = (?l. l1 = APPEND l2 l)
+\ENDTHEOREM
+\THEOREM IS\_PREFIX\_IS\_SUBLIST list
+|- !l1 l2. IS_PREFIX l1 l2 ==> IS_SUBLIST l1 l2
+\ENDTHEOREM
+\THEOREM IS\_PREFIX\_PREFIX list
+|- !P l. IS_PREFIX l(PREFIX P l)
+\ENDTHEOREM
+\THEOREM IS\_PREFIX\_REVERSE list
+|- !l1 l2. IS_PREFIX(REVERSE l1)(REVERSE l2) = IS_SUFFIX l1 l2
+\ENDTHEOREM
+\THEOREM IS\_SUBLIST list
+|- (!l. IS_SUBLIST l[] = T) /\
+   (!x l. IS_SUBLIST[](CONS x l) = F) /\
+   (!x1 l1 x2 l2.
+     IS_SUBLIST(CONS x1 l1)(CONS x2 l2) =
+     (x1 = x2) /\ IS_PREFIX l1 l2 \/ IS_SUBLIST l1(CONS x2 l2))
+\ENDTHEOREM
+\THEOREM IS\_SUBLIST\_APPEND list
+|- !l1 l2. IS_SUBLIST l1 l2 = (?l l'. l1 = APPEND l(APPEND l2 l'))
+\ENDTHEOREM
+\THEOREM IS\_SUBLIST\_REVERSE list
+|- !l1 l2. IS_SUBLIST(REVERSE l1)(REVERSE l2) = IS_SUBLIST l1 l2
+\ENDTHEOREM
+\THEOREM IS\_SUFFIX list
+|- (!l. IS_SUFFIX l[] = T) /\
+   (!x l. IS_SUFFIX[](SNOC x l) = F) /\
+   (!x1 l1 x2 l2.
+     IS_SUFFIX(SNOC x1 l1)(SNOC x2 l2) = (x1 = x2) /\ IS_SUFFIX l1 l2)
+\ENDTHEOREM
+\THEOREM IS\_SUFFIX\_APPEND list
+|- !l1 l2. IS_SUFFIX l1 l2 = (?l. l1 = APPEND l l2)
+\ENDTHEOREM
+\THEOREM IS\_SUFFIX\_IS\_SUBLIST list
+|- !l1 l2. IS_SUFFIX l1 l2 ==> IS_SUBLIST l1 l2
+\ENDTHEOREM
+\THEOREM IS\_SUFFIX\_REVERSE list
+|- !l1 l2. IS_SUFFIX(REVERSE l1)(REVERSE l2) = IS_PREFIX l1 l2
+\ENDTHEOREM
+\THEOREM LAST list
+|- !x l. LAST(SNOC x l) = x
+\ENDTHEOREM
+\THEOREM LASTN list
+|- (!l. LASTN 0 l = []) /\
+   (!n x l. LASTN(SUC n)(SNOC x l) = SNOC x(LASTN n l))
+\ENDTHEOREM
+\THEOREM LASTN\_1 list
+|- !l. ~(l = []) ==> (LASTN 1 l = [LAST l])
+\ENDTHEOREM
+\THEOREM LASTN\_APPEND1 list
+|- !l2 n.
+    (LENGTH l2) <= n ==>
+    (!l1. LASTN n(APPEND l1 l2) = APPEND(LASTN(n - (LENGTH l2))l1)l2)
+\ENDTHEOREM
+\THEOREM LASTN\_APPEND2 list
+|- !n l2. n <= (LENGTH l2) ==> (!l1. LASTN n(APPEND l1 l2) = LASTN n l2)
+\ENDTHEOREM
+\THEOREM LASTN\_BUTFIRSTN list
+|- !n l. n <= (LENGTH l) ==> (LASTN n l = BUTFIRSTN((LENGTH l) - n)l)
+\ENDTHEOREM
+\THEOREM LASTN\_BUTLASTN list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==>
+    (LASTN n(BUTLASTN m l) = BUTLASTN m(LASTN(n + m)l))
+\ENDTHEOREM
+\THEOREM LASTN\_CONS list
+|- !n l. n <= (LENGTH l) ==> (!x. LASTN n(CONS x l) = LASTN n l)
+\ENDTHEOREM
+\THEOREM LASTN\_LASTN list
+|- !l n m.
+    m <= (LENGTH l) ==> n <= m ==> (LASTN n(LASTN m l) = LASTN n l)
+\ENDTHEOREM
+\THEOREM LASTN\_LENGTH\_APPEND list
+|- !l1 l2. LASTN(LENGTH l2)(APPEND l1 l2) = l2
+\ENDTHEOREM
+\THEOREM LASTN\_LENGTH\_ID list
+|- !l. LASTN(LENGTH l)l = l
+\ENDTHEOREM
+\THEOREM LASTN\_MAP list
+|- !n l. n <= (LENGTH l) ==> (!f. LASTN n(MAP f l) = MAP f(LASTN n l))
+\ENDTHEOREM
+\THEOREM LASTN\_REVERSE list
+|- !n l. n <= (LENGTH l) ==> (LASTN n(REVERSE l) = REVERSE(FIRSTN n l))
+\ENDTHEOREM
+\THEOREM LASTN\_SEG list
+|- !n l. n <= (LENGTH l) ==> (LASTN n l = SEG n((LENGTH l) - n)l)
+\ENDTHEOREM
+\THEOREM LAST\_DEF list
+|- !l. LAST l = HD(SEG 1(PRE(LENGTH l))l)
+\ENDTHEOREM
+\THEOREM LAST\_LASTN\_LAST list
+|- !n l. n <= (LENGTH l) ==> 0 < n ==> (LAST(LASTN n l) = LAST l)
+\ENDTHEOREM
+\THEOREM LENGTH list
+|- (LENGTH[] = 0) /\ (!h t. LENGTH(CONS h t) = SUC(LENGTH t))
+\ENDTHEOREM
+\THEOREM LENGTH\_APPEND list
+|- !l1 l2. LENGTH(APPEND l1 l2) = (LENGTH l1) + (LENGTH l2)
+\ENDTHEOREM
+\THEOREM LENGTH\_BUTFIRSTN list
+|- !n l. n <= (LENGTH l) ==> (LENGTH(BUTFIRSTN n l) = (LENGTH l) - n)
+\ENDTHEOREM
+\THEOREM LENGTH\_BUTLAST list
+|- !l. ~(l = []) ==> (LENGTH(BUTLAST l) = PRE(LENGTH l))
+\ENDTHEOREM
+\THEOREM LENGTH\_BUTLASTN list
+|- !n l. n <= (LENGTH l) ==> (LENGTH(BUTLASTN n l) = (LENGTH l) - n)
+\ENDTHEOREM
+\THEOREM LENGTH\_CONS list
+|- !l n.
+    (LENGTH l = SUC n) = (?h l'. (LENGTH l' = n) /\ (l = CONS h l'))
+\ENDTHEOREM
+\THEOREM LENGTH\_EQ list
+|- !x y. (x = y) ==> (LENGTH x = LENGTH y)
+\ENDTHEOREM
+\THEOREM LENGTH\_EQ\_CONS list
+|- !P n.
+    (!l. (LENGTH l = SUC n) ==> P l) =
+    (!l. (LENGTH l = n) ==> (\l. !x. P(CONS x l))l)
+\ENDTHEOREM
+\THEOREM LENGTH\_EQ\_NIL list
+|- !P. (!l. (LENGTH l = 0) ==> P l) = P[]
+\ENDTHEOREM
+\THEOREM LENGTH\_FIRSTN list
+|- !n l. n <= (LENGTH l) ==> (LENGTH(FIRSTN n l) = n)
+\ENDTHEOREM
+\THEOREM LENGTH\_FLAT list
+|- !l. LENGTH(FLAT l) = SUM(MAP LENGTH l)
+\ENDTHEOREM
+\THEOREM LENGTH\_FOLDL list
+|- !l. LENGTH l = FOLDL(\l' x. SUC l')0 l
+\ENDTHEOREM
+\THEOREM LENGTH\_FOLDR list
+|- !l. LENGTH l = FOLDR(\x l'. SUC l')0 l
+\ENDTHEOREM
+\THEOREM LENGTH\_GENLIST list
+|- !f n. LENGTH(GENLIST f n) = n
+\ENDTHEOREM
+\THEOREM LENGTH\_LASTN list
+|- !n l. n <= (LENGTH l) ==> (LENGTH(LASTN n l) = n)
+\ENDTHEOREM
+\THEOREM LENGTH\_MAP list
+|- !l f. LENGTH(MAP f l) = LENGTH l
+\ENDTHEOREM
+\THEOREM LENGTH\_MAP2 list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (!f.
+      (LENGTH(MAP2 f l1 l2) = LENGTH l1) /\
+      (LENGTH(MAP2 f l1 l2) = LENGTH l2))
+\ENDTHEOREM
+\THEOREM LENGTH\_NIL list
+|- !l. (LENGTH l = 0) = (l = [])
+\ENDTHEOREM
+\THEOREM LENGTH\_NOT\_NULL list
+|- !l. 0 < (LENGTH l) = ~NULL l
+\ENDTHEOREM
+\THEOREM LENGTH\_REPLICATE list
+|- !n x. LENGTH(REPLICATE n x) = n
+\ENDTHEOREM
+\THEOREM LENGTH\_REVERSE list
+|- !l. LENGTH(REVERSE l) = LENGTH l
+\ENDTHEOREM
+\THEOREM LENGTH\_SCANL list
+|- !f e l. LENGTH(SCANL f e l) = SUC(LENGTH l)
+\ENDTHEOREM
+\THEOREM LENGTH\_SCANR list
+|- !f e l. LENGTH(SCANR f e l) = SUC(LENGTH l)
+\ENDTHEOREM
+\THEOREM LENGTH\_SEG list
+|- !n k l. (n + k) <= (LENGTH l) ==> (LENGTH(SEG n k l) = n)
+\ENDTHEOREM
+\THEOREM LENGTH\_SNOC list
+|- !x l. LENGTH(SNOC x l) = SUC(LENGTH l)
+\ENDTHEOREM
+\THEOREM LENGTH\_UNZIP\_FST list
+|- !l. LENGTH(UNZIP_FST l) = LENGTH l
+\ENDTHEOREM
+\THEOREM LENGTH\_UNZIP\_SND list
+|- !l. LENGTH(UNZIP_SND l) = LENGTH l
+\ENDTHEOREM
+\THEOREM LENGTH\_ZIP list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (LENGTH(ZIP(l1,l2)) = LENGTH l1) /\ (LENGTH(ZIP(l1,l2)) = LENGTH l2)
+\ENDTHEOREM
+\THEOREM list\_Axiom list
+|- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+\ENDTHEOREM
+\THEOREM list\_CASES list
+|- !l. (l = []) \/ (?t h. l = CONS h t)
+\ENDTHEOREM
+\THEOREM list\_INDUCT list
+|- !P. P[] /\ (!t. P t ==> (!h. P(CONS h t))) ==> (!l. P l)
+\ENDTHEOREM
+\THEOREM list\_ISO\_DEF list
+|- (!a. ABS_list(REP_list a) = a) /\
+   (!r. IS_list_REP r = (REP_list(ABS_list r) = r))
+\ENDTHEOREM
+\THEOREM LIST\_NOT\_EQ list
+|- !l1 l2. ~(l1 = l2) ==> (!h1 h2. ~(CONS h1 l1 = CONS h2 l2))
+\ENDTHEOREM
+\THEOREM list\_TY\_DEF list
+|- ?rep. TYPE_DEFINITION IS_list_REP rep
+\ENDTHEOREM
+\THEOREM MAP list
+|- (!f. MAP f[] = []) /\ (!f h t. MAP f(CONS h t) = CONS(f h)(MAP f t))
+\ENDTHEOREM
+\THEOREM MAP2 list
+|- (!f. MAP2 f[][] = []) /\
+   (!f h1 t1 h2 t2.
+     MAP2 f(CONS h1 t1)(CONS h2 t2) = CONS(f h1 h2)(MAP2 f t1 t2))
+\ENDTHEOREM
+\THEOREM MAP2\_ZIP list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (!f. MAP2 f l1 l2 = MAP(UNCURRY f)(ZIP(l1,l2)))
+\ENDTHEOREM
+\THEOREM MAP\_APPEND list
+|- !f l1 l2. MAP f(APPEND l1 l2) = APPEND(MAP f l1)(MAP f l2)
+\ENDTHEOREM
+\THEOREM MAP\_FILTER list
+|- !f P l.
+    (!x. P(f x) = P x) ==> (MAP f(FILTER P l) = FILTER P(MAP f l))
+\ENDTHEOREM
+\THEOREM MAP\_FLAT list
+|- !f l. MAP f(FLAT l) = FLAT(MAP(MAP f)l)
+\ENDTHEOREM
+\THEOREM MAP\_FOLDL list
+|- !f l. MAP f l = FOLDL(\l' x. SNOC(f x)l')[]l
+\ENDTHEOREM
+\THEOREM MAP\_FOLDR list
+|- !f l. MAP f l = FOLDR(\x l'. CONS(f x)l')[]l
+\ENDTHEOREM
+\THEOREM MAP\_MAP\_o list
+|- !f g l. MAP f(MAP g l) = MAP(f o g)l
+\ENDTHEOREM
+\THEOREM MAP\_o list
+|- !f g. MAP(f o g) = (MAP f) o (MAP g)
+\ENDTHEOREM
+\THEOREM MAP\_REVERSE list
+|- !f l. MAP f(REVERSE l) = REVERSE(MAP f l)
+\ENDTHEOREM
+\THEOREM MAP\_SNOC list
+|- !f x l. MAP f(SNOC x l) = SNOC(f x)(MAP f l)
+\ENDTHEOREM
+\THEOREM MONOID\_APPEND\_NIL list
+|- MONOID APPEND[]
+\ENDTHEOREM
+\THEOREM NIL\_DEF list
+|- [] = ABS_list((\n. @e. T),0)
+\ENDTHEOREM
+\THEOREM NOT\_ALL\_EL\_SOME\_EL list
+|- !P l. ~ALL_EL P l = SOME_EL($~ o P)l
+\ENDTHEOREM
+\THEOREM NOT\_CONS\_NIL list
+|- !h t. ~(CONS h t = [])
+\ENDTHEOREM
+\THEOREM NOT\_EQ\_LIST list
+|- !h1 h2. ~(h1 = h2) ==> (!l1 l2. ~(CONS h1 l1 = CONS h2 l2))
+\ENDTHEOREM
+\THEOREM NOT\_NIL\_CONS list
+|- !h t. ~([] = CONS h t)
+\ENDTHEOREM
+\THEOREM NOT\_NIL\_SNOC list
+|- !x l. ~([] = SNOC x l)
+\ENDTHEOREM
+\THEOREM NOT\_SNOC\_NIL list
+|- !x l. ~(SNOC x l = [])
+\ENDTHEOREM
+\THEOREM NOT\_SOME\_EL\_ALL\_EL list
+|- !P l. ~SOME_EL P l = ALL_EL($~ o P)l
+\ENDTHEOREM
+\THEOREM NULL list
+|- NULL[] /\ (!h t. ~NULL(CONS h t))
+\ENDTHEOREM
+\THEOREM NULL\_DEF list
+|- (NULL[] = T) /\ (!h t. NULL(CONS h t) = F)
+\ENDTHEOREM
+\THEOREM NULL\_EQ\_NIL list
+|- !l. NULL l = (l = [])
+\ENDTHEOREM
+\THEOREM NULL\_FOLDL list
+|- !l. NULL l = FOLDL(\x l'. F)T l
+\ENDTHEOREM
+\THEOREM NULL\_FOLDR list
+|- !l. NULL l = FOLDR(\x l'. F)T l
+\ENDTHEOREM
+\THEOREM OR\_EL\_DEF list
+|- OR_EL = SOME_EL I
+\ENDTHEOREM
+\THEOREM OR\_EL\_FOLDL list
+|- !l. OR_EL l = FOLDL $\/ F l
+\ENDTHEOREM
+\THEOREM OR\_EL\_FOLDR list
+|- !l. OR_EL l = FOLDR $\/ F l
+\ENDTHEOREM
+\THEOREM PART ltree
+|- (!l. PART[]l = []) /\
+   (!n t l.
+     PART(CONS n t)l = CONS(FST(SPLIT n l))(PART t(SND(SPLIT n l))))
+\ENDTHEOREM
+\THEOREM PREFIX list
+|- (!P. PREFIX P[] = []) /\
+   (!P x l. PREFIX P(CONS x l) = (P x => CONS x(PREFIX P l) | []))
+\ENDTHEOREM
+\THEOREM PREFIX\_DEF list
+|- !P l. PREFIX P l = FST(SPLITP($~ o P)l)
+\ENDTHEOREM
+\THEOREM PREFIX\_FOLDR list
+|- !P l. PREFIX P l = FOLDR(\x l'. (P x => CONS x l' | []))[]l
+\ENDTHEOREM
+\THEOREM REPLICATE list
+|- (!x. REPLICATE 0 x = []) /\
+   (!n x. REPLICATE(SUC n)x = CONS x(REPLICATE n x))
+\ENDTHEOREM
+\THEOREM REVERSE list
+|- (REVERSE[] = []) /\ (!x l. REVERSE(CONS x l) = SNOC x(REVERSE l))
+\ENDTHEOREM
+\THEOREM REVERSE\_APPEND list
+|- !l1 l2. REVERSE(APPEND l1 l2) = APPEND(REVERSE l2)(REVERSE l1)
+\ENDTHEOREM
+\THEOREM REVERSE\_EQ\_NIL list
+|- !l. (REVERSE l = []) = (l = [])
+\ENDTHEOREM
+\THEOREM REVERSE\_FLAT list
+|- !l. REVERSE(FLAT l) = FLAT(REVERSE(MAP REVERSE l))
+\ENDTHEOREM
+\THEOREM REVERSE\_FOLDL list
+|- !l. REVERSE l = FOLDL(\l' x. CONS x l')[]l
+\ENDTHEOREM
+\THEOREM REVERSE\_FOLDR list
+|- !l. REVERSE l = FOLDR SNOC[]l
+\ENDTHEOREM
+\THEOREM REVERSE\_REVERSE list
+|- !l. REVERSE(REVERSE l) = l
+\ENDTHEOREM
+\THEOREM REVERSE\_SNOC list
+|- !x l. REVERSE(SNOC x l) = CONS x(REVERSE l)
+\ENDTHEOREM
+\THEOREM SCANL list
+|- (!f e. SCANL f e[] = [e]) /\
+   (!f e x l. SCANL f e(CONS x l) = CONS e(SCANL f(f e x)l))
+\ENDTHEOREM
+\THEOREM SCANR list
+|- (!f e. SCANR f e[] = [e]) /\
+   (!f e x l.
+     SCANR f e(CONS x l) = CONS(f x(HD(SCANR f e l)))(SCANR f e l))
+\ENDTHEOREM
+\THEOREM SEG list
+|- (!k l. SEG 0 k l = []) /\
+   (!m x l. SEG(SUC m)0(CONS x l) = CONS x(SEG m 0 l)) /\
+   (!m k x l. SEG(SUC m)(SUC k)(CONS x l) = SEG(SUC m)k l)
+\ENDTHEOREM
+\THEOREM SEG\_0\_SNOC list
+|- !m l x. m <= (LENGTH l) ==> (SEG m 0(SNOC x l) = SEG m 0 l)
+\ENDTHEOREM
+\THEOREM SEG\_APPEND list
+|- !m l1 n l2.
+    m < (LENGTH l1) /\
+    (LENGTH l1) <= (n + m) /\
+    (n + m) <= ((LENGTH l1) + (LENGTH l2)) ==>
+    (SEG n m(APPEND l1 l2) =
+     APPEND(SEG((LENGTH l1) - m)m l1)(SEG((n + m) - (LENGTH l1))0 l2))
+\ENDTHEOREM
+\THEOREM SEG\_APPEND1 list
+|- !n m l1.
+    (n + m) <= (LENGTH l1) ==> (!l2. SEG n m(APPEND l1 l2) = SEG n m l1)
+\ENDTHEOREM
+\THEOREM SEG\_APPEND2 list
+|- !l1 m n l2.
+    (LENGTH l1) <= m /\ n <= (LENGTH l2) ==>
+    (SEG n m(APPEND l1 l2) = SEG n(m - (LENGTH l1))l2)
+\ENDTHEOREM
+\THEOREM SEG\_FIRSTN\_BUTFISTN list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==> (SEG n m l = FIRSTN n(BUTFIRSTN m l))
+\ENDTHEOREM
+\THEOREM SEG\_LASTN\_BUTLASTN list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==>
+    (SEG n m l = LASTN n(BUTLASTN((LENGTH l) - (n + m))l))
+\ENDTHEOREM
+\THEOREM SEG\_LENGTH\_ID list
+|- !l. SEG(LENGTH l)0 l = l
+\ENDTHEOREM
+\THEOREM SEG\_LENGTH\_SNOC list
+|- !l x. SEG 1(LENGTH l)(SNOC x l) = [x]
+\ENDTHEOREM
+\THEOREM SEG\_REVERSE list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==>
+    (SEG n m(REVERSE l) = REVERSE(SEG n((LENGTH l) - (n + m))l))
+\ENDTHEOREM
+\THEOREM SEG\_SEG list
+|- !n1 m1 n2 m2 l.
+    (n1 + m1) <= (LENGTH l) /\ (n2 + m2) <= n1 ==>
+    (SEG n2 m2(SEG n1 m1 l) = SEG n2(m1 + m2)l)
+\ENDTHEOREM
+\THEOREM SEG\_SNOC list
+|- !n m l. (n + m) <= (LENGTH l) ==> (!x. SEG n m(SNOC x l) = SEG n m l)
+\ENDTHEOREM
+\THEOREM SEG\_SUC\_CONS list
+|- !m n l x. SEG m(SUC n)(CONS x l) = SEG m n l
+\ENDTHEOREM
+\THEOREM SNOC list
+|- (!x. SNOC x[] = [x]) /\
+   (!x x' l. SNOC x(CONS x' l) = CONS x'(SNOC x l))
+\ENDTHEOREM
+\THEOREM SNOC\_11 list
+|- !x l x' l'. (SNOC x l = SNOC x' l') = (x = x') /\ (l = l')
+\ENDTHEOREM
+\THEOREM SNOC\_APPEND list
+|- !x l. SNOC x l = APPEND l[x]
+\ENDTHEOREM
+\THEOREM SNOC\_Axiom list
+|- !e f. ?! fn. (fn[] = e) /\ (!x l. fn(SNOC x l) = f(fn l)x l)
+\ENDTHEOREM
+\THEOREM SNOC\_CASES list
+|- !l. (l = []) \/ (?l' x. l = SNOC x l')
+\ENDTHEOREM
+\THEOREM SNOC\_EQ\_LENGTH\_EQ list
+|- !x1 l1 x2 l2. (SNOC x1 l1 = SNOC x2 l2) ==> (LENGTH l1 = LENGTH l2)
+\ENDTHEOREM
+\THEOREM SNOC\_FOLDR list
+|- !x l. SNOC x l = FOLDR CONS[x]l
+\ENDTHEOREM
+\THEOREM SNOC\_INDUCT list
+|- !P. P[] /\ (!l. P l ==> (!x. P(SNOC x l))) ==> (!l. P l)
+\ENDTHEOREM
+\THEOREM SNOC\_REVERSE\_CONS list
+|- !x l. SNOC x l = REVERSE(CONS x(REVERSE l))
+\ENDTHEOREM
+\THEOREM SOME\_EL list
+|- (!P. SOME_EL P[] = F) /\
+   (!P x l. SOME_EL P(CONS x l) = P x \/ SOME_EL P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_APPEND list
+|- !P l1 l2. SOME_EL P(APPEND l1 l2) = SOME_EL P l1 \/ SOME_EL P l2
+\ENDTHEOREM
+\THEOREM SOME\_EL\_BUTFIRSTN list
+|- !m l.
+    m <= (LENGTH l) ==> (!P. SOME_EL P(BUTFIRSTN m l) ==> SOME_EL P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_BUTLASTN list
+|- !m l.
+    m <= (LENGTH l) ==> (!P. SOME_EL P(BUTLASTN m l) ==> SOME_EL P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_DISJ list
+|- !P Q l. SOME_EL(\x. P x \/ Q x)l = SOME_EL P l \/ SOME_EL Q l
+\ENDTHEOREM
+\THEOREM SOME\_EL\_FIRSTN list
+|- !m l. m <= (LENGTH l) ==> (!P. SOME_EL P(FIRSTN m l) ==> SOME_EL P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_FOLDL list
+|- !P l. SOME_EL P l = FOLDL(\l' x. l' \/ P x)F l
+\ENDTHEOREM
+\THEOREM SOME\_EL\_FOLDL\_MAP list
+|- !P l. SOME_EL P l = FOLDL $\/ F(MAP P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_FOLDR list
+|- !P l. SOME_EL P l = FOLDR(\x l'. P x \/ l')F l
+\ENDTHEOREM
+\THEOREM SOME\_EL\_FOLDR\_MAP list
+|- !P l. SOME_EL P l = FOLDR $\/ F(MAP P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_LASTN list
+|- !m l. m <= (LENGTH l) ==> (!P. SOME_EL P(LASTN m l) ==> SOME_EL P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_MAP list
+|- !P f l. SOME_EL P(MAP f l) = SOME_EL(P o f)l
+\ENDTHEOREM
+\THEOREM SOME\_EL\_REVERSE list
+|- !P l. SOME_EL P(REVERSE l) = SOME_EL P l
+\ENDTHEOREM
+\THEOREM SOME\_EL\_SEG list
+|- !m k l.
+    (m + k) <= (LENGTH l) ==> (!P. SOME_EL P(SEG m k l) ==> SOME_EL P l)
+\ENDTHEOREM
+\THEOREM SOME\_EL\_SNOC list
+|- !P x l. SOME_EL P(SNOC x l) = P x \/ SOME_EL P l
+\ENDTHEOREM
+\THEOREM SPLIT ltree
+|- (!l. SPLIT 0 l = [],l) /\
+   (!n l.
+     SPLIT(SUC n)l =
+     CONS(HD l)(FST(SPLIT n(TL l))),SND(SPLIT n(TL l)))
+\ENDTHEOREM
+
+\THEOREM SPLITP list
+|- (!P. SPLITP P[] = [],[]) /\
+   (!P x l.
+     SPLITP P(CONS x l) =
+     (P x => ([],CONS x l) | (CONS x(FST(SPLITP P l)),SND(SPLITP P l))))
+\ENDTHEOREM
+\THEOREM SUFFIX\_DEF list
+|- !P l. SUFFIX P l = FOLDL(\l' x. (P x => SNOC x l' | []))[]l
+\ENDTHEOREM
+\THEOREM SUM list
+|- (SUM[] = 0) /\ (!h t. SUM(CONS h t) = h + (SUM t))
+\ENDTHEOREM
+\THEOREM SUM\_APPEND list
+|- !l1 l2. SUM(APPEND l1 l2) = (SUM l1) + (SUM l2)
+\ENDTHEOREM
+\THEOREM SUM\_FLAT list
+|- !l. SUM(FLAT l) = SUM(MAP SUM l)
+\ENDTHEOREM
+\THEOREM SUM\_FOLDL list
+|- !l. SUM l = FOLDL $+ 0 l
+\ENDTHEOREM
+\THEOREM SUM\_FOLDR list
+|- !l. SUM l = FOLDR $+ 0 l
+\ENDTHEOREM
+\THEOREM SUM\_REVERSE list
+|- !l. SUM(REVERSE l) = SUM l
+\ENDTHEOREM
+\THEOREM SUM\_SNOC list
+|- !x l. SUM(SNOC x l) = (SUM l) + x
+\ENDTHEOREM
+\THEOREM TL list
+|- !h t. TL(CONS h t) = t
+\ENDTHEOREM
+\THEOREM TL\_SNOC list
+|- !x l. TL(SNOC x l) = (NULL l => [] | SNOC x(TL l))
+\ENDTHEOREM
+\THEOREM UNZIP list
+|- (UNZIP[] = [],[]) /\
+   (!x l.
+     UNZIP(CONS x l) =
+     CONS(FST x)(FST(UNZIP l)),CONS(SND x)(SND(UNZIP l)))
+\ENDTHEOREM
+\THEOREM UNZIP\_FST\_DEF list
+|- !l. UNZIP_FST l = FST(UNZIP l)
+\ENDTHEOREM
+\THEOREM UNZIP\_SND\_DEF list
+|- !l. UNZIP_SND l = SND(UNZIP l)
+\ENDTHEOREM
+\THEOREM UNZIP\_SNOC list
+|- !x l.
+    UNZIP(SNOC x l) =
+    SNOC(FST x)(FST(UNZIP l)),SNOC(SND x)(SND(UNZIP l))
+\ENDTHEOREM
+\THEOREM UNZIP\_ZIP list
+|- !l1 l2. (LENGTH l1 = LENGTH l2) ==> (UNZIP(ZIP(l1,l2)) = l1,l2)
+\ENDTHEOREM
+\THEOREM ZIP list
+|- (ZIP([],[]) = []) /\
+   (!x1 l1 x2 l2. ZIP(CONS x1 l1,CONS x2 l2) = CONS(x1,x2)(ZIP(l1,l2)))
+\ENDTHEOREM
+\THEOREM ZIP\_SNOC list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (!x1 x2. ZIP(SNOC x1 l1,SNOC x2 l2) = SNOC(x1,x2)(ZIP(l1,l2)))
+\ENDTHEOREM
+\THEOREM ZIP\_UNZIP list
+|- !l. ZIP(UNZIP l) = l
+\ENDTHEOREM
+\section{Theorems about trees}
+\THEOREM AP ltree
+|- (!l. AP[]l = []) /\
+   (!h t l. AP(CONS h t)l = CONS(h(HD l))(AP t(TL l)))
+\ENDTHEOREM
+\THEOREM bht tree
+|- bht =
+   PRIM_REC
+   (\tr. tr = node[])
+   (\res n tr. ?trl. (tr = node trl) /\ ALL_EL res trl)
+\ENDTHEOREM
+\THEOREM dest\_node tree
+|- !t. dest_node t = (@p. t = node p)
+\ENDTHEOREM
+\THEOREM HT tree
+|- !t. HT t = (@n. bht n t /\ (!m. m < n ==> ~bht m t))
+\ENDTHEOREM
+\THEOREM Is\_ltree ltree
+|- !t l. Is_ltree(t,l) = (Size t = LENGTH l)
+\ENDTHEOREM
+\THEOREM Is\_tree\_REP tree
+|- Is_tree_REP = (\t. !P. (!tl. ALL_EL P tl ==> P(node_REP tl)) ==> P t)
+\ENDTHEOREM
+\THEOREM ltree\_Axiom ltree
+|- !f. ?! fn. !v tl. fn(Node v tl) = f(MAP fn tl)v tl
+\ENDTHEOREM
+\THEOREM ltree\_Induct ltree
+|- !P. (!t. ALL_EL P t ==> (!h. P(Node h t))) ==> (!l. P l)
+\ENDTHEOREM
+\THEOREM ltree\_ISO\_DEF ltree
+|- (!a. ABS_ltree(REP_ltree a) = a) /\
+   (!r. Is_ltree r = (REP_ltree(ABS_ltree r) = r))
+\ENDTHEOREM
+\THEOREM ltree\_TY\_DEF ltree
+|- ?rep. TYPE_DEFINITION Is_ltree rep
+\ENDTHEOREM
+\THEOREM Node ltree
+|- !v tl.
+    Node v tl =
+    ABS_ltree
+    (node(MAP(FST o REP_ltree)tl),CONS v(FLAT(MAP(SND o REP_ltree)tl)))
+\ENDTHEOREM
+\THEOREM node tree
+|- !tl. node tl = ABS_tree(node_REP(MAP REP_tree tl))
+\ENDTHEOREM
+\THEOREM Node\_11 ltree
+|- !v1 v2 trl1 trl2.
+    (Node v1 trl1 = Node v2 trl2) = (v1 = v2) /\ (trl1 = trl2)
+\ENDTHEOREM
+\THEOREM node\_11 tree
+|- !tl1 tl2. (node tl1 = node tl2) = (tl1 = tl2)
+\ENDTHEOREM
+\THEOREM Node\_onto ltree
+|- !l. ?v trl. l = Node v trl
+\ENDTHEOREM
+\THEOREM node\_REP tree
+|- (node_REP[] = 0) /\
+   (!h t. node_REP(CONS h t) = (SUC(h + h)) * (2 EXP (node_REP t)))
+\ENDTHEOREM
+\THEOREM PART ltree
+|- (!l. PART[]l = []) /\
+   (!n t l.
+     PART(CONS n t)l = CONS(FST(SPLIT n l))(PART t(SND(SPLIT n l))))
+\ENDTHEOREM
+\THEOREM Size ltree
+|- Size = (@fn. !tl. fn(node tl) = SUC(SUM(MAP fn tl)))
+\ENDTHEOREM
+\THEOREM SPLIT ltree
+|- (!l. SPLIT 0 l = [],l) /\
+   (!n l.
+     SPLIT(SUC n)l = CONS(HD l)(FST(SPLIT n(TL l))),SND(SPLIT n(TL l)))
+\ENDTHEOREM
+\THEOREM tree\_Axiom tree
+|- !f. ?! fn. !tl. fn(node tl) = f(MAP fn tl)tl
+\ENDTHEOREM
+\THEOREM tree\_Induct tree
+|- !P. (!tl. ALL_EL P tl ==> P(node tl)) ==> (!t. P t)
+\ENDTHEOREM
+\THEOREM tree\_ISO\_DEF tree
+|- (!a. ABS_tree(REP_tree a) = a) /\
+   (!r. Is_tree_REP r = (REP_tree(ABS_tree r) = r))
+\ENDTHEOREM
+\THEOREM tree\_TY\_DEF tree
+|- ?rep. TYPE_DEFINITION Is_tree_REP rep
+\ENDTHEOREM
+\THEOREM trf tree
+|- !n f.
+    trf n f =
+    (@fn. !trl. (HT(node trl)) <= n ==> (fn(node trl) = f(MAP fn trl)))
+\ENDTHEOREM
+\section{Theorems used to define types}
+\THEOREM ABS\_REP\_THM BASIC-HOL
+|- !P.
+    (?rep. TYPE_DEFINITION P rep) ==>
+    (?rep abs. (!a. abs(rep a) = a) /\ (!r. P r = (rep(abs r) = r)))
+\ENDTHEOREM
+\THEOREM exists\_TRP tydefs
+|- !P. (?v. P v[]) ==> (?t. TRP P t)
+\ENDTHEOREM
+\THEOREM TRP tydefs
+|- !P v tl. TRP P(Node v tl) = P v tl /\ ALL_EL(TRP P)tl
+\ENDTHEOREM
+\THEOREM TRP\_DEF tydefs
+|- !P. TRP P = (@trp. !v tl. trp(Node v tl) = P v tl /\ ALL_EL trp tl)
+\ENDTHEOREM
+\THEOREM TYPE\_DEFINITION bool
+|- !P rep.
+    TYPE_DEFINITION P rep =
+    (!x' x''. (rep x' = rep x'') ==> (x' = x'')) /\
+    (!x. P x = (?x'. x = rep x'))
+\ENDTHEOREM
+\THEOREM TY\_DEF\_THM tydefs
+|- !REP ABS P.
+    (!a. ABS(REP a) = a) /\ (!r. TRP P r = (REP(ABS r) = r)) ==>
+    (!f.
+      ?! fn.
+       !v tl.
+        P v(MAP REP tl) ==>
+        (fn(ABS(Node v(MAP REP tl))) = f(MAP fn tl)v tl))
+\ENDTHEOREM

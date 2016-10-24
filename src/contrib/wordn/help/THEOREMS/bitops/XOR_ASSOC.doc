@@ -1,0 +1,3 @@
+\THEOREM XOR_ASSOC wordn_bitops
+|- !x y z. ~(x = ~(y = z)) = ~(~(x = y) = z)
+\ENDTHEOREM

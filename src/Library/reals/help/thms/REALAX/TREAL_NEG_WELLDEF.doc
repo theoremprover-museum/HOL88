@@ -1,0 +1,3 @@
+\THEOREM TREAL_NEG_WELLDEF REALAX
+|- !x1 x2. x1 treal_eq x2 ==> (treal_neg x1) treal_eq (treal_neg x2)
+\ENDTHEOREM

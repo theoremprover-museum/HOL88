@@ -1,0 +1,16 @@
+\begin{thebibliography}{1}
+
+\bibitem{Boulton:HOLeffiency}
+R.~J. Boulton.
+\newblock On efficiency in theorem provers which fully expand proofs into
+  primitive inferences.
+\newblock Technical Report 248, University of Cambridge Computer Laboratory,
+  1992.
+
+\bibitem{WW:recordproof}
+W.~Wong.
+\newblock Recording {HOL} proofs.
+\newblock Technical Report No.~306, University of Cambridge Computer Laboratory,
+  New Museums Site, Pembroke Street, Cambridge CB2 3QG, {ENGLAND}, July 1993.
+
+\end{thebibliography}

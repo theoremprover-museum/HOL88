@@ -1,0 +1,54 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:32
+**endpages
+(endpages.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/article.sty
+Standard Document Style `article' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/art11.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (endpages.sty) (warning.tex
+
+     WARNING: These fancy cover and end pages require that the psfig macros
+              for the inclusion of PostScript in TeX be in the default TeX
+              include search path.
+
+) (/usr/lib/tex/macros/psfig/psfig.tex
+\@unused=\write3
+
+psfig/tex 1.9
+\ps@stream=\read1
+\p@intvaluex=\dimen99
+\p@intvaluey=\dimen100
+)
+No file endpages.aux.
+psfig: searching LANTERN.ps for bounding box
+psfig: including LANTERN.ps 
+[1
+
+]
+psfig: searching LANTERN.ps for bounding box
+psfig: including LANTERN.ps 
+[2]
+psfig: searching LANTERN.ps for bounding box
+psfig: including LANTERN.ps 
+[3]
+psfig: searching LANTERN.ps for bounding box
+psfig: including LANTERN.ps 
+[4] (endpages.aux) ) 
+Here is how much of TeX's memory you used:
+ 402 strings out of 11977
+ 3813 string characters out of 87025
+ 29976 words of memory out of 262141
+ 2318 multiletter control sequences out of 9500
+ 19297 words of font info for 73 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 12i,4n,16p,149b,152s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on endpages.dvi (4 pages, 1820 bytes).

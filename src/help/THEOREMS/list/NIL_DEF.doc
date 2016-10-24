@@ -1,0 +1,3 @@
+\THEOREM NIL_DEF list
+|- [] = ABS_list((\n. @e. T),0)
+\ENDTHEOREM

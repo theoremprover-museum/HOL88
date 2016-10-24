@@ -1,0 +1,44 @@
+\DOC set_state
+
+\TYPE {set_state : (goalstack -> void)}
+
+\SYNOPSIS
+Sets the current proof state of the subgoal package to the one given.
+
+\DESCRIBE
+The function {set_state} is part of the subgoal package. It restores the
+current proof state to one previously saved (using {get_state}). The restored
+state will include all unproven subgoals or, if the original goal had been
+proved before the state was saved, the corresponding theorem. The old proof
+state is placed on the backup list. For a description of the subgoal package,
+see  {set_goal}.
+
+\USES
+Providing additional backup. Pausing in the proof of a goal to allow  lemmas to
+be proved. {set_state} is used in conjunction with {get_state}.
+
+\EXAMPLE
+The current state may be  bound to an ML variable ({main_proof} in this
+example) using {get_state}.
+{
+   #g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+   () : void
+
+   #let main_proof = get_state();;
+   main_proof = - : goalstack
+}
+\noindent Other goals may now be set and proved. The proof state may later be
+restored using {set_state} and the original proof continued.
+{
+   #set_state main_proof;;
+   "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+   () : void
+}
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, print_state, r,
+rotate, save_top_thm, set_goal, top_goal, top_thm.
+
+\ENDDOC

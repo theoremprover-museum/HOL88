@@ -1,0 +1,3 @@
+\THEOREM COS_ADD TRANSC
+|- !x y. cos(x + y) = ((cos x) * (cos y)) - ((sin x) * (sin y))
+\ENDTHEOREM

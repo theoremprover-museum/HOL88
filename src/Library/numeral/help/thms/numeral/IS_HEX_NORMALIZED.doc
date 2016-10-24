@@ -1,0 +1,4 @@
+\THEOREM IS_HEX_NORMALIZED numeral
+|- !digits.
+    IS_HEX_NORMALIZED digits = IS_HEX digits /\ IS_NORMALIZED digits
+\ENDTHEOREM

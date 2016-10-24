@@ -1,0 +1,63 @@
+\DOC new_specification
+
+\TYPE {new_specification : (string -> (string # string) list -> thm -> thm)}
+
+\SYNOPSIS
+Introduces a constant or constants satisfying a given property.
+
+\DESCRIBE
+The ML function {new_specification} implements the primitive rule of
+constant specification for the HOL logic.
+Evaluating:
+{
+   new_specification `name` [f1,`c1`;...;fn,`cn`] |- ?x1...xn. t
+}
+\noindent simultaneously introduces new constants named {c1}, ..., {cn}
+satisfying the property:
+{
+   |- t[c1,...,cn/x1,...,xn]
+}
+\noindent This theorem is stored, with name {name}, as a definition in the
+current theory segment. It is also returned by the call to {new_specification}
+The strings {f1}, ..., {fn} are flags which determine whether the new constants
+are infixes or binders or neither.  If {fi} is {`constant`} then {ci} is
+declared an ordinary constant, if it is {`infix`} then {ci} is declared an
+infix, and if it is {`binder`} then {ci} is declared a binder.  A flag of any
+other value causes failure.
+
+\FAILURE
+{new_specification} fails if called when HOL is not in draft mode. It also
+fails if there is already an axiom, definition or specification of the given
+name in the current theory segment; if the theorem argument has assumptions or
+free variables; if the supplied constant names {`c1`}, ..., {`cn`} are not
+distinct; if any one of {`c1`}, ..., {`cn`} is already a constant in the
+current theory or is not an allowed name for a constant.  Failure also occurs
+if any of {f1}, ..., {fn} is not either {`constant`}, {`infix`} or {`binder`}
+or if the type of {ci} is not suitable for a constant with the syntactic status
+specified by the flag {fi}.  Finally, failure occurs if some {ci} does not
+contain all the type variables that occur in the term {?x1...xn. t}.
+
+\USES
+{new_specification} can be used to introduce constants that satisfy a given
+property without having to make explicit equational constant definitions for
+them.  For example, the built-in constants {MOD} and {DIV} are defined in the
+system by first proving the theorem:
+{
+   th |- ?MOD DIV.
+         !n. (0 < n) ==>
+             !k. ((k = (((DIV k n) * n) + (MOD k n))) /\ ((MOD k n) < n))
+}
+\noindent and then making the constant specification:
+{
+   #new_specification `DIVISION` [`infix`,`MOD`;`infix`,`DIV`] th;;
+   |- !n. (0 < n) ==>
+          !k. ((k = (((DIV k n) * n) + (MOD k n))) /\ ((MOD k n) < n))
+}
+\noindent This introduces the constants {MOD} and {DIV} with the defining
+property shown above.
+
+\SEEALSO
+new_definition, new_binder_definition, new_gen_definition,
+new_infix_definition.
+
+\ENDDOC

@@ -1,0 +1,10 @@
+\DOC get_boundvars
+
+\TYPE {get_boundvars : (term -> term list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

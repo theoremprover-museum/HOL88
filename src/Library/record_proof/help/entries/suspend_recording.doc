@@ -1,0 +1,46 @@
+\DOC suspend_recording
+
+\TYPE {suspend_recording : void -> void}
+
+\KEYWORDS
+proof recording.
+
+
+\SYNOPSIS
+Suspend proof recording temporarily.
+
+\DESCRIBE
+A proof is a list of inference steps. After the proof recorder is
+enabled, every inference performed by the system is recorded and
+cumulated in an internal buffer. When a proof is completed, the raw
+records can then be processed and output to a disk file.
+
+{suspend_recording} is a low level user function for managing the proof
+recorder. It pauses the proof recorder until the function
+{resume_recording} is called. When the proof recorder is suspended,
+any inference carried out by the system will not be recorded.
+The internal buffer for storing the inference steps will not be
+cleared. When the proof recorder is resumed, the steps will be
+appended to what have been saved in the buffer.
+
+The current state of the proof recorder can interrogated using the
+function {is_recording_proof}. A value of {false} indicates the proof
+recorder is disabled.
+
+\FAILURE
+Never fail.
+
+\COMMENTS
+This function is used to implement higher level user functions for
+recording proof in the library {record_proof}. It is much more
+convenient to use those functions than the low level functions
+such as {suspend_recording} directly.
+
+\SEEALSO
+record_proof, is_recording_proof, RecordStep, get_steps, resume_recording,
+current_proof, current_proof_file,
+new_proof_file, close_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm
+
+
+\ENDDOC

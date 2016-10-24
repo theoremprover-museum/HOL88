@@ -1,0 +1,3 @@
+\THEOREM WOSET_TRANS_LESS WELLORDER
+|- !l. woset l ==> (!x y z. less l(x,y) /\ l(y,z) ==> less l(x,z))
+\ENDTHEOREM

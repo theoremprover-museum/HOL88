@@ -1,0 +1,26 @@
+\DOC freesl
+
+\TYPE {freesl : (term list -> term list)}
+
+\SYNOPSIS
+Returns a list of the free variables in a list of terms.
+
+\DESCRIBE
+When applied to a list of terms, {freesl} returns a list of the variables which
+are free in any of those terms. There are no repetitions in the list produced
+even if several terms contain the same free variable.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+In the following example there are two free instances each of {x} and {y},
+whereas the only instances of {z} are bound:
+{
+   #freesl ["x+y=2"; "!z. z >= (x-y)"];;
+   ["x"; "y"] : term list
+}
+\SEEALSO
+frees, free_in, thm_frees.
+
+\ENDDOC

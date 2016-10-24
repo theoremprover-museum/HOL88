@@ -1,0 +1,20 @@
+
+
+This directory contains an enhanced subgoal package, called
+"prooftree", which allows the user to construct a list of
+proof trees. The user thus has a greater power in controlling
+the proof process as well as more methods to visualize a
+proof.
+
+
+To load the package, start the HOL session and load the file
+"loader" in this directory. To read the documentation, run a
+"latex prooftree_doc" in the "doc" directory. The help entries
+can be accessed using the xholhelp tool by adding the subdirectory
+"help/entries" in the appropriate path.
+
+Please contact me if you have more questions.
+
+						- Sara Kalvala
+						  kalvala@cs.ucdavis.edu
+

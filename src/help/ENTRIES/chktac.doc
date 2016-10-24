@@ -1,0 +1,30 @@
+\DOC chktac
+
+\TYPE {chktac : (subgoals -> thm)}
+
+\SYNOPSIS
+Applies a proof to a list of theorems created using {mk_thm}.
+
+\DESCRIBE
+Evaluating {chktac ([A1,t1;...;An,tn],prf)} applies the proof {prf} to the list
+of theorems {[(A1 |- t1);...;(An |- tn)]}.  The list is created by mapping
+{mk_thm} down the supplied list of subgoals.
+
+{chktac} is, in fact, an assignable variable in ML, bound when the system is
+built to a function that uses {mk_thm} Its presence therefore introduces a
+potential insecurity into the system.  But the function {chktac} is used only
+by {check_valid} to check the validity of tactics, and users worried about
+security can therefore eliminate this insecurity by doing:
+{
+   chktak := \(gl,prf). fail
+}
+\noindent This will disable the validity checking of tactics (using {VALID}),
+but will remove the insecurity.
+
+\FAILURE
+Never fails (unless the proof {prf} fails).
+
+\SEEALSO
+check_valid, VALID.
+
+\ENDDOC

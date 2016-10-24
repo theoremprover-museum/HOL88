@@ -1,0 +1,3 @@
+\THEOREM NOT_LESS arithmetic
+|- !m n. ~m < n = n <= m
+\ENDTHEOREM

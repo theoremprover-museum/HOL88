@@ -1,0 +1,3 @@
+\THEOREM METRIC_NZ TOPOLOGY
+|- !m x y. ~(x = y) ==> (& 0) < (dist m(x,y))
+\ENDTHEOREM

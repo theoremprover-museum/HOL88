@@ -1,0 +1,3 @@
+\THEOREM ABS_SUM REAL
+|- !f m n. (abs(Sum(m,n)f)) <= (Sum(m,n)(\n'. abs(f n')))
+\ENDTHEOREM

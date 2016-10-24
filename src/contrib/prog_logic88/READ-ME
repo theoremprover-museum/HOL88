@@ -1,0 +1,124 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: prog_logic88						|
+|									|
+| DESCRIPTION   : Experimental tools to support programming logics as   |
+|		  described in the paper "Mechanizing Programming       |
+|		  Logics in Higher Order Logic", M.J.C. Gordon, in      |
+|		  "Current Trends in Hardware Verification and          |
+|		  Automated Theorem Proving" edited by 			|
+|		  P.A. Subrahmanyam and Graham Birtwistle, 		|
+|		  Springer-Verlag, 1989.				|
+|									|
+| AUTHOR        : M. Gordon						|
+| DATE		: 23 March 89						|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    prog_logic88.ml          loads the library into hol
+
+    mk_semantics.ml          defines the semantice of the programming
+                             language
+
+    mk_hoare_thms.ml         derives theorems validating the axioms and
+                             rules of Hoare logic
+
+    mk_halts.ml              build a theory to support a program termination
+                             predicate
+
+    mk_halts_thms.ml         derives theorems validating the axioms and
+                             rules of Hoare logic for total correctness
+
+    mk_halts_logic.ml        makes a theory with hoare_thms and halts_thms
+                             as parents
+
+    mk_dijkstra.ml           creates a theory with definitions and properties
+                             of weakest preconditions and weakest liberal
+                             preconditions
+
+    mk_dynamic_logic.ml      creates a theory defining dynamic logic operators
+                             (Box and Diamond) with theorems relating them to 
+                             weakest preconditions and Hoare sentences
+
+    mk_prog_logic88.ml       creates a theory with the following theories
+                             as parents: semantics, hoare_thms, halts, 
+                             halts_thms, halts_logic, dijkstra and 
+                             dynamic_logic
+
+    autoload.ml              sets up the autoloading of definitions and
+                             theorems
+
+    syntax_functions.ml      auxiliary syntactic functions for processing
+                             terms representing programs
+
+    hol_match.ml             some special purpose higher-order matching
+                             routines
+
+    hoare_logic.ml           definition of derived rules to support
+                             forward proof in Hoare logic
+
+    vc_gen.ml                defined tactics to support goal oriented
+                             proof in Hoare logic via verification conditions
+
+    halts_logic.ml           definition of derived rules to support
+                             forward proof in a version of Hoare logic for
+                             total correctness
+
+    halts_vc_gen.ml          defined tactics to support goal oriented
+                             proof in total correctness Hoare logic 
+                             via verification conditions
+
+    examples.ml              some examples to show the use of Hoare logic
+                             in HOL
+
+    parse_hacks.l            Lisp hacks to support the parsing of
+                             Hoare sentences
+
+    print_hacks.l            Lisp hacks to support the printing of
+                             Hoare sentences. 
+                             N.B. There are some bugs in this code
+                                  (see examples.ml for examples)
+
+    llmac.o      \
+    F-macro.o    |           Object files containing system macros needed to 
+    F-ol-rec.o   |           compile the parser and printer hacks
+    genmacs.o    /
+   
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+     load_library `prog_logic88` loads everything. The file examples.ml
+     contains some examples that can be used to exercise the various tools.
+     Working through these would be a good way to learn about them.
+
+     Please note that the contents of this library was produced to test out
+     the ideas reported in the paper "Mechanizing Programming Logics in Higher 
+     Order Logic"; they DO NOT provide a robust tool for verifying programs. The
+     library is included here primarily to help readers of the paper who want
+     more details. Eventually, it is hoped to implement (using the ideas here)
+     practical tools to support reasoning about imperative programs. 
+
+
+

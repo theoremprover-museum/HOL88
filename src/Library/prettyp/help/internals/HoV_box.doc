@@ -1,0 +1,13 @@
+\DOC HoV_box
+
+\BLTYPE
+HoV_box : (((nat # print_indent # nat) # print_object) list ->
+           print_box_spec)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

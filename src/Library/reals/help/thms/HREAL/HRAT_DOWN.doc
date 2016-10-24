@@ -1,0 +1,3 @@
+\THEOREM HRAT_DOWN HREAL
+|- !x. ?y. y hrat_lt x
+\ENDTHEOREM

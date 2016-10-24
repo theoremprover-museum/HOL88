@@ -1,0 +1,3 @@
+\THEOREM REAL_EQ_RMUL REAL
+|- !x y z. (x * z = y * z) = (z = & 0) \/ (x = y)
+\ENDTHEOREM

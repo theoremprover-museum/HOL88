@@ -1,0 +1,4 @@
+\THEOREM HRAT_LDISTRIB HRAT
+|- !h i j.
+    h hrat_mul (i hrat_add j) = (h hrat_mul i) hrat_add (h hrat_mul j)
+\ENDTHEOREM

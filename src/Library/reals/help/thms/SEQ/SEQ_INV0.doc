@@ -1,0 +1,4 @@
+\THEOREM SEQ_INV0 SEQ
+|- !f.
+    (!y. ?N. !n. n num_ge N ==> (f n) > y) ==> (\n. inv(f n)) --> (& 0)
+\ENDTHEOREM

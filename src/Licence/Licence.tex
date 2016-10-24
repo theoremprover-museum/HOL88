@@ -1,0 +1,127 @@
+
+\documentstyle[12pt,a4,alltt]{article}
+
+
+\newenvironment{myenumerate}{\begin{enumerate}
+  \renewcommand{\theenumi}{\roman{enumi}}
+  \renewcommand{\labelenumi}{(\roman{enumi})}}{\end{enumerate}}
+
+ 
+\newlength{\minipagewidth} 
+\setlength{\minipagewidth}{\textwidth} 
+\addtolength{\minipagewidth}{-1em} 
+
+
+
+\newcommand\TextSpacing{18pt}
+\newcommand\PICSpacing{10pt}
+\newcommand\HOLSpacing{12pt}
+  
+      
+  
+
+\newcommand\LCF{{\small LCF}}
+\newcommand\HOL{{\small HOL}}
+\newcommand\SRI{{\small SRI}}
+
+\begin{document}\small
+
+\begin{titlepage}
+\begin{center}
+\Large\bf
+Distribution Agreement
+for the
+HOL System
+\end{center}
+
+\bigskip
+\bigskip
+
+\noindent The University of Cambridge Computer Laboratory
+is prepared
+to make available to:
+
+
+\begin{flushleft}
+\begin{tabular}{|c|}\hline
+\begin{minipage}{\minipagewidth}
+{\small\baselineskip\HOLSpacing\begin{alltt}
+
+
+\( \)
+
+
+
+\end{alltt}}
+\end{minipage}\\ \hline
+\end{tabular}
+\end{flushleft}
+
+\noindent hereafter referred to as `the User',
+the \HOL\ proof assistant system, hereafter referred to as
+`the Software', subject to the following terms:
+
+\begin{enumerate}
+
+\item 
+The University of Edinburgh, the
+University of Cambridge and Inria, hereafter referred to as `the Developers',
+retain the copyright and all other legal
+rights to those parts of the software that they respectively
+developed, and they confirm that the sum of such parts constitute the whole.
+The User will ensure that the software in all its derivations
+carries a copyright notice of the form:
+\begin{center}
+\copyright\ University of Edinburgh,
+\copyright\ University of Cambridge,
+\copyright\ Inria
+\end{center}
+
+
+\item The User shall be entitled to develop derivations of the Software and
+to make the Software and its derivations available to others, provided
+all copyright notices are retained and no charge is made.
+
+\item The User shall not declare theorems to have been proved using HOL unless
+they were proved with an authorized version of the HOL system.  An executable
+binary file supplied by the Developers, or built using a Makefile supplied by
+them, constitutes an authorized version of HOL. Versions of HOL developed by
+the User are not authorized unless so designated, in writing, by the
+Developers.
+
+\item The User will notify the University of Cambridge Computer
+Laboratory, in writing, of any significant derivations of
+the Software made by
+the User. The User will also notify the University of Cambridge Computer
+Laboratory, in writing, of all persons or organizations to whom such
+derivations are distributed.
+
+\item The Software is made available on an {\it as is\/} basis; no guarantee
+of maintenance or reliability is provided by the Developers.
+
+\item The User shall not hold the Developers
+liable for any consequences arising from use of the
+Software whether by himself or by any other party.
+The User shall indemnify the Developers and their staff against any claim by
+any third party arising from or in connection with the use of the Software,
+other than a claim for copyright infringement.
+\end{enumerate}
+
+
+\bigskip
+
+\noindent{\bf Signed:}\dotfill\mbox{}
+
+\bigskip
+
+\noindent{\bf Position:}\dotfill\mbox{}
+
+\bigskip
+
+\noindent{\bf Date:}\dotfill\mbox{}
+
+\end{titlepage}
+
+\end{document}
+
+

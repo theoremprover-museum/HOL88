@@ -1,0 +1,5 @@
+\THEOREM BUTFIRSTN_APPEND1 list
+|- !n l1.
+    n <= (LENGTH l1) ==>
+    (!l2. BUTFIRSTN n(APPEND l1 l2) = APPEND(BUTFIRSTN n l1)l2)
+\ENDTHEOREM

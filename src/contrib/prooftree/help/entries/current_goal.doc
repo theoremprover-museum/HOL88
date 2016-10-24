@@ -1,0 +1,29 @@
+\DOC current_goal
+
+\TYPE {current_goal : (string -> void)}
+
+\SYNOPSIS
+Shows the node corresponding to the top of stack of the proof named by
+the argument.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Many unfinished proofs may exist concurrently;
+{current_goal} returns the top goal of the proof named by the argument
+given to {current_goal}
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+The function {current_goal} fails when its argument does not denote a
+proof tree.
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show all_proofs,
+show_all_subgoals, show_tac, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC

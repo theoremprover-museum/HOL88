@@ -1,0 +1,6 @@
+\THEOREM TYPE_DEFINITION bool
+|- !P rep.
+    TYPE_DEFINITION P rep =
+    (!x' x''. (rep x' = rep x'') ==> (x' = x'')) /\
+    (!x. P x = (?x'. x = rep x'))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM MULT_EVEN odd_even
+|- !n m. EVEN(n * m) ==> EVEN n \/ EVEN m
+\ENDTHEOREM

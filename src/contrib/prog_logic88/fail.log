@@ -1,0 +1,186 @@
+#g   "!p c q. T_SPEC(p,c,q) = !s. (p s ==> WP(c,q)s)";;
+"!p c q. T_SPEC(p,c,q) = (!s. p s ==> WP(c,q)s)"
+
+() : void
+
+#e(   REPEAT STRIP_TAC
+    THEN EQ_TAC
+    THEN REPEAT STRIP_TAC );;
+##OK..
+2 subgoals
+"T_SPEC(p,c,q)"
+    [ "!s. p s ==> WP(c,q)s" ]
+
+"WP(c,q)s"
+    [ "T_SPEC(p,c,q)" ]
+    [ "p s" ]
+
+() : void
+
+#e(IMP_RES_TAC WP_WEAKEST THEN IMP_RES_TAC WEAKER);;
+OK..
+"WP(c,q)s"
+    [ "T_SPEC(p,c,q)" ]
+    [ "p s" ]
+    [ "WEAKER(WP(c,q))p" ]
+
+() : void
+
+#b();;
+2 subgoals
+"T_SPEC(p,c,q)"
+    [ "!s. p s ==> WP(c,q)s" ]
+
+"WP(c,q)s"
+    [ "T_SPEC(p,c,q)" ]
+    [ "p s" ]
+
+() : void
+
+#e(IMP_RES_TAC WP_WEAKEST );;
+OK..
+"WP(c,q)s"
+    [ "T_SPEC(p,c,q)" ]
+    [ "p s" ]
+    [ "WEAKER(WP(c,q))p" ]
+
+() : void
+
+#WEAKER;;
+|- !p' p. WEAKER p' p = (!s. p s ==> p' s)
+
+#e(IMP_RES_THEN ASSUME_TAC);;
+
+ill-typed phrase: (IMP_RES_THEN ASSUME_TAC)
+has an instance of type  thm_tactic
+which should match type  tactic
+1 error in typing
+typecheck failed     
+
+#e(IMP_RES_THEN ASSUME_TAC WEAKER);;
+OK..
+evaluation failed     IMP_RES_THEN: no resolvents 
+
+#let MATCH_MP' impth =
+    let sth = SPEC_ALL impth in
+    let matchfn = match (fst(dest_neg_imp(concl sth))) in
+       \th. NOT_MP (INST_TY_TERM (matchfn (concl th)) sth) th;;
+###MATCH_MP' = - : (thm -> thm -> thm)
+
+#let ths = RES_CANON WEAKER;;
+ths = 
+[|- !p' p. WEAKER p' p ==> (!s. p s ==> p' s);
+ |- !p p'. (!s. p s ==> p' s) ==> WEAKER p' p]
+: thm list
+
+#let asl,gl = top_goal();;
+asl = ["WEAKER(WP(c,q))p"; "p s"; "T_SPEC(p,c,q)"] : term list
+gl = "WP(c,q)s" : term
+
+#let l = itlist (\th.append (mapfilter (MATCH_MP' th) (map ASSUME asl))) ths [];;
+l = [] : thm list
+
+#let l1 = itlist (\th.append (mapfilter (MATCH_MP th) (map ASSUME asl))) ths [];;
+l1 = [. |- !s. p s ==> WP(c,q)s] : thm list
+
+#MATCH_MP' (hd ths) (ASSUME (hd asl));;
+evaluation failed     NOT_MP
+
+#MATCH_MP (hd ths) (ASSUME (hd asl));;
+. |- !s. p s ==> WP(c,q)s
+
+#top_print print_all_thm;;
+- : (thm -> void)
+
+#    let sth = SPEC_ALL (hd ths);;
+sth = |- WEAKER p' p ==> (!s. p s ==> p' s)
+
+#    let matchfn = match (fst(dest_neg_imp(concl sth))) ;;
+matchfn = - : (term -> ((term # term) list # (type # type) list))
+
+#matchfn (hd asl);;
+([("WP(c,q)", "p'")], [(":string -> num", ":*")])
+: ((term # term) list # (type # type) list)
+
+#INST_TY_TERM it sth;;
+|- WEAKER(WP(c,q))p'' ==> (!s. p'' s ==> WP(c,q)s)
+
+#NOT_MP it (ASSUME (hd asl));;
+evaluation failed     NOT_MP
+
+#let ith = it;;
+ith = |- WEAKER(WP(c,q))p'' ==> (!s. p'' s ==> WP(c,q)s)
+
+#let ath = (ASSUME (hd asl));;
+ath = WEAKER(WP(c,q))p |- WEAKER(WP(c,q))p
+
+#NOT_MP ith ath;;
+evaluation failed     NOT_MP
+
+#MP ith ath;;
+evaluation failed     MP
+
+#let ((c,wa),wc) = (dest_comb # I) (dest_comb (concl ith)) ;;
+c = "$==>" : term
+wa = "WEAKER(WP(c,q))p''" : term
+wc = "!s. p'' s ==> WP(c,q)s" : term
+
+# not((fst (dest_const c)) = `==>`) ;;
+false : bool
+
+# aconv wa (concl th);;
+
+unbound or non-assignable variable th
+1 error in typing
+typecheck failed     
+
+# aconv wa (concl ath);;
+false : bool
+
+#set_flag(`show_types`,true);;
+false : bool
+
+#wa, (concl ath);;
+("WEAKER
+  (WP
+   (c:(string -> num) # (string -> num) -> bool,
+    q:(string -> num) -> bool))
+  (p'':(string -> num) -> bool)",
+ "WEAKER
+  (WP
+   (c:(string -> num) # (string -> num) -> bool,
+    q:(string -> num) -> bool))
+  (p:(string -> num) -> bool)")
+: (term # term)
+
+#aconv "x:*" "x':*";;
+false : bool
+
+#aconv "x:num" "x':num";;
+false : bool
+
+#aconv "!x:num.x=x" "!x':num.x=x";;
+Indeterminate types:  "$=:?1 -> (?2 -> bool)"
+
+evaluation failed     types indeterminate in quotation
+
+#aconv "!x:num.x=x" "!x':num.x'=x'";;
+true : bool
+
+#ALPHA "x:num" "x':num";;
+evaluation failed     ALPHA
+
+#wa, (concl ath);;
+("WEAKER
+  (WP
+   (c:(string -> num) # (string -> num) -> bool,
+    q:(string -> num) -> bool))
+  (p'':(string -> num) -> bool)",
+ "WEAKER
+  (WP
+   (c:(string -> num) # (string -> num) -> bool,
+    q:(string -> num) -> bool))
+  (p:(string -> num) -> bool)")
+: (term # term)
+
+#

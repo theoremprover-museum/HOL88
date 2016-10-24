@@ -1,0 +1,36 @@
+\DOC fast_arith
+
+\TYPE {fast_arith : (bool -> void)}
+
+\SYNOPSIS
+Switches fast, finite-precision arithmetic either on or off.
+
+\DESCRIBE
+HOL normally does arithmetic using arbitrary precision. It can be changed to
+use faster, finite-precision arithmetic by {fast_arith true}, and the normal
+behaviour restored with {fast_arith false}. The current state does not affect
+the mode of arithmetic in previously defined functions, such as {num_CONV}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#fast_arith true;;
+() : void
+
+#let pow2 x = funpow x (curry $* 2) 1;;
+pow2 = - : (int -> int)
+
+#map pow2 [30; 31; 32; 33];;
+[1073741824; -2147483648; 0; 0] : int list
+}
+\COMMENTS
+This function is extremely dependent on the version of Lisp used, and its
+behaviour should not be relied upon; it may not work at all in Lisps other than
+Franz. It is questionable whether it is ever worthwhile to use it anyway,
+because although it cannot compromise the consistency of the logic, it can
+lead to confusing failures if one is manipulating numbers larger than the word
+size of the machine.
+
+\ENDDOC

@@ -1,0 +1,111 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: well_order						|
+|									|
+| DESCRIPTION   : Definition of canonical well_order.                   |
+|									|
+| AUTHOR	: T. kalker						|
+| DATE		: 10 JUly 1989  			                |
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+
+        mk_well_order: defines the well_order WLEQ   
+
+	mk_transfinite: defines the theory of transfinite
+	                induction
+
+	wo_fns.ml: contains the definitions of the induction
+	           tactic, and a  conversion/function for 
+	           transfinite definition
+
+        well_order.ml: loads the theory "transfinite"
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+ 
+It is well known from set theory that the axiom of choice
+is equivalent to the fact that every set can be well-ordered.
+That is to say, on every set there is partial order, which is
+linear and, moreover, every non-empty subset has a smallest element.
+A typical example of such a well-order is the natural ordening
+on the natural numbers (this fact is recorded in HOL).
+
+The proof of the above mentioned fact is quite complicated, as
+can be seen from the fact that we need some 30 theorems and
+about 11 lemmas to prove the existence of such a well-order.
+
+The outline from the proof is as follows: 
+
+	first we define a maximal chain of subsets,
+    	which we call WOC. We start with BOT (the empty set),
+        then we take an arbitrary element of TOP, say x0 and
+ 	the second element of our chain will be {x0}. Then
+	we take an arbitrary element of TOP\{x0}, say x1,
+	and we take {x0,x1} as the third set of our chain.
+	And so on. To ensure that we use all elements,
+        the technical definition of WOC is somewhat more
+        complicated. We define WOC as the smallest set of
+        sets such that it preserves UNIONS and INTERSECTION,
+        and such that if A is a set of WOC, then also
+        A U {x|x = @x.x member of TOP\A} is a member of WOC.
+        We prove that WOC exists, that WOC is linear, that it is dense
+        (it skips no elements) and that the subset ordering
+        on WOC is a well-ordening. 
+        To define a well-ordening on the original type
+        all we have to do is find an embedding of
+        the type into WOC. This is rather straight forward,
+        except for the fact that this embedding (INWOC) is
+        injective. Pulling the subset ordering on WOC
+	back to the basis type defines a well-order.
+        See also the documentation in "mk_well-order.ml".  
+
+The well-ordening is named WLEQ; the associated choice function is
+named LEAST. That is, for every non empty set D, LEAST(D) is
+the smallest element of D (which exists as WLEQ is a
+well-order). 
+
+Using the canonical well-order transfinite induction is
+introduced. The main notion in this context is the constant
+RESTRICT. "RESTRICT x f" is the pair (x,g), where "g y" equals "f y" if
+"y WLESS x", and equals a universal constant in other cases.
+The file wo_fns.ml introduces WO_CONV and wo_rec_definition.
+
+WO_CONV tm;; %< evaluates to existence theorem derived from
+                transfinite induction principle>%
+
+wo_rec_definition tm;; %<Use the result from WO_CONV in new_specification>%
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +  
+
+   0) necessary libraries: auxiliary, set, taut
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `well_order`;;
+
+

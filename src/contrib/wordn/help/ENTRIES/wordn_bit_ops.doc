@@ -1,0 +1,44 @@
+\DOC wordn_bit_ops
+
+\TYPE {wordn_bit_ops : thm -> int -> (thm)list}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Defines bitwise operators and proves some basic theorems about them.
+
+\DESCRIBE
+{wordn_bit_ops fndef n}, where {fndef} is the theorem returned by
+{prove_function_defn_thm} and {n} is the word length, defines a set of
+commonly used bitwise logical operators and proves some basic theorems
+about these operators. It combines the functions of
+{define_wordn_bit_ops}, and {prove_bit_op_thms}. 
+
+\FAILURE
+Fails if either it is not in draft mode, or the input theorem is not
+in the expected form or the type {:wordn} has not been defined.
+
+\EXAMPLE
+{wordn_bit_ops word3_FNDEF 3} returns the following list of definitions and
+theorems:
+{
+   [ |- !b0 b1 b2. NOT3(WORD3[b0;b1;b2]) = WORD3(B_NOT[b0;b1;b2]);
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) AND3 w = WORD3(B_AND[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) OR3 w = WORD3(B_OR[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) XOR3 w = WORD3(B_XOR[b0;b1;b2](BITS3 w));
+     |- !w. NOT3(NOT3 w) = w;
+     |- !w1 w2. w1 AND3 w2 = w2 AND3 w1;
+     |- !w1 w2. w1 OR3 w2 = w2 OR3 w1;
+     |- !w1 w2. w1 XOR3 w2 = w2 XOR3 w1;
+     |- !w1 w2 w3. w1 AND3 (w2 AND3 w3) = (w1 AND3 w2) AND3 w3;
+     |- !w1 w2 w3. w1 OR3 (w2 OR3 w3) = (w1 OR3 w2) OR3 w3;
+     |- !w1 w2 w3. w1 XOR3 (w2 XOR3 w3) = (w1 XOR3 w2) XOR3 w3 ]
+}
+
+\SEEALSO
+{define_wordn_bit_ops}, {prove_bit_op_thms}.
+
+\ENDDOC

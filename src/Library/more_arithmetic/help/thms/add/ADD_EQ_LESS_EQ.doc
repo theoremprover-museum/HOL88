@@ -1,0 +1,3 @@
+\THEOREM ADD_EQ_LESS_EQ add
+|- !m n p. (m + n = p) ==> m <= p
+\ENDTHEOREM

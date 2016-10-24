@@ -1,0 +1,3 @@
+\THEOREM BASEN_EXP_N numeral
+|- !r n. BASEN r(CONS 1(REPLICATE n 0)) = r EXP n
+\ENDTHEOREM

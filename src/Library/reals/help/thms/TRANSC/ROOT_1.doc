@@ -1,0 +1,3 @@
+\THEOREM ROOT_1 TRANSC
+|- !n. root(SUC n)(& 1) = & 1
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM LN_POW TRANSC
+|- !n x. (& 0) < x ==> (ln(x pow n) = (& n) * (ln x))
+\ENDTHEOREM

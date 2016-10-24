@@ -1,0 +1,3 @@
+\THEOREM TREAL_LT_WELLDEFR REALAX
+|- !x1 x2 y. x1 treal_eq x2 ==> (x1 treal_lt y = x2 treal_lt y)
+\ENDTHEOREM

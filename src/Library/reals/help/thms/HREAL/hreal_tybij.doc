@@ -1,0 +1,3 @@
+\THEOREM hreal_tybij HREAL
+|- (!a. hreal(cut a) = a) /\ (!r. isacut r = (cut(hreal r) = r))
+\ENDTHEOREM

@@ -1,0 +1,39 @@
+\DOC BASEN_PRE_CONV
+
+\TYPE {BASEN_PRE_CONV : term -> thm}
+
+\SYNOPSIS
+Converts the predecessor function on a numeral into a subtract-one in the same
+radix.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} is a list of digits in base {r}, and {m} is a list of digits in base
+{r}, then {BASEN_PRE_CONV "PRE (BASEN r m)"} returns the theorem:
+{
+        |- PRE (BASEN r m) = BASEN r m - BASEN r [1]
+}
+\FAILURE
+The argument to {BASEN_PRE_CONV} must be of the form {"PRE (BASEN r [...])"},
+and the radix must be a numeric constant that is at least 2, and all elements
+of the digit lists must be numeric constants, and must be less than the radix.
+
+\EXAMPLE
+{
+#BASEN_PRE_CONV "PRE (BASEN 10 [3;4;5])";;
+|- PRE(BASEN 10[3;4;5]) = BASEN 10[3;4;4]
+
+#BASEN_PRE_CONV "PRE (BASEN 10 [])";;
+|- PRE(BASEN 10[]) = BASEN 10[]
+
+#BASEN_PRE_CONV "PRE (BASEN 2 [1;1;1;1])";;
+|- PRE(BASEN 2[1;1;1;1]) = BASEN 2[1;1;1;0]
+
+#BASEN_PRE_CONV "PRE (BASEN 16 [8;10;14])";;
+|- PRE(BASEN 16[8;0;0]) = BASEN 16[7;15;15]
+}
+\SEEALSO
+BASEN_SUB_CONV, BASEN_SUC_CONV.
+
+\ENDDOC

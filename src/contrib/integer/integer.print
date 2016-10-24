@@ -1,0 +1,144 @@
+print_theory `integer`;;
+The Theory integer
+Parents --  HOL     more_arith     more_arith     elt_gp     elt_gp     
+Types --  ":integer"     
+Constants --
+  plus ":integer -> (integer -> integer)"
+  minus ":integer -> (integer -> integer)"
+  times ":integer -> (integer -> integer)"
+  below ":integer -> (integer -> bool)"
+  is_integer ":num # num -> bool"
+  REP_integer ":integer -> num # num"
+  ABS_integer ":num # num -> integer"     INT ":num -> integer"
+  proj ":num # num -> integer"     neg ":integer -> integer"
+  POS ":integer -> bool"     NEG ":integer -> bool"     
+Curried Infixes --
+  plus ":integer -> (integer -> integer)"
+  minus ":integer -> (integer -> integer)"
+  times ":integer -> (integer -> integer)"
+  below ":integer -> (integer -> bool)"     
+Definitions --
+  IS_INTEGER_DEF  |- !X. is_integer X = (?p. X = p,0) \/ (?n. X = 0,n)
+  integer_TY_DEF  |- ?rep. TYPE_DEFINITION is_integer rep
+  REP_integer
+    |- REP_integer =
+       (@rep.
+         (!x' x''. (rep x' = rep x'') ==> (x' = x'')) /\
+         (!x. is_integer x = (?x'. x = rep x')))
+  ABS_integer  |- !x. ABS_integer x = (@x'. x = REP_integer x')
+  INT_DEF  |- !p. INT p = (@N. p,0 = REP_integer N)
+  PROJ_DEF
+    |- !p n.
+        proj(p,n) =
+        (n < p => 
+         (@K1. REP_integer K1 = p - n,0) | 
+         (@K1. REP_integer K1 = 0,n - p))
+  PLUS_DEF
+    |- !M N.
+        M plus N =
+        proj
+        ((FST(REP_integer M)) + (FST(REP_integer N)),
+         (SND(REP_integer M)) + (SND(REP_integer N)))
+  neg_DEF  |- neg = INV((\N. T),$plus)
+  MINUS_DEF  |- !M N. M minus N = M plus (neg N)
+  TIMES_DEF
+    |- !M N.
+        M times N =
+        proj
+        (((FST(REP_integer M)) * (FST(REP_integer N))) +
+         ((SND(REP_integer M)) * (SND(REP_integer N))),
+         ((FST(REP_integer M)) * (SND(REP_integer N))) +
+         ((SND(REP_integer M)) * (FST(REP_integer N))))
+  POS_DEF  |- !M. POS M = (?n. M = INT(SUC n))
+  NEG_DEF  |- !M. NEG M = POS(neg M)
+  BELOW_DEF  |- !M N. M below N = POS(N minus M)
+  
+Theorems --
+  INT_ONE_ONE  |- !m n. (INT m = INT n) = (m = n)
+  NUM_ADD_IS_INT_ADD  |- !m n. (INT m) plus (INT n) = INT(m + n)
+  ASSOC_PLUS  |- !M N P. M plus (N plus P) = (M plus N) plus P
+  COMM_PLUS  |- !M N. M plus N = N plus M
+  PLUS_ID  |- !M. (INT 0) plus M = M
+  PLUS_INV  |- !M. ?N. N plus M = INT 0
+  integer_as_GROUP  |- GROUP((\N. T),$plus)
+  ID_EQ_0  |- ID((\N. T),$plus) = INT 0
+  PLUS_GROUP_ASSOC  |- !x y z. (x plus y) plus z = x plus (y plus z)
+  PLUS_ID_LEMMA
+    |- (!x. (INT 0) plus x = x) /\
+       (!x. x plus (INT 0) = x) /\
+       (!x. ?y. y plus x = INT 0)
+  PLUS_LEFT_RIGHT_INV
+    |- !x y. (y plus x = INT 0) ==> (x plus y = INT 0)
+  PLUS_INV_LEMMA
+    |- !x. ((neg x) plus x = INT 0) /\ (x plus (neg x) = INT 0)
+  PLUS_LEFT_CANCELLATION  |- !x y z. (x plus y = x plus z) ==> (y = z)
+  PLUS_RIGHT_CANCELLATION  |- !x y z. (y plus x = z plus x) ==> (y = z)
+  PLUS_RIGHT_ONE_ONE_ONTO
+    |- !x y. ?z. (x plus z = y) /\ (!u. (x plus u = y) ==> (u = z))
+  PLUS_LEFT_ONE_ONE_ONTO
+    |- !x y. ?z. (z plus x = y) /\ (!u. (u plus x = y) ==> (u = z))
+  PLUS_UNIQUE_ID
+    |- !e. (?x. e plus x = x) \/ (?x. x plus e = x) ==> (e = INT 0)
+  PLUS_UNIQUE_INV  |- !x u. (u plus x = INT 0) ==> (u = neg x)
+  PLUS_INV_ID_LEMMA  |- neg(INT 0) = INT 0
+  PLUS_INV_INV_LEMMA  |- !x. neg(neg x) = x
+  PLUS_DIST_INV_LEMMA  |- !x y. (neg x) plus (neg y) = neg(y plus x)
+  neg_PLUS_DISTRIB  |- neg(M plus N) = (neg M) plus (neg N)
+  PLUS_IDENTITY  |- !M. (M plus (INT 0) = M) /\ ((INT 0) plus M = M)
+  PLUS_INVERSE
+    |- !M. (M plus (neg M) = INT 0) /\ ((neg M) plus M = INT 0)
+  NEG_NEG_IS_IDENTITY  |- !M. neg(neg M) = M
+  NUM_MULT_IS_INT_MULT  |- !m n. (INT m) times (INT n) = INT(m * n)
+  ASSOC_TIMES  |- !M N P. M times (N times P) = (M times N) times P
+  COMM_TIMES  |- !M N. M times N = N times M
+  TIMES_IDENTITY  |- !M. (M times (INT 1) = M) /\ ((INT 1) times M = M)
+  RIGHT_PLUS_DISTRIB
+    |- !M N P. (M plus N) times P = (M times P) plus (N times P)
+  LEFT_PLUS_DISTRIB
+    |- !M N P. M times (N plus P) = (M times N) plus (M times P)
+  TIMES_ZERO
+    |- !M. (M times (INT 0) = INT 0) /\ ((INT 0) times M = INT 0)
+  TIMES_neg
+    |- (!M N. M times (neg N) = neg(M times N)) /\
+       (!M N. (neg M) times N = neg(M times N))
+  neg_IS_TIMES_neg1  |- !M. neg M = M times (neg(INT 1))
+  TRICHOTOMY
+    |- !M.
+        (POS M \/ NEG M \/ (M = INT 0)) /\
+        ~(POS M /\ NEG M) /\
+        ~(POS M /\ (M = INT 0)) /\
+        ~(NEG M /\ (M = INT 0))
+  NON_NEG_INT_IS_NUM  |- !N. ~NEG N = (?n. N = INT n)
+  INT_CASES  |- !P. (!m. P(INT m)) /\ (!m. P(neg(INT m))) ==> (!M. P M)
+  NUM_LESS_IS_INT_BELOW  |- !m n. m < n = (INT m) below (INT n)
+  ANTISYM  |- !M. ~M below M
+  TRANSIT  |- !M N P. M below N /\ N below P ==> M below P
+  COMPAR  |- !M N. M below N \/ N below M \/ (M = N)
+  DOUBLE_INF  |- !M. (?N. N below M) /\ (?P. M below P)
+  PLUS_BELOW_TRANSL  |- !M N P. M below N = (M plus P) below (N plus P)
+  neg_REV_BELOW  |- !M N. (neg M) below (neg N) = N below M
+  DISCRETE
+    |- !S1.
+        (?M. S1 M) ==>
+        ((?K1. !N. N below K1 ==> ~S1 N) ==>
+         (?M1. S1 M1 /\ (!N1. N1 below M1 ==> ~S1 N1))) /\
+        ((?K1. !N. K1 below N ==> ~S1 N) ==>
+         (?M1. S1 M1 /\ (!N1. M1 below N1 ==> ~S1 N1)))
+  POS_MULT_PRES_BELOW
+    |- !M N P. POS M ==> (N below P = (M times N) below (M times P))
+  NEG_MULT_REV_BELOW
+    |- !M N P. NEG M ==> (N below P = (M times P) below (M times N))
+  POS_IS_ZERO_BELOW  |- !N. POS N = (INT 0) below N
+  NEG_IS_BELOW_ZERO  |- !N. NEG N = N below (INT 0)
+  neg_ONE_ONE  |- !x y. (neg x = neg y) = (x = y)
+  neg_ZERO  |- neg(INT 0) = INT 0
+  INT_INTEGRAL_DOMAIN
+    |- !x y. (x times y = INT 0) ==> (x = INT 0) \/ (y = INT 0)
+  TIMES_LEFT_CANCELLATION
+    |- !x y z. ~(x = INT 0) ==> (x times y = x times z) ==> (y = z)
+  TIMES_RIGHT_CANCELLATION
+    |- !x y z. ~(x = INT 0) ==> (y times x = z times x) ==> (y = z)
+  
+******************** integer ********************
+
+() : void

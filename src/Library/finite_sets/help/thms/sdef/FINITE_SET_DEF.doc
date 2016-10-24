@@ -1,0 +1,7 @@
+\THEOREM FINITE_SET_DEF finite_sets
+|- (!x. ~x IN {{}}) /\
+   (!x y s. x IN (y INSERT s) = (x = y) \/ x IN s) /\
+   (!x s. x INSERT (x INSERT s) = x INSERT s) /\
+   (!x y s. x INSERT (y INSERT s) = y INSERT (x INSERT s)) /\
+   (!P. P{{}} /\ (!s. P s ==> (!e. P(e INSERT s))) ==> (!s. P s))
+\ENDTHEOREM

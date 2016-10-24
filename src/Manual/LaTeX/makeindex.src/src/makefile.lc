@@ -1,0 +1,139 @@
+#  Makefile modified for IBM PC DOS (Lattice C 6.0.1) [11-Dec-89] (only major
+#  targets supported)
+#
+#  Makefile for the program `makeindex'
+#
+#  Copyright (C) 1987	Pehong Chen	(phc@renoir.berkeley.edu)
+#  Computer Science Division
+#  University of California, Berkeley
+#
+
+CC = lc
+O = .obj
+X = .exe
+INCLUDE = /usr/include
+INCLUDE = c:/sys/lc/include
+
+DEST	      = /usr/local/bin
+DEST	      = c:/usr/bin
+
+MANDIR	      = /usr/local/man/manl
+MANDIR	      = nul
+
+MANUAL	      = makeindex.l
+
+DOC	      = makeindex.tex
+
+EXTHDRS	      = ${INCLUDE}\ctype.h \
+		${INCLUDE}\stdio.h
+
+HDRS	      = genind.h \
+		mkind.h \
+		scanid.h \
+		scanst.h
+
+XCFLAGS=
+
+LDFLAGS	      = -L -f -ml $(XCFLAGS)
+
+CFLAGS	      = -dOS_PCDOS=1 -dIBM_PC_LATTICE=1 -c -ca -cf -cs -cz -f -ml -S=32K
+
+LIBS	      =
+
+LINKER	      = link
+
+MAKEFILE      = Makefile
+
+OBJS	      = genind${O} mkind${O} qsort${O} scanid${O} scanst${O} sortid${O}
+
+PRINT	      = psgrind
+
+SRCS	      = genind.c \
+		mkind.c \
+		qsort.c \
+		scanid.c \
+		scanst.c \
+		sortid.c
+
+PROGRAM	      = makeindx
+
+TAR	      = $(PROGRAM).tar
+
+SHAR	      = $(PROGRAM).shar
+
+ALL	      = $(MAKEFILE) $(DOC) $(MANUAL) $(HDRS) $(SRCS)
+
+# Default stack is too small--increase
+STACKSIZE=8000
+
+LINKFLAGS=/MAP/LINE/ST:$(STACKSIZE)
+
+# Rules...
+
+.SUFFIXES:
+.SUFFIXES:	.obj .c
+
+.c.obj:
+		$(CC) $(CFLAGS) $*.c
+
+RM = del
+
+$(PROGRAM):	$(PROGRAM)$(X)
+
+$(PROGRAM)$(X):	$(OBJS)
+		$(CC) $(LDFLAGS) $(OBJS)
+		del $(PROGRAM)$(X)
+		ren genind$(X) $(PROGRAM)$(X)
+
+install:	$(PROGRAM)
+		install -c -s -m 0755 $(PROGRAM) $(DEST)
+		@ls -lgs $(DEST)/$(PROGRAM)
+
+tar:
+		@rm -f $(TAR)
+		tar -cf $(TAR) $(ALL)
+
+shar:
+		@rm -f $(SHAR)
+		shar $(SHAR) $(ALL)
+
+dist:
+		cp $(PROGRAM) $(DEST)
+		rcp $(PROGRAM) monet:$(DEST)
+		rcp $(PROGRAM) arpa:$(DEST)
+		rcp $(PROGRAM) harrison@vangogh:bin
+
+clean:
+		@rm -f $(OBJS) core $(PROGRAM) *${O}ut
+
+depend:
+		@rm -f .#*.[chly]
+		mkmf -f $(MAKEFILE) PROGRAM=$(PROGRAM) DEST=$(DEST)
+
+index:
+		@ctags -wx $(HDRS) $(SRCS)
+
+print:
+		@$(PRINT) $(HDRS) $(SRCS)
+
+man:
+		ptroff -man $(MANUAL)
+
+program:	$(PROGRAM)
+
+tags:		$(HDRS) $(SRCS)
+		@ctags $(HDRS) $(SRCS)
+
+# update:		$(DEST)/$(PROGRAM)
+
+# $(DEST)/$(PROGRAM):	$(SRCS) $(HDRS) $(EXTHDRS)
+#		@make -f $(MAKEFILE) DEST=$(DEST) install
+
+# .DEFAULT:;	co $@
+###
+genind${O}:	mkind.h	genind.h
+mkind${O}:	mkind.h
+qsort${O}:	mkind.h
+scanid${O}:	mkind.h scanid.h
+scanst${O}:	mkind.h scanst.h
+sortid${O}:	mkind.h

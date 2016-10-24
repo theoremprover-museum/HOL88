@@ -1,0 +1,44 @@
+\DOC preterm_abs
+
+\TYPE {preterm_abs : ((preterm # preterm) -> preterm)}
+
+\SYNOPSIS
+Constructs abstraction preterm.
+
+\DESCRIBE
+{preterm_abs} is analogous to the oft-used ML function {mk_abs}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {mk_abs} are not encountered until the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#let x = preterm_typed(preterm_var `x`,":bool");;
+x = preterm_typed((preterm_var `x`), ":bool") : preterm
+
+#let y = preterm_const `T`;;
+y = preterm_const `T` : preterm
+
+#preterm_abs(x,y);;
+preterm_abs((preterm_typed((preterm_var `x`), ":bool")),
+            preterm_const `T`)
+: preterm
+
+#preterm_to_term it;;
+"\x. T" : term
+
+#preterm_abs(y,x);;
+preterm_abs((preterm_const `T`),
+            preterm_typed((preterm_var `x`), ":bool"))
+: preterm
+
+#preterm_to_term it;;
+evaluation failed     mk_abs
+}
+\SEEALSO
+mk_abs, preterm_antiquot, preterm_comb, preterm_const, preterm_typed,
+preterm_var, preterm_to_term.
+
+\ENDDOC

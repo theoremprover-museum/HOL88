@@ -1,0 +1,295 @@
+%
+% halfzed is the first half of
+% zed.sty 15 jan 88
+% and contains the schema, infrule environments + new display maths stuff
+% but not the extra fonts for zed
+% Use: when I use bits of zed but need to send LaTeX source to someone
+%      who may not have the extra fonts.
+% David Shepherd, INMOS ltd.
+%
+\typeout{Style Option 'halfzed'. Released 15 January 1988}
+
+%
+% Copyright (c) J.M. Spivey 1987
+%
+% This file contains a collection of macros for typesetting
+% Z specifications. There are four sections.
+%
+% 0. The mathcodes for letters are changed so that they generate text
+%    italic instead of math italic. This makes multi-letter identifiers
+%    look neater.
+%
+% 1. Environments for putting the maths in boxes.
+%
+% 2. Extra symbol fonts are loaded.
+%
+% 3. Mnemonics for Z symbols are defined. Note that certain plain TeX
+%    names are usurped here: \forall is made into a \mathop to give a
+%    thin space between it and the following declaration. The same goes
+%    for \lambda and \mu, and \exists.
+%
+
+%
+% Changes since 25 aug 87
+%
+% 25 aug 87	Renamed \tad as \also and \also as \zbreak. \def'ed \tad
+%		to \also for upward compatibility.
+%		Inserted message on loading.
+%
+% 15 sep 87	Revamped special symbol names.
+%
+% 18 sep 87	Changed \z@d to allow Z text in lists. 
+%
+% 24 sep 87	Removed assignment to \prevdepth from \endschema
+%		--- giving a little more vertical space.
+%
+%  8 oct 87	Removed a spurious space from \schema --- caused
+%		empty paragraph between adjacent schemas.
+%		Merged left bar code into \axdef. Removed redef
+%		of \_.
+%
+% 12 oct 87	Removed \@zedwidth -- use \linewidth instead.
+%		Removed a spurious space from \z@dpream.
+%
+% 16 oct 87	Removed def of \par from \z@d.
+%
+% 10 dec 87	Removed spurious space from \gendef
+%
+% 15 jan 88	Split into two parts to allow both AMS and OXSY versions.
+
+%
+% MATHCODES
+%
+% The mathcodes for the letters A, ..., Z, a, ..., z are changed to
+% generate text italic rather than math italic by default. This makes
+% multi-letter identifiers look better. The mathcode for character c
+% is set to "7000 (variable family) + "400 (text italic) + c.
+%
+% Also, the mathcode for semicolon is set to "8000, so it behaves as an
+% active character in math mode; it is defined to insert a thick space.
+% \semicolon is a semicolon as an ordinary symbol.
+%
+
+\def\@setmcodes#1#2#3{{\count0=#1 \count1=#3
+	\loop \global\mathcode\count0=\count1 \ifnum \count0<#2
+	\advance\count0 by1 \advance\count1 by1 \repeat}}
+
+\@setmcodes{`A}{`Z}{"7441}
+\@setmcodes{`a}{`z}{"7461}
+
+\mathcode`\;="8000 % Makes ; active in math mode
+{\catcode`\;=\active \gdef;{\semicolon\;}}
+\mathchardef\semicolon="003B
+
+%
+% SCHEMAS, Etc.
+%
+% Here are environments for the various sorts of
+% displays which occur in Z documents. All displays are set
+% flush left, indented by \zedindent, by default \leftmargini.
+% schemas, etc, are made just wide enough to give equal margins
+% left and right.
+%
+% Some environments (schema, etc.) must only be split at `\zbreak',
+% and others (argue) may be split arbitrarily. All generate alignment
+% displays, and penalties are used to control page breaks.
+%
+\newdimen\zedindent	\zedindent=\leftmargini
+\newdimen\zedleftsep	\zedleftsep=1em
+\newdimen\zedtab	\zedtab=2em
+\newdimen\zedbar	\zedbar=6em
+\newcount\interzedlinepenalty \interzedlinepenalty=10000
+\newcount\preboxpenalty \preboxpenalty=0
+\newif\ifzt@p		\zt@pfalse
+
+\def\n@rrow{\advance\linewidth by-\zedindent}
+\def\t@pline#1{\omit \hbox to\linewidth{\strut
+	\leftt@p#1\thinspace\hrulefill}\cr}
+\def\z@dline{\omit \hbox to\linewidth{\hrulefill}\cr}
+\def\z@dpream{\halign to\linewidth\bgroup
+        \strut\z@dleft$\@lign##$\hfil \tabskip=0pt plus1fil%
+	&\hbox to0pt{\hss$\@lign##$}\tabskip=0pt\cr}
+\let\z@dleft=\relax
+
+\def\zbreak{\crcr \noalign{\penalty\interdisplaylinepenalty} \also}
+\def\also{\crcr \noalign{\vskip\jot}}
+\def\tad{\also}
+
+\def\@zed{\ifvmode\@zleavevmode\fi
+	$$\global\zt@ptrue \lineskip=0pt
+	\advance\linewidth by-\zedindent
+	\advance\displayindent by\zedindent
+	\def\\{\crcr}% Must have \def and not \let for nested alignments.
+	\everycr={\noalign{\ifzt@p \global\zt@pfalse
+		\else \penalty\interzedlinepenalty \fi}}
+        \tabskip=0pt}
+\def\end@zed{$$\global\@ignoretrue}
+
+\def\zed{\@zed\z@dpream}
+\def\endzed{\crcr\egroup\end@zed}
+
+\let\[=\zed
+\def\]{\crcr\egroup$$\ignorespaces}
+
+\def\axdef{\let\zbreak=\zbre@k \let\also=\@lso \let\z@dleft=\@zedleft
+	\predisplaypenalty=\preboxpenalty \zed}
+\let\endaxdef=\endzed
+\def\zbre@k{\also \noalign{\penalty\interdisplaylinepenalty \vskip-\jot} \also}
+\def\@lso{\crcr \@but \omit\vrule height\jot \cr \@but}
+\def\@zedleft{\vrule\hskip\zedleftsep}
+\def\@but{\noalign{\nointerlineskip}}
+
+\def\schema#1{\n@rrow\axdef \t@pline{$#1$}}
+\def\endschema{\also \z@dline \endzed}
+
+\def\where{\also \omit \hbox to\zedbar{\hrulefill}\cr \also}
+
+\@namedef{schema*}{\n@rrow\axdef
+	\noalign{\kern-\ht\strutbox} \z@dline \also}
+\expandafter\let\csname endschema*\endcsname=\endschema
+
+\def\gendef#1{\let\leftt@p=\@leftt@p
+        \setbox0=\hbox{$[#1]$}\setbox1=\null \wd1=\wd0
+        \n@rrow\axdef \t@pline{\box0}%
+        \noalign{\kern-\baselineskip\kern-\doublerulesep \nobreak}%
+	\t@pline{\box1} \noalign{\kern\doublerulesep \nobreak}}
+\let\endgendef=\endschema
+
+% `infrule' environment: used for inference rules. The horizontal line is
+% generated by \derive: an optional argument contains the side-conditions
+% of the rule.
+\def\infrule{\@zed \halign\bgroup
+	\strut\quad$\@lign##$\quad\hfil&\quad\@lign##\hfil\cr}
+\let\endinfrule=\endzed
+
+\def\derive{\crcr\also\@but\omit\hrulefill\@ifnextchar[{\@xderive}{\@yderive}}
+\def\@xderive[#1]{&$\smash{\lower 0.5ex\hbox{$[\;#1\;]$}}$\cr\also\@but}
+\def\@yderive{\cr\also\@but}
+
+% `argue' environment: used for algebraic proofs expressed as extended
+% equations. Generates an alignment display, which may be split across
+% pages.
+\def\argue{\@zed \interzedlinepenalty=\interdisplaylinepenalty
+	\openup 1\jot \z@dpream \noalign{\vskip-\jot}}
+\let\endargue=\endzed
+
+% `syntax' environment: used for syntax rules - even (once!) for VDM.
+\def\syntax{\@zed \halign\bgroup
+	\strut$\@lign##$\hfil &\hfil$\@lign{}##{}$\hfil
+	&$\@lign##$\hfil &\quad\@lign-- ##\hfil\cr}
+\let\endsyntax=\endzed
+
+\def\@leftt@p{\vrule height0.4pt\hbox to\zedleftsep{\hrulefill\thinspace}}
+\let\leftt@p=\@leftt@p
+\def\leftschemas{\let\leftt@p=\relax}
+
+\def\t#1{\hskip #1\zedtab}
+\def\flushr#1{\crcr&#1\quad\cr}
+
+% \@zleavevmode -- Enter horizontal mode, taking account of possible
+% interaction with lists and section heads:
+%	1	After a \item, use \indent to get the label (this
+%		fails to run in even short labels).
+%	2	After a run-in heading, use \indent.
+%	3	After an ordinary heading, throw away the \everypar
+%		tokens, reset \@nobreak, and use \noindent with \parskip
+%		zero.
+%	4	Otherwise, use \noindent with \parskip zero
+\def\@zleavevmode{\if@inlabel\indent\else\if@noskipsec\indent\else
+	\if@nobreak\global\@nobreakfalse\everypar={}\fi
+	{\parskip=0pt\noindent}\fi\fi}
+
+%
+% FONTS
+%
+% The AMS extra symbol fonts would be loaded here but not here!!
+%
+
+%
+% Z SYMBOLS
+%
+
+\def\token#1{\hbox{`$#1$'}} % makes a quoted expression in mathematical text
+
+\def\report#1{\hbox{`{\tt #1}'}} % used for error messages in Z specs
+
+% \@myop makes an operator, with a strut to defeat TeX's vertical adjustment.
+\def\@myop#1{\mathop{\mathstrut{#1}}\nolimits}
+
+% This underscore doesn't have the little kern --- you get an italic
+% correction anyway in math mode.
+\def\_{\leavevmode \vbox{\hrule width0.5em}}
+
+% Save \q as \xq for quantifiers q.
+\let\xforall=\forall
+\let\xexists=\exists
+\let\xlambda=\lambda
+\let\xmu=\mu
+
+% \p and \f make arrows with 1 and 2 crossings resp.
+\def\p#1{\mathrel{\ooalign{\hfil$\mapstochar\mkern 5mu$\hfil\cr$#1$}}}
+\def\f#1{\mathrel{\ooalign{\hfil
+	$\mapstochar\mkern 3mu\mapstochar\mkern 5mu$\hfil\cr$#1$}}}
+
+\let\@mc=\mathchardef
+
+% In the same order as the Z reference manual ...
+
+% Chapter 1
+\def \lblot	{\langle\!\left|}
+\def \rblot	{\right|\!\rangle}
+
+% Chapter 2
+\def \defs	{\mathrel{\widehat=}}
+\def \power	{\@myop{\bbold P}}
+\let \cross	\times
+\def \lambda	{\@myop{\xlambda}}
+\def \mu	{\@myop{\xmu}}
+\def \lbag	{[\![}
+\def \rbag	{]\!]}
+\def \lnot	{\neg\;}
+\def \land	{\mathrel{\wedge}}
+\def \lor	{\mathrel{\vee}}
+\let \implies	\Rightarrow
+\let \iff	\Leftrightarrow
+\def \forall	{\@myop{\xforall}}
+\def \exists	{\@myop{\xexists}}
+\def \spot	{\mathrel{\bullet}}
+\def \hide	{\mathrel{\backslash}}
+\def \pre	{\@myop{\lt pre}}
+\def \semi	{\mathrel{\comp}}
+\def \ldata	{\langle\!\langle}
+\def \rdata	{\rangle\!\rangle}
+\def \shows	{\;\vdash\;}
+
+% Chapter 3
+\let \rel	\leftrightarrow
+\def \dom	{\@myop{\lt dom}}
+\def \ran	{\@myop{\lt ran}}
+\def \id	{\@myop{\lt id}}
+\def \comp	{\mathbin{\raise 0.6ex\hbox{\oalign{\hfil$\scriptscriptstyle
+		 \lt o$\hfil\cr\hfil$\scriptscriptstyle\lt 9$\hfil}}}}
+\def \ndres	{\mathbin{\rlap{$-$}{\dres}}}
+\def \nrres	{\mathbin{\rlap{$-$}{\rres}}}
+\def \limg	{(\!\left|}
+\def \rimg	{\right|\!)}
+\def \pfun	{\p\fun}
+\let \fun	\rightarrow
+\def \pinj	{\p\inj}
+\def \psurj	{\p\surj}
+\def \surj	{\mathrel{\ooalign{$\fun$\hfil\cr$\mkern4mu\fun$}}}
+\def \bij	{\mathrel{\ooalign{$\inj$\hfil\cr$\mkern5mu\fun$}}}
+\def \nat	{{\bbold N}}
+\def \num	{{\bbold Z}}
+\def \div	{\mathbin{\lt div}}
+\def \mod	{\mathbin{\lt mod}}
+\def \upto	{\mathbin{\ldotp\ldotp}}
+\def \finset	{\@myop{\bbold F}}
+\def \ffun	{\f\fun}
+\def \finj	{\f\inj}
+\def \seq	{\@myop{\lt seq}}
+\def \dcat	{\@myop{\cat/}}
+\def \disjoint  {{\lt disjoint}\;}
+\def \partition {\mathrel{\lt partition}}
+\def \bag	{\@myop{\lt bag}}
+\def \inbag     {\mathrel{\lt in}}

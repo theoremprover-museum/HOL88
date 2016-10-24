@@ -1,0 +1,21 @@
+\DOC dest_basen
+
+\TYPE {dest_basen : term -> thm}
+
+\SYNOPSIS
+Takes apart a BASEN numeral.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term containing such a BASEN numeral, {dest_basen} returns a term
+containing the radix and a term containing the list of digits.
+
+\COMMENTS
+This is not exactly an inverse of {mk_basen}, in that {mk_basen} takes a list
+of digit terms, and {dest_basen} returns a single term of the digit list.
+
+\FAILURE
+{dest_basen} fails if the term is not a BASEN numeral.
+
+\ENDDOC

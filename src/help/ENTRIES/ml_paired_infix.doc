@@ -1,0 +1,33 @@
+\DOC ml_paired_infix
+
+\TYPE {ml_paired_infix : (string -> void)}
+
+\SYNOPSIS
+Declares an ML identifier to have infix status
+(for functions that take a pair as argument).
+
+\DESCRIBE
+{ml_paired_infix `string`} declares to the ML parser that {string} has infix
+status. {string} should be bound to a function that takes a pair as its
+argument.
+
+\FAILURE
+Only ordinary identifiers and certain single character, non-digit, non-layout
+strings can be used as infixes. An attempt to infix other strings may fail,
+or it may succeed but have unpredictable effects on the parser.
+
+\EXAMPLE
+{
+#ml_paired_infix `plus`;;
+() : void
+
+#let x plus y = x + y;;
+plus = - : ((int # int) -> int)
+
+#1 plus 2;;
+3 : int
+}
+\SEEALSO
+ml_curried_infix, is_ml_paired_infix, is_ml_curried_infix, is_ml_infix.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM EXP_FDIFF TRANSC
+|- diffs(\n. inv(&(FACT n))) = (\n. inv(&(FACT n)))
+\ENDTHEOREM

@@ -1,0 +1,13 @@
+! Command file to build MakeIndex on TOPS-20 with PCC
+! [12-Dec-89]
+
+cc -DOS_TOPS20 -DPCC_20 -DSHORTNAMES -c genind.c
+cc -DOS_TOPS20 -DPCC_20 -DSHORTNAMES -c mkind.c
+cc -DOS_TOPS20 -DPCC_20 -DSHORTNAMES -c qsort.c
+cc -DOS_TOPS20 -DPCC_20 -DSHORTNAMES -c scanid.c
+cc -DOS_TOPS20 -DPCC_20 -DSHORTNAMES -c scanst.c
+cc -DOS_TOPS20 -DPCC_20 -DSHORTNAMES -c sortid.c
+cc -DOS_TOPS20 -DPCC_20 -DSHORTNAMES genind.rel mkind.rel qsort.rel -
+        scanid.rel scanst.rel sortid.rel -o makidx.exe
+reset
+rename makidx.exe makeindex.exe

@@ -1,0 +1,6 @@
+\THEOREM IS_PREFIX list
+|- (!l. IS_PREFIX l[] = T) /\
+   (!x l. IS_PREFIX[](CONS x l) = F) /\
+   (!x1 l1 x2 l2.
+     IS_PREFIX(CONS x1 l1)(CONS x2 l2) = (x1 = x2) /\ IS_PREFIX l1 l2)
+\ENDTHEOREM

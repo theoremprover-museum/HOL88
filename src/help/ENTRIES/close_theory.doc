@@ -1,0 +1,27 @@
+\DOC close_theory
+
+\TYPE {close_theory : (void -> void)}
+
+\SYNOPSIS
+Finishes a session in draft mode, writing changes to the theory file.
+
+\DESCRIBE
+Executing {close_theory()} finishes a session in draft mode. It switches the
+system to proof mode. Changes made to the current theory segment are written to
+the theory file associated with it. For a theory segment named {`thy`}, the
+associated file will be {thy.th} in the directory from which HOL was called. If
+the theory file does not exist, it will be created.
+If HOL is quitted before {close_theory} is invoked, the additions made to the
+segment may not persist to future HOL sessions. Whilst in proof mode, the only
+changes which may be made to the theory are the addition of theorems. The
+theory segment may later be extended with {extend_theory}.
+
+\FAILURE
+A call to {close_theory} will fail if the system is not in draft mode.
+Since it involves writing to the file system, if the write fails for
+any reason {close_theory} will fail.
+
+\SEEALSO
+extend_theory, new_theory, print_theory.
+
+\ENDDOC

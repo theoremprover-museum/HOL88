@@ -1,0 +1,5 @@
+\THEOREM BUTLASTN_BUTLASTN list
+|- !m n l.
+    (n + m) <= (LENGTH l) ==>
+    (BUTLASTN n(BUTLASTN m l) = BUTLASTN(n + m)l)
+\ENDTHEOREM

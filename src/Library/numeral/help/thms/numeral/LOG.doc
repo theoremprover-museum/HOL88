@@ -1,0 +1,3 @@
+\THEOREM LOG numeral
+|- !r n. LOG r n = (@x. (r EXP x) <= n /\ n < (r EXP (x + 1)))
+\ENDTHEOREM

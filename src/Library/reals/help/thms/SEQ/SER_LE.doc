@@ -1,0 +1,5 @@
+\THEOREM SER_LE SEQ
+|- !f g.
+    (!n. (f n) <= (g n)) /\ summable f /\ summable g ==>
+    (suminf f) <= (suminf g)
+\ENDTHEOREM

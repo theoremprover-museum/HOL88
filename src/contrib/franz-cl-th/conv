@@ -1,0 +1,41 @@
+# sh conv < infile.th > outfile.th
+#
+# UNIX script for converting a theory made by a Franz Lisp version
+# of HOL into a theory file that can be used with a Common Lisp version.
+# 
+# Convert keys and setqs to uppercase. Put vertical bars around all space
+# and/or parenthesis-delimited data items, but only for non-numeric
+# data items. A data item consists solely of the alphanumeric characters,
+# %, _, and - (i.e. HOL characters which if they appear in a symbol,
+# Franz does not escape).
+# 
+# Sed cannot cope with long lines, so convert spaces to newlines first
+#
+tr '\040' '\012' | sed '
+s/(setq/(SETQ/
+s/%theorydata/%THEORYDATA/
+s/(parents/(PARENTS/
+s/(types/(TYPES/
+s/(nametypes/(NAMETYPES/
+s/(operators/(OPERATORS/
+s/(paired-infixes/(PAIRED-INFIXES/
+s/(curried-infixes/(CURRIED-INFIXES/
+s/(predicates/(PREDICATES/
+s/(version/(VERSION/
+s/(stamp/(STAMP/
+s/%theorems/%THEOREMS/
+s/(sharetypes/(SHARETYPES/
+s/(axiom/(AXIOM/
+s/(fact/(FACT/
+s/^%t$/%T/
+s/^abs$/ABS/
+s/^comb$/COMB/
+s/^const$/CONST/
+s/^pred$/PRED/
+s/^var$/VAR/
+s/(abs$/(ABS/
+s/(comb$/(COMB/
+s/(const$/(CONST/
+s/(pred$/(PRED/
+s/(var$/(VAR/
+s.^\([(]*\)\([a-zA-Z%_\-][0-9a-zA-Z%_\-]*\)\([)]*\).\1|\2|\3.'

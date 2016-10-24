@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_RDIV_0 REAL
+|- !y z. (& 0) < z ==> ((& 0) < (y / z) = (& 0) < y)
+\ENDTHEOREM

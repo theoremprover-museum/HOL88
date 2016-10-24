@@ -1,0 +1,17 @@
+\DOC \#
+
+\TYPE {$# : (((* -> **) # (*** -> ****)) -> (* # ***) -> (** # ****))}
+
+\SYNOPSIS
+Applies two functions to a pair: {(f # g) (x,y)} = {(f x, g y)}.
+
+\KEYWORDS
+combinator.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+B, C, CB, Co, I, K, KI, o, oo, S, W.
+
+\ENDDOC

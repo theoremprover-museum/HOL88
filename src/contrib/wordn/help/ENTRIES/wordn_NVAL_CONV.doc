@@ -1,0 +1,31 @@
+\DOC wordn_NVAL_CONV
+
+\TYPE {wordn_NVAL_CONV : conv}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Derives a theorem stating the value of a word.
+
+\DESCRIBE
+{wordn_NVAL_CONV} takes a term in the form {"NVALn #..."} and derives
+a theorem stating the value of the given word when interpreted as
+natural number in a big-endian format. The length of the string
+following the hash {#} should be {n}, and it should consist of only
+the digits {0} and {1}.
+
+\FAILURE
+Fails if the type {:wordn} or the constant {NVALn} has not been
+defined, or the string is not in the form specified above.
+
+\EXAMPLE
+The HOL session below illustrates the use of this conversion:
+{
+   # let word3_val_6 = wordn_NVAL_CONV "NVAL3 #110";;
+   word3_val_6 = |- NVAL3 #110 = 6
+}
+
+\SEEALSO
+{define_wordn_type}, {define_word_val}, {wordn_NWORD_CONV}.
+
+\ENDDOC

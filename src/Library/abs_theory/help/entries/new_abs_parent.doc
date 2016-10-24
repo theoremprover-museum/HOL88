@@ -1,0 +1,37 @@
+\DOC new_abs_parent
+
+\TYPE {new_abs_parent : (string -> void)}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Extends the current theory with a new abstract parent theory.
+
+\DESCRIBE 
+
+Executing {new_abs_parent `thy`} extends the current theory by making the
+existing abstract theory named  {thy} a parent of the current theory
+segment. The extended theory contains the theory segments of both
+constituent theories and any theory obligations declared in the parent.
+The theory  {thy} is loaded into the system. The message ` {Theory thy
+loaded}' is printed.  The effect of the call may not be written to the
+theory file of the segment until  {close_theory} is invoked.  If HOL is
+quit before this, the effect may not persist to future HOL sessions.
+
+\FAILURE
+
+Executing {new_abs_parent `thy`} will fail if the system is not in
+draft mode. It will fail if {thy} is not a theory on the current search
+path. It will fail if there is a type in theory {thy} with the same name
+as a type in the current theory. It will fail if there is a constant in
+theory {thy} with the same name as a constant in the current theory. It
+will fail if an ancestor of theory {thy} has been extended with either
+new types or constants which clash with names in theory {thy}. It will
+also fail if any of the theory files of theory {thy} have been damaged. On
+failure, the system recovers cleanly, unloading any theory segments it had
+loaded before the failure was detected.
+
+\SEEALSO
+new_parent, close_theory, extend_theory, new_theory, print_theory, search_path.
+
+\ENDDOC

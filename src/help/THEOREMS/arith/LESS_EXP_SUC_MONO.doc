@@ -1,0 +1,3 @@
+\THEOREM LESS_EXP_SUC_MONO arithmetic
+|- !n m. ((SUC(SUC m)) EXP n) < ((SUC(SUC m)) EXP (SUC n))
+\ENDTHEOREM

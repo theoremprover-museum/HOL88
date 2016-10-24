@@ -1,0 +1,71 @@
+??.??.?? hol-errors             Interpretations of various HOL errors and how to fix them (sometimes)   Phil Windley
+??.??.?? more_lists             Library "more_list" moved to contrib                                    Paul Curzon
+??.??.?? wordn                  Theory of n-bit words                                                   Wai Wong
+89.03.20 group                  Library "group" moved to contrib                                        Elsa Gunter
+89.03.23 integer                Theory of integers                                                      Elsa Gunter
+89.03.23 prog_logic88           Library "prog_logic88" moved to contrib                                 Mike Gordon
+89.03.30 icl-taut               Various theorem proving utilities, including a tautology checker        Roger Jones
+89.04.03 fixpoints              Definition of a fixedpoint operator and derivation of Scott Induction   Mike Gordon
+89.06.08 auxiliary              Definition of auxiliary theory                                          Ton Kalker
+89.06.08 quotient               Definition of quotient types                                            Ton Kalker
+89.06.29 bags                   Library "bags" moved to contrib                                         Philip Leveilley
+89.07.10 WELL_ORDER             Proof that every set can be wellordered                                 Ton Kalker
+89.07.10 ZET                    Definition of the integers: zet                                         Ton Kalker
+89.07.27 int_mod                subgroups of the integers and basic modular arithmetic                  Elsa Gunter
+89.09.25 CARD                   Theory of cardinals via quotient structure                              Ton Kalker
+89.12.07 CSP                    Definition of csp trace theory                                          Albert Camilleri
+89.12.29 eval                   lisp-coded conversions and rules for dealing with constants etc.        ?
+89.??.?? hol-mode               Emacs HOL (Higher Order Logic) Mode                                     Kim Dam Petersen
+90.04.11 PNF                    Conversions to reduce terms to prenex normal form                       Clive Jervis
+90.04.11 batch-hol-tool         Batch HOL session with merged input and output                          Richard Boulton
+90.04.11 franz-cl-th            Unix script for translating theory files from Franz to common lisp      John Carroll
+90.04.11 knuth-bendix           Knuth Bendix completion as a derived inference rule                     Konrad Slind
+90.04.11 tooltool               SunView HOL interface tool (using tooltool)                             David Shepherd
+90.04.20 select                 Note on dealing with the epsilon-operator in HOL proofs                 Brian Graham
+90.06.01 CPO                    Basic theory of CPO's and fixed-points                                  Albert Camilleri
+90.08.03 temporal               Temporal logic in HOL                                                   Amit Jasuja
+90.11.14 rewriting              Rewriting tools                                                         Roger Fleming
+90.12.12 subgoal                Experimental new subgoal package                                        Roger Fleming
+90.12.14 latex                  LaTeX macros for typesetting HOL                                        Jim Alves-Foss
+91.01.20 hol_users              Information on groups using HOL                                         Sara Kalvala
+91.01.25 btg-tactics            Extra general-purpose tactics                                           Brian Graham
+91.01.25 mut_rec_types          Defining mutually recursive types in HOL                                Peter Strarup Jensen, Ann-Grete Tan & Anders Pilegaard
+91.01.27 tex-thy-format         Format a HOL theory in LaTeX format                                     Wai Wong
+91.01.28 benchmark              The HOL "multiplier" benchmark (for version 1.12)                       Mike Gordon
+91.01.?? hol-emacs              A simple interface for running HOL under the GNU Emacs editor           Phil Windley
+91.02.01 convert                Various conversion orientated stuff                                     David Shepherd
+91.02.07 UNITY                  Definition of the UNITY theory, described by Chandy and Misra           Flemming Andersen
+91.08.21 prooftree              Enhanced subgoal package                                                Sara Kalvala
+91.08.?? koenig                 A proof of Koenig's Lemma                                               Paul Loewenstein
+92.02.27 SECD                   The SECD microprocessor specification and verification                  Brian Graham
+92.03.02 holsort                Sorts files of axioms, etc., or of typed constants                      Steve Brackin
+92.06.18 non-unix               Instructions for making HOL on non-UNIX machines                        John Carroll
+92.08.26 Xhelp                  Xwindows browser for HOL documentation                                  Sara Kalvala
+92.08.?? res_quan               Library for dealing with restricted quantifiers                         Wai Wong
+92.09.01 rule-induction         Examples using the inductive definitions package                        Juanito Camilleri & Tom Melham
+92.09.18 hol-sum                Summary of HOL system Version 2                                         Wai Wong
+92.10.06 aci                    Generalizing AC operation with identity to finite sets                  Ching-Tsun Chou
+92.10.06 cont                   Interactive Theorem Proving with Theorem Continuation Functions         Ching-Tsun Chou
+92.10.06 pred                   A Sequent Formulation of a Logic of Predicates in HOL                   Ching-Tsun Chou
+92.10.07 hol-exec               HOLER: The HOL Evaluator                                                Sreeranga Rajan
+92.10.16 boyer-moore            Boyer-Moore Automation for HOL                                          Richard Boulton
+92.10.25 fpf                    A theory of finite partial functions (finite maps)                      Donald Syme
+92.10.25 smarttacs              Several general purpose tactics                                         Donald Syme
+92.10.29 Tarski                 Definition of a theory for defining recursive boolean functions         Flemming Andersen & Kim Dam Petersen
+92.10.?? newrw                  Updates rewriting conversions in HOL2.0 code to HOL2.01                 Jim Grundy
+92.11.04 prog_logic92           Program semantics inc. (unbounded) nondeterminism, total correctness    Gavan Tredoux
+92.11.25 make_use               Automatically generates autoloading commands for a theory               Donald Syme
+92.12.01 AKCL-mods              A hol-init file to increase the speed of HOL when built under AKCL      John Van Tassel
+92.12.04 WF                     Theory of well founded relations                                        Wishnu Prasetya
+93.03.04 int                    Integers theory                                                         John Harrison
+93.04.02 mweb                   The mweb suite of source documentation and management utilities.        Wishnu Prasetya
+93.04.05 Predicate              Theory of lifted predicates in HOL                                      Wishnu Prasetya
+93.05.07 rec_tys_listop         An extension to the types which can be automatically defined            Brian Graham
+93.05.14 AKCL-profiling         Rudimentary profiling utility for AKCL                                  John Van Tassel
+93.05.31 reduct                 reflexive/symmetric/transitive closure; abstract reduction relations    John Harrison
+93.06.04 greatest               Theory about the greatest of a list of natural numbers etc              Catia Angelo
+93.09.16 sml-mode               SML mode for gnuemacs Version 19.XX                                     Wai Wong
+93.09.24 HOLproof               A formalisation of higher order logic proofs in HOL                     Joakim von Wright
+94.01.24 Z                      Shallow embedding of Z in HOL                                           Mike Gordon
+94.02.09 RefCalc                Program verification and refinement in predicate transformer semantics  Joakim von Wright
+94.02.18 pre-v2.02-rewr         Compatibility files for the rewriting in HOL88.2.02                     Richard Boulton

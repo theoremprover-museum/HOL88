@@ -1,0 +1,3 @@
+\THEOREM SUM_APPEND list
+|- !l1 l2. SUM(APPEND l1 l2) = (SUM l1) + (SUM l2)
+\ENDTHEOREM

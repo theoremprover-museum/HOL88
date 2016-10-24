@@ -1,0 +1,5 @@
+\THEOREM SPLIT ltree
+|- (!l. SPLIT 0 l = [],l) /\
+   (!n l.
+     SPLIT(SUC n)l = CONS(HD l)(FST(SPLIT n(TL l))),SND(SPLIT n(TL l)))
+\ENDTHEOREM

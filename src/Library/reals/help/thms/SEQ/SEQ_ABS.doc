@@ -1,0 +1,3 @@
+\THEOREM SEQ_ABS SEQ
+|- !f. (\n. abs(f n)) --> (& 0) = f --> (& 0)
+\ENDTHEOREM

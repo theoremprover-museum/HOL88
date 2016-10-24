@@ -1,0 +1,10 @@
+\DOC CURRENT_STACK
+
+\TYPE {CURRENT_STACK : (void -> window_stack)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

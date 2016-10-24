@@ -1,0 +1,31 @@
+\DOC \char'136
+
+\TYPE {$^ : (string -> string -> string)}
+
+\SYNOPSIS
+Concatenates two ML strings.
+
+\KEYWORDS
+string, join.
+
+\DESCRIBE
+The {^} is the ML infix string concatenation operator.
+If {s1} and {s2} are strings, then {s1^s2} gives a string which is their
+concatenation.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#`Hello `^`world`;;
+`Hello world` : string
+}
+\COMMENTS
+The ML role of the {^} operator should not be confused with its use in
+quoted terms to introduce antiquotation (see DESCRIPTION for details).
+
+\SEEALSO
+concat, concatl.
+
+\ENDDOC

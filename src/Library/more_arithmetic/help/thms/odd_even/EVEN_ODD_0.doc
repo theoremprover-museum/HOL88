@@ -1,0 +1,3 @@
+\THEOREM EVEN_ODD_0 odd_even
+|- EVEN 0 /\ ~ODD 0
+\ENDTHEOREM

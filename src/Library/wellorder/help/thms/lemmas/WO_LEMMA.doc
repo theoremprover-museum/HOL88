@@ -1,0 +1,3 @@
+\THEOREM WO_LEMMA WELLORDER
+|- ?l. ordinal l /\ (!x. fl l x)
+\ENDTHEOREM

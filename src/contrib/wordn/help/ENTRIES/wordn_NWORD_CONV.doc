@@ -1,0 +1,39 @@
+\DOC wordn_NWORD_CONV
+
+\TYPE {wordn_NWORD_CONV : conv}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Derives a theorem stating the  representation of a natural number in
+an n-bit word.
+
+\DESCRIBE
+{wordn_NWORD_CONV} takes a term in the form {"NWORDn m"} and derives a
+theorem stating the n-bit word representing the natural number {m} as
+below:
+{
+	|- NWORDn m = #...
+}
+If {m} is greater than the maximium that an n-bit word can represent,
+{m MOD (2 EXP n)} will be used to work out the n-bit word instead. By
+virtue of the theorem returned by {prove_NWORD_MOD}, the above theorem
+is still valid.
+
+\FAILURE
+Fails if the type {:wordn} or the function {NWORDn} has not been defined.
+
+\EXAMPLE
+The HOL session below illustrates the use of this conversion:
+{
+   # wordn_NWORD_CONV "NWORD3 6";;
+   |- NWORD3 6 = #110
+
+   # wordn_NWORD_CONV "NWORD3 16";;
+   |- NWORD3 16 = #000
+}
+
+\SEEALSO
+{define_wordn_type}, {define_word_val}, {prove_NWORD_MOD}, {wordn_NVAL_CONV}.
+
+\ENDDOC

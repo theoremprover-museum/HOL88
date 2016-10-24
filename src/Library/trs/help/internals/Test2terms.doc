@@ -1,0 +1,15 @@
+\DOC Test2terms
+
+\BLTYPE
+Test2terms : ((term -> term -> bool) ->
+              wildvar ->
+              wildvar ->
+              thmpattern)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

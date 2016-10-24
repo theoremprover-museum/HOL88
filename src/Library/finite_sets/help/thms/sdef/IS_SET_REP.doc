@@ -1,0 +1,7 @@
+\THEOREM IS_SET_REP finite_sets
+|- IS_SET_REP(\x. F) /\
+   (!s. IS_SET_REP s ==> (!x. IS_SET_REP(\y. (y = x) \/ s y))) /\
+   (!P.
+     P(\x. F) /\ (!t. P t ==> (!x. P(\y. (y = x) \/ t y))) ==>
+     (!s. IS_SET_REP s ==> P s))
+\ENDTHEOREM

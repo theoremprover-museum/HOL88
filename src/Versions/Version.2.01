@@ -1,0 +1,1496 @@
+******************************************************************************
+******************************** Version 2.01 ********************************
+******************************************************************************
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (install)                                            |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          15 October 1991.                                            |
++----------------------------------------------------------------------------+
+
+The function install in version 2.0 does not set the help search path
+correctly.  This has now been fixed.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (RES_CANON)                                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/resolve.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          19 October 1991.                                            |
++----------------------------------------------------------------------------+
+
+The function RES_CANON in version 2.0 would behave like:
+
+   RES_CANON |- (?n. P[n]) ==> (!n. Q[n])  ==>   [|- !n. P[n] ==> Q[n]]
+
+This has been modified so as not to identify the two ns:
+
+   RES_CANON |- (?n. P[n]) ==> (!n. Q[n])  ==>   [|- !n. P[n] ==> !n'. Q[n']]
+
+RES_CANON will now behave correctly in all similar situations.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition (APPEND_CONV)                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/list.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          26 October 1991.                                            |
++----------------------------------------------------------------------------+
+
+A conversion APPEND_CONV has been added. This maps terms of the form:
+
+   "APPEND [x1;...;xm] [y1;...;yn]"
+
+to the equation:
+
+ |- APPEND [x1;...;xm] [y1;...;yn] = [x1;...;xm;y1;...;yn]
+
+A reference manual/online help entry exists.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition (local and multi-section libraries).               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-tml.l lisp/f-iox-stand.l                             |
+|----------------------------------------------------------------------------|
+| DATE:          27 November 1991.                                           |
++----------------------------------------------------------------------------+
+
+Two new facilities for library loading have been installed.
+
+The first is a search path mechanism, similar to the help search path,
+that allows users to access local libraries using load_library.  In
+particular, there are two new functions:
+
+   * library_search_path : void -> string list
+   * set_library_search_path : string list -> void
+
+These are analgous to the similarly named functions for the help search
+path.  The function load_library uses the library search path returned
+by library_search_path and set by set_library_search_path to look for
+library load files.
+
+The second (rather experimental) facility allows loading of segments of
+a library. Evaluating:
+
+   load_library `lib:part`;;
+
+loads the load file <path>/lib/part.ml instead of <path>/lib/lib.ml.  This
+allows multiple load files in a single library.  The convention will be
+that:
+
+   load_library `lib`;;
+
+will load an entire library, as at present (hence the change is compatable).
+And evaluating:
+
+   load_library `lib:part`;;
+
+will load a selected segment of the library lib.  It will be up to library
+authors to ensure that something sensible happens when parts of a library
+are loaded.  Two multi-section libraries are currently under development
+here, and these will be intended to serve as paradigms.
+
+The REFERENCE manual has been updated. See the entries for:
+
+   library_pathname
+   library_search_path
+   set_library_search_path
+   load_library
+   install
+
+for details.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new theorem (arithmetic)                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_arith_thms.ml                                   |
+|----------------------------------------------------------------------------|
+| DATE:          2 December 1991                                             |
++----------------------------------------------------------------------------+
+
+A new theorem has been added:
+
+   ZERO_DIV |- !n. 0 < n ==> (0 DIV n = 0)
+
+This is analogous to the already existing theorem ZERO_MOD.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix.                                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-cl.l                                                 |
+|----------------------------------------------------------------------------|
+| DATE:          9 January 1992.                                             |
++----------------------------------------------------------------------------+
+
+The functions concat, uconcat, and concatl in f-cl.l have been reimplemented to
+get around the problem that CL limits the number of arguments that a lisp
+function can have.  This feature prevented the old implementation based on
+"apply" from working for very long strings.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix.                                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_bool.ml                                         |
+|----------------------------------------------------------------------------|
+| DATE:          12 January 1992                                             |
++----------------------------------------------------------------------------+
+
+In the file theories/mk_bool.ml, which creates the theory bool, the line
+
+   new_constant(`?`, ":(*->bool)->bool");;
+
+has been changed to
+
+   new_binder(`?`, ":(*->bool)->bool");;
+
+so that ? is stored among the binders of the theory bool.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new manual.                                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/sets.                                               |
+|----------------------------------------------------------------------------|
+| DATE:          18 January 1992                                             |
++----------------------------------------------------------------------------+
+
+A full manual and online help files have been added to the sets library. The
+sets library has also been extended with the following definitions of
+injective, surjective and bijective mappings between sets:
+
+    INJ_DEF =
+    |- !f s t.
+        INJ f s t =
+        (!x. x IN s ==> (f x) IN t) /\
+        (!x y. x IN s /\ y IN s ==> (f x = f y) ==> (x = y))
+
+    SURJ_DEF =
+    |- !f s t.
+        SURJ f s t =
+        (!x. x IN s ==> (f x) IN t) /\
+        (!x. x IN t ==> (?y. y IN s /\ (f y = x)))
+
+    BIJ_DEF = |- !f s t. BIJ f s t = INJ f s t /\ SURJ f s t
+
+as well as left and right inverses
+
+    LINV_DEF = |- !f s t. INJ f s t ==> (!x. x IN s ==> (LINV f s(f x) = x))
+
+    RINV_DEF = |- !f s t. SURJ f s t ==> (!x. x IN t ==> (f(RINV f s x) = x))
+
+There are several built-in theorems about these functions.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix in Library                                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/prog_logic88/examples.ml                            |
+|----------------------------------------------------------------------------|
+| DATE:          4 February 1992.                                            |
++----------------------------------------------------------------------------+
+
+The file example.ml in Library/prog_logic88 now loads correctly.
+A couple of proofs needed to be changed for HOL.88.2.01.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   revision for efficiency.                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    DES/TFM                                                     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-typeol.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          8 February 1992.                                            |
++----------------------------------------------------------------------------+
+
+An improved version of canon-ty, due to David Shepherd, has been installed
+in f-typeol.l.  See the comments there for the reason.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   revised library (pred_sets).                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/pred_sets                                           |
+|----------------------------------------------------------------------------|
+| DATE:          9 February 1992.                                            |
++----------------------------------------------------------------------------+
+
+The pred_sets library has been completely rewritten for HOL88 version
+2.01.  In particular, the library pred_sets has been made exactly parallel
+to the sets library, with the same names for theorems, the same form of
+definitions, and an almost identical manual.  For further information,
+see Library/pred_sets/READ-ME and Library/pred_sets/CHANGES.  The old
+pred_sets library is temporarily available in  Library/pred_sets/OLD.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix / enhancement                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/stack.ml                                                 |
+|----------------------------------------------------------------------------|
+| DATE:          12 February 1992.                                           |
++----------------------------------------------------------------------------+
+
+The function `set_goal' now fails (with an informative message) unless all
+terms in its argument are of type ":bool". This has a corresponding effect on
+the `g' function.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition to libraries.                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: set theory libraries                                        |
+|----------------------------------------------------------------------------|
+| DATE:          22 February 1992.                                           |
++----------------------------------------------------------------------------+
+
+The following theorems, supplied by Peter Homeier (homeier@org.aero.uniblab),
+have been added to the sets, pred_sets, and revised finite_sets (see below)
+libraries:
+
+   DELETE_INTER
+     |- !s t x. (s DELETE x) INTER t = (s INTER t) DELETE x
+
+   DISJOINT_UNION
+     |- !s t u. DISJOINT(s UNION t)u = DISJOINT s u /\ DISJOINT t u
+
+   IMAGE_EQ_EMPTY
+     |- !s f. (IMAGE f s = {{}}) = (s = {{}})
+
+   CARD_DIFF (sets and pred_sets)
+     |- !t.
+        FINITE t ==>
+        (!s. FINITE s ==> (CARD(s DIFF t) = (CARD s) - (CARD(s INTER t))))
+
+   CARD_DIFF (finite_sets)
+     |- !t s. CARD(s DIFF t) = (CARD s) - (CARD(s INTER t))
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (new_parent)                                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          22 February 1992.                                           |
++----------------------------------------------------------------------------+
+
+The function new_parent has been modified so that it activates the binders
+in a new parent theory and its ancestors.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   revision for efficiency.                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    DES/TFM                                                     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-inst.l                                               |
+|----------------------------------------------------------------------------|
+| DATE:          22 February 1992.                                           |
++----------------------------------------------------------------------------+
+
+An improved version of the lisp function tyvars-type, due to David Shepherd,
+has been installed in f-inst.l.  See the comments there for the reason.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (Common Lisp versions of HOL only)                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG (following advice from DES)                            |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-pars.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          26 February 1992.                                           |
++----------------------------------------------------------------------------+
+
+chou%CS.UCLA.EDU%ucla-cs@CS.UCLA.EDU spotted that:
+
+   "\(x,y):num#num. (x,y)";;
+
+would not parse in Common Lisp versions of HOL. This is fixed by replacing:
+
+   (eq (cadaddr vars) 'prod))
+
+by
+
+   (eq (cadaddr vars) '|prod|))
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition to contrib directory                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    BTG                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: contrib/SECD/                                               |
+|----------------------------------------------------------------------------|
+| DATE:          27 February 1992.                                           |
++----------------------------------------------------------------------------+
+
+The HOL sources for the SECD microprocessor specification and partial
+verification have been provided as a large case study.
+The sources are compatible with HOL.88.2.0.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Relaxing of checks for allowable ML infixes                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-dml.l                                                |
+|----------------------------------------------------------------------------|
+| DATE:          3 March 1992.                                               |
++----------------------------------------------------------------------------+
+
+The syntactic category of legal HOL constants have beed added to the
+class of strings that can be made into ML infixes. This means that
+new_special_symbol can be used to create new ML infixables.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (ONCE_DEPTH_CONV)                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          3 March 1992.                                               |
++----------------------------------------------------------------------------+
+
+It has been discovered that in introducing a uniform optimisation scheme for
+depth conversions the behaviour of ONCE_DEPTH_CONV reverted to the behaviour
+it had several versions ago before being modified by TFM. The function would
+originally fail in certain circumstances. After TFM's changes this was no
+longer the case. The function would never fail but instead return a theorem
+of the form |- t = t. This behaviour is considered to be more desirable, so
+the optimised version has been modified to behave in this way.
+
+The REFERENCE entry for ONCE_DEPTH_CONV documented TFM's version, so the
+change brings the behaviour back into line with the documentation. Hence,
+REFERENCE has not had to be changed.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   revision : GEN_ALPHA_CONV.                                  |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/drul.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          9 March 1992.                                               |
++----------------------------------------------------------------------------+
+
+The conversion GEN_ALPHA_CONV has been revised to work with any term of
+the form "B \x.M", where B is a binder constant, according to the function
+is_binder.  The REFERENCE entry has been updated.
+
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/parslist.l                                             |
+|                lisp/f-parser.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          26 March 1992.                                              |
+|                31 May   1992 (bugfix revised).                             |
+|                27 June  1992 (bugfix revised).                             |
++----------------------------------------------------------------------------+
+
+
+The bug illustrated by:
+
+  #"[0 = 0]";;
+  bad list separator
+  skipping: 0 = 0 ] " ;; parse failed
+
+has been fixed by changing (parse-level 30) in ol-list-rtn to
+(parse-level 10).
+
+Added on 27/6/92: the ollp of scolon is temporarilly changed to 0
+during the parsing of lists.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition (GSYM)                                             |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          28 March 1992.                                              |
++----------------------------------------------------------------------------+
+
+A new, general symmetry rule GSYM has been added. It reverses all equations
+first encountered in a top-down search. Useful for reversing universally
+quantified or conjoined equations.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition                                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml, ml/rewrite.ml                                   |
+|----------------------------------------------------------------------------|
+| DATE:          15 April 1992.                                              |
++----------------------------------------------------------------------------+
+
+New rewriting conversions REWRITES_CONV, ONCE_REWRITES_CONV, PURE_REWRITES_CONV
+and PURE_ONCE_REWRITES_CONV were added with functionality analogous to the
+corresponding rewriting rules and tactics.  The rewriting rules and tactics
+were then reimplemented in terms of the new rewriting converions.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new conversion (MAP_CONV)                                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/list.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          16 April 1992.                                              |
++----------------------------------------------------------------------------+
+
+A new conversion MAP_CONV has been added with the following specification.
+
+   MAP_CONV conv "MAP f [e1;...;en]"
+   returns: |- MAP f [e1;...;en] = [r1;...;rn]
+   where  :  conv "f ei" returns |- f ei = ri for 1 <= i <= n
+
+A REFERENCE entry for MAP_CONV has been added.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Revision: EXT                                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-drule.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          16 April 1992.                                              |
++----------------------------------------------------------------------------+
+
+Previously EXT (A |- !x. (f x) = (g x)) would fail if x were free in A.  This
+failure is unnecessary as x can be alpha converted to something not free in A.
+This failure condition has now been removed from EXT and the manual entries in
+reference and description updated to reflect the change.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new list function (MAP2)                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_list.ml                                         |
+|----------------------------------------------------------------------------|
+| DATE:          21 April 1992.                                              |
++----------------------------------------------------------------------------+
+
+
+The following definition of the function
+
+   MAP2 : (*->**->***) -> (*)list -> (**)list -> (***)list
+
+for mapping a curried binary function down a pair of lists has been added
+to the built-in list theory:
+
+   |- (!f. MAP2 f[][] = []) /\
+      (!f h1 t1 h2 t2.
+         MAP2 f(CONS h1 t1)(CONS h2 t2) = CONS(f h1 h2)(MAP2 f t1 t2))
+
+A REFERENCE entry has also been added.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Opimisation to SELECT_CONV                                  |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          24 April 1992.                                              |
++----------------------------------------------------------------------------+
+
+Functionality of SELECT_CONV has been preserved but the runtime and
+intermediate theorems generated has been halved.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Opimisation to SELECT_EQ                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-drule.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          24 April 1992.                                              |
++----------------------------------------------------------------------------+
+
+Removed unnecessary lets, and changed quoted stuff into term contructing
+functions.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Opimisation to rewriting                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/rewrite.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          24 April 1992.                                              |
++----------------------------------------------------------------------------+
+
+Removed unnecessary combinations of GEN and SPEC from the interaction of
+mk_rewrites and mk_conv_net as is done in HOL90.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix  (checkabst)                                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-typeml.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          04 May 1992.                                                |
+|                11 May 1992.                                                |
++----------------------------------------------------------------------------+
+
+Nonsense types were failing to cause an abort:
+
+   #type * foo = FOO of (* list);;
+
+   New constructors declared:
+   FOO : (* list -> * foo)
+
+   #FOO[] : (bool,bool)foo;;
+   bad args for abstype FOO [] : (bool,bool) foo
+
+   #it;;
+   FOO [] : (bool,bool) foo
+
+Also fixed (on 11 May 1992) a similar problem with lists:
+
+   #[] : (bool,bool)list;;
+   [] : (bool,bool) list
+
+   #it;;
+   [] : (bool,bool) list
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-writ.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          4 May 1992.                                                 |
++----------------------------------------------------------------------------+
+
+Pretty printer adjusted so that brackets are printed when printing::
+
+   "(~ <term>) <use-defined-infix> <term>"
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix  (prlet)                                             |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-writml.l                                             |
+|                lisp/f-tml.l                                                |
+|----------------------------------------------------------------------------|
+| DATE:          11 May 1992.                                                |
++----------------------------------------------------------------------------+
+
+The bug illustrated below (discovered by Jim Grundy) has been fixed.
+
+   #rectype (*,**) index_tree =
+     INDEX of ((** list) # (* # (*,**) index_tree) list);;
+
+   New constructors declared:
+   INDEX : ((* list # (** # (**,*) index_tree) list) -> (**,*) index_tree)
+
+   #let INDEX(a,b) = INDEX([],[]);;
+   Error: Attempt to take the cdr of ** which is a non-cons.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   library help directory structure.                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: more_arithmetic and more_lists libraries                    |
+|----------------------------------------------------------------------------|
+| DATE:          13 May 1992.                                                |
++----------------------------------------------------------------------------+
+
+The structure of the help directory in the more_lists and more_arithmetic
+libraries has been changed to be consistent with other libraries.
+Library/<lib>/help/entries replaces Library/<lib>/help/ENTRIES and
+Library/<lib>/help/thms replaces Library/<lib>/help/THEOREMS. The
+Library/<lib>/help/thms directories are further subdivided with one
+subdirectory for each theory in the library. A Makefile for the documentation
+has been added which is now generated automatically from the help files.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix  (top_print)                                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-parsml.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          17 May 1992.                                                |
++----------------------------------------------------------------------------+
+
+Fixed the bug in top_print the caused:
+
+
+    #top_print (print_all_thm o I);;
+    - : (thm -> void)
+
+    #TRUTH;;
+    Error: Funcall of NIL which is a non-function.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   autoloading messages                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-thyfn.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          27 May 1992.                                                |
++----------------------------------------------------------------------------+
+
+
+Autoloading message changed from (for example):
+
+   Theorem LESS_SUC autoloaded from theory `prim_rec`.
+
+to
+
+   Theorem LESS_SUC autoloading from theory `prim_rec` ...
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition of HOLPATH                                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JVT                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-tml.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          29 May 1992.                                                |
++----------------------------------------------------------------------------+
+
+A new facility has been added to the HOL system.  HOL now looks for
+the environment variable HOLPATH on startup.  If found, it uses the
+path that it contains as the default top-level for the system.  This
+allows system binaries to be transported to new sites and used with a
+minimum of effort.  The environment variable holds the name of the
+directory that is to be used in exactly the same form as that expected
+by the "install" command.
+
+  E.g.
+
+    if one would normally type in:
+
+      #install `myholdir`;;
+      HOL installed (`myholdir`)
+      () : void
+
+    then, setting HOLPATH by doing:
+
+      csh> setenv HOLPATH myholdir
+
+             or
+
+      sh> HOLPATH=myholdir ; export HOLPATH
+
+    has the same effect.
+
+Note that setting HOLPATH does not in any way change the location of
+the lisp compiler (liszt) if it is a Franz-based image.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: wellorder                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/wellorder                                           |
+|----------------------------------------------------------------------------|
+| DATE:          30 May 1992                                                 |
++----------------------------------------------------------------------------+
+
+A new library "wellorder" has been added, which provides as theorems four
+useful versions of the Axiom of Choice, including Zorn's Lemma and the
+Well-Ordering Principle. The library includes full documentation, and is
+intended to supersede the older "well-order" library written by Ton Kalker.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (library Makefile)                                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_arithmetic/Makefile,                           |
+|                Library/more_lists/Makefile                                 |
+|----------------------------------------------------------------------------|
+| DATE:          10 June 1992.                                               |
++----------------------------------------------------------------------------+
+
+Some of the entries in the Makefiles for the more_arithmetic and more_lists
+libraries had a line starting with spaces instead of a TAB (discovered by TFM).
+This caused makes of the associated files to fail. TAB characters have been
+inserted.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: latex-hol                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/latex-hol                                           |
+|----------------------------------------------------------------------------|
+| DATE:          12 Jun 1992                                                 |
++----------------------------------------------------------------------------+
+
+A new library "latex-hol" has been added, which automatically converts HOL
+output to LaTeX. Full documentation is included.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: abs_theory                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/abs_theory                                          |
+|----------------------------------------------------------------------------|
+| DATE:          19 Jun 1992                                                 |
++----------------------------------------------------------------------------+
+
+A new library "abs_theory", written by Phil Windley, has been added. It
+implements abstract theories for HOL.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix  (theorem name change)                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_lists/shift.ml                                 |
+|----------------------------------------------------------------------------|
+| DATE:          24 June 1992.                                               |
++----------------------------------------------------------------------------+
+
+The definitions of PAD_LEFT and PAD_RIGHT were the wrong way round (PAD_RIGHT
+padded on the left, and PAD_LEFT on the right) so have been swapped. The
+theorem names ROTATE1_LEFT and ROTATE1_RIGHT clashed with the definitions,
+so both theorem and definition could not be autoloaded. The theorem names have
+been changed to ROTATE1_LEFT_CONS and ROTATE1_RIGHT_SNOC, respectively. The
+documentation has been changed accordingly. These mistakes were found by Wai
+Wong.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/list.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          26 June 1992.                                               |
++----------------------------------------------------------------------------+
+
+Definitions of APPEND_CONV and MAP_CONV changed so that they fail on
+inappropriate terms.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-writ.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          27 June 1992.                                               |
+| MODIFIED:      28 June 1992.                                               |
++----------------------------------------------------------------------------+
+
+Pretty printer fixed so that "let x = 1 in \y:num.1" prints correctly.
+Previously it printed as shown below:
+
+   #"let x = 1 in \y:num.1";;
+   "LET(\x y. 1)1" : term
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition to sets, pred_sets, and finite_sets libraries.     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/sets,pred_sets,finite_sets.                         |
+|----------------------------------------------------------------------------|
+| DATE:          28 June 1992.                                               |
++----------------------------------------------------------------------------+
+
+The following theorem has been added to the finite_sets library:
+
+  DISJOINT_INSERT |- !x s t. DISJOINT(x INSERT s)t = DISJOINT s t /\ ~x IN t
+  LESS_CARD_DIFF  |- !t s. (CARD t) < (CARD s) ==> 0 < (CARD(s DIFF t))
+
+The following theorems have been added to the sets and pred_sets libraries:
+
+  LESS_CARD_DIFF  |- !t. FINITE t ==>
+                     (!s. FINITE s ==>
+                          (CARD t) < (CARD s) ==> 0 < (CARD(s DIFF t)))
+
+The following theorems have been added to the sets, pred_sets, and finite_sets
+libraries:
+
+  DISJOINT_EMPTY       |- !s. DISJOINT EMPTY s /\ DISJOINT s EMPTY
+  DISJOINT_DELETE_SYM  |- !s t x. DISJOINT(s DELETE x)t = DISJOINT(t DELETE x)s
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition (print_unquoted_term, print_unquoted_type)         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-writol.l lisp/hol-writ.l                             |
+|----------------------------------------------------------------------------|
+| DATE:          1 July 1992.                                                |
++----------------------------------------------------------------------------+
+
+Functions have been added to print terms and types without surrounding quotes.
+The leading colon (`:') for types is NOT printed. Reference entries have been
+added.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (theorem name change)                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_arithmetic/suc.ml                              |
+|----------------------------------------------------------------------------|
+| DATE:          5 July 1992.                                                |
++----------------------------------------------------------------------------+
+
+The theorem NOT_SUC_LESS_EQ in theory suc of library more_arithmetic had the
+same name as a different theorem in the standard theory arithmetic. Its name
+in the library has been changed to NOT_FORALL_SUC_LESS_EQ. The documentation
+has been changed accordingly.  This was spotted by MJCG.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   name change                                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml ml/num.ml ml/prim_rec.ml ml/rewrite.ml           |
+|                ml/tydefs.ml ml/tyfns.ml                                    |
+|----------------------------------------------------------------------------|
+| DATE:          13 July 1992.                                                |
++----------------------------------------------------------------------------+
+
+The new rewriting conversions have been renamed to something more natural:
+PURE_REWRITE_CONV, REWRITE_CONV, PURE_ONCE_REWRITE_CONV, ONCE_REWRITE_CONV.
+The existing REWRITE_CONV which is the primitive from which all rewriting
+is constructed has been renamed to REWR_CONV.
+The file newrw in contrib is a shell script that will automatically make
+the substitutions required to update old ml code with respect to this
+change.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new theorems (arithmetic)                                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_arith.ml                                        |
+|                theories/mk_arith_thms.ml                                   |
+|                ml/load_thms.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          14 July 1992                                                |
++----------------------------------------------------------------------------+
+
+The following general arithmetic theorems have been added:
+
+   LESS_LESS_CASES =    |- !m n. (m = n) \/ m < n \/ n < m
+   GREATER_EQ =         |- !n m. n >= m = m <= n
+   LESS_EQ_CASES =      |- !m n. m <= n \/ n <= m
+   LESS_EQUAL_ADD =     |- !m n. m <= n ==> (?p. n = m + p)
+   LESS_EQ_EXISTS =     |- !m n. m <= n = (?p. n = m + p)
+   NOT_LESS_EQUAL =     |- !m n. ~m <= n = n < m
+   LESS_EQ_0 =          |- !n. n <= 0 = (n = 0)
+   MULT_EQ_0 =          |- !m n. (m * n = 0) = (m = 0) \/ (n = 0)
+   LESS_MULT2 =         |- !m n. 0 < m /\ 0 < n ==> 0 < (m * n)
+   LESS_EQ_LESS_TRANS = |- !m n p. m <= n /\ n < p ==> m < p
+   LESS_LESS_EQ_TRANS = |- !m n p. m < n /\ n <= p ==> m < p
+
+In addition, the factorial function has been defined, with one theorem:
+
+   FACT =               |- (FACT 0 = 1) /\
+                           (!n. FACT(SUC n) = (SUC n) * (FACT n))
+   FACT_LESS =          |- !n. 0 < (FACT n)
+
+Evenness and oddity have been defined, and a reasonable complement of theorems
+provided:
+
+   EVEN =               |- (EVEN 0 = T) /\ (!n. EVEN(SUC n) = ~EVEN n)
+   ODD =                |- (ODD 0 = F) /\ (!n. ODD(SUC n) = ~ODD n)
+   EVEN_ODD =           |- !n. EVEN n = ~ODD n
+   ODD_EVEN =           |- !n. ODD n = ~EVEN n
+   EVEN_OR_ODD =        |- !n. EVEN n \/ ODD n
+   EVEN_AND_ODD =       |- !n. ~(EVEN n /\ ODD n)
+   EVEN_ADD =           |- !m n. EVEN(m + n) = (EVEN m = EVEN n)
+   EVEN_MULT =          |- !m n. EVEN(m * n) = EVEN m \/ EVEN n
+   ODD_ADD =            |- !m n. ODD(m + n) = ~(ODD m = ODD n)
+   ODD_MULT =           |- !m n. ODD(m * n) = ODD m /\ ODD n
+   EVEN_DOUBLE =        |- !n. EVEN(2 * n)
+   ODD_DOUBLE =         |- !n. ODD(SUC(2 * n))
+   EVEN_ODD_EXISTS =    |- !n. (EVEN n ==> (?m. n = 2 * m)) /\
+                               (ODD n ==> (?m. n = SUC(2 * m)))
+   EVEN_EXISTS =        |- !n. EVEN n = (?m. n = 2 * m)
+   ODD_EXISTS =         |- !n. ODD n = (?m. n = SUC(2 * m))
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new filtered rewriting functions                            |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/rewrite.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          17 July 1992                                                |
++----------------------------------------------------------------------------+
+
+For the sake of consistancy there is now a complete set of filtered rewriting
+functions. They are:
+    FILTER_PURE_ASM_REWRITE_RULE
+    FILTER_ASM_REWRITE_RULE
+    FILTER_PURE_ONCE_ASM_REWRITE_RULE
+    FILTER_ONCE_ASM_REWRITE_RULE
+and
+    FILTER_PURE_ASM_REWRITE_TAC
+    FILTER_ASM_REWRITE_TAC
+    FILTER_PURE_ONCE_ASM_REWRITE_TAC
+    FILTER_ONCE_ASM_REWRITE_TAC
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   pretty-printer modification (print_thm)                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-writ.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          20 July 1992                                                |
++----------------------------------------------------------------------------+
+
+A fix from David Shepherd has been put in for the problem of printing theorems
+which have many hypotheses elided to dots. Formerly the conclusion of
+the theorem would have been justified in the narrow field to the right of the
+dots and turnstile. Now a line break is allowed before the turnstile.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: reals                                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/reals                                               |
+|----------------------------------------------------------------------------|
+| DATE:          21 July 1992                                                |
++----------------------------------------------------------------------------+
+
+A new library "reals" has been added, which contains a definitional theory of
+real numbers including properties of the elementary transcendental functions.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfixes in unwind library                                  |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/unwind/unwinding.ml                                 |
+|----------------------------------------------------------------------------|
+| DATE:          22 July 1992                                                |
++----------------------------------------------------------------------------+
+
+The automatic unwinding function in the unwind library had two defects. First,
+it was possible for memory to be exhausted during the loop analysis process
+due to the generation of a list of combinations. The size of this list is
+exponential in the number of signal lines. The code has been changed so that
+each element of this list is generated in turn, as required. Memory should no
+longer be exhausted for examples with many signals, but the computation time
+remains exponential. Some optimisations have been included in an attempt to
+avoid the large computation times.
+
+Second, the loop analysis algorithm did not give full priority to unwinding
+internal lines, so it was possible for an internal (existentially quantified)
+line to be left unwound when it could have been eliminated at the expense of
+leaving a recursive equation in an external line. The new version tries to
+eliminate the internal lines before considering the externals. One side-effect
+of this change is that the automatic unwinding function and its derivatives
+may now produce different results to the ones they produced previously;
+the lines left unwound may not be the same as they were before.
+
+Thanks to Brian Graham and Sara Kalvala for pointing out these bugs.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (X_CHOOSE_THEN)                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/tacont.ml                                                |
+|----------------------------------------------------------------------------|
+| DATE:          02 August 1992                                              |
++----------------------------------------------------------------------------+
+
+New code from TFM has been put in to fix a bug in X_CHOOSE_THEN which led to
+problems with STRIP_TAC.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Theorem deletions                                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_arithmetic/ineq.ml                             |
+|                Library/more_arithmetic/add.ml                              |
+|                Library/more_arithmetic/odd_even.ml                         |
+|                Library/more_arithmetic/mult.ml                             |
+|                Library/more_arithmetic/zero.ml                             |
+|                Library/more_arithmetic/pre.ml                              |
+|                Library/more_arithmetic/sub.ml                              |
+|                Library/more_arithmetic/suc.ml                              |
+|                Library/more_lists/range.ml                                 |
+|                Library/more_lists/firstn.ml                                |
+|----------------------------------------------------------------------------|
+| DATE:          21 August 1992.                                             |
++----------------------------------------------------------------------------+
+
+Some theorems and definitions in the more_arithmetic library have been
+redefined in the main system - see earlier change by JRH. To avoid
+duplication, these theorems and definitions have now been deleted from the
+more_arithmetic library. In some cases this means the names of the theorems
+have changed. Some minor changes to the theorems have also been made such as
+variable renaming and conjuncts being split into multiple theorems. The names
+of the constants used to define odd are now ODD and EVEN instead of ODD_NUM
+and EVEN_NUM. Theorems have been renamed to maintain consistency
+with the new constant names.  The theorems affected are given below.
+
+  OLD                           NEW
+
+NUM_DISJ_CASES           --> LESS_LESS_CASES (order of disjuncts changed)
+GREATER_EQ               --> GREATER_EQ (different variable names)
+LESS_EQ_CASES            --> LESS_EQ_CASES (different variable names)
+LESS_EQ_LESS_TRANS       --> LESS_EQ_LESS_TRANS/LESS_LESS_EQ_TRANS
+                                     (conjunct split)
+LESS_EQ_ADD2             --> LESS_EQUAL_ADD (GSYM'd)
+NOT_LESS_EQ_LESS         --> NOT_LESS_EQUAL (different variable names)
+
+EVEN_NUM                 --> EVEN_EXISTS
+NUM_EVEN_MULT            --> EVEN_IMPL_MULT
+NUM_EVEN_ODD_PLUS_CASES  --> EVEN_ODD_PLUS_CASES
+NUM_EVEN_ODD_SUC         --> EVEN_ODD_SUC
+NUM_EVEN_OR_ODD          --> EVEN_OR_ODD
+NUM_MULT_EVEN            --> MULT_EVEN
+NUM_MULT_ODD             --> MULT_ODD
+NUM_NOT_EVEN_AND_ODD     --> EVEN_AND_ODD
+NUM_NOT_EVEN_NOT_ODD     --> EVEN_ODD / ODD_EVEN  (conjunct split and GSYM'd)
+NUM_NOT_EVEN_ODD_SUC_EVEN_ODD  --> NOT_EVEN_ODD_SUC_EVEN_ODD
+NUM_ODD_MULT                   --> ODD_IMPL_MULT
+ODD_NUM                        --> ODD_EXISTS
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Removal of Library dependence                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: more_arithmetic and more_lists libraries                    |
+|----------------------------------------------------------------------------|
+| DATE:          21 August 1992.                                             |
++----------------------------------------------------------------------------+
+
+The dependence of the more_arithmetic library on the auxiliary library has
+been removed. This  involved only changes to some proofs. The more_lists
+library which still depends on the library (though some dependencies have
+been removed) loads it as needed, instead of relying on more_arithmetic to
+load it.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (MATCH_MP)                                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          25 August 1992                                              |
++----------------------------------------------------------------------------+
+
+The original MATCH_MP tended to introduce genvars if there were variables free
+in the consequent but not the antecedent of its first argument. The version
+fixing this introduced a variable capture bug, exemplified by:
+
+  MATCH_MP (|- !x z y. (x = y) ==> (x + z = y + z))
+           (|- p = z) =
+        (|- p + z = z + z)
+
+The new version of MATCH_MP will pick appropriate variants, and universally
+quantify over any which were originally universally quantified in the first
+theorem. It is also somewhat more efficient than the old version in terms of
+primitive inferences, and often in raw running time.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Modified built-in theorem                                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM/BTG                                                     |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_arith_thms.ml                                   |
+|----------------------------------------------------------------------------|
+| DATE:          2 September 1992.                                           |
++----------------------------------------------------------------------------+
+
+Brian Graham spotted that the built-in theorem INV_PRE_LESS:
+
+  |- !m n. 0 < m /\ 0 < n ==> ((PRE m < PRE n) = (m < n))
+
+could be strengthened to
+
+  |- !m. 0 < m  ==> (!n. (PRE m < PRE n) = (m < n))
+
+And so it has been done.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Theorem moved                                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_arith_thms.ml, ml/drul.ml                       |
+|                ml/load_thms.ml, theories/mk_tree.ml,                       |
+|                Library/window/hol_ext.ml                                   |
+|----------------------------------------------------------------------------|
+| DATE:          26 September 1992.                                          |
++----------------------------------------------------------------------------+
+
+The theorem IMP_DISJ_THM has been moved from the theory `arithmetic' to the
+core system. It no longer inhabits a theory, but is bound at top-level.
+
+  |- !t1 t2. t1 ==> t2 = ~t1 \/ t2
+
+Explicit loading of this theorem has been removed from the files:
+
+  ml/load_thms.ml
+  theories/mk_tree.ml
+  Library/window/hol_ext.ml
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New theorems (logical tautologies)                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/drul.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          26 September 1992.                                          |
++----------------------------------------------------------------------------+
+
+The following theorems have been added to the core system:
+
+IMP_F_EQ_F      |- !t. t ==> F = (t = F)
+AND_IMP_INTRO   |- !t1 t2 t3. t1 ==> t2 ==> t3 = t1 /\ t2 ==> t3
+EQ_IMP_THM      |- !t1 t2. (t1 = t2) = (t1 ==> t2) /\ (t2 ==> t1)
+EQ_EXPAND       |- !t1 t2. (t1 = t2) = ((t1 /\ t2) \/ (~t1 /\ ~t2))
+
+COND_RATOR      |- !b (f:*->**) g x. (b => f | g) x = (b => f x | g x)
+COND_RAND       |- !(f:*->**) b x y. f (b => x | y) = (b => f x | f y)
+COND_ABS        |- !b (f:*->**) g. (\x. (b => f(x) | g(x))) = (b => f | g)
+COND_EXPAND     |- !b t1 t2. (b => t1 | t2) = ((~b \/ t1) /\ (b \/ t2))
+
+The theorems do not inhabit a theory.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Theorems moved                                              |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_arith_thms.ml, ml/load_thms.ml,                 |
+|                Library/more_arithmetic/ineq.ml                             |
+|                Library/more_arithmetic/add.ml                              |
+|                Library/more_arithmetic/suc.ml                              |
+|----------------------------------------------------------------------------|
+| DATE:          28 September 1992.                                          |
++----------------------------------------------------------------------------+
+
+The following theorems have been moved from the `more_arithmetic' library to
+the theory `arithmetic'. The first has also undergone a change of variable
+names.
+
+  EQ_LESS_EQ          |- !m n. (m = n) = m <= n /\ n <= m
+  ADD_MONO_LESS_EQ    |- !m n p. (m + n) <= (m + p) = n <= p
+  NOT_SUC_LESS_EQ_0   |- !n. ~(SUC n) <= 0
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New arithmetic theorems                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_arith_thms.ml, ml/load_thms.ml,                 |
+|----------------------------------------------------------------------------|
+| DATE:          29 September 1992.                                          |
++----------------------------------------------------------------------------+
+
+The following theorems have been added to the `arithmetic' theory to support
+the arithmetic proof procedure:
+
+  NOT_LEQ              |- !m n. ~m <= n = (SUC n) <= m
+  NOT_NUM_EQ           |- !m n. ~(m = n) = (SUC m) <= n \/ (SUC n) <= m
+  NOT_GREATER          |- !m n. ~m > n = m <= n
+  NOT_GREATER_EQ       |- !m n. ~m >= n = (SUC m) <= n
+  SUC_ONE_ADD          |- !n. SUC n = 1 + n
+  SUC_ADD_SYM          |- !m n. SUC(m + n) = (SUC n) + m
+  NOT_SUC_ADD_LESS_EQ  |- !m n. ~(SUC(m + n)) <= m
+  MULT_LESS_EQ_SUC     |- !m n p. m <= n = ((SUC p) * m) <= ((SUC p) * n)
+
+  SUB_LEFT_ADD         |- !m n p. m + (n - p) = (n <= p => m | (m + n) - p)
+  SUB_RIGHT_ADD        |- !m n p. (m - n) + p = (m <= n => p | (m + p) - n)
+  SUB_LEFT_SUB         |- !m n p. m - (n - p) = (n <= p => m | (m + p) - n)
+  SUB_RIGHT_SUB        |- !m n p. (m - n) - p = m - (n + p)
+  SUB_LEFT_SUC         |- !m n. SUC(m - n) = (m <= n => SUC 0 | (SUC m) - n)
+  SUB_LEFT_LESS_EQ     |- !m n p. m <= (n - p) = (m + p) <= n \/ m <= 0
+  SUB_RIGHT_LESS_EQ    |- !m n p. (m - n) <= p = m <= (n + p)
+  SUB_LEFT_LESS        |- !m n p. m < (n - p) = (m + p) < n
+  SUB_RIGHT_LESS       |- !m n p. (m - n) < p = m < (n + p) /\ 0 < p
+  SUB_LEFT_GREATER_EQ  |- !m n p. m >= (n - p) = (m + p) >= n
+  SUB_RIGHT_GREATER_EQ |- !m n p. (m - n) >= p = m >= (n + p) \/ 0 >= p
+  SUB_LEFT_GREATER     |- !m n p. m > (n - p) = (m + p) > n /\ m > 0
+  SUB_RIGHT_GREATER    |- !m n p. (m - n) > p = m > (n + p)
+  SUB_LEFT_EQ          |- !m n p. (m = n - p) = (m + p = n) \/ m <= 0 /\ n <= p
+  SUB_RIGHT_EQ         |- !m n p. (m - n = p) = (m = n + p) \/ m <= n /\ p <= 0
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bug fix (binder inheritance)                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Makefile, parse_as_binder.l, hol-pars.l, hol-syn.ml         |
+|----------------------------------------------------------------------------|
+| DATE:          1 October 1992.                                             |
++----------------------------------------------------------------------------+
+
+In order to fix the binder inheritance bug (binder status of binders in
+parents not being activated) the dml'ed definition of parse_as_binder was
+moved from hol-syn.ml (where it was defined via a lisp load) to hol-pars.l.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Theorem moved                                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_arith_thms.ml, ml/load_thms.ml,                 |
+|                Library/more_arithmetic/mult.ml                             |
+|                Library/integer/mk_more_arith.ml                            |
+|----------------------------------------------------------------------------|
+| DATE:          8 October 1992.                                             |
++----------------------------------------------------------------------------+
+
+The following theorem has been moved from the `more_arithmetic' library to
+the theory `arithmetic'. The variable names have been permuted. The theorem
+was also proved in the `integer' library; that occurrence has been deleted.
+
+  LEFT_SUB_DISTRIB    |- !m n p. p * (m - n) = (p * m) - (p * n)
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: arith                                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/arith                                               |
+|----------------------------------------------------------------------------|
+| DATE:          13 October 1992                                             |
++----------------------------------------------------------------------------+
+
+A new library "arith" has been added. This provides a partial decision
+procedure for a subset of linear natural number arithmetic. There are also
+some associated functions, and some more general tools for normalisation and
+for increasing the power of proof procedures.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   portability modification (makeindex)                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Manual, Library.                                            |
+|----------------------------------------------------------------------------|
+| DATE:          15 October 1992                                             |
++----------------------------------------------------------------------------+
+
+A new script has been written
+
+   hol/Manual/LaTeX/makeindex
+
+to provide portable makefiles for documentation.  Calling
+
+   hol/Manual/LaTeX/makeindex  holpath/ file.idx index.tex
+
+where
+
+   holpath/ = pathname to the root hol directory (must end in "/")
+   file.idx = input index file
+   index.tex = outout LaTeX file
+
+will run the makeindex executable called
+
+   holpath/Manual/LaTeX/makeindex.bin/$arch/makeindex
+
+with input file.idx and output index.tex.  To install makeindex on
+a new architecture:
+
+   1) build makeindex in hol/Manual/LaTeX/makeindex.src/src
+
+   2) move the resulting executable into
+
+       hol/Manual/LaTeX/makeindex.src/$arch/makeindex
+
+The makefiles for both REFERENCE and DESCRIPTION, as well as all the existing
+library manuals have been updated to use this portable makeindex.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (DISJ_CASES_THEN2)                                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/tacont.ml                                                |
+|----------------------------------------------------------------------------|
+| DATE:          22 October 1992                                             |
++----------------------------------------------------------------------------+
+
+New code from TFM has been put in to fix a bug in DISJ_CASES_THEN2 which led
+to problems with STRIP_TAC, STRIP_ASSUME_TAC, etc.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition (AKCL GC-time monitoring)                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JVT                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-cl.l                                                 |
+|----------------------------------------------------------------------------|
+| DATE:          27 October 1992                                             |
++----------------------------------------------------------------------------+
+
+New code has been added to allow garbage collection times to be displayed
+in an AKCL version of HOL.  This was a previously unavailable feature.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: UNITY                                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/UNITY                                               |
+|----------------------------------------------------------------------------|
+| DATE:          30 October 1992                                             |
++----------------------------------------------------------------------------+
+
+A new library UNITY, written by Flemming Andersen, has been installed. This
+defines the UNITY theory described in Chandy and Misra's book `Parallel
+Program Design - A Foundation' (Addison Wesley 1988). Full documentation is
+included.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New theorems (about the choice operator)                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/drule.ml                                                 |
+|----------------------------------------------------------------------------|
+| DATE:           3 November 1992.                                           |
++----------------------------------------------------------------------------+
+
+The following theorems about the choice operator have been added:
+
+  SELECT_REFL   = |- !x. (@y. y = x) = x
+  SELECT_UNIQUE = |- !P x. (!y. P y = (y = x)) ==> ($@ P = x)
+
+They do not inhabit a theory.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-parsml.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          9 November 1992.                                            |
++----------------------------------------------------------------------------+
+
+Previously:
+
+   #type ty = FOO in 1;;
+
+   Error in HOL system, please report it.
+   (Diagnostic:
+    ((MK-INC (MK-TYPE (ty NIL MK-CONSTRUCT (FOO))) (MK-INTCONST 1)) BAD
+     ARG TRE))
+
+Now:
+
+   #type ty = FOO in 1;;
+   Local concrete types not supported
+   skipping: in 1 ;; parse failed
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-tml.l                                                |
+|----------------------------------------------------------------------------|
+| DATE:          9 November 1992.                                            |
++----------------------------------------------------------------------------+
+
+Eliminated problems that used to occur if "it" were bound at top-level
+using a let-declaration. It used to get the type of the last
+expression, but the value it was lexically let-bound to. This caused
+top-level printing to go crazy.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-writ.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          16 November 1992.                                           |
++----------------------------------------------------------------------------+
+
+The function `show_types' sets a flag that controls whether or not the
+pretty-printer displays type information in terms. When set to `true' the
+term is supposed to be printed with enough type information to infer the type
+of the term, but this was not the case. The pretty-printer has been modified
+so that now (hopefully) sufficient type information is printed. This should
+allow terms to be cut-and-pasted. See the comments in the sources for a
+description of the criteria for printing type information on subterms.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (MATCH_MP)                                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          18 November 1992                                            |
++----------------------------------------------------------------------------+
+
+The new version of MATCH_MP had problems if type instantiation caused bound
+variables to be renamed to avoid clashing with those in the assumption list.
+This has been fixed by getting a new set of term instantiations after type
+instantiation has been performed. Some explanatory comments for the rather
+obscure code have been added to the source file.

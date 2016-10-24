@@ -1,0 +1,3 @@
+\THEOREM SUB_LESS_EQ arithmetic
+|- !n m. (n - m) <= n
+\ENDTHEOREM

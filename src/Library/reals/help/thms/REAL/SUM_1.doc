@@ -1,0 +1,3 @@
+\THEOREM SUM_1 REAL
+|- !f n. Sum(n,1)f = f n
+\ENDTHEOREM

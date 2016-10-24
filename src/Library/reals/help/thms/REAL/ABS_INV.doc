@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_INV REAL
+|- !x. ~(x = & 0) ==> (abs(inv x) = inv(abs x))
+\ENDTHEOREM

@@ -1,0 +1,27 @@
+\DOC thm_frees
+
+\TYPE {thm_frees : (thm -> term list)}
+
+\SYNOPSIS
+Returns a list of the variables free in a theorem's assumptions and conclusion.
+
+\DESCRIBE
+When applied to a theorem, {A |- t}, the function {thm_frees} returns a list,
+without repetitions, of those variables which are free either in {t} or in
+some member of the assumption list {A}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+When applied to the following theorem:
+{
+   (SUC m) < (SUC n) |- m < n
+}
+\noindent {thm_frees} returns the list {["m"; "n"]}. The term {SUC} is a
+constant, not a variable, so that is not included.
+
+\SEEALSO
+frees, freesl, free_in.
+
+\ENDDOC

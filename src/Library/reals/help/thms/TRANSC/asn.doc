@@ -1,0 +1,5 @@
+\THEOREM asn TRANSC
+|- !y.
+    asn y =
+    (@x. (--(pi / (& 2))) <= x /\ x <= (pi / (& 2)) /\ (sin x = y))
+\ENDTHEOREM

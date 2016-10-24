@@ -1,0 +1,45 @@
+\DOC inst
+
+\TYPE {inst : (term list -> (type # type) list -> term -> term)}
+
+\SYNOPSIS
+Performs type instantiations in a term, avoiding certain ones.
+
+\DESCRIBE
+The function {inst} should be used as follows:
+{
+   inst [tm1;...;tmn] [(t1',t1);...;(tn',tn)] tm
+}
+\noindent where {tm1...tmn} are variables, {t1...tn,t1'...tn'} types and {tm} a
+term to be type-instantiated. This call will instantiate, in parallel, the
+types {t1'...tn'} for the types {t1...tn} wherever they appear in {tm}
+(possibly nowhere). However, if the name (not necessarily the type) of any
+variable being instantiated matches one of the {[tm1...tmn]}, it will be
+renamed (by adding primes) prior to the instantiation. This is useful to avoid
+obscure problems of free variable capture when type-instantiating theorems.
+
+\FAILURE
+Fails if the instantiation list is non-empty and some of the {tm1...tmn} are
+not simply variables.
+
+\EXAMPLE
+{
+#inst [] [(":num",":*")] "(x:*) = (x:*)";;
+"x = x" : term
+
+#inst ["x:bool"] [(":num",":*")] "(x:*) = (x:*)";;
+"x' = x'" : term
+
+#inst [] [(":num",":bool")] "x:bool";;
+"x" : term
+
+#type_of it;;
+":num" : type
+}
+\USES
+Performing internal functions connected with type instantiation.
+
+\SEEALSO
+inst_check, inst_rename_list, inst_type, INST_TYPE.
+
+\ENDDOC

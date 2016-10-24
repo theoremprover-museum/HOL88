@@ -1,0 +1,3 @@
+\THEOREM ISL sum
+|- (!x. ISL(INL x)) /\ (!y. ~ISL(INR y))
+\ENDTHEOREM

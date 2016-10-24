@@ -1,0 +1,2083 @@
+% =====================================================================
+% HOL Course Slides: overview of higher order logic   (c) T melham 1990
+% =====================================================================
+
+\documentstyle[alltt,12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+\def\_{\char'137}
+\def\meta#1{{$\langle\hbox{\it #1\/}\rangle$}}
+
+% ---------------------------------------------------------------------
+% Macro for a tricky underbrace
+% ---------------------------------------------------------------------
+\def\rul#1{\vrule width0.25mm height#1mm depth-1mm}
+\newbox\ubox
+\def\und#1#2{%
+    \setbox\ubox=\hbox{${\stackrel{\rul{#2}}{\scriptstyle\hbox{\rm #1}}}$}%
+    {\wd\ubox=0mm\box\ubox}}
+
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Backward Proof}{8}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+Basic Theorem Proving\\
+{\vrule width20mm height2.5mm depth-2mm}\\
+Backward Proof
+\esectitle
+
+% =====================================================================
+\slide{Backward Proof}
+
+\point{Forward proof style:}
+
+\subpoint{use the rules to derive new theorems from old}
+
+\vskip5mm
+\point{Backward proof style:}
+
+\subpoint{begin with a term that states what we want to prove. This is called
+the {\it goal\/}.}
+
+\subpoint{reduce the goal to simpler and simpler subgoals.}
+
+\subpoint{stop when we reach subgoals that we can prove immediately.}
+
+\subpoint{then let the system construct the proof for us.}
+
+% =====================================================================
+\slide{Example}
+
+\point{The basic idea is:}
+
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,125)\thicklines
+\put(47,110){\makebox(0,0){\Large\bf (P $\wedge$ Q $\supset$ R) 
+$ \wedge$
+(A $\supset$ $\neg$ B)}}
+\put(50,105){\line(2,-1){32}}
+\put(50,105){\line(-2,-1){32}}
+
+\put(18,80){\makebox(0,0){\Large\bf (P $\wedge$ Q $\supset$ R)}}
+\put(18,75){\line(0,-1){8}}
+\put(18,60){\makebox(0,0){\Large\bf ([P;Q], R)}}
+\multiput(30,53)(0,-2){3}{\circle*{1}}
+
+
+\put(82,80){\makebox(0,0){\Large\bf (A $\supset$ $\neg$ B)}}
+\put(82,75){\line(0,-1){8}}
+\put(82,60){\makebox(0,0){\Large\bf [A], $\neg$ B}}
+\put(82,55){\line(0,-1){8}}
+\put(82,40){\makebox(0,0){\Large\bf [A], B $\supset$ F}}
+\put(82,35){\line(0,-1){8}}
+\put(82,20){\makebox(0,0){\Large\bf [A;B], F}}
+\multiput(82,13)(0,-2){3}{\circle*{1}}
+\end{picture}
+\end{center}
+
+\point{Each reduction of goals to subgoals is logically justified by
+a proof in the `opposite direction'.}
+
+
+% =====================================================================
+\slide{Theorems and Goals}
+
+\point{A theorem in HOL has the form:}
+\vskip7mm
+\bpindent\LARGE\bf
+\qquad\qquad$\underbrace{\mathstrut t_1,\ldots,t_n}_
+   {\und{assumptions}{7.5}}  \vdash 
+   \underbrace{\mathstrut t}_{\und{conclusion}{15}}$
+\epindent
+\vskip8mm
+\bpindent\LARGE\bf
+This asserts `if $t_1,\ldots,t_n$ are true then so is $t$'.
+\epindent
+\vskip7mm
+\point{A goal is likewise a pair:}
+
+\vskip7mm
+\bpindent\LARGE\bf
+\qquad\qquad([$t_1$;\ldots;$t_n$], $t$)
+\epindent
+\vskip7mm
+\bpindent\LARGE\bf
+but goals and theorems are separate types!
+\epindent
+
+\vskip7mm
+\point{The aim of backward proof is to turn goals into theorems.}
+
+
+% =====================================================================
+\slide{Overview of Tactics}
+
+\point{Goals are represented by values of type:}
+\vskip 7mm
+\bspindent\Large\bf
+\verb!goal!\quad  $\stackrel{def}{\equiv}$ \quad \verb!term list # term!
+\espindent
+\vskip7mm
+\bpindent\LARGE\bf
+That is, a goal is represented by a list of\\
+assumptions and a conclusion.
+\epindent
+
+\vskip7mm
+
+\point{A {\it tactic} is an ML function of type:}
+
+\vskip 7mm
+\bspindent\Large\bf
+\verb!tactic!\quad  $\stackrel{def}{\equiv}$ \quad 
+\verb!goal -> (goal list # proof)!
+\espindent
+\vskip7mm
+\bpindent\LARGE\bf
+which breaks a goal up into a
+list of {\it subgoals\/} and a {\it proof\/}.
+\epindent
+
+\vskip7mm
+\point{The list of subgoals generated by a tactic must imply the goal.}
+
+
+% =====================================================================
+\slide{Goals and Justifications}
+
+\point{A tactic {\tt T} is a function:}
+\vskip 5mm
+\bspindent\Large\bf
+\verb!T : goal -> !$
+   \underbrace{\hbox{\verb!goal list!}}_{\und{subgoals}{5}}\;\:
+\hbox{\tt \#}\;\:
+   \underbrace{\hbox{\verb!(thm list -> thm)!}}_{\und{justification}{5}}$
+\espindent
+\vskip7mm
+\point{Suppose: {\tt T} $g$ = ([$g_1$;\ldots;$g_n$], $f$)}
+
+\point{Then if the theorems
+$\vdash th_1$, \dots, $\vdash th_n$ solve the goals
+$g_1$, \dots, $g_n$ then:}
+\vskip 7mm
+\bspindent\LARGE\bf
+$f$ [$\vdash th_1$;\ldots;$\vdash th_n$] 
+\espindent
+\vskip7mm
+\bpindent\LARGE\bf
+should solve the original goal $g$.
+\epindent
+
+\vskip5mm
+\point{That is, a tactic takes a goal and returns:}
+\vskip3mm
+\subpoint{a list of subgoals}
+\subpoint{a justification}
+\vskip5mm
+\bpindent\LARGE\bf
+When given a list of theorems that assert the subgoals, the justification
+returns a theorem that asserts the goal.
+\epindent
+
+
+% =====================================================================
+\slide{Notation}
+
+\point{Notation used in the manual for goals:}
+\vskip7mm
+\bpindent\LARGE\bf
+\qquad\qquad$A\:\;\hbox{\verb+?-+}\;\:t$
+\epindent
+\vskip7mm
+\point{A tactic is written:}
+\vskip7mm
+{\Large\begin{alltt}
+                \meta{goal}
+     ===========================  \meta{name} \meta{args}
+       \meta{subgoal}   \dots   \meta{subgoal}
+\end{alltt}}
+
+\vskip7mm
+\point{Example:}
+\vskip7mm
+{\Large\begin{verbatim}
+          A ?- t1 /\ t2
+      ======================  CONJ_TAC
+       A ?- t1      A ?- t2
+\end{verbatim}}
+\vskip7mm
+\bpindent\LARGE\bf
+This splits a conjunction into two conjuncts.
+\epindent
+
+% =====================================================================
+\slide{A Tactic for Conjunctive Goals}
+
+\point{The tactic is:}
+\vskip7mm
+{\Large\begin{verbatim}
+          A ?- t1 /\ t2
+      ======================  CONJ_TAC
+       A ?- t1      A ?- t2
+\end{verbatim}}
+\vskip7mm
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let sgs,p = CONJ_TAC ([], "T /\ ~F");;
+sgs = [([], "T"); ([], "~F")] : goal list
+p = - : proof
+
+#let th1 = TRUTH;;
+th1 = |- T
+
+#let th2 = NOT_INTRO(SPEC "F" FALSITY);;
+th2 = |- ~F
+
+#p [th1;th2];;
+|- T /\ ~F
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Implementation}
+
+\point{The code for {\tt CONJ\_TAC} is:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let CONJ_TAC : tactic(asl,w) =
+     (let l,r = dest_conj w in
+      [(asl,l); (asl,r)],
+     \[th1;th2]. CONJ th1 th2
+    )? failwith `CONJ_TAC`;;
+CONJ_TAC = - : tactic
+\end{verbatim}\end{session}
+
+\point{Example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let l,r = dest_conj "T /\ ~F";;
+l = "T" : term
+r = "~F" : term
+
+#let asl = []:term list;;
+asl = [] : term list
+
+#[(asl,l);(asl,r)];;
+[([], "T"); ([], "~F")] : goal list
+
+#\[th1;th2]. CONJ th1 th2;;
+- : proof
+\end{verbatim}\end{session}
+
+\point{Note failure:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#CONJ_TAC ([], "!t. t /\ t");;
+evaluation failed     CONJ_TAC
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Solving Goals with Theorems}
+
+\point{To use a theorem to solve a goal:}
+\vskip6mm
+{\Large\begin{verbatim}
+       A ?- g
+     =========    ACCEPT_TAC (A |- g)
+         -
+\end{verbatim}}
+\bpindent\LARGE\bf
+The theorem must exactly match the goal.
+\epindent
+
+\point{Example:}
+\vskip 3mm
+\begin{session}\begin{verbatim}
+#ACCEPT_TAC;;
+- : thm_tactic
+
+#ETA_AX;;
+|- !t. (\x. t x) = t
+
+#let tac = ACCEPT_TAC ETA_AX;;
+tac = - : tactic
+
+#let sg,p = tac ([], "!t:*->**. (\x. t x) = t");;
+sg = [] : goal list
+p = - : proof
+
+#p [];;
+|- !t. (\x. t x) = t
+\end{verbatim}\end{session}
+
+\point{Notice the type abbreviation:}
+\vskip 3mm
+\bspindent\Large\bf
+\verb!thm_tactic!\quad  $\stackrel{def}{\equiv}$ \quad 
+\verb!thm -> tactic!
+\espindent
+
+
+% =====================================================================
+\slide{Summary}
+
+\point{Goals:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!goal!\quad  $\stackrel{def}{\equiv}$ \quad \verb!term list # term!
+\espindent
+\vskip7mm
+\point{Tactics:}
+\vskip 5mm
+\bspindent\Large\bf
+\verb!tactic!\quad  $\stackrel{def}{\equiv}$ \quad 
+\verb!goal -> (goal list # proof)!
+\espindent
+\vskip7mm
+\point{Justifications:}
+\vskip3mm
+\subpoint{If: {\tt T} $g$ = ([$g_1$;\ldots;$g_n$], $f$)}
+\vskip3mm
+\subpoint{Then if the theorems
+$\vdash th_1$, \dots, $\vdash th_n$ solve the goals
+$g_1$, \dots, $g_n$ then:}
+\vskip 5mm
+\bspindent\Large\bf
+\qquad$f$ [$\vdash th_1$;\ldots;$\vdash th_n$] 
+\espindent
+\vskip5mm
+\bspindent\Large\bf
+should solve the original goal $g$.
+\epindent
+\vskip7mm
+\point{Notation and examples.}
+\subpoint{{\tt CONJ\_TAC} and {\tt ACCEPT\_TAC}}
+
+% =====================================================================
+\slide{The Subgoal Package}
+
+\point{HOL has a {\it subgoal package\/} for finding tactic proofs
+interactively.}
+
+\point{It maintains a stack of subgoals to be proved.}
+
+\point{The following functions are provided:}
+\vskip 5mm
+\bspindent\Large\bf
+\verb!set_goal : goal -> void!
+\vskip 5mm
+\verb!expand : tactic -> void!
+\vskip 5mm
+\verb!print_state : int -> void!
+\vskip 5mm
+\verb!rotate : int -> void!
+\vskip 5mm
+\verb!backup : void -> void!
+\vskip 5mm
+\verb!top_goal : void -> goal!
+\vskip 5mm
+\verb!save_top_thm : string -> thm!
+\espindent
+
+\point{The subgoal package is for {\it finding\/} tactic proofs only. These
+functions should not appear in completed proofs!}
+
+
+% =====================================================================
+\slide{Functions in the Subgoal Package}
+
+\point{Put an initial goal {\tt($A$,$g$)} on the stack:}
+\vskip4mm
+\bspindent\Large\bf
+\verb!set_goal (!$A$\verb!,!$g$\verb!);;!
+\espindent
+
+\point{Expand the current goal using a tactic $T$:}
+\vskip4mm
+\bspindent\Large\bf
+\verb!expand !$T$\verb!;;!
+\espindent
+
+\point{print the top $n$ layers of the stack:}
+\vskip4mm
+\bspindent\Large\bf
+\verb!print_state !$n$\verb!;;!
+\espindent
+
+\point{Rotate the subgoal stack by $n$ steps:}
+\vskip4mm
+\bspindent\Large\bf
+\verb!rotate !$n$\verb!;;!
+\espindent
+
+
+\point{Undo the last change to the goal stack:}
+\vskip4mm
+\bspindent\Large\bf
+\verb!backup ();;!
+\espindent
+
+
+\point{Get the top goal on the stack:}
+\vskip4mm
+\bspindent\Large\bf
+\verb!top_goal ();;!
+\espindent
+
+\point{Save most recently proved theorem:}
+\vskip4mm
+\bspindent\Large\bf
+\verb!save_top_thm !`\meta{name}`\verb!;;!
+\espindent
+
+% =====================================================================
+\slide{Example}
+
+\point{Set the goal:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "T /\ ~F");;
+"T /\ ~F"
+
+() : void
+\end{verbatim}\end{session}
+
+\point{Expand with {\tt CONJ\_TAC}:}
+\begin{session}\begin{verbatim}
+#expand CONJ_TAC;;
+OK..
+2 subgoals
+"~F"
+
+"T"
+
+() : void
+\end{verbatim}\end{session}
+
+
+\point{Solve the first subgoal:}
+\begin{session}\begin{verbatim}
+#expand (ACCEPT_TAC TRUTH);;
+OK..
+goal proved
+|- T
+
+Previous subproof:
+"~F"
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{Solve the second subgoal:}
+\begin{session}\begin{verbatim}
+#let thm = NOT_INTRO(SPEC "F" FALSITY);;
+thm = |- ~F
+
+#expand (ACCEPT_TAC thm);;
+OK..
+goal proved
+|- ~F
+|- T /\ ~F
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+\point{Save the theorem:}
+\begin{session}\begin{verbatim}
+#let foo = save_top_thm `foo`;;
+foo = |- T /\ ~F
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Proof by Contradiction}
+
+\point{The contradiction tactic:}
+\vskip7mm
+{\Large\begin{verbatim}
+          A ?- g
+      =============  CONTR_TAC  (B |- F)
+            -
+\end{verbatim}}
+\bpindent\LARGE\bf
+We should have ${\tt B} \subseteq {\tt A}$ and, obviously, ${\tt B} \neq \{\}$.
+\epindent
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal (["n < n"], "1 = 0");;
+"1 = 0"
+    [ "n < n" ]
+
+() : void
+
+#top_print print_all_thm;;
+- : (thm -> void)
+
+#let thm = UNDISCH(SPEC "n:num" LESS_REFL);;
+thm = n < n |- F
+
+#expand (CONTR_TAC thm);;
+OK..
+goal proved
+. |- 1 = 0
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Adding Assumptions}
+
+\point{To put a theorem onto the assumption list:}
+\vskip7mm
+{\Large\begin{verbatim}
+          A ?- g
+      ============== ASSUME_TAC  (B |- t)
+       A u {t} ?- g
+\end{verbatim}}
+\bpindent\LARGE\bf
+We require that ${\tt B} \subseteq {\tt A}$.
+\epindent
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal (["n < m"], "n < SUC(SUC m)");;
+"n < (SUC(SUC m))"
+    [ "n < m" ]
+
+() : void
+
+#let thm1 = SPECL ["n:num";"m:num"] LESS_SUC;;
+thm1 = |- n < m ==> n < (SUC m)
+
+#let thm2 = UNDISCH thm1;;
+thm2 = n < m |- n < (SUC m)
+
+#expand (ASSUME_TAC thm2);;
+OK..
+"n < (SUC(SUC m))"
+    [ "n < m" ]
+    [ "n < (SUC m)" ]
+
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Validity}
+
+
+\point{A tactic whose proof part that doesn't actually prove the goal, but some
+{\it other\/} proposition, is called {\it invalid}.}
+
+\point{To be valid, all assumptions of the theorem arguments to tactics must
+also appear among the assumptions of the goal.}
+
+\point{The subgoal package checks validity:}
+\begin{session}\begin{verbatim}
+#set_goal ([], "1 = 0");;
+"1 = 0"
+
+() : void
+
+#let thm = UNDISCH (SPEC "1=0" FALSITY);;
+thm = F |- 1 = 0
+
+#expand (ACCEPT_TAC thm);;
+OK..
+evaluation failed     Invalid tactic
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Proving Disjunctions}
+
+\point{To prove a disjunctive goal:}
+\vskip7mm
+{\Large\begin{verbatim}
+       A \/ B                     A \/ B
+     ========== DISJ1_TAC       ========== DISJ2_TAC
+         A                          B
+\end{verbatim}}
+
+\point{Example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "F \/ T");;
+"F \/ T"
+
+() : void
+
+#expand DISJ2_TAC;;
+OK..
+"T"
+
+() : void
+
+#expand (ACCEPT_TAC TRUTH);;
+OK..
+goal proved
+|- T
+|- F \/ T
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Boolean Equality}
+
+\point{The tactic is:}
+\vskip7mm
+{\Large\begin{verbatim}
+                 A ?- t1 = t2
+     ==================================== EQ_TAC
+      A ?- t1 ==> t2      A ?- t2 ==> t1
+
+\end{verbatim}}
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "(?n. n < m) = ~(m = 0)");;
+"(?n. n < m) = ~(m = 0)"
+
+() : void
+
+#expand EQ_TAC;;
+OK..
+2 subgoals
+"~(m = 0) ==> (?n. n < m)"
+
+"(?n. n < m) ==> ~(m = 0)"
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Universal Quantification}
+
+\point{The tactic is:}
+\vskip7mm
+{\Large\begin{verbatim}
+         A ?- !x.P
+     ================ GEN_TAC
+       A ?- P[x'/x]
+\end{verbatim}}\vskip 5mm
+\bpindent\LARGE\bf
+The system chooses the variable {\tt x'} so that it is not free in \verb+!x.P+
+or {\tt A}.  
+\epindent
+
+\vskip7mm
+\point{For example, set the goal:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal (["x > 0"], "!x:num. x = x");;
+"!x. x = x"
+    [ "x > 0" ]
+
+() : void
+\end{verbatim}\end{session}
+
+\point{Expand with {\tt GEN\_TAC}:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand GEN_TAC;;
+OK..
+"x' = x'"
+    [ "x > 0" ]
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{Current goal:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#print_state 1;;
+"x' = x'"
+    [ "x > 0" ]
+
+() : void
+\end{verbatim}\end{session}
+\vskip4mm
+\point{We can solve this with:}
+\vskip7mm
+{\Large\begin{verbatim}
+         A ?- t = t
+     ================ REFL_TAC
+             -
+\end{verbatim}}
+\vskip2mm
+\point{Continuing the proof:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand REFL_TAC;;
+OK..
+goal proved
+. |- x' = x'
+. |- !x. x = x
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Generalizing the Goal}
+
+\point{To prove a more general goal:}
+\vskip7mm
+{\Large\begin{verbatim}
+          A ?- P[t]
+      =================  SPEC_TAC ("t","x")
+        A ?- !x. P[x]
+\end{verbatim}}
+\bpindent\LARGE\bf
+This is useful for preparing to do induction.
+\epindent
+
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "F ==> (1 = 0)");;
+"F ==> (1 = 0)"
+
+() : void
+
+#expand (SPEC_TAC ("1=0","t:bool"));;
+OK..
+"!t. F ==> t"
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Existential Goals}
+
+\point{Providing a witness:}
+\vskip7mm
+{\Large\begin{verbatim}
+       A ?- ?x.P
+     ============= EXISTS_TAC "t"
+      A ?- P[t/x]
+\end{verbatim}}
+\bpindent\LARGE\bf
+You must know an appropriate term \verb!"t"!.
+\epindent
+
+\point{Example:}
+\begin{session}\begin{verbatim}
+#set_goal ([], "?n. !m. ~(SUC m = n)");;
+"?n. !m. ~(SUC m = n)"
+
+() : void
+
+#expand (EXISTS_TAC "0");;
+OK..
+"!m. ~(SUC m = 0)"
+
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Substitution}
+
+\point{Parallel substitution in a goal:}
+\vskip7mm
+{\Large\begin{verbatim}
+         A ?- P
+     ===============   SUBST_TAC [|- ti == ui]
+      A ?- P[ui/ti]
+\end{verbatim}}
+
+\point{Example:}
+\vskip 5mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "~F");;
+"~F"
+
+() : void
+
+#expand (SUBST_TAC [NOT_DEF;F_DEF]);;
+OK..
+"(\t. t ==> F)(!t. t)"
+
+() : void
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Implications}
+
+\point{To assume the antecdent:}
+\vskip7mm
+{\Large\begin{verbatim}
+       A ?- P ==> Q
+      ==============  DISCH_TAC
+       A u {P} ?- Q
+\end{verbatim}}
+
+\point{Example:}
+\vskip 7mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "(?x:*. P x) ==> ~!x. ~P x");;
+"(?x. P x) ==> ~(!x. ~P x)"
+
+() : void
+
+#expand DISCH_TAC;;
+OK..
+"~(!x. ~P x)"
+    [ "?x. P x" ]
+
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Stripping a Goal}
+
+\point{{\tt STRIP\_TAC} strips the outermost connective or quantifier using
+one of the tactics:}
+\vskip6mm
+\bspindent\LARGE\bf
+{\tt CONJ\_TAC}, {\tt GEN\_TAC} or {\tt DISCH\_TAC}.
+\espindent
+
+\vskip7mm 
+\point{It is often (but {\it not always\/}) the right thing to do
+first in typical tactic proofs.}
+
+\vskip7mm
+\point{For example, set the goal:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "!x. (x \/ ~x) ==> (t1 /\ t2)");;
+"!x. x \/ ~x ==> t1 /\ t2"
+
+() : void
+\end{verbatim}\end{session}
+
+\point{First, strip the universal quantifier:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#expand STRIP_TAC;;
+OK..
+"x \/ ~x ==> t1 /\ t2"
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{The Example Continued}
+
+\point{The current goal:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#print_state 1;;
+"x \/ ~x ==> t1 /\ t2"
+
+() : void
+\end{verbatim}\end{session}
+
+
+\point{Now, assume the antecedent:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#expand STRIP_TAC;;
+OK..
+2 subgoals
+"t1 /\ t2"
+    [ "~x" ]
+
+"t1 /\ t2"
+    [ "x" ]
+
+() : void
+\end{verbatim}\end{session}
+
+\point{The tactic {\tt STRIP\_TAC} (unlike {\tt DISCH\_TAC}) breaks the
+disjunctive antecedent into two subgoals.}
+
+\point{In fact, {\tt STRIP\_TAC} `breaks up' assumed \\antecedents as much as
+possible.}
+
+
+% =====================================================================
+\slide{The Example Concluded}
+
+\point{The current goal:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#print_state 1;;
+2 subgoals
+"t1 /\ t2"
+    [ "~x" ]
+
+"t1 /\ t2"
+    [ "x" ]
+
+() : void
+\end{verbatim}\end{session}
+
+\point{Continue to break up the goal:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#expand STRIP_TAC;;
+OK..
+2 subgoals
+"t2"
+    [ "x" ]
+
+"t1"
+    [ "x" ]
+
+() : void
+\end{verbatim}\end{session}
+
+
+\point{... et cetera.}
+
+% =====================================================================
+\slide{Assuming a Theorem}
+
+\point{This tactic puts the supplied theorem on the assumption list, but breaks
+it up first.}
+
+\point{Conjunctions:}
+\vskip3mm
+{\Large\begin{verbatim}
+      STRIP_ASSUME_TAC (B |- P /\ Q) :
+   
+                 A ?- t
+         ======================  
+            A u {P,Q} ?- t
+\end{verbatim}}
+
+\point{Disjunctions:}
+\vskip3mm
+{\Large\begin{verbatim}
+      STRIP_ASSUME_TAC (B |- P \/ Q) :
+
+                      A ?- t
+         ==============================  
+          A u {P} ?- t    A u {Q} ?- t
+\end{verbatim}}
+
+\point{Existential quantifier:}
+\vskip3mm
+{\Large\begin{verbatim}
+      STRIP_ASSUME_TAC (B |- ?x.P) :
+
+                A ?- t
+         ====================  
+          A u {P[x'/x]} ?- t
+\end{verbatim}}
+
+
+% =====================================================================
+\slide{Assuming a Theorem}
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "0 <= n");;
+"0 <= n"
+
+() : void
+
+#let th = SPEC "n:num" num_CASES;;
+th = |- (n = 0) \/ (?n'. n = SUC n')
+
+#expand (STRIP_ASSUME_TAC th);;
+OK..
+2 subgoals
+"0 <= n"
+    [ "n = SUC n'" ]
+
+"0 <= n"
+    [ "n = 0" ]
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Rewriting Tactics}
+
+\point{Rewrite the goal using supplied theorems and basic simplifications:}
+
+\vskip 4mm
+\bspindent\Large\bf
+\verb!REWRITE_TAC: thm list -> tactic!
+\espindent
+
+
+\point{Rewrite the goal using only the supplied\\ theorems:}
+\vskip 4mm
+\bspindent\Large\bf
+\verb!PURE_REWRITE_TAC: thm list -> tactic!
+\espindent
+
+
+\point{Rewrite the using the supplied theorems and the assumptions of the
+goal:}
+\vskip 4mm
+\bspindent\Large\bf\obeylines
+\verb!PURE_ASM_REWRITE_TAC: thm list -> tactic!
+\verb!ASM_REWRITE_TAC: thm list -> tactic!
+\espindent
+
+\point{There are also `{\tt ONCE\_}' variants of these.}
+
+% =====================================================================
+\slide{Summary}
+
+\point{The subgoal package: {\tt set\_goal} and {\tt expand}.}
+
+\point{Various basic tactics.}
+
+\point{Valid and invalid tactics.}
+
+\point{Rewriting tactics.}
+
+
+% =====================================================================
+\slide{Tacticals}
+
+\point{Tacticals are:}
+
+\subpoint{ML functions used to combine tactics.}
+\subpoint{used for writing complete tactic proofs.}
+\vskip5mm
+
+\point{In general, a {\it tactical\/} is a specific operation on tactics that
+takes one or more tactics as input and return a tactic as output.}
+
+% =====================================================================
+\slide{Choice of Alternatives}
+
+\point{The tactical {\tt ORELSE} is an infix ML function:}
+\vskip6mm
+\bspindent\LARGE\bf
+\verb!ORELSE : tactic -> tactic -> tactic!
+\espindent
+\vskip 7mm
+\point{If $T_1$ and $T_2$ are tactics, then:}
+\vskip5mm
+\bspindent\LARGE\bf
+$T_1\;\;$\verb!ORELSE!$\;\;T_2$
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+is a tactic which:
+\epindent
+\vskip 5mm
+\subpoint{first tries the tactic $T_1$, and}
+\subpoint{applies $T_1$ if it succeeds, or else}
+\subpoint{tries $T_2$ if $T_1$ fails}
+
+\vskip 7mm
+\point{The ML definition of {\tt ORELSE} is simple:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let (t1 ORELSE t2:tactic) g = t1 g ? t2 g;;
+ORELSE = - : (tactic -> tactic -> tactic)
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Example}
+
+\point{Example, try {\tt CONJ\_TAC} or else {\tt GEN\_TAC}}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let tac = CONJ_TAC ORELSE GEN_TAC;;
+tac = - : tactic
+
+#set_goal ([], "!x:*. P x");;
+"!x. P x"
+
+() : void
+
+#expand CONJ_TAC;;
+OK..
+evaluation failed     CONJ_TAC
+
+#expand tac;;
+OK..
+"P x"
+
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Sequencing}
+
+\point{The tactical {\tt THEN} is an ML infix:}
+\vskip6mm
+\bspindent\LARGE\bf
+\verb!THEN : tactic -> tactic -> tactic!
+\espindent
+
+\vskip7mm
+\point{If $T_1$ and $T_2$ are tactics, then:}
+\vskip5mm
+\bspindent\LARGE\bf
+$T_1\;\;$\verb!THEN!$\;\;T_2$
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+is a tactic which:
+\epindent
+\vskip 5mm
+\subpoint{first applies the tactic $T_1$, and}
+\subpoint{then applies $T_2$ to {\it all\/} the resulting subgoals}
+
+
+% =====================================================================
+\slide{Example of Sequencing}
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "!x:bool. T \/ P x");;
+"!x. T \/ P x"
+() : void
+
+#expand
+  (GEN_TAC THEN DISJ1_TAC THEN ACCEPT_TAC TRUTH);;
+OK..
+goal proved
+|- !x. T \/ P x
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Alternative Sequencing}
+
+
+\point{$T_1$ {\tt THEN} $T_2$ applies its second tactic to {\it all\/} the
+subgoals generated by the first tactic.}
+\vskip5mm
+
+\point{If you want to do something different to each resulting subgoals, use
+{\tt THENL}:}
+\vskip6mm
+\bspindent\LARGE\bf
+\verb!THENL : tactic -> tactic list -> tactic!
+\espindent
+
+\vskip7mm
+\point{If $T$, $T_1$, \dots, $T_n$ are tactics, then:}
+\vskip5mm
+\bspindent\LARGE\bf
+{\tt $T\;\;$\verb!THENL!$\;\;$[$T_1$;$\dots$;$T_n$]}
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+is a tactic which:
+\epindent
+\vskip 5mm
+\subpoint{first applies the tactic $T$, and}
+\subpoint{then applies $T_i$ to the $i$th resulting subgoal}
+
+\point{Note: if $T$ generates $n$ subgoals, there must be $n$ tactics in the
+supplied list.}
+
+
+% =====================================================================
+\slide{Example of Alternative Sequencing}
+
+\point{An Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal ([], "T /\ ~F");;
+"T /\ ~F"
+
+() : void
+
+#let tac = 
+  CONJ_TAC THENL
+    [ACCEPT_TAC TRUTH ;
+     STRIP_TAC THEN 
+     CONTR_TAC (ASSUME "F")];;
+tac = - : tactic
+
+
+#expand tac;;
+OK..
+goal proved
+|- T /\ ~F
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Repetition}
+
+\point{Tactical that repeats a tactic until failure:}
+\vskip6mm
+\bspindent\LARGE\bf
+\verb!REPEAT : tactic -> tactic!
+\espindent
+\vskip7mm
+
+\point{If $T$ is a tactic, then the tactic {\tt REPEAT $T$}\\
+applies $T$ repeatedly until it fails.}
+\vskip7mm
+\point{The ML definition of {\tt REPEAT}:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let ALL_TAC : tactic = \g. [g],hd;;
+ALL_TAC = - : tactic
+
+#letrec REPEAT tac g = 
+    ((tac THEN REPEAT tac) ORELSE ALL_TAC) g ;;
+REPEAT = - : (tactic -> tactic)
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Example of Repetition}
+
+\point{A very common first step:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#set_goal ([],"!P Q. ~ P \/ Q ==> (P ==> Q)");;
+"!P Q. ~P \/ Q ==> P ==> Q"
+
+() : void
+
+#expand (REPEAT STRIP_TAC);;
+OK..
+2 subgoals
+"Q"
+    [ "Q" ]
+    [ "P" ]
+
+"Q"
+    [ "~P" ]
+    [ "P" ]
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Auxiliary Functions for Tactics}
+
+\point{To prove a theorem with a tactic:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!TAC_PROOF : (goal # tactic) -> thm!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+This function:
+\epindent
+\vskip5mm
+\subpoint{takes as arguments a goal $(A,g)$ and a tactic $T$,}
+\subpoint{tries to prove the goal using the tactic, and}
+\subpoint{if the tactic succeeds in
+proving the goal, returns the resulting theorem.}
+
+\point{To prove a theorem and save it:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!prove_thm : (string # term # tactic) -> thm!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+This function:
+\epindent
+\vskip5mm
+\subpoint{takes as arguments name {\tt `\meta{name}`}, a goal $(A,g)$ and a
+tactic $T$,}
+\subpoint{tries to prove the goal using the tactic,}
+\subpoint{if the tactic succeeds in
+proving the goal, returns the resulting theorem, and}
+
+\subpoint{saves the theorem under the name {\tt `\meta{name}`} in the current
+theory.}
+
+
+
+% =====================================================================
+\slide{Summary of Tacticals}
+
+\point{Choice of alternatives:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!ORELSE : tactic -> tactic -> tactic!
+\espindent
+\point{Sequencing:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!THEN : tactic -> tactic -> tactic!
+\espindent
+\point{Alternative sequencing:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!THENL : tactic -> tactic list -> tactic!
+\espindent
+\point{Repetition:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!REPEAT : tactic -> tactic!
+\espindent
+\point{Auxiliary functions:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb!TAC_PROOF : (goal # tactic) -> thm!
+\verb!prove_thm : (string # goal # tactic) -> thm!
+\espindent
+
+
+
+% =====================================================================
+\slide{List Tacticals}
+
+\point{We now consider the HOL {\it list tacticals}, which operate on lists of
+theorems, tactics, or\\
+ assumptions.}
+
+\point{The simplest of these are:}
+\vskip5mm
+\bspindent\LARGE\bf\obeylines
+\verb!EVERY : tactic list -> tactic!
+\mbox{}
+\verb!FIRST : tactic list -> tactic!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+which behave as follows:
+\vskip5mm
+\epindent
+
+\subpoint{{\tt EVERY [$T_1$;\dots;$T_n$]} applies the tactics $T_1$, \dots
+$T_n$ in sequence to the goal.}
+
+
+\subpoint{{\tt FIRST [$T_1$;\dots;$T_n$]} applies the first of the tactics
+$T_1$, \dots $T_n$ that succeeds when applied to the goal.}
+
+\point{Thus:}
+
+\vskip5mm
+\bspindent\Large\bf\obeylines
+{\tt EVERY [$T_1$;\dots;$T_n$]} %
+$=$ {\tt $T_1$ THEN \dots THEN $T_n$}
+\mbox{}
+{\tt FIRST [$T_1$;\dots;$T_n$]} %
+$=$ {\tt $T_1$ ORELSE \dots ORELSE $T_n$}
+\espindent
+
+
+% =====================================================================
+\slide{Mapping Tacticals}
+
+\point{The tacticals:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb!MAP_EVERY : (* -> tactic) -> * list -> tactic!
+\mbox{}
+\verb!MAP_FIRST : (* -> tactic) -> * list -> tactic!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+take an ML function $f$ of type \verb!* -> tactic! and 
+a list $l$ of type \verb!* list! and:
+\vskip5mm
+\epindent
+\subpoint{map $f$ it down $l$ to get a list of tactics, and}
+\subpoint{apply every resulting tactic (the first resulting tactic that
+succeeds) to the goal.}
+
+\point{For example}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+{\tt MAP\_EVERY ASSUME\_TAC [|- $t_1$; \dots; |-$t_n$]}
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+is equivalent to
+\epindent
+\vskip5mm
+\bspindent\Large\bf\obeylines
+{\tt EVERY [ASSUME\_TAC |- $t_1$; \dots; ASSUME\_TAC |- $t_n$]}
+\espindent
+
+% =====================================================================
+\slide{Using the Assumptions}
+
+\point{There are three list tacticals for using the \\
+assumption of a goal:}
+\vskip7mm
+\bspindent\Large\bf\obeylines
+\verb!EVERY_ASSUM : (thm -> tactic) -> tactic!
+\mbox{}
+\verb!FIRST_ASSUM : (thm -> tactic) -> tactic!
+\mbox{}
+\verb!ASSUM_LIST : (thm list -> tactic) -> tactic!
+\espindent
+\vskip5mm
+
+\point{These are useful when you want to use the assumptions of a goal as
+theorems.}
+
+\point{For example, you may want to use the \\
+assumptions of a goal as inputs to
+tactics\\ like {\tt ACCEPT\_TAC} and {\tt CONTR\_TAC}.}
+
+
+% =====================================================================
+\slide{Using Every Assumption}
+
+\point{The tactical:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb!EVERY_ASSUM : (thm -> tactic) -> tactic!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+takes an ML function $f$ of type \verb!thm -> tactic! and 
+a goal {\tt ($A$,$g$)} and:
+\vskip5mm
+\epindent
+\subpoint{maps {\tt ASSUME} down the list of assumptions $A$,}
+\subpoint{maps $f$  down the resulting list of theorems,}
+\subpoint{applies every tactic in the resulting list of tactics to the goal.}
+
+\vskip7mm
+\point{For example, condider the goal:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal(["n = 1";"m = 2"], "n < m");;
+"n < m"
+    [ "m = 2" ]
+    [ "n = 1" ]
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{The tactic {\tt SUBST1\_TAC}:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#SUBST1_TAC;;
+- : thm_tactic
+\end{verbatim}\end{session}
+
+
+\point{Substitute into the conclusion:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#print_state 1;;
+"n < m"
+    [ "m = 2" ]
+    [ "n = 1" ]
+
+() : void
+
+#expand (EVERY_ASSUM SUBST1_TAC);;
+OK..
+"1 < 2"
+    [ "m = 2" ]
+    [ "n = 1" ]
+
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Using an Assumption}
+
+\point{The tactical:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb!FIRST_ASSUM : (thm -> tactic) -> tactic!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+takes an ML function $f$ of type \verb!thm -> tactic! and 
+a goal {\tt ($A$,$g$)}, and:
+\vskip5mm
+\epindent
+\subpoint{maps {\tt ASSUME} down the list of assumptions $A$,}
+\subpoint{maps $f$  down the resulting list of theorems,}
+\subpoint{applies the first tactic in the resulting list of tactics that
+succeeds when applied to the goal.}
+\vskip7mm
+\point{For example, consider the goal:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#set_goal ([],"!P Q.  (P /\ Q) ==> (Q /\ P)");;
+"!P Q. P /\ Q ==> Q /\ P"
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{After stripping:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand (REPEAT STRIP_TAC);;
+OK..
+2 subgoals
+"P"
+    [ "P" ]
+    [ "Q" ]
+
+"Q"
+    [ "P" ]
+    [ "Q" ]
+
+() : void
+\end{verbatim}\end{session}
+
+\point{The conclusion is an assumption, so:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand (FIRST_ASSUM ACCEPT_TAC);;
+OK..
+goal proved
+. |- Q
+
+Previous subproof:
+"P"
+    [ "P" ]
+    [ "Q" ]
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Using the Entire Assumption List}
+
+\point{The tacticals {\tt FIRST\_ASSUM} and {\tt EVERY\_ASSUM} are special
+cases of:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb!ASSUM_LIST : (thm list -> tactic) -> tactic!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+which takes an ML function $f$ of type
+\vskip5mm
+\epindent
+\bspindent\Large\bf\obeylines
+\verb!thm list -> tactic! 
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+and a goal {\tt ($A$,$g$)}, and:
+\vskip5mm
+\epindent
+\subpoint{maps {\tt ASSUME} down the list of assumptions $A$,}
+\subpoint{applies $f$ to the resulting list of theorems,}
+\subpoint{applies the resulting tactic to the goal.}
+
+\vskip7mm
+\point{For example, {\tt EVERY\_ASSUM} is defined:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let EVERY_ASSUM  = ASSUM_LIST o MAP_EVERY;;
+EVERY_ASSUM = - : (thm_tactic -> tactic)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Summary: List Tacticals}
+
+\point{For lists of tactics:}
+\subpoint{{\tt EVERY : tactic list -> tactic}}
+\subpoint{{\tt FIRST : tactic list -> tactic}}
+
+\point{Mapping tacticals:}
+\subpoint{{\tt MAP\_EVERY : (* -> tactic) -> * list -> tactic}}
+\subpoint{{\tt MAP\_FIRST : (* -> tactic) -> * list -> tactic}}
+
+\point{Using assumptions:}
+\subpoint{{\tt EVERY\_ASSUM : thm\_tactic -> tactic}}
+\subpoint{{\tt FIRST\_ASSUM : thm\_tactic -> tactic}}
+\subpoint{{\tt ASSUM\_LIST : (thm list -> tactic) -> tactic}}
+
+% =====================================================================
+\slide{`Resolution' Tactics}
+
+\point{In HOL, `resolution' involves of deducing from a list
+of facts}
+\vskip 5mm
+\bspindent\Large\bf
+{\tt [|- $t_1$; |- $t_2$; \dots; |- $t_n$]}
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+and an implication
+\epindent
+\vskip5mm
+\bspindent\Large\bf
+{\tt |- $A_1$ ==> ($A_2$ ==> \dots ==> ($A_n$ ==> $C$))}
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+some instance of {\tt |- $C$}.
+\epindent
+
+\point{This is done by matching antecedants $A_j$ with facts $t_i$ and
+using modus ponens.}
+
+\point{HOL provides one-way matching for this task.}
+
+
+% =====================================================================
+\slide{Matching Modus Ponens}
+
+\point{Suppose we have two theorems:}
+\vskip 5mm
+\bspindent\Large\bf\obeylines
+\verb+thm1 = |- !x y z. t1[x,y,z] ==> t2[x,y,z]+
+\mbox{}
+\verb!thm2 = |- t1[a,b,c]!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+and wish to deduce:
+\epindent
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb!|- t2 [a,b,c]!
+\espindent
+
+\point{This can be done as follows:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let th = SPECL ["a";"b";"c"] thm1;;
+th = |- t1[a,b,c] ==> t2[a,b,c]
+
+#let thm3 = MP th thm2;;
+|- t2[a,b,c]
+\end{verbatim}\end{session}
+
+\point{The rule {\tt MATCH\_MP} does this for us:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let th3 = MATCH_MP thm1 thm2;;
+|- t2[a,b,c]
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Matching Modus Ponens}
+
+\point{{\tt MATCH\_MP} also handles bound variables and type variables:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#let thm1 = SKOLEM_CONV "!x:*. ?y:*. P x y";;
+thm1 = |- (!x. ?y. P x y) = (?y. !x. P x(y x))
+
+#let thm2 = fst(EQ_IMP_RULE thm1);;
+thm2 = |- (!x. ?y. P x y) ==> (?y. !x. P x(y x))
+
+#let thm3 = ASSUME "!n. ?m. n < m";;
+thm3 = . |- !n. ?m. n < m
+
+#MATCH_MP thm2 thm3;;
+. |- ?y''. !x. x < (y'' x)
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Resolution}
+
+\point{The main resolution tactic is:}
+\vskip 5mm
+\bspindent\Large\bf\obeylines
+\verb!IMP_RES_TAC : thm -> tactic!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+which takes an implication
+\epindent
+\vskip5mm
+\bspindent\Large\bf
+{\tt |- $A_1$ ==> ($A_2$ ==> \dots ==> ($A_n$ ==> $C$))}
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+and does the following:
+\epindent
+\subpoint{match the antecedants $A_i$ to the assumptions of the goal}
+\subpoint{derive conclusions from the resulting theorems by modus ponens and
+add them to the\\ assumptions of the goal.}
+
+% =====================================================================
+\slide{Example of Resolution}
+
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal (["a < b";"b < c"], "~(c < a)");;
+"~c < a"
+    [ "b < c" ]
+    [ "a < b" ]
+
+() : void
+
+#let [_;thm] = RES_CANON LESS_TRANS;;
+thm = |- !n p. n < p ==> (!m. m < n ==> m < p)
+
+#expand (IMP_RES_TAC thm);;
+OK..
+"~c < a"
+    [ "b < c" ]
+    [ "a < b" ]
+    [ "!m. m < a ==> m < b" ]
+    [ "a < c" ]
+
+() : void
+\end{verbatim}\end{session}
+
+\point{If the matching can be done in more than one way, all possible results
+are put onto the\\
+assumption list.}
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{{\tt IMP\_RES\_TAC} can solve goals:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal (["a < b";"b < c"], "(a < c)");;
+"a < c"
+    [ "b < c" ]
+    [ "a < b" ]
+
+() : void
+
+#LESS_TRANS;;
+|- !m n p. m < n /\ n < p ==> m < p
+
+#expand (IMP_RES_TAC LESS_TRANS);;
+OK..
+goal proved
+.. |- a < c
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Canonical form}
+
+\point{The implication given to {\tt IMP\_RES\_TAC} is put into canonical form
+by the function:}
+\vskip7mm
+\bspindent\Large\bf
+\verb!RES_CANON : thm -> thm list!
+\espindent
+\vskip7mm
+\bpindent\LARGE\bf
+which does the following transformations:
+\espindent
+\vskip7mm
+{\Large
+\noindent\begin{tabular}{@{\hskip\sind}l%
+@{\quad$\Longrightarrow$\quad}l@{\qquad}}
+  \verb!~t!    
+  &  \verb!t ==> F!\\
+  \verb!t1 /\ t2!	
+  &  \verb!t1!, \verb!t2!\\
+  \verb!(t1\/t2) ==> t !	
+  &  \verb!t1 ==> t!, \verb!t2 ==> t!\\
+  \verb+(t1/\t2) ==> t+ 
+  &  \verb!t1 ==> (t2 ==> t)!, \\
+  \verb+(t1/\t2) ==> t+  & \verb!t2 ==> (t1 ==> t)! \\
+  \verb!t1 = t2!
+  &  \verb!t1 ==> t2!, \verb!t2 ==> t1! \\
+  \verb+!x. t1 ==> t2+ &
+  \verb+t1 ==> !x.t2+ \\
+  \verb+(?x. t1) ==> t2+ &
+  \verb+!x'. t1+[\verb!x'!/\verb!x!]\verb+ ==> t2+ \\
+  \verb!t1 ==> t2! & \verb!t1 ==> t2'! \\
+\end{tabular}}
+
+
+\point{When {\tt RES\_CANON} generates more than one\\
+implication, they are all used for resolution.}
+
+
+% =====================================================================
+\slide{Resolution}
+
+\point{The tactic:}
+\vskip5mm
+\bspindent\Large\bf
+\verb!RES_TAC : tactic!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+does resolution {\tt among\/} the assumptions of a goal by 
+calling {\tt IMP\_RES\_TAC} for all the implications in the assumption list.
+\epindent
+
+\point{We shall see some examples later.}
+
+% =====================================================================
+\slide{Solving Goals with Resolution}
+
+\point{A goal is solved if resolution 
+generates:}
+\subpoint{the theorem {\tt $A$ |- F}, or }
+\subpoint{a theorem $\alpha$-equivalent to the goal's conclusion}
+
+\point{Example proof:}
+\begin{session}\begin{verbatim}
+#set_goal 
+  ([], "((!x:*. P x ==> Q x) /\ P y) ==> Q y");;
+"(!x. P x ==> Q x) /\ P y ==> Q y"
+
+() : void
+
+#expand (REPEAT STRIP_TAC);;
+OK..
+"Q y"
+    [ "!x. P x ==> Q x" ]
+    [ "P y" ]
+
+() : void
+
+#expand RES_TAC;;
+OK..
+goal proved
+|- (!x. P x ==> Q x) /\ P y ==> Q y
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Summary: Resolution}
+
+\point{The resolution tactics:}
+\subpoint{{\tt IMP\_RES\_TAC : thm -> tactic}}
+\subpoint{{\tt RES\_TAC : tactic}}
+
+\point{Implications put in canonical form by:}
+\subpoint{{\tt RES\_CANON : thm -> thm list}}
+
+
+% =====================================================================
+\slide{Example Tactic Proof}
+
+\point{The goal to prove is:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_goal([], "!m n. (n<=m) ==> ?p. m=n+p");;
+"!m n. n <= m ==> (?p. m = n + p)"
+
+() : void
+\end{verbatim}\end{session}
+
+\point{Expand with the definition of {\tt <=} and strip:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand(PURE_ONCE_REWRITE_TAC [LESS_OR_EQ]);;
+OK..
+"!m n. n < m \/ (n = m) ==> (?p. m = n + p)"
+
+() : void
+
+#expand(REPEAT STRIP_TAC);;
+OK..
+2 subgoals
+"?p. m = n + p"
+    [ "n = m" ]
+
+"?p. m = n + p"
+    [ "n < m" ]
+
+() : void
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{We can use the fact {\tt LESS\_ADD\_{1}}:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#LESS_ADD_1;;
+|- !m n. n < m ==> (?p. m = n + (p + 1))
+
+#expand(IMP_RES_TAC LESS_ADD_1);;
+OK..
+"?p. m = n + p"
+    [ "n < m" ]
+    [ "m = n + (p + 1)" ]
+
+() : void
+\end{verbatim}\end{session}
+
+\point{We now substitute for {\tt p}:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand (FIRST_ASSUM SUBST1_TAC);;
+OK..
+"?p'. n + (p + 1) = n + p'"
+    [ "n < m" ]
+    [ "m = n + (p + 1)" ]
+
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Example Continued}
+
+\point{The proof of this subgoal is now easy:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand (EXISTS_TAC "p + 1");;
+OK..
+"n + (p + 1) = n + (p + 1)"
+    [ "n < m" ]
+    [ "m = n + (p + 1)" ]
+
+() : void
+
+#expand REFL_TAC;;
+OK..
+goal proved
+.. |- n + (p + 1) = n + (p + 1)
+.. |- ?p'. n + (p + 1) = n + p'
+.. |- ?p. m = n + p
+. |- ?p. m = n + p
+
+Previous subproof:
+"?p. m = n + p"
+    [ "n = m" ]
+
+() : void
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Example Continued}
+
+
+\point{The correct value is {\tt 0}:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#expand (EXISTS_TAC "0");;
+OK..
+"m = n + 0"
+    [ "n = m" ]
+
+() : void
+\end{verbatim}\end{session}
+
+
+
+\point{An important built-in theorem helps now:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#ADD_CLAUSES;;
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+
+#expand (ASM_REWRITE_TAC [ADD_CLAUSES]);;
+OK..
+goal proved
+. |- m = n + 0
+. |- ?p. m = n + p
+|- !m n. n < m \/ (n = m) ==> (?p. m = n + p)
+|- !m n. n <= m ==> (?p. m = n + p)
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Example Concluded}
+
+\point{The entire proof is:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+let thm =
+    TAC_PROOF
+    (([], "!m n. (n<=m) ==> ?p. m=n+p"),
+     PURE_ONCE_REWRITE_TAC [LESS_OR_EQ] THEN
+     REPEAT STRIP_TAC THENL
+     [IMP_RES_TAC LESS_ADD_1 THEN
+      FIRST_ASSUM SUBST1_TAC THEN
+      EXISTS_TAC "p + 1" THEN
+      REFL_TAC;
+      EXISTS_TAC "0" THEN
+      ASM_REWRITE_TAC [ADD_CLAUSES]]);;
+thm = |- !m n. n <= m ==> (?p. m = n + p)
+\end{verbatim}\end{session}
+
+\end{document}
+

@@ -1,0 +1,144 @@
+\section{Appendix: First Order Group Theory}
+\begin{verbatim}
+The Theory elt_gp
+Parents --  HOL     
+Constants --
+  GROUP ":(* -> bool) # (* -> (* -> *)) -> bool"
+  ID ":(* -> bool) # (* -> (* -> *)) -> *"
+  INV ":(* -> bool) # (* -> (* -> *)) -> (* -> *)"
+
+Definitions --
+  GROUP_DEF
+    |- !G prod.
+        GROUP(G,prod) =
+        (!x y. G x /\ G y ==> G(prod x y)) /\
+        (!x y z. 
+          G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y z))) /\
+        (?e. G e /\
+             (!x. G x ==> (prod e x = x)) /\
+             (!x. G x ==> (?y. G y /\ (prod y x = e))))
+  ID_DEF
+    |- !G prod.
+        ID(G,prod) =
+        (@e. G e /\
+             (!x. G x ==> (prod e x = x)) /\
+             (!x. G x ==> (?y. G y /\ (prod y x = e))))
+  INV_DEF
+    |- !G prod x. INV(G,prod)x = (@y. G y /\ (prod y x = ID(G,prod)))
+
+Theorems --
+\end{verbatim}
+A group is closed under multiplication.
+\begin{verbatim}
+  CLOSURE 
+   |- GROUP(G,prod) ==> (!x y. G x /\ G y ==> G(prod x y))
+
+\end{verbatim}
+The multiplication in a group is associative.
+\begin{verbatim}
+  GROUP_ASSOC
+  |- GROUP(G,prod) ==>
+     (!x y z. G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y z)))
+
+\end{verbatim}
+{\tt ID} is both a left and a right identity in {\tt G}.
+\begin{verbatim}
+  ID_LEMMA
+    |- GROUP(G,prod) ==>
+       G(ID(G,prod)) /\
+       (!x. G x ==> (prod(ID(G,prod))x = x)) /\
+       (!x. G x ==> (prod x(ID(G,prod)) = x)) /\
+       (!x. G x ==> (?y. G y /\ (prod y x = ID(G,prod))))
+
+\end{verbatim}
+{\tt G} is closed under the taking of inverses.
+\begin{verbatim}
+  INV_CLOSURE
+    |- GROUP(G,prod) ==> (!x. G x ==> G(INV(G,prod)x))
+
+\end{verbatim}
+A left inverse for {\tt x} in {\tt G} with respect to {\tt ID} is also a right
+inverse for {\tt x} in {\tt G} with respect to {\tt ID}.
+\begin{verbatim}
+  LEFT_RIGHT_INV
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+             (prod y x = ID(G,prod)) ==> (prod x y = ID(G,prod)))
+
+\end{verbatim}
+{\tt INV x} is both a left inverse for {\tt x} and a right inverse for {\tt x}
+in {\tt G}.
+\begin{verbatim}
+  INV_LEMMA
+    |- GROUP(G,prod) ==>
+       (!x. G x ==>
+            (prod(INV(G,prod)x)x = ID(G,prod)) /\
+            (prod x(INV(G,prod)x) = ID(G,prod)))
+
+\end{verbatim}
+We have right and left cancelation in {\tt G}.
+\begin{verbatim}
+  LEFT_CANCELLATION
+    |- GROUP(G,prod) ==>
+       (!x y z. G x /\ G y /\ G z ==> (prod x y = prod x z) ==> (y = z))
+
+  RIGHT_CANCELLATION
+    |- GROUP(G,prod) ==>
+       (!x y z. G x /\ G y /\ G z ==> (prod y x = prod z x) ==> (y = z))
+
+\end{verbatim}
+Given elements {\tt x} and {\tt y} in {\tt G}, there exist a unique
+element {\tt z} in {\tt G} such that \mbox{\tt (prod x z = y)}.
+\begin{verbatim}
+  RIGHT_ONE_ONE_ONTO
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+        (?z. G z /\ (prod x z = y) /\ 
+             (!u. G u /\ (prod x u = y) ==> (u = z))))
+
+\end{verbatim}
+Given elements {\tt x} and {\tt y} in {\tt G}, there exist a unique
+element {\tt z} in {\tt G} such that \mbox{\tt (prod z x = y)}.
+\begin{verbatim}
+  LEFT_ONE_ONE_ONTO
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+        (?z. G z /\ (prod z x = y) /\ 
+             (!u. G u /\ (prod u x = y) ==> (u = z))))
+
+\end{verbatim}
+{\tt ID} is the unique left identity and the unique right identity in {\tt G}.
+\begin{verbatim}
+  UNIQUE_ID
+    |- GROUP(G,prod) ==>
+       (!e. G e /\
+            ((?x. G x /\ (prod e x = x)) \/ (?x. G x /\ (prod x e = x)))
+             ==> (e = ID(G,prod)))
+
+\end{verbatim}
+{\tt INV} is the unique left inverse for {\tt x}.
+\begin{verbatim}
+  UNIQUE_INV
+    |- GROUP(G,prod) ==>
+       (!x. G x ==>
+            (!u. G u /\ (prod u x = ID(G,prod)) ==> (u = INV(G,prod)x)))
+
+\end{verbatim}
+The inverse of the identity is the identity.
+\begin{verbatim}
+  INV_ID_LEMMA
+    |- GROUP(G,prod) ==> (INV(G,prod)(ID(G,prod)) = ID(G,prod))
+\end{verbatim
+The inverse of the inverse of {\tt x} is {\tt x}.
+\begin{verbatim}
+  INV_INV_LEMMA
+    |- GROUP(G,prod) ==> (!x. G x ==> (INV(G,prod)(INV(G,prod)x) = x))
+
+\end{verbatim}
+The group product anti-distributes over the inverse.
+\begin{verbatim}
+  DIST_INV_LEMMA
+    |- GROUP(G,prod) ==>
+       (!x y. G x /\ G y ==>
+              (prod(INV(G,prod)x)(INV(G,prod)y) = INV(G,prod)(prod y x)))
+\end{verbatim}

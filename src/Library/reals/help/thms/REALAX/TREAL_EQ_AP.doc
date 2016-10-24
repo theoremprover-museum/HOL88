@@ -1,0 +1,3 @@
+\THEOREM TREAL_EQ_AP REALAX
+|- !p q. (p = q) ==> p treal_eq q
+\ENDTHEOREM

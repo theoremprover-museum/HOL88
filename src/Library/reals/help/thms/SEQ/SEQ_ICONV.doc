@@ -1,0 +1,5 @@
+\THEOREM SEQ_ICONV SEQ
+|- !f.
+    bounded(mr1,$num_ge)f /\ (!m n. m num_ge n ==> (f m) >= (f n)) ==>
+    convergent f
+\ENDTHEOREM

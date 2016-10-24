@@ -1,0 +1,23 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: Covers					|
++ ===================================================================== +
+
+
+
+This directory contains the LaTeX source for the fancy cover pages for
+the HOL manual.  
+
+These pages are full of PostScript inclusions, and are useless to you
+if you don't have a PostScript printer.  The psfig macros are also required.  
+If you don't already have them, see the subdirectory psfig for details on 
+installing the package.
+
+You will have to edit the definition of some variables in the Makefile in 
+this subdirectory (Covers) to make things work properly.  The psfig macros 
+are assumed to be on the standard TeX include path.
+
+Once the above requirements have been met, simply typing "make all" at
+the Unix prompt should set things up.  You may then print the files
+titlepages.ps and endpages.ps to your PostScript printer.
+
+As usual, "make clean" and "make clobber" are also provided.

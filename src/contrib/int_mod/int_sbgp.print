@@ -1,0 +1,21 @@
+print_theory `int_sbgp`;;
+The Theory int_sbgp
+Parents --  HOL     more_gp     integer     
+Constants --  int_mult_set ":integer -> (integer -> bool)"     
+Definitions --
+  INT_MULT_SET_DEF  |- !n. int_mult_set n = (\m. ?p. m = p times n)     
+Theorems --
+  INT_SBGP_NORMAL
+    |- !H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+  INT_SBGP_ZERO  |- !H. SUBGROUP((\N. T),$plus)H ==> H(INT 0)
+  INT_SBGP_neg
+    |- !H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))
+  INT_MULT_SET_NORMAL  |- !n. NORMAL((\N. T),$plus)(int_mult_set n)
+  INT_SBGP_TIMES_CLOSED
+    |- !H. SUBGROUP((\N. T),$plus)H ==> (!m p. H p ==> H(m times p))
+  INT_SBGP_CYCLIC
+    |- !H. SUBGROUP((\N. T),$plus)H ==> (?n. H = int_mult_set(INT n))
+  
+******************** int_sbgp ********************
+
+() : void

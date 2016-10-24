@@ -1,0 +1,15 @@
+\indexentry{instantiation of variables!with terms}{1}
+\indexentry{case analysis!on Boolean values}{2}
+\indexentry{simplifier!for propositional formulae}{2}
+\indexentry{instantiation of variables!with true and false}{2}
+\indexentry{optimization}{2}
+\indexentry{duplicated subcalls!elimination of}{2}
+\indexentry{rebuilding terms!avoiding when no change}{2}
+\indexentry{load\_library@{\ptt load\_library}}{3}
+\indexentry{help!updating search path}{3}
+\indexentry{PTAUT\_CONV@{\ptt PTAUT\_CONV}}{5}
+\indexentry{PTAUT\_PROVE@{\ptt PTAUT\_PROVE}}{6}
+\indexentry{PTAUT\_TAC@{\ptt PTAUT\_TAC}}{7}
+\indexentry{TAUT\_CONV@{\ptt TAUT\_CONV}}{8}
+\indexentry{TAUT\_PROVE@{\ptt TAUT\_PROVE}}{8}
+\indexentry{TAUT\_TAC@{\ptt TAUT\_TAC}}{9}

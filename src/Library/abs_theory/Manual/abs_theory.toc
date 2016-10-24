@@ -1,0 +1,17 @@
+\contentsline {chapter}{\numberline {1}The {\ptt abs\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}theory} Library}{3}
+\contentsline {section}{\numberline {1.1}Abstract Theories.}{3}
+\contentsline {paragraph}{OBJ.}{4}
+\contentsline {paragraph}{EHDM.}{4}
+\contentsline {section}{\numberline {1.2}Using the Abstract Theory Package.}{5}
+\contentsline {subsection}{\numberline {1.2.1}Abstract Representations.}{5}
+\contentsline {subsection}{\numberline {1.2.2}Theory Obligations.}{6}
+\contentsline {subsection}{\numberline {1.2.3}Instantiating Theories.}{6}
+\contentsline {paragraph}{Abstract Definitions.}{6}
+\contentsline {paragraph}{Abstract Theorems.}{7}
+\contentsline {section}{\numberline {1.3}Example: Group Theory}{7}
+\contentsline {subsection}{\numberline {1.3.1}Defining Monoids}{7}
+\contentsline {subsection}{\numberline {1.3.2}Defining Groups}{11}
+\contentsline {subsection}{\numberline {1.3.3}Using Groups}{15}
+\contentsline {chapter}{References}{17}
+\contentsline {chapter}{\numberline {2}ML Functions in the {\ptt abs\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}theory} Library}{19}
+\contentsline {chapter}{Index}{29}

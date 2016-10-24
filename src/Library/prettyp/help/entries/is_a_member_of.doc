@@ -1,0 +1,32 @@
+\DOC is_a_member_of
+
+\TYPE {$is_a_member_of : (string -> string list -> print_test)}
+
+\SYNOPSIS
+Function for testing a node-name metavariable in a pretty-printing rule.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{is_a_member_of} forms a {print_test} which yields {true} only if the
+metavariable whose name is the first argument to {is_a_member_of} is bound to
+a node-name which appears in the second argument. This evaluation to a Boolean
+value is only performed when the {print_test} is applied to a parameter list
+and a binding.
+
+\FAILURE
+The function fails if the metavariable named is bound to anything other than
+a single node-name.
+
+\EXAMPLE
+An example of the use of this function is the rule:
+{
+   ''::***node(*,*) where
+          {{`node` is_a_member_of [`plus`;`minus`;`mult`;`div`]}} ->
+       [<h 0> ***node];
+}
+\SEEALSO
+bound_number, bound_name, bound_names, bound_child, bound_children,
+bound_context.
+
+\ENDDOC

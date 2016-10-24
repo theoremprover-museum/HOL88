@@ -1,0 +1,10 @@
+\DOC wildchar1
+
+\TYPE {wildchar1 : string}
+
+\SYNOPSIS
+Internal value of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM REVERSE list
+|- (REVERSE[] = []) /\ (!x l. REVERSE(CONS x l) = SNOC x(REVERSE l))
+\ENDTHEOREM

@@ -1,0 +1,25 @@
+\DOC latex_all_thm
+
+\TYPE {latex_all_thm : (thm -> void)}
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+This function is similar to {latex_thm} except the assumptions of the theorem
+are also printed.
+
+\FAILURE
+Fails if the argument is not an expression evaluated to having
+type {thm}.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to}, {latex_term_add_to},
+{latex_thm}, {latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm_to}, {latex_all_thm_add_to}
+and {latex_theory_to}
+
+\ENDDOC

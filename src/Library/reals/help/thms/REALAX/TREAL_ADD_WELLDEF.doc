@@ -1,0 +1,5 @@
+\THEOREM TREAL_ADD_WELLDEF REALAX
+|- !x1 x2 y1 y2.
+    x1 treal_eq x2 /\ y1 treal_eq y2 ==>
+    (x1 treal_add y1) treal_eq (x2 treal_add y2)
+\ENDTHEOREM

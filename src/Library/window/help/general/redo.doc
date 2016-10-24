@@ -1,0 +1,22 @@
+\DOC redo
+
+\TYPE {redo : (* history -> * history)}
+
+\SYNOPSIS
+Undoes an undo.
+
+\LIBRARY window
+
+\DESCRIBE
+
+{redo h} restores to the present the state that was removed by the last
+{undo} to the history.
+
+\FAILURE
+Fails if nothing has been undone, or if something else has been done
+since the last {undo}.
+
+\SEEALSO
+set_max_hist, get_max_hist, present, epoch, dodo, undo
+
+\ENDDOC

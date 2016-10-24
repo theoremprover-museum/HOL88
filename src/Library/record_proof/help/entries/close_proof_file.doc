@@ -1,0 +1,56 @@
+\DOC close_proof_file
+
+\TYPE {close_proof_file : void -> void}
+
+\KEYWORDS
+proof recording.
+
+\LIBRARY
+record_proof
+
+\SYNOPSIS
+Close the current proof file.
+
+\DESCRIBE
+A proof is a list of inference steps.  The proof recorder records
+every inference performed by the system in an internal buffer.
+When a proof is completed, the raw records are converted into a list
+of proof lines as in Hilbert's style proofs. These lines are then
+output to a disk file. This file is in the {prf} format specified in
+[1].  A proof file may contain one or more of proofs.
+
+The function {close_proof_file} closes the current proof file which
+has been opened by calling the function {new_proof_file}. Since the
+size of the proof file is very large, it will be automatically
+compressed. The name of the compressed file obtained by appending the
+suffix {.gz} to the original name.
+
+
+\FAILURE
+Fails if not proof file is currently opened.
+
+\EXAMPLE
+Below is an example showing the use of this function to record a simple
+proof:
+{
+#new_theory`THY`;;
+() : void
+
+#new_proof_file`myproof`;;
+() : void
+
+#prove_thm(`ADD_0`,
+#  "!m. m + 0 = m",
+#   INDUCT_TAC THEN ASM_REWRITE_TAC[ADD]);;
+|- !m. m + 0 = m
+
+#close_proof_file ();;
+() : void
+}
+
+
+\SEEALSO
+current_proof, current_proof_file, new_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm
+
+\ENDDOC

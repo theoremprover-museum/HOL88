@@ -1,0 +1,5 @@
+\THEOREM PART ltree
+|- (!l. PART[]l = []) /\
+   (!n t l.
+     PART(CONS n t)l = CONS(FST(SPLIT n l))(PART t(SND(SPLIT n l))))
+\ENDTHEOREM

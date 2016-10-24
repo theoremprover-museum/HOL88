@@ -1,0 +1,34 @@
+
+==============================================================================
+  DESCIPTION:   Generalizing an associative and commutative operation
+                with identity to finite sets.
+  AUTHOR:       Ching-Tsun Chou
+  DATE:         Tue Oct  6 14:47:00 PDT 1992
+==============================================================================
+
+File "aci.ml" contains the definitions and theorems for generalizing
+an associative and commutative operation "op" with identity "id"
+to finite sets.  More precisely, a constant
+
+  ACI_OP : (** -> ** -> **) -> ** -> (* -> **) -> (* -> bool) -> **"
+
+is specified (via constant specification) such that
+
+ |- ? ACI_OP : (** -> ** -> **) -> ** -> (* -> **) -> (* -> bool) -> ** .
+    ! op id . ASSOC_COMM_ID op id ==>
+      ( ! f . ACI_OP op id f { } = id ) /\
+      ( ! f s x . FINITE s ==>
+        ( ACI_OP op id f (x INSERT s) = (x IN s) => (ACI_OP op id f s)
+                                        | (op (f x) (ACI_OP op id f s)) ) )
+
+where ASSOC_COMM_ID has the obvious meaning.  Summation and product
+over sets can now be defined using ACI_OP:
+
+ |- set_SUM  = ACI_OP $+ 0
+ |- set_PROD = ACI_OP $* 1
+
+Maximum (minimum) can also be so generalized if there is a least
+(greatest) element in the type.
+
+The basic ideas were stolen from Tom Melham's definition of cardinality
+(CARD) in the new `pred_sets` library.  I would appreciate any comments.

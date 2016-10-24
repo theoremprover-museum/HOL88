@@ -1,0 +1,3 @@
+\THEOREM SUBSET_ANTISYM TOPOLOGY
+|- !P Q. P subset Q /\ Q subset P = (P = Q)
+\ENDTHEOREM

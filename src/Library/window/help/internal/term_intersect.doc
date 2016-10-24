@@ -1,0 +1,10 @@
+\DOC term_intersect.doc
+
+\TYPE {term_intersect.doc : (term list -> term list -> term list)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

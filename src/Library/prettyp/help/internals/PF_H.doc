@@ -1,0 +1,10 @@
+\DOC PF_H
+
+\TYPE {PF_H : ((nat # print_object) list -> print_format)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

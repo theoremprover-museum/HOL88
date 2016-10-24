@@ -1,0 +1,25 @@
+\DOC STRIP_THOBS_TAC
+
+\TYPE {STRIP_THOBS_TAC : tactic}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Strips an explicitly declared theory obligation from a goal, expands it,
+and puts the results in the hypotheses.
+
+\DESCRIBE
+Removes one explicitly declared theory obligation from a goal
+substituting the definition of the theory obligation for the
+name.  The abstract object may or may not be universally quantified.  The
+theory obligations are placed on the assumption list using
+{STRIP_ASSUME_TAC}.
+
+\FAILURE 
+Fails if theory obligation list is empty (e.g. can occur when no
+abstract parent has been declared).
+
+\SEEALSO
+STRIP_THOBS_THEN, STRIP_TAC, STRIP_ASSUME_TAC
+
+\ENDDOC

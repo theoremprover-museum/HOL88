@@ -1,0 +1,3132 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{HRAT}
+\THEOREM hrat\_1 HRAT
+|- hrat_1 = mk_hrat($trat_eq trat_1)
+\ENDTHEOREM
+\THEOREM hrat\_add HRAT
+|- !g00014 g00015.
+    g00014 hrat_add g00015 =
+    mk_hrat
+    ($trat_eq(($@(dest_hrat g00014)) trat_add ($@(dest_hrat g00015))))
+\ENDTHEOREM
+\THEOREM HRAT\_ADD\_ASSOC HRAT
+|- !h i j. h hrat_add (i hrat_add j) = (h hrat_add i) hrat_add j
+\ENDTHEOREM
+\THEOREM HRAT\_ADD\_SYM HRAT
+|- !h i. h hrat_add i = i hrat_add h
+\ENDTHEOREM
+\THEOREM HRAT\_ADD\_TOTAL HRAT
+|- !h i. (h = i) \/ (?d. h = i hrat_add d) \/ (?d. i = h hrat_add d)
+\ENDTHEOREM
+\THEOREM HRAT\_ARCH HRAT
+|- !h. ?n d. hrat_sucint n = h hrat_add d
+\ENDTHEOREM
+\THEOREM hrat\_inv HRAT
+|- !g00013.
+    hrat_inv g00013 = mk_hrat($trat_eq(trat_inv($@(dest_hrat g00013))))
+\ENDTHEOREM
+\THEOREM HRAT\_LDISTRIB HRAT
+|- !h i j.
+    h hrat_mul (i hrat_add j) = (h hrat_mul i) hrat_add (h hrat_mul j)
+\ENDTHEOREM
+\THEOREM hrat\_mul HRAT
+|- !g00016 g00017.
+    g00016 hrat_mul g00017 =
+    mk_hrat
+    ($trat_eq(($@(dest_hrat g00016)) trat_mul ($@(dest_hrat g00017))))
+\ENDTHEOREM
+\THEOREM HRAT\_MUL\_ASSOC HRAT
+|- !h i j. h hrat_mul (i hrat_mul j) = (h hrat_mul i) hrat_mul j
+\ENDTHEOREM
+\THEOREM HRAT\_MUL\_LID HRAT
+|- !h. hrat_1 hrat_mul h = h
+\ENDTHEOREM
+\THEOREM HRAT\_MUL\_LINV HRAT
+|- !h. (hrat_inv h) hrat_mul h = hrat_1
+\ENDTHEOREM
+\THEOREM HRAT\_MUL\_SYM HRAT
+|- !h i. h hrat_mul i = i hrat_mul h
+\ENDTHEOREM
+\THEOREM HRAT\_NOZERO HRAT
+|- !h i. ~(h hrat_add i = h)
+\ENDTHEOREM
+\THEOREM HRAT\_SUCINT HRAT
+|- (hrat_sucint 0 = hrat_1) /\
+   (!n. hrat_sucint(SUC n) = (hrat_sucint n) hrat_add hrat_1)
+\ENDTHEOREM
+\THEOREM hrat\_sucint HRAT
+|- !g00018. hrat_sucint g00018 = mk_hrat($trat_eq(trat_sucint g00018))
+\ENDTHEOREM
+\THEOREM hrat\_tybij HRAT
+|- (!a. mk_hrat(dest_hrat a) = a) /\
+   (!r. (\c. ?x. c = $trat_eq x)r = (dest_hrat(mk_hrat r) = r))
+\ENDTHEOREM
+\THEOREM hrat\_TY\_DEF HRAT
+|- ?rep. TYPE_DEFINITION(\c. ?x. c = $trat_eq x)rep
+\ENDTHEOREM
+\THEOREM trat\_1 HRAT
+|- trat_1 = 0,0
+\ENDTHEOREM
+\THEOREM trat\_add HRAT
+|- !x y x' y'.
+    (x,y) trat_add (x',y') =
+    PRE(((SUC x) * (SUC y')) + ((SUC x') * (SUC y))),
+    PRE((SUC y) * (SUC y'))
+\ENDTHEOREM
+\THEOREM TRAT\_ADD\_ASSOC HRAT
+|- !h i j.
+    (h trat_add (i trat_add j)) trat_eq ((h trat_add i) trat_add j)
+\ENDTHEOREM
+\THEOREM TRAT\_ADD\_SYM HRAT
+|- !h i. (h trat_add i) trat_eq (i trat_add h)
+\ENDTHEOREM
+\THEOREM TRAT\_ADD\_SYM\_EQ HRAT
+|- !h i. h trat_add i = i trat_add h
+\ENDTHEOREM
+\THEOREM TRAT\_ADD\_TOTAL HRAT
+|- !h i.
+    h trat_eq i \/
+    (?d. h trat_eq (i trat_add d)) \/
+    (?d. i trat_eq (h trat_add d))
+\ENDTHEOREM
+\THEOREM TRAT\_ADD\_WELLDEFINED HRAT
+|- !p q r. p trat_eq q ==> (p trat_add r) trat_eq (q trat_add r)
+\ENDTHEOREM
+\THEOREM TRAT\_ADD\_WELLDEFINED2 HRAT
+|- !p1 p2 q1 q2.
+    p1 trat_eq p2 /\ q1 trat_eq q2 ==>
+    (p1 trat_add q1) trat_eq (p2 trat_add q2)
+\ENDTHEOREM
+\THEOREM TRAT\_ARCH HRAT
+|- !h. ?n d. (trat_sucint n) trat_eq (h trat_add d)
+\ENDTHEOREM
+\THEOREM trat\_eq HRAT
+|- !x y x' y'.
+    (x,y) trat_eq (x',y') = ((SUC x) * (SUC y') = (SUC x') * (SUC y))
+\ENDTHEOREM
+\THEOREM TRAT\_EQ\_AP HRAT
+|- !p q. (p = q) ==> p trat_eq q
+\ENDTHEOREM
+\THEOREM TRAT\_EQ\_EQUIV HRAT
+|- !p q. p trat_eq q = ($trat_eq p = $trat_eq q)
+\ENDTHEOREM
+\THEOREM TRAT\_EQ\_REFL HRAT
+|- !p. p trat_eq p
+\ENDTHEOREM
+\THEOREM TRAT\_EQ\_SYM HRAT
+|- !p q. p trat_eq q = q trat_eq p
+\ENDTHEOREM
+\THEOREM TRAT\_EQ\_TRANS HRAT
+|- !p q r. p trat_eq q /\ q trat_eq r ==> p trat_eq r
+\ENDTHEOREM
+\THEOREM trat\_inv HRAT
+|- !x y. trat_inv(x,y) = y,x
+\ENDTHEOREM
+\THEOREM TRAT\_INV\_WELLDEFINED HRAT
+|- !p q. p trat_eq q ==> (trat_inv p) trat_eq (trat_inv q)
+\ENDTHEOREM
+\THEOREM TRAT\_LDISTRIB HRAT
+|- !h i j.
+    (h trat_mul (i trat_add j)) trat_eq
+    ((h trat_mul i) trat_add (h trat_mul j))
+\ENDTHEOREM
+\THEOREM trat\_mul HRAT
+|- !x y x' y'.
+    (x,y) trat_mul (x',y') =
+    PRE((SUC x) * (SUC x')),PRE((SUC y) * (SUC y'))
+\ENDTHEOREM
+\THEOREM TRAT\_MUL\_ASSOC HRAT
+|- !h i j.
+    (h trat_mul (i trat_mul j)) trat_eq ((h trat_mul i) trat_mul j)
+\ENDTHEOREM
+\THEOREM TRAT\_MUL\_LID HRAT
+|- !h. (trat_1 trat_mul h) trat_eq h
+\ENDTHEOREM
+\THEOREM TRAT\_MUL\_LINV HRAT
+|- !h. ((trat_inv h) trat_mul h) trat_eq trat_1
+\ENDTHEOREM
+\THEOREM TRAT\_MUL\_SYM HRAT
+|- !h i. (h trat_mul i) trat_eq (i trat_mul h)
+\ENDTHEOREM
+\THEOREM TRAT\_MUL\_SYM\_EQ HRAT
+|- !h i. h trat_mul i = i trat_mul h
+\ENDTHEOREM
+\THEOREM TRAT\_MUL\_WELLDEFINED HRAT
+|- !p q r. p trat_eq q ==> (p trat_mul r) trat_eq (q trat_mul r)
+\ENDTHEOREM
+\THEOREM TRAT\_MUL\_WELLDEFINED2 HRAT
+|- !p1 p2 q1 q2.
+    p1 trat_eq p2 /\ q1 trat_eq q2 ==>
+    (p1 trat_mul q1) trat_eq (p2 trat_mul q2)
+\ENDTHEOREM
+\THEOREM TRAT\_NOZERO HRAT
+|- !h i. ~(h trat_add i) trat_eq h
+\ENDTHEOREM
+\THEOREM TRAT\_SUCINT HRAT
+|- (trat_sucint 0) trat_eq trat_1 /\
+   (!n. (trat_sucint(SUC n)) trat_eq ((trat_sucint n) trat_add trat_1))
+\ENDTHEOREM
+\THEOREM trat\_sucint HRAT
+|- (trat_sucint 0 = trat_1) /\
+   (!n. trat_sucint(SUC n) = (trat_sucint n) trat_add trat_1)
+\ENDTHEOREM
+\THEOREM TRAT\_SUCINT\_0 HRAT
+|- !n. (trat_sucint n) trat_eq (n,0)
+\ENDTHEOREM
+\section{HREAL}
+\THEOREM CUT\_BOUNDED HREAL
+|- !X. ?x. ~cut X x
+\ENDTHEOREM
+\THEOREM CUT\_DOWN HREAL
+|- !X x y. cut X x /\ y hrat_lt x ==> cut X y
+\ENDTHEOREM
+\THEOREM CUT\_ISACUT HREAL
+|- !X. isacut(cut X)
+\ENDTHEOREM
+\THEOREM CUT\_NEARTOP\_ADD HREAL
+|- !X e. ?x. cut X x /\ ~cut X(x hrat_add e)
+\ENDTHEOREM
+\THEOREM CUT\_NEARTOP\_MUL HREAL
+|- !X u. hrat_1 hrat_lt u ==> (?x. cut X x /\ ~cut X(u hrat_mul x))
+\ENDTHEOREM
+\THEOREM CUT\_NONEMPTY HREAL
+|- !X. ?x. cut X x
+\ENDTHEOREM
+\THEOREM cut\_of\_hrat HREAL
+|- !x. cut_of_hrat x = (\y. y hrat_lt x)
+\ENDTHEOREM
+\THEOREM CUT\_STRADDLE HREAL
+|- !X x y. cut X x /\ ~cut X y ==> x hrat_lt y
+\ENDTHEOREM
+\THEOREM CUT\_UBOUND HREAL
+|- !X x y. ~cut X x /\ x hrat_lt y ==> ~cut X y
+\ENDTHEOREM
+\THEOREM CUT\_UP HREAL
+|- !X x. cut X x ==> (?y. cut X y /\ x hrat_lt y)
+\ENDTHEOREM
+\THEOREM EQUAL\_CUTS HREAL
+|- !X Y. (cut X = cut Y) ==> (X = Y)
+\ENDTHEOREM
+\THEOREM HRAT\_DOWN HREAL
+|- !x. ?y. y hrat_lt x
+\ENDTHEOREM
+\THEOREM HRAT\_DOWN2 HREAL
+|- !x y. ?z. z hrat_lt x /\ z hrat_lt y
+\ENDTHEOREM
+\THEOREM HRAT\_EQ\_LADD HREAL
+|- !x y z. (x hrat_add y = x hrat_add z) = (y = z)
+\ENDTHEOREM
+\THEOREM HRAT\_EQ\_LMUL HREAL
+|- !x y z. (x hrat_mul y = x hrat_mul z) = (y = z)
+\ENDTHEOREM
+\THEOREM HRAT\_GT\_L1 HREAL
+|- !x y. hrat_1 hrat_lt ((hrat_inv x) hrat_mul y) = x hrat_lt y
+\ENDTHEOREM
+\THEOREM HRAT\_GT\_LMUL1 HREAL
+|- !x y. y hrat_lt (x hrat_mul y) = hrat_1 hrat_lt x
+\ENDTHEOREM
+\THEOREM HRAT\_INV\_MUL HREAL
+|- !x y. hrat_inv(x hrat_mul y) = (hrat_inv x) hrat_mul (hrat_inv y)
+\ENDTHEOREM
+\THEOREM hrat\_lt HREAL
+|- !x y. x hrat_lt y = (?d. y = x hrat_add d)
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_ADD2 HREAL
+|- !u v x y.
+    u hrat_lt x /\ v hrat_lt y ==> (u hrat_add v) hrat_lt (x hrat_add y)
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_ADDL HREAL
+|- !x y. x hrat_lt (x hrat_add y)
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_ADDR HREAL
+|- !x y. y hrat_lt (x hrat_add y)
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_ANTISYM HREAL
+|- !x y. ~(x hrat_lt y /\ y hrat_lt x)
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_GT HREAL
+|- !x y. x hrat_lt y ==> ~y hrat_lt x
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_L1 HREAL
+|- !x y. ((hrat_inv x) hrat_mul y) hrat_lt hrat_1 = y hrat_lt x
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_LADD HREAL
+|- !x y z. (z hrat_add x) hrat_lt (z hrat_add y) = x hrat_lt y
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_LMUL HREAL
+|- !x y z. (z hrat_mul x) hrat_lt (z hrat_mul y) = x hrat_lt y
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_LMUL1 HREAL
+|- !x y. (x hrat_mul y) hrat_lt y = x hrat_lt hrat_1
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_MUL2 HREAL
+|- !u v x y.
+    u hrat_lt x /\ v hrat_lt y ==> (u hrat_mul v) hrat_lt (x hrat_mul y)
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_NE HREAL
+|- !x y. x hrat_lt y ==> ~(x = y)
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_R1 HREAL
+|- !x y. (x hrat_mul (hrat_inv y)) hrat_lt hrat_1 = x hrat_lt y
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_RADD HREAL
+|- !x y z. (x hrat_add z) hrat_lt (y hrat_add z) = x hrat_lt y
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_REFL HREAL
+|- !x. ~x hrat_lt x
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_RMUL HREAL
+|- !x y z. (x hrat_mul z) hrat_lt (y hrat_mul z) = x hrat_lt y
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_RMUL1 HREAL
+|- !x y. (x hrat_mul y) hrat_lt x = y hrat_lt hrat_1
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_TOTAL HREAL
+|- !x y. (x = y) \/ x hrat_lt y \/ y hrat_lt x
+\ENDTHEOREM
+\THEOREM HRAT\_LT\_TRANS HREAL
+|- !x y z. x hrat_lt y /\ y hrat_lt z ==> x hrat_lt z
+\ENDTHEOREM
+\THEOREM HRAT\_MEAN HREAL
+|- !x y. x hrat_lt y ==> (?z. x hrat_lt z /\ z hrat_lt y)
+\ENDTHEOREM
+\THEOREM HRAT\_MUL\_RID HREAL
+|- !x. x hrat_mul hrat_1 = x
+\ENDTHEOREM
+\THEOREM HRAT\_MUL\_RINV HREAL
+|- !x. x hrat_mul (hrat_inv x) = hrat_1
+\ENDTHEOREM
+\THEOREM HRAT\_RDISTRIB HREAL
+|- !x y z.
+    (x hrat_add y) hrat_mul z = (x hrat_mul z) hrat_add (y hrat_mul z)
+\ENDTHEOREM
+\THEOREM HRAT\_UP HREAL
+|- !x. ?y. x hrat_lt y
+\ENDTHEOREM
+\THEOREM hreal\_1 HREAL
+|- hreal_1 = hreal(cut_of_hrat hrat_1)
+\ENDTHEOREM
+\THEOREM hreal\_add HREAL
+|- !X Y.
+    X hreal_add Y =
+    hreal(\w. ?x y. (w = x hrat_add y) /\ cut X x /\ cut Y y)
+\ENDTHEOREM
+\THEOREM HREAL\_ADD\_ASSOC HREAL
+|- !X Y Z. X hreal_add (Y hreal_add Z) = (X hreal_add Y) hreal_add Z
+\ENDTHEOREM
+\THEOREM HREAL\_ADD\_ISACUT HREAL
+|- !X Y. isacut(\w. ?x y. (w = x hrat_add y) /\ cut X x /\ cut Y y)
+\ENDTHEOREM
+\THEOREM HREAL\_ADD\_SYM HREAL
+|- !X Y. X hreal_add Y = Y hreal_add X
+\ENDTHEOREM
+\THEOREM HREAL\_ADD\_TOTAL HREAL
+|- !X Y. (X = Y) \/ (?D. Y = X hreal_add D) \/ (?D. X = Y hreal_add D)
+\ENDTHEOREM
+\THEOREM hreal\_inv HREAL
+|- !X.
+    hreal_inv X =
+    hreal
+    (\w.
+      ?d. d hrat_lt hrat_1 /\ (!x. cut X x ==> (w hrat_mul x) hrat_lt d))
+\ENDTHEOREM
+\THEOREM HREAL\_INV\_ISACUT HREAL
+|- !X.
+    isacut
+    (\w.
+      ?d. d hrat_lt hrat_1 /\ (!x. cut X x ==> (w hrat_mul x) hrat_lt d))
+\ENDTHEOREM
+\THEOREM HREAL\_LDISTRIB HREAL
+|- !X Y Z.
+    X hreal_mul (Y hreal_add Z) =
+    (X hreal_mul Y) hreal_add (X hreal_mul Z)
+\ENDTHEOREM
+\THEOREM HREAL\_LT HREAL
+|- !X Y. X hreal_lt Y = (?D. Y = X hreal_add D)
+\ENDTHEOREM
+\THEOREM hreal\_lt HREAL
+|- !X Y. X hreal_lt Y = ~(X = Y) /\ (!x. cut X x ==> cut Y x)
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_LEMMA HREAL
+|- !X Y. X hreal_lt Y ==> (?x. ~cut X x /\ cut Y x)
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_TOTAL HREAL
+|- !X Y. (X = Y) \/ X hreal_lt Y \/ Y hreal_lt X
+\ENDTHEOREM
+\THEOREM hreal\_mul HREAL
+|- !X Y.
+    X hreal_mul Y =
+    hreal(\w. ?x y. (w = x hrat_mul y) /\ cut X x /\ cut Y y)
+\ENDTHEOREM
+\THEOREM HREAL\_MUL\_ASSOC HREAL
+|- !X Y Z. X hreal_mul (Y hreal_mul Z) = (X hreal_mul Y) hreal_mul Z
+\ENDTHEOREM
+\THEOREM HREAL\_MUL\_ISACUT HREAL
+|- !X Y. isacut(\w. ?x y. (w = x hrat_mul y) /\ cut X x /\ cut Y y)
+\ENDTHEOREM
+\THEOREM HREAL\_MUL\_LID HREAL
+|- !X. hreal_1 hreal_mul X = X
+\ENDTHEOREM
+\THEOREM HREAL\_MUL\_LINV HREAL
+|- !X. (hreal_inv X) hreal_mul X = hreal_1
+\ENDTHEOREM
+\THEOREM HREAL\_MUL\_SYM HREAL
+|- !X Y. X hreal_mul Y = Y hreal_mul X
+\ENDTHEOREM
+\THEOREM HREAL\_NOZERO HREAL
+|- !X Y. ~(X hreal_add Y = X)
+\ENDTHEOREM
+\THEOREM hreal\_sub HREAL
+|- !Y X. Y hreal_sub X = hreal(\w. ?x. ~cut X x /\ cut Y(x hrat_add w))
+\ENDTHEOREM
+\THEOREM HREAL\_SUB\_ADD HREAL
+|- !X Y. X hreal_lt Y ==> ((Y hreal_sub X) hreal_add X = Y)
+\ENDTHEOREM
+\THEOREM HREAL\_SUB\_ISACUT HREAL
+|- !X Y.
+    X hreal_lt Y ==> isacut(\w. ?x. ~cut X x /\ cut Y(x hrat_add w))
+\ENDTHEOREM
+\THEOREM HREAL\_SUP HREAL
+|- !P.
+    (?X. P X) /\ (?Y. !X. P X ==> X hreal_lt Y) ==>
+    (!Y. (?X. P X /\ Y hreal_lt X) = Y hreal_lt (hreal_sup P))
+\ENDTHEOREM
+\THEOREM hreal\_sup HREAL
+|- !P. hreal_sup P = hreal(\w. ?X. P X /\ cut X w)
+\ENDTHEOREM
+\THEOREM HREAL\_SUP\_ISACUT HREAL
+|- !P.
+    (?X. P X) /\ (?Y. !X. P X ==> X hreal_lt Y) ==>
+    isacut(\w. ?X. P X /\ cut X w)
+\ENDTHEOREM
+\THEOREM hreal\_tybij HREAL
+|- (!a. hreal(cut a) = a) /\ (!r. isacut r = (cut(hreal r) = r))
+\ENDTHEOREM
+\THEOREM hreal\_TY\_DEF HREAL
+|- ?rep. TYPE_DEFINITION isacut rep
+\ENDTHEOREM
+\THEOREM isacut HREAL
+|- !C.
+    isacut C =
+    (?x. C x) /\
+    (?x. ~C x) /\
+    (!x y. C x /\ y hrat_lt x ==> C y) /\
+    (!x. C x ==> (?y. C y /\ x hrat_lt y))
+\ENDTHEOREM
+\THEOREM ISACUT\_HRAT HREAL
+|- !h. isacut(cut_of_hrat h)
+\ENDTHEOREM
+\section{REALAX}
+\THEOREM HREAL\_EQ\_ADDL REALAX
+|- !x y. ~(x = x hreal_add y)
+\ENDTHEOREM
+\THEOREM HREAL\_EQ\_ADDR REALAX
+|- !x y. ~(x hreal_add y = x)
+\ENDTHEOREM
+\THEOREM HREAL\_EQ\_LADD REALAX
+|- !x y z. (x hreal_add y = x hreal_add z) = (y = z)
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_ADD2 REALAX
+|- !x1 x2 y1 y2.
+    x1 hreal_lt y1 /\ x2 hreal_lt y2 ==>
+    (x1 hreal_add x2) hreal_lt (y1 hreal_add y2)
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_ADDL REALAX
+|- !x y. x hreal_lt (x hreal_add y)
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_ADDR REALAX
+|- !x y. ~(x hreal_add y) hreal_lt x
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_GT REALAX
+|- !x y. x hreal_lt y ==> ~y hreal_lt x
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_LADD REALAX
+|- !x y z. (x hreal_add y) hreal_lt (x hreal_add z) = y hreal_lt z
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_NE REALAX
+|- !x y. x hreal_lt y ==> ~(x = y)
+\ENDTHEOREM
+\THEOREM HREAL\_LT\_REFL REALAX
+|- !x. ~x hreal_lt x
+\ENDTHEOREM
+\THEOREM hreal\_of\_real REALAX
+|- !g00032. hreal_of_real g00032 = hreal_of_treal($@(dest_real g00032))
+\ENDTHEOREM
+\THEOREM hreal\_of\_treal REALAX
+|- !x y. hreal_of_treal(x,y) = (@d. x = y hreal_add d)
+\ENDTHEOREM
+\THEOREM HREAL\_RDISTRIB REALAX
+|- !x y z.
+    (x hreal_add y) hreal_mul z =
+    (x hreal_mul z) hreal_add (y hreal_mul z)
+\ENDTHEOREM
+\THEOREM r0 REALAX
+|- r0 = mk_real($treal_eq treal_0)
+\ENDTHEOREM
+\THEOREM r1 REALAX
+|- r1 = mk_real($treal_eq treal_1)
+\ENDTHEOREM
+\THEOREM REAL\_10 REALAX
+|- ~(r1 = r0)
+\ENDTHEOREM
+\THEOREM real\_add REALAX
+|- !g00025 g00026.
+    g00025 + g00026 =
+    mk_real
+    ($treal_eq(($@(dest_real g00025)) treal_add ($@(dest_real g00026))))
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_ASSOC REALAX
+|- !x y z. x + (y + z) = (x + y) + z
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_LID REALAX
+|- !x. r0 + x = x
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_LINV REALAX
+|- !x. (-- x) + x = r0
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_SYM REALAX
+|- !x y. x + y = y + x
+\ENDTHEOREM
+\THEOREM real\_inv REALAX
+|- !g00024.
+    inv g00024 = mk_real($treal_eq(treal_inv($@(dest_real g00024))))
+\ENDTHEOREM
+\THEOREM REAL\_ISO\_EQ REALAX
+|- !h i. h hreal_lt i = (real_of_hreal h) < (real_of_hreal i)
+\ENDTHEOREM
+\THEOREM REAL\_LDISTRIB REALAX
+|- !x y z. x * (y + z) = (x * y) + (x * z)
+\ENDTHEOREM
+\THEOREM real\_lt REALAX
+|- !g00029 g00030.
+    g00029 < g00030 =
+    ($@(dest_real g00029)) treal_lt ($@(dest_real g00030))
+\ENDTHEOREM
+\THEOREM REAL\_LT\_IADD REALAX
+|- !x y z. y < z ==> (x + y) < (x + z)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_MUL REALAX
+|- !x y. r0 < x /\ r0 < y ==> r0 < (x * y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_REFL REALAX
+|- !x. ~x < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_TOTAL REALAX
+|- !x y. (x = y) \/ x < y \/ y < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_TRANS REALAX
+|- !x y z. x < y /\ y < z ==> x < z
+\ENDTHEOREM
+\THEOREM real\_mul REALAX
+|- !g00027 g00028.
+    g00027 * g00028 =
+    mk_real
+    ($treal_eq(($@(dest_real g00027)) treal_mul ($@(dest_real g00028))))
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_ASSOC REALAX
+|- !x y z. x * (y * z) = (x * y) * z
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_LID REALAX
+|- !x. r1 * x = x
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_LINV REALAX
+|- !x. ~(x = r0) ==> ((inv x) * x = r1)
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_SYM REALAX
+|- !x y. x * y = y * x
+\ENDTHEOREM
+\THEOREM real\_neg REALAX
+|- !g00023.
+    -- g00023 = mk_real($treal_eq(treal_neg($@(dest_real g00023))))
+\ENDTHEOREM
+\THEOREM real\_of\_hreal REALAX
+|- !g00031.
+    real_of_hreal g00031 = mk_real($treal_eq(treal_of_hreal g00031))
+\ENDTHEOREM
+\THEOREM REAL\_POS REALAX
+|- !X. r0 < (real_of_hreal X)
+\ENDTHEOREM
+\THEOREM REAL\_SUP\_ALLPOS REALAX
+|- !P.
+    (!x. P x ==> r0 < x) /\ (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+    (?s. !y. (?x. P x /\ y < x) = y < s)
+\ENDTHEOREM
+\THEOREM real\_tybij REALAX
+|- (!a. mk_real(dest_real a) = a) /\
+   (!r. (\c. ?x. c = $treal_eq x)r = (dest_real(mk_real r) = r))
+\ENDTHEOREM
+\THEOREM real\_TY\_DEF REALAX
+|- ?rep. TYPE_DEFINITION(\c. ?x. c = $treal_eq x)rep
+\ENDTHEOREM
+\THEOREM SUP\_ALLPOS\_LEMMA1 REALAX
+|- (!x. P x ==> r0 < x) ==>
+   ((?x. P x /\ y < x) =
+    (?X. P(real_of_hreal X) /\ y < (real_of_hreal X)))
+\ENDTHEOREM
+\THEOREM SUP\_ALLPOS\_LEMMA2 REALAX
+|- P(real_of_hreal X) = (\h. P(real_of_hreal h))X
+\ENDTHEOREM
+\THEOREM SUP\_ALLPOS\_LEMMA3 REALAX
+|- (!x. P x ==> r0 < x) /\ (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+   (?X. (\h. P(real_of_hreal h))X) /\
+   (?Y. !X. (\h. P(real_of_hreal h))X ==> X hreal_lt Y)
+\ENDTHEOREM
+\THEOREM SUP\_ALLPOS\_LEMMA4 REALAX
+|- !y. ~r0 < y ==> (!x. y < (real_of_hreal x))
+\ENDTHEOREM
+\THEOREM treal\_0 REALAX
+|- treal_0 = hreal_1,hreal_1
+\ENDTHEOREM
+\THEOREM treal\_1 REALAX
+|- treal_1 = hreal_1 hreal_add hreal_1,hreal_1
+\ENDTHEOREM
+\THEOREM TREAL\_10 REALAX
+|- ~treal_1 treal_eq treal_0
+\ENDTHEOREM
+\THEOREM treal\_add REALAX
+|- !x1 y1 x2 y2.
+    (x1,y1) treal_add (x2,y2) = x1 hreal_add x2,y1 hreal_add y2
+\ENDTHEOREM
+\THEOREM TREAL\_ADD\_ASSOC REALAX
+|- !x y z. x treal_add (y treal_add z) = (x treal_add y) treal_add z
+\ENDTHEOREM
+\THEOREM TREAL\_ADD\_LID REALAX
+|- !x. (treal_0 treal_add x) treal_eq x
+\ENDTHEOREM
+\THEOREM TREAL\_ADD\_LINV REALAX
+|- !x. ((treal_neg x) treal_add x) treal_eq treal_0
+\ENDTHEOREM
+\THEOREM TREAL\_ADD\_SYM REALAX
+|- !x y. x treal_add y = y treal_add x
+\ENDTHEOREM
+\THEOREM TREAL\_ADD\_WELLDEF REALAX
+|- !x1 x2 y1 y2.
+    x1 treal_eq x2 /\ y1 treal_eq y2 ==>
+    (x1 treal_add y1) treal_eq (x2 treal_add y2)
+\ENDTHEOREM
+\THEOREM TREAL\_ADD\_WELLDEFR REALAX
+|- !x1 x2 y.
+    x1 treal_eq x2 ==> (x1 treal_add y) treal_eq (x2 treal_add y)
+\ENDTHEOREM
+\THEOREM TREAL\_BIJ REALAX
+|- (!h. hreal_of_treal(treal_of_hreal h) = h) /\
+   (!r.
+     treal_0 treal_lt r = (treal_of_hreal(hreal_of_treal r)) treal_eq r)
+\ENDTHEOREM
+\THEOREM TREAL\_BIJ\_WELLDEF REALAX
+|- !h i. h treal_eq i ==> (hreal_of_treal h = hreal_of_treal i)
+\ENDTHEOREM
+\THEOREM treal\_eq REALAX
+|- !x1 y1 x2 y2.
+    (x1,y1) treal_eq (x2,y2) = (x1 hreal_add y2 = x2 hreal_add y1)
+\ENDTHEOREM
+\THEOREM TREAL\_EQ\_AP REALAX
+|- !p q. (p = q) ==> p treal_eq q
+\ENDTHEOREM
+\THEOREM TREAL\_EQ\_EQUIV REALAX
+|- !p q. p treal_eq q = ($treal_eq p = $treal_eq q)
+\ENDTHEOREM
+\THEOREM TREAL\_EQ\_REFL REALAX
+|- !x. x treal_eq x
+\ENDTHEOREM
+\THEOREM TREAL\_EQ\_SYM REALAX
+|- !x y. x treal_eq y = y treal_eq x
+\ENDTHEOREM
+\THEOREM TREAL\_EQ\_TRANS REALAX
+|- !x y z. x treal_eq y /\ y treal_eq z ==> x treal_eq z
+\ENDTHEOREM
+\THEOREM treal\_inv REALAX
+|- !x y.
+    treal_inv(x,y) =
+    ((x = y) =>
+     treal_0 |
+     (y hreal_lt x =>
+      ((hreal_inv(x hreal_sub y)) hreal_add hreal_1,hreal_1) |
+      (hreal_1,(hreal_inv(y hreal_sub x)) hreal_add hreal_1)))
+\ENDTHEOREM
+\THEOREM TREAL\_INV\_WELLDEF REALAX
+|- !x1 x2. x1 treal_eq x2 ==> (treal_inv x1) treal_eq (treal_inv x2)
+\ENDTHEOREM
+\THEOREM TREAL\_ISO REALAX
+|- !h i. h hreal_lt i ==> (treal_of_hreal h) treal_lt (treal_of_hreal i)
+\ENDTHEOREM
+\THEOREM TREAL\_LDISTRIB REALAX
+|- !x y z.
+    x treal_mul (y treal_add z) =
+    (x treal_mul y) treal_add (x treal_mul z)
+\ENDTHEOREM
+\THEOREM treal\_lt REALAX
+|- !x1 y1 x2 y2.
+    (x1,y1) treal_lt (x2,y2) =
+    (x1 hreal_add y2) hreal_lt (x2 hreal_add y1)
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_ADD REALAX
+|- !x y z. y treal_lt z ==> (x treal_add y) treal_lt (x treal_add z)
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_MUL REALAX
+|- !x y.
+    treal_0 treal_lt x /\ treal_0 treal_lt y ==>
+    treal_0 treal_lt (x treal_mul y)
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_REFL REALAX
+|- !x. ~x treal_lt x
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_TOTAL REALAX
+|- !x y. x treal_eq y \/ x treal_lt y \/ y treal_lt x
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_TRANS REALAX
+|- !x y z. x treal_lt y /\ y treal_lt z ==> x treal_lt z
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_WELLDEF REALAX
+|- !x1 x2 y1 y2.
+    x1 treal_eq x2 /\ y1 treal_eq y2 ==>
+    (x1 treal_lt y1 = x2 treal_lt y2)
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_WELLDEFL REALAX
+|- !x y1 y2. y1 treal_eq y2 ==> (x treal_lt y1 = x treal_lt y2)
+\ENDTHEOREM
+\THEOREM TREAL\_LT\_WELLDEFR REALAX
+|- !x1 x2 y. x1 treal_eq x2 ==> (x1 treal_lt y = x2 treal_lt y)
+\ENDTHEOREM
+\THEOREM treal\_mul REALAX
+|- !x1 y1 x2 y2.
+    (x1,y1) treal_mul (x2,y2) =
+    (x1 hreal_mul x2) hreal_add (y1 hreal_mul y2),
+    (x1 hreal_mul y2) hreal_add (y1 hreal_mul x2)
+\ENDTHEOREM
+\THEOREM TREAL\_MUL\_ASSOC REALAX
+|- !x y z. x treal_mul (y treal_mul z) = (x treal_mul y) treal_mul z
+\ENDTHEOREM
+\THEOREM TREAL\_MUL\_LID REALAX
+|- !x. (treal_1 treal_mul x) treal_eq x
+\ENDTHEOREM
+\THEOREM TREAL\_MUL\_LINV REALAX
+|- !x.
+    ~x treal_eq treal_0 ==> ((treal_inv x) treal_mul x) treal_eq treal_1
+\ENDTHEOREM
+\THEOREM TREAL\_MUL\_SYM REALAX
+|- !x y. x treal_mul y = y treal_mul x
+\ENDTHEOREM
+\THEOREM TREAL\_MUL\_WELLDEF REALAX
+|- !x1 x2 y1 y2.
+    x1 treal_eq x2 /\ y1 treal_eq y2 ==>
+    (x1 treal_mul y1) treal_eq (x2 treal_mul y2)
+\ENDTHEOREM
+\THEOREM TREAL\_MUL\_WELLDEFR REALAX
+|- !x1 x2 y.
+    x1 treal_eq x2 ==> (x1 treal_mul y) treal_eq (x2 treal_mul y)
+\ENDTHEOREM
+\THEOREM treal\_neg REALAX
+|- !x y. treal_neg(x,y) = y,x
+\ENDTHEOREM
+\THEOREM TREAL\_NEG\_WELLDEF REALAX
+|- !x1 x2. x1 treal_eq x2 ==> (treal_neg x1) treal_eq (treal_neg x2)
+\ENDTHEOREM
+\THEOREM treal\_of\_hreal REALAX
+|- !x. treal_of_hreal x = x hreal_add hreal_1,hreal_1
+\ENDTHEOREM
+\section{REAL}
+\THEOREM abs REAL
+|- !x. abs x = ((& 0) <= x => x | -- x)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_0 REAL
+|- abs(& 0) = & 0
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_1 REAL
+|- abs(& 1) = & 1
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_ABS REAL
+|- !x. abs(abs x) = abs x
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_BETWEEN REAL
+|- !x y d. (& 0) < d /\ (x - d) < y /\ y < (x + d) = (abs(y - x)) < d
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_BETWEEN1 REAL
+|- !x y z. x < z /\ (abs(y - x)) < (z - x) ==> y < z
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_BETWEEN2 REAL
+|- !x0 x y0 y.
+    x0 < y0 /\
+    (abs(x - x0)) < ((y0 - x0) / (& 2)) /\
+    (abs(y - y0)) < ((y0 - x0) / (& 2)) ==>
+    x < y
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_BOUND REAL
+|- !x y d. (abs(x - y)) < d ==> y < (x + d)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_BOUNDS REAL
+|- !x k. (abs x) <= k = (-- k) <= x /\ x <= k
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_CASES REAL
+|- !x. (x = & 0) \/ (& 0) < (abs x)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_CIRCLE REAL
+|- !x y h. (abs h) < ((abs y) - (abs x)) ==> (abs(x + h)) < (abs y)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_DIV REAL
+|- !y. ~(y = & 0) ==> (!x. abs(x / y) = (abs x) / (abs y))
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_INV REAL
+|- !x. ~(x = & 0) ==> (abs(inv x) = inv(abs x))
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_LE REAL
+|- !x. x <= (abs x)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_LT\_MUL2 REAL
+|- !w x y z. (abs w) < y /\ (abs x) < z ==> (abs(w * x)) < (y * z)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_MUL REAL
+|- !x y. abs(x * y) = (abs x) * (abs y)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_N REAL
+|- !n. abs(& n) = & n
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_NEG REAL
+|- !x. abs(-- x) = abs x
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_NZ REAL
+|- !x. ~(x = & 0) = (& 0) < (abs x)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_POS REAL
+|- !x. (& 0) <= (abs x)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_POW2 REAL
+|- !x. abs(x pow 2) = x pow 2
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_REFL REAL
+|- !x. (abs x = x) = (& 0) <= x
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_SIGN REAL
+|- !x y. (abs(x - y)) < y ==> (& 0) < x
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_SIGN2 REAL
+|- !x y. (abs(x - y)) < (-- y) ==> x < (& 0)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_STILLNZ REAL
+|- !x y. (abs(x - y)) < (abs y) ==> ~(x = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_SUB REAL
+|- !x y. abs(x - y) = abs(y - x)
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_SUB\_ABS REAL
+|- !x y. (abs((abs x) - (abs y))) <= (abs(x - y))
+\ENDTHEOREM
+\THEOREM ABS\_SUM REAL
+|- !f m n. (abs(Sum(m,n)f)) <= (Sum(m,n)(\n'. abs(f n')))
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_TRIANGLE REAL
+|- !x y. (abs(x + y)) <= ((abs x) + (abs y))
+\ENDTHEOREM
+\THEOREM REAL\_ABS\_ZERO REAL
+|- !x. (abs x = & 0) = (x = & 0)
+\ENDTHEOREM
+\THEOREM pow REAL
+|- (!x. x pow 0 = & 1) /\ (!x n. x pow (SUC n) = x * (x pow n))
+\ENDTHEOREM
+\THEOREM POW\_0 REAL
+|- !n. (& 0) pow (SUC n) = & 0
+\ENDTHEOREM
+\THEOREM POW\_1 REAL
+|- !x. x pow 1 = x
+\ENDTHEOREM
+\THEOREM POW\_2 REAL
+|- !x. x pow 2 = x * x
+\ENDTHEOREM
+\THEOREM POW\_2\_LE1 REAL
+|- !n. (& 1) <= ((& 2) pow n)
+\ENDTHEOREM
+\THEOREM POW\_2\_LT REAL
+|- !n. (& n) < ((& 2) pow n)
+\ENDTHEOREM
+\THEOREM POW\_ABS REAL
+|- !c n. (abs c) pow n = abs(c pow n)
+\ENDTHEOREM
+\THEOREM POW\_ADD REAL
+|- !c m n. c pow (m num_add n) = (c pow m) * (c pow n)
+\ENDTHEOREM
+\THEOREM POW\_INV REAL
+|- !c. ~(c = & 0) ==> (!n. inv(c pow n) = (inv c) pow n)
+\ENDTHEOREM
+\THEOREM POW\_LE REAL
+|- !n x y. (& 0) <= x /\ x <= y ==> (x pow n) <= (y pow n)
+\ENDTHEOREM
+\THEOREM POW\_M1 REAL
+|- !n. abs((--(& 1)) pow n) = & 1
+\ENDTHEOREM
+\THEOREM POW\_MINUS1 REAL
+|- !n. (--(& 1)) pow (2 num_mul n) = & 1
+\ENDTHEOREM
+\THEOREM POW\_MUL REAL
+|- !n x y. (x * y) pow n = (x pow n) * (y pow n)
+\ENDTHEOREM
+\THEOREM POW\_NZ REAL
+|- !c n. ~(c = & 0) ==> ~(c pow n = & 0)
+\ENDTHEOREM
+\THEOREM POW\_PLUS1 REAL
+|- !e. (& 0) < e ==> (!n. ((& 1) + ((& n) * e)) <= (((& 1) + e) pow n))
+\ENDTHEOREM
+\THEOREM POW\_POS REAL
+|- !x. (& 0) <= x ==> (!n. (& 0) <= (x pow n))
+\ENDTHEOREM
+\THEOREM POW\_POS\_LT REAL
+|- !x n. (& 0) < x ==> (& 0) < (x pow (SUC n))
+\ENDTHEOREM
+\THEOREM REAL REAL
+|- !n. &(SUC n) = (& n) + (& 1)
+\ENDTHEOREM
+\THEOREM REAL\_0 REAL
+|- r0 = & 0
+\ENDTHEOREM
+\THEOREM REAL\_1 REAL
+|- r1 = & 1
+\ENDTHEOREM
+\THEOREM REAL\_10 REAL
+|- ~(& 1 = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_ADD REAL
+|- !m n. (& m) + (& n) = &(m num_add n)
+\ENDTHEOREM
+\THEOREM REAL\_ADD2\_SUB2 REAL
+|- !a b c d. (a + b) - (c + d) = (a - c) + (b - d)
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_ASSOC REAL
+|- !x y z. x + (y + z) = (x + y) + z
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_LID REAL
+|- !x. (& 0) + x = x
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_LID\_UNIQ REAL
+|- !x y. (x + y = y) = (x = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_LINV REAL
+|- !x. (-- x) + x = & 0
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_RID REAL
+|- !x. x + (& 0) = x
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_RID\_UNIQ REAL
+|- !x y. (x + y = x) = (y = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_RINV REAL
+|- !x. x + (-- x) = & 0
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_SUB REAL
+|- !x y. (x + y) - x = y
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_SUB2 REAL
+|- !x y. x - (x + y) = -- y
+\ENDTHEOREM
+\THEOREM REAL\_ADD\_SYM REAL
+|- !x y. x + y = y + x
+\ENDTHEOREM
+\THEOREM REAL\_ARCH REAL
+|- !x. (& 0) < x ==> (!y. ?n. y < ((& n) * x))
+\ENDTHEOREM
+\THEOREM REAL\_ARCH\_LEAST REAL
+|- !y.
+    (& 0) < y ==>
+    (!x. (& 0) <= x ==> (?n. ((& n) * y) <= x /\ x < ((&(SUC n)) * y)))
+\ENDTHEOREM
+\THEOREM REAL\_DIFFSQ REAL
+|- !x y. (x + y) * (x - y) = (x * x) - (y * y)
+\ENDTHEOREM
+\THEOREM real\_div REAL
+|- !x y. x / y = x * (inv y)
+\ENDTHEOREM
+\THEOREM REAL\_DIV\_LMUL REAL
+|- !x y. ~(y = & 0) ==> (y * (x / y) = x)
+\ENDTHEOREM
+\THEOREM REAL\_DIV\_LZERO REAL
+|- !x. (& 0) / x = & 0
+\ENDTHEOREM
+\THEOREM REAL\_DIV\_MUL2 REAL
+|- !x z. ~(x = & 0) /\ ~(z = & 0) ==> (!y. y / z = (x * y) / (x * z))
+\ENDTHEOREM
+\THEOREM REAL\_DIV\_REFL REAL
+|- !x. ~(x = & 0) ==> (x / x = & 1)
+\ENDTHEOREM
+\THEOREM REAL\_DIV\_RMUL REAL
+|- !x y. ~(y = & 0) ==> ((x / y) * y = x)
+\ENDTHEOREM
+\THEOREM REAL\_DOUBLE REAL
+|- !x. x + x = (& 2) * x
+\ENDTHEOREM
+\THEOREM REAL\_DOWN REAL
+|- !x. (& 0) < x ==> (?y. (& 0) < y /\ y < x)
+\ENDTHEOREM
+\THEOREM REAL\_DOWN2 REAL
+|- !x y. (& 0) < x /\ (& 0) < y ==> (?z. (& 0) < z /\ z < x /\ z < y)
+\ENDTHEOREM
+\THEOREM REAL\_ENTIRE REAL
+|- !x y. (x * y = & 0) = (x = & 0) \/ (y = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_IMP\_LE REAL
+|- !x y. (x = y) ==> x <= y
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_LADD REAL
+|- !x y z. (x + y = x + z) = (y = z)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_LMUL REAL
+|- !x y z. (x * y = x * z) = (x = & 0) \/ (y = z)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_LMUL2 REAL
+|- !x y z. ~(x = & 0) ==> ((y = z) = (x * y = x * z))
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_LMUL\_IMP REAL
+|- !x y z. ~(x = & 0) /\ (x * y = x * z) ==> (y = z)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_NEG REAL
+|- !x y. (-- x = -- y) = (x = y)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_RADD REAL
+|- !x y z. (x + z = y + z) = (x = y)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_RMUL REAL
+|- !x y z. (x * z = y * z) = (z = & 0) \/ (x = y)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_RMUL\_IMP REAL
+|- !x y z. ~(z = & 0) /\ (x * z = y * z) ==> (x = y)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_SUB\_LADD REAL
+|- !x y z. (x = y - z) = (x + z = y)
+\ENDTHEOREM
+\THEOREM REAL\_EQ\_SUB\_RADD REAL
+|- !x y z. (x - y = z) = (x = z + y)
+\ENDTHEOREM
+\THEOREM REAL\_FACT\_NZ REAL
+|- !n. ~(&(FACT n) = & 0)
+\ENDTHEOREM
+\THEOREM real\_ge REAL
+|- !x y. x >= y = y <= x
+\ENDTHEOREM
+\THEOREM real\_gt REAL
+|- !x y. x > y = y < x
+\ENDTHEOREM
+\THEOREM REAL\_HALF\_DOUBLE REAL
+|- !x. (x / (& 2)) + (x / (& 2)) = x
+\ENDTHEOREM
+\THEOREM REAL\_INJ REAL
+|- !m n. (& m = & n) = (m = n)
+\ENDTHEOREM
+\THEOREM REAL\_INV1 REAL
+|- inv(& 1) = & 1
+\ENDTHEOREM
+\THEOREM REAL\_INVINV REAL
+|- !x. ~(x = & 0) ==> (inv(inv x) = x)
+\ENDTHEOREM
+\THEOREM REAL\_INV\_1OVER REAL
+|- !x. inv x = (& 1) / x
+\ENDTHEOREM
+\THEOREM REAL\_INV\_LT1 REAL
+|- !x. (& 0) < x /\ x < (& 1) ==> (& 1) < (inv x)
+\ENDTHEOREM
+\THEOREM REAL\_INV\_MUL REAL
+|- !x y. ~(x = & 0) /\ ~(y = & 0) ==> (inv(x * y) = (inv x) * (inv y))
+\ENDTHEOREM
+\THEOREM REAL\_INV\_NZ REAL
+|- !x. ~(x = & 0) ==> ~(inv x = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_INV\_POS REAL
+|- !x. (& 0) < x ==> (& 0) < (inv x)
+\ENDTHEOREM
+\THEOREM REAL\_LDISTRIB REAL
+|- !x y z. x * (y + z) = (x * y) + (x * z)
+\ENDTHEOREM
+\THEOREM REAL\_LE REAL
+|- !m n. (& m) <= (& n) = m num_le n
+\ENDTHEOREM
+\THEOREM real\_le REAL
+|- !x y. x <= y = ~y < x
+\ENDTHEOREM
+\THEOREM REAL\_LE1\_POW2 REAL
+|- !x. (& 1) <= x ==> (& 1) <= (x pow 2)
+\ENDTHEOREM
+\THEOREM REAL\_LET\_ADD REAL
+|- !x y. (& 0) <= x /\ (& 0) < y ==> (& 0) < (x + y)
+\ENDTHEOREM
+\THEOREM REAL\_LET\_ADD2 REAL
+|- !w x y z. w <= x /\ y < z ==> (w + y) < (x + z)
+\ENDTHEOREM
+\THEOREM REAL\_LET\_ANTISYM REAL
+|- !x y. ~(x < y /\ y <= x)
+\ENDTHEOREM
+\THEOREM REAL\_LET\_TOTAL REAL
+|- !x y. x <= y \/ y < x
+\ENDTHEOREM
+\THEOREM REAL\_LET\_TRANS REAL
+|- !x y z. x <= y /\ y < z ==> x < z
+\ENDTHEOREM
+\THEOREM REAL\_LE\_01 REAL
+|- (& 0) <= (& 1)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_ADD REAL
+|- !x y. (& 0) <= x /\ (& 0) <= y ==> (& 0) <= (x + y)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_ADD2 REAL
+|- !w x y z. w <= x /\ y <= z ==> (w + y) <= (x + z)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_ADDL REAL
+|- !x y. y <= (x + y) = (& 0) <= x
+\ENDTHEOREM
+\THEOREM REAL\_LE\_ADDR REAL
+|- !x y. x <= (x + y) = (& 0) <= y
+\ENDTHEOREM
+\THEOREM REAL\_LE\_ANTISYM REAL
+|- !x y. x <= y /\ y <= x = (x = y)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_DOUBLE REAL
+|- !x. (& 0) <= (x + x) = (& 0) <= x
+\ENDTHEOREM
+\THEOREM REAL\_LE\_LADD REAL
+|- !x y z. (x + y) <= (x + z) = y <= z
+\ENDTHEOREM
+\THEOREM REAL\_LE\_LDIV REAL
+|- !x y z. (& 0) < x /\ y <= (z * x) ==> (y / x) <= z
+\ENDTHEOREM
+\THEOREM REAL\_LE\_LMUL REAL
+|- !x y z. (& 0) < x ==> ((x * y) <= (x * z) = y <= z)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_LMUL\_IMP REAL
+|- !x y z. (& 0) <= x /\ y <= z ==> (x * y) <= (x * z)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_LT REAL
+|- !x y. x <= y = x < y \/ (x = y)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_MUL REAL
+|- !x y. (& 0) <= x /\ (& 0) <= y ==> (& 0) <= (x * y)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_MUL2 REAL
+|- !x1 x2 y1 y2.
+    (& 0) <= x1 /\ (& 0) <= y1 /\ x1 <= x2 /\ y1 <= y2 ==>
+    (x1 * y1) <= (x2 * y2)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_NEG REAL
+|- !x y. (-- x) <= (-- y) = y <= x
+\ENDTHEOREM
+\THEOREM REAL\_LE\_NEGL REAL
+|- !x. (-- x) <= x = (& 0) <= x
+\ENDTHEOREM
+\THEOREM REAL\_LE\_NEGR REAL
+|- !x. x <= (-- x) = x <= (& 0)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_NEGTOTAL REAL
+|- !x. (& 0) <= x \/ (& 0) <= (-- x)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_POW2 REAL
+|- !x. (& 0) <= (x pow 2)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_RADD REAL
+|- !x y z. (x + z) <= (y + z) = x <= y
+\ENDTHEOREM
+\THEOREM REAL\_LE\_RDIV REAL
+|- !x y z. (& 0) < x /\ (y * x) <= z ==> y <= (z / x)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_REFL REAL
+|- !x. x <= x
+\ENDTHEOREM
+\THEOREM REAL\_LE\_RMUL REAL
+|- !x y z. (& 0) < z ==> ((x * z) <= (y * z) = x <= y)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_RMUL\_IMP REAL
+|- !x y z. (& 0) <= x /\ y <= z ==> (y * x) <= (z * x)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_SQUARE REAL
+|- !x. (& 0) <= (x * x)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_SUB\_LADD REAL
+|- !x y z. x <= (y - z) = (x + z) <= y
+\ENDTHEOREM
+\THEOREM REAL\_LE\_SUB\_RADD REAL
+|- !x y z. (x - y) <= z = x <= (z + y)
+\ENDTHEOREM
+\THEOREM REAL\_LE\_TOTAL REAL
+|- !x y. x <= y \/ y <= x
+\ENDTHEOREM
+\THEOREM REAL\_LE\_TRANS REAL
+|- !x y z. x <= y /\ y <= z ==> x <= z
+\ENDTHEOREM
+\THEOREM REAL\_LINV\_UNIQ REAL
+|- !x y. (x * y = & 1) ==> (x = inv y)
+\ENDTHEOREM
+\THEOREM REAL\_LNEG\_UNIQ REAL
+|- !x y. (x + y = & 0) = (x = -- y)
+\ENDTHEOREM
+\THEOREM REAL\_LT REAL
+|- !m n. (& m) < (& n) = m num_lt n
+\ENDTHEOREM
+\THEOREM REAL\_LT1\_POW2 REAL
+|- !x. (& 1) < x ==> (& 1) < (x pow 2)
+\ENDTHEOREM
+\THEOREM REAL\_LTE\_ADD REAL
+|- !x y. (& 0) < x /\ (& 0) <= y ==> (& 0) < (x + y)
+\ENDTHEOREM
+\THEOREM REAL\_LTE\_ADD2 REAL
+|- !w x y z. w < x /\ y <= z ==> (w + y) < (x + z)
+\ENDTHEOREM
+\THEOREM REAL\_LTE\_ANTSYM REAL
+|- !x y. ~(x <= y /\ y < x)
+\ENDTHEOREM
+\THEOREM REAL\_LTE\_TOTAL REAL
+|- !x y. x < y \/ y <= x
+\ENDTHEOREM
+\THEOREM REAL\_LTE\_TRANS REAL
+|- !x y z. x < y /\ y <= z ==> x < z
+\ENDTHEOREM
+\THEOREM REAL\_LT\_01 REAL
+|- (& 0) < (& 1)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_1 REAL
+|- !x y. (& 0) <= x /\ x < y ==> (x / y) < (& 1)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADD REAL
+|- !x y. (& 0) < x /\ (& 0) < y ==> (& 0) < (x + y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADD1 REAL
+|- !x y. x <= y ==> x < (y + (& 1))
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADD2 REAL
+|- !w x y z. w < x /\ y < z ==> (w + y) < (x + z)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADDL REAL
+|- !x y. y < (x + y) = (& 0) < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADDNEG REAL
+|- !x y z. y < (x + (-- z)) = (y + z) < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADDNEG2 REAL
+|- !x y z. (x + (-- y)) < z = x < (z + y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADDR REAL
+|- !x y. x < (x + y) = (& 0) < y
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ADD\_SUB REAL
+|- !x y z. (x + y) < z = x < (z - y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_ANTISYM REAL
+|- !x y. ~(x < y /\ y < x)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_FRACTION REAL
+|- !n d. 1 num_lt n ==> ((d / (& n)) < d = (& 0) < d)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_FRACTION\_0 REAL
+|- !n d. ~(n = 0) ==> ((& 0) < (d / (& n)) = (& 0) < d)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_GT REAL
+|- !x y. x < y ==> ~y < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_HALF1 REAL
+|- !d. (& 0) < (d / (& 2)) = (& 0) < d
+\ENDTHEOREM
+\THEOREM REAL\_LT\_HALF2 REAL
+|- !d. (d / (& 2)) < d = (& 0) < d
+\ENDTHEOREM
+\THEOREM REAL\_LT\_IADD REAL
+|- !x y z. y < z ==> (x + y) < (x + z)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_IMP\_LE REAL
+|- !x y. x < y ==> x <= y
+\ENDTHEOREM
+\THEOREM REAL\_LT\_IMP\_NE REAL
+|- !x y. x < y ==> ~(x = y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_INV REAL
+|- !x y. (& 0) < x /\ x < y ==> (inv y) < (inv x)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_LADD REAL
+|- !x y z. (x + y) < (x + z) = y < z
+\ENDTHEOREM
+\THEOREM REAL\_LT\_LE REAL
+|- !x y. x < y = x <= y /\ ~(x = y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_LMUL REAL
+|- !x y z. (& 0) < x ==> ((x * y) < (x * z) = y < z)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_LMUL\_0 REAL
+|- !x y. (& 0) < x ==> ((& 0) < (x * y) = (& 0) < y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_LMUL\_IMP REAL
+|- !x y z. y < z /\ (& 0) < x ==> (x * y) < (x * z)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_MUL REAL
+|- !x y. (& 0) < x /\ (& 0) < y ==> (& 0) < (x * y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_MUL2 REAL
+|- !x1 x2 y1 y2.
+    (& 0) <= x1 /\ (& 0) <= y1 /\ x1 < x2 /\ y1 < y2 ==>
+    (x1 * y1) < (x2 * y2)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_MULTIPLE REAL
+|- !n d. 1 num_lt n ==> (d < ((& n) * d) = (& 0) < d)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_NEG REAL
+|- !x y. (-- x) < (-- y) = y < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_NEGTOTAL REAL
+|- !x. (x = & 0) \/ (& 0) < x \/ (& 0) < (-- x)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_NZ REAL
+|- !n. ~(& n = & 0) = (& 0) < (& n)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_RADD REAL
+|- !x y z. (x + z) < (y + z) = x < y
+\ENDTHEOREM
+\THEOREM REAL\_LT\_RDIV REAL
+|- !x y z. (& 0) < z ==> ((x / z) < (y / z) = x < y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_RDIV\_0 REAL
+|- !y z. (& 0) < z ==> ((& 0) < (y / z) = (& 0) < y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_REFL REAL
+|- !x. ~x < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_RMUL REAL
+|- !x y z. (& 0) < z ==> ((x * z) < (y * z) = x < y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_RMUL\_0 REAL
+|- !x y. (& 0) < y ==> ((& 0) < (x * y) = (& 0) < x)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_RMUL\_IMP REAL
+|- !x y z. x < y /\ (& 0) < z ==> (x * z) < (y * z)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_SUB\_LADD REAL
+|- !x y z. x < (y - z) = (x + z) < y
+\ENDTHEOREM
+\THEOREM REAL\_LT\_SUB\_RADD REAL
+|- !x y z. (x - y) < z = x < (z + y)
+\ENDTHEOREM
+\THEOREM REAL\_LT\_TOTAL REAL
+|- !x y. (x = y) \/ x < y \/ y < x
+\ENDTHEOREM
+\THEOREM REAL\_LT\_TRANS REAL
+|- !x y z. x < y /\ y < z ==> x < z
+\ENDTHEOREM
+\THEOREM REAL\_MEAN REAL
+|- !x y. x < y ==> (?z. x < z /\ z < y)
+\ENDTHEOREM
+\THEOREM REAL\_MUL REAL
+|- !m n. (& m) * (& n) = &(m num_mul n)
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_ASSOC REAL
+|- !x y z. x * (y * z) = (x * y) * z
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_LID REAL
+|- !x. (& 1) * x = x
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_LINV REAL
+|- !x. ~(x = & 0) ==> ((inv x) * x = & 1)
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_LZERO REAL
+|- !x. (& 0) * x = & 0
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_RID REAL
+|- !x. x * (& 1) = x
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_RINV REAL
+|- !x. ~(x = & 0) ==> (x * (inv x) = & 1)
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_RZERO REAL
+|- !x. x * (& 0) = & 0
+\ENDTHEOREM
+\THEOREM REAL\_MUL\_SYM REAL
+|- !x y. x * y = y * x
+\ENDTHEOREM
+\THEOREM REAL\_NEGNEG REAL
+|- !x. --(-- x) = x
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_0 REAL
+|- --(& 0) = & 0
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_ADD REAL
+|- !x y. --(x + y) = (-- x) + (-- y)
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_EQ REAL
+|- !x y. (-- x = y) = (x = -- y)
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_EQ0 REAL
+|- !x. (-- x = & 0) = (x = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_GE0 REAL
+|- !x. (& 0) <= (-- x) = x <= (& 0)
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_GT0 REAL
+|- !x. (& 0) < (-- x) = x < (& 0)
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_INV REAL
+|- !x. ~(x = & 0) ==> (--(inv x) = inv(-- x))
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_LE0 REAL
+|- !x. (-- x) <= (& 0) = (& 0) <= x
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_LMUL REAL
+|- !x y. --(x * y) = (-- x) * y
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_LT0 REAL
+|- !x. (-- x) < (& 0) = (& 0) < x
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_MINUS1 REAL
+|- !x. -- x = (--(& 1)) * x
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_MUL2 REAL
+|- !x y. (-- x) * (-- y) = x * y
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_RMUL REAL
+|- !x y. --(x * y) = x * (-- y)
+\ENDTHEOREM
+\THEOREM REAL\_NEG\_SUB REAL
+|- !x y. --(x - y) = y - x
+\ENDTHEOREM
+\THEOREM REAL\_NOT\_LE REAL
+|- !x y. ~x <= y = y < x
+\ENDTHEOREM
+\THEOREM REAL\_NOT\_LT REAL
+|- !x y. ~x < y = y <= x
+\ENDTHEOREM
+\THEOREM REAL\_NZ\_IMP\_LT REAL
+|- !n. ~(n = 0) ==> (& 0) < (& n)
+\ENDTHEOREM
+\THEOREM real\_of\_num REAL
+|- (& 0 = r0) /\ (!n. &(SUC n) = (& n) + r1)
+\ENDTHEOREM
+\THEOREM REAL\_OVER1 REAL
+|- !x. x / (& 1) = x
+\ENDTHEOREM
+\THEOREM REAL\_POASQ REAL
+|- !x. (& 0) < (x * x) = ~(x = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_POS REAL
+|- !n. (& 0) <= (& n)
+\ENDTHEOREM
+\THEOREM REAL\_POS\_NZ REAL
+|- !x. (& 0) < x ==> ~(x = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_POW2\_ABS REAL
+|- !x. (abs x) pow 2 = x pow 2
+\ENDTHEOREM
+\THEOREM REAL\_RDISTRIB REAL
+|- !x y z. (x + y) * z = (x * z) + (y * z)
+\ENDTHEOREM
+\THEOREM REAL\_RINV\_UNIQ REAL
+|- !x y. (x * y = & 1) ==> (y = inv x)
+\ENDTHEOREM
+\THEOREM REAL\_RNEG\_UNIQ REAL
+|- !x y. (x + y = & 0) = (y = -- x)
+\ENDTHEOREM
+\THEOREM real\_sub REAL
+|- !x y. x - y = x + (-- y)
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_0 REAL
+|- !x y. (x - y = & 0) = (x = y)
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_ABS REAL
+|- !x y. ((abs x) - (abs y)) <= (abs(x - y))
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_ADD REAL
+|- !x y. (x - y) + y = x
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_ADD2 REAL
+|- !x y. y + (x - y) = x
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_INV2 REAL
+|- !x y.
+    ~(x = & 0) /\ ~(y = & 0) ==> ((inv x) - (inv y) = (y - x) / (x * y))
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_LDISTRIB REAL
+|- !x y z. x * (y - z) = (x * y) - (x * z)
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_LE REAL
+|- !x y. (& 0) <= (x - y) = y <= x
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_LNEG REAL
+|- !x y. (-- x) - y = --(x + y)
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_LT REAL
+|- !x y. (& 0) < (x - y) = y < x
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_LZERO REAL
+|- !x. (& 0) - x = -- x
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_NEG2 REAL
+|- !x y. (-- x) - (-- y) = y - x
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_RDISTRIB REAL
+|- !x y z. (x - y) * z = (x * z) - (y * z)
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_REFL REAL
+|- !x. x - x = & 0
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_RNEG REAL
+|- !x y. x - (-- y) = x + y
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_RZERO REAL
+|- !x. x - (& 0) = x
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_SUB REAL
+|- !x y. (x - y) - x = -- y
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_SUB2 REAL
+|- !x y. x - (x - y) = y
+\ENDTHEOREM
+\THEOREM REAL\_SUB\_TRIANGLE REAL
+|- !a b c. (a - b) + (b - c) = a - c
+\ENDTHEOREM
+\THEOREM REAL\_SUMSQ REAL
+|- !x y. ((x * x) + (y * y) = & 0) = (x = & 0) /\ (y = & 0)
+\ENDTHEOREM
+\THEOREM REAL\_SUP REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+    (!y. (?x. P x /\ y < x) = y < (sup P))
+\ENDTHEOREM
+\THEOREM REAL\_SUP\_ALLPOS REAL
+|- !P.
+    (!x. P x ==> (& 0) < x) /\ (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+    (?s. !y. (?x. P x /\ y < x) = y < s)
+\ENDTHEOREM
+\THEOREM REAL\_SUP\_EXISTS REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+    (?s. !y. (?x. P x /\ y < x) = y < s)
+\ENDTHEOREM
+\THEOREM REAL\_SUP\_LE REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x <= z) ==>
+    (!y. (?x. P x /\ y < x) = y < (sup P))
+\ENDTHEOREM
+\THEOREM REAL\_SUP\_SOMEPOS REAL
+|- !P.
+    (?x. P x /\ (& 0) < x) /\ (?z. !x. P x ==> x < z) ==>
+    (?s. !y. (?x. P x /\ y < x) = y < s)
+\ENDTHEOREM
+\THEOREM REAL\_SUP\_UBOUND REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x < z) ==> (!y. P y ==> y <= (sup P))
+\ENDTHEOREM
+\THEOREM REAL\_SUP\_UBOUND\_LE REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x <= z) ==> (!y. P y ==> y <= (sup P))
+\ENDTHEOREM
+\THEOREM SETOK\_LE\_LT REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x <= z) =
+    (?x. P x) /\ (?z. !x. P x ==> x < z)
+\ENDTHEOREM
+\THEOREM Sum REAL
+|- (Sum(n,0)f = & 0) /\ (Sum(n,SUC m)f = (Sum(n,m)f) + (f(n num_add m)))
+\ENDTHEOREM
+\THEOREM sum REAL
+|- (!n f. sum n 0 f = & 0) /\
+   (!n m f. sum n(SUC m)f = (sum n m f) + (f(n num_add m)))
+\ENDTHEOREM
+\THEOREM SUM\_0 REAL
+|- !m n. Sum(m,n)(\r. & 0) = & 0
+\ENDTHEOREM
+\THEOREM SUM\_1 REAL
+|- !f n. Sum(n,1)f = f n
+\ENDTHEOREM
+\THEOREM SUM\_2 REAL
+|- !f n. Sum(n,2)f = (f n) + (f(n num_add 1))
+\ENDTHEOREM
+\THEOREM SUM\_ABS REAL
+|- !f m n. abs(Sum(m,n)(\m. abs(f m))) = Sum(m,n)(\m. abs(f m))
+\ENDTHEOREM
+\THEOREM SUM\_ABS\_LE REAL
+|- !f m n. (abs(Sum(m,n)f)) <= (Sum(m,n)(\n'. abs(f n')))
+\ENDTHEOREM
+\THEOREM SUM\_ADD REAL
+|- !f g m n. Sum(m,n)(\n'. (f n') + (g n')) = (Sum(m,n)f) + (Sum(m,n)g)
+\ENDTHEOREM
+\THEOREM SUM\_BOUND REAL
+|- !f K m n.
+    (!p. m num_le p /\ p num_lt (m num_add n) ==> (f p) <= K) ==>
+    (Sum(m,n)f) <= ((& n) * K)
+\ENDTHEOREM
+\THEOREM SUM\_CMUL REAL
+|- !f c m n. Sum(m,n)(\n'. c * (f n')) = c * (Sum(m,n)f)
+\ENDTHEOREM
+\THEOREM Sum\_DEF REAL
+|- !m n f. Sum(m,n)f = sum m n f
+\ENDTHEOREM
+\THEOREM SUM\_DIFF REAL
+|- !f m n. Sum(m,n)f = (Sum(0,m num_add n)f) - (Sum(0,m)f)
+\ENDTHEOREM
+\THEOREM SUM\_EQ REAL
+|- !N. (!n. N num_le n ==> (f n = g n)) ==> (!n. Sum(N,n)f = Sum(N,n)g)
+\ENDTHEOREM
+\THEOREM SUM\_EQ\_GEN REAL
+|- !f g m n.
+    (!r. m num_le r /\ r num_lt (n num_add m) ==> (f r = g r)) ==>
+    (Sum(m,n)f = Sum(m,n)g)
+\ENDTHEOREM
+\THEOREM SUM\_GROUP REAL
+|- !n k f. Sum(0,n)(\m. Sum(m num_mul k,k)f) = Sum(0,n num_mul k)f
+\ENDTHEOREM
+\THEOREM SUM\_LE REAL
+|- !f g N.
+    (!n. N num_le n ==> (f n) <= (g n)) ==>
+    (!n. (Sum(N,n)f) <= (Sum(N,n)g))
+\ENDTHEOREM
+\THEOREM SUM\_NSUB REAL
+|- !n f c. (Sum(0,n)f) - ((& n) * c) = Sum(0,n)(\p. (f p) - c)
+\ENDTHEOREM
+\THEOREM SUM\_OFFSET REAL
+|- !f n k.
+    Sum(0,n)(\m. f(m num_add k)) = (Sum(0,n num_add k)f) - (Sum(0,k)f)
+\ENDTHEOREM
+\THEOREM SUM\_PERMUTE\_0 REAL
+|- !n p.
+    (!y. y num_lt n ==> (?! x. x num_lt n /\ (p x = y))) ==>
+    (!f. Sum(0,n)(\n'. f(p n')) = Sum(0,n)f)
+\ENDTHEOREM
+\THEOREM SUM\_POS REAL
+|- !f. (!n. (& 0) <= (f n)) ==> (!m n. (& 0) <= (Sum(m,n)f))
+\ENDTHEOREM
+\THEOREM SUM\_POS\_GEN REAL
+|- !f m.
+    (!n. m num_le n ==> (& 0) <= (f n)) ==> (!n. (& 0) <= (Sum(m,n)f))
+\ENDTHEOREM
+\THEOREM SUM\_REINDEX REAL
+|- !f m k n. Sum(m num_add k,n)f = Sum(m,n)(\r. f(r num_add k))
+\ENDTHEOREM
+\THEOREM SUM\_SUBST REAL
+|- !f g m n.
+    (!p. m num_le p /\ p num_lt (m num_add n) ==> (f p = g p)) ==>
+    (Sum(m,n)f = Sum(m,n)g)
+\ENDTHEOREM
+\THEOREM SUM\_TWO REAL
+|- !f n p. (Sum(0,n)f) + (Sum(n,p)f) = Sum(0,n num_add p)f
+\ENDTHEOREM
+\THEOREM SUM\_ZERO REAL
+|- !f N.
+    (!n. n num_ge N ==> (f n = & 0)) ==>
+    (!m n. m num_ge N ==> (Sum(m,n)f = & 0))
+\ENDTHEOREM
+\THEOREM sup REAL
+|- !P. sup P = (@s. !y. (?x. P x /\ y < x) = y < s)
+\ENDTHEOREM
+\THEOREM SUP\_LEMMA1 REAL
+|- !d.
+    (!y. (?x. (\x. P(x + d))x /\ y < x) = y < s) ==>
+    (!y. (?x. P x /\ y < x) = y < (s + d))
+\ENDTHEOREM
+\THEOREM SUP\_LEMMA2 REAL
+|- (?x. P x) ==> (?d x. (\x. P(x + d))x /\ (& 0) < x)
+\ENDTHEOREM
+\THEOREM SUP\_LEMMA3 REAL
+|- !d. (?z. !x. P x ==> x < z) ==> (?z. !x. (\x. P(x + d))x ==> x < z)
+\ENDTHEOREM
+\section{TOPOLOGY}
+\THEOREM ball TOPOLOGY
+|- !m x e. B m(x,e) = (\y. (dist m(x,y)) < e)
+\ENDTHEOREM
+\THEOREM BALL\_NEIGH TOPOLOGY
+|- !m x e. (& 0) < e ==> neigh(mtop m)(B m(x,e),x)
+\ENDTHEOREM
+\THEOREM BALL\_OPEN TOPOLOGY
+|- !m x e. (& 0) < e ==> open(mtop m)(B m(x,e))
+\ENDTHEOREM
+\THEOREM closed TOPOLOGY
+|- !L S. closed L S = open L(compl S)
+\ENDTHEOREM
+\THEOREM CLOSED\_LIMPT TOPOLOGY
+|- !top S. closed top S = (!x. limpt top x S ==> S x)
+\ENDTHEOREM
+\THEOREM compl TOPOLOGY
+|- !S. compl S = (\x. ~S x)
+\ENDTHEOREM
+\THEOREM COMPL\_MEM TOPOLOGY
+|- !S x. S x = ~compl S x
+\ENDTHEOREM
+\THEOREM intersect\_def TOPOLOGY
+|- !P Q. P intersect Q = (\x. P x /\ Q x)
+\ENDTHEOREM
+\THEOREM ismet TOPOLOGY
+|- !m.
+    ismet m =
+    (!x y. (m(x,y) = & 0) = (x = y)) /\
+    (!x y z. (m(y,z)) <= ((m(x,y)) + (m(x,z))))
+\ENDTHEOREM
+\THEOREM ISMET\_R1 TOPOLOGY
+|- ismet(\(x,y). abs(y - x))
+\ENDTHEOREM
+\THEOREM istopology TOPOLOGY
+|- !L.
+    istopology L =
+    L null /\
+    L universe /\
+    (!a b. L a /\ L b ==> L(a intersect b)) /\
+    (!P. P subset L ==> L(Union P))
+\ENDTHEOREM
+\THEOREM limpt TOPOLOGY
+|- !top x S.
+    limpt top x S =
+    (!N. neigh top(N,x) ==> (?y. ~(x = y) /\ S y /\ N y))
+\ENDTHEOREM
+\THEOREM METRIC\_ISMET TOPOLOGY
+|- !m. ismet(dist m)
+\ENDTHEOREM
+\THEOREM METRIC\_NZ TOPOLOGY
+|- !m x y. ~(x = y) ==> (& 0) < (dist m(x,y))
+\ENDTHEOREM
+\THEOREM METRIC\_POS TOPOLOGY
+|- !m x y. (& 0) <= (dist m(x,y))
+\ENDTHEOREM
+\THEOREM METRIC\_SAME TOPOLOGY
+|- !m x. dist m(x,x) = & 0
+\ENDTHEOREM
+\THEOREM METRIC\_SYM TOPOLOGY
+|- !m x y. dist m(x,y) = dist m(y,x)
+\ENDTHEOREM
+\THEOREM METRIC\_TRIANGLE TOPOLOGY
+|- !m x y z. (dist m(x,z)) <= ((dist m(x,y)) + (dist m(y,z)))
+\ENDTHEOREM
+\THEOREM metric\_tybij TOPOLOGY
+|- (!a. metric(dist a) = a) /\ (!r. ismet r = (dist(metric r) = r))
+\ENDTHEOREM
+\THEOREM metric\_TY\_DEF TOPOLOGY
+|- ?rep. TYPE_DEFINITION ismet rep
+\ENDTHEOREM
+\THEOREM METRIC\_ZERO TOPOLOGY
+|- !m x y. (dist m(x,y) = & 0) = (x = y)
+\ENDTHEOREM
+\THEOREM mr1 TOPOLOGY
+|- mr1 = metric(\(x,y). abs(y - x))
+\ENDTHEOREM
+\THEOREM MR1\_ADD TOPOLOGY
+|- !x d. dist mr1(x,x + d) = abs d
+\ENDTHEOREM
+\THEOREM MR1\_ADD\_LT TOPOLOGY
+|- !x d. (& 0) < d ==> (dist mr1(x,x + d) = d)
+\ENDTHEOREM
+\THEOREM MR1\_ADD\_POS TOPOLOGY
+|- !x d. (& 0) <= d ==> (dist mr1(x,x + d) = d)
+\ENDTHEOREM
+\THEOREM MR1\_BETWEEN1 TOPOLOGY
+|- !x y z. x < z /\ (dist mr1(x,y)) < (z - x) ==> y < z
+\ENDTHEOREM
+\THEOREM MR1\_DEF TOPOLOGY
+|- !x y. dist mr1(x,y) = abs(y - x)
+\ENDTHEOREM
+\THEOREM MR1\_LIMPT TOPOLOGY
+|- !x. limpt(mtop mr1)x universe
+\ENDTHEOREM
+\THEOREM MR1\_SUB TOPOLOGY
+|- !x d. dist mr1(x,x - d) = abs d
+\ENDTHEOREM
+\THEOREM MR1\_SUB\_LE TOPOLOGY
+|- !x d. (& 0) <= d ==> (dist mr1(x,x - d) = d)
+\ENDTHEOREM
+\THEOREM MR1\_SUB\_LT TOPOLOGY
+|- !x d. (& 0) < d ==> (dist mr1(x,x - d) = d)
+\ENDTHEOREM
+\THEOREM mtop TOPOLOGY
+|- !m.
+    mtop m =
+    topology
+    (\S. !x. S x ==> (?e. (& 0) < e /\ (!y. (dist m(x,y)) < e ==> S y)))
+\ENDTHEOREM
+\THEOREM mtop\_istopology TOPOLOGY
+|- !m.
+    istopology
+    (\S. !x. S x ==> (?e. (& 0) < e /\ (!y. (dist m(x,y)) < e ==> S y)))
+\ENDTHEOREM
+\THEOREM MTOP\_LIMPT TOPOLOGY
+|- !m x S.
+    limpt(mtop m)x S =
+    (!e. (& 0) < e ==> (?y. ~(x = y) /\ S y /\ (dist m(x,y)) < e))
+\ENDTHEOREM
+\THEOREM MTOP\_OPEN TOPOLOGY
+|- !m.
+    open(mtop m)S =
+    (!x. S x ==> (?e. (& 0) < e /\ (!y. (dist m(x,y)) < e ==> S y)))
+\ENDTHEOREM
+\THEOREM neigh TOPOLOGY
+|- !top N x. neigh top(N,x) = (?P. open top P /\ P subset N /\ P x)
+\ENDTHEOREM
+\THEOREM null TOPOLOGY
+|- null = (\x. F)
+\ENDTHEOREM
+\THEOREM OPEN\_NEIGH TOPOLOGY
+|- !S top. open top S = (!x. S x ==> (?N. neigh top(N,x) /\ N subset S))
+\ENDTHEOREM
+\THEOREM OPEN\_OWN\_NEIGH TOPOLOGY
+|- !S top x. open top S /\ S x ==> neigh top(S,x)
+\ENDTHEOREM
+\THEOREM OPEN\_SUBOPEN TOPOLOGY
+|- !S top.
+    open top S = (!x. S x ==> (?P. P x /\ open top P /\ P subset S))
+\ENDTHEOREM
+\THEOREM OPEN\_UNOPEN TOPOLOGY
+|- !S top. open top S = (Union(\P. open top P /\ P subset S) = S)
+\ENDTHEOREM
+\THEOREM subset TOPOLOGY
+|- !P Q. P subset Q = (!x. P x ==> Q x)
+\ENDTHEOREM
+\THEOREM SUBSET\_ANTISYM TOPOLOGY
+|- !P Q. P subset Q /\ Q subset P = (P = Q)
+\ENDTHEOREM
+\THEOREM SUBSET\_REFL TOPOLOGY
+|- !S. S subset S
+\ENDTHEOREM
+\THEOREM SUBSET\_TRANS TOPOLOGY
+|- !P Q R. P subset Q /\ Q subset R ==> P subset R
+\ENDTHEOREM
+\THEOREM TOPOLOGY TOPOLOGY
+|- !L.
+    open L null /\
+    open L universe /\
+    (!x y. open L x /\ open L y ==> open L(x intersect y)) /\
+    (!P. P subset (open L) ==> open L(Union P))
+\ENDTHEOREM
+\THEOREM topology\_tybij TOPOLOGY
+|- (!a. topology(open a) = a) /\
+   (!r. istopology r = (open(topology r) = r))
+\ENDTHEOREM
+\THEOREM topology\_TY\_DEF TOPOLOGY
+|- ?rep. TYPE_DEFINITION istopology rep
+\ENDTHEOREM
+\THEOREM TOPOLOGY\_UNION TOPOLOGY
+|- !L P. P subset (open L) ==> open L(Union P)
+\ENDTHEOREM
+\THEOREM Union TOPOLOGY
+|- !S. Union S = (\x. ?s. S s /\ s x)
+\ENDTHEOREM
+\THEOREM union\_def TOPOLOGY
+|- !P Q. P union Q = (\x. P x \/ Q x)
+\ENDTHEOREM
+\THEOREM universe TOPOLOGY
+|- universe = (\x. T)
+\ENDTHEOREM
+\section{NETS}
+\THEOREM bounded NETS
+|- !m g f.
+    bounded(m,g)f =
+    (?k x N. g N N /\ (!n. g n N ==> (dist m(f n,x)) real_lt k))
+\ENDTHEOREM
+\THEOREM dorder NETS
+|- !g.
+    dorder g =
+    (!x y.
+      g x x /\ g y y ==> (?z. g z z /\ (!w. g w z ==> g w x /\ g w y)))
+\ENDTHEOREM
+\THEOREM DORDER\_LEMMA NETS
+|- !g.
+    dorder g ==>
+    (!P Q.
+      (?n. g n n /\ (!m. g m n ==> P m)) /\
+      (?n. g n n /\ (!m. g m n ==> Q m)) ==>
+      (?n. g n n /\ (!m. g m n ==> P m /\ Q m)))
+\ENDTHEOREM
+\THEOREM DORDER\_NGE NETS
+|- dorder $>=
+\ENDTHEOREM
+\THEOREM DORDER\_TENDSTO NETS
+|- !m x. dorder(tendsto(m,x))
+\ENDTHEOREM
+\THEOREM LIM\_TENDS NETS
+|- !m1 m2 f x0 y0.
+    limpt(mtop m1)x0 universe ==>
+    ((f tends y0)(mtop m2,tendsto(m1,x0)) =
+     (!e.
+       (real_of_num 0) real_lt e ==>
+       (?d.
+         (real_of_num 0) real_lt d /\
+         (!x.
+           (real_of_num 0) real_lt (dist m1(x,x0)) /\
+           (dist m1(x,x0)) real_le d ==>
+           (dist m2(f x,y0)) real_lt e))))
+\ENDTHEOREM
+\THEOREM LIM\_TENDS2 NETS
+|- !m1 m2 f x0 y0.
+    limpt(mtop m1)x0 universe ==>
+    ((f tends y0)(mtop m2,tendsto(m1,x0)) =
+     (!e.
+       (real_of_num 0) real_lt e ==>
+       (?d.
+         (real_of_num 0) real_lt d /\
+         (!x.
+           (real_of_num 0) real_lt (dist m1(x,x0)) /\
+           (dist m1(x,x0)) real_lt d ==>
+           (dist m2(f x,y0)) real_lt e))))
+\ENDTHEOREM
+\THEOREM MR1\_BOUNDED NETS
+|- !g f.
+    bounded(mr1,g)f =
+    (?k N. g N N /\ (!n. g n N ==> (abs(f n)) real_lt k))
+\ENDTHEOREM
+\THEOREM MTOP\_TENDS NETS
+|- !d g x x0.
+    (x tends x0)(mtop d,g) =
+    (!e.
+      (real_of_num 0) real_lt e ==>
+      (?n. g n n /\ (!m. g m n ==> (dist d(x m,x0)) real_lt e)))
+\ENDTHEOREM
+\THEOREM MTOP\_TENDS\_UNIQ NETS
+|- !g d.
+    dorder g ==>
+    (x tends x0)(mtop d,g) /\ (x tends x1)(mtop d,g) ==>
+    (x0 = x1)
+\ENDTHEOREM
+\THEOREM NET\_ABS NETS
+|- !x x0.
+    (x tends x0)(mtop mr1,g) ==>
+    ((\n. abs(x n)) tends (abs x0))(mtop mr1,g)
+\ENDTHEOREM
+\THEOREM NET\_ADD NETS
+|- !g.
+    dorder g ==>
+    (!x x0 y y0.
+      (x tends x0)(mtop mr1,g) /\ (y tends y0)(mtop mr1,g) ==>
+      ((\n. (x n) real_add (y n)) tends (x0 real_add y0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM NET\_CONV\_BOUNDED NETS
+|- !g x x0. (x tends x0)(mtop mr1,g) ==> bounded(mr1,g)x
+\ENDTHEOREM
+\THEOREM NET\_CONV\_IBOUNDED NETS
+|- !g x x0.
+    (x tends x0)(mtop mr1,g) /\ ~(x0 = real_of_num 0) ==>
+    bounded(mr1,g)(\n. real_inv(x n))
+\ENDTHEOREM
+\THEOREM NET\_CONV\_NZ NETS
+|- !g x x0.
+    (x tends x0)(mtop mr1,g) /\ ~(x0 = real_of_num 0) ==>
+    (?N. g N N /\ (!n. g n N ==> ~(x n = real_of_num 0)))
+\ENDTHEOREM
+\THEOREM NET\_DIV NETS
+|- !g.
+    dorder g ==>
+    (!x x0 y y0.
+      (x tends x0)(mtop mr1,g) /\
+      (y tends y0)(mtop mr1,g) /\
+      ~(y0 = real_of_num 0) ==>
+      ((\n. (x n) / (y n)) tends (x0 / y0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM NET\_INV NETS
+|- !g.
+    dorder g ==>
+    (!x x0.
+      (x tends x0)(mtop mr1,g) /\ ~(x0 = real_of_num 0) ==>
+      ((\n. real_inv(x n)) tends (real_inv x0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM NET\_LE NETS
+|- !g.
+    dorder g ==>
+    (!x x0 y y0.
+      (x tends x0)(mtop mr1,g) /\
+      (y tends y0)(mtop mr1,g) /\
+      (?N. g N N /\ (!n. g n N ==> (x n) real_le (y n))) ==>
+      x0 real_le y0)
+\ENDTHEOREM
+\THEOREM NET\_MUL NETS
+|- !g.
+    dorder g ==>
+    (!x y x0 y0.
+      (x tends x0)(mtop mr1,g) /\ (y tends y0)(mtop mr1,g) ==>
+      ((\n. (x n) real_mul (y n)) tends (x0 real_mul y0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM NET\_NEG NETS
+|- !g.
+    dorder g ==>
+    (!x x0.
+      (x tends x0)(mtop mr1,g) =
+      ((\n. real_neg(x n)) tends (real_neg x0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM NET\_NULL NETS
+|- !g x x0.
+    (x tends x0)(mtop mr1,g) =
+    ((\n. (x n) real_sub x0) tends (real_of_num 0))(mtop mr1,g)
+\ENDTHEOREM
+\THEOREM NET\_NULL\_ADD NETS
+|- !g.
+    dorder g ==>
+    (!x y.
+      (x tends (real_of_num 0))(mtop mr1,g) /\
+      (y tends (real_of_num 0))(mtop mr1,g) ==>
+      ((\n. (x n) real_add (y n)) tends (real_of_num 0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM NET\_NULL\_CMUL NETS
+|- !g k x.
+    (x tends (real_of_num 0))(mtop mr1,g) ==>
+    ((\n. k real_mul (x n)) tends (real_of_num 0))(mtop mr1,g)
+\ENDTHEOREM
+\THEOREM NET\_NULL\_MUL NETS
+|- !g.
+    dorder g ==>
+    (!x y.
+      bounded(mr1,g)x /\ (y tends (real_of_num 0))(mtop mr1,g) ==>
+      ((\n. (x n) real_mul (y n)) tends (real_of_num 0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM NET\_SUB NETS
+|- !g.
+    dorder g ==>
+    (!x x0 y y0.
+      (x tends x0)(mtop mr1,g) /\ (y tends y0)(mtop mr1,g) ==>
+      ((\n. (x n) real_sub (y n)) tends (x0 real_sub y0))(mtop mr1,g))
+\ENDTHEOREM
+\THEOREM SEQ\_TENDS NETS
+|- !d x x0.
+    (x tends x0)(mtop d,$>=) =
+    (!e.
+      (real_of_num 0) real_lt e ==>
+      (?N. !n. n >= N ==> (dist d(x n,x0)) real_lt e))
+\ENDTHEOREM
+\THEOREM tends NETS
+|- !s l top g.
+    (s tends l)(top,g) =
+    (!N. neigh top(N,l) ==> (?n. g n n /\ (!m. g m n ==> N(s m))))
+\ENDTHEOREM
+\THEOREM tendsto NETS
+|- !m x y z.
+    tendsto(m,x)y z =
+    (real_of_num 0) real_lt (dist m(x,y)) /\
+    (dist m(x,y)) real_le (dist m(x,z))
+\ENDTHEOREM
+\section{LIM}
+\THEOREM CHAIN\_LEMMA1 LIM
+|- !f g x h.
+    ((f(g(x + h))) - (f(g x))) / h =
+    (((f(g(x + h))) - (f(g x))) / ((g(x + h)) - (g x))) *
+    (((g(x + h)) - (g x)) / h)
+\ENDTHEOREM
+\THEOREM CHAIN\_LEMMA2 LIM
+|- !x y d. (abs(x - y)) < d ==> (abs x) < ((abs y) + d)
+\ENDTHEOREM
+\THEOREM contl LIM
+|- !f x. f contl x = ((\h. f(x + h)) --> (f x))(& 0)
+\ENDTHEOREM
+\THEOREM CONTL\_LIM LIM
+|- !f x. f contl x = (f --> (f x))x
+\ENDTHEOREM
+\THEOREM CONT\_ADD LIM
+|- !x. f contl x /\ g contl x ==> (\x. (f x) + (g x)) contl x
+\ENDTHEOREM
+\THEOREM CONT\_ATTAINS LIM
+|- !f a b.
+    a <= b /\ (!x. a <= x /\ x <= b ==> f contl x) ==>
+    (?M.
+      (!x. a <= x /\ x <= b ==> (f x) <= M) /\
+      (?x. a <= x /\ x <= b /\ (f x = M)))
+\ENDTHEOREM
+\THEOREM CONT\_ATTAINS2 LIM
+|- !f a b.
+    a <= b /\ (!x. a <= x /\ x <= b ==> f contl x) ==>
+    (?M.
+      (!x. a <= x /\ x <= b ==> M <= (f x)) /\
+      (?x. a <= x /\ x <= b /\ (f x = M)))
+\ENDTHEOREM
+\THEOREM CONT\_BOUNDED LIM
+|- !f a b.
+    a <= b /\ (!x. a <= x /\ x <= b ==> f contl x) ==>
+    (?M. !x. a <= x /\ x <= b ==> (f x) <= M)
+\ENDTHEOREM
+\THEOREM CONT\_CONST LIM
+|- !x. (\x. k) contl x
+\ENDTHEOREM
+\THEOREM CONT\_DIV LIM
+|- !x.
+    f contl x /\ g contl x /\ ~(g x = & 0) ==>
+    (\x. (f x) / (g x)) contl x
+\ENDTHEOREM
+\THEOREM CONT\_HASSUP LIM
+|- !f a b.
+    a <= b /\ (!x. a <= x /\ x <= b ==> f contl x) ==>
+    (?M.
+      (!x. a <= x /\ x <= b ==> (f x) <= M) /\
+      (!N. N < M ==> (?x. a <= x /\ x <= b /\ N < (f x))))
+\ENDTHEOREM
+\THEOREM CONT\_INV LIM
+|- !x. f contl x /\ ~(f x = & 0) ==> (\x. inv(f x)) contl x
+\ENDTHEOREM
+\THEOREM CONT\_MUL LIM
+|- !x. f contl x /\ g contl x ==> (\x. (f x) * (g x)) contl x
+\ENDTHEOREM
+\THEOREM CONT\_NEG LIM
+|- !x. f contl x ==> (\x. --(f x)) contl x
+\ENDTHEOREM
+\THEOREM CONT\_SUB LIM
+|- !x. f contl x /\ g contl x ==> (\x. (f x) - (g x)) contl x
+\ENDTHEOREM
+\THEOREM differentiable LIM
+|- !f x. f differentiable x = (?l. (f diffl l)x)
+\ENDTHEOREM
+\THEOREM diffl LIM
+|- !f l x. (f diffl l)x = ((\h. ((f(x + h)) - (f x)) / h) --> l)(& 0)
+\ENDTHEOREM
+\THEOREM DIFF\_ADD LIM
+|- !f g l m x.
+    (f diffl l)x /\ (g diffl m)x ==>
+    ((\x. (f x) + (g x)) diffl (l + m))x
+\ENDTHEOREM
+\THEOREM DIFF\_CHAIN LIM
+|- !f g x.
+    (f diffl l)(g x) /\ (g diffl m)x ==> ((\x. f(g x)) diffl (l * m))x
+\ENDTHEOREM
+\THEOREM DIFF\_CMUL LIM
+|- !f c l x. (f diffl l)x ==> ((\x. c * (f x)) diffl (c * l))x
+\ENDTHEOREM
+\THEOREM DIFF\_CONST LIM
+|- !k x. ((\x. k) diffl (& 0))x
+\ENDTHEOREM
+\THEOREM DIFF\_CONT LIM
+|- !f l x. (f diffl l)x ==> f contl x
+\ENDTHEOREM
+\THEOREM DIFF\_DIV LIM
+|- !f g l m.
+    (f diffl l)x /\ (g diffl m)x /\ ~(g x = & 0) ==>
+    ((\x. (f x) / (g x)) diffl
+     (((l * (g x)) - (m * (f x))) / ((g x) pow 2)))
+    x
+\ENDTHEOREM
+\THEOREM DIFF\_INV LIM
+|- !f l x.
+    (f diffl l)x /\ ~(f x = & 0) ==>
+    ((\x. inv(f x)) diffl (--(l / ((f x) pow 2))))x
+\ENDTHEOREM
+\THEOREM DIFF\_ISCONST LIM
+|- !f a b.
+    a < b /\
+    (!x. a <= x /\ x <= b ==> f contl x) /\
+    (!x. a < x /\ x < b ==> (f diffl (& 0))x) ==>
+    (!x. a <= x /\ x <= b ==> (f x = f a))
+\ENDTHEOREM
+\THEOREM DIFF\_ISCONST\_ALL LIM
+|- !f. (!x. (f diffl (& 0))x) ==> (!x y. f x = f y)
+\ENDTHEOREM
+\THEOREM DIFF\_ISCONST\_END LIM
+|- !f a b.
+    a < b /\
+    (!x. a <= x /\ x <= b ==> f contl x) /\
+    (!x. a < x /\ x < b ==> (f diffl (& 0))x) ==>
+    (f b = f a)
+\ENDTHEOREM
+\THEOREM DIFF\_LCONST LIM
+|- !f x l.
+    (f diffl l)x /\
+    (?d. (& 0) < d /\ (!y. (abs(x - y)) < d ==> (f y = f x))) ==>
+    (l = & 0)
+\ENDTHEOREM
+\THEOREM DIFF\_LDEC LIM
+|- !f x l.
+    (f diffl l)x /\ l < (& 0) ==>
+    (?d. (& 0) < d /\ (!h. (& 0) < h /\ h < d ==> (f x) < (f(x - h))))
+\ENDTHEOREM
+\THEOREM DIFF\_LINC LIM
+|- !f x l.
+    (f diffl l)x /\ (& 0) < l ==>
+    (?d. (& 0) < d /\ (!h. (& 0) < h /\ h < d ==> (f x) < (f(x + h))))
+\ENDTHEOREM
+\THEOREM DIFF\_LMAX LIM
+|- !f x l.
+    (f diffl l)x /\
+    (?d. (& 0) < d /\ (!y. (abs(x - y)) < d ==> (f y) <= (f x))) ==>
+    (l = & 0)
+\ENDTHEOREM
+\THEOREM DIFF\_LMIN LIM
+|- !f x l.
+    (f diffl l)x /\
+    (?d. (& 0) < d /\ (!y. (abs(x - y)) < d ==> (f x) <= (f y))) ==>
+    (l = & 0)
+\ENDTHEOREM
+\THEOREM DIFF\_MUL LIM
+|- !f g l m x.
+    (f diffl l)x /\ (g diffl m)x ==>
+    ((\x. (f x) * (g x)) diffl ((l * (g x)) + (m * (f x))))x
+\ENDTHEOREM
+\THEOREM DIFF\_NEG LIM
+|- !f l x. (f diffl l)x ==> ((\x. --(f x)) diffl (-- l))x
+\ENDTHEOREM
+\THEOREM DIFF\_POW LIM
+|- !n x. ((\x'. x' pow n) diffl ((& n) * (x pow (n num_sub 1))))x
+\ENDTHEOREM
+\THEOREM DIFF\_SUB LIM
+|- !f g l m x.
+    (f diffl l)x /\ (g diffl m)x ==>
+    ((\x. (f x) - (g x)) diffl (l - m))x
+\ENDTHEOREM
+\THEOREM DIFF\_SUM LIM
+|- !f f' m n x.
+    (!r.
+      m num_le r /\ r num_lt (m num_add n) ==>
+      ((\x'. f r x') diffl (f' r x))x) ==>
+    ((\x'. Sum(m,n)(\n'. f n' x')) diffl (Sum(m,n)(\r. f' r x)))x
+\ENDTHEOREM
+\THEOREM DIFF\_UNIQ LIM
+|- !f l m x. (f diffl l)x /\ (f diffl m)x ==> (l = m)
+\ENDTHEOREM
+\THEOREM DIFF\_X LIM
+|- !x. ((\x. x) diffl (& 1))x
+\ENDTHEOREM
+\THEOREM DIFF\_XM1 LIM
+|- !x. ~(x = & 0) ==> ((\x. inv x) diffl (--((inv x) pow 2)))x
+\ENDTHEOREM
+\THEOREM INTERVAL\_LEMMA LIM
+|- !a b x.
+    a < x /\ x < b ==>
+    (?d. (& 0) < d /\ (!y. (abs(x - y)) < d ==> a <= y /\ y <= b))
+\ENDTHEOREM
+\THEOREM IVT LIM
+|- !f a b y.
+    a <= b /\
+    ((f a) <= y /\ y <= (f b)) /\
+    (!x. a <= x /\ x <= b ==> f contl x) ==>
+    (?x. a <= x /\ x <= b /\ (f x = y))
+\ENDTHEOREM
+\THEOREM IVT2 LIM
+|- !f a b y.
+    a <= b /\
+    ((f b) <= y /\ y <= (f a)) /\
+    (!x. a <= x /\ x <= b ==> f contl x) ==>
+    (?x. a <= x /\ x <= b /\ (f x = y))
+\ENDTHEOREM
+\THEOREM IVT\_SUPLEMMA LIM
+|- a <= b /\
+   ((f a) <= y /\ y <= (f b)) /\
+   (!x. a <= x /\ x <= b ==> f contl x) ==>
+   (?x. (\x. a <= x /\ x <= b /\ (f x) <= y)x) /\
+   (?z. !x. (\x. a <= x /\ x <= b /\ (f x) <= y)x ==> x <= z)
+\ENDTHEOREM
+\THEOREM IVT\_SUPLEMMA2 LIM
+|- a <= b /\
+   ((f a) <= y /\ y <= (f b)) /\
+   (!x. a <= x /\ x <= b ==> f contl x) ==>
+   a <= (sup(\x. a <= x /\ x <= b /\ (f x) <= y)) /\
+   (sup(\x. a <= x /\ x <= b /\ (f x) <= y)) <= b
+\ENDTHEOREM
+\THEOREM LIM LIM
+|- !f y0 x0.
+    (f --> y0)x0 =
+    (!e.
+      (& 0) < e ==>
+      (?d.
+        (& 0) < d /\
+        (!x.
+          (& 0) < (abs(x - x0)) /\ (abs(x - x0)) < d ==>
+          (abs((f x) - y0)) < e)))
+\ENDTHEOREM
+\THEOREM LIM\_ADD LIM
+|- !f g l m.
+    (f --> l)x /\ (g --> m)x ==> ((\x. (f x) + (g x)) --> (l + m))x
+\ENDTHEOREM
+\THEOREM LIM\_BOUNDED LIM
+|- bounded(mr1,tendsto(mr1,x0))f =
+   (?k d.
+     (& 0) < d /\
+     (!x. (& 0) < (abs(x - x0)) /\ (abs(x - x0)) < d ==> (abs(f x)) < k))
+\ENDTHEOREM
+\THEOREM LIM\_CONST LIM
+|- !k x. ((\x. k) --> k)x
+\ENDTHEOREM
+\THEOREM LIM\_DIV LIM
+|- !f g l m.
+    (f --> l)x /\ (g --> m)x /\ ~(m = & 0) ==>
+    ((\x. (f x) / (g x)) --> (l / m))x
+\ENDTHEOREM
+\THEOREM LIM\_EQUAL LIM
+|- !f g l x0.
+    (!x. ~(x = x0) ==> (f x = g x)) ==> ((f --> l)x0 = (g --> l)x0)
+\ENDTHEOREM
+\THEOREM LIM\_INV LIM
+|- !f l. (f --> l)x /\ ~(l = & 0) ==> ((\x. inv(f x)) --> (inv l))x
+\ENDTHEOREM
+\THEOREM LIM\_MUL LIM
+|- !f g l m.
+    (f --> l)x /\ (g --> m)x ==> ((\x. (f x) * (g x)) --> (l * m))x
+\ENDTHEOREM
+\THEOREM LIM\_NEG LIM
+|- !f l. (f --> l)x = ((\x. --(f x)) --> (-- l))x
+\ENDTHEOREM
+\THEOREM LIM\_NULL LIM
+|- !f l x. (f --> l)x = ((\x. (f x) - l) --> (& 0))x
+\ENDTHEOREM
+\THEOREM LIM\_NULL\_MUL LIM
+|- !x x0 y.
+    bounded(mr1,tendsto(mr1,x0))x /\ (y --> (& 0))x0 ==>
+    ((\u. (x u) * (y u)) --> (& 0))x0
+\ENDTHEOREM
+\THEOREM LIM\_SUB LIM
+|- !f g l m.
+    (f --> l)x /\ (g --> m)x ==> ((\x. (f x) - (g x)) --> (l - m))x
+\ENDTHEOREM
+\THEOREM LIM\_TRANSFORM LIM
+|- !f g x0 l.
+    ((\x. (f x) - (g x)) --> (& 0))x0 /\ (g --> l)x0 ==> (f --> l)x0
+\ENDTHEOREM
+\THEOREM LIM\_UNIQ LIM
+|- !f l m x. (f --> l)x /\ (f --> m)x ==> (l = m)
+\ENDTHEOREM
+\THEOREM LIM\_X LIM
+|- !x0. ((\x. x) --> x0)x0
+\ENDTHEOREM
+\THEOREM MVT LIM
+|- !f a b.
+    a < b /\
+    (!x. a <= x /\ x <= b ==> f contl x) /\
+    (!x. a < x /\ x < b ==> f differentiable x) ==>
+    (?l z.
+      a < z /\ z < b /\ (f diffl l)z /\ ((f b) - (f a) = (b - a) * l))
+\ENDTHEOREM
+\THEOREM MVT\_LEMMA LIM
+|- !f a b.
+    (\x. (f x) - ((((f b) - (f a)) / (b - a)) * x))a =
+    (\x. (f x) - ((((f b) - (f a)) / (b - a)) * x))b
+\ENDTHEOREM
+\THEOREM ROLLE LIM
+|- !f a b.
+    a < b /\
+    (f a = f b) /\
+    (!x. a <= x /\ x <= b ==> f contl x) /\
+    (!x. a < x /\ x < b ==> f differentiable x) ==>
+    (?z. a < z /\ z < b /\ (f diffl (& 0))z)
+\ENDTHEOREM
+\THEOREM SUP\_BOUNDED LIM
+|- !P a b.
+    (?x. P x) /\ (!x. P x ==> a <= x /\ x <= b) ==>
+    a <= (sup P) /\ (sup P) <= b
+\ENDTHEOREM
+\THEOREM SUP\_UBOUNDED LIM
+|- !P b. (?x. P x) /\ (!x. P x ==> x <= b) ==> (sup P) <= b
+\ENDTHEOREM
+\THEOREM tends\_real\_real LIM
+|- !f l x0. (f --> l)x0 = (f tends l)(mtop mr1,tendsto(mr1,x0))
+\ENDTHEOREM
+\section{SEQ}
+\THEOREM ABS\_NEG\_LEMMA SEQ
+|- !c. c <= (& 0) ==> (!x y. (abs x) <= (c * (abs y)) ==> (x = & 0))
+\ENDTHEOREM
+\THEOREM cauchy SEQ
+|- !f.
+    cauchy f =
+    (!e.
+      (& 0) < e ==>
+      (?N. !m n. m num_ge N /\ n num_ge N ==> (abs((f m) - (f n))) < e))
+\ENDTHEOREM
+\THEOREM convergent SEQ
+|- !f. convergent f = (?l. f --> l)
+\ENDTHEOREM
+\THEOREM GP SEQ
+|- !x. (abs x) < (& 1) ==> (\n. x pow n) sums (inv((& 1) - x))
+\ENDTHEOREM
+\THEOREM GP\_FINITE SEQ
+|- !x.
+    ~(x = & 1) ==>
+    (!n. Sum(0,n)(\n'. x pow n') = ((x pow n) - (& 1)) / (x - (& 1)))
+\ENDTHEOREM
+\THEOREM lim SEQ
+|- !f. lim f = (@l. f --> l)
+\ENDTHEOREM
+\THEOREM MAX\_LEMMA SEQ
+|- !s N. ?k. !n. n num_lt N ==> (abs(s n)) < k
+\ENDTHEOREM
+\THEOREM mono SEQ
+|- !f.
+    mono f =
+    (!m n. m num_le n ==> (f m) <= (f n)) \/
+    (!m n. m num_le n ==> (f m) >= (f n))
+\ENDTHEOREM
+\THEOREM MONO\_SUC SEQ
+|- !f. mono f = (!n. (f(SUC n)) >= (f n)) \/ (!n. (f(SUC n)) <= (f n))
+\ENDTHEOREM
+\THEOREM SEQ SEQ
+|- !x x0.
+    x --> x0 =
+    (!e. (& 0) < e ==> (?N. !n. n num_ge N ==> (abs((x n) - x0)) < e))
+\ENDTHEOREM
+\THEOREM SEQ\_ABS SEQ
+|- !f. (\n. abs(f n)) --> (& 0) = f --> (& 0)
+\ENDTHEOREM
+\THEOREM SEQ\_ABS\_IMP SEQ
+|- !f l. f --> l ==> (\n. abs(f n)) --> (abs l)
+\ENDTHEOREM
+\THEOREM SEQ\_ADD SEQ
+|- !x x0 y y0.
+    x --> x0 /\ y --> y0 ==> (\n. (x n) + (y n)) --> (x0 + y0)
+\ENDTHEOREM
+\THEOREM SEQ\_BCONV SEQ
+|- !f. bounded(mr1,$num_ge)f /\ mono f ==> convergent f
+\ENDTHEOREM
+\THEOREM SEQ\_BOUNDED SEQ
+|- !s. bounded(mr1,$num_ge)s = (?k. !n. (abs(s n)) < k)
+\ENDTHEOREM
+\THEOREM SEQ\_CAUCHY SEQ
+|- !f. cauchy f = convergent f
+\ENDTHEOREM
+\THEOREM SEQ\_CBOUNDED SEQ
+|- !f. cauchy f ==> bounded(mr1,$num_ge)f
+\ENDTHEOREM
+\THEOREM SEQ\_CONST SEQ
+|- !k. (\x. k) --> k
+\ENDTHEOREM
+\THEOREM SEQ\_DIRECT SEQ
+|- !f. subseq f ==> (!N1 N2. ?n. n num_ge N1 /\ (f n) num_ge N2)
+\ENDTHEOREM
+\THEOREM SEQ\_DIV SEQ
+|- !x x0 y y0.
+    x --> x0 /\ y --> y0 /\ ~(y0 = & 0) ==>
+    (\n. (x n) / (y n)) --> (x0 / y0)
+\ENDTHEOREM
+\THEOREM SEQ\_ICONV SEQ
+|- !f.
+    bounded(mr1,$num_ge)f /\ (!m n. m num_ge n ==> (f m) >= (f n)) ==>
+    convergent f
+\ENDTHEOREM
+\THEOREM SEQ\_INV SEQ
+|- !x x0. x --> x0 /\ ~(x0 = & 0) ==> (\n. inv(x n)) --> (inv x0)
+\ENDTHEOREM
+\THEOREM SEQ\_INV0 SEQ
+|- !f.
+    (!y. ?N. !n. n num_ge N ==> (f n) > y) ==> (\n. inv(f n)) --> (& 0)
+\ENDTHEOREM
+\THEOREM SEQ\_LE SEQ
+|- !f g l m.
+    f --> l /\ g --> m /\ (?N. !n. n num_ge N ==> (f n) <= (g n)) ==>
+    l <= m
+\ENDTHEOREM
+\THEOREM SEQ\_LIM SEQ
+|- !f. convergent f = f --> (lim f)
+\ENDTHEOREM
+\THEOREM SEQ\_MONOSUB SEQ
+|- !s. ?f. subseq f /\ mono(\n. s(f n))
+\ENDTHEOREM
+\THEOREM SEQ\_MUL SEQ
+|- !x x0 y y0.
+    x --> x0 /\ y --> y0 ==> (\n. (x n) * (y n)) --> (x0 * y0)
+\ENDTHEOREM
+\THEOREM SEQ\_NEG SEQ
+|- !x x0. x --> x0 = (\n. --(x n)) --> (-- x0)
+\ENDTHEOREM
+\THEOREM SEQ\_NEG\_BOUNDED SEQ
+|- !f. bounded(mr1,$num_ge)(\n. --(f n)) = bounded(mr1,$num_ge)f
+\ENDTHEOREM
+\THEOREM SEQ\_NEG\_CONV SEQ
+|- !f. convergent f = convergent(\n. --(f n))
+\ENDTHEOREM
+\THEOREM SEQ\_POWER SEQ
+|- !c. (abs c) < (& 1) ==> (\n. c pow n) --> (& 0)
+\ENDTHEOREM
+\THEOREM SEQ\_POWER\_ABS SEQ
+|- !c. (abs c) < (& 1) ==> (\n. (abs c) pow n) --> (& 0)
+\ENDTHEOREM
+\THEOREM SEQ\_SBOUNDED SEQ
+|- !s f. bounded(mr1,$num_ge)s ==> bounded(mr1,$num_ge)(\n. s(f n))
+\ENDTHEOREM
+\THEOREM SEQ\_SUB SEQ
+|- !x x0 y y0.
+    x --> x0 /\ y --> y0 ==> (\n. (x n) - (y n)) --> (x0 - y0)
+\ENDTHEOREM
+\THEOREM SEQ\_SUBLE SEQ
+|- !f. subseq f ==> (!n. n num_le (f n))
+\ENDTHEOREM
+\THEOREM SEQ\_SUC SEQ
+|- !f l. f --> l = (\n. f(SUC n)) --> l
+\ENDTHEOREM
+\THEOREM SEQ\_UNIQ SEQ
+|- !x x1 x2. x --> x1 /\ x --> x2 ==> (x1 = x2)
+\ENDTHEOREM
+\THEOREM SER\_0 SEQ
+|- !f n. (!m. n num_le m ==> (f m = & 0)) ==> f sums (Sum(0,n)f)
+\ENDTHEOREM
+\THEOREM SER\_ABS SEQ
+|- !f.
+    summable(\n. abs(f n)) ==> (abs(suminf f)) <= (suminf(\n. abs(f n)))
+\ENDTHEOREM
+\THEOREM SER\_ACONV SEQ
+|- !f. summable(\n. abs(f n)) ==> summable f
+\ENDTHEOREM
+\THEOREM SER\_ADD SEQ
+|- !x x0 y y0.
+    x sums x0 /\ y sums y0 ==> (\n. (x n) + (y n)) sums (x0 + y0)
+\ENDTHEOREM
+\THEOREM SER\_CAUCHY SEQ
+|- !f.
+    summable f =
+    (!e. (& 0) < e ==> (?N. !m n. m num_ge N ==> (abs(Sum(m,n)f)) < e))
+\ENDTHEOREM
+\THEOREM SER\_CDIV SEQ
+|- !x x0 c. x sums x0 ==> (\n. (x n) / c) sums (x0 / c)
+\ENDTHEOREM
+\THEOREM SER\_CMUL SEQ
+|- !x x0 c. x sums x0 ==> (\n. c * (x n)) sums (c * x0)
+\ENDTHEOREM
+\THEOREM SER\_COMPAR SEQ
+|- !f g.
+    (?N. !n. n num_ge N ==> (abs(f n)) <= (g n)) /\ summable g ==>
+    summable f
+\ENDTHEOREM
+\THEOREM SER\_COMPARA SEQ
+|- !f g.
+    (?N. !n. n num_ge N ==> (abs(f n)) <= (g n)) /\ summable g ==>
+    summable(\k. abs(f k))
+\ENDTHEOREM
+\THEOREM SER\_GROUP SEQ
+|- !f k.
+    summable f /\ 0 num_lt k ==>
+    (\n. Sum(n num_mul k,k)f) sums (suminf f)
+\ENDTHEOREM
+\THEOREM SER\_LE SEQ
+|- !f g.
+    (!n. (f n) <= (g n)) /\ summable f /\ summable g ==>
+    (suminf f) <= (suminf g)
+\ENDTHEOREM
+\THEOREM SER\_LE2 SEQ
+|- !f g.
+    (!n. (abs(f n)) <= (g n)) /\ summable g ==>
+    summable f /\ (suminf f) <= (suminf g)
+\ENDTHEOREM
+\THEOREM SER\_NEG SEQ
+|- !x x0. x sums x0 ==> (\n. --(x n)) sums (-- x0)
+\ENDTHEOREM
+\THEOREM SER\_OFFSET SEQ
+|- !f.
+    summable f ==>
+    (!k. (\n. f(n num_add k)) sums ((suminf f) - (Sum(0,k)f)))
+\ENDTHEOREM
+\THEOREM SER\_PAIR SEQ
+|- !f. summable f ==> (\n. Sum(2 num_mul n,2)f) sums (suminf f)
+\ENDTHEOREM
+\THEOREM SER\_POS\_LE SEQ
+|- !f n.
+    summable f /\ (!m. n num_le m ==> (& 0) <= (f m)) ==>
+    (Sum(0,n)f) <= (suminf f)
+\ENDTHEOREM
+\THEOREM SER\_POS\_LT SEQ
+|- !f n.
+    summable f /\ (!m. n num_le m ==> (& 0) < (f m)) ==>
+    (Sum(0,n)f) < (suminf f)
+\ENDTHEOREM
+\THEOREM SER\_POS\_LT\_PAIR SEQ
+|- !f n.
+    summable f /\
+    (!d.
+      (& 0) <
+      ((f(n num_add (2 num_mul d))) +
+       (f(n num_add ((2 num_mul d) num_add 1))))) ==>
+    (Sum(0,n)f) < (suminf f)
+\ENDTHEOREM
+\THEOREM SER\_RATIO SEQ
+|- !f c N.
+    c < (& 1) /\
+    (!n. n num_ge N ==> (abs(f(SUC n))) <= (c * (abs(f n)))) ==>
+    summable f
+\ENDTHEOREM
+\THEOREM SER\_SUB SEQ
+|- !x x0 y y0.
+    x sums x0 /\ y sums y0 ==> (\n. (x n) - (y n)) sums (x0 - y0)
+\ENDTHEOREM
+\THEOREM SER\_ZERO SEQ
+|- !f. summable f ==> f --> (& 0)
+\ENDTHEOREM
+\THEOREM subseq SEQ
+|- !f. subseq f = (!m n. m num_lt n ==> (f m) num_lt (f n))
+\ENDTHEOREM
+\THEOREM SUBSEQ\_SUC SEQ
+|- !f. subseq f = (!n. (f n) num_lt (f(SUC n)))
+\ENDTHEOREM
+\THEOREM suminf SEQ
+|- !f. suminf f = (@s. f sums s)
+\ENDTHEOREM
+\THEOREM summable SEQ
+|- !f. summable f = (?s. f sums s)
+\ENDTHEOREM
+\THEOREM SUMMABLE\_SUM SEQ
+|- !f. summable f ==> f sums (suminf f)
+\ENDTHEOREM
+\THEOREM sums SEQ
+|- !f s. f sums s = (\n. Sum(0,n)f) --> s
+\ENDTHEOREM
+\THEOREM SUM\_SUMMABLE SEQ
+|- !f l. f sums l ==> summable f
+\ENDTHEOREM
+\THEOREM SUM\_UNIQ SEQ
+|- !f x. f sums x ==> (x = suminf f)
+\ENDTHEOREM
+\THEOREM tends\_num\_real SEQ
+|- !x x0. x --> x0 = (x tends x0)(mtop mr1,$num_ge)
+\ENDTHEOREM
+\section{POWSER}
+\THEOREM diffs POWSER
+|- !c. diffs c = (\n. (&(SUC n)) * (c(SUC n)))
+\ENDTHEOREM
+\THEOREM DIFFS\_EQUIV POWSER
+|- !c x.
+    summable(\n. (diffs c n) * (x pow n)) ==>
+    (\n. (& n) * ((c n) * (x pow (n num_sub 1)))) sums
+    (suminf(\n. (diffs c n) * (x pow n)))
+\ENDTHEOREM
+\THEOREM DIFFS\_LEMMA POWSER
+|- !n c x.
+    Sum(0,n)(\n'. (diffs c n') * (x pow n')) =
+    (Sum(0,n)(\n'. (& n') * ((c n') * (x pow (n' num_sub 1))))) +
+    ((& n) * ((c n) * (x pow (n num_sub 1))))
+\ENDTHEOREM
+\THEOREM DIFFS\_LEMMA2 POWSER
+|- !n c x.
+    Sum(0,n)(\n. (& n) * ((c n) * (x pow (n num_sub 1)))) =
+    (Sum(0,n)(\n. (diffs c n) * (x pow n))) -
+    ((& n) * ((c n) * (x pow (n num_sub 1))))
+\ENDTHEOREM
+\THEOREM DIFFS\_NEG POWSER
+|- !c. diffs(\n. --(c n)) = (\n. --(diffs c n))
+\ENDTHEOREM
+\THEOREM POWDIFF POWSER
+|- !n x y.
+    (x pow (SUC n)) - (y pow (SUC n)) =
+    (x - y) * (Sum(0,SUC n)(\p. (x pow p) * (y pow (n num_sub p))))
+\ENDTHEOREM
+\THEOREM POWDIFF\_LEMMA POWSER
+|- !n x y.
+    Sum(0,SUC n)(\p. (x pow p) * (y pow ((SUC n) num_sub p))) =
+    y * (Sum(0,SUC n)(\p. (x pow p) * (y pow (n num_sub p))))
+\ENDTHEOREM
+\THEOREM POWREV POWSER
+|- !n x y.
+    Sum(0,SUC n)(\p. (x pow p) * (y pow (n num_sub p))) =
+    Sum(0,SUC n)(\p. (x pow (n num_sub p)) * (y pow p))
+\ENDTHEOREM
+\THEOREM POWSER\_INSIDE POWSER
+|- !f x z.
+    summable(\n. (f n) * (x pow n)) /\ (abs z) < (abs x) ==>
+    summable(\n. (f n) * (z pow n))
+\ENDTHEOREM
+\THEOREM POWSER\_INSIDEA POWSER
+|- !f x z.
+    summable(\n. (f n) * (x pow n)) /\ (abs z) < (abs x) ==>
+    summable(\n. (abs(f n)) * (z pow n))
+\ENDTHEOREM
+\THEOREM TERMDIFF POWSER
+|- !c K.
+    summable(\n. (c n) * (K pow n)) /\
+    summable(\n. (diffs c n) * (K pow n)) /\
+    summable(\n. (diffs(diffs c)n) * (K pow n)) /\
+    (abs x) < (abs K) ==>
+    ((\x. suminf(\n. (c n) * (x pow n))) diffl
+     (suminf(\n. (diffs c n) * (x pow n))))
+    x
+\ENDTHEOREM
+\THEOREM TERMDIFF\_LEMMA1 POWSER
+|- !m z h.
+    Sum(0,m)(\p. (((z + h) pow (m num_sub p)) * (z pow p)) - (z pow m)) =
+    Sum
+    (0,m)
+    (\p.
+      (z pow p) * (((z + h) pow (m num_sub p)) - (z pow (m num_sub p))))
+\ENDTHEOREM
+\THEOREM TERMDIFF\_LEMMA2 POWSER
+|- !z h.
+    ~(h = & 0) ==>
+    (((((z + h) pow n) - (z pow n)) / h) -
+     ((& n) * (z pow (n num_sub 1))) =
+     h *
+     (Sum
+      (0,n num_sub 1)
+      (\p.
+        (z pow p) *
+        (Sum
+         (0,(n num_sub 1) num_sub p)
+         (\q.
+           ((z + h) pow q) *
+           (z pow (((n num_sub 2) num_sub p) num_sub q)))))))
+\ENDTHEOREM
+\THEOREM TERMDIFF\_LEMMA3 POWSER
+|- !z h n K.
+    ~(h = & 0) /\ (abs z) <= K /\ (abs(z + h)) <= K ==>
+    (abs
+     (((((z + h) pow n) - (z pow n)) / h) -
+      ((& n) * (z pow (n num_sub 1))))) <=
+    ((& n) * ((&(n num_sub 1)) * ((K pow (n num_sub 2)) * (abs h))))
+\ENDTHEOREM
+\THEOREM TERMDIFF\_LEMMA4 POWSER
+|- !f K k.
+    (& 0) < k /\
+    (!h. (& 0) < (abs h) /\ (abs h) < k ==> (abs(f h)) <= (K * (abs h))) ==>
+    (f tends_real_real (& 0))(& 0)
+\ENDTHEOREM
+\THEOREM TERMDIFF\_LEMMA5 POWSER
+|- !f g k.
+    (& 0) < k /\
+    summable f /\
+    (!h.
+      (& 0) < (abs h) /\ (abs h) < k ==>
+      (!n. (abs(g h n)) <= ((f n) * (abs h)))) ==>
+    ((\h. suminf(g h)) tends_real_real (& 0))(& 0)
+\ENDTHEOREM
+\section{TRANSC}
+\THEOREM ACS TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (& 0) <= (acs y) /\ (acs y) <= pi /\ (cos(acs y) = y)
+\ENDTHEOREM
+\THEOREM acs TRANSC
+|- !y. acs y = (@x. (& 0) <= x /\ x <= pi /\ (cos x = y))
+\ENDTHEOREM
+\THEOREM ACS\_BOUNDS TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==> (& 0) <= (acs y) /\ (acs y) <= pi
+\ENDTHEOREM
+\THEOREM ACS\_COS TRANSC
+|- !y. (--(& 1)) <= y /\ y <= (& 1) ==> (cos(acs y) = y)
+\ENDTHEOREM
+\THEOREM ASN TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (--(pi / (& 2))) <= (asn y) /\
+    (asn y) <= (pi / (& 2)) /\
+    (sin(asn y) = y)
+\ENDTHEOREM
+\THEOREM asn TRANSC
+|- !y.
+    asn y =
+    (@x. (--(pi / (& 2))) <= x /\ x <= (pi / (& 2)) /\ (sin x = y))
+\ENDTHEOREM
+\THEOREM ASN\_BOUNDS TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (--(pi / (& 2))) <= (asn y) /\ (asn y) <= (pi / (& 2))
+\ENDTHEOREM
+\THEOREM ASN\_SIN TRANSC
+|- !y. (--(& 1)) <= y /\ y <= (& 1) ==> (sin(asn y) = y)
+\ENDTHEOREM
+\THEOREM ATN TRANSC
+|- !y.
+    (--(pi / (& 2))) < (atn y) /\
+    (atn y) < (pi / (& 2)) /\
+    (tan(atn y) = y)
+\ENDTHEOREM
+\THEOREM atn TRANSC
+|- !y.
+    atn y =
+    (@x. (--(pi / (& 2))) < x /\ x < (pi / (& 2)) /\ (tan x = y))
+\ENDTHEOREM
+\THEOREM ATN\_BOUNDS TRANSC
+|- !y. (--(pi / (& 2))) < (atn y) /\ (atn y) < (pi / (& 2))
+\ENDTHEOREM
+\THEOREM ATN\_TAN TRANSC
+|- !y. tan(atn y) = y
+\ENDTHEOREM
+\THEOREM cos TRANSC
+|- !x.
+    cos x =
+    suminf
+    (\n.
+      ((\n'.
+         (EVEN n' => ((--(& 1)) pow (n' DIV 2)) / (&(FACT n')) | & 0))
+       n) *
+      (x pow n))
+\ENDTHEOREM
+\THEOREM COS\_0 TRANSC
+|- cos(& 0) = & 1
+\ENDTHEOREM
+\THEOREM COS\_2 TRANSC
+|- (cos(& 2)) < (& 0)
+\ENDTHEOREM
+\THEOREM COS\_ACS TRANSC
+|- !x. (& 0) <= x /\ x <= pi ==> (acs(cos x) = x)
+\ENDTHEOREM
+\THEOREM COS\_ADD TRANSC
+|- !x y. cos(x + y) = ((cos x) * (cos y)) - ((sin x) * (sin y))
+\ENDTHEOREM
+\THEOREM COS\_BOUND TRANSC
+|- !x. (abs(cos x)) <= (& 1)
+\ENDTHEOREM
+\THEOREM COS\_BOUNDS TRANSC
+|- !x. (--(& 1)) <= (cos x) /\ (cos x) <= (& 1)
+\ENDTHEOREM
+\THEOREM COS\_CONVERGES TRANSC
+|- !x.
+    (\n.
+      ((\n. (EVEN n => ((--(& 1)) pow (n DIV 2)) / (&(FACT n)) | & 0))n) *
+      (x pow n)) sums
+    (cos x)
+\ENDTHEOREM
+\THEOREM COS\_DOUBLE TRANSC
+|- !x. cos((& 2) * x) = ((cos x) pow 2) - ((sin x) pow 2)
+\ENDTHEOREM
+\THEOREM COS\_FDIFF TRANSC
+|- diffs(\n. (EVEN n => ((--(& 1)) pow (n DIV 2)) / (&(FACT n)) | & 0)) =
+   (\n.
+     --
+     ((\n.
+        (EVEN n =>
+         & 0 |
+         ((--(& 1)) pow ((n num_sub 1) DIV 2)) / (&(FACT n))))
+      n))
+\ENDTHEOREM
+\THEOREM COS\_ISZERO TRANSC
+|- ?! x. (& 0) <= x /\ x <= (& 2) /\ (cos x = & 0)
+\ENDTHEOREM
+\THEOREM COS\_NEG TRANSC
+|- !x. cos(-- x) = cos x
+\ENDTHEOREM
+\THEOREM COS\_NPI TRANSC
+|- !n. cos((& n) * pi) = (--(& 1)) pow n
+\ENDTHEOREM
+\THEOREM COS\_PAIRED TRANSC
+|- !x.
+    (\n.
+      (((--(& 1)) pow n) / (&(FACT(2 num_mul n)))) *
+      (x pow (2 num_mul n))) sums
+    (cos x)
+\ENDTHEOREM
+\THEOREM COS\_PERIODIC TRANSC
+|- !x. cos(x + ((& 2) * pi)) = cos x
+\ENDTHEOREM
+\THEOREM COS\_PERIODIC\_PI TRANSC
+|- !x. cos(x + pi) = --(cos x)
+\ENDTHEOREM
+\THEOREM COS\_PI TRANSC
+|- cos pi = --(& 1)
+\ENDTHEOREM
+\THEOREM COS\_PI2 TRANSC
+|- cos(pi / (& 2)) = & 0
+\ENDTHEOREM
+\THEOREM COS\_POS\_PI TRANSC
+|- !x. (--(pi / (& 2))) < x /\ x < (pi / (& 2)) ==> (& 0) < (cos x)
+\ENDTHEOREM
+\THEOREM COS\_POS\_PI2 TRANSC
+|- !x. (& 0) < x /\ x < (pi / (& 2)) ==> (& 0) < (cos x)
+\ENDTHEOREM
+\THEOREM COS\_SIN TRANSC
+|- !x. cos x = sin((pi / (& 2)) - x)
+\ENDTHEOREM
+\THEOREM COS\_TOTAL TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (?! x. (& 0) <= x /\ x <= pi /\ (cos x = y))
+\ENDTHEOREM
+\THEOREM COS\_ZERO TRANSC
+|- !x.
+    (cos x = & 0) =
+    (?n. ~EVEN n /\ (x = (& n) * (pi / (& 2)))) \/
+    (?n. ~EVEN n /\ (x = --((& n) * (pi / (& 2)))))
+\ENDTHEOREM
+\THEOREM COS\_ZERO\_LEMMA TRANSC
+|- !x.
+    (& 0) <= x /\ (cos x = & 0) ==>
+    (?n. ~EVEN n /\ (x = (& n) * (pi / (& 2))))
+\ENDTHEOREM
+\THEOREM DIFF\_COS TRANSC
+|- !x. (cos diffl (--(sin x)))x
+\ENDTHEOREM
+\THEOREM DIFF\_EXP TRANSC
+|- !x. (exp diffl (exp x))x
+\ENDTHEOREM
+\THEOREM DIFF\_SIN TRANSC
+|- !x. (sin diffl (cos x))x
+\ENDTHEOREM
+\THEOREM DIFF\_TAN TRANSC
+|- !x. ~(cos x = & 0) ==> (tan diffl (inv((cos x) pow 2)))x
+\ENDTHEOREM
+\THEOREM exp TRANSC
+|- !x. exp x = suminf(\n. ((\n'. inv(&(FACT n')))n) * (x pow n))
+\ENDTHEOREM
+\THEOREM EXP\_0 TRANSC
+|- exp(& 0) = & 1
+\ENDTHEOREM
+\THEOREM EXP\_ADD TRANSC
+|- !x y. exp(x + y) = (exp x) * (exp y)
+\ENDTHEOREM
+\THEOREM EXP\_ADD\_MUL TRANSC
+|- !x y. (exp(x + y)) * (exp(-- x)) = exp y
+\ENDTHEOREM
+\THEOREM EXP\_CONVERGES TRANSC
+|- !x. (\n. ((\n. inv(&(FACT n)))n) * (x pow n)) sums (exp x)
+\ENDTHEOREM
+\THEOREM EXP\_FDIFF TRANSC
+|- diffs(\n. inv(&(FACT n))) = (\n. inv(&(FACT n)))
+\ENDTHEOREM
+\THEOREM EXP\_INJ TRANSC
+|- !x y. (exp x = exp y) = (x = y)
+\ENDTHEOREM
+\THEOREM EXP\_LE\_X TRANSC
+|- !x. (& 0) <= x ==> ((& 1) + x) <= (exp x)
+\ENDTHEOREM
+\THEOREM EXP\_LN TRANSC
+|- !x. (exp(ln x) = x) = (& 0) < x
+\ENDTHEOREM
+\THEOREM EXP\_LT\_1 TRANSC
+|- !x. (& 0) < x ==> (& 1) < (exp x)
+\ENDTHEOREM
+\THEOREM EXP\_MONO\_IMP TRANSC
+|- !x y. x < y ==> (exp x) < (exp y)
+\ENDTHEOREM
+\THEOREM EXP\_MONO\_LE TRANSC
+|- !x y. (exp x) <= (exp y) = x <= y
+\ENDTHEOREM
+\THEOREM EXP\_MONO\_LT TRANSC
+|- !x y. (exp x) < (exp y) = x < y
+\ENDTHEOREM
+\THEOREM EXP\_N TRANSC
+|- !n x. exp((& n) * x) = (exp x) pow n
+\ENDTHEOREM
+\THEOREM EXP\_NEG TRANSC
+|- !x. exp(-- x) = inv(exp x)
+\ENDTHEOREM
+\THEOREM EXP\_NEG\_MUL TRANSC
+|- !x. (exp x) * (exp(-- x)) = & 1
+\ENDTHEOREM
+\THEOREM EXP\_NEG\_MUL2 TRANSC
+|- !x. (exp(-- x)) * (exp x) = & 1
+\ENDTHEOREM
+\THEOREM EXP\_NZ TRANSC
+|- !x. ~(exp x = & 0)
+\ENDTHEOREM
+\THEOREM EXP\_POS\_LE TRANSC
+|- !x. (& 0) <= (exp x)
+\ENDTHEOREM
+\THEOREM EXP\_POS\_LT TRANSC
+|- !x. (& 0) < (exp x)
+\ENDTHEOREM
+\THEOREM EXP\_SUB TRANSC
+|- !x y. exp(x - y) = (exp x) / (exp y)
+\ENDTHEOREM
+\THEOREM EXP\_TOTAL TRANSC
+|- !y. (& 0) < y ==> (?x. exp x = y)
+\ENDTHEOREM
+\THEOREM EXP\_TOTAL\_LEMMA TRANSC
+|- !y.
+    (& 1) <= y ==> (?x. (& 0) <= x /\ x <= (y - (& 1)) /\ (exp x = y))
+\ENDTHEOREM
+\THEOREM ln TRANSC
+|- !x. ln x = (@u. exp u = x)
+\ENDTHEOREM
+\THEOREM LN\_1 TRANSC
+|- ln(& 1) = & 0
+\ENDTHEOREM
+\THEOREM LN\_DIV TRANSC
+|- !x. (& 0) < x /\ (& 0) < y ==> (ln(x / y) = (ln x) - (ln y))
+\ENDTHEOREM
+\THEOREM LN\_EXP TRANSC
+|- !x. ln(exp x) = x
+\ENDTHEOREM
+\THEOREM LN\_INJ TRANSC
+|- !x y. (& 0) < x /\ (& 0) < y ==> ((ln x = ln y) = (x = y))
+\ENDTHEOREM
+\THEOREM LN\_INV TRANSC
+|- !x. (& 0) < x ==> (ln(inv x) = --(ln x))
+\ENDTHEOREM
+\THEOREM LN\_MONO\_LE TRANSC
+|- !x y. (& 0) < x /\ (& 0) < y ==> ((ln x) <= (ln y) = x <= y)
+\ENDTHEOREM
+\THEOREM LN\_MONO\_LT TRANSC
+|- !x y. (& 0) < x /\ (& 0) < y ==> ((ln x) < (ln y) = x < y)
+\ENDTHEOREM
+\THEOREM LN\_MUL TRANSC
+|- !x y. (& 0) < x /\ (& 0) < y ==> (ln(x * y) = (ln x) + (ln y))
+\ENDTHEOREM
+\THEOREM LN\_POW TRANSC
+|- !n x. (& 0) < x ==> (ln(x pow n) = (& n) * (ln x))
+\ENDTHEOREM
+\THEOREM pi TRANSC
+|- pi = (& 2) * (@x. (& 0) <= x /\ x <= (& 2) /\ (cos x = & 0))
+\ENDTHEOREM
+\THEOREM PI2 TRANSC
+|- pi / (& 2) = (@x. (& 0) <= x /\ x <= (& 2) /\ (cos x = & 0))
+\ENDTHEOREM
+\THEOREM PI2\_BOUNDS TRANSC
+|- (& 0) < (pi / (& 2)) /\ (pi / (& 2)) < (& 2)
+\ENDTHEOREM
+\THEOREM PI\_POS TRANSC
+|- (& 0) < pi
+\ENDTHEOREM
+\THEOREM root TRANSC
+|- !n x. root n x = (@u. ((& 0) < x ==> (& 0) < u) /\ (u pow n = x))
+\ENDTHEOREM
+\THEOREM ROOT\_0 TRANSC
+|- !n. root(SUC n)(& 0) = & 0
+\ENDTHEOREM
+\THEOREM ROOT\_1 TRANSC
+|- !n. root(SUC n)(& 1) = & 1
+\ENDTHEOREM
+\THEOREM ROOT\_LN TRANSC
+|- !n x. (& 0) < x ==> (!n. root(SUC n)x = exp((ln x) / (&(SUC n))))
+\ENDTHEOREM
+\THEOREM ROOT\_LT\_LEMMA TRANSC
+|- !n x. (& 0) < x ==> ((exp((ln x) / (&(SUC n)))) pow (SUC n) = x)
+\ENDTHEOREM
+\THEOREM ROOT\_POW\_POS TRANSC
+|- !n x. (& 0) <= x ==> ((root(SUC n)x) pow (SUC n) = x)
+\ENDTHEOREM
+\THEOREM sin TRANSC
+|- !x.
+    sin x =
+    suminf
+    (\n.
+      ((\n'.
+         (EVEN n' =>
+          & 0 |
+          ((--(& 1)) pow ((n' num_sub 1) DIV 2)) / (&(FACT n'))))
+       n) *
+      (x pow n))
+\ENDTHEOREM
+\THEOREM SIN\_0 TRANSC
+|- sin(& 0) = & 0
+\ENDTHEOREM
+\THEOREM SIN\_ADD TRANSC
+|- !x y. sin(x + y) = ((sin x) * (cos y)) + ((cos x) * (sin y))
+\ENDTHEOREM
+\THEOREM SIN\_ASN TRANSC
+|- !x. (--(pi / (& 2))) <= x /\ x <= (pi / (& 2)) ==> (asn(sin x) = x)
+\ENDTHEOREM
+\THEOREM SIN\_BOUND TRANSC
+|- !x. (abs(sin x)) <= (& 1)
+\ENDTHEOREM
+\THEOREM SIN\_BOUNDS TRANSC
+|- !x. (--(& 1)) <= (sin x) /\ (sin x) <= (& 1)
+\ENDTHEOREM
+\THEOREM SIN\_CIRCLE TRANSC
+|- !x. ((sin x) pow 2) + ((cos x) pow 2) = & 1
+\ENDTHEOREM
+\THEOREM SIN\_CONVERGES TRANSC
+|- !x.
+    (\n.
+      ((\n.
+         (EVEN n =>
+          & 0 |
+          ((--(& 1)) pow ((n num_sub 1) DIV 2)) / (&(FACT n))))
+       n) *
+      (x pow n)) sums
+    (sin x)
+\ENDTHEOREM
+\THEOREM SIN\_COS TRANSC
+|- !x. sin x = cos((pi / (& 2)) - x)
+\ENDTHEOREM
+\THEOREM SIN\_COS\_ADD TRANSC
+|- !x y.
+    (((sin(x + y)) - (((sin x) * (cos y)) + ((cos x) * (sin y)))) pow 2) +
+    (((cos(x + y)) - (((cos x) * (cos y)) - ((sin x) * (sin y)))) pow 2) =
+    & 0
+\ENDTHEOREM
+\THEOREM SIN\_COS\_NEG TRANSC
+|- !x.
+    (((sin(-- x)) + (sin x)) pow 2) + (((cos(-- x)) - (cos x)) pow 2) =
+    & 0
+\ENDTHEOREM
+\THEOREM SIN\_DOUBLE TRANSC
+|- !x. sin((& 2) * x) = (& 2) * ((sin x) * (cos x))
+\ENDTHEOREM
+\THEOREM SIN\_FDIFF TRANSC
+|- diffs
+   (\n.
+     (EVEN n =>
+      & 0 |
+      ((--(& 1)) pow ((n num_sub 1) DIV 2)) / (&(FACT n)))) =
+   (\n. (EVEN n => ((--(& 1)) pow (n DIV 2)) / (&(FACT n)) | & 0))
+\ENDTHEOREM
+\THEOREM SIN\_NEG TRANSC
+|- !x. sin(-- x) = --(sin x)
+\ENDTHEOREM
+\THEOREM SIN\_NEGLEMMA TRANSC
+|- !x.
+    --(sin x) =
+    suminf
+    (\n.
+      --
+      (((\n.
+          (EVEN n =>
+           & 0 |
+           ((--(& 1)) pow ((n num_sub 1) DIV 2)) / (&(FACT n))))
+        n) *
+       (x pow n)))
+\ENDTHEOREM
+\THEOREM SIN\_NPI TRANSC
+|- !n. sin((& n) * pi) = & 0
+\ENDTHEOREM
+\THEOREM SIN\_PAIRED TRANSC
+|- !x.
+    (\n.
+      (((--(& 1)) pow n) / (&(FACT((2 num_mul n) num_add 1)))) *
+      (x pow ((2 num_mul n) num_add 1))) sums
+    (sin x)
+\ENDTHEOREM
+\THEOREM SIN\_PERIODIC TRANSC
+|- !x. sin(x + ((& 2) * pi)) = sin x
+\ENDTHEOREM
+\THEOREM SIN\_PERIODIC\_PI TRANSC
+|- !x. sin(x + pi) = --(sin x)
+\ENDTHEOREM
+\THEOREM SIN\_PI TRANSC
+|- sin pi = & 0
+\ENDTHEOREM
+\THEOREM SIN\_PI2 TRANSC
+|- sin(pi / (& 2)) = & 1
+\ENDTHEOREM
+\THEOREM SIN\_POS TRANSC
+|- !x. (& 0) < x /\ x < (& 2) ==> (& 0) < (sin x)
+\ENDTHEOREM
+\THEOREM SIN\_POS\_PI TRANSC
+|- !x. (& 0) < x /\ x < pi ==> (& 0) < (sin x)
+\ENDTHEOREM
+\THEOREM SIN\_POS\_PI2 TRANSC
+|- !x. (& 0) < x /\ x < (pi / (& 2)) ==> (& 0) < (sin x)
+\ENDTHEOREM
+\THEOREM SIN\_TOTAL TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (?! x. (--(pi / (& 2))) <= x /\ x <= (pi / (& 2)) /\ (sin x = y))
+\ENDTHEOREM
+\THEOREM SIN\_ZERO TRANSC
+|- !x.
+    (sin x = & 0) =
+    (?n. EVEN n /\ (x = (& n) * (pi / (& 2)))) \/
+    (?n. EVEN n /\ (x = --((& n) * (pi / (& 2)))))
+\ENDTHEOREM
+\THEOREM SIN\_ZERO\_LEMMA TRANSC
+|- !x.
+    (& 0) <= x /\ (sin x = & 0) ==>
+    (?n. EVEN n /\ (x = (& n) * (pi / (& 2))))
+\ENDTHEOREM
+\THEOREM sqrt TRANSC
+|- !x. sqrt x = root 2 x
+\ENDTHEOREM
+\THEOREM SQRT\_0 TRANSC
+|- sqrt(& 0) = & 0
+\ENDTHEOREM
+\THEOREM SQRT\_1 TRANSC
+|- sqrt(& 1) = & 1
+\ENDTHEOREM
+\THEOREM SQRT\_POW2 TRANSC
+|- !x. ((sqrt x) pow 2 = x) = (& 0) <= x
+\ENDTHEOREM
+\THEOREM tan TRANSC
+|- !x. tan x = (sin x) / (cos x)
+\ENDTHEOREM
+\THEOREM TAN\_0 TRANSC
+|- tan(& 0) = & 0
+\ENDTHEOREM
+\THEOREM TAN\_ADD TRANSC
+|- !x y.
+    ~(cos x = & 0) /\ ~(cos y = & 0) /\ ~(cos(x + y) = & 0) ==>
+    (tan(x + y) = ((tan x) + (tan y)) / ((& 1) - ((tan x) * (tan y))))
+\ENDTHEOREM
+\THEOREM TAN\_ATN TRANSC
+|- !x. (--(pi / (& 2))) < x /\ x < (pi / (& 2)) ==> (atn(tan x) = x)
+\ENDTHEOREM
+\THEOREM TAN\_DOUBLE TRANSC
+|- !x.
+    ~(cos x = & 0) /\ ~(cos((& 2) * x) = & 0) ==>
+    (tan((& 2) * x) = ((& 2) * (tan x)) / ((& 1) - ((tan x) pow 2)))
+\ENDTHEOREM
+\THEOREM TAN\_NEG TRANSC
+|- !x. tan(-- x) = --(tan x)
+\ENDTHEOREM
+\THEOREM TAN\_NPI TRANSC
+|- !n. tan((& n) * pi) = & 0
+\ENDTHEOREM
+\THEOREM TAN\_PERIODIC TRANSC
+|- !x. tan(x + ((& 2) * pi)) = tan x
+\ENDTHEOREM
+\THEOREM TAN\_PI TRANSC
+|- tan pi = & 0
+\ENDTHEOREM
+\THEOREM TAN\_POS\_PI2 TRANSC
+|- !x. (& 0) < x /\ x < (pi / (& 2)) ==> (& 0) < (tan x)
+\ENDTHEOREM
+\THEOREM TAN\_TOTAL TRANSC
+|- !y. ?! x. (--(pi / (& 2))) < x /\ x < (pi / (& 2)) /\ (tan x = y)
+\ENDTHEOREM
+\THEOREM TAN\_TOTAL\_LEMMA TRANSC
+|- !y. (& 0) < y ==> (?x. (& 0) < x /\ x < (pi / (& 2)) /\ y < (tan x))
+\ENDTHEOREM
+\THEOREM TAN\_TOTAL\_POS TRANSC
+|- !y.
+    (& 0) <= y ==> (?x. (& 0) <= x /\ x < (pi / (& 2)) /\ (tan x = y))
+\ENDTHEOREM

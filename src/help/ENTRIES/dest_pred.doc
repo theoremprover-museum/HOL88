@@ -1,0 +1,23 @@
+\DOC dest_pred
+
+\TYPE {dest_pred : (term -> (string # term))}
+
+\SYNOPSIS
+Breaks apart a combination whose operator is a constant.
+
+\DESCRIBE
+Given a term {"op t"}, {dest_pred} returns the pair {(`op`,"t")}, provided
+{"op"} is a constant.
+
+\FAILURE
+Fails if the given term is not a combination whose operator is a constant.
+
+\EXAMPLE
+{
+dest_pred "$/\ T";;
+(`/\`, "T") : (string # term)
+}
+\SEEALSO
+dest_comb, dest_const, is_pred
+
+\ENDDOC

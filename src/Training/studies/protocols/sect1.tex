@@ -1,0 +1,284 @@
+\begin{titlepage}
+
+
+
+\begin{center}
+{\Huge\bf HOL CASE STUDY}\\
+\vskip .3in
+{\Large\bf The Specification and Verification of a}\\
+\vskip .2in
+{\Large\bf Sliding Window Protocol}\\
+\end{center}
+\vskip .4in
+
+\begin{inset}{Author}
+Rachel Cardell-Oliver\newline
+Computer Laboratory\newline
+Corn Exchange Street\newline
+Cambridge CB2 3QG, UK.\newline
+{\bf Telephone:} +44 223 334733\newline
+{\bf Email:} {\verb+rco@cl.cam.ac.uk+}
+\end{inset}
+
+\begin{inset}{Concepts illustrated}
+Communication protocol specification and verification
+\end{inset}
+
+\begin{inset}{Prerequisites}
+Good working knowledge of HOL and some experience using the HOL system.
+Some familiarity with the built in tactics and the theories of lists and
+arithmetic.
+Ability to tackle proofs using steps containing several tactics.
+\end{inset}
+
+\begin{inset}{Supporting files}
+On the directory \verb%hol/Training/studies/protocols%.
+\end{inset}
+
+\begin{inset}{Abstract}
+This case study describes the specification and verification of a
+sliding window protocol.  It presents some ideas about modelling
+software systems with HOL and a feel for the work involved in
+performing a medium sized verification proof in HOL.
+\end{inset}
+
+\setcounter{page}{1}
+
+\end{titlepage}
+
+\newpage
+\tableofcontents 
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\newpage
+
+\setlength{\unitlength}{1mm}
+\vskip10mm
+\begin{center}\LARGE\bf
+A Sliding Window Protocol
+\end{center}
+\vskip10mm
+
+\section{Introduction}
+
+The following document describes the specification and verification of a
+sliding window protocol in HOL.  It is proved that a model for implementations
+of the protocol logically implies safety and liveness invariants and that these
+invariants in turn imply an abstract specification of the protocol.  The
+specification states that a sequence of data is transferred from one computer
+in a network to another after some elapsed time.  The implementation model is
+an interpretation of the behaviour, over time, of the variables of a Pascal
+program for a sliding window protocol.  Real time is modelled explicitly.  This
+means that timeouts, channel delays, response times and retransmission limits
+can be expressed directly and real protocol implementations can be modelled.
+All levels of the protocol model and proof are expressed in higher order logic,
+and proofs are checked by the HOL proof assistant.
+
+
+I shall first describe the files used in this case study and then informally
+describe the sliding window protocol which is verified in this example.  The
+specification and verification of this sliding window protocol in \HOL\ is then
+described, following the order in which definitions and theorems are introduced
+when building this theory.  The theorems were actually developed in a different
+order, usually starting from the theorems at the end of each section which were
+proved by {\em assuming} any supporting theorems.  This process was continued,
+top down, until no assumed theorems remained to be proved.  Of course, there
+was also a lot of sideways development (that is rewriting definitions and
+theorems) since the problems of modelling protocols at this level of detail
+were new to me, and I was also learning to use \HOL\ at the same time.  I
+changed aspects of the protocol's specification and the organization of the
+proof several times during the development stages.  Details of the development
+of this proof may be found in Reference~\cite{cardelloliver}.
+Reference~\cite{bertsekas} is an introductory text book on computer networks
+which includes a section on sliding window protocols.
+
+\section {Files}
+
+The case study is supported by the files in the directory \verb%protocols% in
+the HOL distribution directory.  These files are :
+
+\begin{verbatim}
+READ-ME
+
+casestudy.tex	sect1.tex 	sect2.tex	sect3.tex	appendix.tex
+casestudy.dvi   
+
+SWnew.ml	SW.th
+hdi_tli.ml	plusm_subm.ml	int.ml		mod.ml		da.ml
+hdi_tli.th	plusm_subm.th	int.th		mod.th		da.th
+arith.ml	arith.th	myarith.ml	myarith.th
+tacticsSW.ml	mytactics.ml
+startSW.ml	restartSW.ml	tydefsSW.ml
+
+MakeSW		MakeEverything
+\end{verbatim}
+
+The file \verb%READ-ME% contains this explanation.  The \verb%.tex% files are
+needed to print the case study document which appears in printable form in
+\verb%casestudy.dvi%.  \verb%SWnew.ml% contains the HOL sessions from the case
+study document and \verb%SW.th% contains a copy of the theory which is created
+by executing \verb%SWnew.ml%.
+
+The remaining \verb%.ml% and \verb%.th% files support the main sliding window
+protocol theory which will be described later.  \verb%MakeSW% automatically
+performs the HOL session described in the case study, and \verb%MakeEverything%
+rebuilds the complete supporting theory as well.  \verb%MakeEverything% should
+not be used if it can be avoided, as the sessions involved will take a very
+long time.
+
+
+\section{Informal specification}
+
+A sliding window protocol is a concurrent program for transferring an ordered
+stream of data from one computer in a network to another via an unreliable
+channel.  There is a large family of such protocols of which the protocol
+described here, called the go-back-n sliding window protocol, is one example.
+
+At the highest level of specification the family of sliding window protocols
+may be represented by an input stream of data, called the $source$, and an
+output stream, the $sink$.  The protocol itself is a black box which effects
+the transfer of data from source to sink.
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(150,40)
+\put(10,0){
+\begin{picture}(120,40)
+\put(0,14){$source$}
+\put(14,15){\vector(1,0){5}}
+\put(20,5){\framebox(75,20){SLIDING WINDOW PROTOCOL}}
+\put(97,15){\vector(1,0){5}}
+\put(104,14){$sink$}
+\end{picture} }
+\end{picture}
+
+
+The input stream, $source$, is available on one computer and the output
+sequence, $sink$, is eventually produced on another computer.  The sink data
+list is dynamic since it will not be available until some time after the
+protocol has begun.  It is modelled as a function from time to finite output
+data lists.  Time starts at time 0 and extends infinitely into the future in
+discrete time steps.  Thus $sink (t)$ refers to the value of the ouput
+sequence, $sink$, at time $t$ where $t \geq 0$.  The source data list is 
+static: its value is determined outside the protocol model and never
+changed by the model. $source$ is modelled as a finite list of data
+messages.  The specification for a sliding
+window protocol using these variables is
+
+\begin{center}
+\begin{displaymath}
+  \exists  t:time. \;\;  sink (t) = source  
+\end{displaymath}
+\end{center}
+
+This specification encapsulates the {\em total correctness} of the protocol.
+That is, it says that the protocol program will terminate and, on termination,
+will satisfy its specification.  In this case, termination means reaching a
+stable state.  Properties stating that progress will be made are called
+liveness properties.  Properties which are always satisfied by the system are
+called safety properties or system invariants.
+
+The implementation of a sliding window protocol is described by the structure
+and behaviour of the black box, SLIDING WINDOW PROTOCOL, of the specification.
+A sliding window protocol uses three physical devices: SENDER and RECEIVER
+computer programs running concurrently on different computers in a network, and
+a CHANNEL, a physical wire, between the computers.  The channel provides the
+only means of communication between the two computers.  The implementation
+structure of a sliding window protocol can be represented by
+
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(150,40)
+\put(5,0){
+\begin{picture}(120,40)
+\put(0,14){$source$}
+\put(14,15){\vector(1,0){5}}
+\put(20,5){\framebox(25,20){SENDER}}
+\put(46,15){\line(1,0){8}}
+\put(55,5){\framebox(25,20){CHANNEL}}
+\put(81,15){\line(1,0){8}}
+\put(90,5){\framebox(25,20){RECEIVER}}
+\put(117,15){\vector(1,0){5}}
+\put(124,14){$sink$}
+\end{picture} }
+\end{picture}
+
+The CHANNEL device provides unreliable message delivery.  Messages may be
+correctly delivered, detectably garbled or lost completely.  To reliably
+transmit data in such an environment, the SENDER takes a {\em window} or buffer
+of messages from the source stream and transmits each message with a unique
+label.  The RECEIVER accepts these messages and outputs them to the sink in
+their original order.  The original order of the messages must be deduced from
+their labels.  The RECEIVER also sends messages, called {\em acknowledgements},
+to the SENDER expressing the current state of the RECEIVER in terms of which
+messages it has received.  The SENDER uses the information contained in the
+acknowledgements to retransmit any messages which may not have been received.
+This process continues until all the messages from the {\em source} have been
+received and output to the {\em sink}.
+
+An example of the sort of program code which would be used for the SENDER and
+RECEIVER programs of this sliding window protocol is given in
+Figure~\ref{fig:pascal}.  The code is written in a language like Pascal.  The
+HOL specification verified in this case study is an informal translation of the
+program code of Figure~\ref{fig:pascal}.  However, the HOL specification is
+more general than the code in that it describes a family of protocols.  For
+example, window size is a parameter of the \HOL\ specification, so the
+alternating bit protocol (with window size 1) and the HDLC protocol (with
+window size 7 or 127) are both described by the HOL model.  Also, the sender's
+retransmission strategy is not fully specified in the \HOL\ model so a range of
+protocols using different strategies are possible.
+
+\begin{figure}
+  \footnotesize
+  \begin{verbatim}
+program SENDER;                            program RECEIVER;
+
+{external variables}                       {external variables} 
+  source : input list of data                sink  : output list of data
+  ackS   : input from channel via ackR       ackR  : output to channel
+  dataS  : output to channel                 dataR : input from channel via dataS
+
+const maxseq = 8; {for example}             {constants and types as SENDER}
+      SW = 7;     {SENDER window}             RW = 1;     {RECEIVER window}
+
+type data = num;    {or char or integer or record etc.}
+     sequence = [0..maxseq-1]  {message labels}
+
+var rem : list of data;                    var r : sequence;
+    s, stop, i: sequence;                      dummy : data;
+    
+begin                                      begin
+  rem:=source;                               sink:=[];
+  s:=0;                                      r:=0;
+  while not(NULL rem) do begin               while TRUE do begin
+
+{receive ack packet}                       {receive data packet}
+    RECV( ackS ) ;                            RECV( dataR ) ;
+    if IN_WINDOW(ackS,s,SW,maxseq)            if IN_WINDOW(dataR,r,RW,maxseq) 
+    then begin                                then begin
+      stop:=(label(ackS)+1) MOD maxseq;
+      while s<>stop do begin                    
+        rem:=tail(rem);                         sink:=append(sink, dataR);
+        s:= (s+1) MOD maxseq;                   r:= (r+1) MOD maxseq;
+      end; {while}
+    end {if};                                 end {if};
+
+{transmit data}                            {transmit ack}
+    i:=choosei(SW);
+    dataS:=((s+i) MOD maxseq,                ackR:=((r-1) MOD maxseq, dummy);
+            headi(i,rem));
+    SEND( dataS )                            SEND( ackR )
+  end {while};                               end {while};
+end {program}.                              end {program}.
+  \end{verbatim}
+  \caption{Pascal Programs for a Sliding Window Protocol}
+  \label{fig:pascal}
+\end{figure}
+\normalsize
+
+
+The protocol model presented in this case study is based on a number of
+simplistic assumptions.  For example, it is assumed that the time taken to
+deliver a message (channel delay) is 0 and that the receiver does not buffer
+any received packets.  
+These restrictions are removed in \cite{cardell.tapsoft}.
+
+

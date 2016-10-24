@@ -1,0 +1,3 @@
+\THEOREM list_Axiom list
+|- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+\ENDTHEOREM

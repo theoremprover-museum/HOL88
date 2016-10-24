@@ -1,0 +1,3 @@
+\THEOREM TREAL_BIJ_WELLDEF REALAX
+|- !h i. h treal_eq i ==> (hreal_of_treal h = hreal_of_treal i)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM HRAT_GT_LMUL1 HREAL
+|- !x y. y hrat_lt (x hrat_mul y) = hrat_1 hrat_lt x
+\ENDTHEOREM

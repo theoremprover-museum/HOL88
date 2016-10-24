@@ -1,0 +1,3 @@
+\THEOREM list_INDUCT list
+|- !P. P[] /\ (!t. P t ==> (!h. P(CONS h t))) ==> (!l. P l)
+\ENDTHEOREM

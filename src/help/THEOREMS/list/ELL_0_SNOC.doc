@@ -1,0 +1,3 @@
+\THEOREM ELL_0_SNOC list
+|- !l x. ELL 0(SNOC x l) = x
+\ENDTHEOREM

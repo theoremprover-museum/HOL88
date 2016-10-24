@@ -1,0 +1,27 @@
+\DOC move_to_proof
+
+\TYPE {move_to_proof : (string -> void)}
+
+\SYNOPSIS
+Facilitates the transition from one proof to another.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Multiple incomplete proofs can exist at the same
+time, each linked to a different name. The function {move_to_proof} is
+used to change the focus of functions such as {current_proof},
+{expand}, etc. use the proof pointed at by its argument as the default
+one. Usually the default proof is the one which is manipulated last.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails when its argument does not name a proof tree.
+
+\SEEALSO
+cancel_tac, do_tac, new_goal.
+
+\ENDDOC

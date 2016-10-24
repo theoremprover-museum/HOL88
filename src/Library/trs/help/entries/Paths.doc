@@ -1,0 +1,31 @@
+\DOC Paths
+
+\TYPE {Paths : (searchpath list -> source)}
+
+\SYNOPSIS
+Generates a source for a search from a list of search paths.
+
+\LIBRARY trs
+
+\DESCRIBE
+A {source} for a search can be either a list of search paths, or a list of
+theorems found on a previous search. {Paths} generates a {source} of the first
+kind. The search paths in such a {source} are searched in sequence.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+To search the ancestry of the theories `{theory1}' and `{theory2}' in
+`parallel', one would use the source:
+{
+   Paths [Ancestors ([`theory1`;`theory2`],[])]
+}
+\noindent To search them in sequence, one would use:
+{
+   Paths [Ancestors ([`theory1`],[]); Ancestors ([`theory2`],[])]
+}
+\SEEALSO
+List, List_from, Theory, Ancestors.
+
+\ENDDOC

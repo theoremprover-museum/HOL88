@@ -1,0 +1,4 @@
+\THEOREM COND_ABS \none
+|- !b f g. (\x. (b => f x | g x)) = (b => f | g)
+\ENDTHEOREM
+

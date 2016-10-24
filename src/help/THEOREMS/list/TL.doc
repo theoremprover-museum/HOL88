@@ -1,0 +1,3 @@
+\THEOREM TL list
+|- !h t. TL(CONS h t) = t
+\ENDTHEOREM

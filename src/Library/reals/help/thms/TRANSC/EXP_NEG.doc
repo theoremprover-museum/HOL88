@@ -1,0 +1,3 @@
+\THEOREM EXP_NEG TRANSC
+|- !x. exp(-- x) = inv(exp x)
+\ENDTHEOREM

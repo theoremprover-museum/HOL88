@@ -1,0 +1,5 @@
+\THEOREM TREAL_LDISTRIB REALAX
+|- !x y z.
+    x treal_mul (y treal_add z) =
+    (x treal_mul y) treal_add (x treal_mul z)
+\ENDTHEOREM

@@ -1,0 +1,103 @@
+% File:/home/unagi/elsa/papers/Alg/Alg.tex
+% This is the root file for the paper about Algebra in HOL
+
+\documentstyle[12pt,twoside,fleqn,alltt,layout]{article}
+%Spacing between rows
+%*\def\baselinestretch{1.2}
+
+\input{commands}
+\input{pic-macros}
+\input{docmacros}
+
+%Width of text
+%*\setlength{\textwidth}{6.5in}
+%*\setlength{\oddsidemargin}{0in}
+%\setlength{\oddsidemargin}{.6in}
+
+%Height of text and page numbers
+%\addtolength{\topmargin}{.17in}
+%\setlength{\headsep}{.4in}
+%*\setlength{\topmargin}{0in}
+%*\setlength{\textheight}{8.5in}
+
+%To give empty headers
+%*\pagestyle{myheadings}                       %for page numbers in top
+%*\markright{\ }                                 %right-hand corner
+%\pagestyle{headings}
+
+
+% ---------------------------------------------------------------------
+% Redefine the bibliography style
+% ---------------------------------------------------------------------
+
+\makeatletter   
+
+\def\thebibliography#1{\section{References} 
+ \list {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep
+ \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \sloppy
+ \sfcode`\.=1000\relax}
+ \let\endthebibliography=\endlist
+
+\makeatother
+
+\reversemarginpar                            %makes marginal notes on left
+
+\begin{document}
+
+\thispagestyle{empty}
+\setcounter{page}{1}		         % start at page 1
+
+\vspace*{5mm}
+\noindent {\Large\bf Note}
+\vspace*{5mm}
+
+\begin{quote} The  following  unpublished paper,  {\it Doing  Algebra in Simple
+Type Theory\/} by Elsa Gunter, is included here for the  convenience of readers
+of the case study {\it Modular Arithmetic\/} in this volume.
+\end{quote}
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+\setcounter{page}{1}		         % start at page 1
+
+%*\sloppy
+%*\thicklines
+%*\setlength{\unitlength}{6em}
+
+\input{mac}
+
+\input{Aintro}
+
+\input{A1}
+
+\input{A2}
+
+\input{A-rest}
+
+\input{Aref}
+
+\input{ApA}
+
+\input{ApB}
+
+\input{ApC}
+
+\input{ApD}
+
+\input{ApE}
+
+
+
+% Already have references here!
+%\bibliographystyle{plain}
+%\bibliography{Studies/int_mod/doing_alg_paper/../genref}
+
+
+\end{document}
+
+

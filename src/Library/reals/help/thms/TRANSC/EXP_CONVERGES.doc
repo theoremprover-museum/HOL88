@@ -1,0 +1,3 @@
+\THEOREM EXP_CONVERGES TRANSC
+|- !x. (\n. ((\n. inv(&(FACT n)))n) * (x pow n)) sums (exp x)
+\ENDTHEOREM

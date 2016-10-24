@@ -1,0 +1,1185 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  13 MAR 1991 20:27
+**tutorial
+(tutorial.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (/usr/lib/tex/macros/fleqn.sty
+\mathindent=\dimen99
+) (layout.sty)
+(commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count87
+) (ref-macros.tex) (tutorial.aux)
+Underfull \hbox (badness 10000) in paragraph at lines 44--51
+
+
+\hbox(0.0+0.0)x443.86299
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 2269) in paragraph at lines 68--71
+[] []\twlrm An un-der-stand-ing of the ba-sic con-cepts of how to do al-ge-bra 
+in \elvrm HOL\twlrm , as
+
+\hbox(8.33331+2.33331)x443.86299, glue set 2.83235
+.\hbox(0.0+0.0)x0.0
+.\glue 0.0
+.\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\glue -23.49976
+..\glue -5.87494
+..\hbox(0.0+0.0)x23.49976, glue set 23.49976fil
+...\glue 0.0 plus 1.0fil
+..\glue 5.87494
+.\penalty 0
+.\twlrm A
+.etc.
+
+
+Underfull \hbox (badness 1983) in paragraph at lines 68--71
+\twlrm ex-plained in \twlit Do-ing Al-ge-bra in Sim-ple Type The-ory\twlrm , wh
+ich can be found in
+
+\hbox(8.33331+2.33331)x443.86299, glue set 2.70856
+.\twlrm e
+.\twlrm x
+.\discretionary
+..\twlrm -
+.\twlrm p
+.\twlrm l
+.etc.
+
+[1
+
+] [2] (tutorial.toc)
+\tf@toc=\write3
+ [3] (tut_intro.tex [4]) (tut1.tex [5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 139--139
+[] []
+
+\hbox(0.0+0.0)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\glue 0.0
+.\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\glue 0.0
+..\glue -5.87494
+..\hbox(0.0+0.0)x0.0
+..\glue 5.87494
+.\penalty 0
+.\glue(\rightskip) 0.0
+
+[7]
+Underfull \vbox (badness 1097) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.2225
+.\glue(\topskip) 0.0
+.\hbox(30.32692+24.3269)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(30.32692+24.3269)x455.04408
+...\mathon
+...\vbox(30.32692+24.3269)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [8]
+[9] [10] [11] [12] [13] [14] [15] [16]
+Underfull \vbox (badness 1460) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.445
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.68008
+..\hbox(0.0+0.0)x11.38109
+..\twlrm F
+..\kern-0.97916
+..\twlrm r
+..\twlrm o
+..etc.
+.\penalty 10000
+.\glue(\baselineskip) 3.83337
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.53683
+..\twlrm s
+..\twlrm u
+..\twlrm b
+..\twlrm g
+..\twlrm r
+..etc.
+.etc.
+
+ [17]
+Underfull \vbox (badness 6910) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 4.10681
+.\glue(\topskip) 0.0
+.\hbox(88.82692+82.8269)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(88.82692+82.8269)x455.04408
+...\mathon
+...\vbox(88.82692+82.8269)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [18]
+Underfull \vbox (badness 5147) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.72108
+.\glue(\topskip) 0.0
+.\hbox(130.12149+124.12149)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(130.12149+124.12149)x455.04408
+...\mathon
+...\vbox(130.12149+124.12149)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [19]
+[20] [21]) (tut2.tex [22] [23] [24] [25] [26]
+Underfull \hbox (badness 1057) in paragraph at lines 351--354
+[]\twlrm The sub-goal that this gives us back is an in-stance of the con-se-que
+nt of the
+
+\hbox(8.33331+2.33331)x455.24408, glue set 2.19684
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+
+Underfull \hbox (badness 3302) in paragraph at lines 368--370
+[]\twlrm This leaves us, once again, with a goal which is es-sen-tially the the
+-o-rem
+
+\hbox(8.33331+2.33331)x455.24408, glue set 3.2098
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm i
+.\twlrm s
+.etc.
+
+[27] [28] [29]
+Underfull \hbox (badness 1325) in paragraph at lines 537--550
+[]\twlrm If we first rewrote []\elvtt (INT 0) \twlrm as the ad-di-tive in-verse
+ of the in-te-gers, then, by
+
+\hbox(8.33331+2.33331)x455.24408, glue set 2.36858
+.\hbox(0.0+0.0)x11.38109
+.\twlrm I
+.\twlrm f
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm w
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 5.77077
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 153.5799fil
+..\hbox(0.0+0.0)x11.38109
+..\twlrm N
+..\twlrm o
+..\kern-0.32639
+..\twlrm w
+..etc.
+.\penalty -51
+.\glue 10.0 plus 5.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [30]
+[31] [32] [33] [34]) (tut3.tex [35]
+Underfull \vbox (badness 7151) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 4.15427
+.\glue(\topskip) 0.0
+.\hbox(12.0+3.36)x455.24408, glue set 115.99884fil
+..\hbox(11.13599+0.0)x29.80783
+...\glue 0.0
+...\svtnbf 4
+...\glue 19.87189
+..\svtnbf S
+..\svtnbf u
+..\svtnbf b
+..\svtnbf g
+..etc.
+.\mark{{\uppercase {4\hskip 1em\relax Subgroups of the integers, revisited}}\ET
+C.}
+.\write1{\@writefile{toc}{\string\contentsline\space {section}{\string\numberl\
+ETC.}
+.\penalty 10000
+.etc.
+
+ [36]
+[37]
+Underfull \vbox (badness 7925) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 4.2994
+.\glue(\topskip) 0.0
+.\hbox(43.32692+37.3269)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(43.32692+37.3269)x455.04408
+...\mathon
+...\vbox(43.32692+37.3269)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [38]
+Underfull \hbox (badness 3758) in paragraph at lines 242--246
+[]\twlrm Next, for the in-duc-tive step of the in-duc-tion. We want to show tha
+t
+
+\hbox(8.33331+2.33331)x455.24408, glue set 3.35158
+.\hbox(0.0+0.0)x11.38109
+.\twlrm N
+.\twlrm e
+.\twlrm x
+.\twlrm t
+.etc.
+
+[39] [40]
+Underfull \vbox (badness 1675) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.55899
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.39847
+..\twlrm T
+..\twlrm h
+..\twlrm i
+..\twlrm s
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..etc.
+.\penalty 300
+.\glue(\baselineskip) 4.20238
+.\hbox(7.96431+2.33331)x455.24408, glue set 384.67953fil
+..\twlrm n
+..\twlrm e
+..\twlrm g
+..\twlrm a
+..\twlrm t
+..etc.
+.etc.
+
+ [41]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 7.86617
+.\glue(\topskip) 0.0
+.\hbox(135.08736+129.08734)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(135.08736+129.08734)x455.04408
+...\mathon
+...\vbox(135.08736+129.08734)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [42]
+Underfull \vbox (badness 6300) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.98242
+.\glue(\topskip) 0.0
+.\hbox(82.32692+76.3269)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(82.32692+76.3269)x455.04408
+...\mathon
+...\vbox(82.32692+76.3269)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [43]
+[44] [45] [46] [47] [48]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 11.35075
+.\glue(\topskip) 0.0
+.\hbox(52.12149+46.12149)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(52.12149+46.12149)x455.04408
+...\mathon
+...\vbox(52.12149+46.12149)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [49]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 10.00142
+.\glue(\topskip) 0.0
+.\hbox(118.71065+112.71065)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(118.71065+112.71065)x455.04408
+...\mathon
+...\vbox(118.71065+112.71065)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [50]
+Underfull \hbox (badness 10000) in paragraph at lines 931--937
+[]\twlrm To show that []\elvtt N = (MAX times MIN)\twlrm , it suf-fices to
+
+\hbox(8.33331+2.33331)x455.24408, glue set 16.46346
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\kern-0.97916
+.\twlrm o
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[51]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 9.76906
+.\glue(\topskip) 0.0
+.\hbox(123.26765+117.26765)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(123.26765+117.26765)x455.04408
+...\mathon
+...\vbox(123.26765+117.26765)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [52]
+[53]
+Underfull \hbox (badness 10000) in paragraph at lines 1165--1171
+\twlrm pos-i-tive, whereas we want to be try-ing to
+
+\hbox(8.33331+2.33331)x455.24408, glue set 17.06677
+.\twlrm p
+.\kern0.32639
+.\twlrm o
+.\twlrm s
+.\discretionary
+..\twlrm -
+.etc.
+
+[54] [55] [56] [57] [58] [59] [60]
+Underfull \hbox (badness 10000) in paragraph at lines 1587--1590
+[]\twlrm The next thing to
+
+\hbox(8.33331+2.33331)x455.24408, glue set 59.94083
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 8.05133
+.\glue(\topskip) 0.0
+.\hbox(97.19937+91.19937)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(97.19937+91.19937)x455.04408
+...\mathon
+...\vbox(97.19937+91.19937)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [61]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 5.09497
+.\glue(\topskip) 0.0
+.\hbox(148.81143+142.81142)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(148.81143+142.81142)x455.04408
+...\mathon
+...\vbox(148.81143+142.81142)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [62]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 15.0429
+.\glue(\topskip) 0.0
+.\hbox(195.79816+189.79816)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(195.79816+189.79816)x455.04408
+...\mathon
+...\vbox(195.79816+189.79816)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [63]
+[64] [65]
+Underfull \vbox (badness 1253) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.32341
+.\glue(\topskip) 0.0
+.\hbox(70.43896+64.43896)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(70.43896+64.43896)x455.04408
+...\mathon
+...\vbox(70.43896+64.43896)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [66]
+[67]
+Underfull \vbox (badness 1092) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.22197
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.36696
+..\hbox(0.0+0.0)x11.38109
+..\twlrm L
+..\twlrm a
+..\twlrm s
+..\twlrm t
+..etc.
+.\penalty 300
+.\glue(\baselineskip) 3.83337
+.\hbox(8.33331+2.33331)x455.24408, glue set 194.52734fil
+..\twlrm l
+..\twlrm o
+..\kern-0.32639
+..\twlrm w
+..\kern-0.32639
+..etc.
+.etc.
+
+ [68]
+[69]
+Overfull \hbox (20.23116pt too wide) in paragraph at lines 2243--2243
+[]                    \twltt [(SYM neg_PLUS_DISTRIB);(SYM (SPEC_ALL MINUS_DEF))
+]) THEN[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (7.88115pt too wide) in paragraph at lines 2243--2243
+[]               \twltt [MINUS_DEF;TIMES_ZERO;PLUS_INV_ID_LEMMA;PLUS_ID_LEMMA])
+ THEN[] 
+
+\hbox(8.33331+1.66667)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+1.11383)x455.24408, glue set 10.64386fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 5.05286
+.\hbox(8.33331+1.11383)x455.24408, glue set 4.46886fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [70]
+Overfull \hbox (1.70615pt too wide) in paragraph at lines 2243--2243
+[]               \twltt (PURE_ONCE_REWRITE_RULE [POS_DEF] (ASSUME "POS MIN"))) 
+THEN[] 
+
+\hbox(8.33331+1.11383)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (1.70615pt too wide) in paragraph at lines 2243--2243
+[]               \twltt (SPECL ["N':integer";"(N' times (INT n)) plus N'";"neg 
+N'"][] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (7.88115pt too wide) in paragraph at lines 2243--2243
+[]             \twltt [(ASM_REWRITE_TAC [(SYM (SPEC_ALL (NUM_LESS_IS_INT_BELOW)
+))]);[] 
+
+\hbox(8.33331+1.66667)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (1.70615pt too wide) in paragraph at lines 2243--2243
+[]               \twltt (ASM_REWRITE_TAC[(SYM (SPEC_ALL POS_IS_ZERO_BELOW))]))]
+)]);[] 
+
+\hbox(8.33331+1.66667)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (14.05615pt too wide) in paragraph at lines 2243--2243
+[]           \twltt (NEW_SUBST1_TAC (SYM (SPEC "N:integer" PLUS_INV_INV_LEMMA))
+) THEN[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 195.89395fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.50003
+.\hbox(8.33331+1.11383)x455.24408, glue set 300.869fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [71]
+Overfull \hbox (32.58116pt too wide) in paragraph at lines 2243--2243
+[]           \twltt (UNDISCH (SPEC_ALL (UNDISCH (SPEC_ALL INT_SBGP_TIMES_CLOSED
+))))))]);[] 
+
+\hbox(8.33331+1.66667)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+[72]) (thm_app.tex [73]
+Overfull \hbox (7.88115pt too wide) in paragraph at lines 43--43
+[]       \twltt (!x y z. G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y
+ z)))[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+[74]
+Overfull \hbox (32.58116pt too wide) in paragraph at lines 98--98
+[]        \twltt (?z. G z /\ (prod x z = y) /\ (!u. G u /\ (prod x u = y) ==> (
+u = z))))[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (32.58116pt too wide) in paragraph at lines 107--107
+[]        \twltt (?z. G z /\ (prod z x = y) /\ (!u. G u /\ (prod u x = y) ==> (
+u = z))))[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (14.05615pt too wide) in paragraph at lines 116--116
+[]            \twltt ((?x. G x /\ (prod e x = x)) \/ (?x. G x /\ (prod x e = x)
+)) ==>[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+[75] [76]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 2.66667
+.\hbox(7.33333+1.11383)x455.24408, glue set 405.84406fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 5.05286
+.\hbox(8.33331+0.99997)x455.24408, glue set 220.59396fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [77]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 276.16899fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.50003
+.\hbox(8.33331+0.99997)x455.24408, glue set 381.14404fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [78]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 195.89395fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.50003
+.\hbox(8.33331+2.66666)x455.24408, glue set 257.64398fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [79]
+Overfull \hbox (1.70615pt too wide) in paragraph at lines 540--540
+[]           \twltt (!u. LEFT_COSET(G,prod)H x u ==> LEFT_COSET(G,prod)H y(f u)
+) /\[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Overfull \hbox (1.70615pt too wide) in paragraph at lines 540--540
+[]           \twltt (!v. LEFT_COSET(G,prod)H y v ==> LEFT_COSET(G,prod)H x(g v)
+) /\[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 2.66667
+.\hbox(7.33333+1.11383)x455.24408, glue set 288.519fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 5.05286
+.\hbox(8.33331+2.66666)x455.24408, glue set 282.344fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [80]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 177.36894fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 4.50002
+.\hbox(7.33333+1.11383)x455.24408, glue set 344.09402fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [81]
+Overfull \hbox (1.70615pt too wide) in paragraph at lines 540--540
+[]         \twltt (quot_hom(G1,prod1)(G2,prod2)N f(NAT_HOM(G1,prod1)N x) = f x)
+) /\[] 
+
+\hbox(8.33331+2.66666)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 6.175
+.\penalty 10000
+.\glue 6.175
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 90.9189fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.50003
+.\hbox(8.33331+2.66666)x455.24408, glue set 214.41896fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [82]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 121.79391fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 4.50002
+.\hbox(7.33333+1.66667)x455.24408, glue set 337.91902fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [83]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 97.0939fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.50003
+.\hbox(8.33331+2.66666)x455.24408, glue set 90.9189fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [84]
+[85]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 2.66667
+.\hbox(7.33333+0.0)x455.24408, glue set 368.79404fil
+..\hbox(0.0+0.0)x0.0
+..\twltt D
+..\twltt e
+..\twltt f
+..\twltt i
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 6.16669
+.\hbox(8.33331+2.66666)x455.24408, glue set 22.99387fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [86]
+[87]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 2.66667
+.\hbox(7.33333+1.11383)x455.24408, glue set 381.14404fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 5.05286
+.\hbox(8.33331+0.99997)x455.24408, glue set 53.86888fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [88])
+(gen_tactics.tex [89] [90]
+Underfull \hbox (badness 1874) in paragraph at lines 154--160
+[]\twlrm The tac-tic []\elvtt NEW_SUBST1_TAC thm \twlrm where []\elvtt thm = |-
+ exp1 = exp2\twlrm , when ap-plied to a
+
+\hbox(8.33331+2.43333)x455.24408, glue set 2.65665
+.\hbox(0.0+0.0)x0.0
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[91] [92]
+Underfull \hbox (badness 1910) in paragraph at lines 267--271
+[]\twlrm where []\elvtt thm \twlrm is a the-o-rem of the form []\elvtt |- A ==>
+ B\twlrm , when ap-plied to the goal
+
+\hbox(8.33331+2.33331)x455.24408, glue set 2.67645
+.\hbox(0.0+0.0)x11.38109
+.\twlrm w
+.\twlrm h
+.\twlrm e
+.\twlrm r
+.etc.
+
+[93] [94] [95]) (gp_tactics.tex [96] [97]
+Underfull \hbox (badness 1910) in paragraph at lines 115--119
+[]\twlrm The tac-tic []\elvtt GROUP_RIGHT_ASSOC_TAC \twlrm fails if it is not g
+iven a term of the form
+
+\hbox(8.33331+2.33331)x455.24408, glue set 2.67365
+.\hbox(0.0+0.0)x0.0
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[98]
+Underfull \hbox (badness 2435) in paragraph at lines 164--168
+[]\twlrm The tac-tic []\elvtt GROUP_LEFT_ASSOC_TAC \twlrm fails if it is not gi
+ven a term of the form
+
+\hbox(8.33331+2.33331)x455.24408, glue set 2.89948
+.\hbox(0.0+0.0)x0.0
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[99]
+Underfull \hbox (badness 1496) in paragraph at lines 208--212
+\twlrm with the group and prod-uct given in the the-o-rem []\elvtt is_group_thm
+\twlrm , re-mov-ing the
+
+\hbox(8.33331+2.43333)x455.24408, glue set 2.46588
+.\twlrm w
+.\twlrm i
+.\twlrm t
+.\twlrm h
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+
+Underfull \hbox (badness 1721) in paragraph at lines 213--216
+[]\twlrm The func-tion []\elvtt return_GROUP_thm \twlrm fails if it is not give
+n a the-o-rem of the form
+
+\hbox(8.33331+2.33331)x455.24408, glue set 2.58453
+.\hbox(0.0+0.0)x0.0
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[100]
+Underfull \hbox (badness 1430) in paragraph at lines 309--314
+\twlrm returns the list re-sult-ing from of in-stan-ti-at-ing the each the-o-re
+m in the the-ory
+
+\hbox(8.33331+2.33331)x455.24408, glue set 2.43062
+.\twlrm r
+.\twlrm e
+.\twlrm t
+.\twlrm u
+.\twlrm r
+.etc.
+
+[101] [102]) (int_tactics.tex [103] [104] [105] [106] [107]
+Underfull \hbox (badness 3049) in paragraph at lines 314--317
+[]\twlrm The tac-tic []\elvtt INT_RIGHT_ASSOC_TAC \twlrm fails if it is not giv
+en a term of the form
+
+\hbox(8.33331+2.33331)x455.24408, glue set 3.1253
+.\hbox(0.0+0.0)x0.0
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+
+Underfull \hbox (badness 3758) in paragraph at lines 354--357
+[]\twlrm The tac-tic []\elvtt INT_LEFT_ASSOC_TAC \twlrm fails if it is not give
+n a term of the form
+
+\hbox(8.33331+2.33331)x455.24408, glue set 3.35112
+.\hbox(0.0+0.0)x0.0
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[108]) [109] (tutorial.aux) ) 
+Here is how much of TeX's memory you used:
+ 299 strings out of 4463
+ 2407 string characters out of 63169
+ 49881 words of memory out of 262141
+ 2216 multiletter control sequences out of 9500
+ 19472 words of font info for 74 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 17i,12n,17p,171b,474s stack positions out of 300i,60n,60p,3000b,4000s
+
+Output written on tutorial.dvi (109 pages, 258144 bytes).

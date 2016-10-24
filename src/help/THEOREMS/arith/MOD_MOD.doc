@@ -1,0 +1,3 @@
+\THEOREM MOD_MOD arithmetic
+|- !n. 0 < n ==> (!k. (k MOD n) MOD n = k MOD n)
+\ENDTHEOREM

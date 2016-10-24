@@ -1,0 +1,3 @@
+\THEOREM VAL_ONTO wordn_num
+|- !l. ?n. VAL l = n
+\ENDTHEOREM

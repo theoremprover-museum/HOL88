@@ -1,0 +1,4 @@
+\THEOREM FOLDR list
+|- (!f e. FOLDR f e[] = e) /\
+   (!f e x l. FOLDR f e(CONS x l) = f x(FOLDR f e l))
+\ENDTHEOREM

@@ -1,0 +1,2344 @@
+	rm -f boolarith1.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `boolarith1`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+() : void
+
+Loading library `taut` ...
+........................
+Library `taut` loaded.
+() : void
+
+NOT_EQ = |- !t1 t2. (t1 = t2) = (~t1 = ~t2)
+
+DISJ_ASSOC = |- !t1 t2 t3. t1 \/ t2 \/ t3 = (t1 \/ t2) \/ t3
+
+LEFT_CONJ_DISTRIB = 
+|- !t1 t2 t3. t1 /\ (t2 \/ t3) = t1 /\ t2 \/ t1 /\ t3
+
+RIGHT_CONJ_DISTRIB = 
+|- !t1 t2 t3. (t2 \/ t3) /\ t1 = t2 /\ t1 \/ t3 /\ t1
+
+LEFT_DISJ_DISTRIB = 
+|- !t1 t2 t3. t1 \/ t2 /\ t3 = (t1 \/ t2) /\ (t1 \/ t3)
+
+RIGHT_DISJ_DISTRIB = 
+|- !t1 t2 t3. t2 /\ t3 \/ t1 = (t2 \/ t1) /\ (t3 \/ t1)
+
+LEFT_DISJ_CONJ = |- !a b. a /\ b \/ b = b
+
+Definition GREATER autoloaded from theory `arithmetic`.
+GREATER = |- !m n. m > n = n < m
+
+Definition LESS_OR_EQ autoloaded from theory `arithmetic`.
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+
+Definition GREATER_OR_EQ autoloaded from theory `arithmetic`.
+GREATER_OR_EQ = |- !m n. m >= n = m > n \/ (m = n)
+
+GREATER_EQ = |- !a b. a >= b = b <= a
+
+Theorem NOT_LESS autoloaded from theory `arithmetic`.
+NOT_LESS = |- !m n. ~m < n = n <= m
+
+NOT_LEQ = |- !a b. ~a <= b = b < a
+
+Theorem LESS_ANTISYM autoloaded from theory `arithmetic`.
+LESS_ANTISYM = |- !m n. ~(m < n /\ n < m)
+
+EQ_LEQ = |- !a b. (a = b) = a <= b /\ b <= a
+
+NOT_EQ_LEQ = |- !a b. ~(a = b) = a < b \/ b < a
+
+Theorem LESS_EQ autoloaded from theory `arithmetic`.
+LESS_EQ = |- !m n. m < n = (SUC m) <= n
+
+Theorem ADD1 autoloaded from theory `arithmetic`.
+ADD1 = |- !m. SUC m = m + 1
+
+LESS_LESSEQ = |- !a b. a < b = (a + 1) <= b
+
+() : void
+
+
+File boolarith1 loaded
+() : void
+
+#Bye.
+	rm -f boolarith2.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `boolarith2`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+() : void
+
+Theory boolarith1 loaded
+() : void
+
+Loading library `taut` ...
+........................
+Library `taut` loaded.
+() : void
+
+F_IMP_EX_F = |- F ==> (?t. F)
+
+EX_F_IMP_F = |- (?t. F) ==> F
+
+F_FROM_EX_F = |- (?t. F) = F
+
+ID_IMP = |- !b. b ==> b
+
+CONJ_IMP_TAUT = |- !a b c. (a ==> b) ==> a /\ c ==> b /\ c
+
+CONJ2_IMP_TAUT = |- !a b c d. (a ==> b) ==> d /\ a /\ c ==> d /\ b /\ c
+
+CONJ3_IMP_TAUT = |- !a b c. (a ==> b) ==> c /\ a ==> c /\ b
+
+NOT_LEQ = |- !a b. ~a <= b = b < a
+
+Theorem ADD1 autoloaded from theory `arithmetic`.
+ADD1 = |- !m. SUC m = m + 1
+
+Theorem ADD_SYM autoloaded from theory `arithmetic`.
+ADD_SYM = |- !m n. m + n = n + m
+
+ADD_SUC_0 = |- !m. SUC m = (SUC 0) + m
+
+Theorem LESS_MONO_MULT autoloaded from theory `arithmetic`.
+LESS_MONO_MULT = |- !m n p. m <= n ==> (m * p) <= (n * p)
+
+Theorem MULT_SYM autoloaded from theory `arithmetic`.
+MULT_SYM = |- !m n. m * n = n * m
+
+LESS_MONO_MULT' = |- !m n p. m <= n ==> (p * m) <= (p * n)
+
+Theorem NOT_LESS_0 autoloaded from theory `prim_rec`.
+NOT_LESS_0 = |- !n. ~n < 0
+
+Theorem NOT_LESS autoloaded from theory `arithmetic`.
+NOT_LESS = |- !m n. ~m < n = n <= m
+
+LESS_EQ_0_N = |- !n. 0 <= n
+
+Theorem LESS_EQ_MONO_ADD_EQ autoloaded from theory `arithmetic`.
+LESS_EQ_MONO_ADD_EQ = |- !m n p. (m + p) <= (n + p) = m <= n
+
+LESS_EQ_MONO_ADD_EQ' = |- !m n p. m <= n = (p + m) <= (p + n)
+
+Definition ADD autoloaded from theory `arithmetic`.
+ADD = |- (!n. 0 + n = n) /\ (!m n. (SUC m) + n = SUC(m + n))
+
+LESS_EQ_MONO_ADD_EQ1 = |- !m p. (m + p) <= p = m <= 0
+
+LESS_EQ_MONO_ADD_EQ2 = |- !p n. p <= (n + p) = 0 <= n
+
+LESS_EQ_MONO_ADD_EQ3 = |- !p n. p <= (n + p)
+
+Theorem ADD_ASSOC autoloaded from theory `arithmetic`.
+ADD_ASSOC = |- !m n p. m + (n + p) = (m + n) + p
+
+ADD_SYM_ASSOC = |- !a b c. a + (b + c) = b + (a + c)
+
+Theorem LESS_0 autoloaded from theory `prim_rec`.
+LESS_0 = |- !n. 0 < (SUC n)
+
+NOT_SUC_LEQ_0 = |- !n. ~(SUC n) <= 0
+
+Theorem INV_SUC_EQ autoloaded from theory `prim_rec`.
+INV_SUC_EQ = |- !m n. (SUC m = SUC n) = (m = n)
+
+Theorem LESS_MONO_EQ autoloaded from theory `arithmetic`.
+LESS_MONO_EQ = |- !m n. (SUC m) < (SUC n) = m < n
+
+Definition LESS_OR_EQ autoloaded from theory `arithmetic`.
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+
+INV_SUC_LEQ = |- !m n. (SUC m) <= (SUC n) = m <= n
+
+Theorem MULT_CLAUSES autoloaded from theory `arithmetic`.
+MULT_CLAUSES = 
+|- !m n.
+    (0 * m = 0) /\
+    (m * 0 = 0) /\
+    (1 * m = m) /\
+    (m * 1 = m) /\
+    ((SUC m) * n = (m * n) + n) /\
+    (m * (SUC n) = m + (m * n))
+
+Theorem ADD_CLAUSES autoloaded from theory `arithmetic`.
+ADD_CLAUSES = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+
+TWICE = |- !x. x + x = (SUC(SUC 0)) * x
+
+NOT_SUC_LEQ = |- ~(!n m. (SUC m) <= n)
+
+Theorem LESS_EQ_ADD autoloaded from theory `arithmetic`.
+LESS_EQ_ADD = |- !m n. m <= (m + n)
+
+Theorem LESS_EQ_TRANS autoloaded from theory `arithmetic`.
+LESS_EQ_TRANS = |- !m n p. m <= n /\ n <= p ==> m <= p
+
+LEQ_SPLIT = |- (m + n) <= p ==> n <= p /\ m <= p
+
+() : void
+
+
+File boolarith2 loaded
+() : void
+
+#Bye.
+	rm -f list_lib1.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `list_lib1`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+() : void
+
+Theorem CONS_11 autoloaded from theory `list`.
+CONS_11 = |- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+
+Definition APPEND autoloaded from theory `list`.
+APPEND = 
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+
+APPEND_ID = |- !l l'. (l = APPEND l l') = (l' = [])
+
+APPEND_NIL = |- !l. APPEND l[] = l
+
+Definition LESS_OR_EQ autoloaded from theory `arithmetic`.
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+
+Theorem LESS_THM autoloaded from theory `prim_rec`.
+LESS_THM = |- !m n. m < (SUC n) = (m = n) \/ m < n
+
+Definition LENGTH autoloaded from theory `list`.
+LENGTH = |- (LENGTH[] = 0) /\ (!h t. LENGTH(CONS h t) = SUC(LENGTH t))
+
+LENGTH_LESS_EQ = 
+|- !l1 l2.
+    (LENGTH l1) <= (LENGTH l2) ==>
+    (!a. (LENGTH l1) < (LENGTH(CONS a l2)))
+
+Theorem INV_SUC_EQ autoloaded from theory `prim_rec`.
+INV_SUC_EQ = |- !m n. (SUC m = SUC n) = (m = n)
+
+Theorem NOT_NIL_CONS autoloaded from theory `list`.
+NOT_NIL_CONS = |- !h t. ~([] = CONS h t)
+
+Theorem LENGTH_NIL autoloaded from theory `list`.
+LENGTH_NIL = |- !l. (LENGTH l = 0) = (l = [])
+
+NOT_LENGTH_EQ = |- !l2 l1. ~(LENGTH l1 = LENGTH l2) ==> ~(l1 = l2)
+
+Theorem NOT_CONS_NIL autoloaded from theory `list`.
+NOT_CONS_NIL = |- !h t. ~(CONS h t = [])
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+Definition NULL_DEF autoloaded from theory `list`.
+NULL_DEF = |- (NULL[] = T) /\ (!h t. NULL(CONS h t) = F)
+
+NULL_EQ_NIL = |- !l. (l = []) = NULL l
+
+Definition HD autoloaded from theory `list`.
+HD = |- !h t. HD(CONS h t) = h
+
+Theorem CONS autoloaded from theory `list`.
+CONS = |- !l. ~NULL l ==> (CONS(HD l)(TL l) = l)
+
+HD_APPEND = |- !l. ~(l = []) ==> (!l'. HD(APPEND l l') = HD l)
+
+Definition TL autoloaded from theory `list`.
+TL = |- !h t. TL(CONS h t) = t
+
+TL_APPEND = |- !l. ~(l = []) ==> (!l'. TL(APPEND l l') = APPEND(TL l)l')
+
+ONE_MEMBER_LIST = 
+|- !s t a. (APPEND s t = [a]) ==> (s = []) \/ (s = [a])
+
+CONS_MEMBER_LIST = 
+|- !s s' t a.
+    (APPEND s t = CONS a s') ==>
+    (s = []) \/ (?r. (s = CONS a r) /\ (s' = APPEND r t))
+
+CONS_EQ_APPEND = |- !a l. CONS a l = APPEND[a]l
+
+() : void
+
+
+File list_lib1 loaded
+() : void
+
+#Bye.
+	rm -f traces.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `traces`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+() : void
+
+Theory list_lib1 loaded
+() : void
+
+[(); ()] : void list
+
+APPEND_ID = |- !l l'. (l = APPEND l l') = (l' = [])
+
+APPEND_NIL = |- !l. APPEND l[] = l
+
+trace = ":(*)list" : type
+
+TR_STRICT = |- !f. TR_STRICT f = (f[] = [])
+
+TR_DIST = |- !f. TR_DIST f = (!s t. f(APPEND s t) = APPEND(f s)(f t))
+
+Definition APPEND autoloaded from theory `list`.
+APPEND = 
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+
+TR_DIST_STRICT = |- !f. TR_DIST f ==> TR_STRICT f
+
+ITERATE = 
+|- (!t. ITERATE 0 t = []) /\
+   (!n t. ITERATE(SUC n)t = APPEND t(ITERATE n t))
+
+Theorem APPEND_ASSOC autoloaded from theory `list`.
+APPEND_ASSOC = 
+|- !l1 l2 l3. APPEND l1(APPEND l2 l3) = APPEND(APPEND l1 l2)l3
+
+ITER_COMM = |- !n t. ITERATE(SUC n)t = APPEND(ITERATE n t)t
+
+ITER_APP = 
+|- !n s t.
+    ITERATE(SUC n)(APPEND s t) =
+    APPEND s(APPEND(ITERATE n(APPEND t s))t)
+
+() : void
+
+
+File traces loaded
+() : void
+
+#Bye.
+	rm -f restrict.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `restrict`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+() : void
+
+sets already loaded
+() : void
+
+Theory traces loaded
+Theory boolarith2 loaded
+[(); ()] : void list
+
+[(); ()] : void list
+
+INV_SUC_LEQ = |- !m n. (SUC m) <= (SUC n) = m <= n
+
+LESS_EQ_0_N = |- !n. 0 <= n
+
+() : void
+
+NOT_EQ_LEQ = |- !a b. ~(a = b) = a < b \/ b < a
+
+() : void
+
+NOT_LENGTH_EQ = |- !l2 l1. ~(LENGTH l1 = LENGTH l2) ==> ~(l1 = l2)
+
+RESTRICT = 
+|- (!A. RESTRICT[]A = []) /\
+   (!x t A.
+     RESTRICT(CONS x t)A =
+     (x IN A => CONS x(RESTRICT t A) | RESTRICT t A))
+
+STRICT_REST = |- !A. RESTRICT[]A = []
+
+Definition APPEND autoloaded from theory `list`.
+APPEND = 
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+
+DISTRIB_REST = 
+|- !s t A. RESTRICT(APPEND s t)A = APPEND(RESTRICT s A)(RESTRICT t A)
+
+Theorem NOT_IN_EMPTY autoloaded from theory `sets`.
+NOT_IN_EMPTY = |- !x. ~x IN {}
+
+RESTR_EMPTY = |- !s. RESTRICT s{} = []
+
+Theorem IN_INTER autoloaded from theory `sets`.
+IN_INTER = |- !s t x. x IN (s INTER t) = x IN s /\ x IN t
+
+REP_RESTR = |- !s A B. RESTRICT(RESTRICT s A)B = RESTRICT s(A INTER B)
+
+Theorem LESS_EQ_ADD autoloaded from theory `arithmetic`.
+LESS_EQ_ADD = |- !m n. m <= (m + n)
+
+Theorem ADD1 autoloaded from theory `arithmetic`.
+ADD1 = |- !m. SUC m = m + 1
+
+LEQ_ID = |- !m. m <= (SUC m)
+
+Theorem LESS_EQ_TRANS autoloaded from theory `arithmetic`.
+LESS_EQ_TRANS = |- !m n p. m <= n /\ n <= p ==> m <= p
+
+Definition LENGTH autoloaded from theory `list`.
+LENGTH = |- (LENGTH[] = 0) /\ (!h t. LENGTH(CONS h t) = SUC(LENGTH t))
+
+MAX_LEN_REST = |- !A s. (LENGTH(RESTRICT s A)) <= (LENGTH s)
+
+Theorem LESS_THM autoloaded from theory `prim_rec`.
+LESS_THM = |- !m n. m < (SUC n) = (m = n) \/ m < n
+
+Definition LESS_OR_EQ autoloaded from theory `arithmetic`.
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+
+REST_LEMMA = |- !A s a. ~(LENGTH(RESTRICT s A) = LENGTH(CONS a s))
+
+REST_CONS_THM = |- !s A a. ~(RESTRICT s A = CONS a s)
+
+() : void
+
+
+File restrict loaded
+() : void
+
+#Bye.
+	rm -f star.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `star`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+() : void
+
+Theory restrict loaded
+() : void
+
+trace = ":(*)list" : type
+
+.........() : void
+
+() : void
+
+RESTRICT = 
+|- (!A. RESTRICT[]A = []) /\
+   (!x t A.
+     RESTRICT(CONS x t)A =
+     (x IN A => CONS x(RESTRICT t A) | RESTRICT t A))
+
+() : void
+
+REST_CONS_THM = |- !s A a. ~(RESTRICT s A = CONS a s)
+
+() : void
+
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+() : void
+
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+() : void
+
+NOT_LENGTH_EQ = |- !l2 l1. ~(LENGTH l1 = LENGTH l2) ==> ~(l1 = l2)
+
+STAR = |- !A. STAR A = {s | RESTRICT s A = s}
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+Theorem NOT_NIL_CONS autoloaded from theory `list`.
+NOT_NIL_CONS = |- !h t. ~([] = CONS h t)
+
+SINGLE_STAR = |- !x A. [x] IN (STAR A) = x IN A
+
+Theorem CONS_11 autoloaded from theory `list`.
+CONS_11 = |- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+
+CONS_STAR = |- !a t A. (CONS a t) IN (STAR A) = a IN A /\ t IN (STAR A)
+
+Definition APPEND autoloaded from theory `list`.
+APPEND = 
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+
+APPEND_STAR = 
+|- !s t A. (APPEND s t) IN (STAR A) = s IN (STAR A) /\ t IN (STAR A)
+
+Definition TL autoloaded from theory `list`.
+TL = |- !h t. TL(CONS h t) = t
+
+Definition HD autoloaded from theory `list`.
+HD = |- !h t. HD(CONS h t) = h
+
+Theorem NOT_CONS_NIL autoloaded from theory `list`.
+NOT_CONS_NIL = |- !h t. ~(CONS h t = [])
+
+Theorem EXTENSION autoloaded from theory `sets`.
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+STAR_INDUCT = 
+|- !A. STAR A = {t | (t = []) \/ (HD t) IN A /\ (TL t) IN (STAR A)}
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+SUBSET_STAR = |- !A B. A SUBSET B ==> (STAR A) SUBSET (STAR B)
+
+() : void
+
+
+File star loaded
+() : void
+
+#Bye.
+	rm -f order.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `order`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+() : void
+
+Theory restrict loaded
+() : void
+
+[(); (); ()] : void list
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+APPEND_NIL = |- !l. APPEND l[] = l
+
+APPEND_ID = |- !l l'. (l = APPEND l l') = (l' = [])
+
+PREFIX = |- !s t. s LEQ t = (?u. APPEND s u = t)
+
+Definition APPEND autoloaded from theory `list`.
+APPEND = 
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+
+LEAST = |- !s. [] LEQ s
+
+REFLEXIVE = |- !s. s LEQ s
+
+Theorem APPEND_ASSOC autoloaded from theory `list`.
+APPEND_ASSOC = 
+|- !l1 l2 l3. APPEND l1(APPEND l2 l3) = APPEND(APPEND l1 l2)l3
+
+ANTI_SYMM = |- !s t. s LEQ t /\ t LEQ s ==> (s = t)
+
+TRANS_PREFIX = |- !s t v. s LEQ t /\ t LEQ v ==> s LEQ v
+
+RIGHT_AND_EXISTS_TAC = - : tactic
+
+Theorem CONS_11 autoloaded from theory `list`.
+CONS_11 = |- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+
+Definition TL autoloaded from theory `list`.
+TL = |- !h t. TL(CONS h t) = t
+
+Definition HD autoloaded from theory `list`.
+HD = |- !h t. HD(CONS h t) = h
+
+Theorem NOT_CONS_NIL autoloaded from theory `list`.
+NOT_CONS_NIL = |- !h t. ~(CONS h t = [])
+
+ST_IND_PREFIX = 
+|- !s t x. (APPEND[x]s) LEQ t = ~(t = []) /\ (x = HD t) /\ s LEQ (TL t)
+
+ST_IND_PREFIX' = 
+|- !s t x. (CONS x s) LEQ t = ~(t = []) /\ (x = HD t) /\ s LEQ (TL t)
+
+TOT_ORDER_PREFIX = |- !s t v. s LEQ v /\ t LEQ v ==> s LEQ t \/ t LEQ s
+
+IN_TRACE = |- !s t. s in t = (?u v. t = APPEND u(APPEND s v))
+
+MONOTONIC = |- !f. MONOTONIC f = (!s t. s LEQ t ==> (f s) LEQ (f t))
+
+() : void
+
+
+File order loaded
+() : void
+
+#Bye.
+	rm -f process_ty.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `process_ty`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Declaring theory string a new parent
+Theory string loaded
+......
+Library `string` loaded.
+() : void
+
+Theory star loaded
+() : void
+
+() : void
+
+() : void
+
+() : void
+
+() : void
+
+UNCURRY_DEF = |- !f x y. UNCURRY f(x,y) = f x y
+
+STAR = |- !A. STAR A = {s | RESTRICT s A = s}
+
+RESTRICT = 
+|- (!A. RESTRICT[]A = []) /\
+   (!x t A.
+     RESTRICT(CONS x t)A =
+     (x IN A => CONS x(RESTRICT t A) | RESTRICT t A))
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+.........() : void
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+Theorem IN_SING autoloaded from theory `sets`.
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+EXISTS_PROCESS = |- ?P. (\(A,TR). IS_PROCESS(A,TR))P
+
+PROCESS_TYPE = |- ?rep. TYPE_DEFINITION(\(A,TR). IS_PROCESS(A,TR))rep
+
+PROCESS_LEMMA1 = |- !a a'. (REP_process a = REP_process a') = (a = a')
+PROCESS_LEMMA2 = |- !r. IS_PROCESS r = (?a. r = REP_process a)
+PROCESS_LEMMA3 = 
+|- !r r'.
+    IS_PROCESS r ==>
+    IS_PROCESS r' ==>
+    ((ABS_process r = ABS_process r') = (r = r'))
+PROCESS_LEMMA4 = |- !a. ?r. (a = ABS_process r) /\ IS_PROCESS r
+PROCESS_LEMMA5 = |- !a. ABS_process(REP_process a) = a
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+ALPHA_DEF = |- !P. ALPHA P = FST(REP_process P)
+
+TRACES_DEF = |- !P. TRACES P = SND(REP_process P)
+
+ID_PROCESS = |- !P. ABS_process(ALPHA P,TRACES P) = P
+
+ID_PROCESS' = |- !P. ALPHA P,TRACES P = REP_process P
+
+SPLIT_PROCESS = 
+|- IS_PROCESS v =
+   (SND v) SUBSET (STAR(FST v)) /\
+   [] IN (SND v) /\
+   (!s t. (APPEND s t) IN (SND v) ==> s IN (SND v))
+
+PROC_TAC = - : tactic
+
+proc_LEMMA1 = 
+|- !P v. (P = ABS_process v) /\ IS_PROCESS v ==> [] IN (TRACES P)
+
+proc_LEMMA2 = 
+|- !P v.
+    (P = ABS_process v) /\ IS_PROCESS v ==>
+    (!s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P))
+
+proc_LEMMA3 = 
+|- !P v.
+    (P = ABS_process v) /\ IS_PROCESS v ==>
+    (TRACES P) SUBSET (STAR(ALPHA P))
+
+NIL_IN_TRACES = |- !P. [] IN (TRACES P)
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+ALPHA_FST = |- !x y. IS_PROCESS(x,y) ==> (ALPHA(ABS_process(x,y)) = x)
+
+TRACES_SND = |- !x y. IS_PROCESS(x,y) ==> (TRACES(ABS_process(x,y)) = y)
+
+PROCESS_EQ_SPLIT = 
+|- !P Q. (P = Q) = (ALPHA P = ALPHA Q) /\ (TRACES P = TRACES Q)
+
+() : void
+
+
+File process_ty loaded
+() : void
+
+#Bye.
+	rm -f stop.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `stop`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+() : void
+
+Theory process_ty loaded
+() : void
+
+() : void
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+() : void
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+[(); (); ()] : void list
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+ALPHA_DEF = |- !P. ALPHA P = FST(REP_process P)
+
+TRACES_DEF = |- !P. TRACES P = SND(REP_process P)
+
+() : void
+
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+.........() : void
+
+Theorem IN_SING autoloaded from theory `sets`.
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+IS_PROCESS_STOP = |- !A. IS_PROCESS(A,{[]})
+
+STOP_LEMMA1 = |- !A. REP_process(ABS_process(A,{[]})) = A,{[]}
+
+DEST_PROCESS = |- ?f. !x. (ALPHA(f x) = x) /\ (TRACES(f x) = {[]})
+
+STOP = |- !x. (ALPHA(STOP x) = x) /\ (TRACES(STOP x) = {[]})
+
+[|- !x. ALPHA(STOP x) = x; |- !x. TRACES(STOP x) = {[]}] : thm list
+
+() : void
+
+
+File stop loaded
+() : void
+
+#Bye.
+	rm -f run.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `run`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+() : void
+
+Theory process_ty loaded
+() : void
+
+[(); ()] : void list
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+APPEND_STAR = 
+|- !s t A. (APPEND s t) IN (STAR A) = s IN (STAR A) /\ t IN (STAR A)
+
+[(); (); ()] : void list
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+ALPHA_DEF = |- !P. ALPHA P = FST(REP_process P)
+
+TRACES_DEF = |- !P. TRACES P = SND(REP_process P)
+
+() : void
+
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+IS_PROCESS_RUN = |- !A. IS_PROCESS(A,STAR A)
+
+RUN_LEMMA1 = |- !A. REP_process(ABS_process(A,STAR A)) = A,STAR A
+
+DEST_PROCESS = |- ?f. !A. (ALPHA(f A) = A) /\ (TRACES(f A) = STAR A)
+
+RUN = |- !A. (ALPHA(RUN A) = A) /\ (TRACES(RUN A) = STAR A)
+
+[|- !A. ALPHA(RUN A) = A; |- !A. TRACES(RUN A) = STAR A] : thm list
+
+() : void
+
+
+File run loaded
+() : void
+
+#Bye.
+	rm -f prefix.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `prefix`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory process_ty loaded
+() : void
+
+[(); (); (); (); (); (); (); (); (); (); ()] : void list
+
+CONS_EQ_APPEND = |- !a l. CONS a l = APPEND[a]l
+
+CONS_MEMBER_LIST = 
+|- !s s' t a.
+    (APPEND s t = CONS a s') ==>
+    (s = []) \/ (?r. (s = CONS a r) /\ (s' = APPEND r t))
+
+ONE_MEMBER_LIST = 
+|- !s t a. (APPEND s t = [a]) ==> (s = []) \/ (s = [a])
+
+TL_APPEND = |- !l. ~(l = []) ==> (!l'. TL(APPEND l l') = APPEND(TL l)l')
+
+HD_APPEND = |- !l. ~(l = []) ==> (!l'. HD(APPEND l l') = HD l)
+
+NULL_EQ_NIL = |- !l. (l = []) = NULL l
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+NOT_LENGTH_EQ = |- !l2 l1. ~(LENGTH l1 = LENGTH l2) ==> ~(l1 = l2)
+
+LENGTH_LESS_EQ = 
+|- !l1 l2.
+    (LENGTH l1) <= (LENGTH l2) ==>
+    (!a. (LENGTH l1) < (LENGTH(CONS a l2)))
+
+APPEND_NIL = |- !l. APPEND l[] = l
+
+APPEND_ID = |- !l l'. (l = APPEND l l') = (l' = [])
+
+[(); ()] : void list
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+CONS_STAR = |- !a t A. (CONS a t) IN (STAR A) = a IN A /\ t IN (STAR A)
+
+[(); (); ()] : void list
+
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+[(); (); ()] : void list
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+ALPHA_DEF = |- !P. ALPHA P = FST(REP_process P)
+
+TRACES_DEF = |- !P. TRACES P = SND(REP_process P)
+
+Theorem IN_SING autoloaded from theory `sets`.
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Definition UNION_DEF autoloaded from theory `sets`.
+UNION_DEF = |- !s t. s UNION t = {x | x IN s \/ x IN t}
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+IS_PROCESS_PREFIX = 
+|- !a P.
+    a IN (ALPHA P) ==>
+    IS_PROCESS(ALPHA P,{[]} UNION {CONS a t | t IN (TRACES P)})
+
+PREFIX_LEMMA1 = 
+|- !a P.
+    a IN (ALPHA P) ==>
+    (REP_process
+     (ABS_process(ALPHA P,{[]} UNION {CONS a t | t IN (TRACES P)})) =
+     ALPHA P,{[]} UNION {CONS a t | t IN (TRACES P)})
+
+DEST_PROCESS = 
+|- ?f.
+    !a P.
+     a IN (ALPHA P) ==>
+     (ALPHA(f a P) = ALPHA P) /\
+     (TRACES(f a P) = {[]} UNION {CONS a t | t IN (TRACES P)})
+
+PREFIX = 
+|- !a P.
+    a IN (ALPHA P) ==>
+    (ALPHA(a --> P) = ALPHA P) /\
+    (TRACES(a --> P) = {[]} UNION {CONS a t | t IN (TRACES P)})
+
+[|- !a P. a IN (ALPHA P) ==> (ALPHA(a --> P) = ALPHA P);
+ |- !a P.
+     a IN (ALPHA P) ==>
+     (TRACES(a --> P) = {[]} UNION {CONS a t | t IN (TRACES P)})]
+: thm list
+
+() : void
+
+
+File prefix loaded
+() : void
+
+#Bye.
+	rm -f after.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `after`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory process_ty loaded
+() : void
+
+[(); (); ()] : void list
+
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+[(); (); ()] : void list
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+ALPHA_DEF = |- !P. ALPHA P = FST(REP_process P)
+
+TRACES_DEF = |- !P. TRACES P = SND(REP_process P)
+
+[(); (); ()] : void list
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+CONS_STAR = |- !a t A. (CONS a t) IN (STAR A) = a IN A /\ t IN (STAR A)
+
+APPEND_STAR = 
+|- !s t A. (APPEND s t) IN (STAR A) = s IN (STAR A) /\ t IN (STAR A)
+
+() : void
+
+APPEND_NIL = |- !l. APPEND l[] = l
+
+Theorem APPEND_ASSOC autoloaded from theory `list`.
+APPEND_ASSOC = 
+|- !l1 l2 l3. APPEND l1(APPEND l2 l3) = APPEND(APPEND l1 l2)l3
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+IS_PROCESS_AFTER = 
+|- !P s.
+    s IN (TRACES P) ==>
+    IS_PROCESS(ALPHA P,{t | (APPEND s t) IN (TRACES P)})
+
+AFTER_LEMMA1 = 
+|- !P s.
+    s IN (TRACES P) ==>
+    (REP_process(ABS_process(ALPHA P,{t | (APPEND s t) IN (TRACES P)})) =
+     ALPHA P,{t | (APPEND s t) IN (TRACES P)})
+
+DEST_PROCESS = 
+|- ?f.
+    !P s.
+     s IN (TRACES P) ==>
+     (ALPHA(f P s) = ALPHA P) /\
+     (TRACES(f P s) = {t | (APPEND s t) IN (TRACES P)})
+
+AFTER = 
+|- !P s.
+    s IN (TRACES P) ==>
+    (ALPHA(P / s) = ALPHA P) /\
+    (TRACES(P / s) = {t | (APPEND s t) IN (TRACES P)})
+
+[|- !s P. s IN (TRACES P) ==> (ALPHA(P / s) = ALPHA P);
+ |- !s P.
+     s IN (TRACES P) ==>
+     (TRACES(P / s) = {t | (APPEND s t) IN (TRACES P)})]
+: thm list
+
+() : void
+
+
+File after loaded
+() : void
+
+#Bye.
+	rm -f choice.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `choice`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory process_ty loaded
+() : void
+
+[(); (); (); (); (); (); (); (); (); (); ()] : void list
+
+CONS_EQ_APPEND = |- !a l. CONS a l = APPEND[a]l
+
+CONS_MEMBER_LIST = 
+|- !s s' t a.
+    (APPEND s t = CONS a s') ==>
+    (s = []) \/ (?r. (s = CONS a r) /\ (s' = APPEND r t))
+
+ONE_MEMBER_LIST = 
+|- !s t a. (APPEND s t = [a]) ==> (s = []) \/ (s = [a])
+
+TL_APPEND = |- !l. ~(l = []) ==> (!l'. TL(APPEND l l') = APPEND(TL l)l')
+
+HD_APPEND = |- !l. ~(l = []) ==> (!l'. HD(APPEND l l') = HD l)
+
+NULL_EQ_NIL = |- !l. (l = []) = NULL l
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+NOT_LENGTH_EQ = |- !l2 l1. ~(LENGTH l1 = LENGTH l2) ==> ~(l1 = l2)
+
+LENGTH_LESS_EQ = 
+|- !l1 l2.
+    (LENGTH l1) <= (LENGTH l2) ==>
+    (!a. (LENGTH l1) < (LENGTH(CONS a l2)))
+
+APPEND_NIL = |- !l. APPEND l[] = l
+
+APPEND_ID = |- !l l'. (l = APPEND l l') = (l' = [])
+
+[(); (); ()] : void list
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+CONS_STAR = |- !a t A. (CONS a t) IN (STAR A) = a IN A /\ t IN (STAR A)
+
+SUBSET_STAR = |- !A B. A SUBSET B ==> (STAR A) SUBSET (STAR B)
+
+[(); (); ()] : void list
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+ALPHA_DEF = |- !P. ALPHA P = FST(REP_process P)
+
+TRACES_DEF = |- !P. TRACES P = SND(REP_process P)
+
+[(); (); ()] : void list
+
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+WELL_DEF_ALPHA = 
+|- !A P.
+    WELL_DEF_ALPHA A P =
+    (?A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A')
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+WELL_DEF_LEMMA1 = 
+|- (?A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ (!x. x IN A ==> x IN A')) ==>
+   (!x.
+     x IN A ==>
+     (ALPHA(P x) =
+      (@A'.
+        (!x. x IN A ==> (ALPHA(P x) = A')) /\ (!x. x IN A ==> x IN A'))))
+WELL_DEF_LEMMA2 = 
+|- (?A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ (!x. x IN A ==> x IN A')) ==>
+   (!x.
+     x IN A ==>
+     x IN
+     (@A'.
+       (!x. x IN A ==> (ALPHA(P x) = A')) /\ (!x. x IN A ==> x IN A')))
+
+WELL_DEF_LEMMA3 = 
+|- (?A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ (!x. x IN A ==> x IN A')) ==>
+   (!x. x IN A ==> x IN (ALPHA(P x)))
+
+Theorem IN_SING autoloaded from theory `sets`.
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Definition UNION_DEF autoloaded from theory `sets`.
+UNION_DEF = |- !s t. s UNION t = {x | x IN s \/ x IN t}
+
+IS_PROCESS_choice = 
+|- !A P.
+    WELL_DEF_ALPHA A P ==>
+    IS_PROCESS
+    ((@A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A'),
+     {[]} UNION {CONS a t | a IN A /\ t IN (TRACES(P a))})
+
+choice_LEMMA1 = 
+|- !A P.
+    WELL_DEF_ALPHA A P ==>
+    (REP_process
+     (ABS_process
+      ((@A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A'),
+       {[]} UNION {CONS a t | a IN A /\ t IN (TRACES(P a))})) =
+     (@A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A'),
+     {[]} UNION {CONS a t | a IN A /\ t IN (TRACES(P a))})
+
+DEST_PROCESS = 
+|- ?f.
+    !A P.
+     WELL_DEF_ALPHA A P ==>
+     (ALPHA(f A P) =
+      (@A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A')) /\
+     (TRACES(f A P) =
+      {[]} UNION {CONS a t | a IN A /\ t IN (TRACES(P a))})
+
+choice = 
+|- !A P.
+    WELL_DEF_ALPHA A P ==>
+    (ALPHA(choice A P) =
+     (@A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A')) /\
+    (TRACES(choice A P) =
+     {[]} UNION {CONS a t | a IN A /\ t IN (TRACES(P a))})
+
+ALPHA_choice = 
+|- !A P.
+    WELL_DEF_ALPHA A P ==>
+    (ALPHA(choice A P) =
+     (@A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A'))
+TRACES_choice = 
+|- !A P.
+    WELL_DEF_ALPHA A P ==>
+    (TRACES(choice A P) =
+     {[]} UNION {CONS a t | a IN A /\ t IN (TRACES(P a))})
+
+WELL_DEF_LEMMA3 = 
+|- c IN A ==>
+   WELL_DEF_ALPHA A P ==>
+   ((@A'. (!x. x IN A ==> (ALPHA(P x) = A')) /\ A SUBSET A') =
+    ALPHA(P c))
+
+|- WELL_DEF_ALPHA A P ==>
+   (!c. c IN A ==> (ALPHA(choice A P) = ALPHA(P c)))
+
+() : void
+
+
+File choice loaded
+() : void
+
+#Bye.
+	rm -f parallel.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `parallel`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory process_ty loaded
+() : void
+
+() : void
+
+RESTRICT = 
+|- (!A. RESTRICT[]A = []) /\
+   (!x t A.
+     RESTRICT(CONS x t)A =
+     (x IN A => CONS x(RESTRICT t A) | RESTRICT t A))
+
+() : void
+
+DISTRIB_REST = 
+|- !s t A. RESTRICT(APPEND s t)A = APPEND(RESTRICT s A)(RESTRICT t A)
+
+[(); ()] : void list
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+APPEND_STAR = 
+|- !s t A. (APPEND s t) IN (STAR A) = s IN (STAR A) /\ t IN (STAR A)
+
+[(); (); ()] : void list
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+ALPHA_DEF = |- !P. ALPHA P = FST(REP_process P)
+
+TRACES_DEF = |- !P. TRACES P = SND(REP_process P)
+
+[(); (); (); ()] : void list
+
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+NIL_IN_TRACES = |- !P. [] IN (TRACES P)
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+IS_PROCESS_PAR = 
+|- !P Q.
+    IS_PROCESS
+    ((ALPHA P) UNION (ALPHA Q),
+     {s | 
+      s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+      (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+      (RESTRICT s(ALPHA Q)) IN (TRACES Q)})
+
+PAR_LEMMA1 = 
+|- !P Q.
+    REP_process
+    (ABS_process
+     ((ALPHA P) UNION (ALPHA Q),
+      {s | 
+       s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+       (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+       (RESTRICT s(ALPHA Q)) IN (TRACES Q)})) =
+    (ALPHA P) UNION (ALPHA Q),
+    {s | 
+     s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+     (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+     (RESTRICT s(ALPHA Q)) IN (TRACES Q)}
+
+DEST_PROCESS = 
+|- ?f.
+    !P Q.
+     (ALPHA(f P Q) = (ALPHA P) UNION (ALPHA Q)) /\
+     (TRACES(f P Q) =
+      {s | 
+       s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+       (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+       (RESTRICT s(ALPHA Q)) IN (TRACES Q)})
+
+PAR = 
+|- !P Q.
+    (ALPHA(P PAR Q) = (ALPHA P) UNION (ALPHA Q)) /\
+    (TRACES(P PAR Q) =
+     {s | 
+      s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+      (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+      (RESTRICT s(ALPHA Q)) IN (TRACES Q)})
+
+[|- !P Q. ALPHA(P PAR Q) = (ALPHA P) UNION (ALPHA Q);
+ |- !P Q.
+     TRACES(P PAR Q) =
+     {s | 
+      s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+      (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+      (RESTRICT s(ALPHA Q)) IN (TRACES Q)}]
+: thm list
+
+() : void
+
+
+File parallel loaded
+() : void
+
+#Bye.
+	rm -f process_fix.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `process_fix`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory stop loaded
+() : void
+
+[()] : void list
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+[(); (); (); (); (); ()] : void list
+
+PROCESS_EQ_SPLIT = 
+|- !P Q. (P = Q) = (ALPHA P = ALPHA Q) /\ (TRACES P = TRACES Q)
+
+NIL_IN_TRACES = |- !P. [] IN (TRACES P)
+
+ALPHA_FST = |- !x y. IS_PROCESS(x,y) ==> (ALPHA(ABS_process(x,y)) = x)
+
+TRACES_SND = |- !x y. IS_PROCESS(x,y) ==> (TRACES(ABS_process(x,y)) = y)
+
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+[(); (); ()] : void list
+
+TRACES_STOP = |- !x. TRACES(STOP x) = {[]}
+
+ALPHA_STOP = |- !x. ALPHA(STOP x) = x
+
+IS_PROCESS_STOP = |- !A. IS_PROCESS(A,{[]})
+
+Theorem SUBSET_REFL autoloaded from theory `sets`.
+SUBSET_REFL = |- !s. s SUBSET s
+
+Theorem SUBSET_ANTISYM autoloaded from theory `sets`.
+SUBSET_ANTISYM = |- !s t. s SUBSET t /\ t SUBSET s ==> (s = t)
+
+EQ_SUB_THM = |- !A B. (A = B) = A SUBSET B /\ B SUBSET A
+
+PROCESS_ORDER = 
+|- !P Q. P << Q = (ALPHA P = ALPHA Q) /\ (TRACES P) SUBSET (TRACES Q)
+
+REFL_PROCESS_ORDER = |- !P. P << P
+
+Theorem SUBSET_TRANS autoloaded from theory `sets`.
+SUBSET_TRANS = |- !s t u. s SUBSET t /\ t SUBSET u ==> s SUBSET u
+
+TRANS_PROCESS_ORDER = |- !P Q R. P << Q /\ Q << R ==> P << R
+
+ANTISYM_PROCESS_ORDER = |- !P Q. P << Q /\ Q << P ==> (P = Q)
+
+PROCESS_FIX = 
+|- !fun.
+    FIX_PROC fun = (@P. (fun P = P) /\ (!Q. (fun Q = Q) ==> P << Q))
+
+ITER = 
+|- (!f x. ITER 0 f x = x) /\ (!n f x. ITER(SUC n)f x = f(ITER n f x))
+
+IT_UNION = |- !c. IT_UNION c = {x | ?n. x IN (c n)}
+
+CHAIN = |- !P. CHAIN P = (!n. (P n) << (P(SUC n)))
+
+CHAIN_EQ_ALPHA = |- !P. CHAIN P ==> (!n m. ALPHA(P n) = ALPHA(P m))
+
+LIM_PROC = 
+|- !P.
+    LIM_PROC P =
+    (@Q.
+      CHAIN P ==>
+      (Q = ABS_process(ALPHA(P 0),IT_UNION(\n. TRACES(P n)))))
+
+LIM_PROC_THM = 
+|- !P.
+    CHAIN P ==>
+    (LIM_PROC P = ABS_process(ALPHA(P 0),IT_UNION(\n. TRACES(P n))))
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+IS_PROCESS_LIMIT = 
+|- !P. CHAIN P ==> IS_PROCESS(ALPHA(P 0),IT_UNION(\n. TRACES(P n)))
+
+ALPHA_LIMIT = |- CHAIN P ==> (ALPHA(LIM_PROC P) = ALPHA(P 0))
+
+TRACES_LIMIT = 
+|- CHAIN P ==> (TRACES(LIM_PROC P) = IT_UNION(\n. TRACES(P n)))
+
+Theorem IN_SING autoloaded from theory `sets`.
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+LEAST_PROCESS = |- !A P. (A = ALPHA P) ==> (STOP A) << P
+
+LUB_CHAIN1 = |- !P. CHAIN P ==> (!n. (P n) << (LIM_PROC P))
+
+LUB_CHAIN2 = |- !P Q. CHAIN P /\ (!n. (P n) << Q) ==> (LIM_PROC P) << Q
+
+CONT_PROCESS = 
+|- !fun.
+    CONTINUOUS fun =
+    (!P. CHAIN P ==> (fun(LIM_PROC P) = LIM_PROC(\n. fun(P n))))
+
+MONO_PROCESS = 
+|- !fun. MONO fun = (!p1 p2. p1 << p2 ==> (fun p1) << (fun p2))
+
+() : void
+
+
+File process_fix loaded
+() : void
+
+#Bye.
+	rm -f mu.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `mu`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory process_fix loaded
+() : void
+
+() : void
+
+IS_PROCESS = 
+|- !A TR.
+    IS_PROCESS(A,TR) =
+    TR SUBSET (STAR A) /\
+    [] IN TR /\
+    (!s t. (APPEND s t) IN TR ==> s IN TR)
+
+[(); (); (); (); (); ()] : void list
+
+PROCESS_LEMMA6 = |- !r. IS_PROCESS r = (REP_process(ABS_process r) = r)
+
+ALPHA_FST = |- !x y. IS_PROCESS(x,y) ==> (ALPHA(ABS_process(x,y)) = x)
+
+TRACES_SND = |- !x y. IS_PROCESS(x,y) ==> (TRACES(ABS_process(x,y)) = y)
+
+NIL_IN_TRACES = |- !P. [] IN (TRACES P)
+
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+() : void
+
+ALPHA_STOP = |- !x. ALPHA(STOP x) = x
+
+[(); (); (); ()] : void list
+
+ITER = 
+|- (!f x. ITER 0 f x = x) /\ (!n f x. ITER(SUC n)f x = f(ITER n f x))
+
+LIM_PROC = 
+|- !P.
+    LIM_PROC P =
+    (@Q.
+      CHAIN P ==>
+      (Q = ABS_process(ALPHA(P 0),IT_UNION(\n. TRACES(P n)))))
+
+IT_UNION = |- !c. IT_UNION c = {x | ?n. x IN (c n)}
+
+CONTINUOUS = 
+|- !fun.
+    CONTINUOUS fun =
+    (!P. CHAIN P ==> (fun(LIM_PROC P) = LIM_PROC(\n. fun(P n))))
+
+[(); ()] : void list
+
+LIM_PROC_THM = 
+|- !P.
+    CHAIN P ==>
+    (LIM_PROC P = ABS_process(ALPHA(P 0),IT_UNION(\n. TRACES(P n))))
+
+IS_PROCESS_LIMIT = 
+|- !P. CHAIN P ==> IS_PROCESS(ALPHA(P 0),IT_UNION(\n. TRACES(P n)))
+
+EXISTS_MU = 
+|- ?f. !A G. CONTINUOUS G ==> (f A G = LIM_PROC(\n. ITER n G(STOP A)))
+
+MU = |- !A G. CONTINUOUS G ==> (MU A G = LIM_PROC(\n. ITER n G(STOP A)))
+
+IS_PROCESS_MU = 
+|- !G A.
+    CHAIN(\n. ITER n G(STOP A)) ==>
+    IS_PROCESS(A,IT_UNION(\n. TRACES(ITER n G(STOP A))))
+
+IS_PROCESS_MU' = 
+|- !G A.
+    CHAIN(\n. ITER n G(STOP A)) ==>
+    CONTINUOUS G ==>
+    IS_PROCESS(A,IT_UNION(\n. TRACES(ITER n G(STOP A))))
+
+MU_THM = 
+|- CHAIN(\n. ITER n G(STOP A)) ==>
+   CONTINUOUS G ==>
+   (MU A G = ABS_process(A,IT_UNION(\n. TRACES(ITER n G(STOP A)))))
+
+ALPHA_MU = 
+|- CHAIN(\n. ITER n G(STOP A)) ==> CONTINUOUS G ==> (ALPHA(MU A G) = A)
+
+TRACES_MU = 
+|- CHAIN(\n. ITER n G(STOP A)) ==>
+   CONTINUOUS G ==>
+   (TRACES(MU A G) = IT_UNION(\n. TRACES(ITER n G(STOP A))))
+
+() : void
+
+
+File mu loaded
+() : void
+
+#Bye.
+	rm -f process.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `process`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+() : void
+
+Theory prefix loaded
+Theory run loaded
+Theory choice loaded
+Theory parallel loaded
+Theory after loaded
+Theory mu loaded
+[(); (); (); (); (); ()] : void list
+
+() : void
+
+
+File process loaded
+() : void
+
+#Bye.
+	rm -f after_laws.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `after_laws`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory process loaded
+() : void
+
+[(); ()] : void list
+
+CONS_EQ_APPEND = |- !a l. CONS a l = APPEND[a]l
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+[(); (); (); (); ()] : void list
+
+ALPHA_FST = |- !x y. IS_PROCESS(x,y) ==> (ALPHA(ABS_process(x,y)) = x)
+
+TRACES_SND = |- !x y. IS_PROCESS(x,y) ==> (TRACES(ABS_process(x,y)) = y)
+
+APPEND_IN_TRACES = 
+|- !P s t. (APPEND s t) IN (TRACES P) ==> s IN (TRACES P)
+
+NIL_IN_TRACES = |- !P. [] IN (TRACES P)
+
+PROCESS_EQ_SPLIT = 
+|- !P Q. (P = Q) = (ALPHA P = ALPHA Q) /\ (TRACES P = TRACES Q)
+
+[(); ()] : void list
+
+ALPHA_PREFIX = |- !a P. a IN (ALPHA P) ==> (ALPHA(a --> P) = ALPHA P)
+
+TRACES_PREFIX = 
+|- !a P.
+    a IN (ALPHA P) ==>
+    (TRACES(a --> P) = {[]} UNION {CONS a t | t IN (TRACES P)})
+
+() : void
+
+AFTER = 
+|- !P s.
+    s IN (TRACES P) ==>
+    (ALPHA(P / s) = ALPHA P) /\
+    (TRACES(P / s) = {t | (APPEND s t) IN (TRACES P)})
+
+() : void
+
+TRACES_AFTER = 
+|- !s P.
+    s IN (TRACES P) ==>
+    (TRACES(P / s) = {t | (APPEND s t) IN (TRACES P)})
+
+[(); ()] : void list
+
+TRACES_choice = 
+|- !A P.
+    WELL_DEF_ALPHA A P ==>
+    (TRACES(choice A P) =
+     {[]} UNION {CONS a t | a IN A /\ t IN (TRACES(P a))})
+
+ALPHA_choice_SPEC = 
+|- WELL_DEF_ALPHA A P ==>
+   (!c. c IN A ==> (ALPHA(choice A P) = ALPHA(P c)))
+
+Theorem EXTENSION autoloaded from theory `sets`.
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+SET_ABBREV = |- !A. {x | x IN A} = A
+
+Definition APPEND autoloaded from theory `list`.
+APPEND = 
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+
+AFTER_NIL = |- P / [] = P
+
+TRACES_AFTER_THM = 
+|- !s t P.
+    (APPEND s t) IN (TRACES P) ==>
+    s IN (TRACES P) /\ t IN (TRACES(P / s))
+
+Theorem APPEND_ASSOC autoloaded from theory `list`.
+APPEND_ASSOC = 
+|- !l1 l2 l3. APPEND l1(APPEND l2 l3) = APPEND(APPEND l1 l2)l3
+
+AFTER_APPEND = 
+|- !s t P.
+    (APPEND s t) IN (TRACES P) ==> (P / (APPEND s t) = (P / s) / t)
+
+Theorem CONS_11 autoloaded from theory `list`.
+CONS_11 = |- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+
+simplify_lemma = 
+|- !t c.
+    (?t'. (APPEND[c]t = CONS c t') /\ t' IN (TRACES P)) =
+    t IN (TRACES P)
+
+Theorem NOT_CONS_NIL autoloaded from theory `list`.
+NOT_CONS_NIL = |- !h t. ~(CONS h t = [])
+
+Theorem IN_SING autoloaded from theory `sets`.
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Theorem IN_UNION autoloaded from theory `sets`.
+IN_UNION = |- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+
+AFTER_PREFIX = |- !c P. c IN (ALPHA P) ==> ((c --> P) / [c] = P)
+
+simplify_lemma2 = 
+|- (?a t'. (APPEND[c]t = CONS a t') /\ a IN B /\ t' IN (TRACES(P a))) =
+   c IN B /\ t IN (TRACES(P c))
+
+simplify_lemma3 = 
+|- (?a t. ((c = a) /\ ([] = t)) /\ a IN B /\ t IN (TRACES(P a))) =
+   c IN B
+
+AFTER_CHOICE_LEMMA = 
+|- WELL_DEF_ALPHA B P ==>
+   c IN B ==>
+   (ALPHA((choice B P) / [c]) = ALPHA(choice B P)) /\
+   (TRACES((choice B P) / [c]) = TRACES(P c))
+
+AFTER_CHOICE = 
+|- !c P B. WELL_DEF_ALPHA B P /\ c IN B ==> ((choice B P) / [c] = P c)
+
+() : void
+
+
+File after_laws loaded
+() : void
+
+#Bye.
+	rm -f par_laws.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `par_laws`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+Loading library `taut` ...
+........................
+Library `taut` loaded.
+() : void
+
+.........() : void
+
+() : void
+
+Theory process loaded
+() : void
+
+[(); (); (); (); (); (); (); (); (); (); ()] : void list
+
+CONS_EQ_APPEND = |- !a l. CONS a l = APPEND[a]l
+
+CONS_MEMBER_LIST = 
+|- !s s' t a.
+    (APPEND s t = CONS a s') ==>
+    (s = []) \/ (?r. (s = CONS a r) /\ (s' = APPEND r t))
+
+ONE_MEMBER_LIST = 
+|- !s t a. (APPEND s t = [a]) ==> (s = []) \/ (s = [a])
+
+TL_APPEND = |- !l. ~(l = []) ==> (!l'. TL(APPEND l l') = APPEND(TL l)l')
+
+HD_APPEND = |- !l. ~(l = []) ==> (!l'. HD(APPEND l l') = HD l)
+
+NULL_EQ_NIL = |- !l. (l = []) = NULL l
+
+APPEND_EQ_NIL = |- !l1 l2. (APPEND l1 l2 = []) = (l1 = []) /\ (l2 = [])
+
+NOT_LENGTH_EQ = |- !l2 l1. ~(LENGTH l1 = LENGTH l2) ==> ~(l1 = l2)
+
+LENGTH_LESS_EQ = 
+|- !l1 l2.
+    (LENGTH l1) <= (LENGTH l2) ==>
+    (!a. (LENGTH l1) < (LENGTH(CONS a l2)))
+
+APPEND_NIL = |- !l. APPEND l[] = l
+
+APPEND_ID = |- !l l'. (l = APPEND l l') = (l' = [])
+
+() : void
+
+RESTRICT = 
+|- (!A. RESTRICT[]A = []) /\
+   (!x t A.
+     RESTRICT(CONS x t)A =
+     (x IN A => CONS x(RESTRICT t A) | RESTRICT t A))
+
+[(); (); ()] : void list
+
+STRICT_REST = |- !A. RESTRICT[]A = []
+
+DISTRIB_REST = 
+|- !s t A. RESTRICT(APPEND s t)A = APPEND(RESTRICT s A)(RESTRICT t A)
+
+REP_RESTR = |- !s A B. RESTRICT(RESTRICT s A)B = RESTRICT s(A INTER B)
+
+() : void
+
+STAR = |- !A. STAR A = {s | RESTRICT s A = s}
+
+[(); ()] : void list
+
+NIL_IN_STAR = |- !A. [] IN (STAR A)
+
+CONS_STAR = |- !a t A. (CONS a t) IN (STAR A) = a IN A /\ t IN (STAR A)
+
+[(); (); (); (); ()] : void list
+
+NIL_IN_TRACES = |- !P. [] IN (TRACES P)
+
+TRACES_IN_STAR = |- !P. (TRACES P) SUBSET (STAR(ALPHA P))
+
+ID_PROCESS = |- !P. ABS_process(ALPHA P,TRACES P) = P
+
+ALPHA_FST = |- !x y. IS_PROCESS(x,y) ==> (ALPHA(ABS_process(x,y)) = x)
+
+PROCESS_EQ_SPLIT = 
+|- !P Q. (P = Q) = (ALPHA P = ALPHA Q) /\ (TRACES P = TRACES Q)
+
+[()] : void list
+
+STOP = |- !x. (ALPHA(STOP x) = x) /\ (TRACES(STOP x) = {[]})
+
+[(); (); ()] : void list
+
+TRACES_STOP = |- !x. TRACES(STOP x) = {[]}
+
+ALPHA_STOP = |- !x. ALPHA(STOP x) = x
+
+IS_PROCESS_STOP = |- !A. IS_PROCESS(A,{[]})
+
+[()] : void list
+
+RUN = |- !A. (ALPHA(RUN A) = A) /\ (TRACES(RUN A) = STAR A)
+
+[(); (); ()] : void list
+
+TRACES_RUN = |- !A. TRACES(RUN A) = STAR A
+
+ALPHA_RUN = |- !A. ALPHA(RUN A) = A
+
+IS_PROCESS_RUN = |- !A. IS_PROCESS(A,STAR A)
+
+[()] : void list
+
+PREFIX = 
+|- !a P.
+    a IN (ALPHA P) ==>
+    (ALPHA(a --> P) = ALPHA P) /\
+    (TRACES(a --> P) = {[]} UNION {CONS a t | t IN (TRACES P)})
+
+[(); (); ()] : void list
+
+TRACES_PREFIX = 
+|- !a P.
+    a IN (ALPHA P) ==>
+    (TRACES(a --> P) = {[]} UNION {CONS a t | t IN (TRACES P)})
+
+ALPHA_PREFIX = |- !a P. a IN (ALPHA P) ==> (ALPHA(a --> P) = ALPHA P)
+
+IS_PROCESS_PREFIX = 
+|- !a P.
+    a IN (ALPHA P) ==>
+    IS_PROCESS(ALPHA P,{[]} UNION {CONS a t | t IN (TRACES P)})
+
+[()] : void list
+
+PAR = 
+|- !P Q.
+    (ALPHA(P PAR Q) = (ALPHA P) UNION (ALPHA Q)) /\
+    (TRACES(P PAR Q) =
+     {s | 
+      s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+      (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+      (RESTRICT s(ALPHA Q)) IN (TRACES Q)})
+
+[(); (); ()] : void list
+
+TRACES_PAR = 
+|- !P Q.
+    TRACES(P PAR Q) =
+    {s | 
+     s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+     (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+     (RESTRICT s(ALPHA Q)) IN (TRACES Q)}
+
+ALPHA_PAR = |- !P Q. ALPHA(P PAR Q) = (ALPHA P) UNION (ALPHA Q)
+
+IS_PROCESS_PAR = 
+|- !P Q.
+    IS_PROCESS
+    ((ALPHA P) UNION (ALPHA Q),
+     {s | 
+      s IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+      (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+      (RESTRICT s(ALPHA Q)) IN (TRACES Q)})
+
+Theorem IN_UNION autoloaded from theory `sets`.
+IN_UNION = |- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+
+Theorem IN_INTER autoloaded from theory `sets`.
+IN_INTER = |- !s t x. x IN (s INTER t) = x IN s /\ x IN t
+
+INTER_UNION_IMP = |- !x A B. x IN (A INTER B) ==> x IN (A UNION B)
+
+Theorem UNION_COMM autoloaded from theory `sets`.
+UNION_COMM = |- !s t. s UNION t = t UNION s
+
+PAR_SYM = |- !P Q. P PAR Q = Q PAR P
+
+Theorem EXTENSION autoloaded from theory `sets`.
+EXTENSION = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+INT_UNI_LEMMA = |- !A B. (A UNION B) INTER A = A
+
+INT_UNI_LEMMA' = |- !B A. (B UNION A) INTER A = A
+
+Theorem INTER_IDEMPOT autoloaded from theory `sets`.
+INTER_IDEMPOT = |- !s. s INTER s = s
+
+Theorem UNION_ASSOC autoloaded from theory `sets`.
+UNION_ASSOC = |- !s t u. (s UNION t) UNION u = s UNION (t UNION u)
+
+PAR_ASSOC = |- !P Q R. P PAR (Q PAR R) = (P PAR Q) PAR R
+
+Definition APPEND autoloaded from theory `list`.
+APPEND = 
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+
+CONS_RESTR = |- !a s A. RESTRICT(CONS a s)A = RESTRICT(APPEND[a]s)A
+
+Theorem NOT_CONS_NIL autoloaded from theory `list`.
+NOT_CONS_NIL = |- !h t. ~(CONS h t = [])
+
+PAR_STOP_TRACES = 
+|- s IN (STAR(ALPHA P)) /\
+   (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+   (RESTRICT s(ALPHA P) = []) =
+   (s = [])
+
+Theorem IN_SING autoloaded from theory `sets`.
+IN_SING = |- !x y. x IN {y} = (x = y)
+
+Theorem UNION_IDEMPOT autoloaded from theory `sets`.
+UNION_IDEMPOT = |- !s. s UNION s = s
+
+PAR_STOP = |- !P. P PAR (STOP(ALPHA P)) = STOP(ALPHA P)
+
+Definition SUBSET_DEF autoloaded from theory `sets`.
+SUBSET_DEF = |- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+
+PAR_RUN_TRACES = 
+|- {s | 
+    s IN (STAR(ALPHA P)) /\
+    (RESTRICT s(ALPHA P)) IN (TRACES P) /\
+    (RESTRICT s(ALPHA P)) IN (STAR(ALPHA P))} =
+   TRACES P
+
+PAR_RUN = |- !P. P PAR (RUN(ALPHA P)) = P
+
+Theorem CONS_11 autoloaded from theory `list`.
+CONS_11 = |- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+
+Theorem CONS autoloaded from theory `list`.
+CONS = |- !l. ~NULL l ==> (CONS(HD l)(TL l) = l)
+
+PREFIX_PAR_1 = 
+|- !c P Q.
+    c IN ((ALPHA P) INTER (ALPHA Q)) ==>
+    ((c --> P) PAR (c --> Q) = c --> (P PAR Q))
+
+Theorem NOT_IN_EMPTY autoloaded from theory `sets`.
+NOT_IN_EMPTY = |- !x. ~x IN {}
+
+Theorem IN_INSERT autoloaded from theory `sets`.
+IN_INSERT = |- !x y s. x IN (y INSERT s) = (x = y) \/ x IN s
+
+Sets_Lemma = |- {c,d} SUBSET A ==> c IN A /\ d IN A
+
+PREFIX_PAR_2_LEMMA = 
+..... |- !x.
+          x IN (STAR((ALPHA P) UNION (ALPHA Q))) /\
+          ((RESTRICT x(ALPHA P) = []) \/
+           (?t. (RESTRICT x(ALPHA P) = CONS c t) /\ t IN (TRACES P))) /\
+          ((RESTRICT x(ALPHA Q) = []) \/
+           (?t. (RESTRICT x(ALPHA Q) = CONS d t) /\ t IN (TRACES Q))) =
+          (x = [])
+
+PREFIX_PAR_2 = 
+|- !c d P Q.
+    {c,d} SUBSET ((ALPHA P) INTER (ALPHA Q)) /\ ~(c = d) ==>
+    ((c --> P) PAR (d --> Q) = STOP((ALPHA P) UNION (ALPHA Q)))
+
+() : void
+
+
+File par_laws loaded
+() : void
+
+#Bye.
+	rm -f csp_syntax.th
+	echo 'set_flag(`abort_when_fail`,true);;'\
+	     'loadt `csp_syntax`;;'\
+	     'quit();;' | /usr/local/hol/HOL12/hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 , built on 4/3/91
+
+#false : bool
+
+
+sets already loaded
+() : void
+
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Defining ML function load_string
+.....
+Library `string` loaded.
+() : void
+
+() : void
+
+Theory process loaded
+() : void
+
+() : void
+
+Event = 
+|- !f0 f1. ?! fn. (!s. fn(econst s) = f0 s) /\ (!s. fn(evar s) = f1 s)
+
+Event_INDUCT = |- !P. (!s. P(econst s)) /\ (!s. P(evar s)) ==> (!E. P E)
+
+Event_ONE_ONE = 
+|- (!s s'. (econst s = econst s') = (s = s')) /\
+   (!s s'. (evar s = evar s') = (s = s'))
+
+Event_DISTINCT = |- !s s'. ~(econst s = evar s')
+
+ES = |- (!s E. ES(econst s)E = s) /\ (!s E. ES(evar s)E = OUTL(E s))
+
+CSP = 
+|- !f0 f1 f2 f3 f4 f5 f6 f7 f8.
+    ?! fn.
+     (!s. fn(stop s) = f0 s) /\
+     (!s. fn(run s) = f1 s) /\
+     (!s. fn(var s) = f2 s) /\
+     (!E C. fn(pref E C) = f3(fn C)E C) /\
+     (!s0 s1 C. fn(Choice s0 s1 C) = f4(fn C)s0 s1 C) /\
+     (!C1 C2. fn(par C1 C2) = f5(fn C1)(fn C2)C1 C2) /\
+     (!C l. fn(after C l) = f6(fn C)l C) /\
+     (!s0 s1 C. fn(mu s0 s1 C) = f7(fn C)s0 s1 C) /\
+     (!E0 E1 C1 C2. fn(cond E0 E1 C1 C2) = f8(fn C1)(fn C2)E0 E1 C1 C2)
+
+Bnd = |- !s exp env. Bnd s exp env = (\s'. ((s' = s) => exp | env s))
+
+TS = 
+|- (!A E. TS(stop A)E = STOP A) /\
+   (!A E. TS(run A)E = RUN A) /\
+   (!s E. TS(var s)E = OUTR(E s)) /\
+   (!a P E. TS(pref a P)E = (ES a E) --> (TS P E)) /\
+   (!s A P E. TS(Choice s A P)E = choice A(\x. TS P(Bnd s(INL x)E))) /\
+   (!P Q E. TS(par P Q)E = (TS P E) PAR (TS Q E)) /\
+   (!P tr E. TS(after P tr)E = (TS P E) / tr) /\
+   (!s A P E. TS(mu s A P)E = MU A(\x. TS P(Bnd s(INR x)E))) /\
+   (!e1 e2 P Q E.
+     TS(cond e1 e2 P Q)E = ((ES e1 E = ES e2 E) => TS P E | TS Q E))
+
+CSP_INDUCT = 
+|- !P.
+    (!s. P(stop s)) /\
+    (!s. P(run s)) /\
+    (!s. P(var s)) /\
+    (!C. P C ==> (!E. P(pref E C))) /\
+    (!C. P C ==> (!s0 s1. P(Choice s0 s1 C))) /\
+    (!C1 C2. P C1 /\ P C2 ==> P(par C1 C2)) /\
+    (!C. P C ==> (!l. P(after C l))) /\
+    (!C. P C ==> (!s0 s1. P(mu s0 s1 C))) /\
+    (!C1 C2. P C1 /\ P C2 ==> (!E0 E1. P(cond E0 E1 C1 C2))) ==>
+    (!C. P C)
+
+() : void
+
+
+File csp_syntax loaded
+() : void
+
+#Bye.
+===> library csp rebuilt

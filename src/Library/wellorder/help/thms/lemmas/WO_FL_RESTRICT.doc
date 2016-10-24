@@ -1,0 +1,5 @@
+\THEOREM WO_FL_RESTRICT WELLORDER
+|- !l.
+    woset l ==>
+    (!P. fl(\(x,y). P x /\ P y /\ l(x,y))x = P x /\ fl l x)
+\ENDTHEOREM

@@ -1,0 +1,30 @@
+\DOC axiom_lfn
+
+\TYPE {axiom_lfn : (string list -> thm)}
+
+\SYNOPSIS
+Loads a given axiom from a given theory.
+
+\DESCRIBE
+If {thy} is an ancestor theory, and {ax} one of its axioms, then the call
+{
+   axiom_lfn [`thy`;`ax`]
+}
+\noindent will return that axiom.
+
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {ax} is not one of its
+axioms.
+
+\EXAMPLE
+{
+#axiom_lfn [`bool`;`ETA_AX`];;
+|- !t. (\x. t x) = t
+}
+\COMMENTS
+This call has the same effect as {axiom `thy` `ax`}.
+
+\SEEALSO
+axiom, axioms, axiom_msg_lfn, load_axiom, load_axioms.
+
+\ENDDOC

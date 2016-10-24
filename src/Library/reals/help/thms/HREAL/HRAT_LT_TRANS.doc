@@ -1,0 +1,3 @@
+\THEOREM HRAT_LT_TRANS HREAL
+|- !x y z. x hrat_lt y /\ y hrat_lt z ==> x hrat_lt z
+\ENDTHEOREM

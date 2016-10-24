@@ -1,0 +1,979 @@
+The Theory RCwellf
+Parents --  HOL     
+Constants --
+  order ":(* -> (* -> bool)) -> bool"
+  minimal ":* -> ((* -> bool) -> ((* -> (* -> bool)) -> bool))"
+  wellf ":(* -> (* -> bool)) -> bool"     
+Definitions --
+  order_DEF
+    |- !po.
+        order po =
+        (!x y. po x y ==> ~(x = y)) /\
+        (!x y z. po x y /\ po y z ==> po x z)
+  minimal_DEF  |- !x M po. minimal x M po = M x /\ (!y. M y ==> ~po y x)
+  wellf_DEF
+    |- !po.
+        wellf po = order po /\ (!M. (?x. M x) ==> (?x. minimal x M po))
+  
+Theorems --
+  wellf_INDUCT
+    wellf po |- (!x. (!y. po y x ==> P y) ==> P x) ==> (!x. P x)
+  strong_induct  |- !P. (!n. (!m. m < n ==> P m) ==> P n) ==> (!n. P n)
+  num_wellf  |- wellf $<
+  wellf_0_grt  |- wellf(\x y. 0 < x /\ (x < y \/ (y = 0)))
+  
+******************** RCwellf ********************
+
+
+The Theory RCpredicate
+Parents --  HOL     
+Constants --
+  andd ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  or ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  imp ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  implies ":(*s -> bool) -> ((*s -> bool) -> bool)"
+  false ":*s -> bool"     true ":*s -> bool"
+  not ":(*s -> bool) -> (*s -> bool)"
+  glb ":((*s -> bool) -> bool) -> (*s -> bool)"
+  lub ":((*s -> bool) -> bool) -> (*s -> bool)"
+  monotonic ":((*s1 -> bool) -> (*s2 -> bool)) -> bool"
+  fix ":((*s -> bool) -> (*s -> bool)) -> (*s -> bool)"
+  gfix ":((*s -> bool) -> (*s -> bool)) -> (*s -> bool)"     
+Infixes --
+  andd ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  or ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  imp ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  implies ":(*s -> bool) -> ((*s -> bool) -> bool)"     
+Definitions --
+  false_DEF  |- false = (\u. F)
+  true_DEF  |- true = (\u. T)
+  not_DEF  |- !p. not p = (\u. ~p u)
+  and_DEF  |- !p q. p andd q = (\u. p u /\ q u)
+  or_DEF  |- !p q. p or q = (\u. p u \/ q u)
+  imp_DEF  |- !p q. p imp q = (\u. p u ==> q u)
+  implies_DEF  |- !p q. p implies q = (!u. p u ==> q u)
+  glb_DEF  |- !P. glb P = (\u. !p. P p ==> p u)
+  lub_DEF  |- !P. lub P = (\u. ?p. P p /\ p u)
+  monotonic_DEF
+    |- !f. monotonic f = (!p q. p implies q ==> (f p) implies (f q))
+  fix_DEF  |- !f. fix f = glb(\p. (f p) implies p)
+  gfix_DEF  |- !f. gfix f = lub(\p. p implies (f p))
+  
+Theorems --
+  shunt  |- (b andd p) implies q = p implies ((not b) or q)
+  implies_prop
+    |- (!p. p implies p) /\
+       (!p q. p implies q /\ q implies p ==> (p = q)) /\
+       (!p q r. p implies q /\ q implies r ==> p implies r)
+  and_glb  |- p andd q = glb(\p'. (p' = p) \/ (p' = q))
+  glb_bound  |- !P p. P p ==> (glb P) implies p
+  glb_greatest  |- !P q. (!p. P p ==> q implies p) ==> q implies (glb P)
+  glb_mono
+    |- (!p. P p ==> (f p) implies (g p)) ==>
+       (glb(\q. ?p. P p /\ (q = f p))) implies
+       (glb(\q. ?p. P p /\ (q = g p)))
+  fix_least  |- !p. (f p) implies p ==> (fix f) implies p
+  fix_fp  |- monotonic f ==> (f(fix f) = fix f)
+  fix_char
+    |- monotonic f ==>
+       (f a) implies a /\ (!x. (f x = x) ==> a implies x) ==>
+       (a = fix f)
+  gfix_greatest  |- !p. p implies (f p) ==> p implies (gfix f)
+  gfix_fp  |- monotonic f ==> (f(gfix f) = gfix f)
+  gfix_char
+    |- monotonic f ==>
+       a implies (f a) /\ (!x. (f x = x) ==> x implies a) ==>
+       (a = gfix f)
+  or_into_glb  |- q or (glb P) = glb(\p'. ?p. P p /\ (p' = q or p))
+  glb_and
+    |- !f g.
+        glb(\q. ?p. P p /\ (q = (f p) andd (g p))) =
+        (glb(\q. ?p. P p /\ (q = f p))) andd
+        (glb(\q. ?p. P p /\ (q = g p)))
+  
+******************** RCpredicate ********************
+
+
+The Theory RCcommand
+Parents --  HOL     RCpredicate     
+Constants --
+  ref
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) -> bool)"
+  dch
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s2 -> bool)))"
+  ach
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s2 -> bool)))"
+  seq
+    ":((*s2 -> bool) -> (*s3 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s3 -> bool)))"
+  guard ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  Dch
+    ":(((*s1 -> bool) -> (*s2 -> bool)) -> bool) ->
+      ((*s1 -> bool) -> (*s2 -> bool))"
+  Ach
+    ":(((*s1 -> bool) -> (*s2 -> bool)) -> bool) ->
+      ((*s1 -> bool) -> (*s2 -> bool))"
+  mu
+    ":(((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s2 -> bool))) ->
+      ((*s1 -> bool) -> (*s2 -> bool))"
+  dolib
+    ":(*s -> bool) ->
+      (((*s -> bool) -> (*s -> bool)) -> ((*s -> bool) -> (*s -> bool)))"
+  abort ":(*s1 -> bool) -> (*s2 -> bool)"
+  assert ":(*s -> bool) -> ((*s -> bool) -> (*s -> bool))"
+  nondass ":(*s1 -> (*s2 -> bool)) -> ((*s2 -> bool) -> (*s1 -> bool))"
+  assign ":(*s1 -> *s2) -> ((*s2 -> bool) -> (*s1 -> bool))"
+  skip ":(*s -> bool) -> (*s -> bool)"
+  cond
+    ":(*s2 -> bool) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) ->
+       (((*s1 -> bool) -> (*s2 -> bool)) ->
+        ((*s1 -> bool) -> (*s2 -> bool))))"
+  do
+    ":(*s -> bool) ->
+      (((*s -> bool) -> (*s -> bool)) -> ((*s -> bool) -> (*s -> bool)))"
+  block
+    ":(* # *s -> bool) ->
+      (((* # *s -> bool) -> (* # *s -> bool)) ->
+       ((*s -> bool) -> (*s -> bool)))"
+  strict ":((*s1 -> bool) -> (*s2 -> bool)) -> bool"
+  terminating ":((*s1 -> bool) -> (*s2 -> bool)) -> bool"
+  biconjunctive ":((*s1 -> bool) -> (*s2 -> bool)) -> bool"
+  uniconjunctive ":((*s1 -> bool) -> (*s2 -> bool)) -> bool"
+  conjunctive ":((*s1 -> bool) -> (*s2 -> bool)) -> bool"
+  pmonotonic
+    ":(((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s3 -> bool) -> (*s4 -> bool))) ->
+      bool"
+  mono_mono
+    ":(((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s3 -> bool) -> (*s4 -> bool))) ->
+      bool"
+  regular
+    ":(((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s3 -> bool) -> (*s4 -> bool))) ->
+      bool"     
+Infixes --
+  ref
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) -> bool)"
+  dch
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s2 -> bool)))"
+  ach
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s2 -> bool)))"
+  seq
+    ":((*s2 -> bool) -> (*s3 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s3 -> bool)))"     
+Definitions --
+  ref_DEF  |- !c c'. c ref c' = (!q. (c q) implies (c' q))
+  guard_DEF  |- !b q. guard b q = b imp q
+  dch_DEF  |- !c1 c2 q. (c1 dch c2)q = (c1 q) andd (c2 q)
+  Dch_DEF  |- !C q. Dch C q = glb(\p. ?c. C c /\ (p = c q))
+  ach_DEF  |- !c1 c2 q. (c1 ach c2)q = (c1 q) or (c2 q)
+  Ach_DEF  |- !C q. Ach C q = lub(\p. ?c. C c /\ (p = c q))
+  mu_DEF  |- !f. mu f = Dch(\c. monotonic c /\ (f c) ref c)
+  dolib_DEF
+    |- !g c q.
+        dolib g c q = gfix(\p. (g andd (c p)) or ((not g) andd q))
+  abort_DEF  |- !q. abort q = false
+  assert_DEF  |- !p q. assert p q = p andd q
+  nondass_DEF  |- !P q. nondass P q = (\u. !u'. P u u' ==> q u')
+  assign_DEF  |- !e q. assign e q = (\u. q(e u))
+  skip_DEF  |- !q. skip q = q
+  seq_DEF  |- !c1 c2 q. (c1 seq c2)q = c1(c2 q)
+  cond_DEF
+    |- !g c1 c2 q.
+        cond g c1 c2 q = (g andd (c1 q)) or ((not g) andd (c2 q))
+  do_DEF  |- !g c. do g c = mu(\x. cond g(c seq x)skip)
+  block_DEF
+    |- !p c q. block p c q = (\v. !x. p(x,v) ==> c(\(x',v'). q v')(x,v))
+  strict_DEF  |- !c. strict c = (c false = false)
+  terminating_DEF  |- !c. terminating c = (c true = true)
+  biconjunctive_DEF
+    |- !c. biconjunctive c = (!p q. c(p andd q) = (c p) andd (c q))
+  uniconjunctive_DEF
+    |- !c.
+        uniconjunctive c =
+        (!P. c(glb P) = glb(\q. ?p. P p /\ (q = c p)))
+  conjunctive_DEF
+    |- !c.
+        conjunctive c =
+        (!P. (?p. P p) ==> (c(glb P) = glb(\q. ?p. P p /\ (q = c p))))
+  pmonotonic_DEF
+    |- !f.
+        pmonotonic f =
+        (!c c'.
+          monotonic c /\ monotonic c' /\ c ref c' ==> (f c) ref (f c'))
+  mono_mono_DEF
+    |- !f. mono_mono f = (!c. monotonic c ==> monotonic(f c))
+  regular_DEF  |- !f. regular f = pmonotonic f /\ mono_mono f
+  
+Theorems --
+  ref_prop
+    |- (!c. c ref c) /\
+       (!c c'. c ref c' /\ c' ref c ==> (c = c')) /\
+       (!c c' c''. c ref c' /\ c' ref c'' ==> c ref c'')
+  mono_Dch  |- (!c. C c ==> monotonic c) ==> monotonic(Dch C)
+  Dch_bound  |- !C c. C c ==> (Dch C) ref c
+  Dch_greatest  |- !C c. (!c'. C c' ==> c ref c') ==> c ref (Dch C)
+  mono_mu  |- !f. monotonic(mu f)
+  mu_least  |- !c. monotonic c /\ (f c) ref c ==> (mu f) ref c
+  mu_fp  |- regular f ==> (f(mu f) = mu f)
+  mu_char
+    |- regular f /\
+       monotonic a /\
+       (f a) ref a /\
+       (!x. (f x = x) ==> a ref x) ==>
+       (a = mu f)
+  do_thm
+    |- !c.
+        monotonic c ==>
+        (do g c q = fix(\p. (g andd (c p)) or ((not g) andd q)))
+  seq_assoc  |- c1 seq (c2 seq c3) = (c1 seq c2) seq c3
+  skip_unit  |- (skip seq c = c) /\ (c seq skip = c)
+  do_unfold
+    |- monotonic c ==>
+       (do g c p = (g andd (c(do g c p))) or ((not g) andd p))
+  do_implies
+    |- monotonic c ==>
+       ((g andd (c q)) or ((not g) andd p)) implies q ==>
+       (do g c p) implies q
+  dolib_unfold
+    |- monotonic c ==>
+       (dolib g c p = (g andd (c(dolib g c p))) or ((not g) andd p))
+  dolib_implies
+    |- p implies ((g andd (c p)) or ((not g) andd q)) ==>
+       p implies (dolib g c q)
+  assign_skip  |- assign(\u. u) = skip
+  cond_true  |- cond true c1 c2 = c1
+  cond_false  |- cond false c1 c2 = c2
+  cond_same  |- cond g c c = c
+  do_false  |- monotonic c ==> (do false c = skip)
+  do_true  |- monotonic c /\ strict c ==> (do true c = abort)
+  skip_eq_assert  |- skip = assert true
+  assign_eq_nondass  |- assign e = nondass(\u u'. u' = e u)
+  assign_seq  |- !e f. (assign e) seq (assign f) = assign(\u. f(e u))
+  mono_subuniconj
+    |- monotonic c ==>
+       (c(glb P)) implies (glb(\q. ?p. P p /\ (q = c p)))
+  biconj_mono  |- biconjunctive c ==> monotonic c
+  conj_biconj  |- conjunctive c ==> biconjunctive c
+  conj_mono  |- conjunctive c ==> monotonic c
+  uniconj_conjterm  |- uniconjunctive c = conjunctive c /\ terminating c
+  uniconj_conj  |- uniconjunctive c ==> conjunctive c
+  uniconj_biconj  |- uniconjunctive c ==> biconjunctive c
+  uniconj_mono  |- uniconjunctive c ==> monotonic c
+  mono_abort  |- monotonic abort
+  mono_skip  |- monotonic skip
+  mono_assert  |- !b. monotonic(assert b)
+  mono_assign  |- !e. monotonic(assign e)
+  mono_nondass  |- !p. monotonic(nondass p)
+  mono_seq
+    |- !c c'. monotonic c /\ monotonic c' ==> monotonic(c seq c')
+  mono_cond
+    |- !g c1 c2.
+        monotonic c1 /\ monotonic c2 ==> monotonic(cond g c1 c2)
+  mono_do  |- !g c. monotonic c ==> monotonic(do g c)
+  mono_dolib  |- monotonic c ==> monotonic(dolib g c)
+  mono_block  |- !p c. monotonic c ==> monotonic(block p c)
+  do_dolib
+    biconjunctive c |- do g c q = (dolib g c q) andd (do g c true)
+  strict_abort  |- strict abort
+  strict_skip  |- strict skip
+  strict_assert  |- !b. strict(assert b)
+  strict_assign  |- !e. strict(assign e)
+  strict_nondass  |- strict(nondass P) = (!u. ?v. P u v)
+  strict_seq  |- !c c'. strict c /\ strict c' ==> strict(c seq c')
+  strict_cond
+    |- !b c1 c2. strict c1 /\ strict c2 ==> strict(cond b c1 c2)
+  strict_do  |- !g c. monotonic c /\ strict c ==> strict(do g c)
+  strict_block
+    |- !p c. (!u. ?x. p(x,u)) ==> strict c ==> strict(block p c)
+  conj_abort  |- conjunctive abort
+  conj_skip  |- conjunctive skip
+  conj_assert  |- !b. conjunctive(assert b)
+  conj_assign  |- !e. conjunctive(assign e)
+  conj_nondass  |- !p. conjunctive(nondass p)
+  conj_seq
+    |- !c c'. conjunctive c /\ conjunctive c' ==> conjunctive(c seq c')
+  conj_cond
+    |- !b c1 c2.
+        conjunctive c1 /\ conjunctive c2 ==> conjunctive(cond b c1 c2)
+  conj_dolib  |- !g c. conjunctive c ==> conjunctive(dolib g c)
+  conj_do  |- !g c. conjunctive c ==> conjunctive(do g c)
+  conj_block  |- !p c. conjunctive c ==> conjunctive(block p c)
+  nondass_complete
+    |- uniconjunctive c ==> (c = nondass(\u u'. glb(\q. c q u)u'))
+  
+******************** RCcommand ********************
+ 
+
+The Theory RCcorrect
+Parents --  HOL     RCcommand     RCwellf     
+Constants --
+  correct
+    ":(*s2 -> bool) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) -> ((*s1 -> bool) -> bool))"
+  
+Definitions --
+  correct_DEF  |- !p c q. correct p c q = p implies (c q)     
+Theorems --
+  correct_assign  |- (!u. p u ==> q(e u)) ==> correct p(assign e)q
+  correct_nondass
+    |- (!u. p u ==> (!u'. n u u' ==> q u')) ==> correct p(nondass n)q
+  correct_seq
+    |- !c1 c2 p q r.
+        monotonic c1 /\ correct p c1 q /\ correct q c2 r ==>
+        correct p(c1 seq c2)r
+  correct_cond
+    |- !g c1 c2 p q.
+        correct(g andd p)c1 q /\ correct((not g) andd p)c2 q ==>
+        correct p(cond g c1 c2)q
+  wellf_do_rule
+    |- monotonic c /\
+       wellf po /\
+       (!x.
+         (p andd (g andd (\u. t u = x))) implies
+         (c(p andd (\u. po(t u)x)))) ==>
+       p implies (do g c p)
+  correct_do_wellf
+    |- !g c po inv t p q.
+        monotonic c /\
+        wellf po /\
+        p implies inv /\
+        ((not g) andd inv) implies q /\
+        (!x.
+          correct
+          (inv andd (g andd (\u. t u = x)))
+          c
+          (inv andd (\u. po(t u)x))) ==>
+        correct p(do g c)q
+  num_do_rule
+    |- monotonic c /\
+       (!x.
+         (p andd (g andd (\u. t u = x))) implies
+         (c(p andd (\u. (t u) < x)))) ==>
+       p implies (do g c p)
+  correct_do
+    |- !g c inv t p q.
+        monotonic c /\
+        p implies inv /\
+        ((not g) andd inv) implies q /\
+        (!x.
+          correct
+          (inv andd (g andd (\u. t u = x)))
+          c
+          (inv andd (\u. (t u) < x))) ==>
+        correct p(do g c)q
+  correct_block
+    |- !p0 c p q.
+        correct(\(x,u). p u /\ p0(x,u))c(\(x,u). q u) ==>
+        correct p(block p0 c)q
+  
+******************** RCcorrect ********************
+ 
+
+The Theory RCrefine
+Parents --  HOL     RCcorrect     
+Theorems --
+  ref_correct
+    |- !c c'. (!p q. correct p c q ==> correct p c' q) = c ref c'
+  impl_assign
+    |- monotonic c /\ (!u0. correct(\u. u = u0)c(\u. u = e u0)) ==>
+       (assign e) ref c
+  impl_nondass
+    |- monotonic c /\ (!u0. correct(\u. u = u0)c(\v. P u0 v)) ==>
+       (nondass P) ref c
+  assert_fwd
+    |- !p q c.
+        conjunctive c /\ correct p c q ==>
+        ((assert p) seq c) ref (c seq (assert q))
+  assert_weaken  |- p implies q ==> (assert p) ref (assert q)
+  assert_split  |- assert(p andd q) = (assert p) seq (assert q)
+  assert_remove  |- (assert p) ref skip
+  assert_intro
+    |- !g c.
+        conjunctive c /\ correct true c g ==> (c = c seq (assert g))
+  assert_bwd
+    |- !p c. conjunctive c ==> (c seq (assert p) = (assert(c p)) seq c)
+  assert_cond
+    |- ((assert p) seq (cond g c1 c2)) ref
+       (cond 
+        g
+        ((assert(p andd g)) seq c1)
+        ((assert(p andd (not g))) seq c2))
+  assert_do
+    |- conjunctive c /\ correct(p andd g)c p ==>
+       ((assert p) seq (do g c)) ref (do g((assert(p andd g)) seq c))
+  
+******************** RCrefine ********************
+ 
+
+The Theory RCfunction
+Parents --  HOL     RCrefine     
+Constants --
+  fcall ":((*s1 -> bool) -> (*s2 -> bool)) -> (*s2 -> *s1)"     
+Definitions --
+  fcall_DEF  |- !c. fcall c = (\u. @v. glb(\q. c q u)v)     
+Theorems --
+  assign_fcall  |- fcall(assign e) = e
+  fcall_thm
+    |- !c f.
+        conjunctive c /\
+        strict c /\
+        (!u0. correct(\u. u = u0)c(\v. v = f u0)) ==>
+        (fcall c = f)
+  fcall_rule
+    |- !c f.
+        conjunctive c /\ strict c /\ (assign f) ref c ==> (fcall c = f)
+  fcall_thm_pre
+    |- !g c f.
+        conjunctive c /\
+        strict c /\
+        (!u0. g u0 ==> correct(\u. u = u0)c(\v. v = f u0)) ==>
+        (!u. g u ==> (fcall c u = f u))
+  fcall_rule_pre
+    |- !g c f.
+        conjunctive c /\ strict c /\ ((assert g) seq (assign f)) ref c ==>
+        (!u. g u ==> (fcall c u = f u))
+  
+******************** RCfunction ********************
+
+
+The Theory RCrecursion
+Parents --  HOL     RCrefine     
+Theorems --
+  regular_const  |- !c. monotonic c ==> regular(\x. c)
+  regular_id  |- regular(\x. x)
+  regular_seq
+    |- !f f'. regular f /\ regular f' ==> regular(\x. (f x) seq (f' x))
+  regular_cond
+    |- !g f f'.
+        regular f /\ regular f' ==> regular(\x. cond g(f x)(f' x))
+  mu_thm
+    |- !c.
+        regular f /\
+        monotonic c /\
+        (?t.
+          !i.
+           ((assert(\u. t u = i)) seq c) ref
+           (f((assert(\u. (t u) < i)) seq c))) ==>
+        c ref (mu f)
+  strict_mu  |- (!c. strict c ==> strict(f c)) ==> strict(mu f)
+  
+******************** RCrecursion ********************
+
+
+The Theory RCprocedure
+Parents --  HOL     RCrecursion     
+Constants --
+  pcall
+    ":((*sa -> bool) -> (*sa -> bool)) ->
+      ((*s -> *sa) -> ((*s -> *sb) -> ((*s -> bool) -> (*s -> bool))))"
+  xpcall
+    ":(* -> ((*sa -> bool) -> (*sa -> bool))) ->
+      ((*s -> *sa) ->
+       ((*s -> *sb) -> ((*s -> *) -> ((*s -> bool) -> (*s -> bool)))))"
+  
+Definitions --
+  pcall_DEF
+    |- !c G R q u.
+        pcall c G R q u =
+        (?p. (!u'. p(G u') /\ (R u' = R u) ==> q u') /\ c p(G u))
+  xpcall_DEF
+    |- !c G R V q u.
+        xpcall c G R V q u =
+        (?p. (!u'. p(G u') /\ (R u' = R u) ==> q u') /\ c(V u)p(G u))
+  
+Theorems --
+  pcall_mono
+    |- !c c'. c ref c' ==> (!G R. (pcall c G R) ref (pcall c' G R))
+  regular_pcall  |- !G R. regular(\x. pcall x G R)
+  xpcall_mono
+    |- !c c'.
+        (!a. (c a) ref (c' a)) ==>
+        (!G R V. (xpcall c G R V) ref (xpcall c' G R V))
+  
+******************** RCprocedure ********************
+
+
+The Theory RCdataref
+Parents --  HOL     RCrecursion     
+Constants --
+  abst
+    ":(*a # (*c # *s) -> bool) ->
+      ((*a # *s -> bool) -> (*c # *s -> bool))"
+  repr
+    ":(*a # (*c # *s) -> bool) ->
+      ((*c # *s -> bool) -> (*a # *s -> bool))"
+  dataref
+    ":(*a # (*c # *s) -> bool) ->
+      (((*a # *s -> bool) -> (*a # *s -> bool)) ->
+       (((*c # *s -> bool) -> (*c # *s -> bool)) -> bool))"     
+Definitions --
+  abst_DEF  |- !r q. abst r q = (\(k,u). ?a. r(a,k,u) /\ q(a,u))
+  repr_DEF  |- !r q. repr r q = (\(a,u). !k. r(a,k,u) ==> q(k,u))
+  dataref_DEF
+    |- !r c c'. dataref r c c' = ((abst r) seq c) ref (c' seq (abst r))
+  
+Theorems --
+  mono_abst  |- !r. monotonic(abst r)
+  mono_repr  |- !r. monotonic(repr r)
+  abst_repr
+    |- !r.
+        ((abst r) seq (repr r)) ref skip /\
+        skip ref ((repr r) seq (abst r))
+  dataref_alt
+    |- monotonic c /\ monotonic c' ==>
+       (dataref r c c' = ((abst r) seq (c seq (repr r))) ref c')
+  dataref_ba  |- dataref r c c' = c ref ((repr r) seq (c' seq (abst r)))
+  nondass_dataref
+    |- (!a k k' u u'.
+         r(a,k,u) /\ Q(k,u)(k',u') ==>
+         (?a'. r(a',k',u') /\ P(a,u)(a',u'))) ==>
+       dataref r(nondass P)(nondass Q)
+  abort_dataref  |- dataref r abort abort
+  skip_dataref  |- dataref r skip skip
+  seq_dataref
+    |- monotonic c1' /\ dataref r c1 c1' /\ dataref r c2 c2' ==>
+       dataref r(c1 seq c2)(c1' seq c2')
+  cond_dataref
+    |- dataref r c1 c1' /\
+       dataref r c2 c2' /\
+       (!a k u. r(a,k,u) ==> (g(a,u) = g'(k,u))) ==>
+       dataref r(cond g c1 c2)(cond g' c1' c2')
+  mu_dataref
+    |- regular f' /\ (!c c'. dataref r c c' ==> dataref r(f c)(f' c')) ==>
+       dataref r(mu f)(mu f')
+  do_dataref
+    |- monotonic c' /\
+       dataref r c c' /\
+       (!a k u. r(a,k,u) ==> (g(a,u) = g'(k,u))) ==>
+       dataref r(do g c)(do g' c')
+  block_dataref
+    |- !p c p' c' r.
+        monotonic c' /\
+        (!k u. p'(k,u) ==> (?a. r(a,k,u) /\ p(a,u))) /\
+        dataref r c c' ==>
+        (block p c) ref (block p' c')
+  nondass_dataref_eq
+    |- dataref r(nondass P)(nondass Q) =
+       (!a k k' u u'.
+         r(a,k,u) /\ Q(k,u)(k',u') ==>
+         (?a'. r(a',k',u') /\ P(a,u)(a',u')))
+  spec_dataref
+    |- (!a k u. r(a,k,u) /\ p(a,u) ==> q(k,u)) /\
+       (!a k k' u u'.
+         r(a,k,u) /\ p(a,u) /\ Q(k,u)(k',u') ==>
+         (?a'. r(a',k',u') /\ P(a,u)(a',u'))) ==>
+       dataref r((assert p) seq (nondass P))((assert q) seq (nondass Q))
+  spec_dataref_eq
+    |- dataref r((assert p) seq (nondass P))((assert q) seq (nondass Q)) =
+       (!a k u. r(a,k,u) /\ p(a,u) ==> q(k,u)) /\
+       (!a k k' u u'.
+         r(a,k,u) /\ p(a,u) /\ Q(k,u)(k',u') ==>
+         (?a'. r(a',k',u') /\ P(a,u)(a',u')))
+  
+******************** RCdataref ********************
+ 
+
+The Theory RCactsys
+Parents --  HOL     RCdataref     
+Constants --
+  EVERY2 ":(* -> (** -> bool)) -> ((*)list -> ((**)list -> bool))"
+  magic ":(*s1 -> bool) -> (*s2 -> bool)"
+  ldch
+    ":((*s1 -> bool) -> (*s2 -> bool))list ->
+      ((*s1 -> bool) -> (*s2 -> bool))"
+  lguard
+    ":((*s -> bool) # ((*s -> bool) -> (*s -> bool)))list ->
+      (*s -> bool)"
+  if2
+    ":(*s2 -> bool) # ((*s1 -> bool) -> (*s2 -> bool)) ->
+      ((*s2 -> bool) # ((*s1 -> bool) -> (*s2 -> bool)) ->
+       ((*s1 -> bool) -> (*s2 -> bool)))"
+  lif
+    ":((*s -> bool) # ((*s -> bool) -> (*s -> bool)))list ->
+      ((*s -> bool) -> (*s -> bool))"
+  ldo
+    ":((*s -> bool) # ((*s -> bool) -> (*s -> bool)))list ->
+      ((*s -> bool) -> (*s -> bool))"     
+Definitions --
+  EVERY2_DEF
+    |- (!P yl. EVERY2 P[]yl = T) /\
+       (!P x xl yl.
+         EVERY2 P(CONS x xl)yl = P x(HD yl) /\ EVERY2 P xl(TL yl))
+  magic_DEF  |- !q. magic q = true
+  ldch_DEF
+    |- (ldch[] = magic) /\ (!c cl. ldch(CONS c cl) = c dch (ldch cl))
+  lguard_DEF
+    |- (lguard[] = false) /\
+       (!a al. lguard(CONS a al) = (FST a) or (lguard al))
+  if2_DEF
+    |- !g1 c1 g2 c2 q.
+        if2(g1,c1)(g2,c2)q =
+        (g1 or g2) andd ((g1 imp (c1 q)) andd (g2 imp (c2 q)))
+  lif_DEF
+    |- (lif[] = abort) /\
+       (!a al. lif(CONS a al) = if2 a(lguard al,lif al))
+  ldo_DEF  |- !al. ldo al = do(lguard al)(lif al)
+  
+Theorems --
+  EVERY2
+    |- (!P. EVERY2 P[][] = T) /\
+       (!P x xl y yl.
+         EVERY2 P(CONS x xl)(CONS y yl) = P x y /\ EVERY2 P xl yl)
+  EVERY2_MAP
+    |- !l1 l2 P f g.
+        (LENGTH l1 = LENGTH l2) ==>
+        (EVERY2 P(MAP f l1)(MAP g l2) = EVERY2(\x y. P(f x)(g y))l1 l2)
+  if2_reduce
+    |- if2(g1,c1)(g2,c2) =
+       (assert(g1 or g2)) seq
+       (((guard g1) seq c1) dch ((guard g2) seq c2))
+  lif_reduce
+    |- !al.
+        lif al =
+        (assert(lguard al)) seq (ldch(MAP(\(g,c). (guard g) seq c)al))
+  mono_magic  |- monotonic magic
+  mono_guard  |- !g. monotonic(guard g)
+  mono_if2
+    |- !g1 c1 g2 c2.
+        monotonic c1 /\ monotonic c2 ==> monotonic(if2(g1,c1)(g2,c2))
+  mono_lif  |- !al. EVERY monotonic(MAP SND al) ==> monotonic(lif al)
+  mono_ldo  |- !al. EVERY monotonic(MAP SND al) ==> monotonic(ldo al)
+  correct_if2
+    |- !p g1 c1 g2 c2 q.
+        correct(g1 andd p)c1 q /\ correct(g2 andd p)c2 q ==>
+        correct((g1 or g2) andd p)(if2(g1,c1)(g2,c2))q
+  correct_ldo
+    |- !al inv t p q.
+        EVERY monotonic(MAP SND al) /\
+        p implies inv /\
+        ((not(lguard al)) andd inv) implies q /\
+        EVERY
+        (\(g,c).
+          !x.
+           correct
+           (inv andd (g andd (\s. t s = x)))
+           c
+           (inv andd (\s. (t s) < x)))
+        al ==>
+        correct p(ldo al)q
+  correct_ldo_wellf
+    |- !al inv po t p q.
+        EVERY monotonic(MAP SND al) /\
+        wellf po /\
+        p implies inv /\
+        ((not(lguard al)) andd inv) implies q /\
+        EVERY
+        (\(g,c).
+          !x.
+           correct
+           (inv andd (g andd (\s. t s = x)))
+           c
+           (inv andd (\s. po(t s)x)))
+        al ==>
+        correct p(ldo al)q
+  abort_dataref  |- dataref r abort abort
+  magic_dataref  |- dataref r magic magic
+  ldch_dataref
+    |- !cl' cl r.
+        (LENGTH cl = LENGTH cl') /\ EVERY2(\c c'. dataref r c c')cl cl' ==>
+        dataref r(ldch cl)(ldch cl')
+  assert_dataref
+    |- (!a k u. r(a,k,u) /\ g(a,u) ==> g'(k,u)) ==>
+       dataref r(assert g)(assert g')
+  dch_dataref
+    |- dataref r c1 c1' /\ dataref r c2 c2' ==>
+       dataref r(c1 dch c2)(c1' dch c2')
+  lif_dataref
+    |- !al' al r.
+        EVERY monotonic(MAP SND al') /\
+        (LENGTH al = LENGTH al') /\
+        EVERY2(\(g,c) (g',c'). dataref r c((guard g') seq c'))al al' /\
+        EVERY2
+        (\(g,c) (g',c'). !a k u. r(a,k,u) /\ g'(k,u) ==> g(a,u))
+        al 
+        al' /\
+        (!a k u. r(a,k,u) /\ lguard al(a,u) ==> lguard al'(k,u)) ==>
+        dataref r(lif al)(lif al')
+  ldo_dataref
+    |- !al' al r.
+        EVERY monotonic(MAP SND al') /\
+        (LENGTH al = LENGTH al') /\
+        EVERY2(\(g,c) (g',c'). dataref r c((guard g') seq c'))al al' /\
+        EVERY2
+        (\(g,c) (g',c'). !a k u. r(a,k,u) /\ g'(k,u) ==> g(a,u))
+        al 
+        al' /\
+        (!a k u. r(a,k,u) /\ lguard al(a,u) ==> lguard al'(k,u)) ==>
+        dataref r(ldo al)(ldo al')
+  actsys_dataref
+    |- !p p' al al' r.
+        (LENGTH al = LENGTH al') /\
+        EVERY monotonic(MAP SND al') /\
+        (!k u. p'(k,u) ==> (?a. r(a,k,u) /\ p(a,u))) /\
+        EVERY2(\(g,c) (g',c'). dataref r c((guard g') seq c'))al al' /\
+        EVERY2
+        (\(g,c) (g',c'). !a k u. r(a,k,u) /\ g'(k,u) ==> g(a,u))
+        al 
+        al' /\
+        (!a k u. r(a,k,u) /\ lguard al(a,u) ==> lguard al'(k,u)) ==>
+        (block p(ldo al)) ref (block p'(ldo al'))
+  
+******************** RCactsys ********************
+
+
+The Theory RCbounded
+Parents --  HOL     RCdataref     
+Constants --
+  uchain ":(num -> (*s -> bool)) -> bool"
+  ulimit ":(num -> (*s -> bool)) -> (*s -> bool)"
+  ucontinuous ":((*s1 -> bool) -> (*s2 -> bool)) -> bool"
+  H
+    ":(*s -> bool) ->
+      (((*s -> bool) -> (*s -> bool)) ->
+       (num -> ((*s -> bool) -> (*s -> bool))))"
+  dual
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      ((*s1 -> bool) -> (*s2 -> bool))"
+  bwdref
+    ":(*a # (*c # *s) -> bool) ->
+      (((*a # *s -> bool) -> (*a # *s -> bool)) ->
+       (((*c # *s -> bool) -> (*c # *s -> bool)) -> bool))"
+  max ":(num -> num) -> (num -> num)"
+  finite ":(* -> bool) -> bool"     
+Definitions --
+  uchain_DEF  |- !Q. uchain Q = (!n. (Q n) implies (Q(SUC n)))
+  ulimit_DEF  |- !Q. ulimit Q = (\s. ?n. Q n s)
+  ucontinuous_DEF
+    |- !f.
+        ucontinuous f =
+        (!Q. uchain Q ==> (f(ulimit Q) = ulimit(\n. f(Q n))))
+  H_DEF
+    |- (!g c q. H g c 0 q = (not g) andd q) /\
+       (!g c n q.
+         H g c(SUC n)q = ((not g) andd q) or (g andd (c(H g c n q))))
+  dual_DEF  |- !c q. dual c q = not(c(not q))
+  bwdref_DEF
+    |- !r c c'.
+        bwdref r c c' =
+        ((dual(abst r)) seq c) ref (c' seq (dual(abst r)))
+  max_DEF
+    |- (!N. max N 0 = N 0) /\
+       (!N n.
+         max N(SUC n) = ((max N n) < (N(SUC n)) => N(SUC n) | max N n))
+  finite_DEF
+    |- !A. finite A = (?f n. !a. A a ==> (?i. i < n /\ (f i = a)))
+  
+Theorems --
+  ucont_mono  |- ucontinuous c ==> monotonic c
+  dual_abst  |- dual(abst r)q = (\(k,u). !a. r(a,k,u) ==> q(a,u))
+  max_prop  |- i <= n ==> (N i) <= (max N n)
+  uchain_lemma  |- uchain Q ==> (!i j. i <= j ==> (Q i) implies (Q j))
+  mono_H  |- monotonic c ==> monotonic(H g c n)
+  uchain_H  |- monotonic c ==> uchain(\n. H g c n q)
+  do_bounded  |- ucontinuous c ==> (do g c q = ulimit(\n. H g c n q))
+  ucont_abort  |- ucontinuous abort
+  ucont_skip  |- ucontinuous skip
+  ucont_assign  |- ucontinuous(assign e)
+  ucont_dch
+    |- ucontinuous c /\ ucontinuous c' ==> ucontinuous(c dch c')
+  ucont_seq
+    |- ucontinuous c /\ ucontinuous c' ==> ucontinuous(c seq c')
+  ucont_cond
+    |- ucontinuous c /\ ucontinuous c' ==> ucontinuous(cond g c c')
+  ucont_assert  |- ucontinuous(assert b)
+  ucont_guard  |- ucontinuous(guard b)
+  ucont_do  |- ucontinuous c ==> ucontinuous(do g c)
+  ucont_abst  |- ucontinuous(abst r)
+  ucont_nondass  |- (!u. finite(\v. P u v)) ==> ucontinuous(nondass P)
+  ucont_block
+    |- !p c.
+        ucontinuous c /\ (!u. finite(\x. p(x,u))) ==>
+        ucontinuous(block p c)
+  ucont_dualabst
+    |- (!k u. finite(\a. r(a,k,u))) ==> ucontinuous(dual(abst r))
+  abort_bwdref  |- (!k u. ?a. r(a,k,u)) ==> bwdref r abort abort
+  skip_bwdref  |- bwdref r skip skip
+  seq_bwdref
+    |- !c1 c1' c2 c2' r.
+        monotonic c1' /\ bwdref r c1 c1' /\ bwdref r c2 c2' ==>
+        bwdref r(c1 seq c2)(c1' seq c2')
+  cond_bwdref
+    |- !g g' c1 c1' c2 c2' r.
+        bwdref r c1 c1' /\
+        bwdref r c2 c2' /\
+        (!a k u. r(a,k,u) ==> (g(a,u) = g'(k,u))) ==>
+        bwdref r(cond g c1 c2)(cond g' c1' c2')
+  nondass_bwdref
+    |- (!a' c c' u u'.
+         r(a',c',u') /\ Q(c,u)(c',u') ==>
+         (?a. r(a,c,u) /\ P(a,u)(a',u'))) ==>
+       bwdref r(nondass P)(nondass Q)
+  do_bwdref
+    |- !g c g' c' r.
+        ucontinuous c /\
+        ucontinuous c' /\
+        bwdref r c((guard g') seq c') /\
+        (!a k u. r(a,k,u) ==> (g(a,u) = g'(k,u))) /\
+        ucontinuous(dual(abst r)) /\
+        (!k u. ?a. r(a,k,u)) ==>
+        bwdref r(do g c)(do g' c')
+  block_bwdref
+    |- !p c p' c' r.
+        monotonic c' /\
+        (!a k u. r(a,k,u) /\ p'(k,u) ==> p(a,u)) /\
+        bwdref r c c' /\
+        (!k u. ?a. r(a,k,u)) ==>
+        (block p c) ref (block p' c')
+  actsys_bwdref
+    |- !p g c p' g' c' r.
+        ucontinuous c /\
+        ucontinuous c' /\
+        (!k u. ?a. r(a,k,u)) /\
+        ucontinuous(dual(abst r)) /\
+        (!a k u. r(a,k,u) /\ p'(k,u) ==> p(a,u)) /\
+        (!a k u. r(a,k,u) ==> (g(a,u) = g'(k,u))) /\
+        bwdref r c((guard g') seq c') ==>
+        (block p(do g c)) ref (block p'(do g' c'))
+  nondass_bwdref_eq
+    |- bwdref r(nondass P)(nondass Q) =
+       (!a' k k' u u'.
+         r(a',k',u') /\ Q(k,u)(k',u') ==>
+         (?a. r(a,k,u) /\ P(a,u)(a',u')))
+  spec_bwdref
+    |- (!k u. (!a. r(a,k,u) ==> p(a,u)) ==> q(k,u)) /\
+       (!a' k k' u u'.
+         (!a. r(a,k,u) ==> p(a,u)) /\ r(a',k',u') /\ Q(k,u)(k',u') ==>
+         (?a. r(a,k,u) /\ P(a,u)(a',u'))) ==>
+       bwdref r((assert p) seq (nondass P))((assert q) seq (nondass Q))
+  spec_bwdref_eq
+    |- bwdref r((assert p) seq (nondass P))((assert q) seq (nondass Q)) =
+       (!k u. (!a. r(a,k,u) ==> p(a,u)) ==> q(k,u)) /\
+       (!a' k k' u u'.
+         (!a. r(a,k,u) ==> p(a,u)) /\ r(a',k',u') /\ Q(k,u)(k',u') ==>
+         (?a. r(a,k,u) /\ P(a,u)(a',u')))
+  
+******************** RCbounded ********************
+
+
+The Theory RCwintool
+Parents --  HOL     RCdataref     win     
+Constants --
+  refines
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) -> bool)"
+  implies2 ":(*s1 -> (*s2 -> bool)) -> ((*s1 -> (*s2 -> bool)) -> bool)"
+  implied_by ":(*s -> bool) -> ((*s -> bool) -> bool)"     
+Infixes --
+  refines
+    ":((*s1 -> bool) -> (*s2 -> bool)) ->
+      (((*s1 -> bool) -> (*s2 -> bool)) -> bool)"
+  implies2 ":(*s1 -> (*s2 -> bool)) -> ((*s1 -> (*s2 -> bool)) -> bool)"
+  implied_by ":(*s -> bool) -> ((*s -> bool) -> bool)"     
+Definitions --
+  refines_DEF  |- !c' c. c' refines c = c ref c'
+  implies2_DEF  |- !P Q. P implies2 Q = (!u v. P u v ==> Q u v)
+  implied_by_DEF  |- !p' p. p' implied_by p = p implies p'
+  
+Theorems --
+  refines_refl  |- !c. c refines c
+  refines_trans
+    |- !c'' c' c. c'' refines c' /\ c' refines c ==> c'' refines c
+  implies_refl  |- !p. p implies p
+  implies_trans  |- !p q r. p implies q /\ q implies r ==> p implies r
+  implies2_refl  |- !P. P implies2 P
+  implies2_trans
+    |- !P Q R. P implies2 Q /\ Q implies2 R ==> P implies2 R
+  implied_by_refl  |- !p. p implied_by p
+  implied_by_trans
+    |- !r q p. r implied_by q /\ q implied_by p ==> r implied_by p
+  spec_to_loop
+    |- !p0 q g c inv t p.
+        monotonic c ==>
+        (\(x,u). p0 u /\ q(x,u)) implies inv ==>
+        ((not g) andd inv) implies (\(x,u). p u) ==>
+        (!x.
+          correct
+          (inv andd (g andd (\s. t s = x)))
+          c
+          (inv andd (\s. (t s) < x))) ==>
+        ((nondass(\u u'. p0 u')) seq (block q(do g c))) refines
+        (nondass(\u u'. p u'))
+  guard_into_cond1  |- cond g c c' = cond g((assert g) seq c)c'
+  guard_into_cond2  |- cond g c c' = cond g c((assert(not g)) seq c')
+  guard_into_do  |- do g c = do g((assert g) seq c)
+  add_assert
+    |- !p c.
+        conjunctive c /\ (c p = true) ==> (c seq (assert p)) refines c
+  remove_assert_left  |- !p c. c refines ((assert p) seq c)
+  remove_assert_right
+    |- !p c. monotonic c ==> c refines (c seq (assert p))
+  nondass_to_assign
+    |- !e p. (!u. p u(e u)) ==> (assign e) refines (nondass p)
+  dr_block
+    |- !r p c.
+        monotonic c ==>
+        (block(abst r p)((abst r) seq (c seq (repr r)))) refines
+        (block p c)
+  dr_do
+    |- !r g c.
+        monotonic c ==>
+        (!a a' k u. r(a,k,u) /\ r(a',k,u) /\ g(a',u) ==> g(a,u)) ==>
+        (do(abst r g)((abst r) seq (c seq (repr r)))) refines
+        ((abst r) seq ((do g c) seq (repr r)))
+  dr_seq
+    |- !r c1 c2.
+        monotonic c1 ==>
+        (((abst r) seq (c1 seq (repr r))) seq
+         ((abst r) seq (c2 seq (repr r)))) refines
+        ((abst r) seq ((c1 seq c2) seq (repr r)))
+  dr_cond
+    |- !r g c1 c2.
+        (!a a' k u. r(a,k,u) /\ r(a',k,u) /\ g(a',u) ==> g(a,u)) ==>
+        (cond
+         (abst r g)
+         ((abst r) seq (c1 seq (repr r)))
+         ((abst r) seq (c2 seq (repr r)))) refines
+        ((abst r) seq ((cond g c1 c2) seq (repr r)))
+  dr_nondass_rule
+    |- !r Q P.
+        (!a k k' u u'.
+          r(a,k,u) /\ Q(k,u)(k',u') ==>
+          (?a'. r(a',k',u') /\ P(a,u)(a',u'))) ==>
+        (nondass Q) refines ((abst r) seq ((nondass P) seq (repr r)))
+  dr_spec
+    |- ((assert(abst r p)) seq
+        (nondass
+         (\(k,u) (k',u').
+           !a. ?a'. r(a,k,u) /\ p(a,u) /\ r(a',k',u') /\ P(a,u)(a',u')))) refines
+       ((abst r) seq (((assert p) seq (nondass P)) seq (repr r)))
+  dr_spec_rule
+    |- (!a k u. r(a,k,u) /\ p(a,u) ==> q(k,u)) /\
+       (!a k k' u u'.
+         r(a,k,u) /\ p(a,u) /\ q(k,u) /\ Q(k,u)(k',u') ==>
+         (?a'. r(a',k',u') /\ P(a,u)(a',u'))) ==>
+       ((assert q) seq (nondass Q)) refines
+       ((abst r) seq (((assert p) seq (nondass P)) seq (repr r)))
+  dr_nondass
+    |- (nondass
+        (\(k,u) (k',u').
+          !a. ?a'. r(a,k,u) /\ r(a',k',u') /\ P(a,u)(a',u'))) refines
+       ((abst r) seq ((nondass P) seq (repr r)))
+  
+******************** RCwintool ********************
+ 

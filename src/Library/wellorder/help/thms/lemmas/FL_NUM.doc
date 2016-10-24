@@ -1,0 +1,3 @@
+\THEOREM FL_NUM WELLORDER
+|- !n. fl(\(m,n). m <= n)n
+\ENDTHEOREM

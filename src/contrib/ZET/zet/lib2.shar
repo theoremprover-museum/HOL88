@@ -1,0 +1,322 @@
+
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  zet_tactics.ml zet_ind.ml zet.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 12:19:40 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'zet_tactics.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'zet_tactics.ml'\"
+else
+echo shar: Extracting \"'zet_tactics.ml'\" \(3230 characters\)
+sed "s/^X//" >'zet_tactics.ml' <<'END_OF_FILE'
+X%<
+XFILE: zet_fns.ml
+X
+XDESCRIPTION: tactics for integers
+X
+XAUTHOR: Ton Kalker
+X
+XDATE: 22-09-89
+X>%
+X
+Xlet ZET_INDUCT0_TAC (A,t) = 
+X    (let th = ZET_INDUCTION0 in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in
+X     let tac = 
+X     (MATCH_MP_TAC thm THEN  
+X      CONJ_TAC THEN
+X      FIRST[CONV_TAC (BINDER_CONV((RAND_CONV BETA_CONV) THENC
+X                                  (LHS_CONV(RAND_CONV BETA_CONV))));
+X            CONV_TAC (BINDER_CONV(RAND_CONV BETA_CONV))] )in
+X      tac (A,t));; 
+X
+X%<The parameter k in the tactic below determines the
+X  point where induction really starts>%
+X
+X
+Xlet ZET_INDUCT1_TAC k (A,t) = 
+X    (let th = SPEC k ZET_INDUCTION1 in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in 
+X     let PART_MATCH' partfn th =
+X              (let pth = GSPEC th  in
+X               let pat = partfn(concl pth) in
+X               let matchfn = match pat in
+X               \tm. INST_TY_TERM (matchfn tm) pth) in  
+X     let MATCH_MP_TAC' thm:tactic (gl,g) =
+X              (let imp = ((PART_MATCH' (snd o dest_imp) thm) g) ? 
+X	       failwith `MATCH_MP_TAC` in
+X    
+X               ([gl,(fst(dest_imp(concl imp)))], \thl. MP imp (hd thl))) in
+X     let tac = 
+X     (MATCH_MP_TAC' thm THEN
+X      REPEAT CONJ_TAC THEN
+X      GEN_TAC THENL
+X      [CONV_TAC (RAND_CONV BETA_CONV);
+X       CONV_TAC ((RAND_CONV BETA_CONV) THENC
+X                 (LHS_CONV(RAND_CONV BETA_CONV)))] THEN
+X      REPEAT STRIP_TAC) in
+X     tac (A,t));;    
+X
+X%<The parameter k in the tactic below determines the
+X  point where induction really starts>%
+X
+Xlet ZET_INDUCT2_TAC k (A,t) = 
+X    (let th = SPEC k ZET_INDUCTION2 in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in 
+X     let PART_MATCH' partfn th =
+X              (let pth = GSPEC th  in
+X               let pat = partfn(concl pth) in
+X               let matchfn = match pat in
+X               \tm. INST_TY_TERM (matchfn tm) pth) in  
+X     let MATCH_MP_TAC' thm:tactic (gl,g) =
+X              (let imp = ((PART_MATCH' (snd o dest_imp) thm) g) ? 
+X	       failwith `MATCH_MP_TAC` in
+X    
+X               ([gl,(fst(dest_imp(concl imp)))], \thl. MP imp (hd thl))) in
+X     let tac = 
+X     (MATCH_MP_TAC' thm THEN
+X      REPEAT CONJ_TAC THENL
+X      [ALL_TAC;GEN_TAC;GEN_TAC] THENL
+X      [CONV_TAC BETA_CONV;
+X       CONV_TAC ((RAND_CONV BETA_CONV) THENC
+X                 (LHS_CONV(RAND_CONV BETA_CONV)));
+X       CONV_TAC ((RAND_CONV BETA_CONV) THENC
+X                 (LHS_CONV(RAND_CONV BETA_CONV)))] THEN
+X      REPEAT STRIP_TAC) in
+X     tac (A,t));; 
+X
+END_OF_FILE
+if test 3230 -ne `wc -c <'zet_tactics.ml'`; then
+    echo shar: \"'zet_tactics.ml'\" unpacked with wrong size!
+fi
+chmod +x 'zet_tactics.ml'
+# end of 'zet_tactics.ml'
+fi
+if test -f 'zet_ind.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'zet_ind.ml'\"
+else
+echo shar: Extracting \"'zet_ind.ml'\" \(6683 characters\)
+sed "s/^X//" >'zet_ind.ml' <<'END_OF_FILE'
+X%<
+XFILE: zet_ind.ml
+X
+XDESCRIPTION: induction for integers
+X
+XAUTHOR: Ton Kalker
+X
+XDATE: 22-09-89
+X>%
+X
+Xlet zet_derive_existence_thm k tml = 
+X    (let th = SPEC k zet_Axiom in
+X     let vars = map(genvar o type_of) (fst(strip_forall(concl th))) in 
+X     let exists = CONJUNCT1 (CONV_RULE EXISTS_UNIQUE_CONV (SPECL vars th)) in
+X     let e_fn = fst(dest_exists (concl exists)) in
+X     letrec splt l = 
+X	    if (is_var (hd l)) then 
+X	       (let bv,C,av = splt (tl l) in ((hd l).bv,C,av)) else
+X	    if (is_const (hd l) or (is_comb (hd l))) then
+X	       [],(hd l),(tl l) else fail in
+X     let bv,Con,av =splt(snd(strip_comb(lhs(snd(strip_forall(hd tml)))))) in
+X     let rhsfn = let cv = genvar(type_of Con) in
+X                 let r = rhs(snd(strip_forall(hd tml))) in
+X                 list_mk_abs(cv. (bv @ av),r) in
+X     let th_inst = INST_TYPE (snd(match e_fn rhsfn)) exists in
+X     let get_c t = 
+X         let args = snd(strip_comb(lhs(snd(strip_forall t)))) in
+X	 let c = fst(strip_comb(find (\t.is_const t or is_comb t) args)) in
+X	 (if (is_const c) then c else fail) in
+X     let cs = map get_c tml in
+X     let exl = CONJUNCTS (SELECT_RULE th_inst) in
+X     let fn = fst(dest_exists(concl th_inst)) in
+X     let same_c c cl = 
+X	(
+X         (c = fst(strip_comb(rand(lhs(snd(dest_imp(snd(strip_forall(concl cl))))))))) ?
+X         (c = fst(strip_comb(rand(lhs(snd(strip_forall(concl cl)))))))
+X        ) in
+X     letrec get_ths cs exl = 
+X            if (null cs) then [] else
+X	       (let (c,ex) = remove (same_c(hd cs)) exl in
+X	         (c.(get_ths (tl cs) ex))) in
+X     let ths = (get_ths cs exl) in
+X     let argvars = map (genvar o type_of) (bv @ av) in
+X     let ap_ths th = 
+X         let v = map (genvar o type_of) (fst(strip_forall(concl th))) in
+X         let th1 = SPECL v th in 
+X         let th2 = (if (is_imp (concl th1)) then
+X                       (let as,_= dest_imp (concl th1) in
+X                        let th3 = UNDISCH th1 in
+X                        let th4 = rev_itlist (C AP_THM) argvars th3 in
+X                        DISCH as th4)
+X                     else (rev_itlist (C AP_THM) argvars th1) 
+X                    ) in
+X	     (GENL (v @ argvars) th2) in
+X     let th1 = LIST_CONJ (map ap_ths ths) in
+X     let sel = mk_select(dest_exists (concl th_inst)) in
+X     GEN_ALL(EXISTS(mk_exists(fn,subst [fn,sel](concl th1)),sel)th1))?
+X     failwith `Can't derive existence theorem`;;
+X
+Xlet zet_instantiate_existence_thm eth tml = 
+X   (let cls = map (snd o strip_forall) tml in
+X    letrec splt l = 
+X	   if (is_var (hd l)) then 
+X	      (let bv,C,av = splt (tl l) in ((hd l).bv,C,av)) else
+X	   if (is_const (hd l) or (is_comb (hd l))) then
+X	      [],(hd l),(tl l) else fail in
+X    let dest tm = 
+X	let ((Fn,(bv,C,av)),r)=(((I # splt) o strip_comb) # I)(dest_eq tm) in
+X	    (Fn,bv,C,av,r) in
+X    let destcl = (map dest cls) in 
+X    let prep_tm tm = (if (is_imp (snd(strip_forall tm))) then
+X                     (let vl,body = strip_forall tm in
+X                      list_mk_forall(vl,snd(dest_imp body))) else tm) in
+X    let ecls = map prep_tm (conjuncts(snd(dest_exists(snd(strip_forall(concl eth)))))) in
+X    let fns,spec,beta = (I # split)
+X			(split(map mk_fn (combine(ecls,destcl)))) in
+X    let ethsp = SPECL fns eth in
+X    let conjs = map (uncurry SPECL)
+X    		    (combine(spec,CONJUNCTS(SELECT_RULE ethsp))) in
+X    let rule (th1,th2) = ((CONV_RULE (RAND_CONV (REWRITE_CONV th1)) th2) ?
+X                          (CONV_RULE (RAND_CONV(RAND_CONV(REWRITE_CONV th1))) th2)) in
+X    let th = LIST_CONJ (map (GEN_ALL o rule) (combine(beta,conjs))) in
+X    let fn = fst(dest_exists (concl ethsp)) and
+X        fsel = mk_select(dest_exists(concl ethsp)) in
+X        (EXISTS (mk_exists(fn,subst [fn,fsel] (concl th)),fsel) th))?
+X    failwith `Can't instantiate existence theorem`;;
+X                                    
+Xlet prepare_goal k tml = 
+X    letrec splt l = 
+X	    if (is_var (hd l)) then 
+X	       (let bv,C,av = splt (tl l) in ((hd l).bv,C,av)) else
+X	    if (is_const (hd l) or (is_comb (hd l))) then
+X	       [],(hd l),(tl l) else fail in
+X    let term_type tm =fst(snd(splt(snd(strip_comb(lhs(snd(strip_forall tm))))))) in 
+X    let mk_term tm = 
+X            (let strip_term = snd(strip_forall tm) in
+X             let Con = term_type tm in
+X             let con = fst(strip_comb Con) in
+X             let y = hd(frees Con) ? "zero" in 
+X              (if y = "zero" then strip_term 
+X               if con = "$plus" then "(^k leq ^y) ==> ^strip_term"
+X               if con = "$minus" then "(^y leq ^k) ==> ^strip_term"
+X               else fail)) in 
+X     let lvars t = subtract
+X		    (freesl(snd(strip_comb(lhs(snd (strip_forall t))))))
+X    		    (fst(strip_forall t)) in
+X     list_mk_conj(map (\tm.list_mk_forall(lvars tm,mk_term tm)) tml);;
+X
+X
+Xlet zet_prove_rec_fn_exists k tml = 
+X   (let eth = zet_derive_existence_thm k tml in
+X    let ith = zet_instantiate_existence_thm eth tml in
+X    letrec get_avars tm  = 
+X	   if (is_var (rand tm)) then (get_avars (rator tm)) else
+X	      (snd(strip_comb (rator tm)),rand tm) in
+X    let cl = snd(strip_forall(hd tml)) in
+X    let fn = fst(strip_comb(lhs cl)) and
+X        av,tv = (map (genvar o type_of) # (genvar o type_of))
+X	        (get_avars (lhs cl)) in 
+X    let prep_tm tm = (if (is_imp (snd(strip_forall tm))) then
+X                     (let vl,body = strip_forall tm in
+X                      list_mk_forall(vl,snd(dest_imp body))) else tm) in
+X    if is_const fn
+X     then failwith(fst(dest_const fn)^` previously defined`)
+X     else
+X      let goal = ([],mk_exists(fn,prepare_goal k tml)) in 
+X      let etac th = 
+X	  let efn = fst(strip_comb(lhs(snd(strip_forall(prep_tm(concl th)))))) in
+X          EXISTS_TAC (list_mk_abs(av@[tv],list_mk_comb(efn,tv.av))) in 
+X      let fn_beta th (A,gl) = 
+X 	   let efn = fst(strip_comb(lhs(snd(strip_forall(prep_tm(concl th)))))) in
+X           let eabs = (list_mk_abs(av@[tv],list_mk_comb(efn,tv.av))) in 
+X	   let epat = list_mk_comb(eabs, map (genvar o type_of) (av @ [tv])) in
+X	   let tms = find_terms (\tm. can (match epat) tm) gl in
+X	   PURE_ONCE_REWRITE_TAC (map LIST_BETA_CONV tms) (A,gl) in
+X      GEN_ALL(TAC_PROOF(goal,
+X              STRIP_ASSUME_TAC ith THEN FIRST_ASSUM etac THEN
+X              REPEAT STRIP_TAC THEN FIRST_ASSUM fn_beta THEN
+X              RES_TAC THEN FIRST_ASSUM MATCH_ACCEPT_TAC)))?\tok
+X    failwith(`Can't solve recursion equation: `^tok);;
+X
+Xlet zet_recursive_definition k infix_flag name tml = 
+X let thm = zet_prove_rec_fn_exists k tml
+X in
+X new_specification
+X  name
+X  [(infix_flag=>`infix`|`constant`),
+X  ((fst o dest_var o fst o dest_exists o concl) thm)]
+X  thm;; 
+X
+Xlet zet_zero_definition = zet_recursive_definition "zero";;
+X
+Xlet zet_one_definition = zet_recursive_definition "een";;
+X
+END_OF_FILE
+if test 6683 -ne `wc -c <'zet_ind.ml'`; then
+    echo shar: \"'zet_ind.ml'\" unpacked with wrong size!
+fi
+chmod +x 'zet_ind.ml'
+# end of 'zet_ind.ml'
+fi
+if test -f 'zet.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'zet.ml'\"
+else
+echo shar: Extracting \"'zet.ml'\" \(736 characters\)
+sed "s/^X//" >'zet.ml' <<'END_OF_FILE'
+X% FILE		: zet.ml						%
+X% DESCRIPTION   : loads the library zet into hol.       	        %
+X%									%
+X% AUTHOR        : T. Kalker						%
+X% DATE		: 10 July 1989						%
+X
+X
+Xif draft_mode() 
+X then (if not(mem `zet` (parents (current_theory()))) 
+X         then
+X            (print_newline();
+X             print_string `zet declared a new parent`;
+X             print_newline();
+X             new_parent `zet`)
+X         else 
+X            (print_newline();
+X             print_string `zet is parent`;
+X             print_newline())
+X       )
+X else (load_theory`zet` ? print_newline());;  
+X
+Xload_from_lib false `auxiliary` `functions`;;
+X
+Xautoload_defs_and_thms `zet`;; 
+X
+Xmap 
+X  loadx (words `zet_fns zet_ind`);;
+X
+Xlet goal = g
+Xand apply  = expandf;;
+X
+END_OF_FILE
+if test 736 -ne `wc -c <'zet.ml'`; then
+    echo shar: \"'zet.ml'\" unpacked with wrong size!
+fi
+chmod +x 'zet.ml'
+# end of 'zet.ml'
+fi
+echo shar: End of shell archive.
+exit 0

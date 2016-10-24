@@ -1,0 +1,199 @@
+
+
+
+% --------------------------------------------------------------------- %
+% DIRECTORY: smarttacs                                                  %
+%                                                                       %
+% DESCRIPTION: Several general purpose tactics that I have 		%
+% found quite useful.       						%
+%                                                                       %
+% AUTHOR: Donald Syme                                                   %
+%                                                                       %
+% ADDRESS: c/o Department of Computer Science                           %
+%          Australian National University                               %
+%          GPO Box 4,                                                   %
+%          Canberra, Australia, 2601                                    %
+%                                                                       %
+%          email: symdchon@cs.anu.edu.au                                %
+%  Also contact mcn@cs.anu.edu.au (Malcolm Newey)			%                                                                       %
+% DATE: 25/10/92                                                        %
+% --------------------------------------------------------------------- %
+
+
+Tactics:
+
+   ELIMINATE_TACS.ml
+   SSMART_EXISTS_TAC.ml
+   RENAME_TAC.ml  
+      - renames variables in a goal so they are all unique
+   SET_PROOFS.ml
+      - function to automatically prove a group of theorems regarding
+        membership or non-membership for a set
+
+The  most original and useful of these tactics are
+SMART_ELIMINATE_TAC and SSMART_EXISTS_TAC (sic - two x S).
+
+
+SMART_ELIMINATE_TAC:
+
+This  tactic  is  just fantastic for eliminating variables with
+known values from a proof. For instance, with a goal such as:
+
+"(x = 1) /\ (y = 3)"
+    [ "z = 3" ]
+    [ "p = 1,z" ]
+    [ "x,y = p" ]
+
+it  is  quite  a  natural style of proof to just get rid of all
+references  to  z  (replacing them by 3), and p (replacing them
+by  (x,y)).  This is exactly what SMART_ELIMINATE_TAC does - it
+searches  through  the assumptions for assumptions stating that
+some  variable  V  has value X, and replaces all occurrences of
+V   by  X.  It  does  this  efficiently,  eliminating  as  many
+variables   as   possible  at  once.  It  also  does  not  make
+mistakes,  in  the  sense  that it will not eliminate variables
+in ways that interfere with other eliminations.
+
+Perhaps  the  best thing about the tactic is that it eliminates
+variables   on   the   *right*   side   of  equalities  in  the
+assumptions, which ASM_REWRITE_TAC cannot easily do. E.g:
+
+   "P x /\ Q y"
+     [ x = 3 ]
+     [ P 3 ]
+     [ (z + 6) = y ]
+     [ Q (z + 6) ]
+
+will be reduced by SMART_ELIMINATE_TAC to
+
+   "P 3 /\ Q (z + 6)"
+     [ P 3 ]
+     [ Q (z + 6) ]
+
+which is easily solved.
+
+
+Terms  more  complicate  than variables may also be eliminated
+when    it    appears    safe.    To    restrict    this,    use
+SMART_VAR_ELIMINATE_TAC.  To  allow  it  with  even less safety
+checking, use SMART_TERM_ELIMINATE_TAC.
+
+Examples follow below.
+
+
+---------------- SSMART_EXISTS_TAC --------------------
+
+
+SSMART_EXISTS_TAC:
+
+This  tactic  is  great  for times when you have an existential
+goal  and  it  is  "obvious"  what  value  should be chosen. By
+obvious  it  is  meant those times when the goal itself demands
+a  particular  value  for the existential variable, e.g. "?x. x
+=  1",  or when the assumptions give a direct hint. In general,
+whenever  an  existential  goal  appears,  it  is  worth trying
+SSMART_EXISTS_TAC  to  see  if  it  does  the  job  (of  course
+knowing  what  the  tactic will and won't choose will make this
+much more effective).
+
+For a goal with more than one existential quantifier, such as:
+
+  "?x y. P x /\ (y = 3)"
+
+SSMART_EXISTS_TAC  will  try to find values for x and/or y. The
+tactic   firstly  looks  through  the  goal  for  any  equality
+relationships  which  tell  it  what  to  choose.  In the above
+example  no  value is found for x, and the value 3 is found for
+y, reducing the goal to
+
+  "?x. P x /\ (3 = 3)
+
+which can then be simplified by rewriting.
+The equality search goes through operators too:
+
+  "?x y. (SOME_FUNCTION x y = SOME_FUNCTION 3 4)"
+
+will  find  x = 3 and y = 4. If no appropriate values are found
+in  the  goal, the tactic will look through the assumptions for
+a hint:
+
+  "?x y. P x /\ Q y"
+     [ Q (FRANK_SINATRA x) ]
+
+will  result  in  y  =  FRANK_SINATRA  x  being chosen. Choices
+found  in  the  goal  are  always preferred to choices found in
+the assumptions.
+
+
+
+
+
+--------------------- Examples ------------------------------------
+
+
+Some examples of the use of SMART_ELIMINATE_TAC (the second taken from 
+part of a monogenicity proof for a programming language):
+
+Example 1: eliminating paired values
+
+"(x = 1) /\ (y = 3)"
+    [ "z = 3" ]
+    [ "p = 1,z" ]
+    [ "x,y = p" ]
+ 
+() : void
+Run time: 0.1s
+ 
+#e(SMART_ELIMINATE_TAC);;   
+OK..
+"(x = 1) /\ (y = 3)"
+    [ "x,y = 1,3" ]
+ 
+() : void
+Run time: 0.1s
+Intermediate theorems generated: 11
+ 
+
+
+Example 2:  (nb. some special pretty printing is used but is irrelevant to
+the use of SMART_ELIMINATE_TAC).  Note the absolute plethora of variables
+defined in the assumptions that we would rather just get rid of.
+
+Current subgoal: 
+"Res_VarEnv(VarEnv(EXTBY VVM{V |-> val''})) =
+ Res_VarEnv(VarEnv(EXTBY VVM'{V |-> val'''}))"
+     [ "!s E val val' s' s''.
+        IS(s,E,Ph_Pat P,val,s') /\ IS(s,E,Ph_Pat P,val',s'') ==>
+        (val = val') /\ (s' = s'')" ]
+    [ "E = Obj_Env_Val E' val''" ]
+    [ "val = Res_VarEnv(VarEnv(EXTBY VVM{V |-> val''}))" ]
+    [ "IS(s,Obj_Env_Val E' val'',Ph_Pat P,Res_VarEnv(VarEnv VVM),s)" ]
+    [ "s' = s" ]
+    [ "E = Obj_Env_Val E'' val'''" ]
+    [ "val' = Res_VarEnv(VarEnv(EXTBY VVM'{V |-> val'''}))" ]
+    [ "IS(s,Obj_Env_Val E'' val''',Ph_Pat P,Res_VarEnv(VarEnv VVM'),s)" ]
+    [ "s'' = s" ]
+ 
+() : void
+Run time: 3.0s
+ 
+#e(SMART_ELIMINATE_TAC);;
+OK..
+"Res_VarEnv(VarEnv(EXTBY VVM{V |-> val''})) =
+ Res_VarEnv(VarEnv(EXTBY VVM'{V |-> val'''}))"
+    [ "!s''' E val val' s' s''.
+        IS(s''',E,Ph_Pat P,val,s') /\ IS(s''',E,Ph_Pat P,val',s'') ==>
+        (val = val') /\ (s' = s'')" ]
+    [ "Obj_Env_Val E'' val''' = Obj_Env_Val E' val''" ]
+    [ "IS(s,Obj_Env_Val E' val'',Ph_Pat P,Res_VarEnv(VarEnv VVM),s)" ]
+    [ "IS(s,Obj_Env_Val E'' val''',Ph_Pat P,Res_VarEnv(VarEnv VVM'),s)" ]
+ 
+() : void
+Run time: 0.3s
+Intermediate theorems generated: 28
+ 
+
+
+
+
+

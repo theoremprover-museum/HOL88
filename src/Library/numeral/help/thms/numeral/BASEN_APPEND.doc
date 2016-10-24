@@ -1,0 +1,5 @@
+\THEOREM BASEN_APPEND numeral
+|- !r l m.
+    BASEN r(APPEND l m) =
+    ((r EXP (LENGTH m)) * (BASEN r l)) + (BASEN r m)
+\ENDTHEOREM

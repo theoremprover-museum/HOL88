@@ -1,0 +1,3 @@
+\THEOREM WORD_DEF word_base
+|- !l. WORD l = ABS_word(Node l[])
+\ENDTHEOREM

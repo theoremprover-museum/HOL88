@@ -1,0 +1,13 @@
+\DOC true_tm
+
+\TYPE {true_tm : term}
+
+\SYNOPSIS
+The boolean constant "T".
+
+\LIBRARY window
+
+\SEEALSO
+false_tm.
+
+\ENDDOC

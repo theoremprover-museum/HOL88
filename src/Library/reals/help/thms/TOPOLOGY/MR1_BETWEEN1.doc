@@ -1,0 +1,3 @@
+\THEOREM MR1_BETWEEN1 TOPOLOGY
+|- !x y z. x < z /\ (dist mr1(x,y)) < (z - x) ==> y < z
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REAL_EQ_LMUL_IMP REAL
+|- !x y z. ~(x = & 0) /\ (x * y = x * z) ==> (y = z)
+\ENDTHEOREM

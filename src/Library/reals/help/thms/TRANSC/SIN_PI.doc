@@ -1,0 +1,3 @@
+\THEOREM SIN_PI TRANSC
+|- sin pi = & 0
+\ENDTHEOREM

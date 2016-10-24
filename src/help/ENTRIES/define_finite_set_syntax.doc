@@ -1,0 +1,58 @@
+\DOC define_finite_set_syntax
+
+\TYPE {define_finite_set_syntax : ((string # string) -> void)}
+
+\SYNOPSIS
+Sets up an interpretation of finite set syntax.
+
+\DESCRIBE
+The HOL quotation parser supports the notation {"{{x1,...,xn}}"}. This is
+primarily intended to support the {sets} library and dependent work,
+meaning `the set consisting just of the elements {x1...xn}', but
+this function allows the interpretation of the notation to be changed. A call
+{
+   define_finite_set_syntax(`base`,`cons`)
+}
+\noindent causes
+{
+   "{{x1,x2,...,xn}}"
+}
+\noindent to be parsed as
+{
+   "cons x1 (cons x2 (cons ... (cons xn base) ... ))"
+}
+\noindent where {base} and {cons} should be the names of constants, the former
+of which may be an infix. The printer will invert this transformation.
+
+\FAILURE
+Fails unless both argument strings are the names of constants of the current
+theory.
+
+\EXAMPLE
+We can use set notation for special boolean lists as follows
+{
+   #new_theory `snork`;;
+   () : void
+
+   #new_definition(`cons`,"cons (x:bool) (l:bool list) = CONS x l");;
+   |- !x l. cons x l = CONS x l
+
+   #new_definition(`nil`,"nil = ([]:bool list)");;
+   |- nil = []
+
+   #define_finite_set_syntax(`nil`,`cons`);;
+   () : void
+
+   #"{{F,T,T}}";;
+   "{{F,T,T}}" : term
+
+   #it = "cons F (cons T (cons T nil))";;
+   true : bool
+}
+\COMMENTS
+For more details about the use of set notation, refer to the DESCRIPTION.
+
+\SEEALSO
+define_set_abstraction_syntax, load_library.
+
+\ENDDOC

@@ -1,0 +1,20 @@
+\DOC com
+
+\TYPE {$com : ((* list # ** list) -> (* # **) list)}
+
+\SYNOPSIS
+Converts a pair of lists into a list of pairs (infix version).
+
+\DESCRIBE
+{[x1;...;xn] com [y1;...;yn]} returns {[(x1,y1);...;(xn,yn)]}.
+
+\FAILURE
+Fails if the two lists are of different lengths.
+
+\COMMENTS
+Has the same effect as {combine}.
+
+\SEEALSO
+combine, split.
+
+\ENDDOC

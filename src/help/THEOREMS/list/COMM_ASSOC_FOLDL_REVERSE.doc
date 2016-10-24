@@ -1,0 +1,3 @@
+\THEOREM COMM_ASSOC_FOLDL_REVERSE list
+|- !f. COMM f ==> ASSOC f ==> (!e l. FOLDL f e(REVERSE l) = FOLDL f e l)
+\ENDTHEOREM

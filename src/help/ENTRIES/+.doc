@@ -1,0 +1,14 @@
+\DOC +
+
+\TYPE {$+ : ((int # int) -> int)}
+
+\SYNOPSIS
+Performs addition on ML integers.
+
+\KEYWORDS
+arithmetic, number.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

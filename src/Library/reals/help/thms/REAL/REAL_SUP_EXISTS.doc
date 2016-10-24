@@ -1,0 +1,5 @@
+\THEOREM REAL_SUP_EXISTS REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+    (?s. !y. (?x. P x /\ y < x) = y < s)
+\ENDTHEOREM

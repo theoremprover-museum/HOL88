@@ -1,0 +1,29 @@
+\DOC prove_abs_thm
+
+\TYPE {prove_abs_thm : ((string # term # tactic) -> thm)}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Attempts to prove a boolean term with abstract components
+using the supplied tactic, then save the theorem.
+
+\DESCRIBE 
+The function {prove_abs_thm}
+is identical to {prove_thm} except that 
+the theory obligations for any abstract objects in the goal 
+are added to the assumption list before the proof is performed.
+
+\FAILURE Fails if the term is not of type {bool} (and so cannot possibly
+be the conclusion of a theorem), or if the tactic cannot solve the goal.
+In the latter case {prove_abs_thm} will list the unsolved goals to
+help the user.  In addition, {prove_abs_thm} will fail if the theorem
+cannot be saved, e.g.  because there is already a theorem of that name in
+the current theory segment, or if the resulting theorem has assumptions;
+clearly this can only happen if the tactic was invalid, so this gives some
+measure of validity checking.
+
+\SEEALSO
+prove_thm
+
+\ENDDOC

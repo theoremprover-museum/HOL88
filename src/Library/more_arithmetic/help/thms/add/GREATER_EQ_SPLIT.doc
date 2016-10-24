@@ -1,0 +1,3 @@
+\THEOREM GREATER_EQ_SPLIT add
+|- !m n p. p >= (m + n) ==> p >= n /\ p >= m
+\ENDTHEOREM

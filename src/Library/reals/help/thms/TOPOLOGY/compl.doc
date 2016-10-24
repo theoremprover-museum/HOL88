@@ -1,0 +1,3 @@
+\THEOREM compl TOPOLOGY
+|- !S. compl S = (\x. ~S x)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM FALSITY \none
+|- !t. F ==> t
+\ENDTHEOREM

@@ -1,0 +1,16 @@
+\DOC Axiom
+
+\TYPE {Axiom : thmkind}
+
+\SYNOPSIS
+Identifier denoting a `kind of theorem', specifically an axiom.
+
+\LIBRARY trs
+
+\USES
+Used to generate patterns that test the `kind' of a theorem.
+
+\SEEALSO
+Definition, Theorem, kind.
+
+\ENDDOC

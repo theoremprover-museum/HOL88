@@ -1,0 +1,3 @@
+\THEOREM topology_TY_DEF TOPOLOGY
+|- ?rep. TYPE_DEFINITION istopology rep
+\ENDTHEOREM

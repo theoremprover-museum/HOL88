@@ -1,0 +1,10 @@
+\DOC Contains
+
+\TYPE {Contains : (wildvar -> termpattern -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

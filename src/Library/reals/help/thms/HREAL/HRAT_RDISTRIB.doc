@@ -1,0 +1,4 @@
+\THEOREM HRAT_RDISTRIB HREAL
+|- !x y z.
+    (x hrat_add y) hrat_mul z = (x hrat_mul z) hrat_add (y hrat_mul z)
+\ENDTHEOREM

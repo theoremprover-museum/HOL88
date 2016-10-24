@@ -1,0 +1,3 @@
+\THEOREM IN_DEF sets
+|- !x s. x IN s = CHF s x
+\ENDTHEOREM

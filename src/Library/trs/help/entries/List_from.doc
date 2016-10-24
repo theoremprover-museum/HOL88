@@ -1,0 +1,22 @@
+\DOC List_from
+
+\TYPE {List_from : (searchstep -> source)}
+
+\SYNOPSIS
+Generates a source for a search from the result of a previous search.
+
+\LIBRARY trs
+
+\DESCRIBE
+A {source} for a search can be either a list of search paths, or a list of
+theorems found on a previous search. {List_from} generates a {source} of the
+second kind from a step of a previous search. It extracts the list of found
+theorems from the {searchstep}, and gives them to {List}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+List, Paths.
+
+\ENDDOC

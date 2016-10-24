@@ -1,0 +1,3 @@
+\THEOREM METRIC_TRIANGLE TOPOLOGY
+|- !m x y z. (dist m(x,z)) <= ((dist m(x,y)) + (dist m(y,z)))
+\ENDTHEOREM

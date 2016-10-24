@@ -1,0 +1,9 @@
+\THEOREM BASEN_11 numeral
+|- !r l1 l2.
+    1 < r ==>
+    IS_BASEN r l1 ==>
+    IS_BASEN r l2 ==>
+    (LENGTH l1 = LENGTH l2) ==>
+    (BASEN r l1 = BASEN r l2) ==>
+    (l1 = l2)
+\ENDTHEOREM

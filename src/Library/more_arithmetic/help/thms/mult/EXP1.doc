@@ -1,0 +1,3 @@
+\THEOREM EXP1 mult
+|- !n. n EXP 1 = n
+\ENDTHEOREM

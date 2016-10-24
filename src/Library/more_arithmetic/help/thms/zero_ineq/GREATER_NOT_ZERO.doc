@@ -1,0 +1,3 @@
+\THEOREM GREATER_NOT_ZERO zero_ineq
+|- !x. 0 < x ==> ~(x = 0)
+\ENDTHEOREM

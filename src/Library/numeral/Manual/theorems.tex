@@ -1,0 +1,430 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{Numeral theory}
+\THEOREM BASEN numeral
+|- (!radix. BASEN radix[] = 0) /\
+   (!radix digit digits.
+     BASEN radix(CONS digit digits) =
+     (digit * (radix EXP (LENGTH digits))) + (BASEN radix digits))
+\ENDTHEOREM
+\THEOREM BASEN\_11 numeral
+|- !r l1 l2.
+    1 < r ==>
+    IS_BASEN r l1 ==>
+    IS_BASEN r l2 ==>
+    (LENGTH l1 = LENGTH l2) ==>
+    (BASEN r l1 = BASEN r l2) ==>
+    (l1 = l2)
+\ENDTHEOREM
+\THEOREM BASEN\_APPEND numeral
+|- !r l m.
+    BASEN r(APPEND l m) =
+    ((r EXP (LENGTH m)) * (BASEN r l)) + (BASEN r m)
+\ENDTHEOREM
+\THEOREM BASEN\_CONS\_0 numeral
+|- !r l. BASEN r(CONS 0 l) = BASEN r l
+\ENDTHEOREM
+\THEOREM BASEN\_DIGITS numeral
+|- !n m r.
+    1 < r ==>
+    (LENGTH(BASEN_DIGITS r n m) = n) /\
+    (BASEN r(BASEN_DIGITS r n m) = m MOD (r EXP n))
+\ENDTHEOREM
+\THEOREM BASEN\_DIGIT\_EQ\_DIGIT numeral
+|- !r e. BASEN r[e] = e
+\ENDTHEOREM
+\THEOREM BASEN\_EMPTY\_EQ\_0 numeral
+|- !r l. 1 < r ==> IS_NORMALIZED l ==> ((BASEN r l = 0) = (l = []))
+\ENDTHEOREM
+\THEOREM BASEN\_EXP\_LESS numeral
+|- !r l.
+    IS_BASEN r l ==>
+    IS_NORMALIZED l ==>
+    ~NULL l ==>
+    1 < r ==>
+    ((r EXP ((LENGTH l) - 1)) - 1) < (BASEN r l)
+\ENDTHEOREM
+\THEOREM BASEN\_EXP\_LESS\_OR\_EQ numeral
+|- !r l.
+    1 < r ==>
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_BASEN r l ==>
+    (r EXP ((LENGTH l) - 1)) <= (BASEN r l)
+\ENDTHEOREM
+\THEOREM BASEN\_EXP\_N numeral
+|- !r n. BASEN r(CONS 1(REPLICATE n 0)) = r EXP n
+\ENDTHEOREM
+\THEOREM BASEN\_LEADING numeral
+|- !r l.
+    1 < r ==>
+    IS_BASEN r l ==>
+    ~NULL l ==>
+    (BASEN r(BUTLAST l) = (BASEN r l) DIV r)
+\ENDTHEOREM
+\THEOREM BASEN\_LESS\_EXP\_LENGTH numeral
+|- !r l. 1 < r ==> IS_BASEN r l ==> (BASEN r l) < (r EXP (LENGTH l))
+\ENDTHEOREM
+\THEOREM BASEN\_LESS\_OR\_EQ\_EXP\_LENGTH numeral
+|- !r l.
+    1 < r ==> IS_BASEN r l ==> (BASEN r l) <= ((r EXP (LENGTH l)) - 1)
+\ENDTHEOREM
+\THEOREM BASEN\_ONTO numeral
+|- !r l. ?n. BASEN r l = n
+\ENDTHEOREM
+\THEOREM BASEN\_SNOC numeral
+|- !r e l. BASEN r(SNOC e l) = ((BASEN r l) * r) + e
+\ENDTHEOREM
+\THEOREM BASEN\_TRAILING numeral
+|- !r l.
+    1 < r ==>
+    IS_BASEN r l ==>
+    ~NULL l ==>
+    (BASEN r(TL l) = (BASEN r l) MOD (r EXP ((LENGTH l) - 1)))
+\ENDTHEOREM
+\THEOREM BASEN\_ZEROS numeral
+|- !r n. BASEN r(REPLICATE n 0) = 0
+\ENDTHEOREM
+\THEOREM BINARY numeral
+|- BINARY = BASEN 2
+\ENDTHEOREM
+\THEOREM BINARY\_11 numeral
+|- !l1 l2.
+    IS_BINARY l1 ==>
+    IS_BINARY l2 ==>
+    (LENGTH l1 = LENGTH l2) ==>
+    (BINARY l1 = BINARY l2) ==>
+    (l1 = l2)
+\ENDTHEOREM
+\THEOREM BINARY\_CONS\_0 numeral
+|- !l. BINARY(CONS 0 l) = BINARY l
+\ENDTHEOREM
+\THEOREM BINARY\_DIGIT\_EQ\_DIGIT numeral
+|- !e. BINARY[e] = e
+\ENDTHEOREM
+\THEOREM BINARY\_EMPTY\_EQ\_0 numeral
+|- !l. IS_NORMALIZED l ==> ((BINARY l = 0) = (l = []))
+\ENDTHEOREM
+\THEOREM BINARY\_EXP\_LESS numeral
+|- !l.
+    IS_BINARY l ==>
+    IS_NORMALIZED l ==>
+    ~NULL l ==>
+    ((2 EXP ((LENGTH l) - 1)) - 1) < (BINARY l)
+\ENDTHEOREM
+\THEOREM BINARY\_EXP\_LESS\_OR\_EQ numeral
+|- !l.
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_BINARY l ==>
+    (2 EXP ((LENGTH l) - 1)) <= (BINARY l)
+\ENDTHEOREM
+\THEOREM BINARY\_EXP\_N numeral
+|- !n. BINARY(CONS 1(REPLICATE n 0)) = 2 EXP n
+\ENDTHEOREM
+\THEOREM BINARY\_LESS\_EXP\_LENGTH numeral
+|- !l. IS_BINARY l ==> (BINARY l) < (2 EXP (LENGTH l))
+\ENDTHEOREM
+\THEOREM BINARY\_LESS\_OR\_EQ\_EXP\_LENGTH numeral
+|- !l. IS_BINARY l ==> (BINARY l) <= ((2 EXP (LENGTH l)) - 1)
+\ENDTHEOREM
+\THEOREM BINARY\_ONTO numeral
+|- !l. ?n. BINARY l = n
+\ENDTHEOREM
+\THEOREM BINARY\_ZEROS numeral
+|- !n. BINARY(REPLICATE n 0) = 0
+\ENDTHEOREM
+\THEOREM DECIMAL numeral
+|- DECIMAL = BASEN 10
+\ENDTHEOREM
+\THEOREM DECIMAL\_11 numeral
+|- !l1 l2.
+    IS_DECIMAL l1 ==>
+    IS_DECIMAL l2 ==>
+    (LENGTH l1 = LENGTH l2) ==>
+    (DECIMAL l1 = DECIMAL l2) ==>
+    (l1 = l2)
+\ENDTHEOREM
+\THEOREM DECIMAL\_CONS\_0 numeral
+|- !l. DECIMAL(CONS 0 l) = DECIMAL l
+\ENDTHEOREM
+\THEOREM DECIMAL\_DIGIT\_EQ\_DIGIT numeral
+|- !e. DECIMAL[e] = e
+\ENDTHEOREM
+\THEOREM DECIMAL\_EMPTY\_EQ\_0 numeral
+|- !l. IS_NORMALIZED l ==> ((DECIMAL l = 0) = (l = []))
+\ENDTHEOREM
+\THEOREM DECIMAL\_EXP\_LESS numeral
+|- !l.
+    IS_DECIMAL l ==>
+    IS_NORMALIZED l ==>
+    ~NULL l ==>
+    ((10 EXP ((LENGTH l) - 1)) - 1) < (DECIMAL l)
+\ENDTHEOREM
+\THEOREM DECIMAL\_EXP\_LESS\_OR\_EQ numeral
+|- !l.
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_DECIMAL l ==>
+    (10 EXP ((LENGTH l) - 1)) <= (DECIMAL l)
+\ENDTHEOREM
+\THEOREM DECIMAL\_EXP\_N numeral
+|- !n. DECIMAL(CONS 1(REPLICATE n 0)) = 10 EXP n
+\ENDTHEOREM
+\THEOREM DECIMAL\_LESS\_EXP\_LENGTH numeral
+|- !l. IS_DECIMAL l ==> (DECIMAL l) < (10 EXP (LENGTH l))
+\ENDTHEOREM
+\THEOREM DECIMAL\_LESS\_OR\_EQ\_EXP\_LENGTH numeral
+|- !l. IS_DECIMAL l ==> (DECIMAL l) <= ((10 EXP (LENGTH l)) - 1)
+\ENDTHEOREM
+\THEOREM DECIMAL\_ONTO numeral
+|- !l. ?n. DECIMAL l = n
+\ENDTHEOREM
+\THEOREM DECIMAL\_ZEROS numeral
+|- !n. DECIMAL(REPLICATE n 0) = 0
+\ENDTHEOREM
+\THEOREM HEX numeral
+|- HEX = BASEN 16
+\ENDTHEOREM
+\THEOREM HEX\_11 numeral
+|- !l1 l2.
+    IS_HEX l1 ==>
+    IS_HEX l2 ==>
+    (LENGTH l1 = LENGTH l2) ==>
+    (HEX l1 = HEX l2) ==>
+    (l1 = l2)
+\ENDTHEOREM
+\THEOREM HEX\_CONS\_0 numeral
+|- !l. HEX(CONS 0 l) = HEX l
+\ENDTHEOREM
+\THEOREM HEX\_DIGIT\_EQ\_DIGIT numeral
+|- !e. HEX[e] = e
+\ENDTHEOREM
+\THEOREM HEX\_EMPTY\_EQ\_0 numeral
+|- !l. IS_NORMALIZED l ==> ((HEX l = 0) = (l = []))
+\ENDTHEOREM
+\THEOREM HEX\_EXP\_LESS numeral
+|- !l.
+    IS_HEX l ==>
+    IS_NORMALIZED l ==>
+    ~NULL l ==>
+    ((16 EXP ((LENGTH l) - 1)) - 1) < (HEX l)
+\ENDTHEOREM
+\THEOREM HEX\_EXP\_LESS\_OR\_EQ numeral
+|- !l.
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_HEX l ==>
+    (16 EXP ((LENGTH l) - 1)) <= (HEX l)
+\ENDTHEOREM
+\THEOREM HEX\_EXP\_N numeral
+|- !n. HEX(CONS 1(REPLICATE n 0)) = 16 EXP n
+\ENDTHEOREM
+\THEOREM HEX\_LESS\_EXP\_LENGTH numeral
+|- !l. IS_HEX l ==> (HEX l) < (16 EXP (LENGTH l))
+\ENDTHEOREM
+\THEOREM HEX\_LESS\_OR\_EQ\_EXP\_LENGTH numeral
+|- !l. IS_HEX l ==> (HEX l) <= ((16 EXP (LENGTH l)) - 1)
+\ENDTHEOREM
+\THEOREM HEX\_ONTO numeral
+|- !l. ?n. HEX l = n
+\ENDTHEOREM
+\THEOREM HEX\_ZEROS numeral
+|- !n. HEX(REPLICATE n 0) = 0
+\ENDTHEOREM
+\THEOREM IS\_BASEN numeral
+|- !radix digits. IS_BASEN radix digits = EVERY($> radix)digits
+\ENDTHEOREM
+\THEOREM IS\_BASEN\_APPEND numeral
+|- !r l m. IS_BASEN r(APPEND l m) = IS_BASEN r l /\ IS_BASEN r m
+\ENDTHEOREM
+\THEOREM IS\_BASEN\_CONS numeral
+|- !r l e. 1 < r ==> (IS_BASEN r(CONS e l) = e < r /\ IS_BASEN r l)
+\ENDTHEOREM
+\THEOREM IS\_BASEN\_CONS\_EQ numeral
+|- !r l e. IS_BASEN r(CONS e l) = e < r /\ IS_BASEN r l
+\ENDTHEOREM
+\THEOREM IS\_BASEN\_CONS\_IMP\_IS\_BASEN numeral
+|- !r l e. 1 < r ==> IS_BASEN r(CONS e l) ==> IS_BASEN r l
+\ENDTHEOREM
+\THEOREM IS\_BASEN\_CONS\_IMP\_LESS numeral
+|- !r l e. 1 < r ==> IS_BASEN r(CONS e l) ==> e < r
+\ENDTHEOREM
+\THEOREM IS\_BASEN\_NIL numeral
+|- !r. IS_BASEN r[]
+\ENDTHEOREM
+\THEOREM IS\_BINARY numeral
+|- IS_BINARY = IS_BASEN 2
+\ENDTHEOREM
+\THEOREM IS\_BINARY\_CONS numeral
+|- !l e. IS_BINARY(CONS e l) = e < 2 /\ IS_BINARY l
+\ENDTHEOREM
+\THEOREM IS\_BINARY\_CONS\_IMP\_IS\_BINARY numeral
+|- !l e. IS_BINARY(CONS e l) ==> IS_BINARY l
+\ENDTHEOREM
+\THEOREM IS\_BINARY\_CONS\_IMP\_LESS numeral
+|- !l e. IS_BINARY(CONS e l) ==> e < 2
+\ENDTHEOREM
+\THEOREM IS\_BINARY\_NIL numeral
+|- IS_BINARY[]
+\ENDTHEOREM
+\THEOREM IS\_BINARY\_NORMALIZED numeral
+|- !digits.
+    IS_BINARY_NORMALIZED digits =
+    IS_BINARY digits /\ IS_NORMALIZED digits
+\ENDTHEOREM
+\THEOREM IS\_DECIMAL numeral
+|- IS_DECIMAL = IS_BASEN 10
+\ENDTHEOREM
+\THEOREM IS\_DECIMAL\_CONS numeral
+|- !l e. IS_DECIMAL(CONS e l) = e < 10 /\ IS_DECIMAL l
+\ENDTHEOREM
+\THEOREM IS\_DECIMAL\_CONS\_IMP\_IS\_DECIMAL numeral
+|- !l e. IS_DECIMAL(CONS e l) ==> IS_DECIMAL l
+\ENDTHEOREM
+\THEOREM IS\_DECIMAL\_CONS\_IMP\_LESS numeral
+|- !l e. IS_DECIMAL(CONS e l) ==> e < 10
+\ENDTHEOREM
+\THEOREM IS\_DECIMAL\_NIL numeral
+|- IS_DECIMAL[]
+\ENDTHEOREM
+\THEOREM IS\_DECIMAL\_NORMALIZED numeral
+|- !digits.
+    IS_DECIMAL_NORMALIZED digits =
+    IS_DECIMAL digits /\ IS_NORMALIZED digits
+\ENDTHEOREM
+\THEOREM IS\_HEX numeral
+|- IS_HEX = IS_BASEN 16
+\ENDTHEOREM
+\THEOREM IS\_HEX\_CONS numeral
+|- !l e. IS_HEX(CONS e l) = e < 16 /\ IS_HEX l
+\ENDTHEOREM
+\THEOREM IS\_HEX\_CONS\_IMP\_IS\_HEX numeral
+|- !l e. IS_HEX(CONS e l) ==> IS_HEX l
+\ENDTHEOREM
+\THEOREM IS\_HEX\_CONS\_IMP\_LESS numeral
+|- !l e. IS_HEX(CONS e l) ==> e < 16
+\ENDTHEOREM
+\THEOREM IS\_HEX\_NIL numeral
+|- IS_HEX[]
+\ENDTHEOREM
+\THEOREM IS\_HEX\_NORMALIZED numeral
+|- !digits.
+    IS_HEX_NORMALIZED digits = IS_HEX digits /\ IS_NORMALIZED digits
+\ENDTHEOREM
+\THEOREM IS\_NORMALIZED numeral
+|- !digits. IS_NORMALIZED digits = (digits = []) \/ 0 < (HD digits)
+\ENDTHEOREM
+\THEOREM IS\_NORMALIZED\_CONS numeral
+|- !e l. IS_NORMALIZED(CONS e l) = 0 < e
+\ENDTHEOREM
+\THEOREM IS\_NORMALIZED\_NIL numeral
+|- IS_NORMALIZED[]
+\ENDTHEOREM
+\THEOREM IS\_OCTAL numeral
+|- IS_OCTAL = IS_BASEN 8
+\ENDTHEOREM
+\THEOREM IS\_OCTAL\_CONS numeral
+|- !l e. IS_OCTAL(CONS e l) = e < 8 /\ IS_OCTAL l
+\ENDTHEOREM
+\THEOREM IS\_OCTAL\_CONS\_IMP\_IS\_HEX numeral
+|- !l e. IS_OCTAL(CONS e l) ==> IS_OCTAL l
+\ENDTHEOREM
+\THEOREM IS\_OCTAL\_CONS\_IMP\_LESS numeral
+|- !l e. IS_OCTAL(CONS e l) ==> e < 8
+\ENDTHEOREM
+\THEOREM IS\_OCTAL\_NIL numeral
+|- IS_OCTAL[]
+\ENDTHEOREM
+\THEOREM IS\_OCTAL\_NORMALIZED numeral
+|- !digits.
+    IS_OCTAL_NORMALIZED digits = IS_OCTAL digits /\ IS_NORMALIZED digits
+\ENDTHEOREM
+\THEOREM LOG numeral
+|- !r n. LOG r n = (@x. (r EXP x) <= n /\ n < (r EXP (x + 1)))
+\ENDTHEOREM
+\THEOREM LOG\_1 numeral
+|- !r. 1 < r ==> (LOG r 1 = 0)
+\ENDTHEOREM
+\THEOREM NORMALIZED\_BASEN\_11 numeral
+|- !l1 l2 r.
+    1 < r ==>
+    IS_BASEN r l1 ==>
+    IS_BASEN r l2 ==>
+    IS_NORMALIZED l1 ==>
+    IS_NORMALIZED l2 ==>
+    (BASEN r l1 = BASEN r l2) ==>
+    (l1 = l2)
+\ENDTHEOREM
+\THEOREM NORMALIZED\_LENGTHS numeral
+|- !l1 l2 r.
+    1 < r ==>
+    IS_BASEN r l1 ==>
+    IS_BASEN r l2 ==>
+    IS_NORMALIZED l1 ==>
+    IS_NORMALIZED l2 ==>
+    (BASEN r l1 = BASEN r l2) ==>
+    (LENGTH l1 = LENGTH l2)
+\ENDTHEOREM
+\THEOREM NORMALIZED\_LENGTHS\_LEMMA numeral
+|- !l1 l2 r.
+    ~(1 < r /\
+      IS_BASEN r l1 /\
+      IS_BASEN r l2 /\
+      IS_NORMALIZED l1 /\
+      IS_NORMALIZED l2 /\
+      (BASEN r l1 = BASEN r l2) /\
+      (LENGTH l1) < (LENGTH l2))
+\ENDTHEOREM
+\THEOREM OCTAL numeral
+|- OCTAL = BASEN 8
+\ENDTHEOREM
+\THEOREM OCTAL\_11 numeral
+|- !l1 l2.
+    IS_OCTAL l1 ==>
+    IS_OCTAL l2 ==>
+    (LENGTH l1 = LENGTH l2) ==>
+    (OCTAL l1 = OCTAL l2) ==>
+    (l1 = l2)
+\ENDTHEOREM
+\THEOREM OCTAL\_CONS\_0 numeral
+|- !l. OCTAL(CONS 0 l) = OCTAL l
+\ENDTHEOREM
+\THEOREM OCTAL\_DIGIT\_EQ\_DIGIT numeral
+|- !e. OCTAL[e] = e
+\ENDTHEOREM
+\THEOREM OCTAL\_EMPTY\_EQ\_0 numeral
+|- !l. IS_NORMALIZED l ==> ((OCTAL l = 0) = (l = []))
+\ENDTHEOREM
+\THEOREM OCTAL\_EXP\_LESS numeral
+|- !l.
+    IS_OCTAL l ==>
+    IS_NORMALIZED l ==>
+    ~NULL l ==>
+    ((8 EXP ((LENGTH l) - 1)) - 1) < (OCTAL l)
+\ENDTHEOREM
+\THEOREM OCTAL\_EXP\_LESS\_OR\_EQ numeral
+|- !l.
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_OCTAL l ==>
+    (8 EXP ((LENGTH l) - 1)) <= (OCTAL l)
+\ENDTHEOREM
+\THEOREM OCTAL\_EXP\_N numeral
+|- !n. OCTAL(CONS 1(REPLICATE n 0)) = 8 EXP n
+\ENDTHEOREM
+\THEOREM OCTAL\_LESS\_EXP\_LENGTH numeral
+|- !l. IS_OCTAL l ==> (OCTAL l) < (8 EXP (LENGTH l))
+\ENDTHEOREM
+\THEOREM OCTAL\_LESS\_OR\_EQ\_EXP\_LENGTH numeral
+|- !l. IS_OCTAL l ==> (OCTAL l) <= ((8 EXP (LENGTH l)) - 1)
+\ENDTHEOREM
+\THEOREM OCTAL\_ONTO numeral
+|- !l. ?n. OCTAL l = n
+\ENDTHEOREM
+\THEOREM OCTAL\_ZEROS numeral
+|- !n. OCTAL(REPLICATE n 0) = 0
+\ENDTHEOREM
+\THEOREM SNOC\_APPEND numeral
+|- !h l. SNOC h l = APPEND l[h]
+\ENDTHEOREM

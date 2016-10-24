@@ -1,0 +1,33 @@
+% ------------------------------------------------------------------ %
+% DIRECTORY: holsort                                                 %
+%                                                                    %
+% DESCRIPTION: Sorts files of axioms, etc., or of typed constants.   %
+%                                                                    %
+% AUTHOR: Stephen H. Brackin                                         %
+%                                                                    %
+% ADDRESS: ORA Corporation                                           %
+%          301A Dates Drive                                          %
+%          Ithaca, NY 14850                                          %
+%          USA                                                       %
+%                                                                    %
+% EMAIL: shb@oracorp.com                                             %
+%                                                                    %
+% DATE: 92.03.02                                                     %
+% ------------------------------------------------------------------ %
+
+The C utility "holsort" in this directory makes it easy to look up
+information contained in theories -- particularly large theories
+prepared by people other than yourself -- by producing
+alphabetically-ordered versions of files containing lists of HOL
+axioms, theorems, definitions, or constants with associated type
+declarations.  The files that "holsort" takes as input can be prepared
+easily with the UNIX command "script" and the HOL commands
+"print_theory", "axioms", "theorems", and so on.  See comments in
+"holsort.c" for more specific information about how the program
+operates, how to invoke it, and how to compile it.
+
+Happy sorting, and please send me any reports of problems or
+possible improvements.
+
+                         Stephen H. Brackin
+                         March 2, 1992

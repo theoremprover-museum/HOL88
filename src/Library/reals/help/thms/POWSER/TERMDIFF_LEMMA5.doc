@@ -1,0 +1,9 @@
+\THEOREM TERMDIFF_LEMMA5 POWSER
+|- !f g k.
+    (& 0) < k /\
+    summable f /\
+    (!h.
+      (& 0) < (abs h) /\ (abs h) < k ==>
+      (!n. (abs(g h n)) <= ((f n) * (abs h)))) ==>
+    ((\h. suminf(g h)) tends_real_real (& 0))(& 0)
+\ENDTHEOREM

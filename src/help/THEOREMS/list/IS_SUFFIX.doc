@@ -1,0 +1,6 @@
+\THEOREM IS_SUFFIX list
+|- (!l. IS_SUFFIX l[] = T) /\
+   (!x l. IS_SUFFIX[](SNOC x l) = F) /\
+   (!x1 l1 x2 l2.
+     IS_SUFFIX(SNOC x1 l1)(SNOC x2 l2) = (x1 = x2) /\ IS_SUFFIX l1 l2)
+\ENDTHEOREM

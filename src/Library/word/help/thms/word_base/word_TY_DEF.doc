@@ -1,0 +1,3 @@
+\THEOREM word_TY_DEF word_base
+|- ?rep. TYPE_DEFINITION(TRP(\v tl. (?l. v = l) /\ (LENGTH tl = 0)))rep
+\ENDTHEOREM

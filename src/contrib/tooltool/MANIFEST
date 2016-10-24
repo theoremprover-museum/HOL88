@@ -1,0 +1,46 @@
+   File Name		Archive #	Description
+-----------------------------------------------------------
+ MANIFEST                   1	This shipping list
+ Makefile                   1	
+ README                     1	
+ actions.c                  3	
+ doc                        1	
+ doc/Makefile               1	
+ doc/tooltool.uu.1          9	
+ doc/tooltool.uu.2         11	
+ doc/tooltool.uu.3         12	
+ doc/tooltool.uu.4         10	
+ doc/tooltool.uu.5          8	
+ emalloc.c                  1	
+ events.c                   3	
+ expr.c                     5	
+ func.c                     4	
+ lex.c                      4	
+ misc.c                     3	
+ objects.c                  6	
+ parse.y                    7	
+ patchlevel.h               1	
+ samples                    1	
+ samples/README             2	
+ samples/calc.tt            1	
+ samples/keytool            5	
+ samples/keytool.defaults.uu  1	
+ samples/keytool.l          2	
+ samples/keytool.r.14.uu    2	
+ samples/laserwriter.icon   1	
+ samples/lpq.tt             1	
+ samples/lpq2.tt            2	
+ samples/news.icon          1	
+ samples/queue.c            1	
+ samples/rn.tt              1	
+ samples/stopwatch.icon     1	
+ samples/stopwatch.tt       2	
+ samples/top.icon           1	
+ samples/top.tt             1	
+ selection.c                1	
+ symbols.c                  1	
+ tooltool.c                 2	
+ tooltool.h                 3	
+ tooltool.icon              1	
+ tooltool.man               1	
+ windows.c                  4	

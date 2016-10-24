@@ -1,0 +1,25 @@
+\DOC before
+
+\TYPE {before : (* list -> * list -> * list)}
+
+\SYNOPSIS
+Finds the difference between two lists.
+
+\LIBRARY window
+
+\DESCRIBE
+{before l1 l2} is the list {l} such that {(l @ l1) = l2}.
+
+\FAILURE
+{before l1 l2} fails if {l1} is not a suffix of {l2}.
+
+\EXAMPLE
+{
+   #before [2; 3] [1; 2; 3];;
+   [1] : int list
+}
+
+\SEEALSO
+prefix, suffix, after
+
+\ENDDOC

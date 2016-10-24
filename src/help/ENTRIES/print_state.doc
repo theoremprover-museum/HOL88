@@ -1,0 +1,56 @@
+\DOC print_state
+
+\TYPE {print_state : (int -> void)}
+
+\SYNOPSIS
+Prints the top levels of  the subgoal package goal stack.
+
+\DESCRIBE
+The function {print_state} is part of the subgoal package. Calling
+{print_state n} prints the top {n} levels of the goal stack of the current
+proof state (that is, the top {n} levels of unproven subgoals). If more than
+one subgoal is produced, they are printed from the bottom of the stack so that
+the current goal is printed last. If {n} is negative or is greater than the
+number of levels on the goal stack, the whole stack is printed. If no goal has
+been set or {n} is zero, nothing will be printed. If the original goal has just
+been proved so that the proof state consists of a theorem, and {n} is non-zero,
+{goal proved} is printed. For a description of the subgoal package, see
+{set_goal}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#g "(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])";;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+() : void
+
+#e CONJ_TAC;;
+OK..
+2 subgoals
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+
+#print_state 2;;
+"(HD[1;2;3] = 1) /\ (TL[1;2;3] = [2;3])"
+
+2 subgoals
+"TL[1;2;3] = [2;3]"
+
+"HD[1;2;3] = 1"
+
+() : void
+}
+\USES
+Examining the proof state during an interactive proof session.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, g, get_state, p, r,
+rotate, save_top_thm, set_goal, set_state, top_goal, top_thm.
+
+\ENDDOC

@@ -1,0 +1,35 @@
+\DOC preterm_typed
+
+\TYPE {preterm_typed : ((preterm # type) -> preterm)}
+
+\SYNOPSIS
+Constructs a typed preterm.
+
+\DESCRIBE
+{preterm_typed} allows type information to be associated with various
+substructures of a given preterm.  One can, therefore, construct improperly
+typed preterms that will fail to typecheck when {preterm_to_term} is
+invoked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#preterm_typed(preterm_const `T`,":bool");;
+preterm_typed((preterm_const `T`), ":bool") : preterm
+
+#preterm_to_term it;;
+"T" : term
+
+#preterm_typed(preterm_const `T`,":num");;
+preterm_typed((preterm_const `T`), ":num") : preterm
+
+#preterm_to_term it;;
+evaluation failed     types
+}
+\SEEALSO
+preterm_abs, preterm_antiquot, preterm_comb, preterm_const, preterm_var,
+preterm_to_term.
+
+\ENDDOC

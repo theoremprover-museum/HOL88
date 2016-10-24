@@ -1,0 +1,40 @@
+\DOC load_theorems
+
+\TYPE {load_theorems : (string -> void list)}
+
+\SYNOPSIS
+Loads in all the theorems from a given theory.
+
+\DESCRIBE
+If {thy} is the name of an ancestor theory, then the call
+{
+   load_theorems `thy`
+}
+\noindent attempts to load in all the theorems from that theory, that is, for
+each axiom {th}, to perform dynamically the following toplevel binding:
+{
+  let th = theorem `thy` `th`;;
+}
+
+\FAILURE
+Fails unless {thy} is an ancestor theory.
+
+\EXAMPLE
+{
+#load_theorems `bool`;;
+[(); (); (); (); ()] : void list
+
+PAIR_EQ = |- !x y a b. (x,y = a,b) = (x = a) /\ (y = b)
+
+SND = |- !x y. SND(x,y) = y
+
+FST = |- !x y. FST(x,y) = x
+
+PAIR = |- !x. FST x,SND x = x
+
+PAIR_EXISTS = |- ?p. IS_PAIR p
+}
+\SEEALSO
+let_after, let_before, load_theorem, theorems.
+
+\ENDDOC

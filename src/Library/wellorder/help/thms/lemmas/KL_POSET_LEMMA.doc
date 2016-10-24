@@ -1,0 +1,3 @@
+\THEOREM KL_POSET_LEMMA WELLORDER
+|- poset(\(c1,c2). C subset c1 /\ c1 subset c2 /\ chain l c2)
+\ENDTHEOREM

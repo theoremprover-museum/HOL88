@@ -1,0 +1,19 @@
+\DOC mk_list
+
+\TYPE {mk_list : ((term list # type) -> term)}
+
+\SYNOPSIS
+Constructs object-level list from list of terms.
+
+\DESCRIBE
+{mk_list(["t1";...;"tn"],":ty")} returns {"[t1;...;tn]:(ty)list"}.
+The type argument is required so that empty lists can be constructed.
+
+\FAILURE
+Fails with {mk_list} if any term in the list is not of the type specified as
+the second argument.
+
+\SEEALSO
+dest_list, is_list, mk_cons, dest_cons, is_cons.
+
+\ENDDOC

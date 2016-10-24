@@ -1,0 +1,3 @@
+\THEOREM ZIP_UNZIP list
+|- !l. ZIP(UNZIP l) = l
+\ENDTHEOREM

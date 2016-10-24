@@ -1,0 +1,72 @@
+\section{Suggested exercises}
+\label{sec-exer}
+
+\begin{enumerate}
+
+\item
+Design an implementation of the next address logic
+using devices such as logic gates,
+multiplexors and an adder.
+Verify this design by showing that it satisfies the
+behavioural specification expressed by \verb"NextMPC".
+
+\item
+Replace the next address logic and microcode ROM by
+a single PLA structure.
+Verify that this new design is functionally equivalent
+to the original design of the control unit.
+This may require a more concrete representation for
+microinstruction addresses.
+
+\item
+Experiment with trade-offs between defining \verb"NextState" as
+a function (as done in the current version) and defining
+it as a relation.
+In particular,
+re-define the semantics of
+the return-from-interrupt RFI
+instruction so that the value of the return address register \verb"rtn"
+after executing the RFI instruction is either:
+
+\begin{enumerate}
+\item Some fixed but unknown value.
+\item Some unpredictable value which
+``may vary from moment to moment, implementation to
+implementation, instruction to instruction within an implementation''
+\footnote{
+Timothy E. Leonard, ed.,
+VAX Architectural Reference Manual, Digital Equipment Corp., 1987.}.
+\end{enumerate}
+
+\item
+Re-design the internal architecture of \Tamarack\
+so that the program counter is incremented in parallel with
+data operations on the accumulator and external memory.
+Verify that the new design is correct with respect to the
+programming level model.
+
+\item 
+Enlarge the \Tamarack\ instruction set to provide more ALU operations,
+more forms of conditional branches (e.g., branch on overflow),
+and an alternative to absolute addressing for instruction operands.
+
+\item
+Generalize some of the proof procedures
+used to verify \Tamarack\ to provide greater automation
+for verifying \mbox{{\footnotesize TAMARACK}-like} architectures.
+For instance, generalize the proof procedure for symbolic execution
+of the microprogramming level by having the proof procedure use
+intermediate results for the \verb"mpc" to determine the microinstruction
+sequence instead of supplying this sequence beforehand.
+
+\item
+Modify the design of \Tamarack\ to include a time-out mechanism
+to handle failures in handshaking interactions while operating
+in fully asynchronous mode.
+Weaken the behavioural model of fully asynchronous
+memory to allow for the possibility of such failures.
+Verify the modified design (with appropriate modifications to
+the programming level model) using the more realistic model of
+external memory.
+
+\end{enumerate}

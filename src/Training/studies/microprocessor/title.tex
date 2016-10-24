@@ -1,0 +1,64 @@
+\begin{titlepage}
+
+\setcounter{page}{1}
+
+\begin{center}
+{\Huge{\bf HOL CASE STUDY}}\\
+\vskip .3in
+{\Large\bf Microprocessor Systems}\\
+\end{center}
+\vskip .2in
+
+\begin{inset}{Author}
+Jeff Joyce\newline
+Dept. of Computer Science\newline
+University of British Columbia\newline
+Vancouver, British Columbia\newline
+Canada V6T 1W5\newline
+{\bf Telephone:} (604) 228-3061\newline
+{\bf Email:} \verb"joyce@ca.ubc.cs"
+\end{inset}
+
+\begin{inset}{Concepts illustrated}
+Multi-level specification and verification,
+abstract description and specification of hardware,
+parameterization of theories,
+proof techniques based on symbolic execution,
+embedding other calculi in higher-order logic.
+\end{inset}
+
+\begin{inset}{Prerequisites}
+Familiarity with \HOL\ language syntax
+as given in {\it Getting Started with HOL}.
+Familiarity with the \HOL\ system is not essential.
+\end{inset}
+
+\begin{inset}{Supporting files}
+In the directory {\verb"hol/Training/studies/microprocessor"}.
+\end{inset}
+
+\begin{inset}{Abstract}
+The multi-level specification and
+verification of a very simple microprocessor is described.
+A relationship between specifications for its implementation,
+the external environment, and
+its intended behaviour is rigorously established by formal
+proof using the \HOL\ system.
+This case study gives a detailed description of
+how the \HOL\ language can be
+used to specify hardware structure and behaviour.
+It also outlines a strategy for using the \HOL\ system to verify a
+set of correctness
+theorems which relate different levels of specification.
+The main proof technique is the use of inference rules
+to symbolically execute microinstructions and microcode.
+A form of temporal logic is embedded in the \HOL\ logic
+for the special purpose of reasoning
+about asynchronous interactions between the microprocessor
+and external memory.
+\end{inset}
+
+\end{titlepage}
+
+\newpage
+

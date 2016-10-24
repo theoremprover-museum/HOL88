@@ -1,0 +1,3 @@
+\THEOREM NOT_SUC num
+|- !n. ~(SUC n = 0)
+\ENDTHEOREM

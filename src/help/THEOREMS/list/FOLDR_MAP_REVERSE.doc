@@ -1,0 +1,5 @@
+\THEOREM FOLDR_MAP_REVERSE list
+|- !f.
+    (!a b c. f a(f b c) = f b(f a c)) ==>
+    (!e g l. FOLDR f e(MAP g(REVERSE l)) = FOLDR f e(MAP g l))
+\ENDTHEOREM

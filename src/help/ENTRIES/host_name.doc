@@ -1,0 +1,38 @@
+\DOC host_name
+
+\TYPE {host_name : (void -> string)}
+
+\SYNOPSIS
+Returns the name of the host machine.
+
+\EXAMPLE
+When the {HOL} system was being run on the host machine {scaup.cl.cam.ac.uk}:
+{
+   #host_name ();;
+   `scaup.cl.cam.ac.uk` : string
+}
+\COMMENTS
+This function uses the facilities provided by the underlying Lisp, which
+unfortunately are extremely inconsistent. In Lisps other that Franz, this
+function may not work at all. However, the ability to perform system commands
+usually provides an adequate alternative, if one is prepared to put in a bit
+more work. For example:
+{
+   #let host_name2() =
+   #system `hostname >/tmp/.hostname`;
+   #let handle = openi `/tmp/.hostname` in
+   #letref name, char = ``, `` in
+   #while not (char = `\
+   #`) do (name := name^char; char := read handle);
+   #close handle;
+   #system `rm /tmp/.hostname`;
+   #name;;
+   host_name2 = - : (* -> string)
+
+   #host_name();;
+   `` : string
+
+   #host_name2();;
+   `auk.cl.cam.ac.uk` : string
+}
+\ENDDOC

@@ -1,0 +1,25 @@
+\DOC mk_comb
+
+\TYPE {mk_comb : ((term # term) -> term)}
+
+\SYNOPSIS
+Constructs a combination (function application).
+
+\DESCRIBE
+{mk_comb "t1","t2"} returns the combination {"t1 t2"}.
+
+\FAILURE
+Fails with {mk_comb} unless {t1} is a function with domain type {t2}.
+
+\EXAMPLE
+{
+#mk_comb("$~","T");;
+"~T" : term
+
+#mk_comb("T","T");;
+evaluation failed     mk_comb
+}
+\SEEALSO
+dest_comb, is_comb, list_mk_comb, mk_var, mk_const, mk_abs.
+
+\ENDDOC

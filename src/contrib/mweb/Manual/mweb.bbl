@@ -1,0 +1,16 @@
+\input bibnames.sty \hyphenation{Ker-n-i-ghan Port-able Post-Script Pren-tice
+  Richt-er Spring-er}
+\begin{thebibliography}{1}
+
+\bibitem{Knuth:CJ-27-2-97}
+Donald~E. Knuth.
+\newblock Literate programming.
+\newblock {\em The Computer Journal}, 27(2):97--111, May 1984.
+
+\bibitem{Knuth:ct-b}
+Donald~E. Knuth.
+\newblock {\em \TeX{}: The Program}, volume~B of {\em Computers \&
+  Typesetting}.
+\newblock Ad{\-d}i{\-s}on-Wes{\-l}ey, Reading, {MA}, {\noopsort{1986b}}1986.
+
+\end{thebibliography}

@@ -1,0 +1,5 @@
+\THEOREM CONT_DIV LIM
+|- !x.
+    f contl x /\ g contl x /\ ~(g x = & 0) ==>
+    (\x. (f x) / (g x)) contl x
+\ENDTHEOREM

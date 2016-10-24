@@ -1,0 +1,8 @@
+\THEOREM DORDER_LEMMA NETS
+|- !g.
+    dorder g ==>
+    (!P Q.
+      (?n. g n n /\ (!m. g m n ==> P m)) /\
+      (?n. g n n /\ (!m. g m n ==> Q m)) ==>
+      (?n. g n n /\ (!m. g m n ==> P m /\ Q m)))
+\ENDTHEOREM

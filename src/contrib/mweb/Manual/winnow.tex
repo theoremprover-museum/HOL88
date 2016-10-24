@@ -1,0 +1,434 @@
+%% To format this section only, uncomment those line starting with a single %
+%% Document Type: LaTeX
+%\documentstyle[12pt,array,verbatim,vrbinput]{article}
+
+%\begin{document}
+
+%\input{macros}
+
+\section{An Extension to the {\tt mweb} suite}\label{sec-winnow}
+
+The {\bf winnow} and {\bf mmerge} programs were added to the suite of
+\mweb\ tools to permit the creation of a ``master'' format file from a
+fairly ordinary \LaTeX\ source in which interactive \HOL\ sessions were
+included.  The circumstances included a very large document with many
+formatting-introduced errors, and generally datedness as the \HOL\ 
+system evolved during the lengthy preparation of the material.
+The intent was to generate a file which could be used with the \mweb\ 
+suite of tools to (nearly automatically) update and maintain the
+interactive \HOL\ material in the document. 
+
+By providing a filter from a \LaTeX\ source, there is flexibility in
+chosing which file to edit.  Both the \LaTeX\ source and the master
+files are possible, depending entirely on the inclination of the user.
+Using the \mweb\ suite to update the files with newly run interactive
+HOL sessions when required greatly reduces the overhead of maintaining
+the currency of a document.
+
+In order to make the process as automatic as possible, each file
+needed to contain all of the ML source code required for execution
+in \HOL.  In some cases this required material which was not to appear
+in the final document to be included in the source.  A ``hidden hol''
+environment was created for this purpose. 
+
+The modified processing sequence is shown in Figure~\ref{fig:new-proc}.
+Observe that the two instances of \LaTeX\ files in the diagram can be
+interpreted as a cycle in the file processing.
+
+
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{0.009000in}%
+\small
+\begin{picture}(340,700)(40,260)
+\thicklines
+\put(240,860){\oval(80,40)}
+\put(340,380){\oval(80,40)}
+\put(340,540){\oval(80,40)}
+\put(140,700){\oval(80,40)}
+\put(140,540){\oval(80,40)}
+\put(200,380){\oval(80,40)}
+\put( 40,440){\framebox(80,40){}}
+\put(160,440){\framebox(80,40){}}
+\put(100,600){\framebox(80,40){}}
+\put(200,920){\framebox(80,40){}}
+\put(200,760){\framebox(80,40){}}
+\put(300,440){\framebox(80,40){}}
+\put(300,280){\framebox(80,40){}}
+\put(160,280){\framebox(80,40){}}
+\put(240,920){\vector( 0,-1){ 40}}
+\put(240,840){\vector( 0,-1){ 40}}
+\put(140,680){\vector( 0,-1){ 40}}
+\put(140,600){\vector( 0,-1){ 40}}
+\put(340,520){\vector( 0,-1){ 40}}
+\put(340,440){\vector( 0,-1){ 40}}
+\put(340,360){\vector( 0,-1){ 40}}
+\put(200,440){\vector( 0,-1){ 40}}
+\put(200,360){\vector( 0,-1){ 40}}
+\put(240,760){\vector(-2,-1){ 80}}
+\put(240,760){\line  ( 5,-2){100}}
+\put(340,720){\vector( 0,-1){160}}
+\put(140,520){\vector(-3,-2){ 60}}
+\put(140,520){\vector( 3,-2){ 60}}
+\put(200,280){\line( 0,-1){ 20}}
+\put(200,260){\line( 1, 0){ 85}}
+\put(285,260){\line( 0, 1){280}}
+\put(285,540){\vector( 1, 0){ 15}}
+\put(180,620){\line( 1, 0){ 75}}
+\put(255,620){\line( 0,-1){240}}
+\put(255,380){\vector(-1, 0){ 15}}
+\put(140,615){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{ML file}}}
+\put(240,935){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{\LaTeX\ file}}}
+\put(240,855){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{\winnow}}}
+\put(240,775){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{MASTER}}}
+\put(140,695){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{\tangle}}}
+\put(140,535){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{HOL}}}
+\put( 80,455){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{THEORY}}}
+\put(200,455){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{LOG file}}}
+\put(340,455){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{\LaTeX\ file}}}
+\put(340,535){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{\weave}}}
+\put(340,375){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{\LaTeX}}}
+\put(340,295){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{Document}}}
+\put(200,375){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{\merge}}}
+\put(200,295){\makebox(0,0)[b]{\raisebox{0pt}[0pt][0pt]{TAG file}}}
+\end{picture}
+
+\end{center}
+\caption{Extended operation of \mweb\label{fig:new-proc}}
+\end{figure}
+
+\subsection{Using {\tt winnow}}
+
+An informal specification for the function of the winnow utility is
+given in Figure~\ref{fig:winnow-io}.  There are two envionments in the
+\LaTeX\ document which are modified by the filter.  The first is the
+environment which contains displayed interactive \HOL\ sessions,
+delimited by \verb+\beginhol+ and \verb+\endhol+.  These commands are
+\LaTeX\ macros which define how the material will be displayed (in
+this case, a framebox the allowed textwidth size encloses the
+verbatim-displayed material.)   
+
+\begin{figure}
+\begin{center}\it
+\begin{tabular}{|l|c|l|}
+\multicolumn{1}{c}{\rm input } & \multicolumn{1}{c}{} &
+ \multicolumn{1}{c}{\rm \winnow\ output}\\
+ \cline{1-1}\cline{3-3}
+ & & \\
+\verb+\beginhol+ \hspace*{7em} & \hspace*{1em} & \verb+\beginhol+ \hspace*{2em} \\
+                               & & \para{@ \{<infilename>_<seccount>\}} \\
+                               & & \para{@t\{<infilename>_<seccount>\}} \\
+                               & & \para{@N} \\
+\verb+%+ hol comment \verb+%+  & & \verb+%+ hol comment \verb+%+ \\
+\verb+#+command line\verb+;;+  & & command line \verb+;;+ \\
+returned value                 & & \\
+                               & & \\
+\verb+%+ comment line 1        & & \verb+%+ comment line 1 \\
+  comment line 2 \verb+%+      & &   comment line 2 \verb+%+ \\
+\verb+#+command line 1         & & command line 1 \\
+ command line 2\verb+;;+       & & command line 2\verb+;;+ \\
+returned value/feedback        & & \\
+ \ldots                        & & \\
+\verb+\endhol+                 & & \para{@-}\\
+                               & & \verb+\endhol+\\
+other input                    & & other input\\
+ \ldots                        & & \ldots \\
+\verb+\begin{hh}+              & & \verb+\begin{hh}+ \\
+                               & & \para{@ \{\$<infilename>_<seccount>\}} \\
+                               & & \para{@t\{\$<infilename>_<seccount>\}} \\
+                               & & \para{@N} \\
+command 1\verb+;;+             & & command 1\verb+;;+ \\
+ \ldots                        & &  \ldots \\
+command n\verb+;;+             & & command n\verb+;;+ \\
+\verb+\end{hh}+                & & \para{@-} \\
+                               & & \verb+\end{hh}+ \\
+\cline{1-1}\cline{3-3}
+\end{tabular}
+\end{center}
+\caption{Input format and corresponding output from \winnow\label{fig:winnow-io}}
+\end{figure}
+
+
+The other environment contains the \HOL\ commands which will not
+appear in the final document, but which are necessary for the
+extracted ML file to be executable.  The definition of this macro
+follows.
+
+\vspace*{12pt}
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{center}
+\begin{verbatim}
+
+\makeatletter
+\def\hh{\@bsphack
+             \let\do\@makeother\dospecials\catcode`\^^M\active
+             \let\verbatim@startline\relax
+             \let\verbatim@addtoline\@gobble
+             \let\verbatim@processline\relax
+             \let\verbatim@finish\relax
+             \verbatim@}
+\let\endhh=\@esphack
+\makeatother
+
+\end{verbatim}
+\end{center}
+\end{boxedminipage}
+\vspace*{12pt}
+
+A number of formatting requirements and assumptions exist.  
+\begin{enumerate}
+\item All displayed \HOL\ commands (ie.~those enclosed by the commands\linebreak
+\verb+\beginhol+ and \verb+\endhol+) are preceded by a single prompt \verb+#+,
+regardless of how many lines the command occupies.  This prompt is the
+first character on the line on which it occurs.  The program expects
+that the character sequence beginning after the prompt and continuing
+until the {\bf end} of the line on which the characters \verb+;;+
+appear, will comprise an executable \HOL\ command.  Thus, comments may
+be included within a command for example.
+\item Comments begin with the ML comment character \verb+%+ as the
+first character on a line, and continue up to the next occurrance of a
+comment character.  Multiline comments are permitted, but
+``supercomments'' (delimited by \verb+%<+ and \verb+>%+) are not
+supported to enclose simple comments. 
+\item The commands \verb+\beginhol+, \verb+\endhol+, \verb+\begin{hh}+,
+and \verb+\end{hh}+ must all be at the beginning of a line.  No
+indentation is permitted.
+\item Hidden \HOL\ commands (ie.~those enclosed by \verb+\begin{hh}+
+and \verb+\end{hh}+) must not have a prompt; everything thus enclosed
+is expected to be suitable for feeding directly to \HOL\ without
+modification or stripping prompt characters.  All commands must be
+terminated with \verb+;;+.
+\end{enumerate}
+
+The program shares the same front end as the other utilities in the
+\mweb\ suite, so the command line argments, etc.\ have the same
+format.  There are different defaults for some parameters, as well as
+a few added parameters.  These are listed below.
+
+The most visible difference is that all commands in the \LaTeX\ source
+file begin with the \verb+\+ character since they are also commands to
+\LaTeX.  As with the other \mweb\ tools, the exact command strings and
+output strings can be customized by changing the values of a set of
+parameters. 
+
+\noindent\cmdrule
+
+\begin{describecmd}{begin_section}{char_begin_sec}{\none}
+{\verb|\\beginhol|}
+\describe
+This command begins a section of displayed interactive \HOL\ material.
+\winnowaction: pass the command unchanged to output.  Then output
+three \mweb\ macros as follows: 
+\para{out_char_cmd} \para{out_begin_sec_cmd} with an argument made up of the 
+current values of \para{infilename} and \para{seccount}, enclosed
+by \para{mac_begin_arg} and \para{mac_end_arg};
+\para{out_char_cmd} \para{char_begin_tag} with an argument made up of the 
+current values of \para{infilename} and \para{seccount}, enclosed
+by \para{mac_begin_arg} and \para{mac_end_arg};
+\para{out_char_cmd} \para{out_char_new_cmd}.  Then, copy all \HOL\ commands
+and comments to the output until the command \cmd{char_end_sec} is
+found.  \HOL\ commands begin with a \para{char_hol_prompt} and end
+with \para{char_end_hol_in}.  Comments are enclosed by
+\para{char_hol_begin_comment} and \para{char_hol_end_comment}.
+\end{describecmd}
+
+\begin{describecmd}{end_section}{char_end_sec}{\none}
+{\verb|\\endhol|}
+\describe
+This command terminates a section of displayed interactive \HOL\ material.
+\winnowaction: Output \mweb\ macro
+\para{out_char_cmd} \para{out_end_sec_cmd} followed by the command itself unchanged.
+\end{describecmd}
+
+\begin{describecmd}{begin_ml_section}{char_ml_sec}{\none}
+{\verb|\\begin{hh}|}
+\describe
+This command begins a `hidden \HOL' section. 
+\winnowaction: pass the command unchanged to output.  Then output
+three \mweb\ macros as follows: 
+\para{out_char_cmd} \para{out_begin_sec_cmd} with an argument made up of
+\para{char_hide_indicator} and the 
+current values of \para{infilename} and \para{seccount}, enclosed
+by \para{mac_begin_arg} and \para{mac_end_arg};
+\para{out_char_cmd} \para{char_begin_tag} with an argument made up of
+\para{char_hide_indicator} and the current values of \para{infilename} and
+\para{seccount}, enclosed by \para{mac_begin_arg} and \para{mac_end_arg};
+\para{out_char_cmd} \para{out_char_new_cmd}.  
+Then, copy all \HOL\ commands and comments to the output until the
+command \cmd{char_end_hide} is found. 
+\end{describecmd}
+
+\begin{describecmd}{end_hide_hol_section}{char_end_hide}{\none}
+{\verb|\\end{hh}|}
+\describe
+This command terminates a section of displayed interactive \HOL\ material.
+\winnowaction: Output \mweb\ macro
+\para{out_char_cmd} \para{out_end_sec_cmd} followed by the command itself unchanged.
+\end{describecmd}
+\vspace*{8pt}
+
+The parameters understood and used by \winnow\ in a different way or
+in addition to those of the rest of \mweb\ are described in the
+following.  All the values are strings.  The values of the parameters
+may be changed by the user using the \cmd{para_def} command or the
+command line option {\tt -D}\index{command line options!-D@{\tt -D}}.
+First we present the parameters which
+are used differently or have different defaults.
+
+\noindent\cmdrule
+
+\begin{describepara}{char_begin_sec}{\verb|beginhol|}\describe
+This parameter associates with the \cmd{begin_section} command
+which begins a section of visible interactive \HOL. 
+\end{describepara}
+\begin{describepara}{char_cmd}{\verb|\\|}\describe
+This parameter is the command escape character.
+\end{describepara}
+\begin{describepara}{char_end_sec}{\verb|endhol|}\describe
+This parameter associates with the \cmd{end_section} command
+which terminates a section of visible interactive \HOL. 
+\end{describepara}
+\begin{describepara}{char_begin_star_sec}{\verb|\n|}\describe
+This parameter is an unused entry in an internal procedure to process
+a section of text.
+\end{describepara}
+\begin{describepara}{insuffix}{\verb*|.tex|}\describe
+The value of this parameter is the default suffix of the input file.
+If the name of input file given on the command line has no suffix,
+this string is appended to it. The \winnow\ program attempts to open a
+file of this resulting name for input.
+\end{describepara}
+\begin{describepara}{char_ml_sec}{\verb|begin{hh}|}\describe
+This parameter associates with the \cmd{begin_ml_section} command
+which begins a `hidden \HOL' section. 
+\end{describepara}
+\begin{describepara}{filter_mode}{true}\describe
+The value of this parameter is boolean. When it is true, the filter
+mode is active.  It must be set to true for \winnow.
+\end{describepara}
+
+\vspace*{12pt}
+
+Added parameters follow.
+
+\noindent\cmdrule
+
+{\def\describ@para#1{\endgroup
+ \vspace*{5pt}\noindent
+ \begin{minipage}{\textwidth}
+ \noindent\index{#1@\string\idxmlname{#1}|ul}%
+ \begin{tabular}{>{\bf}ll>{\bf}ll}
+ {NAME:} & \hbox to 13pc{\tt#1\hss} &
+  {DEFAULT:}&\relax }
+
+\begin{describepara}{out_char_cmd}{\verb|@|}\describe
+This is the output command escape character.
+\end{describepara}
+\begin{describepara}{out_begin_sec_cmd}{\verb*| |}\describe
+This is the output \para{begin_section} command string.
+\end{describepara}
+\begin{describepara}{out_end_sec_cmd}{\verb|-|}\describe
+This is the output \para{char_end_sec} command string.
+\end{describepara}
+\begin{describepara}{out_char_new_cmd}{\verb|N|}\describe
+This is the output \para{native_part} command string.
+\end{describepara}
+\begin{describepara}{out_ml_sec}{\verb|M|}\describe
+This is the output \para{begin_ml_section} command string.
+\end{describepara}
+\begin{describepara}{char_hol_prompt}{\verb|#|}\describe
+This string identifies the start of a \HOL\ command.
+\end{describepara}
+\begin{describepara}{char_end_hol_in}{\verb|endhol|}\describe
+This string identifies the end of a \HOL\ command.
+\end{describepara}
+\begin{describepara}{char_hol_begin_comment}{\verb|%|}\describe
+This string identifies the start of a \HOL\ comment.
+\end{describepara}
+\begin{describepara}{char_hol_end_comment}{\verb|%|}\describe
+This string identifies the end of a \HOL\ comment.
+\end{describepara}
+\begin{describepara}{char_end_hide}{\verb|end{hh}|}\describe
+This parameter associates with the \cmd{end_hide_hol_section}
+\end{describepara}
+\begin{describepara}{char_hide_indicator}{\verb|$|}\describe
+This parameter marks a section as containing hidden hol commands.  
+\end{describepara}
+}
+\vspace*{12pt}
+
+\subsection{Using {\tt mmerge} to prepare the tag file}
+
+Once the ``master'' file has been created, an ML source file can be
+extracted using the command {\tt mtangle <filename>}.  Given the
+presence of a master file named ``{\tt <filename>.m}'', this will
+generate an ML file named ``{\tt <filename>.ml}''.  A log of executing
+the source file should be saved in a file named {\tt <filename>.log}.
+This file can be combined with the original ML file to generate the
+``tag'' file, which will contain segments of (slightly modified)
+interactive sessions of \HOL\ to be reinserted into a \LaTeX\ document.
+
+The \merge\ utility is independent of the \mweb\ system.  Its purpose is
+to create the ``tag'' files.  In the presence of files {\tt
+<filename>.log} and {\tt <filename>.ml} the proper usage is given as follows.
+\begin{center}
+\verb+mmerge [-p prompt] [-hH] <filename>+
+\end{center}
+The {\tt p} option permits recognizing other than the default \HOL\
+prompt \verb+#+.  The {\tt h} and {\tt H} options cause a usage help
+message to be printed to standard output.  A file labelled {\tt
+<filename>.tag} will be generated if the program successfully
+executes.
+
+The source and log files are merged together such that:
+\begin{itemize}
+\item Imbedded comments are passed to the output untouched, with no
+preceding prompt.
+\item Every visible command is passed to the output file, preceded by a single
+prompt character \verb+#+.  Hidden commands are passed to the output
+file, but without a prompt.
+\item The system response to visible commands is passed to the output.
+\item Imbedded comments placed by the \tangle\ program identify the
+extent of ``sections'', which were delineated by the commands
+\verb|\beginhol|, \verb|\endhol| and \verb|\begin{hh}|,
+\verb|\end{hh}| in the original file.
+The corresponding tag sections
+are delineated by commands of the form
+\verb|@t{<filename>_<seccount>}| and \verb|@e| for visible sections,
+and \verb|@t{$<filename>_<seccount>}| and \verb|@e| for hidden sections,
+\end{itemize}
+
+It has been the experience of the author that some manual editing of
+the tag files may be necessary to cope with unusual demands on the
+program.  Examples include eliminating the listing of a long series of
+proved subgoals when a goal is finally solved (an imbedded comment
+that this is being done serves both to inform the reader, and remind
+the person processing the text), splitting a section
+into two if the original \LaTeX\ file had split the system feedback
+so (the empty section serves as a useful reminder in this case), and
+reformatting the output to limit line lengths if the \HOL\ pretty
+printer was not configured appropriately.  A list of all such manual
+changes should be kept to ease repeating of the process without introducing
+random errors.
+
+
+\subsection{Using {\tt mweave} to put it all together}
+
+For the most part the standard \mweb\ utilities when applied to the
+output of the \winnow\ program are run as described in the main
+documentation.  The only exception to this is the \weave\ utility,
+which requires the setting of particular parameters.  Filter mode must
+be turned on by using the command option \verb+-f+.  In addition, the
+following parameters must be set as shown, typically in an include file.
+
+\begin{verbatim}
+@D"doc_only_mode"="true"
+@D"char_begin_sec"="$"
+@D"char_anon_sec"=" "
+@D"mac_before_tag"=""
+@D"mac_after_tag"=""
+@D"mac_end_sec"=""
+\end{verbatim}
+
+%\end{document}

@@ -1,0 +1,6 @@
+\THEOREM BNVAL_WCAT bword_num
+|- !n m.
+    !w1 :: PWORDLEN n.
+     !w2 :: PWORDLEN m.
+      BNVAL(WCAT(w1,w2)) = ((BNVAL w1) * (2 EXP m)) + (BNVAL w2)
+\ENDTHEOREM

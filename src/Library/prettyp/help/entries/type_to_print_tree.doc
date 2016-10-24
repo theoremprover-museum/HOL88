@@ -1,0 +1,26 @@
+\DOC type_to_print_tree
+
+\TYPE {type_to_print_tree : (type -> print_tree)}
+
+\SYNOPSIS
+Function for converting a HOL type into a print-tree.
+
+\LIBRARY prettyp
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#type_to_print_tree ":* -> bool";;
+Print_node(`type`,
+           [Print_node(`OP`,
+                       [Print_node(`fun`, []);
+                        Print_node(`VAR`, [Print_node(`*`, [])]);
+                        Print_node(`OP`, [Print_node(`bool`, [])])])])
+: print_tree
+}
+\SEEALSO
+term_to_print_tree, thm_to_print_tree, pp_convert_type.
+
+\ENDDOC

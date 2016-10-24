@@ -1,0 +1,50 @@
+\DOC extend_theory
+
+\TYPE {extend_theory : (string -> void)}
+
+\SYNOPSIS
+Allows an existing theory to be extended.
+
+\DESCRIBE
+Calling {extend_theory `thy`} loads the existing theory {thy} into the system
+and makes it the current theory. The message `{Theory thy loaded}' is printed.
+The theory is entered in draft mode. This allows new axioms, constants, types,
+constant specifications, infix constants, binders and parents to be added to
+the theory segment. Inconsistencies may be introduced to the theory if
+inconsistent axioms are asserted.  New theorems can also be added as when in
+proof mode. If new type or constant names are added to theory {thy} which
+clash with names in any of its descendants, later attempts to load those
+descendants will fail. The extensions to the theory segment might  not be
+written to the theory file until the session is finished with a call to
+{close_theory}. If HOL is quitted without closing the session with
+{close_theory}, parts of the theory segment created during the session may be
+lost. If the system is in draft mode when a call to {extend_theory} is made,
+the previous session is closed; all changes made in it will be written to the
+associated theory file.
+
+\FAILURE
+A call to {extend_theory `thy`} will fail if theory {thy} does not appear on
+the current search path. It will fail unless theory {thy} is either the
+current theory or a descendant of it. It will fail if any of the theory files
+of the theory {thy} have been damaged. It will also fail if an ancestor of
+theory {thy} has been extended with either new types or constants which clash
+with names in theory {thy}. Since it could involve writing to the file
+system, if a write fails for any reason {extend_theory} will fail. On failure,
+the system recovers cleanly, unloading any theory segments it had loaded before
+the failure was detected. It will diverge if the theory hierarchy within theory
+{thy} contains loops, so that a theory segment is its own ancestor.
+
+\USES
+The normal way to build upon a theory is to use it as a parent. You should
+only use {extend_theory} to add declarations, etc., that were mistakenly
+omitted from a theory.
+
+\COMMENTS
+It would be difficult to implement the necessary checks to ensure that added
+types, constants, etc., did not invalidate declarations in the descendant
+theories.
+
+\SEEALSO
+load_theory, new_parent, new_theory, print_theory, search_path.
+
+\ENDDOC

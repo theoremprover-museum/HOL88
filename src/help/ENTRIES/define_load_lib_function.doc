@@ -1,0 +1,42 @@
+\DOC define_load_lib_function
+
+\TYPE {define_load_lib_function = - : (string list -> void -> void)}
+
+\KEYWORDS
+library
+
+\SYNOPSIS
+Defines a function for loading the contents of a library.
+
+\DESCRIBE
+ If a library is loaded while the system is not in draft mode, it may
+ not be loaded completely.
+ In such case, a function whose name is created by prefixing the name
+ of the library with `{load_}' is defined. This function can be called
+ later to complete the loading.
+
+The function {define_load_lib_function} dynamically defines such a
+function. It is called in the generic library loader {library_loader}.
+Due to the way it is called using {let_before}, it can  take only a
+single argument, a string list. The information passed in this list
+consists of the library name, the names of theories and the names of
+the code files. The library name is the first string in the list and
+it is mandatory. The theory names and code file names follow, and they
+are separated by a null string. Both of these are optional. E.g. the
+simplest case is {[`lib_name`; ``]}.
+
+When the loading function defined by {define_load_lib_function} is
+called, the code files will be loaded, and the theorems and
+definitions in the theories will be set up for autoloading.
+
+\FAILURE
+The function {define_load_lib_function} fails if called with an
+argument not in the form described above.
+The loading function defined by it will fail if any of the code files
+cannot be loaded successfully, or any of the theories is not in the ancestry
+of the current theory.
+
+\SEEALSO
+library_loader, load_library.
+
+\ENDDOC

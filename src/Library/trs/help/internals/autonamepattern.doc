@@ -1,0 +1,10 @@
+\DOC autonamepattern
+
+\TYPE {autonamepattern : (string -> namepattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

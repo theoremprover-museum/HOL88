@@ -1,0 +1,37 @@
+\DOC prove_word_val
+
+\TYPE {prove_word_val : int -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Proves the theorem characterizing the conversion functions between the
+types {:wordn} and {:num}.
+
+\DESCRIBE
+{prove_word_val} takes a natural number as its single argument. It
+proves a theorem which characterizes the conversion functions {NVALn}
+and {NWORDn}. The theorem is returned as the function value, and it
+takes the following form:
+{
+   |- (!w. NWORDn(NVALn w) = w) /\ 
+      (!m. m < (2 EXP n) ==> (NVALn(NWORDn m) = m))
+}
+
+\FAILURE
+Fails if the type {:wordn} or the conversion functions {:NVALn} and
+{:NWORDn} have not been defined.
+
+\EXAMPLE
+The following HOL session illustrates the use of this function:
+{
+   # let WORD_VAL_3 = save_thm(`WORD_VAL_3`, prove_word_val 3);;
+   WORD_VAL_3 = 
+   |- (!w. NWORD3(NVAL3 w) = w) /\
+      (!n. n < (2 EXP 3) ==> (NVAL3(NWORD3 n) = n))
+}
+
+\SEEALSO
+{define_wordn_type}, {define_word_val}.
+
+\ENDDOC

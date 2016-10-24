@@ -1,0 +1,10 @@
+\DOC No_link
+
+\TYPE {No_link : print_loop_link}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

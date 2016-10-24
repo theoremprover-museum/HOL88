@@ -1,0 +1,3 @@
+\THEOREM ZERO_LESS_EXP arithmetic
+|- !m n. 0 < ((SUC n) EXP m)
+\ENDTHEOREM

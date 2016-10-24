@@ -1,0 +1,27 @@
+\DOC all_subgoals
+
+\TYPE {all_subgoals : (void -> void)}
+
+\SYNOPSIS
+Prints all the remaining subgoals of the current default proof.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Displays all the remaining subgoals (unexpanded
+nodes) of the prooftree being manipulated.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails when the set of proofs is empty.
+
+
+\SEEALSO
+do_tac, cancel_tac, current_goal, current_proof, move_to_proof,
+new_goal, remove_proof, show all_proofs, show_all_subgoals, show_tac,
+show_the_tactic, subgoal_tac.
+
+\ENDDOC

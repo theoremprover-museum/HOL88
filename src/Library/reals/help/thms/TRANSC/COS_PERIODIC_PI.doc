@@ -1,0 +1,3 @@
+\THEOREM COS_PERIODIC_PI TRANSC
+|- !x. cos(x + pi) = --(cos x)
+\ENDTHEOREM

@@ -1,0 +1,38 @@
+\DOC load_theorem
+
+\TYPE {load_theorem : (string -> string -> void)}
+
+\SYNOPSIS
+Loads in a given theorem from a given theory.
+
+\DESCRIBE
+If {thy} is the name of an ancestor theory, and {th} one of its axioms, then
+{
+   load_theorem `thy` `th`
+}
+\noindent will attempt to load the corresponding theorem, that is, to perform
+dynamically the following toplevel binding:
+{
+  let th = theorem `thy` `th`;;
+}
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {th} is not one of its
+theorems.
+
+\EXAMPLE
+{
+#load_theorem `bool` `PAIR`;;
+() : void
+
+PAIR = |- !x. FST x,SND x = x
+
+#PAIR;;
+|- !x. FST x,SND x = x
+}
+\USES
+Useful for autoloading.
+
+\SEEALSO
+theorems, let_after, let_before, load_theorems.
+
+\ENDDOC

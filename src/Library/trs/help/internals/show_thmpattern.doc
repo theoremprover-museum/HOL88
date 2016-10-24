@@ -1,0 +1,10 @@
+\DOC show_thmpattern
+
+\TYPE {show_thmpattern : (thmpattern -> thmpattern_rep)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

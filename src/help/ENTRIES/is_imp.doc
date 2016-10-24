@@ -1,0 +1,22 @@
+\DOC is_imp
+
+\TYPE {is_imp : (term -> bool)}
+
+\SYNOPSIS
+Tests a term to see if it is an implication.
+
+\DESCRIBE
+{is_imp "t1 ==> t2"} returns {true}. 
+If the term is not an implication the result is {false}.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+This function used to take negation as an implication with {F} conclusion.
+This behaviour is implemented by the function {is_neg_imp}.
+
+\SEEALSO
+mk_imp, dest_imp, dest_neg_imp, is_neg_imp.
+
+\ENDDOC

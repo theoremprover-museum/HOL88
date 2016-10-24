@@ -1,0 +1,3 @@
+\THEOREM CONT_NEG LIM
+|- !x. f contl x ==> (\x. --(f x)) contl x
+\ENDTHEOREM

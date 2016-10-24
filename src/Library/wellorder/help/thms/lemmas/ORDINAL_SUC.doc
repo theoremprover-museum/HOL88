@@ -1,0 +1,7 @@
+\THEOREM ORDINAL_SUC WELLORDER
+|- !l.
+    ordinal l /\ (?x. ~fl l x) ==>
+    ordinal
+    (\(x,y).
+      l(x,y) \/ (y = (@y. ~fl l y)) /\ (fl l x \/ (x = (@y. ~fl l y))))
+\ENDTHEOREM

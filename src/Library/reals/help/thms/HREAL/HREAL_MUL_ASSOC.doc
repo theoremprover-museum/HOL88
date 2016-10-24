@@ -1,0 +1,3 @@
+\THEOREM HREAL_MUL_ASSOC HREAL
+|- !X Y Z. X hreal_mul (Y hreal_mul Z) = (X hreal_mul Y) hreal_mul Z
+\ENDTHEOREM

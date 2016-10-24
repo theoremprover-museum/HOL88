@@ -1,0 +1,762 @@
+% =====================================================================
+% HOL Course Slides: the type definition package      (c) T Melham 1990
+% =====================================================================
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Type definition package}{10}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+The\\
+Type Definition\\
+Package
+\esectitle
+
+
+% =====================================================================
+\slide{Type Definitions in HOL}
+
+\point{The type definition mechanism:}
+
+\vskip10mm
+
+{\setlength{\unitlength}{1.2mm}
+\begin{center}
+\begin{picture}(115,25)
+\Large
+{\thicklines
+\put(88,12.5){\oval(40,25)}
+\put(20.5,12.5){\oval(15,15)}
+\put(80.5,12.5){\oval(15,15)}}
+\put(20.5,20){\line(1,0){60}}
+\put(20.5,5){\line(1,0){60}}
+\put(20.5,15){\makebox(0,0){\large\bf new}}
+\put(20.5,11.5){\makebox(0,0){\large\bf type}}
+\put(98,20){\makebox(0,0){\large\bf existing}}
+\put(98,16.5){\makebox(0,0){\large\bf type}}
+{\thicklines \put(33,10.5){\vector(1,0){30}}}
+\put(48,14.4){\makebox(0,0){{\large \bf bijection}}}
+\put(3,12.5){\makebox(0,0){{\tt newty}}}
+\put(80.5,12.5){\makebox(0,0){{\LARGE\tt P}}}
+\put(113,12.5){\makebox(0,0){{\tt ty}}}
+\end{picture}
+\end{center}
+}
+
+\vskip7mm
+
+\point{The axiom-scheme for type definitions:}
+
+\vskip7mm
+
+\bspindent
+\begin{picture}(100,11)
+\def\_{\char'137}
+\put(0,8){\makebox(50,0)[l]{\Large\tt
+new\_type\_definition:(string \# term \# thm) -> thm}}
+\put(77,0){\makebox(0,0)[b]{\large\bf 1}}
+\put(102,0){\makebox(0,0)[b]{\large\bf 2}}
+\put(123,0){\makebox(0,0)[b]{\large\bf 3}}
+\end{picture}
+\espindent
+
+
+%\vskip7mm
+
+\bpindent
+\LARGE\bf where:
+\epindent
+
+\vskip7mm
+
+\bspindent
+\Large\bf
+1: is the name of the new type: {\tt `newty`}
+\bigskip
+
+2: is the `subset predicate': {\tt "P:ty->bool"}
+\bigskip
+
+3: is a required existence theorem: \verb!|- ?x. P x!
+\espindent 
+
+% =====================================================================
+\slide{Example: A Type with One Value}
+
+\vskip-9mm
+
+\point{Type definition:%
+{\setlength{\unitlength}{0.9mm}\begin{picture}(115,25)(-8,11)
+\Large{\thicklines
+\put(88,12.5){\oval(40,25)}
+\put(20.5,12.5){\oval(15,15)}
+\put(80.5,12.5){\oval(15,15)}}
+\put(20.5,20){\line(1,0){60}}
+\put(20.5,5){\line(1,0){60}}
+\put(20.5,13.25){\makebox(0,0){\tt one}}
+\put(98,20){\makebox(0,0){\tt bool}}
+{\thicklines \put(33,9.5){\vector(1,0){30}}}
+\put(48,14.4){\makebox(0,0){\tt $\exists\;\:$rep}}
+\put(80.5,13.25){\makebox(0,0){{{\large $\bullet\;$}\tt T}}}
+\put(98,5){\makebox(0,0){{{\large $\bullet\;$}\tt F}}}
+\end{picture}
+}}
+
+\vskip17mm
+
+\point{Prove existence theorem:}
+
+\begin{session}\begin{verbatim}
+#let eth = TAC_PROOF(([], "?x:bool.(\b.b)x"),
+                     BETA_TAC THEN EXISTS_TAC "T" 
+                     THEN ACCEPT_TAC TRUTH);;
+eth = |- ?x. (\b. b)x
+\end{verbatim}\end{session}
+
+\point{Make type definition:}
+
+\begin{session}\begin{verbatim}
+#let def = 
+     new_type_definition(`one`, "\b:bool.b", eth);;
+def = |- ?rep. TYPE_DEFINITION(\b. b)rep
+
+#REWRITE_RULE [TYPE_DEFINITION] def;;
+|- ?rep.
+    (!x' x''. (rep x' = rep x'') ==> (x' = x'')) /\
+    (!x. (\b. b)x = (?x'. x = rep x'))
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Defining Bijections}
+
+\point{The function:}
+
+\vskip7mm
+
+\bspindent
+{\Large\verb!define_new_type_bijections!}
+\espindent
+
+\vskip7mm
+
+\bpindent
+{\LARGE\bf defines bijections {\tt ABS} and {\tt REP} such that:}
+\epindent
+
+\vskip7mm
+
+{\setlength{\unitlength}{1.2mm}
+\begin{picture}(115,25)
+\Large
+{\thicklines
+\put(88,12.5){\oval(40,25)}
+\put(20.5,12.5){\oval(15,15)}
+\put(80.5,12.5){\oval(15,15)}}
+\put(20.5,20){\line(1,0){60}}
+\put(20.5,5){\line(1,0){60}}
+\put(20.5,12.5){\makebox(0,0){\tt newty}}
+\put(98,20){\makebox(0,0){\tt ty}}
+{\thicklines \put(54,16){\vector(1,0){10}}}
+{\thicklines \put(54,8.6){\line(1,0){10}}}
+{\thicklines \put(42,16){\line(-1,0){10}}}
+{\thicklines \put(42,8.6){\vector(-1,0){10}}}
+\put(48,16){\makebox(0,0){\Large\tt REP}}
+\put(48,8.6){\makebox(0,0){\Large\tt ABS}}
+\put(80.5,12.5){\makebox(0,0){{\tt P}}}
+\end{picture}}
+
+\vskip10mm
+
+\point{For example:}
+
+\begin{session}\begin{verbatim}
+#let def = 
+     new_type_definition(`one`, "\b:bool.b", eth);;
+def = |- ?rep. TYPE_DEFINITION(\b. b)rep
+
+#let iso = define_new_type_bijections
+           `one_ISO_DEF` `ABS` `REP` def;;
+iso = |- (!a. ABS(REP a) = a) /\ 
+         (!r. (\b. b)r = (REP(ABS r) = r))
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Proving Facts about the Bijections}
+
+\point{Functions for proving (trivial) facts:}
+
+\vskip5mm
+
+\bspindent\Large
+\verb!prove_rep_fn_one_one : thm -> thm!
+\medskip
+
+\verb!prove_rep_fn_onto    : thm -> thm!
+\medskip
+
+\verb!prove_abs_fn_one_one : thm -> thm!
+\medskip
+
+\verb!prove_abs_fn_onto    : thm -> thm!
+\espindent
+
+\point{For example:}
+
+\begin{session}\begin{verbatim}
+#let iso = define_new_type_isomorphisms 
+           `one_ISO_DEF` `ABS` `REP` def;;
+iso = |- (!a. ABS(REP a) = a) /\ 
+         (!r. (\b. b)r = (REP(ABS r) = r))
+
+#prove_rep_fn_one_one iso;;
+|- !a a'. (REP a = REP a') = (a = a')
+
+#prove_abs_fn_onto iso;;
+|- !a. ?r. (a = ABS r) /\ (\b. b)r
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Method for Defining a New Type}
+
+\point{The usual three steps are:}
+
+\begin{center}
+\setlength{\unitlength}{1.5mm}
+\begin{picture}(80,100)(12,0)
+\thicklines
+
+% box 1
+{\thicklines \put(40,90){\oval(80,14){}}}
+\put(4,89.5){\parbox{108mm}{\Large\bf Find an appropriate representation}} 
+
+% vector down
+\put(40,83){\vector(0,-1){13}}
+\put(42,76.5){\line(1,0){19}}
+\put(40,76.5){\thinlines\oval(4,2)}
+\put(64,76.5){\makebox(0,0)[l]{\Large\bf Subset predicate: {\tt P}}}
+
+% box 2
+{\thicklines \put(40,62){\oval(80,16){}}}
+\put(4,61.5){\parbox{108mm}{\def\_{\char'137}%
+			     \Large {\tt new\_type\_definition}\\
+			     {\tt define\_new\_type\_bijections}}}
+
+% vector down
+\put(40,54){\vector(0,-1){13}}
+\put(42,47.5){\line(1,0){19}}
+\put(40,47.5){\thinlines\oval(4,2)}
+\put(64,47.5){\makebox(0,0)[l]{\Large\bf Bijections: {\tt ABS} and {\tt REP}}}
+
+% box 3
+{\thicklines \put(40,33){\oval(80,16){}}}
+\put(4,32.5){\parbox{109mm}{\Large \bf 
+			   Derive an abstract characterization of the 
+			   new type by formal proof.}}
+
+% output
+\put(40,25){\vector(0,-1){7}}
+
+\put(40,14){\makebox(0,0){\Large\bf $\vdash$ abstract `axiomatization'}}
+
+\end{picture}
+\end{center}
+
+\vskip-10mm
+
+\point{This process has been completely automated for arbitrary concrete
+recursive types.}
+
+% =====================================================================
+\slide{Automatic Type Definitions}
+
+\point{The derived rule is:}
+
+\vskip7mm
+
+\bspindent
+\begin{picture}(100,11)
+\def\_{\char'137}
+\put(0,8){\makebox(50,0)[l]{\Large \tt
+define\_type:string -> string -> thm}}
+\put(49,0){\makebox(0,0)[b]{\large\bf 1}}
+\put(80.5,0){\makebox(0,0)[b]{\large\bf 2}}
+\end{picture}
+\espindent
+
+%\vskip7mm
+
+\bpindent
+\Large\bf where: 
+\epindent
+
+\vskip7mm
+
+\bspindent
+\Large\bf
+1: is the name under which the results will be stored
+\vskip12pt
+
+2: is a `grammar' describing the required type
+\espindent 
+
+\vskip3mm
+
+\point{The resulting theorem is a complete and \newline
+      \mbox{abstract} characterization of the desired type.}
+
+% =====================================================================
+\slide{Example: an Enumerated Type}
+
+\point{A three-valued type is specified by:}
+
+\vskip7mm
+
+\bspindent
+{\LARGE \verb!tri  =  A  |  B  |  C!}
+\espindent
+
+\vskip4mm
+
+\point{In the system:}
+
+\begin{session}\begin{verbatim}
+#let tri = define_type `tri` `tri = A | B | C`;;
+tri = |- !e0 e1 e2. ?! fn:tri->*. 
+         (fn A = e0) /\ (fn B = e1) /\ (fn C = e2)
+\end{verbatim}\end{session}
+
+\vskip4mm
+
+\point{The resulting theorem says:}
+
+{\setlength{\unitlength}{2.4mm}
+\begin{center}
+\begin{picture}(40,25)
+\thicklines
+\put(5,23){\makebox(0,0){\LARGE\tt :tri}}
+\put(35,23){\makebox(0,0){\LARGE\tt :*}}
+\put(20,18){\makebox(0,0){\LARGE\tt fn}}
+
+\put(5,10){\oval(10,20)}
+
+\put(3,5){\makebox(0,0){\Large\tt C}}
+\put(3,10){\makebox(0,0){\Large\tt B}}
+\put(3,15){\makebox(0,0){\Large\tt A}}
+
+\put(6,5){\circle*{1}}
+\put(6,10){\circle*{1}}
+\put(6,15){\circle*{1}}
+
+\put(7.5,5){\vector(1,0){25}}
+\put(7.5,10){\vector(1,0){25}}
+\put(7.5,15){\vector(1,0){25}}
+
+\put(35,10){\oval(10,20)}
+
+
+\put(37,5){\makebox(0,0){\Large\tt e2}}
+\put(37,10){\makebox(0,0){\Large\tt e1}}
+\put(37,15){\makebox(0,0){\Large\tt e0}}
+
+\put(34,5){\circle*{1}}
+\put(34,10){\circle*{1}}
+\put(34,15){\circle*{1}}
+
+\end{picture}
+\end{center}
+}
+
+% =====================================================================
+\slide{Example: the Natural Numbers}
+
+\point{The recursive type {\tt :nat} is specified by:}
+
+\vskip7mm
+
+\bspindent
+\LARGE \verb!nat  =  Zero  |  Suc nat!
+\espindent
+
+\point{In the system:}
+
+\begin{session}\begin{verbatim}
+#let nat = 
+     define_type `nat` `nat = Zero | Suc nat`;;
+nat = |- !e f. ?! fn. 
+         (fn Zero = e) /\ 
+         (!n. fn(Suc n) = f (fn n) n)
+\end{verbatim}\end{session}
+
+\point{The result is the Primitive Recursion Theorem for the natural numbers.}
+
+% =====================================================================
+\slide{Example: Binary Trees}
+
+\point{The recursive type {\tt :(*)tree} is specified by:}
+
+\vskip7mm
+
+\bspindent
+\LARGE \verb!tree  =  Leaf *  |  Node tree tree!
+\espindent
+
+\point{In the system:}
+
+\begin{session}\begin{verbatim}
+#let tree = 
+     define_type `tree` 
+     `tree = Leaf * | Node tree tree`;; 
+tree = 
+|- !f0 f1. ?! fn.
+    (!x. fn(Leaf x) = f0 x) /\
+    (!t t'. fn(Node t t') = f1 (fn t) (fn t') t t')
+\end{verbatim}\end{session}
+
+\point{The result is a `primitive recursion theorem' 
+       for binary trees.}
+
+% =====================================================================
+\slide{General Form of Input}
+
+\point{The type {\tt :ty} specified by:}
+
+\vskip7mm
+
+\bspindent
+\LARGE
+$
+\verb!ty! \;\: {\tt{=}} \;\:
+{\tt C}_1\;\:ty{}_1^1\;\:\ldots\;\:ty{}_1^{k_1}\quad\verb!|! \;\:{\cdots}\;\: 
+\verb!|! \quad {\tt C}_n\;\:ty{}_n^1\;\:\ldots\;\:ty{}_n^{k_n}$
+\espindent
+
+\vskip7mm
+
+\bpindent
+\LARGE\bf denotes the smallest set of values:
+\espindent
+
+\vskip7mm
+
+\bspindent
+\LARGE
+${\tt C}_i\;\;x{}_i^1\;\;\ldots\;\;x{}_i^{k_i}$
+\espindent
+
+\vskip7mm
+
+\bpindent
+\LARGE\bf where $x_i^j$ is a term of type $ty_i^j$ for
+		$1 \leq j \leq k_i$.
+\epindent
+
+\vskip10mm
+
+\point{The resulting theorem states the uniqueness of functions
+       defined by `primitive recursion' on the new type {\tt :ty}.}
+
+
+% =====================================================================
+\slide{Primitive Recursive Functions}
+
+\point{The derived rule is:}
+
+\vskip7mm
+
+\bspindent
+\Large\verb!new_recursive_definition!
+\espindent
+
+\vskip7mm
+
+\bpindent
+\LARGE\bf with ML type:
+\epindent
+
+\vskip7mm
+
+%let new_recursive_definition infix_flag th name tm
+
+\bspindent
+\begin{picture}(100,11)
+\def\_{\char'137}
+\put(0,8){\makebox(50,0)[l]{\Large \tt
+:bool -> thm -> string -> term -> thm}}
+\put(10,0){\makebox(0,0)[b]{\large\bf 1}}
+\put(33.5,0){\makebox(0,0)[b]{\large\bf 2}}
+\put(61,0){\makebox(0,0)[b]{\large\bf 3}}
+\put(89,0){\makebox(0,0)[b]{\large\bf 4}}
+\end{picture}
+\espindent
+
+\bpindent 
+\Large\bf where
+\epindent
+
+\vskip7mm
+
+\bspindent
+\Large\bf
+1: is an `infix flag'
+\bigskip
+
+2: is the abstract axiom for the recursive type
+\bigskip
+
+3: is the name under which the result is stored
+\bigskip
+
+4: is a term giving the desired definition
+\espindent
+
+\vskip3mm
+
+\point{The output is a theorem that states the
+		     \mbox{desired} function definition.}
+
+
+% =====================================================================
+\slide{An Example}
+
+\point{Define the type:}
+
+\begin{session}\begin{verbatim}
+#let tree = 
+     define_type `tree` 
+     `tree = Leaf * | Node tree tree`;; 
+tree = 
+|- !f0 f1. ?! fn.
+    (!x. fn(Leaf x) = f0 x) /\
+    (!t t'. fn(Node t t') = f1 (fn t) (fn t') t t')
+\end{verbatim}\end{session}
+
+\point{Define a recursive function:}
+
+\begin{session}\begin{verbatim}
+#let Sum = 
+     new_recursive_definition false tree `Sum`
+      "(Sum(Leaf n) = n) /\
+       (Sum(Node t1 t2) = (Sum t1) + (Sum t2))";;
+Sum = 
+ |- (!n. Sum(Leaf n) = n) /\
+    (!t1 t2. Sum(Node t1 t2) = (Sum t1) + (Sum t2))
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Special Features}
+
+\point{Partially specified functions:}
+
+\begin{session}\begin{verbatim}
+#let VAL = 
+     new_recursive_definition false tree `VAL`
+     "VAL (Leaf x) = (x:*)";;
+
+VAL = |- !x. VAL(Leaf x) = x
+\end{verbatim}\end{session}
+
+
+\point{Proving existence only:}
+
+\begin{session}\begin{verbatim}
+#let ethm = 
+     prove_rec_fn_exists tree 
+       "(Sum(Leaf n) = n) /\
+        (Sum(Node t1 t2) = (Sum t1) + (Sum t2))";;
+ethm = 
+|- ?Sum.
+    (!n. Sum(Leaf n) = n) /\
+    (!t1 t2. Sum(Node t1 t2) = (Sum t1) + (Sum t2))
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Deriving Induction}
+
+\point{An Example:}
+
+\begin{session}\begin{verbatim}
+#let tree = 
+     define_type `tree` 
+     `tree = Leaf * | Node tree tree`;; 
+tree = 
+|- !f0 f1. ?! fn.
+    (!x. fn(Leaf x) = f0 x) /\
+    (!t t'. fn(Node t t') = f1 (fn t) (fn t') t t')
+
+#let ind = prove_induction_thm tree;;
+ind = 
+|- !P. (!x. P(Leaf x)) /\ 
+       (!t t'. P t /\ P t' ==> P(Node t t')) 
+         ==> 
+       (!t. P t)
+\end{verbatim}\end{session}
+
+\point{For enumerated types:}
+
+\begin{session}\begin{verbatim}
+#prove_induction_thm tri;;
+|- !P. P A /\ P B /\ P C ==> (!t. P t)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Induction Tactics}
+
+\point{The general tactic for induction is:}
+
+\vskip7mm
+
+\bspindent
+\def\_{\char'137}
+\begin{picture}(100,11)
+\put(0,8){\makebox(50,0)[l]{\Large \tt
+INDUCT\_THEN:thm -> (thm -> tactic) -> thm}}
+\put(44,0){\makebox(0,0)[b]{\large\bf 1}}
+\put(80.5,0){\makebox(0,0)[b]{\large\bf 2}}
+\end{picture}
+\espindent
+
+\bpindent
+\Large\bf where:
+\epindent
+
+\vskip7mm
+
+\bspindent
+\Large\bf
+
+1: is the induction theorem for the defined type
+\bigskip
+
+2: determines what to do with induction hypotheses
+\espindent
+
+
+
+% =====================================================================
+\slide{Induction Example}
+
+\point{The goal:}
+
+\begin{session}\begin{verbatim}
+#set_goal ([], "!t:(*)tree. ?n. P t n");;
+"!t. ?n. P t n"
+\end{verbatim}\end{session}
+
+\point{Hypotheses are just assumed:}
+
+\begin{session}\begin{verbatim}
+#expand (INDUCT_THEN ind ASSUME_TAC);;
+OK..
+2 subgoals
+"?n. P(Node t t')n"
+    [ "?n. P t n" ]
+    [ "?n. P t' n" ]
+
+"!x. ?n. P(Leaf x)n"
+\end{verbatim}\end{session}
+
+
+\point{Hypotheses are stripped first:}
+
+\begin{session}\begin{verbatim}
+#expand (INDUCT_THEN ind STRIP_ASSUME_TAC);;
+OK..
+2 subgoals
+"?n. P(Node t t')n"
+    [ "P t n" ]
+    [ "P t' n'" ]
+
+"!x. ?n. P(Leaf x)n"
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Other tools}
+
+\point{Proving constructors one-to-one:}
+
+\begin{session}\begin{verbatim}
+#prove_constructors_one_one tree;;
+|- (!x x'. (Leaf x = Leaf x') = (x = x')) /\
+   (!t0 t1 t2 t3. (Node t0 t1 = Node t2 t3)
+                    = 
+                  (t0=t2) /\ (t1=t3))
+\end{verbatim}\end{session}
+
+\point{Proving constructors yield distinct values:}
+
+
+\begin{session}\begin{verbatim}
+#prove_constructors_distinct tree;;
+|- !x t t'. ~(Leaf x = Node t t')
+\end{verbatim}\end{session}
+
+
+\point{Proving an exhastive cases theorem:}
+
+\begin{session}\begin{verbatim}
+#prove_cases_thm ind;;
+|- !t. (?x. t = Leaf x) \/ (?t1 t2. t = Node t1 t2)
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Summary}
+
+\def\_{\char'137}
+
+\point{Type definition primitive}
+
+  \subpoint{{\tt new\_type\_definition}}
+
+\point{Defining bijections}
+
+  \subpoint{{\tt define\_new\_type\_bijections}}
+
+\point{Automatic type definitions}
+
+  \subpoint{{\tt define\_type}}
+
+\point{Primitive recursive functions}
+
+  \subpoint{{\tt new\_recursive\_definition}}
+
+\point{Induction}
+
+  \subpoint{{\tt prove\_induction\_thm}}
+  \subpoint{{\tt INDUCT\_THEN}}
+
+\point{Other tools}
+
+  \subpoint{{\tt prove\_constructors\_one\_one}}
+  \subpoint{{\tt prove\_constructors\_distinct}}
+  \subpoint{{\tt prove\_cases\_thm}}
+
+
+\end{document}

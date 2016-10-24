@@ -1,0 +1,4 @@
+\THEOREM num_ISO_DEF num
+|- (!a. ABS_num(REP_num a) = a) /\
+   (!r. IS_NUM_REP r = (REP_num(ABS_num r) = r))
+\ENDTHEOREM

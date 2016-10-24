@@ -1,0 +1,26 @@
+\DOC name_current_proof
+
+\TYPE {name_current_proof : (string -> void)}
+
+\SYNOPSIS
+Changes the name of the current default proof.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Multiple incomplete proofs may exist
+concurrently, each accessed by a different name. The function
+{name_current_proof} may be used to change the name of a proof.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails if there is no current proof.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

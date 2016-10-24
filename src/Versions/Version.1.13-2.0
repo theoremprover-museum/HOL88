@@ -1,0 +1,766 @@
+******************************************************************************
+******************************** Version 2.0 *********************************
+******************************************************************************
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (define_type)                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/tydefs.ml                                                |
+|----------------------------------------------------------------------------|
+| DATE:          23 February 1991.                                           |
++----------------------------------------------------------------------------+
+
+The version 1.12 reimplementation of define_type had a parser bug (spotted
+by rjb), which would not allow type definitions like:
+
+   #define_type `name` `foo = foo num`;;
+   evaluation failed     missing constructor name after "="
+
+where the name "foo" was being used both as a constructor name and as the
+name of the type being defined.  This has now been fixed:
+
+   #define_type `name` `foo = foo num`;;
+   |- !f. ?! fn. !n. fn(foo n) = f n
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Rewrite (GEN_ALPHA_CONV)                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/drul.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          24 February 1991.                                           |
++----------------------------------------------------------------------------+
+
+
+The generalized alpha-conversion function GEN_ALPHA_CONV has been modified
+to deal with the unique existence quantifier:
+
+   GEN_ALPHA_CONV "x"   "(?!y.t)"   --->  |- "?!y.t = ?!x. t[x/y]"
+
+We now have:
+
+   GEN_ALPHA_CONV "x"   "(\y.t)"   --->   |- "\y.t = \x. t[x/y]"
+   GEN_ALPHA_CONV "x"   "(!y.t)"   --->   |- "!y.t = !x. t[x/y]"
+   GEN_ALPHA_CONV "x"   "(?y.t)"   --->   |- "?y.t = ?x. t[x/y]"
+   GEN_ALPHA_CONV "x"   "(@y.t)"   --->   |- "@y.t = @x. t[x/y]"
+   GEN_ALPHA_CONV "x"   "(?!y.t)"   --->  |- "?!y.t = ?!x. t[x/y]"
+
+Furthermore, GEN_ALPHA_CONV "x" tm fails if the term tm does not
+have the form \y.t or !y.t or ?y.t or @y.t or ?!y.t.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Deletion (theories_dir_pathname)                            |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/site.ml.orig Makefile                                    |
+|----------------------------------------------------------------------------|
+| DATE:          24 February 1991.                                           |
++----------------------------------------------------------------------------+
+
+The ML variable `theories_dir_pathname' was bound in previous versions to
+the absolute pathname to the directory containing the HOL built-in theories.
+This is no longer necessary, and theories_dir_pathname is now unbound at
+top-level.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Deletion (mk_tuple, dest_tuple)                             |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          24 February 1991.                                           |
++----------------------------------------------------------------------------+
+
+The functions mk_tuple and dest_tuple, which were used only internally for
+purposes having to do with storing binders in theory files, have been hidden
+from top-level.  Users looking for the functionality that these names suggest,
+should use the functions strip_pair and list_mk_pair.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New ML functions (is_ml_curried_infix, is_ml_paired_infix)  |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-dml.l                                                |
+|----------------------------------------------------------------------------|
+| DATE:          4 March 1991                                                |
++----------------------------------------------------------------------------+
+
+is_ml_curried_infix tests whether a string is the name of a user-defined
+curried ML infix.
+
+is_ml_paired_infix tests whether a string is the name of a user-defined
+paired ML infix.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (flags)                                              |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JVT                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-cl.l, lisp/f-constants, lisp/f-format.l,             |
+|                lisp/f-franz.l, lisp/f-iox-stand.l, lisp/f-ol-syntax.l      |
+|                lisp/f-parser.l, lisp/f-tml.l, lisp/typeml.l, lisp/typeol.l |
+|                lisp/f-writol.l, lisp/hol-pars.l, lisp/hol-writ.l,          |
+|                lisp/mk-ml.l, lisp/parslist.l                               |
+|----------------------------------------------------------------------------|
+| DATE:          04 March 1991.                                              |
++----------------------------------------------------------------------------+
+
+This is yet another situation in which the case-sensitive nature of old
+Franz Lisp is in conflict with the case-INsensitivity of Common Lisp.
+
+Flags in the source code are of the form %<flag_name>-flag (where <flag_name>
+is the name of the flag at the ML level.).  In Franz Lisp, this does not
+present a problem.  The ML function "flags" returns the expected list of
+lower-case default HOL flags, and user-defined flags may be of mixed-case
+(i.e. MY_flag is not the same as my_FLAG).  In Common Lisp, neither behaviour
+was observed.  To alleviate the problem, ALL flags in the source code
+were converted to the form |%<flag_name>-flag|, and all new flags created
+by the user will also take on the intended case.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (pretty-printing                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-writ.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          04 March 1991.                                              |
++----------------------------------------------------------------------------+
+
+The new set notation was causing pretty-printing problems in common lisp
+because a check for combiniations (is-comb) was not being done in
+dest-uncurry.  This trap has now been added.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   addition (sets library)                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/mk_sets.ml                                          |
+|----------------------------------------------------------------------------|
+| DATE:          6 March 1991.                                               |
++----------------------------------------------------------------------------+
+
+The following useful theorem has been added to the sets library:
+
+ FINITE_ISO_NUM
+
+   |-  !s:(*)set.
+       FINITE s ==>
+       ?f. (!n m. (n < CARD s /\ m < CARD s) ==> (f n = f m) ==> (n = m)) /\
+           (s = {f n | n < CARD s})
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   optimization (RAND_CONV and RATOR_CONV)                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM and RJB                                                 |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          8 March 1991.                                               |
++----------------------------------------------------------------------------+
+
+Richard Boulton spotted an opportunity to optimize RAND_CONV and RATOR_CONV,
+which has now been done.  Users should notice no diference in functionality,
+just a slight (20%) improvement in speed.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   deletions (hiding)                                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/prim_rec.ml                                              |
+|----------------------------------------------------------------------------|
+| DATE:          12 March 1991.                                              |
++----------------------------------------------------------------------------+
+
+The following functions are used only internally in HOL, and have therefore
+been hidden from the top-level:
+
+  closeup
+  derive_existence_thm
+  instantiate_existence_thm
+  mk_fn
+
+Their REFERENCE entries have been deleted.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-typeml.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          14 March 1991                                               |
++----------------------------------------------------------------------------+
+
+Victor Carreno spotted the following bug:
+
+   #(\x y.x) 1 2;;
+   misplaced constructor in abstraction
+   translation failed
+
+It is amazing this had not been spotted before! After the bugfix
+
+   #(\x y.x) 1 2;;
+   1 : int
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   deletions (curried_infixes,new_curried_infix,paired_infixes)|
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml ml/hol-thfyn.ml                               |
+|----------------------------------------------------------------------------|
+| DATE:          17 March 1991.                                              |
++----------------------------------------------------------------------------+
+
+The functions curried_infixes and new_curried_infix were, in previous
+versions, synonyms for infixes, curried_infix.  Since there are no
+"paired" infixes in the object language:
+
+   curried_infixes
+   new_curried_infix
+   paired_infixes
+
+have been deleted.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   deletions (internal functions for rewriting)                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/rewrite.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          17 March 1991.                                              |
++----------------------------------------------------------------------------+
+
+The following functions, used internally in the implementation of rewriting,
+have been hidden from top-level:
+
+   mk_rewrites mk_rewritesl REWRITES_CONV
+
+Their (preliminary) REFERENCE entries have been deleted.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (fail)                                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-tran.l                                               |
+|----------------------------------------------------------------------------|
+| DATE:          24 March 1991.                                              |
++----------------------------------------------------------------------------+
+
+Failure token of the construct `fail' forced to be lower-case (this
+was only a bug Common Lisp implementations).
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (parsing and printing of sets)                       |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/parslist.l                                             |
+|                lisp/hol-writ.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          28 March 1991.                                              |
++----------------------------------------------------------------------------+
+
+Parsing and printing of nested sets like "{{1},{2},{3}}" made to work
+properly (bug spotted by Emilio Lucerna).
+
+
+|----------------------------------------------------------------------------|
+| CHANGE TYPE:   Bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    Mark van der Voort                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-tml.l                                                |
+|----------------------------------------------------------------------------|
+| DATE:          7 Feb. 1991 (installed by MJCG 6 April 1991)                |
+|----------------------------------------------------------------------------|
+
+Bug fixed in function ml-load in lisp/f-tml.l.
+Whenever this function was invoked by ml-load-library with an extensionless
+filename and a pathname containing dots (such as .../hol88.1.11/...) this
+pathname got stripped down from the end until the last dot was reached,
+resulting in a non-existent filename.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (is_ml_infix,is_ml_curried_infix,is_ml_paired_infix) |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-dml.l                                                |
+|----------------------------------------------------------------------------|
+| DATE:          12 April 1991.                                              |
++----------------------------------------------------------------------------+
+
+Functions is_ml_infix, is_ml_curried_infix, is_ml_paired_infix changed so that
+they work in Common Lisp.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   failure strings (RAND_CONV, RATOR_CONV and ABS_CONV)        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          17 April 1991.                                              |
++----------------------------------------------------------------------------+
+
+RAND_CONV and RATOR_CONV now allow the propagation of failures caused by
+application of their argument conversion. However, the failure strings
+`RAND_CONV` and `RATOR_CONV` are still generated if either function is
+applied to a term that is not a combination. ABS_CONV has been changed
+similarly.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   optimization                                                |
+|                (DEPTH_CONV,REDEPTH_CONV,TOP_DEPTH_CONV,ONCE_DEPTH_CONV)    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          17 April 1991.                                              |
++----------------------------------------------------------------------------+
+
+The functions DEPTH_CONV, REDEPTH_CONV, TOP_DEPTH_CONV and ONCE_DEPTH_CONV
+have been reimplemented to work much faster. They now avoid rebuilding
+unchanged sub-terms unless it is really necessary. The method for doing this
+was suggested by Roger Fleming.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   revision (MATCH_MP_TAC)                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/resolve.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          20 April 1991.                                              |
++----------------------------------------------------------------------------+
+
+The built-in tactic MATCH_MP_TAC has been revised to have the following
+specification:
+
+        A ?- t'
+   ==================  MATCH_MP_TAC (A' |- !x1...xn. s ==> !y1...tm. t)
+    A ?- ?z1...zp. s'
+
+where the z's are those x's that do not appear free in t.  This change
+means, for example, that applying a tactic like:
+
+   MATCH_MP_TAC (|- !m n p. m < n /\ n < p ==> m < p)    [ie LESS_TRANS]
+
+to a goal "1 < 3" produces the subgoal:
+
+   "?n. 1 < n /\ n < 3"
+
+instead of the annoying (and false) subgoal:
+
+   "1 < gen%var%504 /\ gen%var%504 < 3"
+
+Furthermore, theorems in which there are y's as shown above in the
+specification can also now be used.
+
+The REFERENCE entry for MATCH_MP_TAC has been updated (see this for
+more details).
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   revision (FIRST_ASSUM)                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/tacticals.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          20 April 1991.                                              |
++----------------------------------------------------------------------------+
+
+FIRST_ASSUM has been revised to deal properly with thm_tactics that fail
+immediately on the supplied theorem, rather than producing a tactic that
+will fail.  That is:
+
+   let FIRST_ASSUM : (thm -> tactic) -> tactic = ASSUM_LIST o MAP_FIRST;;
+
+has been replaced by:
+
+   let FIRST_ASSUM (ttac:thm->tactic) (A,g) =
+       FIRST (mapfilter (ttac o ASSUME) A) (A,g) ? failwith `FIRST_ASSUM`;;
+
+so that FIRST_ASSUM ttac (A,g) applies the first tactic which ttac can generate
+from A and which also succeeds on the goal.
+
+The REFERENCE manual has been updated.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   revision (IS_ASSUMPTION_OF hack).                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-thyfn.ml theories/mk_bool.ml                         |
+|----------------------------------------------------------------------------|
+| DATE:          27 April 1991.                                              |
++----------------------------------------------------------------------------+
+
+The facility for storing theorems with assumptions in theory files
+(implemented via a hack involving the constant IS_ASSUMPTION_OF)
+has been restored.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (IMAGE_CONV in sets library)                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/sets/fset_conv.ml                                   |
+|----------------------------------------------------------------------------|
+| DATE:          28 April 1991                                               |
++----------------------------------------------------------------------------+
+
+The IMAGE_CONV function in the sets library had a bug (spotted by Wai Wong)
+which meant that it wouldn't compute the image of functions f:ty1->ty2 where
+ty1 and ty2 are different types.  This has now been fixed.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new_function (hol_pathname)                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-tml.l help/GENFNS/hol_pathname                       |
+|----------------------------------------------------------------------------|
+| DATE:          17 May 1991.                                                |
++----------------------------------------------------------------------------+
+
+A new function:
+
+  hol_pathname : void -> string
+
+has been added to the system.  It returns the absolute pathname to the hol
+system directory.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   reorganization (REFERENCE manual and help directory)        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: help/ Manual/Reference                                      |
+|----------------------------------------------------------------------------|
+| DATE:          6 Jun 1991                                                  |
++----------------------------------------------------------------------------+
+
+The decision was made adopt a flat, alphabetical structure for the section
+of the hol REFERENCE manual that documents the predeclared ML identifiers
+not bound to theorems.  The manual now has a single section containing
+all the reference entries for tactics, system functions, rules, and so on,
+rather than four separate chapters, as in the first release of the manual.
+The structure of the theorems section is unchanged.
+
+The directory containing the text sources for manual entries (as well as
+online help) has also been flattened.  Instead of four separate directories
+in help:
+
+   help/GENFNS  help/LOGFNS  help/TACTICS  help/RULES
+
+there is now a single directory help/ENTRIES for the text sources of
+all the non-theorem manual entries.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: reduce                                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/reduce                                              |
+|----------------------------------------------------------------------------|
+| DATE:          6 June 1991                                                 |
++----------------------------------------------------------------------------+
+
+A new library has been added: it performs reduction of arithmetic expressions
+built up from numerals. It also provides conversions to simplify certain
+boolean expressions, including those which are built from T and F. For most
+purposes, REDUCE_CONV, REDUCE_RULE and REDUCE_TAC are all that is needed.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (MATCH_MP)                                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          19 June 1991.                                               |
++----------------------------------------------------------------------------+
+
+The rule MATCH_MP has been reimplemented so that, for example, when
+
+    impth = |- P ==> Q[x]               (x not free in P)
+
+then MATCH_MP impth (|- P) will give Q[x], rather than Q[v] where v is
+a genvar.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (binders)                                            |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          19 June 1991.                                               |
++----------------------------------------------------------------------------+
+
+The function "binders" has been changed so that it fails on non-ancestor
+theories, which makes it consistent with other related functions
+("axioms",...,"types"). There are now two failure strings, one for a non-
+ancestor theory, the other for an invalid "LIST_OF_BINDERS" theorem.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Replacement Library (taut)                                  |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/taut contrib/icl-taut                               |
+|----------------------------------------------------------------------------|
+| DATE:          15 July 1991.                                               |
++----------------------------------------------------------------------------+
+
+A new version of the taut library has been installed. The old version from
+Roger Jones of ICL has been moved into contrib/icl-taut. The new version is
+not compatible with the old version. The new version is purely a tautology
+checker. There are no miscellaneous functions. The new version should be
+faster for most examples. See the documentation in Library/taut and
+contrib/icl-taut for full details.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New function (sort)                                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/lis.ml                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          17 July 1991                                                |
++----------------------------------------------------------------------------+
+
+A general-purpose "sort" function has been added to the existing lists
+functions. Example:
+
+   sort $< [3;1;4;1;5;9;2;6] = [1; 1; 2; 3; 4; 5; 6; 9]
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New functions (mk_pabs, dest_pabs and is_pabs)              |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          17 July 1991                                                |
++----------------------------------------------------------------------------+
+
+Contructor, destructor and discriminator functions for paired abstractions
+(that is, arbitrarily tupled except for single variables) have been added.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New functions (PAIRED_ETA_CONV and GEN_BETA_CONV)           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          17 July 1991                                                |
++----------------------------------------------------------------------------+
+
+Two new derived rules for dealing with paired abstractions have been added.
+
+(1) PAIRED_ETA_CONV is the paired counterpart of ETA_CONV.
+
+(2) GEN_BETA_CONV will try to force through a simple or paired beta-conversion,
+introducing pairs if necessary; e.g. |- (\(x,y). x + y) p = (FST p) + (SND p).
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New function (AC_CONV)                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          17 July 1991                                                |
++----------------------------------------------------------------------------+
+
+A derived rule for proving simple AC-equivalence has been added. It is given an
+associative and commutative law for an operator and a term "l = r", and will
+prove |- (l = r) = T if "l" and "r" can be matched using these laws. Otherwise
+it fails. A typical example is:
+
+   AC_CONV(ADD_ASSOC,ADD_SYM) "x + (y + z) + w = w + y + z + x".
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New function (EXISTS_GREATEST_CONV)                         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/num.ml                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          17 July 1991                                                |
++----------------------------------------------------------------------------+
+
+A new conversion has been added which embodies the fact that a set of natural
+numbers which is nonempty and bounded above has a greatest element. It returns
+theorems of the form:
+
+ |- (?x. P[x]) /\ (?y. !z. z > y ==> ~(P[z])) =
+     ?x. P[x] /\ !z. z > x ==> ~(P[z])
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Documentation for Library (trs)                             |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/trs                                                 |
+|----------------------------------------------------------------------------|
+| DATE:          7 August 1991.                                              |
++----------------------------------------------------------------------------+
+
+Reference entries and documentation in the standard format added to the trs
+library.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Modifications to Library (prettyp)                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/prettyp                                             |
+|----------------------------------------------------------------------------|
+| DATE:          9 August 1991.                                              |
++----------------------------------------------------------------------------+
+
+The pretty-printer library has been updated. The main changes are:
+
+   Pretty-printing box structure extended to allow sub-tree addresses to be
+   stored in the structure. This enables one to determine what part of the
+   print-tree was used to generate a sub-box (when applicable).
+
+   The pretty-printing rules for terms have been modified so that long lists
+   of bound variables are broken across lines if necessary. In the previous
+   version the list of variables could not be split between lines.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New implementations (CONJUNCTS_CONV, CONJ_SET_CONV)         |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-drule.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          15 August 1991.                                             |
++----------------------------------------------------------------------------+
+
+The implementations of CONJUNCTS_CONV and CONJ_SET_CONV have been changed so
+that they no longer use mk_thm, i.e. they are now proper derived `rules'.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bug Fix (install)                                           |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          21 August 1991.                                             |
++----------------------------------------------------------------------------+
+
+The install function has been updated to set the initial help search path
+to the new help directory pathname. (See my entry for 6 June above).
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Changes to Library (unwind)                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/unwind                                              |
+|----------------------------------------------------------------------------|
+| DATE:          5 September 1991.                                           |
++----------------------------------------------------------------------------+
+
+The unwind library has been tidied-up. It no longer uses mk_thm. The old
+files can be found in Library/unwind/old, together with a detailed description
+of the changes in the file Library/unwind/old/CHANGES. Preliminary help
+entries are present. Full documentation to follow shortly.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New combinator: CB = C B                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          13 September 1991                                           |
++----------------------------------------------------------------------------+
+
+A new combinator CB has been added with the definition:
+
+   ml_curried_infix `CB`;;
+   let $CB f g x = g(f x) ;;
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New implementation (FRONT_CONJ_CONV)                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-drule.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          23 September 1991.                                          |
++----------------------------------------------------------------------------+
+
+The implementation of FRONT_CONJ_CONV has been changed so that it is defined
+in terms of CONJ_SET_CONV.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New library: ind_defs                                       |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/ind_defs                                            |
+|----------------------------------------------------------------------------|
+| DATE:          30 September 1991                                           |
++----------------------------------------------------------------------------+
+
+A new library called ind_defs has been added. Among other things, it allows
+users to define relations inductively by a set of rules and contains a tactic
+for rule induction.  For preliminary documentation, see the directory
+
+   hol/Library/ind_defs/Manual
+
+Note that this is an initial release, and at least following changes are
+proposed:
+
+  * to add a function that maps rules as theorems to ML inference rules
+
+  * to strengthen the implication proved by derive_cases_thm to equality
+
+Please report any bugs or other problems to me [Tom Melham].
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Documentation for libraries (prettyp, unwind)               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/prettyp Library/unwind                              |
+|----------------------------------------------------------------------------|
+| DATE:          30 September 1991.                                          |
++----------------------------------------------------------------------------+
+
+Full documentation in the standard format has now been added to the prettyp
+and unwind libraries.
+

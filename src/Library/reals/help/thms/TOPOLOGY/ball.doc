@@ -1,0 +1,3 @@
+\THEOREM ball TOPOLOGY
+|- !m x e. B m(x,e) = (\y. (dist m(x,y)) < e)
+\ENDTHEOREM

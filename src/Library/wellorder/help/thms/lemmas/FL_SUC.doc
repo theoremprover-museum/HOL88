@@ -1,0 +1,5 @@
+\THEOREM FL_SUC WELLORDER
+|- !l a.
+    fl(\(x,y). l(x,y) \/ (y = a) /\ (fl l x \/ (x = a)))x =
+    fl l x \/ (x = a)
+\ENDTHEOREM

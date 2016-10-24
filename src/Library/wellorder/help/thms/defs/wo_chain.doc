@@ -1,0 +1,3 @@
+\THEOREM wo_chain WELLORDER
+|- !l P. chain l P = (!x y. P x /\ P y ==> l(x,y) \/ l(y,x))
+\ENDTHEOREM

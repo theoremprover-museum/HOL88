@@ -1,0 +1,3 @@
+\THEOREM OR_EL_FOLDR list
+|- !l. OR_EL l = FOLDR $\/ F l
+\ENDTHEOREM

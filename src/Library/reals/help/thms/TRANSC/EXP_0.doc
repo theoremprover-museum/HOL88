@@ -1,0 +1,3 @@
+\THEOREM EXP_0 TRANSC
+|- exp(& 0) = & 1
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM SIN_PERIODIC TRANSC
+|- !x. sin(x + ((& 2) * pi)) = sin x
+\ENDTHEOREM

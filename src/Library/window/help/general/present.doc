@@ -1,0 +1,19 @@
+\DOC present
+
+\TYPE {present : (* history -> *)}
+
+\SYNOPSIS
+Return the present state of a history.
+
+\LIBRARY window
+
+\DESCRIBE
+
+Returns the present state associated with a history.
+
+\FAILURE
+
+\SEEALSO
+set_max_hist, get_max_hist, epoch, dodo, undo, redo
+
+\ENDDOC

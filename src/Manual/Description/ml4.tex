@@ -1,0 +1,832 @@
+\chapter {ML Types}\label{ML-types}
+
+
+So far, little mention has been made of types.  For \ML\ in its 
+original role as
+the meta-language for proof in \LCF, the importance of strict type checking\index{type checking, in ML@type checking, in \ML!reasons for}
+was principally to ensure that every computed value of 
+the type representing theorems was
+indeed a theorem. This use of type checking was due
+to Milner, and the idea is equally vital in \HOL.
+The same effect could probably have been achieved by run-time
+type checking, but compile-time type checking was adopted instead, in
+the design of \ML.  This was
+partly for the considerable debugging aid that it
+provides; partly for efficient execution; and partly to explore the
+possibility of combining polymorphism with type 
+checking.\footnote{Milner's idea was that there are many operations
+(such as list mapping functions, functional composition, \etc) which work at an
+infinity of types, so their types should therefore somehow  be
+parameterized---but without having to mention the
+particular type intended at each of their uses.}
+
+The \ML\ type checking
+system is implemented in such a way that, although the user may
+occasionally (either for documentation or as a constraint) ascribe
+ a type to an
+\ML\ expression or pattern, it is hardly ever necessary to do so.   The user of
+\ML\ will almost always be content with the types ascribed and presented by the
+type checker, which checks every top-level phrase before it is  
+evaluated.  (The
+type checker may sometimes find a more general type assignment than expected.)
+
+
+\section {Types and objects}
+
+
+Every data object in \ML\ possesses a type. Such an object may possess many
+types, in which case it is said to be {\it polymorphic\/}\index{polymorphism, in ML@polymorphism, in \ML} and 
+possesses a {\it polytype\/}---\ie\ a type containing type variables
+(for which we use a sequence of asterisks possibly followed by an
+identifier or integer)---and moreover it possesses all types which are
+{\it instances\/} of its polytype, formed by substituting types for zero or
+more type variables in the polytype. A type containing no type variables is
+a {\it monotype.}
+
+We saw several examples of types in Chapter~\ref{ML-intro}.   To understand the
+following syntax, note that {\small\verb%list%} is a postfixed unary
+(one-argument) type constructor  (thereafter abbreviated  to $tycon$). 
+The user
+may introduce  new  $n$-argument  type  constructors.   A  binary type operator
+{\small\verb%directory%}, for example, can be  introduced.   The following type
+expressions will then be types of different kinds of {\small\verb%directory%}:
+
+\begin{itemize}
+\item {\small\verb%(string, int)directory%}
+\item {\small\verb%(int, int->int)directory%}
+\end{itemize}
+
+\noindent The user may even deal with lists of directories, with the type
+
+\begin{itemize}
+\item {\small\verb%(int, bool)directory list%}
+\end{itemize}
+
+\subsection{The syntax of types}
+\index{type constructors!in ML@in \ML|(}
+
+The syntax of \ML\ types is:
+
+
+\subsubsection*{Types $ty$}\index{abbreviation of types, in ML@abbreviation of types, in \ML}
+
+\noindent\begin{tabular}{@{}ll}
+{\small\verb%    %}$ty${\small\verb% ::= %}$sty$  & Standard (non-infix) type\\
+{\small\verb%        | %}$ty${\small\verb% # %}$ty$  & R  Cartesian product\index{ product type operator, in ML@{\small\verb+#+} (product type operator, in \ML)}\index{product types!in ML@in \ML}\\
+{\small\verb%        | %}$ty${\small\verb% + %}$ty$         & R  Disjoint sum\index{disjoint union, in ML@disjoint union, in \ML}\index{ disjoint union type operator, in ML@{\small\verb:+:} (disjoint union type operator, in \ML)}\\
+{\small\verb%        | %}$ty${\small\verb% -> %}$ty$        & R  Function type\index{ function type operator, in ML@{\small\verb+->+} (function type operator, in \ML)}\index{function types, in ML@function types, in \ML}\\
+\end{tabular}
+
+\subsubsection*{Standard types $sty$}
+
+\noindent\begin{tabular}{@{}ll}
+\index{void@\ml{void}}
+\index{int@\ml{int}}
+\index{bool, the type in ML@\ml{bool}, the type in \ML}
+\index{string@\ml{string}}
+
+{\small\verb%   %}$sty${\small\verb% ::= void | int | bool | string%}    & Basic types\\
+{\small\verb%         | %}$vty$                     & Type variable\\
+{\small\verb%         | %}$tycon$                   & Type abbreviation (see Section~\ref{MLtypeabbrev})\\
+{\small\verb%         | %}$tycon$                   & Nullary concrete type (see Section~\ref{ML-concrete-types})\\
+{\small\verb%         | %}$tyarg$ $tycon$           & L Concrete type\index{types, in ML@types, in \ML!concrete} \\
+{\small\verb%         | %}$tycon$                   & Nullary abstract
+type\\
+{\small\verb%         | %}$tyarg$ $tycon$           & L  Abstract type (see Section~\ref{ML-abstract-types})\\
+{\small\verb%         | (%}$ty${\small\verb%)%} & {}\\
+\end{tabular}
+
+\subsubsection*{Type arguments $tyarg$}
+
+\noindent\begin{tabular}{@{}ll}
+{\small\verb%   %}$tyarg${\small\verb% ::= %}$sty$    & Single type argument\\
+{\small\verb%          |  (%}$ty${\small\verb%,%}$\ldots${\small\verb%,%}$ty${\small\verb%)%}    & One or more type arguments\\
+\end{tabular}
+
+\subsubsection*{Type variables $vty$}
+
+\noindent\begin{tabular}{@{}llll}
+\index{ type variables, in ML@{\small\verb+*+, \verb+**+,$\ldots$} (type variables, in
+\ML)} 
+{\small\verb%   %}$vty${\small\verb%  ::=%}&{\small\verb% *  %}&{\small\verb%| **  %}&{\small\verb%|  %} $\ldots$\\
+                                           &\hspace{-8mm}{\small\verb%|%}\hspace{8mm}{\small\verb%*%}$id$ &{\small\verb%| **%}$id$ &{\small\verb%|  %}$\ldots$\\
+                                           &\hspace{-8mm}{\small\verb%|%}\hspace{8mm}{\small\verb%*0%}    &{\small\verb%| **0%}    &{\small\verb%|  %}$\ldots${\small\verb% | *1  | **1  |  %}$\ldots$\\
+\end{tabular}
+
+\noindent Type  abbreviations\index{type abbreviations!in ML@in \ML}\index{types, in ML@types, in \ML!abbreviation of}
+are  introduced  by  a  `{\small\verb%lettype%}'\index{lettype@{\small\verb+lettype+}} declaration (see Section~\ref{MLtypeabbrev}  below) which  allows an identifier
+to abbreviate an arbitrary monotype.  By contrast, a concrete
+type\index{concrete types, in ML@concrete types, in \ML}\index{types, in ML@types, in \ML!abstract} 
+consists of
+an identifier  (a  type  operator  introduced  by  a  `{\small\verb%type%}'  or
+`{\small\verb%rectype%}' declaration;    see    Section~\ref{ML-concrete-types}
+below) postfixed to zero  or more  type arguments. 
+ An  abstract type\index{abstract types, in ML@abstract types, in \ML}
+\index{types, in ML@types, in \ML!concrete}  likewise
+consists of  an  identifier   (introduced  by   an  `{\small\verb%abstype%}  or
+`{\small\verb%absrectype%}' declaration;  see  Section~\ref{ML-abstract-types})
+postfixed to  zero  or  more  type arguments.   Two  or more  arguments must be
+separated by commas and enclosed by parentheses.  The type operator
+{\small\verb%list%}\index{list, the type operator in ML@\ml{list}, the type operator in \ML} is a predeclared unary type operator; and {\small\verb%#%},
+{\small\verb%+%} and {\small\verb%->%} may be regarded as infix  forms of three
+predeclared binary type operators.
+
+For an object to possess\footnote{We  shall talk  of objects {\it
+possessing\/} types  and  phrases  {\it  having\/}  types,   to  emphasise  the
+distinction.} a type means the following:
+For basic types, all integers possess
+{\small\verb%int%}, both  booleans  possess  {\small\verb%bool%}\index{bool, the type in ML@\ml{bool}, the type in \ML},  all  strings
+possess {\small\verb%string%}, \etc\ The only object possessing
+{\small\verb%void%}\index{void@\ml{void}} is that  denoted by  {\small\verb%()%} in  \ML.   For a type
+abbreviation $tycon$,  an  object  possesses $tycon$
+(during execution of phrases in the scope of the declaration of
+$tycon$) if and only if  
+it  possesses  the  type  which $tycon$
+abbreviates.
+
+For compound monotypes\index{compound monotypes, in ML@compound monotypes, in \ML},
+
+\begin{enumerate} \item  The  type $ty${\small\verb% list%} is possessed by any
+list of objects, all of which possess type $ty$ (so that the empty
+list possesses type $ty${\small\verb% list%} for every $ty$).
+
+\item The type $ty_1${\small\verb%#%}$ty_2$  is  possessed 
+ by any  pair of objects
+possessing the types $ty_1$ and $ty_2$, respectively.
+
+\item The type $ty_1${\small\verb%+%}$ty_2$ is possessed
+ by the left-injection of any
+object possessing $ty_1$, and by the right-injection  of any object
+possessing $ty_2$.    These  injections  are  denoted  by  the \ML\
+function identifiers {\small\verb%inl : * -> * + **%} 
+and {\small\verb%inr : ** -> * + **%} (see Chapter~\ref{MLprims}).
+
+\item
+A function possesses type $ty_1${\small\verb%->%}$ty_2$ if whenever
+ its argument
+possesses type $ty_1$, its result (if defined) possesses type
+$ty_2$.  (This is not an exact description; for example, a
+function defined in \ML\ with non-local variables 
+may possess this type even though some
+assumption about the types of the values of these non-local variables is
+necessary for the above condition to hold.  The constraints on programs
+listed below ensure that the non-locals will always have the right types).
+
+\item
+An object possesses the concrete type $tyarg$ $tycon$ if and only if it is
+constructed with a constructor $con$ from an object which possess the
+$tyarg$ instance of some type $ty$ and $con${\small\verb% of %}$ty$
+appears in the declaration of $tycon$.
+
+\item
+An object possesses the abstract type $tyarg$ $id$ if
+and only if it is
+represented (via the abstract type representation) by an object possessing
+the $tyarg$ instance of the right-hand side of the 
+declaration of $id$.
+
+\end{enumerate}
+
+Finally, an object possesses a polytype $ty$ if
+and only if it possesses all
+monotypes which are substitution instances of $ty$\index{type constructors!in ML@in \ML|)}.
+
+
+
+\section{Typing of ML phrases}
+
+\index{type checking, in ML@type checking, in \ML!inference involved in|(}
+\index{type checking, in ML@type checking, in \ML|(}
+\index{has type vs possesses type@has type {\it vs} possesses type|(}
+We now explain the constraints used by the type checker
+in ascribing types
+to \ML\ expressions, patterns and declarations.
+
+The significance of expression $e$
+having type\index{type constraint!in ML@in \ML} $ty$ is that
+ the value of $e$ (if evaluation
+terminates successfully) possesses type $ty$.
+\index{has type vs possesses type@has type {\it vs} possesses type|)}
+As consequences of the well-typing constraints listed below, it
+is impossible for example to apply a non-function to an argument, or
+to form a list of objects of different types, or (as mentioned earlier) to
+compute an object of the type corresponding to theorems which is not a theorem.
+
+The type
+\index{ML@\ML!type checking of|(} ascribed to a phrase depends in general on the
+entire surrounding \ML\ program.  In the case of top-level\index{ML@\ML!top level of}\index{top level, of ML@top level, of \ML!declarations at}\index{top level, of ML@top level, of \ML!expressions at}
+expressions and
+declarations, however, the type ascribed depends only on preceding top-level
+phrases.  Thus you know that types ascribed at top-level are
+not subject to further constraint.
+
+Before each top-level phrase is executed, types are ascribed to all
+its sub-expressions, sub-declarations and sub-patterns according to
+the following rules.  Most of the rules are fairly natural; those
+which are less so are discussed later.  You are only presented
+with the types of top-level phrases; the types of sub-phrases
+will hardly ever concern you.
+
+Before giving the list of constraints, let us discuss an example which
+illustrates some important points.  To map a function over a list we may
+define the polymorphic function {\small\verb%map%} recursively as follows
+(where we have used an explicit abstraction, rather than
+{\small\verb%letrec map f l = ...%}, to make the typing clearer):
+
+\begin{hol}\begin{verbatim}
+   letrec map = \f.\l. null l => [] | f(hd l).map f(tl l) ;;
+\end{verbatim}\end{hol}
+
+\noindent From this declaration the type checker  will infer  a {\it
+generic\/}\index{generic types, in ML@generic types, in \ML} 
+type for {\small\verb%map%}.  By `generic' we  mean that  each later occurrence
+of {\small\verb%map%} will be ascribed a type which is  a substitution instance
+of the generic type.
+
+Now the free identifiers in this declaration are {\small\verb%null%}, 
+{\small\verb%hd%} and
+{\small\verb%$.%}, which are \ML\ primitives whose {\it generic\/}
+ (poly)types are {\small\verb%* list -> bool%}, 
+{\small\verb%* list -> *%}, and {\small\verb%* # * list -> * list%} 
+respectively.
+The first constraint used by the type checker is that the occurrences of
+these identifiers in the declaration are ascribed instances of their
+generic types.  Other constraints which the type checker will use to
+determine the type of {\small\verb%map%} are:
+
+\begin{itemize}
+\item
+All occurrences of a {\small\verb%\%}-bound variable receive the same type.
+
+\item
+Each arm of a conditional receives the same type, and
+the condition receives type {\small\verb%bool%}.
+
+\item
+In each application $e${\small\verb% = (%}$e_1 e_2${\small\verb%)%}, 
+if $e_2$ receives $ty$ and
+$e$ receives $ty'$ then $e_1$ receives $ty${\small\verb%->%}$ty'$.
+
+\item
+In each abstraction $e${\small\verb% = \%}$v${\small\verb%.%}$e_1$, if $v$ 
+receives $ty$ and $e_1$ receives $ty'$ then $e$ 
+receives $ty${\small\verb%->%}$ty'$.
+
+\item
+In a {\small\verb%letrec%} declaration, all free occurrences of the 
+declared variable receive the same type.
+
+\end{itemize}
+
+
+Now the  type checker  will  ascribe  the  type 
+{\small\verb%(*->**)->* list->** list%} 
+to {\small\verb%map%}.  This is in fact the most general type consistent
+with the constraints mentioned.  Moreover, it can be shown that any instance of
+this type also allows the constraints to be satisfied;  this is  what allows us
+to claim that the declaration is indeed polymorphic\index{type checking, in ML@type checking, in \ML!inference involved in|)}.
+
+In the following constraint list, we say $p$ has $ty$ to
+indicate that the phrase $p$ is ascribed a type $ty$ which
+satisfies the stated conditions.  We use $x$, $p$, $e$,
+$d$ to stand for variables, patterns, expressions and declarations
+respectively.
+
+\begin{enumerate}
+
+\item Constants\index{constant expressions, in ML@constant expressions, in \ML}
+  \begin{enumerate}
+    \item {\small\verb%()%} has {\small\verb%void%}\index{void@\ml{void}}
+    \item {\small\verb%0%} has {\small\verb%int%}\index{integers, in ML@integers, in \ML}, {\small\verb%1%} has {\small\verb%int%}, ...
+    \item {\small\verb%true%}\index{true in ML@\ml{true} in \ML} has {\small\verb%bool%}, {\small\verb%false%}\index{false@\ml{false}}
+has {\small\verb%bool%}
+    \item {\small\verb%`...`%} has {\small\verb%string%}
+    \item $con$ and $con$ $ce$ have an instance of $tyarg$
+          $tycon$ where $tycon$ is the type 
+          of which $con$ is a  constructor (see
+	  Section~\ref{ML-abstract-types}).
+  \end{enumerate}
+
+
+\item Variable\index{type variables, in ML@type variables, in \ML}
+ and constructors\index{identifiers, in ML@identifiers, in \ML!type checking of}\index{variables, in ML@variables, in \ML!type checking of}\index{constructors, in ML@constructors, in \ML!type checking of}\\
+      The constraints described here are discussed in 
+      Section~\ref{ML-ty-con-discuss} below.
+
+  \begin{enumerate}
+  \item If $x$ is a variable bound by {\small\verb%\%}, 
+        {\small\verb%fun%} or
+        {\small\verb%letref%}\index{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!type checking of}, then {\small\verb%x%} is ascribed 
+         the same type as
+        its binding occurrence.  In the case of {\small\verb%letref%}, this
+        must be monotype if 
+        \begin{enumerate}
+        \item the {\small\verb%letref%} is top-level or
+        \item an assignment to $x$ occurs within a
+              {\small\verb%\%}-expression within its scope.
+        \end{enumerate}
+  \item If $x$ is bound by {\small\verb%let%}\index{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!type checking of} or
+        {\small\verb%letrec%}\index{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!type checking of}, then $x$
+        has $ty$, where $ty$ is an instance 
+        of the type of the
+        binding occurrence of $x$ (\ie\ the {\it generic\/} 
+        type of $x$), in which type variables occurring in the types of
+        current {\small\verb%\%}-bound or {\small\verb%letref%}-bound 
+        identifiers are not instantiated.
+  \item If $x$ is not bound in the program 
+        (in which case it must be
+        an \ML\ primitive), then $x$ has 
+        $ty$, where $ty$ is
+        an instance of the type of $x$ given in 
+	Chapter~\ref{MLprims}.
+  \item If $x$ is a constructor, $x$ has 
+        $ty$ where $ty$ is an instance of 
+	the type ascribed to $x$ in the
+        concrete type declaration where it was bound.
+  \end{enumerate}
+
+\item Patterns\index{patterns, in ML@patterns, in \ML!type checking of|(}\\
+      Cases for a pattern $p$:
+  \begin{itemize}
+  \item {\small\verb%_%}\index{wildcard, in ML@wildcard, in \ML}\index{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}\\
+        $p$ has $ty$, where $ty$ is any type.
+  \item $con$ $p'$\\
+        $p$ has an instance of $tyarg$ $tycon$ where $tycon$ is the type
+        of which $con$ is a constructor.
+  \item $p_1${\small\verb%:%}$ty$\index{type constraint!in ML@in \ML}\\
+        $p_1$ and $p$ have an instance of $ty$.
+  \item $p_1${\small\verb%,%}$p_2$\\
+        If $p_1$ has $ty_1$ and $p_2$ has $ty_2$,
+        then $p$ has $ty_1${\small\verb%#%}$ty_2$.
+  \item $p_1${\small\verb%.%}$p_2$\\
+        If $p_1$ has $ty$ then $p_2$ and $p$
+        have $ty${\small\verb% list%}.
+  \item {\small\verb%[%}$p_1${\small\verb%; %}$\ldots${\small\verb% ;%}$p_n${\small\verb%]%}\index{list constructor, in ML@list constructor, in \ML!type checking of}\\
+        For some $ty$, each $p_i$ has $ty$ and
+        $p$ has $ty${\small\verb% list%}.
+  \end{itemize}\index{patterns, in ML@patterns, in \ML!type checking of|)}
+
+\item Expressions\index{expressions, in ML@expressions, in \ML!type
+checking of}\\ 
+      Cases for an expression $e$ (not a constant or identifier):\index{combinations, in ML@combinations, in \ML}
+
+  \begin{itemize}
+  \item $e_1 e_2$\index{function application, in ML@function application, in \ML!type checking of}\index{function types, in ML@function types, in \ML}\\
+        If $e_2$ has $ty$ and $e$ has $ty'$ then
+        $e_1$ has $ty${\small\verb%->%}$ty'$.
+  \item $e_1${\small\verb%:%}$ty$\\
+        $e_1$ and $e$ have an instance of $ty$.
+  \item $px$ $e_1$\index{prefixes, in ML@prefixes, in \ML}\\
+        Treated as {\small\verb%$%}$px${\small\verb%(%}$e_1${\small\verb%)%}
+        when $px$ is a prefix.
+        If $e$ is {\small\verb%-%}$e_1$, then $e$ 
+        and $e_1$ have {\small\verb%int%}.
+  \item $e_1$ $ix$ $e_2$\\
+        Treated as 
+        {\small\verb%$%}$ix${\small\verb%(%}$e_1${\small\verb%,%}$e_2${\small\verb%)%} if $ix$ is
+        introduced with {\small\verb%ml_paired_infix%},
+	 and as {\small\verb%($%}$ix$ $e_1$ $e_2${\small\verb%)%} if
+        $ix$ is introduced by
+        {\small\verb%ml_curried_infix%}.  
+	If $e$ is {\small\verb%(%}$e_1${\small\verb% & %}$e_2${\small\verb%)%}
+         or
+        {\small\verb%(%}$e_1${\small\verb% or %}$e_2${\small\verb%)%}, 
+        then $e$, $e_1$ and $e_2$ have {\small\verb%bool%}.
+  \item $e_1${\small\verb%,%}$e_2$\index{pairs, in ML@pairs, in \ML!type checking of}\\
+        If $e_1$ has $ty_1$ and $e_2$ has $ty_2$ then
+        $e$ has $ty_1${\small\verb%#%}$ty_2$.
+  \item $p${\small\verb%:=%}$e_1$\index{assignments, in ML@assignments, in \ML!type checking of}\\
+        For some $ty$, $p$, $e_1$ and $e$ all have $ty$.
+  \item {\small\verb%failwith %}$e_1$\index{failwith@\ml{failwith}}\\
+        $e_1$ has string, and $e$ has any type.
+  \item {\small\verb%if %}$e_1${\small\verb% then %}$e_{1}' \ldots${\small\verb% if %}$e_n${\small\verb% then %}$e_{n}'${\small\verb% else %}$e'$\index{conditional loop construct, in ML@conditional/loop construct, in \ML!type checking of}\index{conditional loop construct, in ML@conditional/loop construct, in \ML}\index{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}!type checking of}
+\\
+        Each $e_i (0<i<n+1)$ has bool, and {\small\verb%-%} for some
+        $ty - e$, each $e_{i}'$ and $e'$ all have $ty$.
+        However, this constraint does not apply to an $e_{i}'$ preceded
+        by {\small\verb%loop%} in place of {\small\verb%then%}, nor 
+	to $e'$ preceded
+        by {\small\verb%loop%} in place of {\small\verb%else%}. If
+	$e'$ is absent, then $ty${\small\verb% = void%} .
+  \item $e_{0}'${\small\verb% ?? %}$e_1$ $e_{1}'\ldots${\small\verb% ?? %}$e_n$  $e_{n}'${\small\verb% ?{\%}$x${\small\verb%} %}$e'$\\
+        Each $e_i$ $(0<i<n+1)$ has {\small\verb%string list%}, 
+	and {\small\verb%-%} for
+        some $ty${\small\verb% - %}$e$, $e_{0}'$, 
+	each $e_{i}'$ and $e'$ all
+        have $ty$. However, this constraint does not apply to an
+        $e_{i}'$ preceded by {\small\verb%!!%}\index{failure, in ML@failure, in \ML!iterative selective trapping of}\index{failure, in ML@failure, in \ML!trapping of}\index{failure, in ML@failure, in \ML!selective trapping of}\index{failure, in ML@failure, in \ML!iterative trapping of}
+        in place of {\small\verb%??%} nor to
+        $e'$ preceded by {\small\verb%!%} in place of
+        {\small\verb%?%}.  If {\small\verb%\%}$x$
+        is present, $x$ has {\small\verb%string%}.
+  \item {\small\verb%while %}$e_1${\small\verb% do %}$e_2$\index{while construct, in ML@while construct, in \ML}\index{while do@{\small\ml{while}$\cdots$\ml{do}$\cdots$}!type checking of}\\
+        $e_1$ must have type {\small\verb%bool%}, 
+	$e_2$ may have any type and $e$ has type {\small\verb%void%}.
+  \item $e_1${\small\verb%; %}$\ldots${\small\verb% ;%}$e_n$\index{sequencing!of ML expressions@of \ML\ expressions}\\
+        If $e_n$ has $ty$ then $e$ has $ty$.
+  \item {\small\verb%[%}$e_1${\small\verb%; %}$\ldots${\small\verb% ;%}$e_n${\small\verb%]%}\index{lists, in ML@lists, in \ML!type checking of}\\
+        For some $ty$, each $e_i$ has 
+	$ty$ and $e$ has $ty${\small\verb% list%}.
+  \item $d${\small\verb% in %}$e_1$\\
+        If $e_1$ has $ty$ then $e$ has $ty$.  See also
+        (2) above.  If $d$ is a type definition 
+	(see Sections~\ref{ML-concrete-types} and~\ref{ML-abstract-types}) then
+        $ty$ must contain no type defined in $d$.
+  \item {\small\verb%\%}$p${\small\verb%.%}$e_1$\index{function abstraction, in ML@function abstraction, in \ML!type checking of}\\
+        If $p$ has $ty$ and $e_1$ has $ty'$ then
+        $e$ has $ty${\small\verb%->%}$ty'$.  See also (2) above.
+  \item {\small\verb%fun %}$p_1${\small\verb%.%}$e_1${\small\verb% | %}$\ldots${\small\verb% | %}$p_n${\small\verb%.%}$e_n$\index{function (pattern) selection abstraction, in ML@function (pattern) selection abstraction, in \ML}\index{fun@{\ml{fun$\cdots$}\ml{"|}\ml{$\cdots$}}!type checking of}\\
+        If each $p_i$ has $ty$ and each $e_i$ has $ty'$
+        then $e$ has $ty${\small\verb%->%}$ty'$.  See also (2) above.
+  \end{itemize}
+
+% ??? avra: \item{declarations, in ML@declarations, in \ML!type checking of}
+\item Declarations
+
+  \begin{enumerate}
+  \item Each binding $x$ $p_1 \ldots p_n${\small\verb% = %}$e$ is treated as
+        $x${\small\verb% = \%}$p_1${\small\verb%. %}$\ldots${\small\verb% \%}$p_n${\small\verb%. %}$e$.
+  \item {\small\verb%let %}$p_1${\small\verb% = %}$e_1${\small\verb% and %}$\ldots${\small\verb% and %}$p_n${\small\verb% = %}$e_n$ is treated as
+        {\small\verb%let %}$p_1${\small\verb%,%}$\ldots${\small\verb%,%}$p_n${\small\verb% = %}$e_1${\small\verb%,%}$\ldots${\small\verb%,%}$e_n$\\
+ (similarly for
+        {\small\verb%letrec%}, {\small\verb%letref%})\index{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!type checking of}\index{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!type checking of}\index{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!type checking of}.
+  \item If $d$\index{declarations, in ML@declarations, in \ML!type checking of} is {\small\verb%let %}$p${\small\verb% = %}$e$, then
+   {\small\verb%-%} for some
+        $ty${\small\verb% - %}$d$, $p$ and $e$ all have $ty$ (similarly
+        for {\small\verb%letref%}).  Note that $e$ is not in 
+	the scope of the declaration.
+  \item If $d$ is 
+        {\small\verb%letrec %}$x_1${\small\verb%,%}$\ldots${\small\verb%,%}$x_n${\small\verb% = %}$e_1${\small\verb%,%}$\ldots${\small\verb%,%}$e_n$ then
+        {\small\verb%-%} for some $ty_i${\small\verb% - %}$x_i$ and 
+	$e_i$ have $ty_i$,
+        and $d$ has $ty_1${\small\verb%#%}$\ldots${\small\verb%#%}$ty_n$.  
+	(In addition, each free
+        occurrence of $x_i$ in 
+        $e_1${\small\verb%, %}$\ldots${\small\verb% ,%}$e_n$ has 
+	$ty_i$, so that the type of recursive calls of $x_i$ is 
+	the same as the declaring type).
+  \end{enumerate}
+
+\end{enumerate}
+\index{ML@\ML!type checking of|)}
+\index{type checking, in ML@type checking, in \ML|)}
+
+\section {Discussion of type constraints}\label{ML-ty-con-discuss}
+
+We  give  here  reasons\index{type checking, in ML@type checking, in \ML!reasons behind algorithm for|(} for  our constraints  on the  types ascribed to
+occurrences of identifiers.  The reader may  like to  skip this section
+at first reading.
+
+\begin{enumerate}
+
+\item
+Consider constraint (2a) for {\small\verb%\%}-bound identifiers.  This 
+constraint implies that the expression 
+{\small\verb%let %}$x${\small\verb% = %}$e${\small\verb% in %}$e'$ may be
+ well-typed even if the semantically-equivalent expression
+ {\small\verb%let %}$f$ $x${\small\verb% = %}$e'${\small\verb% in %}$f$ $e$
+ is not, since in
+the former expression $x$ may occur in $e'$ with two incompatible
+types which are both instances of the declaring type.  The greater
+constraint on $f$ is associated with the fact that $f$ may be
+applied to many different arguments during evaluation.  To show the need
+for the constraint, suppose that it is replaced by the weaker constraint
+for {\small\verb%let%}-bound identifiers, so that for example
+
+{\small\begin{verbatim}
+   let f x = if x then 1+x else x(1)
+\end{verbatim}}
+
+is a well-typed declaration of type {\small\verb%*->int%}, in which the four
+occurrences of {\small\verb%x%} receive types {\small\verb%*%}, 
+{\small\verb%bool%}, {\small\verb%int%},
+{\small\verb%int->int%} respectively.  In the absence of an explicit argument
+for the abstraction, no constraint exists for the type of the binding
+occurrence of {\small\verb%x%}.  But, because {\small\verb%f%} is
+{\small\verb%let%}-bound,
+expressions such as {\small\verb%f(true)%} and {\small\verb%f(`dog`)%} are
+admissible in the scope of {\small\verb%f%}, although their evaluation should
+result in either nonsense or {\it run-time\/} type-errors; one of our
+purposes is to preclude these.
+
+The only exception to this rule is for expressions of the form 
+{\small\verb%(\%}$x${\small\verb%. %}$e'${\small\verb%) %}$e$, 
+which is treated exactly as
+{\small\verb%let %}$x${\small\verb%=%}$e${\small\verb% in %}$e'$.
+Here we know the unique instance of type of 
+the argument $x$, namely the type of $e$.
+
+\item
+The analogous restriction for {\small\verb%letref%}-bound 
+identifiers is also due
+to the possibility that the identifier-value binding may change during
+evaluation (this time because of assignments).  Consider the following:
+
+{\small\begin{verbatim}
+   letref x = [] in
+          (if e then do(x := 1.x) else do(x := [true]) ;
+           hd x) ;;
+\end{verbatim}}
+
+If {\small\verb%letref%} were treated like {\small\verb%let%}, this 
+phrase would be
+well-typed and indeed have type {\small\verb%* %}, despite the fact 
+that the value
+returned is either {\small\verb%1%} or {\small\verb%true%}.  
+So, calling the whole
+expression $e$, all manner of larger expressions involving
+$e$
+would be well-typed, even including $e${\small\verb%(%}$e${\small\verb%) %}!
+
+\item
+Top level {\small\verb%letref%}s must be monomorphic (see (2ai)) to avoid
+retrospective type constraints at top-level.  If this restriction
+were removed the following would be allowed:
+
+{\small\begin{alltt}
+   letref x = [] ;;
+       \(\vdots\)
+       2.x ;;
+\end{alltt}}
+
+But on type checking the last phrase, it would appear that the type of
+{\small\verb%x%} at declaration should have been {\small\verb%int list%}, 
+not {\small\verb%* list%}, and the types of intervening phrases may likewise 
+need constraining.
+
+\item
+To see the need for the exclusion of polymorphic non-local assignments (see
+(2aii)), consider this example in the \HOL\ system (this example
+is originally due to Lockwood Morris\index{Morris, L.}). (The type \ml{thm} is the type
+of theorems, as is explained later in Section~\ref{avra_theorems}.)
+
+{\small\begin{verbatim}
+   let store,fetch =
+       letref x = [] in (\y. x:=[y]) , (\(). hd x ) ;;
+   store "T = F" ;;
+   let eureka :thm = fetch() ;;
+\end{verbatim}}
+
+Now suppose we lift our constraint.  Then in the declaration, 
+{\small\verb%x%} has
+type {\small\verb%* list%} throughout its (textual) scope, and 
+{\small\verb%store%},
+{\small\verb%fetch%} receive types {\small\verb%*->* list%}, 
+{\small\verb%**->*%} respectively.
+In the two ensuing phrases they get respective types 
+{\small\verb%term->term list%}, {\small\verb%void->thm%} (instances of their
+declaring types), and the value of {\small\verb%eureka%}
+is a contradictory formula masquerading as a theorem!
+
+The problem is that the type checker has no simple way of discovering the
+types of all values assigned to the polymorphic {\small\verb%x%}, since these
+assignments may be invoked by calls of the 
+function {\small\verb%store%} outside
+the (textual) scope of {\small\verb%x%}.  This is not possible under our
+constraint.
+
+However, polymorphic assignable\index{assignable variables, in ML@assignable variables, in \ML}\index{assignable variables, in ML@assignable variables, in \ML}\index{variables, in ML@variables, in \ML!assignable}
+identifiers are still useful: consider
+
+{\small\begin{verbatim}
+   let rev l =
+        letref l,l' = l,[] in
+          if null l then l' loop (l,l':= tl l, hd l.l') ;;
+\end{verbatim}}
+
+
+Such uses of assignable identifiers for iteration may be avoided given
+a suitable syntax for iteration, but assignable identifiers
+are useful for a totally different purpose---namely as `own variables'
+shared between one or more functions (as in the store-fetch example).
+Our constraint of course requires them to be monomorphic; this
+is one of the few cases where the user occasionally needs to
+add an explicit type to a program.
+
+\end{enumerate}\index{type checking, in ML@type checking, in \ML!reasons behind algorithm for|)}
+
+
+
+\section{Type abbreviations}
+\index{abbreviation of types, in ML@abbreviation of types, in \ML}\index{type abbreviations!in ML@in \ML}\index{types, in ML@types, in \ML!abbreviation of}
+\label{MLtypeabbrev}
+\index{lettype@{\small\verb+lettype+}|(}
+
+The syntax of type abbreviation bindings $tab$ is
+
+\begin{hol}
+{\small\verb%   %}$tab${\small\verb% ::= %}$id_1${\small\verb% = %}$ty_1${\small\verb%  and %}$\ldots${\small\verb% and %}$id_n${\small\verb% = %}$ty_n$
+\end{hol}
+
+\noindent Then the declaration
+
+\begin{hol}
+{\small\verb%   lettype %}$tab$
+\end{hol}
+
+\noindent in which each $ty_i$ must be a monotype, built from 
+basic types and
+previously defined types, allows you to introduce new names $id_i$ for
+the types $ty_i$.  Within the scope of the 
+declaration the expression
+$e${\small\verb%:%}$id_i$ behaves exactly like 
+$e${\small\verb%:%}$ty_i$, and the type $ty_i$
+will always be printed as $id_i$.
+
+One aspect of such type abbreviations should be emphasised.  Suppose you
+declare
+
+\begin{hol}\begin{verbatim}
+    lettype rat = int # int ;;
+\end{verbatim}\end{hol}
+
+\noindent for the rational numbers, and set up the standard 
+operations on rationals.
+Within the scope of this declaration {\it any\/} expression of type
+{\small\verb%int#int%} will be treated as though it had 
+type {\small\verb%rat%}, and this
+could be not only confusing but also incorrect (in which case it ought to
+cause a type failure).  If you wish to introduce the type {\small\verb%rat%},
+isomorphic to {\small\verb%int#int%} but not matching it 
+for type checking purposes, then you should use abstract types\index{abstract types, in ML@abstract types, in \ML!reasons for}.
+\index{lettype@{\small\verb+lettype+}|)}
+
+\section {Concrete types}\label{ML-concrete-types}
+
+\index{type constructors!in ML@in \ML|(}\index{types, in ML@types, in \ML!concrete}
+Concrete type operators\index{concrete types, in ML@concrete types, in \ML}
+ may be introduced by a special kind of declaration,
+in which type variables are used as dummy arguments (or formal parameters)
+of the operators, just as ordinary variables are so used in declaring
+functions.  We need the syntax
+
+\begin{hol}
+{\small\verb%  %}$vtyarg${\small\verb%  ::=                    Empty dummy argument list%}\\
+{\small\verb%           |   %}$vty${\small\verb%               One dummy argument%}\\
+{\small\verb%           |  (%}$vty${\small\verb%, %}$\ldots${\small\verb% ,%}$vty${\small\verb%)     One or more dummy arguments%}
+\end{hol}
+
+\noindent Then the syntax of concrete type bindings\index{bindings, in ML@bindings, in \ML!concrete type} $cb$ is
+
+\begin{hol}
+{\small\verb%  %}$cb${\small\verb% ::= %}$vtyarg$ $tycon${\small\verb% = %}$con_1${\small\verb% {of %}$ty_1${\small\verb%} | ... | %}$con_n${\small\verb% {of %}$ty_n${\small\verb%}%}\\
+{\small\verb%         |  %}$cb_1${\small\verb% and %}$\ldots${\small\verb% and %}$cb_n$
+\end{hol}
+
+\noindent where each $vtyarg_i$ must contain no type 
+variable more than once, and
+all the type variables in $ty_i$ must occur in $vtyarg$.  A
+concrete type declaration takes the form
+
+
+\begin{hol}
+\index{rectype@\ml{rectype}}
+\index{type@\ml{type}}
+{\small\verb%   {type|rectype} %}$cb$
+\end{hol}
+
+The declaration introduces a set of type constructors\index{constructions, in ML@constructions, in \ML}, and also a set of
+constructors.  If {\small\verb%of %}$ty_i$ is absent then the value of
+$con_i$ is the constant value $con_i$ and its type is $vtyarg$ $tycon$;
+otherwise the value of $con_i$ is the function which 
+maps $v$ to
+$con_{i}${\small\verb%(%}$v${\small\verb%)%} and its type 
+is $ty_i${\small\verb% -> %}$vtyarg$ $tycon$.  The
+constructors have the same scope as the type constructors introduced by the
+declaration.
+
+For non-top-level declarations a simple
+constraint ensures that a value of concrete type cannot exist except
+during the execution of phrases within the scope of the type
+declaration.  In the expression
+
+\begin{hol}
+{\small\verb%   {rec}type %}$\ldots vtyarg_i$ $id_i${\small\verb% = %}$\ldots${\small\verb% in %}$e$
+\end{hol}
+
+\noindent the type of $e$, and the types of any non-local assignments within
+$b$ and $e$, must not involve any of the $id_i$.
+
+\section {Abstract types}\label{ML-abstract-types}
+
+\index{types, in ML@types, in \ML!abstract|(}
+\index{abstract types, in ML@abstract types, in \ML|(}
+\index{absrectype@{\small\verb+absrectype+}$\ldots${\small\verb+with+}$\ldots$|(}
+\index{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|(}
+As with concrete types, abstract type constructors
+may be introduced by a
+declaration in which type variables are used as dummy arguments (or formal
+parameters) of the operators.  The syntax of abstract type
+bindings\index{bindings, in ML@bindings, in \ML!abstract type}
+$ab$ is
+
+\begin{hol}
+{\small\verb%   %}$ab${\small\verb% ::= %}$vtyarg_1$ $tycon_1${\small\verb% = %}$ty_1${\small\verb% and %}$\ldots${\small\verb% and %}$vtyarg_n$ $tycon_n${\small\verb% = %}$ty_n${\small\verb% with %}$b$
+\end{hol}
+
+\noindent where each $vtyarg_i$ must contain no  type variable more
+than once,  and  all  the  type variables  in $ty_i$  must occur in
+$vtyarg_i$.  An abstract type declaration takes the form
+
+\begin{hol}
+{\small\verb%   {abstype|absrectype} %}$ab$
+\end{hol}
+
+\noindent The declaration introduces a set of type operators, and 
+also incorporates a
+normal binding $b$ (treated like {\small\verb%let%}) of \ML\ identifiers.
+Throughout the scope of the abstract type declaration the type operators
+and \ML\ identifiers are both available, but it is 
+only within $b$ that
+the {\it representation\/} of the type operators (as declared in terms of
+other operators) is available.
+
+In an abstract type declaration
+
+\begin{hol}
+{\small\verb%   abs{rec}type %}$vtyarg_1$ $id_1${\small\verb% = %}$ty_1${\small\verb% and %}$\ldots${\small\verb% and %}$vtyarg_n$ $id_n${\small\verb% = %}$ty_n${\small\verb% with %}$b$
+\end{hol}
+
+\noindent The sense in which the representation of each $id_i$ 
+is available only within
+$b$ is as follows: the isomorphism between objects of types $ty_i$
+and $vtyarg_i$ $id_i$ is available 
+(only in $b$) via a pair of
+implicitly declared polymorphic functions
+
+\begin{hol}
+\index{abs_@{\small\verb+abs_+$\ldots$}}
+\index{rep_@{\small\verb+rep_+$\ldots$}}
+{\small\verb%   abs_%}$id_i${\small\verb% : %}$ty_i${\small\verb% -> %}$vtyarg_i$ $id_i$
+{\small\verb%   rep_%}$id_i${\small\verb% : %}$vtyarg_i$ $id_i${\small\verb% -> %}$ty_i$
+\end{hol}
+
+\noindent which are to be used as coercions between the abstract types
+and their representations. Thus in the simple case
+
+
+\begin{hol}
+{\small\verb%   abstype %}$a${\small\verb% = %}$ty${\small\verb% with %}$x${\small\verb% = %}$e'${\small\verb% in %}$e$
+\end{hol}
+
+\noindent the scope\index{scope!in ML abstract types@in \ML\ abstract types} of $a$ is $e'$ and $e$, the scope of {\small\verb%abs_%}$a$ and
+ {\small\verb%rep_%}$a$ is $e'$, and the scope of $x$ is $e$.
+
+As an illustration, consider the definition of the type {\small\verb%rat%} of
+rational numbers, represented by pairs of integers, together
+with operations {\small\verb%plus%} and {\small\verb%times%} and 
+the conversion functions
+
+\begin{hol}\begin{verbatim}
+   inttorat : int->rat
+   rattoint : rat->int
+\end{verbatim}\end{hol}
+
+\noindent Since {\small\verb%rat%} is a nullary type operation, 
+no type variables are involved, and {\small\verb%rat%} can be defined by:
+
+\begin{hol}\begin{verbatim}
+   abstype rat = int#int
+      with plus(x,y) = (abs_rat(x1*y2+x2*y1, x2*y2)
+                        where x1,x2 = rep_rat x
+                          and y1,y2 = rep_rat y    )
+      and times(x,y) = (abs_rat(x1*y1, x2*y2)
+                        where x1,x2 = rep_rat x
+                          and y1,y2 = rep_rat y    )
+      and inttorat n = abs_rat(n,1)
+      and rattoint x = ((x1/x2)*x2=x1 => x1/x2 | failwith `rattoint`
+                        where x1,x2 = rep_rat x    ) ;;
+\end{verbatim}\end{hol}
+
+Most abstract type declarations are probably used at top-level\index{ML@\ML!top level of}, so that their scope is the remainder of the top-level
+program.  But for non-top-level declarations, a simple
+constraint ensures that a value of abstract type cannot exist except
+during the execution of phrases within the scope of the type
+declaration.  In the expression
+
+\begin{hol}
+{\small\verb%   abs{rec}type %}$\ldots vtyarg_i$ $id_i${\small\verb% = %}$ty_i \ldots${\small\verb% with %}$b${\small\verb% in %}$e$
+\end{hol}
+
+\noindent The  type  of  $e$,  and  the  types  of  any  non-local
+assignments within $b$ and $e$, must  not involve any of the $id_i$.
+
+Finally, in keeping with the abstract\index{top level, of ML@top level, of \ML!abstract type expressions at} nature of objects of abstract type,
+the value of a top-level expression of abstract type is printed as a
+dash, {\small\verb%-%}\index{non-printable values in ML@non-printable values in \ML}\index{ non-printable symbol, in ML@{\small\verb+-+} (`non-printable' symbol, in \ML)}\index{printing, of ML@printing, of \ML!of abstract-typed values}\index{abstract-typed values, in ML@abstract-typed values, in \ML!printing of},
+as functional values are. Users who
+wish to `see' such an
+object should declare a coercion function in the `with' part of the
+type declaration, to yield a suitable concrete representation of the
+abstract objects.
+
+\index{absrectype@{\small\verb+absrectype+}$\ldots${\small\verb+with+}$\ldots$|)}
+\index{abstract types, in ML@abstract types, in \ML|)}
+\index{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|)}
+\index{type constructors!in ML@in \ML|)}
+\index{types, in ML@types, in \ML!abstract|)}
+
+
+
+
+

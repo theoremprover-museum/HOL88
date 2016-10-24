@@ -1,0 +1,3 @@
+\THEOREM DIFF_CONST LIM
+|- !k x. ((\x. k) diffl (& 0))x
+\ENDTHEOREM

@@ -1,0 +1,4 @@
+\THEOREM TAN_TOTAL_POS TRANSC
+|- !y.
+    (& 0) <= y ==> (?x. (& 0) <= x /\ x < (pi / (& 2)) /\ (tan x = y))
+\ENDTHEOREM

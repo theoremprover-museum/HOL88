@@ -1,0 +1,3 @@
+\THEOREM ADDR_GREATER add
+|- !m n p. m < n ==> m < (n + p)
+\ENDTHEOREM

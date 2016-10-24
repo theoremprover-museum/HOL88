@@ -1,0 +1,15 @@
+rm -f NEXT.th
+hol21 < mk_NEXT.ml
+
+rm -f MULT_FUN_CURRY.th
+hol21 < MULT_FUN_CURRY.ml
+
+rm -f MULT_FUN.th
+hol21 < MULT_FUN.ml
+
+rm -f prims.th
+rm -f MULT_IMP.th
+rm -f MULT_VER.th
+hol21 < HOL_MULT.ml
+
+echo 'Multiplier verified in hol21'

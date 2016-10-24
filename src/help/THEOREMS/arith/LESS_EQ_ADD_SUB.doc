@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_ADD_SUB arithmetic
+|- !c b. c <= b ==> (!a. (a + b) - c = a + (b - c))
+\ENDTHEOREM

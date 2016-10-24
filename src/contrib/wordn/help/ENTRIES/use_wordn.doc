@@ -1,0 +1,59 @@
+\DOC use_wordn
+
+\TYPE {use_wordn : int -> (thm)list}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Defines the type of n-bit words and proves some basic theorems.
+
+\DESCRIBE
+The function {use_wordn} is one of the top level user functions of the
+wordn library. It provides a facility to define the type of n-bit
+words and to prove some basic theorems on this type. When the user
+needs to use n-bit words in an application, he/she can simply make
+a call to {use_wordn} with a single argument {n}. This will define the
+type {:wordn}, and a list of basic theorems about the type are returned.
+{use_wordn} combines the function {define_wordn_type} and the following
+functions for proving theorems about the type of n-bit words:
+{prove_function_defn_thm},\ {prove_wordn_induction_thm},\
+{prove_wordn_cases_thm},\ {prove_BITS_one_one},\
+{prove_BITS_onto},\ {prove_WORD_one_one},\newline
+{prove_WORD_onto},\ {prove_LENGTH_BITS_thm}.
+
+\FAILURE
+Failure occurs if any of the functions invoked fails.
+
+
+\EXAMPLE
+The HOL session below illustrates the use of the function {use_wordn}:
+{
+ # let [word3; word3_BITS_11; word3_BITS_onto;
+ # word3_WORD_11; word3_WORD_onto; word3_LENGTH_BITS;
+ # word3_FNDEF; word3_INDUCT; word3_CASES] =
+ # use_wordn 3;;
+   word3 = 
+   |- (!w. WORD3(BITS3 w) = w) /\
+      (!l. (LENGTH l = 3) = (BITS3(WORD3 l) = l))
+   word3_BITS_11 = |- !w' w. (BITS3 w = BITS3 w') ==> (w = w')
+   word3_BITS_onto = |- !l. (LENGTH l = 3) ==> (?w. BITS3 w = l)
+   word3_WORD_11 = 
+   |- !l l'.
+       (LENGTH l = 3) /\ (LENGTH l' = 3) ==>
+       (WORD3 l = WORD3 l') ==>
+       (l = l')
+   word3_WORD_onto = |- !w. ?l. (LENGTH l = 3) /\ (WORD3 l = w)
+   word3_LENGTH_BITS = |- !w. LENGTH(BITS3 w) = 3
+   word3_FNDEF = |- !f. ?! fn. !b0 b1 b2. fn(WORD3[b0;b1;b2]) = f b0 b1 b2
+   word3_INDUCT = |- !P. (!b0 b1 b2. P(WORD3[b0;b1;b2])) ==> (!w. P w)
+   word3_CASES = |- !w. ?b0 b1 b2. w = WORD3[b0;b1;b2]
+}
+
+\SEEALSO
+{define_wordn_type}, {prove_function_defn_thm}, {prove_wordn_induction_thm},
+{prove_wordn_cases_thm}, {prove_BITS_one_one},
+{prove_BITS_onto}, {prove_WORD_one_one},
+{prove_WORD_onto}, {prove_LENGTH_BITS_thm}.
+
+
+\ENDDOC

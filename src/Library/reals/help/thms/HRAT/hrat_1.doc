@@ -1,0 +1,3 @@
+\THEOREM hrat_1 HRAT
+|- hrat_1 = mk_hrat($trat_eq trat_1)
+\ENDTHEOREM

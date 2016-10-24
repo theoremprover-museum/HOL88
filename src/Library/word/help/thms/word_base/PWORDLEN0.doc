@@ -1,0 +1,3 @@
+\THEOREM PWORDLEN0 word_base
+|- !w. PWORDLEN 0 w ==> (w = WORD[])
+\ENDTHEOREM

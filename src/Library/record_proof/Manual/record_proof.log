@@ -1,0 +1,191 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:20
+**record_proof.tex
+(record_proof.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (/usr/lib/tex/macros/latex/makeidx.sty
+Document style option `makeidx' - released 21 Oct 91
+) (/usr/lib/tex/macros/array/array.sty
+Style-Option: `array' v2.1b  <92/07/06> (F.M.)
+English documentation dated  <92/09/12> (F.M.)
+\col@sep=\dimen101
+\extrarowheight=\dimen102
+\NC@list=\toks11
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+(macros.tex (holmacs.tex) (tokmac.tex))
+\@indexfile=\write3
+
+Writing index file record_proof.idx 
+(record_proof.aux (title.aux) (description.aux) (entries.aux)) (title.tex
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 16.
+[1
+
+
+] [2]) (record_proof.toc)
+\tf@toc=\write4
+ [3
+
+
+] [4
+
+] (description.tex
+Chapter 1.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 3.
+[1
+
+
+] [2]
+Overfull \hbox (0.4pt too wide) in paragraph at lines 145--172
+[]  
+
+\hbox(160.32692+154.3269)x455.24408
+.\hbox(160.32692+154.3269)x455.64407
+..\mathon
+..\vbox(160.32692+154.3269)x455.64407
+...\rule(0.4+0.0)x455.64407
+...\hbox(309.5038+4.35004)x455.64407 []
+...\rule(0.4+0.0)x455.64407
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 8.6868
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.32993
+..\hbox(0.0+0.0)x11.38109
+..\twlrm A
+..\glue 3.91663 plus 1.95634 minus 1.30684
+..\twlrm c
+..\kern-0.32639
+..etc.
+.\penalty 150
+.\glue(\baselineskip) 5.33337
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.95663
+..\twlrm f
+..\twlrm o
+..\twlrm r
+..\twlrm m
+..\twlrm a
+..etc.
+.etc.
+
+ [3]
+Overfull \hbox (0.4pt too wide) in paragraph at lines 195--218
+[]  
+
+\hbox(134.32692+128.3269)x455.24408
+.\hbox(134.32692+128.3269)x455.64407
+..\mathon
+..\vbox(134.32692+128.3269)x455.64407
+...\rule(0.4+0.0)x455.64407
+...\hbox(257.5038+4.35004)x455.64407 []
+...\rule(0.4+0.0)x455.64407
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 8.27498
+.\glue(\topskip) 12.0
+.\hbox(0.0+0.0)x455.24408, glue set 455.24408fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\glue(\rightskip) 0.0 plus 1.0fil
+.\penalty 10150
+.\glue(\lineskip) 1.0
+.\hbox(160.32692+154.3269)x455.24408
+..\hbox(160.32692+154.3269)x455.64407
+...\mathon
+...\vbox(160.32692+154.3269)x455.64407 []
+...\mathoff
+..\penalty 10000
+..\glue(\parfillskip) 0.0 plus 1.0fil
+..\glue(\rightskip) 0.0 plus 1.0fil
+.etc.
+
+ [4]
+[5]
+Overfull \hbox (2.81691pt too wide) in paragraph at lines 300--308
+[] [][][] []\twltt : string -> string -> thm list -> line list -> void 
+
+\hbox(7.33333+2.66666)x425.86938, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\glue 0.0
+.\hbox(5.33334+0.0)x0.0
+..\glue 0.0
+..\glue -23.49976
+..\glue -5.87494
+..\hbox(5.33334+0.0)x23.49976, glue set 23.49976fil
+...\glue 0.0 plus 1.0fil minus 1.0fil
+...\hbox(5.33334+0.0)x0.0, glue set - 6.00002fil []
+..\glue 5.87494
+.\penalty 0
+.\hbox(7.33333+2.66666)x111.15005
+..\twltt w
+..\twltt r
+..\twltt i
+..\twltt t
+..\twltt e
+..etc.
+.etc.
+
+[6]) [7] (entries.tex [8
+
+
+
+]
+Chapter 2.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 1.
+(entries-intro.tex)) [9] (record_proof.bbl [10
+
+
+]) (record_proof.ind [11]
+[12
+
+
+]) (record_proof.aux (title.aux) (description.aux) (entries.aux)) ) 
+Here is how much of TeX's memory you used:
+ 559 strings out of 11977
+ 4649 string characters out of 87025
+ 39159 words of memory out of 262141
+ 2412 multiletter control sequences out of 9500
+ 19914 words of font info for 75 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 18i,12n,17p,261b,441s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on record_proof.dvi (16 pages, 24860 bytes).

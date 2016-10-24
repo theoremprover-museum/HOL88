@@ -1,0 +1,12 @@
+\DOC *
+
+\TYPE {$* : ((int # int) -> int)}
+
+\SYNOPSIS
+Performs multiplication on ML integers.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+

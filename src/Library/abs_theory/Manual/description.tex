@@ -1,0 +1,738 @@
+\newcommand{\AVM}[1]{\mbox{\em AVM--#1}}
+\newcommand{\vb}[1]{\mbox{\tt #1}}
+
+
+
+\chapter{The {\tt abs\_theory} Library}
+
+A theory is a set of types, definitions, constants, axioms and parent
+theories.  Logics are extended by defining new theories.  An abstract
+theory is parameterized so that some of the types and constants in the
+theory are undefined inside the theory except for their syntax and an
+algebraic specification of their semantics.  Group theory provides an
+example of a abstract theory: the multiplication operator is undefined
+except for its syntax (a binary operator on type \vb{:group}) and a
+semantics given by the axioms of group theory.
+
+Abstract theories are useful because they provide proofs about abstract
+structures which can then be used to reason about specific instances of
+those structures.  In groups, for example, after showing that addition over
+the integers satisfies the axioms of group theory, we can use the theorems
+from group theory to reason about addition on the integers.
+
+This report describes the use of abstract theories in the HOL theorem
+prover~\cite{gordon1}.  The current version of the abstract theory package
+has evolved greatly since the original report was
+published~\cite{windley:abs-old}.
+
+\section{Abstract Theories.}
+There are two key components of an abstract theory: (1) the {\em abstract
+representation} and (2) the {\em theory obligations}.  The {\em abstract
+representation} is a set of abstract objects and a set of abstract
+operations.  The operations are unspecified; that is, we don't know (inside
+the theory) what the objects and operations mean.  Their meaning is
+specified through the theory obligations: a set of predicates that define
+relationships among members of the abstract representation.  The abstract
+theory describes a model.  Any structure with objects and operations that
+satisfy the predicates is a homomorphism of that model.
+
+The theory obligations axiomatize the theory.  Using the obligations as
+axioms, we prove theorems of interest about the abstract objects and
+operations.  The goal is to use the abstract theory to reason about
+specific objects by instantiating the abstract theory with a concrete
+representation which has been shown to meet the obligations.  The
+instantiation specializes the abstract theorems, producing a set of
+theorems about the concrete representation.  The concrete representation is
+an instance of the abstract theory and represents a {\em member} of the
+class of abstract objects that it describes.
+
+HOL, the verification environment used in the research reported here, does
+not explicitly support abstract theories; however, HOL's metalanguage, ML,
+combined with higher--order logic, provides a framework sufficient for
+implementing abstract theories.  Several specification and verification
+systems, such as OBJ and EHDM, offer explicit support for abstract
+theories.  We briefly describe them for comparison.
+
+\paragraph{OBJ.}
+OBJ is a specification and programming language developed by Joseph
+Goguen~\etal\ that has most recently been described in~\cite{obj-ref-man}.
+OBJ is widely known and the semantics of its theories and views match our
+use of abstract theories.  OBJ is based on a many--sorted (or typed)
+algebraic semantics and supports parameterized specification and
+programming \cite{obj-param-prog}. OBJ has three kinds of entities:
+\begin{enumerate}
+\item
+{\bf Objects}, which are concrete modules that encapsulate executable code,
+\item
+{\bf Theories}, which are parameterized modules that correspond to abstract
+theories as used in this report, and
+\item
+{\bf Views}, which bind objects and theories to parameters in another
+theory.
+\end{enumerate}
+
+Objects are said to contain executable code because the expressions in an
+object module give the initial algebraic semantics of the sorts and
+operations being defined.  The fact that their semantics is initial implies
+that they describe just one model (up to isomorphism).  Theories, on the
+other hand, are said to have a ``loose'' semantics since they define a
+variety of models.  A loose semantics describes a class of objects; any
+member of that class will satisfy the theory.
+
+A view is {\em not} an instantiation.  Instantiation is done using a
+special command, {\bf make}, after the view has been established.  A view
+can be seen as a mapping of the operators and objects from one module onto
+a theory, as well as a declaration of intent that the module meets the
+obligations set forth in the equations of the theory module.  OBJ does not
+require that the user prove that the obligations are met---a simple
+declaration is sufficient.  Of course, if the view is not proper, then the
+OBJ program will not operate as intended.
+
+\paragraph{EHDM.}
+EHDM is a specification and verification system developed by SRI
+International~\cite{ehdm:manual}.  The language of EHDM is based on
+first--order predicate logic, but includes some elements of higher--order
+logic as well.  For example, variables can range over functions, functions
+can return other functions, and functions can appear in quantifications.
+Parameterized modules are an important part of the EHDM language where they
+are used to organize specifications.  Modules can be parameterized with
+types, constants, and functions.  The module parameters can have
+constraints placed on them that must be met before the module can be
+instantiated.
+
+In EHDM, a parameterized module is called a {\em generic module} and an
+instantiation is called a {\em module instance}.  EHDM module declarations
+give the uninterpreted types, constants, and functions over which the
+module is parameterized.  This declaration is analogous to our abstract
+representation. 
+
+The module body contains (among other things) an {\bf ASSUMING} clause that
+gives the properties of the module parameters.  The formulae in the {\bf
+ASSUMING} clause are analogous to our theory obligations.
+
+The module can also contain declarations of concrete types, constants, and
+functions that define the theory associated with the module and proofs of
+theorems about the abstract operations in the theory.  These proofs may
+rely on the formulae in the {\bf ASSUMING} clause.
+
+\section{Using the Abstract Theory Package.}
+This section briefly describes the major functions in the abstract theory
+package.  The following section provides an example of its use.  Complete
+descriptions of all the commands are given in the next chapter. For an
+example of how abstract theories can be used in computer system
+specification and verification see~\cite{windley:ah,windley:git}.
+
+Before beginning an abstract theory, the ML file \vb{abs\_theory} must be
+loaded.  This defines the commands in the abstract package and modifies
+some of the standard HOL commands to support its operation.
+
+One declares a new abstract theory in the same way that one declares a
+standard theory, using \vb{new\_theory}.  One is free to use any of the
+standard HOL commands for manipulating a draft theory in their usual
+manner.  For example, definitions are made in the usual way using
+\vb{new\_definition}.
+
+\subsection{Abstract Representations.}
+The abstract representation describes the abstract objects and operators in
+the abstract theory. The abstract theory package defines
+\vb{new\_abstract\_representation} for declaring the abstract representation.
+The function is applied to a string representing the name of the abstract
+object and a list of string--type pairs.  The first member of the pair
+gives the name of the abstract operator and the second member of the pair
+is the its type. Any number of abstract operators can be defined in an
+abstract representation.  One can use \vb{new\_abstract\_representation}
+more than once in a single theory defining more than one abstract object.
+
+The system does not require that abstract objects be specifically declared.
+We represent abstract objects as type variables in HOL (denoted by a
+prepended asterisk).  Since HOL does not require that type variables be
+declared, we are free to use them wherever we wish.  The declaration of
+abstract objects is implicit, being the set of type variables
+occurring in the abstract representation.  
+
+The result of declaring a new abstract representation is a theorem that can
+be saved to use with \vb{abs\_type\_info} to retrieve the type of the
+abstract object when this is difficult to otherwise discern. 
+
+When one defines a constant in the abstract theory, by convention, the
+first argument to the constant will be a variable with the same type as the
+abstract representation.  This variable must, in turn be the first argument
+to any of the abstract constants from the abstract representation used in
+the definition.  Later, during instantiation, the definition will be
+applied to a concrete representation and the instantiation functions will
+replace the abstract constants with the appropriate concrete constants in
+the instantiation.
+
+\subsection{Theory Obligations.}
+The theory obligations are declared using the ML function
+\vb{new\_theory\_obligations}. The function takes a string--term
+pair as its sole argument.  The pair represents a theory obligation, giving
+the name and the predicate defining the theory obligation.  The pair can be
+thought of as an axiom defining the semantics of the abstract objects.  
+
+The predicate is usually a conjunction of obligations.  These obligations
+will be available for use in the draft theory.  The system will
+automatically add them to the assumption list when the HOL commands for
+declaring abstract goals and proving abstract theorems, such as
+{\vb{set\_abs\_goal}} and \vb{prove\_abs\_thm}, are used.  The HOL command
+{\vb{close\_theory}} closes the current draft and flushes the theory
+obligations.
+
+\subsection{Instantiating Theories.}
+One makes use of an abstract theory by instantiating it.  The first step is
+to make the abstract theory a parent of the draft theory using the ML
+function \vb{new\_abstract\_parent}.  
+
+HOL theories differentiate between definitions and theorems and so there
+is an ML function for instantiating each.  Instantiating any abstract
+object requires that we create a concrete representation.  Concrete
+representations are created by applying the name of the abstract object to
+the concrete objects that are to be used for the instantiation.  
+
+\paragraph{Abstract Definitions.}
+Abstract definitions are definitions which use the abstract objects from
+the abstract representation.  By convention, the first variable in an
+abstract definition is the representation variable and has the same type as
+the abstract representation.  Creating a concrete definition from an
+abstract one requires two steps:
+\begin{enumerate}
+\item
+Make an auxiliary definition that uses the abstract definition and applies
+it to a concrete representation.
+\item
+Use the ML function \vb{instantiate\_abstract\_definition} to produce a
+concrete instance of the abstract definition from the auxiliary definition.
+\end{enumerate}
+The result of this instantiation is a theorem that defines a concrete
+instance of the abstract definition and makes no reference to the abstract
+definition.
+
+\paragraph{Abstract Theorems.}
+In drafting an abstract theory, one normally proves theorems about the
+abstract representation using the theory obligations as axioms.  When the
+abstract theory is used, we instantiate the theorems in it so that the
+theory obligations are discharged and the new concrete theorems stand on
+their own.  
+
+
+The ML function \vb{instantiate\_abstract\_theorem} instantiates one
+abstract theorem.  The function takes four arguments:
+\begin{enumerate}
+\item
+The name of the abstract theory where theorem reside.
+\item
+The name of the abstract theorem to instantiate.
+\item
+A list of term pairs that instantiate variables with concrete
+representations.  The first term in the pair is the variable to instantiate
+and the second is the concrete representation.
+\item
+A list of theorems that satisfy the theory obligations in the subject
+abstract theorem.  These theorems discharge the antecedents of the abstract
+theorems.
+\end{enumerate}
+The new theorem resulting from the instantiation is {\em not} automatically
+saved in the current theory, but must be explicitly saved using
+\vb{save\_thm}.
+
+\section{Example: Group Theory}
+This section demonstrates the major features of the abstract theory
+package.  We begin by defining an abstract theory for {\em monoids}.  The
+following section uses the theory of monoids to create a theory of {\em
+groups}.  The last section instantiates the theory of groups using
+exclusive--or as the group operator.
+
+\subsection{Defining Monoids}
+A monoid is an algebra with a binary operator and an identity element.  The
+operator is associative and operating on the identity element with any
+object in the algebra, $x$ yields that same object, $x$.
+
+We begin the the session by loading the abstract theory package and
+entering draft mode:
+\begin{boxed}\begin{hol}\begin{alltt}
+loadf `abs_theory`;;
+
+new_theory `monoid_def`;;
+\end{alltt}\end{hol}\end{boxed}
+
+The abstract representation is declared using
+{\vb{new\_abstract\_representation}}.  We declare the binary operator,
+{\vb{op}}, and an identity element, \vb{e}:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let MONOID = new_abstract_representation `monoid`
+   [
+    (`op`,":* -> * -> *")
+   ;
+    (`e`,":*")
+   ];;
+}\end{alltt}\end{hol}\end{boxed}
+The abstract representation gives only the name and type of the operators. 
+
+
+A declaration of an abstract representation will almost always be followed
+immediately by a declaration of the theory obligation since the abstract
+representation introduces the structure of the abstract entity, but not the
+semantics. The theory obligations declare the semantics (or axioms) for the
+abstract entity.  The theory obligations are contained in a predicate that
+states the required properties of \vb{op} and \vb{e}:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+new_theory_obligations
+   (`IS_MONOID`,
+    "!m:(*)monoid . IS_MONOID m = 
+        (!x:* .op m x (e m) = x) /\
+        (!x:* .op m (e m) x = x) /\
+        (! x y z:*. (op m x (op m y z)) = (op m (op m x y) z))");;
+}
+\end{alltt}\end{hol}\end{boxed}
+Note that when \vb{op} and \vb{e} are used in a term, they always take as
+their first argument a variable with the type of the abstract object.
+While this is an implementational requirement, one can think of it as
+identifying \vb{op} and \vb{e} as abstract operators and giving the
+specific abstract object of which they are part.  This last point is
+important since some theorems may use more than one abstract object and the
+abstract operators are differentiated by their argument (as shown in the
+example below).
+
+We will begin with an interactive proof that the identity element is
+unique.  We place the goal on the goal stack in the usual manner:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+g
+"! (m:(*)monoid) (f:*) .
+       (!(a:*) .(op m a f = a) /\ (op m f a = a)) ==> (f = (e m))";;
+}
+\end{alltt}\end{hol}\end{boxed}
+HOL responds with the goal.  Note that the theory obligations are
+automatically placed on the assumption list.
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+"!f. (!a. (op m a f = a) /\ (op m f a = a)) ==> (f = e m)"
+    [ "!x y z. op m x(op m y z) = op m(op m x y)z" ]
+    [ "!x. op m(e m)x = x" ]
+    [ "!x. op m x(e m) = x" ]
+}
+\end{alltt}\end{hol}\end{boxed}
+
+We begin by stripping the universally quantified variables and the
+antecedent of the implication:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+e(
+REPEAT STRIP_TAC
+);;
+
+OK..
+"f = e m"
+    [ "!x y z. op m x(op m y z) = op m(op m x y)z" ]
+    [ "!x. op m(e m)x = x" ]
+    [ "!x. op m x(e m) = x" ]
+    [ "!a. (op m a f = a) /\ (op m f a = a)" ]
+}
+\end{alltt}\end{hol}\end{boxed}
+
+We can specialize the antecedent that we just placed on the assumption list
+with the identity element.  Either conjunct can be used to solve the goal,
+we'll use the first.\footnote{\vb{SYM\_RULE} is implemented as
+\vb{CONV\_RULE SYM\_CONV}.}
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+e(
+ASSUME_TAC (
+  SYM_RULE (
+  CONJUNCT1 (
+  SPEC "e (m:(*)monoid)" (
+  ASSUME "!a. (op m a f = a) /\ (op m f a = a)"))))
+);;
+
+OK..
+"f = e m"
+    [ "!x y z. op m x(op m y z) = op m(op m x y)z" ]
+    [ "!x. op m(e m)x = x" ]
+    [ "!x. op m x(e m) = x" ]
+    [ "!a. (op m a f = a) /\ (op m f a = a)" ]
+    [ "e m = op m(e m)f" ]
+}
+\end{alltt}\end{hol}\end{boxed}
+
+The result of the last step can be substituted into the goal:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+e(
+SUBST1_TAC ASSUME "e m = op m(e m)f"
+);;
+
+OK..
+"f = op m(e m)f"
+    [ "!x y z. op m x(op m y z) = op m(op m x y)z" ]
+    [ "!x. op m(e m)x = x" ]
+    [ "!x. op m x(e m) = x" ]
+    [ "!a. (op m a f = a) /\ (op m f a = a)" ]
+    [ "e m = op m(e m)f" ]
+}
+\end{alltt}\end{hol}\end{boxed}
+
+The result can be rewritten with the assumptions to solve the goal:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+e(
+ASM_REWRITE_TAC []
+);;
+
+OK..
+goal proved
+. |- f = op m(e m)f
+.. |- f = e m
+.. |- f = e m
+. |- !f. (!a. (op m a f = a) /\ (op m f a = a)) ==> (f = e m)
+
+Previous subproof:
+goal proved
+}
+\end{alltt}\end{hol}\end{boxed}
+
+The interactive proof can be packaged up as a proof script:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let IDENTITY_UNIQUE = ABS_TAC_PROOF
+   (([],"! (m:(*)monoid) (f:*) .
+       (!(a:*) .(op m a f = a) /\ (op m f a = a)) ==> (f = (e m))"),
+    REPEAT GEN_TAC
+    THEN STRIP_GOAL_THEN (\.thm .
+        SUBST1_TAC (
+        SYM_RULE (
+        CONJUNCT1 (
+        SPEC "e (m:(*)monoid)" thm))))
+    THEN ASM_REWRITE_TAC []
+   );;
+}
+
+\holthm{
+IDENTITY_UNIQUE = 
+. |- !f. (!a. (op m a f = a) /\ (op m f a = a)) ==> (f = e m)
+}
+\end{alltt}\end{hol}\end{boxed}
+The function \vb{ABS\_TAC\_PROOF} is like \vb{TAC\_PROOF} except that when
+used on a goal with an abstract variable, the theory obligations are added
+to the assumption list before the proof is started.  If there is more than
+one abstract variable the theory obligations are added to the assumption
+list for each.  The fact that the theory obligations are needed to
+establish the theorem and are on the assumption list obviously influences
+the style of proof.  An example in the next section demonstrates how to
+explicitly declare the obligations.
+
+The next theorem gives an example that uses two abstract objects.  The
+theorem proves that if the operations for two monoids are the same then
+their identity elements must be the same as well.
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let OP_DETERMINES_IDENTITY = ABS_TAC_PROOF
+   (([],
+     "! m1 (m2:(*)monoid) . (op m1 = (op m2)) ==> (e m1 = (e m2))"),
+    REPEAT STRIP_TAC
+    THEN let t1 = ASSUME "!x:*. op m1 (e m1) x = x" in
+         SUBST_TAC (map SYM_RULE [SPEC "e m2:*" t1])
+    THEN let t2 = ASSUME "!x:*. op m2 x (e m2) = x" in
+         SUBST_TAC (map SYM_RULE [SPEC "e m1:*" t2])
+    THEN ASM_REWRITE_TAC []
+  );;
+}
+
+\holthm{
+OP_DETERMINES_IDENTITY = .. |- (op m1 = op m2) ==> (e m1 = e m2)
+}
+\end{alltt}\end{hol}\end{boxed}
+In this example \vb{m1} and \vb{m2} are two distinct abstract objects.  The
+term \vb{(op m1)} represents the binary operation of monoid \vb{m1} and the
+term \vb{(op m2)} represents the binary operation of monoid \vb{m2}.  When
+there is more than one abstract object in a goal, the abstract theory
+package places theory obligations on the assumption list for each. Note
+that the style of proof in this example is more goal oriented than the last
+example even though, as in the last example, the goal is proven using the
+assumptions.
+
+\subsection{Defining Groups}
+A group is a monoid extended with an inverse operator defined such that
+when the binary operator is applied to any element and its inverse, the
+identity element is the result.
+
+To define a theory of groups, we take care of the usual front matter and
+also declare \vb{monoids\_def} to be an abstract parent since we are going
+to establish some properties of groups from our theory of monoids.
+\begin{boxed}\begin{hol}\begin{alltt}
+loadf `abs_theory`;;
+
+new_theory `group_def`;;
+
+new_abstract_parent `monoid_def`;;
+\end{alltt}\end{hol}\end{boxed}
+The call to \vb{new\_theory} clears the global theory obligation list.
+\vb{new\_abstract\_parent} puts the theory obligations from
+{\vb{monoid\_def}} on the theory obligation list.
+
+The next step is to define the abstract representation:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let GROUP = new_abstract_representation `group`
+   [
+    (`fn`,":* -> * -> *")
+   ;
+    (`id`,":*")
+   ;
+    (`inv`,":* -> *")
+   ];;
+}
+\end{alltt}\end{hol}\end{boxed}
+Note that we do not simply define the abstract representation for groups as
+an extension to the representation for monoids.  Without subtypes, the
+implementation and use of extensions becomes too unwieldy.  Also, since HOL
+does not allow operator overloading, we had to give the operator and
+identity element for groups different names from the operator and identity
+element for monoids.
+
+The theory obligations are those for monoids extended with two additional
+facts for the inverse function:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+new_theory_obligations
+    (`IS_GROUP`,
+     "!g:(*)group . IS_GROUP g = 
+        (!x:* .fn g x (id g) = x) /\ 
+        (!x:* .fn g (id g) x = x) /\ 
+        (!x:* .fn g x (inv g x) = (id g)) /\ 
+        (!x:* .fn g (inv g x) x = (id g)) /\ 
+        (! x y z:*. (fn g x (fn g y z)) = (fn g (fn g x y) z))");;
+}\end{alltt}\end{hol}\end{boxed}
+Again, because HOL does not have a notion of subtypes, we do not define the
+theory obligations for groups in terms of the theory obligations for
+monoids. 
+
+The connection between groups and monoids is established by the following
+trivial theorem:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let GROUP_EXTENDS_MONOID = ABS_TAC_PROOF
+   (([],
+     "! g:(*)group . IS_MONOID(monoid (fn g) (id g))"),
+    EXPAND_THOBS_TAC `monoid_def`
+    THEN ASM_REWRITE_TAC []
+   );;
+
+}\holthm{
+GROUP_EXTENDS_MONOID = ... |- IS_MONOID(monoid(fn g)(id g))
+}
+\end{alltt}\end{hol}\end{boxed}
+The theorem states that the operator and identity element for groups can be
+used in place of the operator and identity element for monoids.  The tactic
+{\vb{EXPAND\_THOBS\_TAC}} is used to expand the theory obligations for
+monoids as the first step of the proof.  The result is an abstract theorem
+since it relies on the theory obligations of \vb{group\_def}.
+
+We can make use of the fact that a group is a monoid by instantiating the
+theorem that the identity is unique from \vb{monoid\_def}:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let IDENTITY_UNIQUE = 
+    instantiate_abstract_theorem `monoid_def` `IDENTITY_UNIQUE` 
+        ["m","monoid (fn (g:(*)group)) (id (g:(*)group))"]
+        [GROUP_EXTENDS_MONOID];;
+
+}\holthm{
+IDENTITY_UNIQUE = 
+... |- !f. (!a. (fn g a f = a) /\ (fn g f a = a)) ==> (f = id g)
+}
+\end{alltt}\end{hol}\end{boxed}
+We instantiate the abstract representation variable \vb{"m"} with a
+concrete (from the standpoint of \vb{monoid\_def}) representation made from
+the operator and identity element of \vb{group\_def}.  The theorem that a
+group extends a monoid is used to discharge the theory obligations for
+monoids.  Note that the instantiated theorem must be explicitly saved on
+the current theory.
+
+The resulting theorem is really a theory about groups, not monoids, as can
+be seen from the following check of the type of the abstract representation
+variable \vb{"g"} in \vb{IDENTITY\_UNIQUE}:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+(type_of o hd o frees o concl o DISCH_ALL) IDENTITY_UNIQUE;;
+
+":(*)group" : type
+}\end{alltt}\end{hol}\end{boxed}
+
+In addition to instantiating theorems from \vb{monoid\_def}, we can prove
+theorems about groups directly.  For example, we can prove that left
+cancellation holds for groups:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let LEFT_CANCELLATION = prove_abs_thm
+   (`LEFT_CANCELLATION`,
+     "! (g:(*)group) (x y a:*) . 
+      ((fn g) a x = ((fn g) a y)) ==> (x = y)",
+    REPEAT STRIP_TAC
+    THEN ACCEPT_TAC (
+      let t1 = (ASSUME "!x y z. fn g x(fn g y z) = fn g(fn g x y)z") and
+          t2 = (ASSUME "!x. fn g(inv g x)x = id g") and
+          t3 = (ASSUME "!x. fn g(id g) x  = x") and
+          t4 = (ASSUME "fn g a x = fn g a y") in
+      SYM_RULE (
+      REWRITE_RULE [t1;t2;t3] (
+      REWRITE_RULE [t2;t3;t4] (
+      ISPECL ["(inv g a)";"a";"x"] t1))))
+   );;
+
+}\holthm{
+LEFT_CANCELLATION = ... |- !x y a. (fn g a x = fn g a y) ==> (x = y)
+}
+\end{alltt}\end{hol}\end{boxed}
+In this case, we used \vb{prove\_abs\_thm}, so the the resulting theorem is
+explicitly saved in the current theory. 
+
+Because some people may be uncomfortable with implicit theory obligations
+and their automatic inclusion in the assumptions, the abstract theory
+package supports explicit theory obligations as well.  For example,
+consider the following proof that the inverse function is reversible (that
+is that the inverse operator applied twice is the identity function):
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let INVERSE_INVERSE_LEMMA = prove_thm
+   (`INVERSE_INVERSE_LEMMA`,
+    "!(g:(*)group) . IS_GROUP(g) ==> !a .(((inv g) ((inv g) a)) = a)",
+    STRIP_THOBS_TAC
+    THEN GEN_TAC
+    THEN ACCEPT_TAC (
+        let t1 = ASSUME "!x. fn g x(inv g x) = id g" and
+            t2 = ASSUME "!x. fn g (inv g x)x = id g" in
+        let LC_LEMMA = 
+              ISPECL ["inv g (inv g a)";"a";"inv g a"] LEFT_CANCELLATION in
+        MATCH_MP LC_LEMMA 
+                 (TRANS (ISPEC "(inv g) a" t1) 
+                        (SYM_RULE (ISPEC "a" t2))))
+   );;
+
+}\holthm{
+INVERSE_INVERSE_LEMMA = |- !g. IS_GROUP g ==> (!a. inv g(inv g a) = a)
+}
+\end{alltt}\end{hol}\end{boxed}
+In this case, we use the standard \vb{prove\_thm} function and so the
+theory obligations were not automatically added to the assumption list.
+The theory obligation are given explicitly as the antecedent to an
+implication.  The tactic {\vb{STRIP\_THOBS\_TAC}} is a convenient way to
+strip explicit theory obligations from the goal and expand them on the
+assumption list.
+
+We can use a different proof style using the theorem continuation
+{\vb{STRIP\_THOBS\_THEN}} for the same theorem:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let ALTERNATE_INVERSE_INVERSE_LEMMA = TAC_PROOF
+   (([],
+    "!(g:(*)group)  . IS_GROUP(g) ==> ! a .(((inv g) ((inv g) a)) = a)"),
+    STRIP_THOBS_THEN (\. thm .
+        let thl = CONJUNCTS thm in
+        MAP_EVERY ASSUME_TAC thl THEN
+        GEN_TAC THEN
+        MATCH_MP_TAC 
+           (ISPECL ["inv g (inv g a)";"a";"inv g a"] 
+                   LEFT_CANCELLATION) THEN
+        REWRITE_TAC thl)
+  );;
+
+}\holthm{
+ALTERNATE_INVERSE_INVERSE_LEMMA = 
+    |- !g. IS_GROUP g ==> (!a. inv g(inv g a) = a)
+}\end{alltt}\end{hol}\end{boxed}
+The only caveat to using {\vb{STRIP\_THOBS\_THEN}} is that the accompanying 
+theorem--tactic must put the theory obligations on the assumption list if
+any other abstract theories are to be used.  In this case, we use
+{\vb{LEFT\_CANCELLATION}} and so the tactic {\vb{MAP\_EVERY ASSUME\_TAC
+thl}} is used to add the theory obligations to the assumption list.
+
+\subsection{Using Groups}
+We can instantiate the theory of groups using exclusive--or as the
+operator, false as the identity element, and the identity function as the
+inverse operator.  As usual, we load the abstract theory package, enter
+draft mode, and declare \vb{groups\_def} an abstract parent.
+\begin{boxed}\begin{hol}\begin{alltt}
+loadf `abs_theory`;;
+
+new_theory `example`;;
+
+load_library `taut`;;
+
+new_abstract_parent `group_def`;;
+\end{alltt}\end{hol}\end{boxed}
+
+Before we can instantiate the theorems of \vb{group\_def} we must show that
+our proposed instantiation discharges the theory obligations:
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+let GROUP_THOBS = TAC_PROOF
+   (([],"IS_GROUP(group (\.x y.~(x=y)) F I)"),
+    EXPAND_THOBS_TAC `group_def`
+    THEN BETA_TAC
+    THEN REWRITE_TAC [I_THM]
+    THEN TAUT_TAC
+   );;
+}\end{alltt}\end{hol}\end{boxed}
+Note that we have created our concrete representation using 
+{\vb{(group (\(\lambda\) x y. \(\lnot\)(x=y)) F I)}}.  
+
+Using {\vb{instantiate\_abstract\_theorem}}, we can instantiate the theorem
+of group theory for our concrete representation.  The abstract variable
+{\vb{"g"}} is instantiated with our concrete representation.
+\begin{boxed}\begin{hol}\begin{alltt}\holthm{
+instantiate_abstract_theorem `group_def` `IDENTITY_UNIQUE` 
+    ["g","group (\.x y.~(x=y)) F I"]
+    [GROUP_THOBS];;
+
+
+|- !f. (!a. (~(a = f) = a) /\ (~(f = a) = a)) ==> ~f
+
+
+instantiate_abstract_theorem `group_def` `LEFT_CANCELLATION` 
+    ["g","group (\.x y.~(x=y)) F I"]
+    [GROUP_THOBS];;
+
+
+|- !x y a. (~(a = x) = ~(a = y)) ==> (x = y)
+
+
+instantiate_abstract_theorem `group_def` `INVERSE_INVERSE_LEMMA` 
+    ["g","group (\.x y.~(x=y)) F I"]
+    [GROUP_THOBS];;
+
+
+|- !a. I(I a) = a
+}
+\end{alltt}\end{hol}\end{boxed}
+The instantiation is done in the same way regardless of whether the theory
+obligations for the abstract theorems were explicitly stated or not. 
+
+
+\begin{thebibliography}{EHD88}
+
+\bibitem[EHD88]{ehdm:manual}
+SRI International Computer Science Laboratory.
+\newblock {\em {EHDM} Specification and Verification System: User's Guide, {\rm
+  Version 4.1}}, 1988.
+
+\bibitem[Gog84]{obj-param-prog}
+J.~Goguen.
+\newblock Parameterized programming.
+\newblock {\em IEEE Transactions on Software Engineering}, SE-10(5):528--543,
+  September 1984.
+
+\bibitem[Gor88]{gordon1}
+Michael~J.C. Gordon.
+\newblock {HOL}: A proof generating system for higher-order logic.
+\newblock In G.~Birtwhistle and P.A Subrahmanyam, editors, {\em {VLSI}
+  Specification,Verification, and Synthesis}. Kluwer Academic Press, 1988.
+
+\bibitem[GW88]{obj-ref-man}
+J.~Goguen and T.~Winkler.
+\newblock Introducing \mbox{OBJ3}.
+\newblock Technical Report SRI-CSL-88-9, SRI International, August 1988.
+
+\bibitem[Win90]{windley:abs-old}
+Phillip~J. Windley.
+\newblock A poor man's implementation of abstract theories.
+\newblock Technical Report CSE-90-06, University of California, Davis, Division
+  of Computer Science, 1990.
+
+\bibitem[Win91]{windley:ah}
+Phillip~J. Windley.
+\newblock Abstract hardware.
+\newblock In {\em Proceedings of the {ACM/SIGDA} International Workshop in
+  Formal Methods in {VLSI} Design}, January 1991.
+
+\bibitem[Win92]{windley:git}
+Phillip~J. Windley.
+\newblock A theory of generic interpreters.
+\newblock Technical Report LAL-92-06, University of Idaho, Laboratory for
+  Applied Logic, April 1992.
+
+\end{thebibliography}
+
+

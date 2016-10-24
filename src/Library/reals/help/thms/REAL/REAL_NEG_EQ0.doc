@@ -1,0 +1,3 @@
+\THEOREM REAL_NEG_EQ0 REAL
+|- !x. (-- x = & 0) = (x = & 0)
+\ENDTHEOREM

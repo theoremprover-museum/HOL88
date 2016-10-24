@@ -1,0 +1,53 @@
+
++ =====================================================================	+
+|									|
+| LIBRARY	: sets							|
+|									|
+| DESCRIPTION   : Theory of finite and infinite sets			|
+|									|
+| AUTHORS	: P Leveilley, T Melham					|
+|									|
+| DATE		: 29 June 1989, revised August 1990			|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+| FILES:								|
++ --------------------------------------------------------------------- +
+    
+    mk_sets.ml     creates the theory of sets
+    fset_conv.ml   conversions for finite sets
+    gspec.ml	   a conversion for generalized set specifications
+    set_ind.ml	   induction tactic for finite sets
+    sets.ml	   loadfile for the sets library
+    load_sets.ml   auxiliary loadfile for the sets library
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clobber"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `sets`  
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   Manual/sets.dvi
+

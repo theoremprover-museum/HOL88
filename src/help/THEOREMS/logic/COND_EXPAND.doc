@@ -1,0 +1,4 @@
+\THEOREM COND_EXPAND \none
+|- !b t1 t2. (b => t1 | t2) = (~b \/ t1) /\ (b \/ t2)
+\ENDTHEOREM
+

@@ -1,0 +1,10 @@
+\DOC get_types
+
+\TYPE {get_types : (term -> type list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

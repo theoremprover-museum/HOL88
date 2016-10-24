@@ -1,0 +1,19 @@
+\DOC ascii
+
+\TYPE {ascii : (int -> string)}
+
+\SYNOPSIS
+Maps an integer to the corresponding ASCII character.
+
+\DESCRIBE
+When given an integer, {ascii} returns a string consisting of
+the single character corresponding to that integer under the ASCII
+encoding.
+
+\FAILURE
+Fails unless the integer supplied is in the range {0 <= x < 128}.
+
+\SEEALSO
+ascii_code, int_of_string, is_alphanum, is_letter, string_of_int.
+
+\ENDDOC

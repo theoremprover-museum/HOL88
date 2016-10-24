@@ -1,0 +1,43 @@
+\begin{theindex}
+
+  \item {\it aa\/}
+    \subitem {\it bb\/}
+      \subsubitem {\it cc\/}, 1
+  \item alpha, 1--5
+    \subitem beta, 3
+      \subsubitem gamma, 10
+  \item alpha@beta, 1
+
+  \indexspace
+
+  \item beta, \bold{1--5}
+  \item {\it beta\/}, 1
+
+  \indexspace
+
+  \item delta, i--iv, \see{beta}{1--7}
+
+  \indexspace
+
+  \item epsilon, 1--5
+  \item eta, \bold{3}, 1--5
+
+  \indexspace
+
+  \item f\"ur, 1
+  \item foo, 5, \bold{5}, \italic{5}, \roman{5}, \sanserif{5}, 
+		\slanted{5}, \smallcaps{5}
+
+  \indexspace
+
+  \item gamma, \bold{1}, \bold{3}, 1--5
+
+  \indexspace
+
+  \item theta, i--iv, 3--7
+
+  \indexspace
+
+  \item zeta, \bold{1--5}
+
+\end{theindex}

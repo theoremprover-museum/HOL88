@@ -1,0 +1,3 @@
+\THEOREM MR1_SUB TOPOLOGY
+|- !x d. dist mr1(x,x - d) = abs d
+\ENDTHEOREM

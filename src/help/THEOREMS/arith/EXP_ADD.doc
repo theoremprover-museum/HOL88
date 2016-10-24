@@ -1,0 +1,3 @@
+\THEOREM EXP_ADD arithmetic
+|- !p q n. n EXP (p + q) = (n EXP p) * (n EXP q)
+\ENDTHEOREM

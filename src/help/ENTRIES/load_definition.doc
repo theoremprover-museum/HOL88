@@ -1,0 +1,39 @@
+\DOC load_definition
+
+\TYPE {load_definition : (string -> string -> void)}
+
+\SYNOPSIS
+Loads in a given definition from a given theory.
+
+\DESCRIBE
+If {thy} is the name of an ancestor theory, and {def} one of its definitions,
+then
+{
+   load_definition `thy` `def`
+}
+\noindent attempts to load the corresponding definition, that is, to perform
+dynamically the following toplevel binding:
+{
+  let def = definition `thy` `def`;;
+}
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {def} is not one of its
+definitions.
+
+\EXAMPLE
+{
+#load_definition `bool` `FORALL_DEF`;;
+() : void
+
+FORALL_DEF = |- $! = (\P. P = (\x. T))
+
+#FORALL_DEF;;
+|- $! = (\P. P = (\x. T))
+}
+\USES
+Useful for autoloading.
+
+\SEEALSO
+definitions, let_after, let_before, load_definitions.
+
+\ENDDOC

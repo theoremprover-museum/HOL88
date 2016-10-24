@@ -1,0 +1,26 @@
+.TH TOOLTOOL 1 "28 March 1988"
+.SH NAME
+tooltool \- create a windowed tool
+.SH SYNOPSIS
+\fBtooltool\fP [ \fB-f\fP \fIfile\fP ] [ \fIargs\fP ]
+.SH DESCRIPTION
+Tooltool creates a windowed application based upon specifications read from
+its standard input.  If \fB-f\fP is specified, the specifications are
+read from the indicated \fIfile\fP.  The shell search path is used to
+locate \fIfile\fP if it is not a complete pathname.  Any \fIargs\fP are
+passed on to the windowed application.
+.LP
+The details of the application specification are too numerous to mention
+here.  The user is referred to the \fITooltool User's Guide\fP for 
+more information.
+.SH AUTHOR
+Chuck Musciano
+.br
+Advanced Technology Department
+.br
+Harris Corporation
+.br
+(407) 727-6131
+.br
+ARPA: chuck@trantor.harris-atd.com
+

@@ -1,0 +1,10 @@
+\DOC create_stack
+
+\TYPE {create_stack : (window -> window_stack)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

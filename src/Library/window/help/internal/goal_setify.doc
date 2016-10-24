@@ -1,0 +1,10 @@
+\DOC goal_setify
+
+\TYPE {goal_setify :  (goal list -> goal list)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

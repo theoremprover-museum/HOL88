@@ -1,0 +1,4 @@
+\THEOREM BOOL_EQ_DISTINCT \none
+|- ~(T = F) /\ ~(F = T)
+\ENDTHEOREM
+

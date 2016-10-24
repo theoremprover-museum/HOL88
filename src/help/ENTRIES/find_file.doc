@@ -1,0 +1,25 @@
+\DOC find_file
+
+\TYPE {find_file: (string -> string)}
+
+\SYNOPSIS
+Searches for a named file.
+
+\DESCRIBE
+Searches for a named file using the search path, and returns the full pathname
+if successful (if the file is in the current directory, this will just be the
+argument string).
+
+\FAILURE
+Fails if the named file cannot be found using the current search path.
+
+\EXAMPLE
+The answer from the following will depend on where HOL is installed:
+{
+   #find_file `combin.th`;;
+   `/usr/groups/hol/HOL2/sun4_sos/theories/combin.th` : string
+}
+\SEEALSO
+find_ml_file, search_path, set_search_path
+
+\ENDDOC

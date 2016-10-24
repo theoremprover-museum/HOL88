@@ -1,0 +1,5 @@
+\THEOREM SUP_ALLPOS_LEMMA3 REALAX
+|- (!x. P x ==> r0 < x) /\ (?x. P x) /\ (?z. !x. P x ==> x < z) ==>
+   (?X. (\h. P(real_of_hreal h))X) /\
+   (?Y. !X. (\h. P(real_of_hreal h))X ==> X hreal_lt Y)
+\ENDTHEOREM

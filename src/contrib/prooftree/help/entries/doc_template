@@ -1,0 +1,22 @@
+\DOC 
+
+\TYPE {}
+
+\SYNOPSIS
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+
+\EXAMPLE
+
+\SEEALSO
+
+\ENDDOC

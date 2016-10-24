@@ -1,0 +1,30 @@
+\DOC FILTER_PURE_ASM_REWRITE_WIN
+
+\TYPE {FILTER_PURE_ASM_REWRITE_WIN : ((term -> bool) -> thm list -> void)}
+
+\SYNOPSIS
+Repeatedly rewrite the focus with selected terms of the context and theorems.
+
+\LIBRARY window
+
+\DESCRIBE
+{FILTER_PURE_ASM_REWRITE_WIN p thms} repeatedly rewrites the focus of 
+of the top window on the current stack with {thms} and those theorems in the
+context of the window, the conclusions of which satisfy the predicate {p}.
+
+\FAILURE
+Fails if there is not current stack.
+
+{FILTER_PURE_ASM_REWRITE_WIN p thms} will fail if the hypotheses of any of
+the theorems in {thms} are not a subset of the conjectures of the window.
+This function may fail to terminate if {thms}, or the selected terms in
+the context, describe a circular rewriting.
+
+\SEEALSO
+ASM_REWRITE_WIN, GEN_REWRITE_WIN, PURE_REWRITE_WIN, REWRITE_WIN, 
+PURE_ONCE_REWRITE_WIN, ONCE_REWRITE_WIN,
+PURE_ASM_REWRITE_WIN, PURE_ONCE_ASM_REWRITE_WIN,
+ONCE_ASM_REWRITE_WIN, FILTER_ASM_REWRITE_WIN,
+FILTER_PURE_ONCE_ASM_REWRITE_WIN, FILTER_ONCE_ASM_REWRITE_WIN
+
+\ENDDOC

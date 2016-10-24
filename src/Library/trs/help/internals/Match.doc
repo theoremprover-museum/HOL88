@@ -1,0 +1,10 @@
+\DOC Match
+
+\TYPE {Match : ((matching # (void -> result_of_match)) -> result_of_match)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

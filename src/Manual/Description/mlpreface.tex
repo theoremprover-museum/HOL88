@@ -1,0 +1,181 @@
+%\pagenumbering{roman}
+
+\chapter{The History of ML}
+
+Several versions of the programming language
+\ML\index{ML@\ML!versions of}\ have appeared  over the  years,
+between the time it was first designed and implemented by
+Milner\index{Milner, R.}, Morris\index{Morris, L.} 
+and Wadsworth\index{Wadsworth, C.} at the University of Edinburgh
+in the early 1970's,
+and the time it was settled and standardised, in the mid-1980's.
+The original \ML, the meta-language of the Edinburgh
+\LCF\ system, is defined in \cite{Edinburgh-LCF}\index{LCF@\LCF!Edinburgh}.
+The genealogy of the \ML\ used in the \HOL\ system is rather complex;
+in brief, it is a version roughly midway between the original\index{ML@\ML!original version of}
+\ML\ and Standard\index{ML@\ML!Standard} \ML, frozen while the language was
+in flux. 
+More precisely, it is a subset of
+the version  of \ML\ developed jointly by  Huet\index{Huet, G.} and 
+Paulson\index{Paulson, L.} 
+in the early 1980's,
+at {\small INRIA} and the University of Cambridge, respectively.
+The \ML\ of Huet and Paulson is  described in the
+preface (reproduced  below) to `The ML Handbook' \cite{ml-handbook}.   
+Huet used this version in the Formel project; and it subsequently
+evolved into a version of \ML\ called {\small  CAML}\index{ML@\ML!CAML version of@\verb+CAML+ version of}.
+Paulson also used it, as part of the first version
+of Cambridge \LCF\ (but not the version of
+Cambridge\index{LCF@\LCF!Cambridge} \LCF\ described in 
+\cite{new-LCF-man}, which used an early Standard \ML).  
+
+
+There are now
+two mature descendents of the original \ML:  Standard \ML\ (also
+from Edinburgh) and
+{\small CAML} (from {\small INRIA}).  The \ML\ in \HOL\index{ML@\ML!HOL version of@\HOL\ version of}\ is neither  of these,
+but, as suggested above, is rather closer to
+{\small  CAML} than  to Standard  \ML.   A completely new
+implementation of \HOL, with Standard \ML\ as its meta-language,  is 
+currently in
+progress at the University of Calgary.   This is expected to be completed
+in mid-1990. A second new implementation is planned by ICL Defence Systems,
+also based on Standard \ML.
+
+The \ML\ of Huet and Paulson was implemented in Franz Lisp\index{Franz
+Lisp HOL@Franz Lisp \HOL}. 
+The porting of \HOL\ from Franz Lisp to Common Lisp\index{Common Lisp HOL@Common Lisp \HOL} was  
+done by  John Carroll\index{Carroll, J.} of
+the University of Cambridge, with the joint  support of SRI
+International and Hewlett Packard Limited.
+
+The description of \ML\ that appears in 
+Chapters~\ref{MLsyntax} to \ref{MLprims}
+is based very closely on `The ML Handbook' \cite{ml-handbook}.
+It was adapted for \HOL\ purposes by Mike Gordon\index{Gordon, M.},
+and modified for the present document by Tom Melham\index{Melham, T.}.
+The draft was produced by Inder Dhingra\index{Dhingra, I.} and Mike
+Gordon (with help from John Van Tassel\index{Van Tassel, J.}) from the {\tt
+troff} 
+sources of `The ML Handbook'. 
+
+For completeness (and historical interest), 
+the preface to `The ML Handbook'\footnote{Minor
+errors have been corrected in this.} and the preface
+to `Edinburgh LCF: a Mechanised Logic of Computation' are reproduced
+below.
+
+%\begin{flushright}
+%\bf Mike Gordon
+%\end{flushright}
+\vfill
+\newpage
+\section{Preface to `The ML Handbook'}
+
+This handbook is a revised edition of Chapter~2 of `Edinburgh LCF',
+by M.~Gordon, R.~Milner, and C.~Wadsworth, published in 1979 as
+Springer Verlag Lecture Notes in Computer Science n$^{\underline{o}}$~78.
+\ML\ was originally the meta-language of the \LCF~system. The \ML\ system was
+adapted to Maclisp on Multics by G\'erard
+Huet at {\small INRIA} in 1981, and a compiler was added.  Larry Paulson
+from the University of Cambridge completely redesigned the \LCF\ proving
+system, which stabilised in 1984 as Cambridge \LCF.  Guy Cousineau from
+the University Paris VII added concrete types in the summer of 1984.  Philippe
+Le~Chenadec from {\small INRIA} implemented an interface with the Yacc parser 
+generator system, for the versions of \ML\ running under Unix.  This permits 
+the user to associate a concrete syntax with a concrete type.
+
+The \ML\ language is still under design.  An extended language was implemented
+on the VAX by Luca Cardelli in 1981.  It was then decided to completely
+re-design the language, in order to accommodate in particular the call by
+pattern feature of the language HOPE designed by Rod Burstall and David
+MacQueen.  A committee of researchers from the Universities of Edinburgh and
+Cambridge, the Bell Laboratories and {\small INRIA}, headed by Robin Milner, is
+currently working on the new extended language, called Standard \ML.  Progress
+reports appear in the Polymorphism Newsletter, edited by Luca Cardelli and
+David MacQueen from Bell Laboratories.  The design of a core language is now
+frozen, and its description will appear in a forthcoming report of
+the University of Edinburgh, as `The Standard \ML\ Core Language' by Robin Milner.
+
+This handbook is a manual for \ML~version 6.1, released in December 1984.
+The language is somewhere in between the original \ML\ from \LCF\ and standard
+\ML, since Guy Cousineau added the constructors and call by 
+patterns.  This is a LISP based implementation, compatible for Maclisp on
+Multics, Franzlisp on VAX under Unix, Zetalisp on Symbolics 3600, and Le\_Lisp
+on 68000, VAX, Multics, Perkin-Elmer, etc... Video interfaces have been
+implemented by Philippe Le Chenadec on Multics, and by Maurice Migeon
+on Symbolics 3600.  The \ML\ system is maintained and distributed jointly by
+{\small INRIA} and the University of Cambridge.
+
+%\begin{flushright}\bf
+%Guy Cousineau, G\'erard Huet, Larry Paulson.
+%\end{flushright}
+
+\section{Preface to `Edinburgh LCF'}
+
+\ML\ is a general purpose programming language.
+It is derived in different aspects from
+{\small ISWIM}, {\small POP2} and {\small GEDANKEN}, and contains
+perhaps two new features. First, it has an
+escape and escape trapping mechanism, well-adapted  to programming
+strategies which may be (in fact usually are)
+inapplicable to certain goals. Second, it has a polymorphic type
+discipline which combines the flexibility of programming in
+a typeless language with the security of compile-time
+type checking (as in other languages, you may also define
+your own types, which may be abstract and/or recursive).
+
+For those primarily interested in the design of programming
+languages, a few remarks here may be helpful both about \ML\ as a
+candidate for comparison with other recently designed languages,
+and about the description of \ML\ which we
+provide. On the first point, although we did not set out with
+programming language design as a primary aim, we believe that \ML\ 
+does contain features worthy of serious consideration; these are
+the escape mechanism and the polymorphic type discipline mentioned
+above, and also the attempt to make programming with functions---including 
+those of higher type---as easy and natural as possible.
+We are less happy about the imperative aspects of the language, and
+would wish to give them further thought if we were mainly concerned
+with language design. In particular, the constructs for controlling
+iteration both by boolean conditions and by escape-trapping
+(which we included partly for experiment) are perhaps too complex
+taken together, and we are sensitive to the criticism that escape
+(or failure, as we call it) reports information only in the form
+of a string. This latter constraint results mainly
+from our type discipline; we do not know how best to relax the
+constraint while maintaining the discipline.
+
+Concerning the description of \ML, we have tried both to initiate
+users by examples of programming and to give a precise definition.
+
+
+%\subsection{Acknowledgements}
+
+%Many people have helped us in this work.  First and foremost,
+%Lockwood Morris and Malcolm Newey worked intensively on the project
+%in its early stages and are responsible for much of what we are now
+%describing; if it had been feasible, they should have been
+%co-authors.
+
+%We are indebted to Dana Scott for providing a large part of the
+%theoretical basis for our work: to John McCarthy for encouraging
+%the forerunner of this project at Stanford; to Richard Weyhrauch
+%who with Newey contributed greatly to that project; to Tony Hoare
+%for his probing criticism of a draft of this document; to both him and
+%Jerry Schwarz for help with the notion of abstract types in \ML;
+%to Avra Cohn for help in the final design stages through her
+%experiments; to Jacek Leszczylowski for his helpful criticisms
+%of the final draft; and to Rod Burstall, Gordon Plotkin
+%and many colleagues in Edinburgh for illuminating
+%discussions.  Finally, we are indebted to the Science Research
+%Council for supporting, and to our department for tolerating, a
+%project which has taken longer to mature than we hoped.
+
+%\begin{flushright}\bf
+%Michael Gordon, Robin Milner, Christopher Wadsworth
+%\end{flushright}
+
+
+
+

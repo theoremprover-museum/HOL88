@@ -1,0 +1,48 @@
+\DOC print_all_thm
+
+\TYPE {print_all_thm : (thm -> void)}
+
+\SYNOPSIS
+Prints a theorem in full.
+
+\DESCRIBE
+The function {print_all_thm} will cause the system to print a
+theorem with its hypotheses.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+As a simple example of the use of {print_all_thm} we assume the
+following two theorems:
+{
+   #let a = ASSUME "A:bool";;
+   a = . |- A
+}
+{
+   #let b = ASSUME "A ==> B";;
+   b = . |- A ==> B
+}
+\noindent Using Modus Ponens (MP) as follows:
+{
+   #let r = MP b a;;
+}
+\noindent The system responds with:
+{
+   r = .. |- B
+}
+\noindent By using {print_all_thm} as follows:
+{
+   #print_all_thm r;;
+}
+\noindent The system then pretty prints:
+{
+   A ==> B, A |- B() : void
+}
+\noindent This shows all the assumptions of the theorem in a comma separated
+list.
+
+\SEEALSO
+print_thm.
+
+\ENDDOC

@@ -1,0 +1,34 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: pre-v2.02-rewr						%
+%									%
+% DESCRIPTION: Compatibility files for the rewriting in HOL88.2.02	%
+%									%
+% AUTHOR: Richard Boulton						%
+%									%
+% ADDRESS: University of Cambridge					%
+%	   Computer Laboratory						%
+%	   New Museums Site						%
+% 	   Pembroke Street						%
+%	   Cambridge, CB2 3QG 						%
+%	   England.							%
+%	   								%
+%	   email: rjb@uk.ac.cam.cl					%
+%									%
+% DATE: 94.02.18							%
+% --------------------------------------------------------------------- %
+
+The rewriting conversions, rules and tactics in HOL88.2.02 (and later) have
+slightly different behaviour to earlier versions: Formerly some rewrites
+inside abstractions would fail to occur due to the presence of the bound
+variable in hypotheses. This has been fixed, but may cause some old proofs to
+break due to rewrites now occurring that didn't before, or to renaming.
+
+To obtain the old versions of the rewriting functions, load:
+
+   old_rewriting.ml
+
+To restore the new versions, load:
+
+   new_rewriting.ml
+
+

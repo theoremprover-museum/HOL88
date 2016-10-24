@@ -1,0 +1,28 @@
+\DOC proven
+
+\TYPE {proven : (string -> thm)}
+
+\SYNOPSIS
+Returns the theorem proved at a proof tree.
+
+\DESCRIBE
+Returns the theorem obtained by applying the solving tactic to the
+goal of the given proof tree, usually so that it can be assigned to a
+variable. This function does not remove the proof tree from the set of
+all proofs. The theorem returned can be used to rewrite other goals or
+it can be stored in a theory.
+
+\KEYWORDS
+subgoal.
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails if there is no proof named by the argument to the function. Also
+fails if the top goal of the proof is not yet proved.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

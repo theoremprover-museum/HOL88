@@ -1,0 +1,6 @@
+\THEOREM WO_RECURSE_NUM WELLORDER
+|- !h ms.
+    (!f g x.
+      (!y. (ms y) < (ms x) ==> (f y = g y)) ==> (h f x = h g x)) ==>
+    (?! f. !x. f x = h f x)
+\ENDTHEOREM

@@ -1,0 +1,6 @@
+\THEOREM SIN_COS_ADD TRANSC
+|- !x y.
+    (((sin(x + y)) - (((sin x) * (cos y)) + ((cos x) * (sin y)))) pow 2) +
+    (((cos(x + y)) - (((cos x) * (cos y)) - ((sin x) * (sin y)))) pow 2) =
+    & 0
+\ENDTHEOREM

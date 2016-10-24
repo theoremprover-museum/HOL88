@@ -1,0 +1,10 @@
+\DOC print_stack
+
+\TYPE {print_stack : (window_stack -> void)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

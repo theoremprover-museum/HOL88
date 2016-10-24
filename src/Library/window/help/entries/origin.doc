@@ -1,0 +1,13 @@
+\DOC origin
+
+\TYPE {origin : (window -> term)}
+
+\SYNOPSIS
+The original focus of a window.
+
+\LIBRARY window
+
+\FAILURE
+Never fails.
+
+\ENDDOC

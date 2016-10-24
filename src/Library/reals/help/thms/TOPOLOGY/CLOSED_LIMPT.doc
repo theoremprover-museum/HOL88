@@ -1,0 +1,3 @@
+\THEOREM CLOSED_LIMPT TOPOLOGY
+|- !top S. closed top S = (!x. limpt top x S ==> S x)
+\ENDTHEOREM

@@ -1,0 +1,67 @@
+From: ac@com.hp.hpl.hplb
+Subject: prog_logic library
+To: Mike Gordon <mjcg@uk.ac.cam.cl>
+Date: Mon, 21 May 90 15:25:39 BST
+Cc: jvt@uk.ac.cam.cl
+X-Mailer: Elm [version 2.0 beta]
+
+
+Mike,
+
+I seem to have tripped over a bug in one of the proofs of the
+above library when trying to re-build it. I'm not sure if this
+goes through the franz HOL ok (and hence was never detected) but
+causes common lisp HOL to cough up immediately.
+
+The proof in question is that of Diamond_Halts in the file
+prog_logic88/mk_dynamic_logic.ml
+The code seems to generate 3 subgoals, and reduces the first
+subgoal to include an assumption [ "s2 = s2" ] which causes the
+final ASM_REWRITE_TAC to blow the stack.
+
+I think this is not meant to be so, and I can easily fix the
+proof. However I am interested to know whether it has always been
+this way, or whether some change in code between versions has
+caused it to be so. Also, it is better to have an official fix.
+
+Albert
+
+P.S. I am running a pre-release of V1.12 given to me by jvt.
+
+
+From: ac@com.hp.hpl.hplb
+Subject: Re: Previous message
+To: Mike Gordon <mjcg@uk.ac.cam.cl>
+Date: Mon, 21 May 90 15:33:49 BST
+X-Mailer: Elm [version 2.0 beta]
+
+
+P.S.
+I think the fix should be simply to change the line:
+ASSUM_LIST (\thl. REWRITE_TAC [SYM (el 2 thl)])
+to
+ASSUM_LIST (\thl. REWRITE_TAC [el 2 thl])
+
+The SYM seems to order the theorem the wrong way.
+
+Albert
+
+
+From: ac@com.hp.hpl.hplb
+Subject: Another bug
+To: Mike Gordon <mjcg@uk.ac.cam.cl>
+Date: Mon, 21 May 90 16:28:30 BST
+X-Mailer: Elm [version 2.0 beta]
+
+
+Hi Mike
+
+The same thing happens again in the following theorem Diamond_WP.
+I've replaced the last line but one in this proof by
+    THEN POP_ASSUM SUBST1_TAC
+
+The whole file seems to go through ok now.
+
+Albert
+
+

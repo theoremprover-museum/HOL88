@@ -1,0 +1,3 @@
+\THEOREM word_Ax word_base
+|- !f. ?! fn. !l. fn(WORD l) = f l
+\ENDTHEOREM

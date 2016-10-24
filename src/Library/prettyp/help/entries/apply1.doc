@@ -1,0 +1,46 @@
+\DOC apply1
+
+\BLTYPE
+apply1 : ((* -> **) ->
+          ((string # int) list -> print_binding -> *) ->
+          ((string # int) list -> print_binding -> **))
+\ELTYPE
+
+\SYNOPSIS
+Function for constructing environment accessing functions.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{apply1} is a higher-order function which can be used to simplify the ML code
+required for user-defined pretty-printer environment accessing functions.
+Instead of having to mention the parameter list and binding explicitly as in:
+{
+   \params. \pbind. f (val params pbind)
+}
+\noindent one can use {apply1}:
+{
+   apply1 f val
+}
+\FAILURE
+Cannot fail when given no more than two arguments. However, the resulting
+function may fail. This will depend on the values of the arguments.
+
+\EXAMPLE
+Suppose a function is required which evaluates the length of the node-name
+bound to the metavariable {***x}. The ML code for this is:
+{
+   \params. \pbind. (length o explode) (bound_name `x` params pbind)
+}
+\noindent The function takes a parameter list and a binding as arguments. It
+uses these to find the node-name bound to the metavariable with name `{x}'. The
+resulting string is then exploded into a list of single character strings and
+the length of this list is computed. Using {apply1}, the code can be written
+more simply as:
+{
+   apply1 (length o explode) (bound_name `x`)
+}
+\SEEALSO
+apply0, apply2.
+
+\ENDDOC

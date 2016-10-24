@@ -1,0 +1,3 @@
+\THEOREM HREAL_NOZERO HREAL
+|- !X Y. ~(X hreal_add Y = X)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM HRAT_MUL_ASSOC HRAT
+|- !h i j. h hrat_mul (i hrat_mul j) = (h hrat_mul i) hrat_mul j
+\ENDTHEOREM

@@ -1,0 +1,14 @@
+\DOC /
+
+\TYPE {$/ : ((int # int) -> int)}
+
+\SYNOPSIS
+Performs division on ML integers.
+
+\KEYWORDS
+arithmetic, number.
+
+\FAILURE
+Fails on division by zero.
+
+\ENDDOC

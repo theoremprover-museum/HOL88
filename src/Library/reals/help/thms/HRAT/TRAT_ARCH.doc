@@ -1,0 +1,3 @@
+\THEOREM TRAT_ARCH HRAT
+|- !h. ?n d. (trat_sucint n) trat_eq (h trat_add d)
+\ENDTHEOREM

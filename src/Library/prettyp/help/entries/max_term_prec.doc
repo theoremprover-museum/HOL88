@@ -1,0 +1,14 @@
+\DOC max_term_prec
+
+\TYPE {max_term_prec : int}
+
+\SYNOPSIS
+Lowest precedence (maximum value) used by the pretty-printer for HOL function
+constants and syntactic constructs in terms.
+
+\LIBRARY prettyp
+
+\SEEALSO
+min_term_prec, term_prec.
+
+\ENDDOC

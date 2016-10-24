@@ -1,0 +1,3 @@
+\THEOREM FLAT_SNOC list
+|- !x l. FLAT(SNOC x l) = APPEND(FLAT l)x
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM UNION_FL WELLORDER
+|- !P l. fl(Union P)x = (?l. P l /\ fl l x)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM INR_DEF sum
+|- !e. INR e = ABS_sum(\b x y. (y = e) /\ ~b)
+\ENDTHEOREM

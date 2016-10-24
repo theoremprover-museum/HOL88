@@ -1,0 +1,3 @@
+\THEOREM PI_POS TRANSC
+|- (& 0) < pi
+\ENDTHEOREM

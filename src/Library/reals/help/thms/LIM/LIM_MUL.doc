@@ -1,0 +1,4 @@
+\THEOREM LIM_MUL LIM
+|- !f g l m.
+    (f --> l)x /\ (g --> m)x ==> ((\x. (f x) * (g x)) --> (l * m))x
+\ENDTHEOREM

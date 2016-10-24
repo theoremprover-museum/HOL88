@@ -1,0 +1,3 @@
+\THEOREM EMPTY_UNION sets
+|- !s t. (s UNION t = {{}}) = (s = {{}}) /\ (t = {{}})
+\ENDTHEOREM

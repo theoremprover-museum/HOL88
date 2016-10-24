@@ -1,0 +1,3 @@
+\THEOREM REAL_ADD_LID REAL
+|- !x. (& 0) + x = x
+\ENDTHEOREM

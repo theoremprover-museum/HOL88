@@ -1,0 +1,46 @@
++=====================================================================+
+|  HOL CASE STUDY: Modular Arithmetic				      |
++=====================================================================+
+
+AUTHOR
+  Elsa L. Gunter
+  Department of Computer and Information Science
+  University of Pennsylvania
+  200 South 33rd Street
+  Philadelphia, PA 19104, USA
+  Telephone: (1) 215-898-9514
+  Email: elsa@linc.cis.upenn.edu
+
+
+CONCEPTS ILLUSTRATED
+  Application of abstract group theory, use of specialized tactics for group
+  theory and for the integers, interactive proof, tactics.
+
+PREREQUISITES
+  At least as much knowledge of HOL as is given in "Getting started with
+  HOL".  Knowledge of the definitions of a group and a subgroup
+
+
+SUPPORTING FILES
+  In the directories hol/Training/studies/int_mod and hol/Library/int_mod.
+
+
+ABSTRACT 
+  The development of the basic group theory of the integers, including
+  basic modular arithmetic, is described in three sections.  This case
+  study is intended to give the user extensive hands-on experience proving
+  facts using theorems and tactics from group theory and the theory of
+  the integers, applying and developing abstract theories, and working
+  through large proofs.  The material presented in this case study in
+  graded in difficulty, with increases in difficulty occurring mainly
+  from section to section.  This study is intended to be worked through
+  in an interactive fashion.  While substantial benefit should be obtainable
+  by simply reading this case study, the full benefit can only be had
+  by executing the commands here outline as they are read.  At the end
+  of the second and third sections, projects have been suggested for those
+  who wish to further test their understanding of the concepts studied
+  in those sections.
+
+LATEX FILES
+  The top-level TeX file for the case study is tutorial.tex.
+

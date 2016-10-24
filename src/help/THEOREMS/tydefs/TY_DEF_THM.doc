@@ -1,0 +1,9 @@
+\THEOREM TY_DEF_THM tydefs
+|- !REP ABS P.
+    (!a. ABS(REP a) = a) /\ (!r. TRP P r = (REP(ABS r) = r)) ==>
+    (!f.
+      ?! fn.
+       !v tl.
+        P v(MAP REP tl) ==>
+        (fn(ABS(Node v(MAP REP tl))) = f(MAP fn tl)v tl))
+\ENDTHEOREM

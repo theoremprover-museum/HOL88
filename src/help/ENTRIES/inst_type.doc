@@ -1,0 +1,41 @@
+\DOC inst_type
+
+\TYPE {inst_type : ((type # type) list -> type -> type)}
+
+\SYNOPSIS
+Instantiates types in a type.
+
+\DESCRIBE
+If {[(t1',t1);...;(tn',tn)]} is a list of type instantiations, where {t1...tn}
+are the initial types, and {t1'...tn'} the desired instantiations, and {ty} is
+a type to instantiate, the call
+{
+   inst_type [(t1',t1);...;(tn',tn)] ty
+}
+\noindent will appropriately instantiate the type {ty}. The instantiations will
+be performed in parallel. If several of the type instantiations are applicable,
+the choice is undefined. In normal use the {t1...tn} are type variables,
+although this is not essential. Neither is it necessary that any or all of the
+types {t1...tn} should in fact appear in {ty}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#inst_type [(":bool",":*")] ":* # **";;
+":bool # **" : type
+
+#inst_type [(":num",":* # **"); (":bool",":*")] ":* # **";;
+":num" : type
+
+#inst_type [(":bool",":*"); (":num",":* # **")] ":* # **";;
+":num" : type
+
+#inst_type [(":bool",":num"); (":num",":bool")] ":(bool)list";;
+":(num)list" : type
+}
+\SEEALSO
+inst, inst_check, inst_type, INST_TYPE.
+
+\ENDDOC

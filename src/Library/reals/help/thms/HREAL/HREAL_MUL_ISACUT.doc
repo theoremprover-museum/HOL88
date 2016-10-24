@@ -1,0 +1,3 @@
+\THEOREM HREAL_MUL_ISACUT HREAL
+|- !X Y. isacut(\w. ?x y. (w = x hrat_mul y) /\ cut X x /\ cut Y y)
+\ENDTHEOREM

@@ -1,0 +1,187 @@
+% =====================================================================
+% HOL Course Slides: introductory slides              (c) T Melham 1990
+% =====================================================================
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Introduction}{1}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+Introduction\\
+to the\\
+HOL Theorem Prover\\
+\esectitle
+
+\vskip20mm
+
+\begin{center}
+\large\bf
+T F Melham
+\end{center}
+\vskip10mm
+\begin{center}
+\bf
+University of Cambridge\\
+Computer Laboratory\\
+New Museums Site\\
+Pembroke Street\\
+Cambridge, CB2 3QG\\
+England
+\end{center}
+
+% =====================================================================
+\slide{What is HOL?}
+
+\point{A system for proving theorems in 
+Higher\\ Order Logic.}
+
+\point{Features of HOL:}
+\subpoint{has a rigorous formal basis}
+\subpoint{supports both `forward' and goal-directed proof}
+\subpoint{secure: can't prove false theorems}
+\subpoint{embedded in a general purpose functional\\ programming language (ML)}
+\subpoint{user-extendable, without compromising security}
+\subpoint{NOT an `automatic' theorem prover}
+
+% =====================================================================
+\slide{History of HOL}
+
+\vskip10mm
+
+\begin{center}
+\def\_{\leavevmode \kern-0.5mm \vbox{\hrule height0.2mm width0.3em}}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,120)
+{
+\thicklines
+\put(45,55){\line(-3,-1){30}}
+\put(55,55){\line( 3,-1){30}}
+\put(85,19){\line( 0,-1){10}}
+\put(40,95){\line(-3,-1){30}}
+\put(50,95){\line( 0,-1){30}}
+\put(50,115){\line( 0,-1){10}}
+
+\put(1,16){\bf {\Large{\bf 
+  {\shortstack{LCF{\kern-.3mm}\_{\kern.7mm}LSM\\[2mm]
+ (logic for\\ sequential\\ machines)}}}}}
+\put(85,5){\makebox(0,0)[c]{\Large{\bf HOL88}}}
+\put(65,21){\Large{\bf {\shortstack{ HOL\\[2mm] (Higher Order\\Logic) }}}}
+\put(50,60){\makebox(0,0)[c]{\Large{\bf Cambridge LCF (PP\kern-1mm$\lambda$)}}}
+\put(10,80){\makebox(0,0)[c]{\Large{\bf Standard ML}}}
+\put(50,100){\makebox(0,0)[c]{\Large{\bf Edinburgh LCF (ML, PP\kern-1mm$\lambda$)}}}
+\put(50,120){\makebox(0,0)[c]{\Large{\bf Stanford LCF}}} 
+}
+\end{picture}
+\end{center}
+\vskip 7mm
+
+% =====================================================================
+\slide{HOL and ML}
+
+\point{HOL is built on top of ML.}
+
+
+\point{Roughly speaking, HOL = ML plus:}
+
+\vskip7mm
+\bspindent\LARGE
+{\bf some predefined ML programs (functions),} 
+\vskip7mm
+{\bf and some data type declarations.}
+\espindent
+
+\point{There are also a few enhancements to the ML parser and pretty-printer.}
+
+% =====================================================================
+\slide{Tools and System Support}
+
+\point{HOL tools include:}
+
+\subpoint{support for goal-directed proof}
+\subpoint{many built-in inference rules}
+\subpoint{automatic recursive type definitions}
+\subpoint{structural induction tools}
+\subpoint{rewriting tools (from LCF)}
+\subpoint{automatic primitive recursive definitions}
+\subpoint{built-in theories of arithmetic, lists, sets,\dots}
+\subpoint{tautology checker}
+\subpoint{automatic inductive definitions}
+\subpoint{parser and pretty-printer generator}
+\subpoint{online help facility}
+\subpoint{full documentation}
+\subpoint{user-loadable libraries}
+
+
+% =====================================================================
+\slide{Applications}
+
+\point{HOL applications include:}
+
+\subpoint{hardware design and verification}
+\subpoint{reasoning about security}
+\subpoint{verification of fault-tolerant computers}
+\subpoint{reasoning about real-time system}
+\subpoint{semantics of HDLs (e.g.\ VHDL, ELLA)}
+\subpoint{compiler verification}
+\subpoint{program refinement calculus}
+\subpoint{software verification (e.g.\ Hoare logic)}
+\subpoint{modelling concurrency (e.g.\ CCS, CSP)}
+\subpoint{automata theory}
+\subpoint{\dots\ et cetera}
+
+
+% =====================================================================
+\slide{Course Outline}
+
+\point{Overview of higher order logic}
+
+\subpoint{Syntax of the logic}
+
+\subpoint{Primitive basis of the logic}
+
+\point{Brief introduction to ML}
+
+\point{Introduction to the HOL system}
+
+\subpoint{Embedding the logic in ML}
+
+\subpoint{Inference rules, theorems and proof}
+
+\subpoint{The core system}
+
+\point{Forward proof in HOL}
+
+\point{Goal-directed proof in HOL}
+
+\point{Primitive recursion and induction}
+
+\point{The recursive types package}
+
+\end{document}

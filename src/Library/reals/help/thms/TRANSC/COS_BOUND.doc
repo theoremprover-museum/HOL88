@@ -1,0 +1,3 @@
+\THEOREM COS_BOUND TRANSC
+|- !x. (abs(cos x)) <= (& 1)
+\ENDTHEOREM

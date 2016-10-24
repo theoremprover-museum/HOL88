@@ -1,0 +1,25 @@
+\DOC continue_search
+
+\TYPE {continue_search : (searchstep -> searchstep)}
+
+\SYNOPSIS
+Function to continue a search.
+
+\LIBRARY trs
+
+\DESCRIBE
+A search can be continued using the function {continue_search}. It takes a
+step of a search as argument, and performs the next step of the search. The
+steps correspond to searches of individual theory segments.
+
+\FAILURE
+Fails if the step given as argument is a final step. The function may fail for
+other reasons. Since the user may supply his/her own side-condition functions
+at the beginning of the search, an exhaustive list of possible failures cannot
+be given.
+
+\SEEALSO
+CS, find_theorems, FT, show_step, run_search, full_search, search_until_find,
+search_n_theories, search_n_until_find.
+
+\ENDDOC

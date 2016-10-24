@@ -1,0 +1,4 @@
+\THEOREM treal_eq REALAX
+|- !x1 y1 x2 y2.
+    (x1,y1) treal_eq (x2,y2) = (x1 hreal_add y2 = x2 hreal_add y1)
+\ENDTHEOREM

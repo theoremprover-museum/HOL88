@@ -1,0 +1,3 @@
+\THEOREM METRIC_ZERO TOPOLOGY
+|- !m x y. (dist m(x,y) = & 0) = (x = y)
+\ENDTHEOREM

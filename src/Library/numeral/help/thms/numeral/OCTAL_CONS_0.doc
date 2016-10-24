@@ -1,0 +1,3 @@
+\THEOREM OCTAL_CONS_0 numeral
+|- !l. OCTAL(CONS 0 l) = OCTAL l
+\ENDTHEOREM

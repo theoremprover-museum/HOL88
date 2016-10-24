@@ -1,0 +1,4 @@
+\THEOREM BUTLASTN_MAP list
+|- !n l.
+    n <= (LENGTH l) ==> (!f. BUTLASTN n(MAP f l) = MAP f(BUTLASTN n l))
+\ENDTHEOREM

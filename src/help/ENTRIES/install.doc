@@ -1,0 +1,34 @@
+\DOC install
+
+\TYPE {install : (string -> void)}
+
+\SYNOPSIS
+Informs HOL of the absolute pathname to the hol distribution directory.
+
+\DESCRIBE
+{install} reconfigures a running HOL system to a new root directory.  The
+string argument to {install} should be the absolute path name to the
+directory in which the HOL system is located. Executing
+{
+   install `/dir1/dir2/dir3/.../hol`;;
+}
+\noindent sets the internal HOL search path to:
+{
+   [``; `~/`; `/dir1/dir2/dir3/.../hol/theories/`]
+}
+\noindent In addition, {install} sets the internal search path used by HOL to
+find the standard online help files and the internal search path used by HOL to
+find libraries.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+The effect persists only for the current HOL session. To change the image
+permanently, use the {save} function after installation.
+
+\SEEALSO
+help_search_path, library_pathname, library_search_path, search_path,
+set_help_search_path, set_library_search_path, set_search_path.
+
+\ENDDOC

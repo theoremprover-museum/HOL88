@@ -1,0 +1,3 @@
+\THEOREM OCTAL_LESS_OR_EQ_EXP_LENGTH numeral
+|- !l. IS_OCTAL l ==> (OCTAL l) <= ((8 EXP (LENGTH l)) - 1)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM DIV_LESS_EQ arithmetic
+|- !n. 0 < n ==> (!k. (k DIV n) <= k)
+\ENDTHEOREM

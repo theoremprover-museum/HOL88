@@ -1,0 +1,3 @@
+\THEOREM NOT_SNOC_NIL list
+|- !x l. ~(SNOC x l = [])
+\ENDTHEOREM

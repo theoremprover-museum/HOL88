@@ -1,0 +1,26 @@
+\DOC set_wo_map
+
+\TYPE {set_wo_map : (void -> void)}
+
+\SYNOPSIS
+Sets interface map for constants in the ``wellorder'' library.
+
+\LIBRARY wellorder
+
+\DESCRIBE
+To increase flexibility, the constants used in the wellorder library are
+declared with a {wo_} prefix. The {set_wo_map} function sets up an interface
+map to eliminate them from view. Any existing interface map is preserved
+alongside. The constants which have their prefixes hidden are: {subset},
+{Union}, {fl}, {poset}, {chain}, {woset} and {inseg}.
+
+\FAILURE
+Fails if an entry in the new interface map clashes with an existing one.
+
+\COMMENTS
+The interface map is not set up by default when the library is loaded.
+
+\SEEALSO
+interface_map, set_interface_map, unset_wo_map.
+
+\ENDDOC

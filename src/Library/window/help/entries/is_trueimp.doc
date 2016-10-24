@@ -1,0 +1,20 @@
+\DOC is_trueimp
+
+\TYPE {is_trueimp : (term -> bool)}
+
+\SYNOPSIS
+Tests a term to see if it is an implication.
+
+\LIBRARY window
+
+\DESCRIBE
+{is_trueimp "t1 ==> t2"} returns {true}.
+If the argument is not an implication it returns {false}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_imp, is_pmi
+
+\ENDDOC

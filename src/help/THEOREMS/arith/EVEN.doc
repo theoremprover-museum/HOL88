@@ -1,0 +1,3 @@
+\THEOREM EVEN arithmetic
+|- (EVEN 0 = T) /\ (!n. EVEN(SUC n) = ~EVEN n)
+\ENDTHEOREM

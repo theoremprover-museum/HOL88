@@ -1,0 +1,24 @@
+\DOC load_string
+
+\TYPE {load_string : (void -> void)}
+
+\SYNOPSIS
+Loads ML functions in the string library and sets up autoloading of theorems in
+the library.
+
+\DESCRIBE
+If the user is not in draft mode, or the current theory is not an ancestor of
+the library theory {string}, then the contents of the string library cannot
+immediately be made available when the library is loaded, since the theory
+{string} can neither be made a parent of the current theory nor loaded using
+{load_theory}. In this case, the library load sequence defines the function
+{load_string}. Calling this function when the library theory {string} is an
+ancestor of the current theory completes the library load sequence for the
+string library, making available the ML functions in the library and activating
+autoloading of theorems.
+
+\FAILURE
+Fails if the theory {string} is not an ancestor of the current theory.
+
+\ENDDOC
+

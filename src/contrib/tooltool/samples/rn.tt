@@ -1,0 +1,42 @@
+application "rn -m=s"
+   font "/usr/lib/fonts/fixedwidthfonts/screen.r.14"
+   size 36 by 80 characters
+   label "<< Newstool >>"
+   icon "news.icon"
+gadgets
+   top
+   font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+   button
+      normal	"Restart Article"		send "^R";
+      shift	"Decrypt Article"		send "^X";
+   end_button
+   button
+      normal	"Previous Article"		send "P";
+      shift	"Previous Unread Article"	send "p";
+   end_button
+   button
+      normal	"Kill Subject"			send "k";
+   end_button
+   button
+      normal	"Close"				close;
+      shift	"Quit"				send "q";
+   end_button
+   button
+      normal	"Subject List"			send "=";
+   end_button
+   button
+      normal	"Next Article"			send "N";
+      shift	"Next Unread Article"		send "n";
+   end_button
+   button
+      normal	"Same Subject"			send "^N";
+   end_button
+   menu "Others"
+      "Go to first unread article"		send "^";
+      "Go to last article"			send "$";
+      "Mark all articles read"			send "c";
+      "Reply via mail"				send "r";
+      "Reply, including article"		send "R";
+      "Unsubscribe"				send "u";
+   end_menu
+end_gadgets

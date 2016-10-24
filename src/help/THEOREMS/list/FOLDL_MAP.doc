@@ -1,0 +1,3 @@
+\THEOREM FOLDL_MAP list
+|- !f e g l. FOLDL f e(MAP g l) = FOLDL(\x y. f x(g y))e l
+\ENDTHEOREM

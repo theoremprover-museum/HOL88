@@ -1,0 +1,3 @@
+\THEOREM exists_TRP tydefs
+|- !P. (?v. P v[]) ==> (?t. TRP P t)
+\ENDTHEOREM

@@ -1,0 +1,32 @@
+\section{Function Restriction, Extensionality, and Undefinedness}
+
+Throughout this paper, we have taken the view that a set is a
+predicate on a type, that it is a subset of the type considered as a
+fixed universe.  When defining functions on a set, we only demand that
+it satisfy properties on elements of the set and we do not care what
+the function does on the remainder of the type.  This has as a
+consequence that we lose extensionality for functions on sets.  That
+is, just because two functions have the same value for all elements of
+the set of interest does not mean that we can conclude that these
+functions are equal; they may differ on values in the type outside of
+the set.  The question arises, do we want extensionality for functions
+on sets?  For example, do we want $(\{0\},\times) = (\{0\},+) = (\{0\},-)$?
+In this paper, we have taken the view that, in fact, we
+do not want this.  We want to say that these groups are isomorphic,
+which they are by our definitions.  But $(\{0\},\times)$, $(\{0\},+)$,
+and $(\{0\},-)$ all arise in different contexts and if we are
+interested in equality then we are interested in these different
+contexts.
+
+Had we taken a more set-theoretic approach to the question of how to
+represent functions between sets, we would have chosen to define them
+as predicates on the product of the domain type and the range type
+satisfying those properties necessary to describe the graph of the
+corresponding function.  Had we chosen to take this approach then we
+would have preserved extensionality for functions on sets.  However,
+this would have been at the expense of carry with us the hypothesis
+that for every element in the domain type there exists at most one
+element in the range type such that the predicate describing the
+function is true of it.  Having chosen to use the functions on types
+as the functions on sets as well, we are releaved of the requirement
+of keeping this hypothesis around; it is guaranteed to us by the type.

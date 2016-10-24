@@ -1,0 +1,5 @@
+\THEOREM SIN_TOTAL TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (?! x. (--(pi / (& 2))) <= x /\ x <= (pi / (& 2)) /\ (sin x = y))
+\ENDTHEOREM

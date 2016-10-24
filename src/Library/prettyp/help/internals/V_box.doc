@@ -1,0 +1,10 @@
+\DOC V_box
+
+\TYPE {V_box : (((print_indent # nat) # print_object) list -> print_box_spec)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

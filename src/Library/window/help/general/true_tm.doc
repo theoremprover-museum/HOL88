@@ -1,0 +1,13 @@
+\DOC false_tm
+
+\TYPE {false_tm : term}
+
+\SYNOPSIS
+The boolean constant "F".
+
+\LIBRARY window
+
+\SEEALSO
+bool_tm.
+
+\ENDDOC

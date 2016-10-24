@@ -1,0 +1,10 @@
+\DOC Inc
+
+\TYPE {Inc : (int -> print_indent)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

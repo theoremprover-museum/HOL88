@@ -1,0 +1,3 @@
+\THEOREM REAL_DIV_REFL REAL
+|- !x. ~(x = & 0) ==> (x / x = & 1)
+\ENDTHEOREM

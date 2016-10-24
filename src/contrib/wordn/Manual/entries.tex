@@ -1,0 +1,928 @@
+\chapter{ML Functions in the wordn Library}
+\label{entries}
+\input{entries-intro}
+\DOC{define\_wordn\_bit\_ops}
+
+\TYPE {\small\verb%define_wordn_bit_ops : thm -> int -> (thm) list%}\egroup
+
+\SYNOPSIS
+Defines a set of bitwise logical operators for the given word length.
+
+\DESCRIBE
+{\small\verb%define_wordn_bit_ops wordn n%}, where {\small\verb%wordn%} is the theorem returned
+by {\small\verb%define_wordn_type%} and {\small\verb%n%} is the word length, defines four
+commonly used bitwise logical operators: {\small\verb%NOTn%}, {\small\verb%ANDn%}, {\small\verb%ORn%}, and
+{\small\verb%XORn%}.  The definitions are stored in the current theory under the
+names: {\small\verb%NOTn_DEF%}, {\small\verb%ANDn_DEF%}, {\small\verb%ORn_DEF%} and {\small\verb%XORn_DEF%}  and are
+returned in a list as  the value of this function.
+
+\FAILURE
+Fails if either it is not in draft mode, or the input theorem is not
+in the expected form or the type {\small\verb%:wordn%} has not been defined.
+
+\EXAMPLE
+{\small\verb%define_wordn_bit_ops word3 3%} returns the following list of
+definitons:
+{\par\samepage\setseps\small\begin{verbatim}
+   [ |- !b0 b1 b2. NOT3(WORD3[b0;b1;b2]) = WORD3(B_NOT[b0;b1;b2]);
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) AND3 w = WORD3(B_AND[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) OR3 w = WORD3(B_OR[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) XOR3 w = WORD3(B_XOR[b0;b1;b2](BITS3 w)) ]
+\end{verbatim}}
+\noindent and they are stored in the current theory under the names
+{\small\verb%NOT3_DEF%}, {\small\verb%AND3_DEF%}, {\small\verb%OR3_DEF%} and {\small\verb%XOR3_DEF%}, repectively.
+
+\SEEALSO
+{\small\verb%prove_bit_opthms%}, {\small\verb%wordn_bit_ops%}.
+
+\ENDDOC
+\DOC{define\_wordn\_type}
+
+\TYPE {\small\verb%define_wordn_type : string -> int -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{define\_word\_val}
+
+\TYPE {\small\verb%define_word_val : int -> thm list%}\egroup
+
+\SYNOPSIS
+Defines two constants for converting between the type {\small\verb%:wordn%} and {\small\verb%:num%}.
+
+\DESCRIBE
+{\small\verb%define_word_val%} takes a single argument, a positive integer {\small\verb%n%}. It
+defines two logical  constants for converting between the types
+{\small\verb%:wordn%} and {\small\verb%:num%}. The constants are named {\small\verb%NVALn%} and {\small\verb%NWORDn%}, and
+they have the types {\small\verb%:wordn -> num%} and {\small\verb%:num -> wordn%}, respectively.
+Natural numbers are represented by an n-bit word in a big-endian
+format, for example, {\small\verb%#001%} denotes 1 as a 3-bit word, and the
+following expressions are true:
+{\par\samepage\setseps\small\begin{verbatim}
+   NVAL3 #001 = 1
+   NWORD3 1 = #001
+\end{verbatim}}
+
+These constants are defined in terms of {\small\verb%VAL%} and {\small\verb%WORDN%}, which are
+the generic conversion 
+functions between the represention type of the n-bit words, namely
+{\small\verb%:(bool)list%}, and the type {\small\verb%:num%}. The definitions of these generic
+conversion functions are as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (VAL[] = 0) /\
+      (!b bs. VAL(CONS b bs) = ((BV b) * (2 EXP (LENGTH bs))) + (VAL bs))
+   |- !n m. (LENGTH(WORDN n m) = n) /\ (VAL(WORDN n m) = m MOD (2 EXP n))
+\end{verbatim}}
+
+For a particular word length {\small\verb%n%}, the conversion from  {\small\verb%:wordn%} to
+{\small\verb%:num%} is defined to be
+{\par\samepage\setseps\small\begin{verbatim}
+   !w. NVALn w = VAL(BITSn w)
+\end{verbatim}}
+and the conversion from {\small\verb%:num%} to {\small\verb%:wordn%} is defined to be
+{\par\samepage\setseps\small\begin{verbatim}
+   !m. NWORDn m = WORDn(WORDN n m)
+\end{verbatim}}
+
+The functions {\small\verb%NVALn%} converting words to natural numbers are one-one
+and onto, but the functions {\small\verb%NWORDn%} are not one-one due to the finite
+length of a word. From the definition of {\small\verb%WORDN%}, the theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !m. NWORDn m = NWORDn (m MOD (2 EXP n))
+\end{verbatim}}
+can be deduced. The conversions can be better characterized by the
+theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (!w. NWORDn(NVALn w) = w) /\
+      (!m. m < (2 EXP m) ==> (NVALn(NWORDn m) = m))
+\end{verbatim}}
+which can be obtained by calling the function {\small\verb%prove_word_val%}.
+
+\FAILURE
+Fails if the type {\small\verb%:wordn%} of the specified word length {\small\verb%n%} has not
+been defined.
+
+\EXAMPLE
+The following HOL session illustrates the use of this function:
+{\par\samepage\setseps\small\begin{verbatim}
+   # let [NVAL3_DEF; NWORD3_DEF] = define_word_val 3;;
+
+   NVAL3_DEF = |- !w. NVAL3 w = VAL(BITS3 w)
+   NWORD3_DEF = |- !n. NWORD3 n = WORD3(WORDN 3 n)
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%prove_word_val%}.
+
+\ENDDOC
+\DOC{define\_word\_partition}
+
+\TYPE {\small\verb%define_word_partition : int -> int -> thm%}\egroup
+
+\SYNOPSIS
+Defines operators for splitting and joining words.
+
+\DESCRIBE
+{\small\verb%define_word_partition m n%} defines the following two constants:
+{\small\verb%JOIN_m_n%} which has type {\small\verb%:(wordm # wordn) -> wordl%} and
+{\small\verb%SPLIT_m_n%} which has type {\small\verb%:wordl -> (wordm # wordn)%} where {\small\verb%l = m + n%}.
+They are specified by the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (!wm wn. SPLIT_m_n(JOIN_m_n(wm,wn)) = wm,wn) /\
+      (!w. JOIN_m_n(SPLIT_m_n w) = w)
+\end{verbatim}}
+\noindent which is stored in the current theory as a definition under the name
+{\small\verb%PARTITION_m_n%} and is returned as the value of this function.
+
+\FAILURE
+Fails if either it is not in draft mode or any of the word types
+involved has not been defined.
+
+\EXAMPLE
+{\small\verb%define_word_partition 3 5%} returns the following definition:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (!wm wn. SPLIT_3_5(JOIN_3_5 (wm,wn)) = wm,wn) /\
+      (!w. JOIN_3_5(SPLIT_3_5 w) = w)
+\end{verbatim}}
+where {\small\verb%wm%} is of type {\small\verb%:word3%}, {\small\verb%wn%} is of type {\small\verb%:word5%} and {\small\verb%w%} is
+{\small\verb%:word8%}.
+
+\ENDDOC
+\DOC{new\_wordn\_definition}
+
+\TYPE {\small\verb%new_wordn_definition : (bool -> thm -> string -> conv)%}\egroup
+
+\SYNOPSIS
+Defines a function over the types of n-bit words.
+
+\DESCRIBE
+The function {\small\verb%new_wordn_definition%} provides a facility for defining
+functions on the types of n-bit words. It takes four arguments. The
+first is a boolean flag which indicates if the function being
+defined will be an infix or not. The second is a theorem stating the
+existence of functions on the type of n-bit words; this must be a
+theorem returned by {\small\verb%prove_function_defn_thm%}. The third argument is a
+name under which the resulting definition will be saved in the current
+theory segment. And the fourth argument is a term giving the desired
+function definition. The value returned by {\small\verb%new_wordn_definiton%} is a
+theorem stating the definition requested by the user. This theorem is
+derived by formal proof from an instance of the theorem given as the
+second argument.
+
+\FAILURE
+Failure occurs if HOL cannot prove there is a function satisfying the
+specification supplied as the last argument, or if any other condition
+for making constant specification (ie, the failure conditions of
+{\small\verb%new_specification%}) is violated.
+
+\EXAMPLE
+Suppose that the type of 3-bit word has been defined by calling
+{\small\verb%define_wordn_type 3%}, and the theorem returned by this type
+definition is bound to the name {\small\verb%word3%}. Then, a call to the function
+{\small\verb%prove_function_defn_thm%} with the theorem {\small\verb%word3%}
+will result in the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   word3_FNDEF |- !f. ?! fn. !b0 b1 b2. fn(WORD3[b0;b1;b2]) = f b0 b1 b2
+\end{verbatim}}
+\noindent which is in the form expected by the function {\small\verb%new_wordn_definition%}.
+The following definition will define a new constant on the type
+{\small\verb%:word3%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let BIT1 = new_wordn_definition false word3_FNDEF `BIT1`
+   #    "BIT1(WORD3[b0;b1;b2]) = b1";;
+   BIT1 =
+   |- !b0 b1 b2. BIT1(WORD3[b0;b1;b2]) = b1
+\end{verbatim}}
+
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%new_specification%}, {\small\verb%new_recursive_definition%},
+{\small\verb%prove_function_defn_thm%}, {\small\verb%use_wordn%}.
+
+\ENDDOC
+\DOC{prove\_BITS\_one\_one}
+
+\TYPE {\small\verb%prove_BITS_one_one : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_BITS\_onto}
+
+\TYPE {\small\verb%prove_BITS_onto : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_BITS\_WORD}
+
+\TYPE {\small\verb%prove_BITS_WORD : thm -> thm%}\egroup
+
+\SYNOPSIS
+Proves a theorem for reducing {\small\verb%BITSn(WORDn [...])%} to {\small\verb%[...]%}.
+
+\DESCRIBE
+{\small\verb%prove_BITS_WORDS%} takes a theorem returned by {\small\verb%define_wordn_type%} and
+deduces a theorem which is an instance of the second conjunct of the
+type definition theorem. This theorem is usually used in rewriting to
+simplify terms containing the expression {\small\verb%BITSn(WORDn [...]%}. 
+
+\FAILURE
+Fails if the input theorem is not in the expected form.
+
+\EXAMPLE
+{\small\verb%prove_BITS_WORD word3%} where {\small\verb%word3%} is the theorem 
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (!w. WORD3(BITS3 w) = w) /\
+      (!l. (LENGTH l = 3) = (BITS3(WORD3 l) = l))
+\end{verbatim}}
+\noindent returns the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !b0 b1 b2. BITS3(WORD3[b0; b1; b2]) = [b0; b1; b2]
+\end{verbatim}}
+
+\ENDDOC
+\DOC{prove\_bit\_op\_thms}
+
+\TYPE {\small\verb%prove_bit_op_thms : (int -> thm list)%}\egroup
+
+\SYNOPSIS
+Proves some basic theorems about the bitwise logical operators.
+
+\DESCRIBE
+{\small\verb%prove_bit_op_thms%} takes a single integer as its argument and returns
+a list of theorems about the basic properties of the bitwise logical
+operators. These theorems are the self-inversion of the {\small\verb%NOTn%}
+operator, the symmetry and associativity of the {\small\verb%ANDn%}, {\small\verb%ORn%} and
+{\small\verb%XORn%} operators. They are also stored in the current theory under the
+names {\small\verb%NOTn%}, {\small\verb%ANDn_SYM%}, {\small\verb%ORn_SYM%}, {\small\verb%XORn_SYM%}, {\small\verb%ANDn_ASSOC%},
+{\small\verb%ORn_ASSOC%} and {\small\verb%XORn_ASSOC%}.
+
+\FAILURE
+Fails if either it is not in draft mode, or any of the operators has
+not been defined.
+
+\EXAMPLE
+{\small\verb%prove_bit_op_thms 3%} returns the following list of theorems and
+stores them in the current theory under the names {\small\verb%NOT3%},
+{\small\verb%AND3_SYM%}, {\small\verb%OR3_SYM%}, {\small\verb%XOR3_SYM%}, {\small\verb%AND3_ASSOC%}, {\small\verb%OR3_ASSOC%} and
+{\small\verb%XOR3_ASSOC%}, respectively.
+{\par\samepage\setseps\small\begin{verbatim}
+   [ |- !w. NOT3(NOT3 w) = w;
+     |- !w1 w2. w1 AND3 w2 = w2 AND3 w1;
+     |- !w1 w2. w1 OR3 w2 = w2 OR3 w1;
+     |- !w1 w2. w1 XOR3 w2 = w2 XOR3 w1;
+     |- !w1 w2 w3. w1 AND3 (w2 AND3 w3) = (w1 AND3 w2) AND3 w3;
+     |- !w1 w2 w3. w1 OR3 (w2 OR3 w3) = (w1 OR3 w2) OR3 w3;
+     |- !w1 w2 w3. w1 XOR3 (w2 XOR3 w3) = (w1 XOR3 w2) XOR3 w3]
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_bit_ops%}, {\small\verb%wordn_bit_ops%}.
+
+\ENDDOC
+\DOC{prove\_function\_defn\_thm}
+
+\TYPE {\small\verb%prove_function_defn_thm : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_LENGTH\_BITS\_thm}
+
+\TYPE {\small\verb%prove_LENGTH_BITS_thm : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_NWORD\_MOD}
+
+\TYPE {\small\verb%prove_NWORD_MOD : int -> thm%}\egroup
+
+\SYNOPSIS
+Proves a theorem stating the periodicity of the function {\small\verb%NWORDn%}.
+
+\DESCRIBE
+{\small\verb%prove_NWORD_MOD n%} proves a theorem about the num-to-word conversion
+{\small\verb%NWORDn%} which takes the following form:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !m. NWORDn m = NWORDn (m MOD e)
+\end{verbatim}}
+\noindent where {\small\verb%e%} is a constant number whose value equals to {\small\verb%2 EXP n%}.
+
+\FAILURE
+Fails if the type {\small\verb%:wordn%} or the conversion function {\small\verb%NWORDn%}
+has not been defined.
+
+\EXAMPLE
+The following HOL session illustrates the use of this function:
+{\par\samepage\setseps\small\begin{verbatim}
+   # let word3_NWORD_MOD = prove_NWORD_MOD 3;;
+   word3_NWORD_MOD = |- !m. NWORD3 m = NWORD3(m MOD 8)
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%define_word_val%}, {\small\verb%prove_word_val%}.
+
+\ENDDOC
+\DOC{prove\_wordn\_cases\_thm}
+
+\TYPE {\small\verb%prove_wordn_cases_thm : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_wordn\_const\_cases}
+
+\TYPE {\small\verb%prove_wordn_const_cases : thm -> thm%}\egroup
+
+\SYNOPSIS
+Exhaustive cases theorem for wordn constants.
+
+\DESCRIBE
+{\small\verb%prove_wordn_const_cases%} derives an exhaustive cases theorem for
+constants of type {\small\verb%:wordn%}.  Use only for small n.
+The input is a theorem of the form returned by {\small\verb%prove_word_cases_thm%}:
+{\par\samepage\setseps\small\begin{verbatim}
+    |- !w. ?b0...bn-1. w = WORDn [b0;...;bn-1]
+\end{verbatim}}
+\noindent The corresponding output has the form:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !w. ((w = #0...0) \/ ...)  \/ (... \/ w = #1...1)
+\end{verbatim}}
+
+\FAILURE
+
+
+\EXAMPLE
+{\small\verb%prove_wordn_const_cases word3_CASES%} returns the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !w.
+    (((w = #000) \/ (w = #001)) \/ (w = #010) \/ (w = #011)) \/
+    ((w = #100) \/ (w = #101)) \/
+    (w = #110) \/
+    (w = #111)
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%prove_wordn_cases_thm%}
+
+\ENDDOC
+\DOC{prove\_wordn\_induction\_thm}
+
+\TYPE {\small\verb%prove_wordn_induction_thm : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_WORD\_one\_one}
+
+\TYPE {\small\verb%prove_WORD_one_one : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_WORD\_onto}
+
+\TYPE {\small\verb%prove_WORD_onto : thm -> thm%}\egroup
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC
+\DOC{prove\_word\_val}
+
+\TYPE {\small\verb%prove_word_val : int -> thm%}\egroup
+
+\SYNOPSIS
+Proves the theorem characterizing the conversion functions between the
+types {\small\verb%:wordn%} and {\small\verb%:num%}.
+
+\DESCRIBE
+{\small\verb%prove_word_val%} takes a natural number as its single argument. It
+proves a theorem which characterizes the conversion functions {\small\verb%NVALn%}
+and {\small\verb%NWORDn%}. The theorem is returned as the function value, and it
+takes the following form:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (!w. NWORDn(NVALn w) = w) /\ 
+      (!m. m < (2 EXP n) ==> (NVALn(NWORDn m) = m))
+\end{verbatim}}
+
+\FAILURE
+Fails if the type {\small\verb%:wordn%} or the conversion functions {\small\verb%:NVALn%} and
+{\small\verb%:NWORDn%} have not been defined.
+
+\EXAMPLE
+The following HOL session illustrates the use of this function:
+{\par\samepage\setseps\small\begin{verbatim}
+   # let WORD_VAL_3 = save_thm(`WORD_VAL_3`, prove_word_val 3);;
+   WORD_VAL_3 = 
+   |- (!w. NWORD3(NVAL3 w) = w) /\
+      (!n. n < (2 EXP 3) ==> (NVAL3(NWORD3 n) = n))
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%define_word_val%}.
+
+\ENDDOC
+\DOC{use\_wordn}
+
+\TYPE {\small\verb%use_wordn : int -> (thm)list%}\egroup
+
+\SYNOPSIS
+Defines the type of n-bit words and proves some basic theorems.
+
+\DESCRIBE
+The function {\small\verb%use_wordn%} is one of the top level user functions of the
+wordn library. It provides a facility to define the type of n-bit
+words and to prove some basic theorems on this type. When the user
+needs to use n-bit words in an application, he/she can simply make
+a call to {\small\verb%use_wordn%} with a single argument {\small\verb%n%}. This will define the
+type {\small\verb%:wordn%}, and a list of basic theorems about the type are returned.
+{\small\verb%use_wordn%} combines the function {\small\verb%define_wordn_type%} and the following
+functions for proving theorems about the type of n-bit words:
+{\small\verb%prove_function_defn_thm%},\ {\small\verb%prove_wordn_induction_thm%},\
+{\small\verb%prove_wordn_cases_thm%},\ {\small\verb%prove_BITS_one_one%},\
+{\small\verb%prove_BITS_onto%},\ {\small\verb%prove_WORD_one_one%},\
+{\small\verb%prove_WORD_onto%},\ {\small\verb%prove_LENGTH_BITS_thm%}.
+
+\FAILURE
+Failure occurs if any of the functions invoked fails.
+
+
+\EXAMPLE
+The HOL session below illustrates the use of the function {\small\verb%use_wordn%}:
+{\par\samepage\setseps\small\begin{verbatim}
+ # let [word3; word3_BITS_11; word3_BITS_onto;
+ # word3_WORD_11; word3_WORD_onto; word3_LENGTH_BITS;
+ # word3_FNDEF; word3_INDUCT; word3_CASES] =
+ # use_wordn 3;;
+   word3 = 
+   |- (!w. WORD3(BITS3 w) = w) /\
+      (!l. (LENGTH l = 3) = (BITS3(WORD3 l) = l))
+   word3_BITS_11 = |- !w' w. (BITS3 w = BITS3 w') ==> (w = w')
+   word3_BITS_onto = |- !l. (LENGTH l = 3) ==> (?w. BITS3 w = l)
+   word3_WORD_11 = 
+   |- !l l'.
+       (LENGTH l = 3) /\ (LENGTH l' = 3) ==>
+       (WORD3 l = WORD3 l') ==>
+       (l = l')
+   word3_WORD_onto = |- !w. ?l. (LENGTH l = 3) /\ (WORD3 l = w)
+   word3_LENGTH_BITS = |- !w. LENGTH(BITS3 w) = 3
+   word3_FNDEF = |- !f. ?! fn. !b0 b1 b2. fn(WORD3[b0;b1;b2]) = f b0 b1 b2
+   word3_INDUCT = |- !P. (!b0 b1 b2. P(WORD3[b0;b1;b2])) ==> (!w. P w)
+   word3_CASES = |- !w. ?b0 b1 b2. w = WORD3[b0;b1;b2]
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%prove_function_defn_thm%}, {\small\verb%prove_wordn_induction_thm%},
+{\small\verb%prove_wordn_cases_thm%}, {\small\verb%prove_BITS_one_one%},
+{\small\verb%prove_BITS_onto%}, {\small\verb%prove_WORD_one_one%},
+{\small\verb%prove_WORD_onto%}, {\small\verb%prove_LENGTH_BITS_thm%}.
+
+
+\ENDDOC
+\DOC{wordn\_bit\_ops}
+
+\TYPE {\small\verb%wordn_bit_ops : thm -> int -> (thm)list%}\egroup
+
+\SYNOPSIS
+Defines bitwise operators and proves some basic theorems about them.
+
+\DESCRIBE
+{\small\verb%wordn_bit_ops wordn n%}, where {\small\verb%wordn%} is the theorem returned by
+{\small\verb%define_wordn_type%} and {\small\verb%n%} is the word length, defines a set of
+commonly used bitwise logical operators and proves some basic theorems
+about these operators. It combines the functions of
+{\small\verb%define_wordn_bit_ops%}, and {\small\verb%prove_bit_op_thms%}. 
+
+\FAILURE
+Fails if either it is not in draft mode, or the input theorem is not
+in the expected form or the type {\small\verb%:wordn%} has not been defined.
+
+\EXAMPLE
+{\small\verb%wordn_bit_ops word3 3%} returns the following list of definitions and
+theorems:
+{\par\samepage\setseps\small\begin{verbatim}
+   [ |- !b0 b1 b2. NOT3(WORD3[b0;b1;b2]) = WORD3(B_NOT[b0;b1;b2]);
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) AND3 w = WORD3(B_AND[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) OR3 w = WORD3(B_OR[b0;b1;b2](BITS3 w));
+     |- !b0 b1 b2 w.
+        (WORD3[b0;b1;b2]) XOR3 w = WORD3(B_XOR[b0;b1;b2](BITS3 w));
+     |- !w. NOT3(NOT3 w) = w;
+     |- !w1 w2. w1 AND3 w2 = w2 AND3 w1;
+     |- !w1 w2. w1 OR3 w2 = w2 OR3 w1;
+     |- !w1 w2. w1 XOR3 w2 = w2 XOR3 w1;
+     |- !w1 w2 w3. w1 AND3 (w2 AND3 w3) = (w1 AND3 w2) AND3 w3;
+     |- !w1 w2 w3. w1 OR3 (w2 OR3 w3) = (w1 OR3 w2) OR3 w3;
+     |- !w1 w2 w3. w1 XOR3 (w2 XOR3 w3) = (w1 XOR3 w2) XOR3 w3 ]
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_bit_ops%}, {\small\verb%prove_bit_op_thms%}.
+
+\ENDDOC
+\DOC{wordn\_CASES\_TAC}
+
+\TYPE {\small\verb%wordn_CASES_TAC : term -> thm_tactic%}\egroup
+
+\SYNOPSIS
+Instantiates variables of type {\small\verb%:wordn%} with a list of bits.
+
+\DESCRIBE
+The tactic {\small\verb%wordn_CASES_TAC%} instantiates occurrences of a variable of
+type {\small\verb%:wordn%} in the goal with a list of bits. It takes, as its
+arguments, a term which indicates which variable is to be instantiated
+and a theorem which should in the form  returned by
+{\small\verb%prove_wordn_cases%}. The specification of {\small\verb%wordn_CASES_TAC%} is:
+{\par\samepage\setseps\small\begin{verbatim}
+              A ?- t[w]
+   =============================== wordn_CASES_TAC "w" wordn_CASES
+      A ?- t[WORDn[b0';...;bn-1']/w]
+\end{verbatim}}
+where {\small\verb%wordn_CASES%} is the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !w. ?b0...bn-1. w = WORDn[b0;...bn-1]
+\end{verbatim}}
+
+This function specializes the universally quantified variable in the
+theorem {\small\verb%wordn_CASES%} with the given term which should match the
+variable required to be instantiated in the goal. It then eliminaates
+the existentially quantified vairables {\small\verb%b0%},...,{\small\verb%bn-1%} by choosing some
+variants which are not free in the assumptions; normally these are
+just {\small\verb%b0%},...,{\small\verb%bn-1%}. It then  substitutes the right-hand side of the
+equation for the occurrences of the variable {\small\verb%w%} in the goal.
+
+\FAILURE
+Fails if the substitution cannot be performed due to  no matching
+variable of the correct type is found or other reasons as given in the
+failure conditions of {\small\verb%CHOOSE_TAC%} and {\small\verb%SUBST1_TAC%}.
+
+\EXAMPLE
+Suppose that one wants to solve the following  goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   "!w. LENGTH(BITS3 w) = 3"
+\end{verbatim}}
+The tactic {\small\verb%GEN_TAC THEN wordn_CASES_TAC "w" word3_CASES%}
+ may be used to transform it to
+{\par\samepage\setseps\small\begin{verbatim}
+   "LENGTH(BITS3(WORD3[b0;b1;b2])) = 3"
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%wordn_X_CASES_TAC%}, {\small\verb%prove_wordn_cases_thm%},
+{\small\verb%CHOOSE_TAC%}, {\small\verb%SUBST1_TAC%}.
+
+\ENDDOC
+\DOC{wordn\_CONV}
+
+\TYPE {\small\verb%wordn_CONV : conv%}\egroup
+
+\SYNOPSIS
+Definition scheme for wordn constants.
+
+\DESCRIBE
+{\small\verb%wordn_CONV "#b1...bn"%} returns
+{\par\samepage\setseps\small\begin{verbatim}
+   |- #b1...bn = WORDn [b1;...;bn]
+\end{verbatim}}
+
+\FAILURE
+
+
+\EXAMPLE
+{\small\verb%wordn_CONV "#110"%} returns the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- #110 = WORD3 [T; T; F]
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%wordn_NVAL_CONV%}, {\small\verb%wordn_NWORD_CONV%}.
+
+\ENDDOC
+\DOC{wordn\_EQ\_CONV}
+
+\TYPE {\small\verb%wordn_EQ_CONV : thm -> conv%}\egroup
+
+\SYNOPSIS
+Derives a theorem stating the equality of two words.
+
+\DESCRIBE
+{\small\verb%wordn_EQ_CONV wordn "w1 = w2"%} returns a theorem
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (w1 = w2) = T
+\end{verbatim}}
+if and only if {\small\verb%w1%} is equal to {\small\verb%w2%}, otherwise, it returns
+{\par\samepage\setseps\small\begin{verbatim}
+   |-  (w1 = w2) = F
+\end{verbatim}}
+{\small\verb%wordn%} is the type definition theorem returned by {\small\verb%define_wordn_type%}.
+
+\FAILURE
+
+
+\EXAMPLE
+{\small\verb%wordn_EQ_CONV word3 "#010 = #110";;%} return the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (#010 = #110) = F
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%wordn_CONV%}.
+
+\ENDDOC
+\DOC{wordn\_NVAL\_CONV}
+
+\TYPE {\small\verb%wordn_NVAL_CONV : conv%}\egroup
+
+\SYNOPSIS
+Derives a theorem stating the value of a word.
+
+\DESCRIBE
+{\small\verb%wordn_NVAL_CONV%} takes a term in the form {\small\verb%"NVALn #..."%} and derives
+a theorem stating the value of the given word when interpreted as
+natural number in a big-endian format. The length of the string
+following the hash {\small\verb%#%} should be {\small\verb%n%}, and it should consist of only
+the digits {\small\verb%0%} and {\small\verb%1%}.
+
+\FAILURE
+Fails if the type {\small\verb%:wordn%} or the constant {\small\verb%NVALn%} has not been
+defined, or the string is not in the form specified above.
+
+\EXAMPLE
+The HOL session below illustrates the use of this conversion:
+{\par\samepage\setseps\small\begin{verbatim}
+   # let word3_val_6 = wordn_NVAL_CONV "NVAL3 #110";;
+   word3_val_6 = |- NVAL3 #110 = 6
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%define_word_val%}, {\small\verb%wordn_NWORD_CONV%}.
+
+\ENDDOC
+\DOC{wordn\_NWORD\_CONV}
+
+\TYPE {\small\verb%wordn_NWORD_CONV : conv%}\egroup
+
+\SYNOPSIS
+Derives a theorem stating the  representation of a natural number in
+an n-bit word.
+
+\DESCRIBE
+{\small\verb%wordn_NWORD_CONV%} takes a term in the form {\small\verb%"NWORDn m"%} and derives a
+theorem stating the n-bit word representing the natural number {\small\verb%m%} as
+below:
+{\par\samepage\setseps\small\begin{verbatim}
+	|- NWORDn m = #...
+\end{verbatim}}
+If {\small\verb%m%} is greater than the maximium that an n-bit word can represent,
+{\small\verb%m MOD (2 EXP n)%} will be used to work out the n-bit word instead. By
+virtue of the theorem returned by {\small\verb%prove_NWORD_MOD%}, the above theorem
+is still valid.
+
+\FAILURE
+Fails if the type {\small\verb%:wordn%} or the function {\small\verb%NWORDn%} has not been defined.
+
+\EXAMPLE
+The HOL session below illustrates the use of this conversion:
+{\par\samepage\setseps\small\begin{verbatim}
+   # wordn_NWORD_CONV "NWORD3 6";;
+   |- NWORD3 6 = #110
+
+   # wordn_NWORD_CONV "NWORD3 16";;
+   |- NWORD3 16 = #000
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%define_wordn_type%}, {\small\verb%define_word_val%}, {\small\verb%prove_NWORD_MOD%}, {\small\verb%wordn_NVAL_CONV%}.
+
+\ENDDOC
+\DOC{wordn\_X\_CASES\_TAC}
+
+\TYPE {\small\verb%wordn_X_CASES_TAC : term -> thm -> (term list) -> tactic%}\egroup
+
+\SYNOPSIS
+Instantiates variables of type {\small\verb%:wordn%} with a list of bits.
+
+\DESCRIBE
+The tactic {\small\verb%wordn_X_CASES_TAC%} instantiates occurrences of a variable of
+type {\small\verb%:wordn%} in the goal with a list of bits. It takes, as its
+arguments, a term which indicates which variable is to be
+instantiated, a theorem which should in the form  returned by
+{\small\verb%prove_wordn_cases%} and a list of terms which is used as the bits in
+the instantiation. The specification of {\small\verb%wordn_X_CASES_TAC%} is:
+{\par\samepage\setseps\small\begin{verbatim}
+              A ?- t[w]
+   =============================== wordn_X_CASES_TAC "w" wordn_CASES
+      A ?- t[WORDn[c0;...;cn-1]/w]       ["c0";..."cn-1"]
+\end{verbatim}}
+\noindent where {\small\verb%wordn_CASES%} has the following theorem:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !w. ?b0...bn. w = WORDn[b0;...bn]
+\end{verbatim}}
+
+This function specializes the universally quantified variable in the
+theorem {\small\verb%wordn_CASES%} with the given term which should match the
+variable required to be instantiated in the goal. It then eliminates
+the existentially quantified vairables {\small\verb%b0%},...,{\small\verb%bn-1%} using the terms
+given in the last argument as specific witness.
+It then  substitutes the right-hand side of the
+equation for the occurrences of the variable {\small\verb%w%} in the goal.
+
+\FAILURE
+Fails if the substitution cannot be performed due to  no matching
+variable of the correct type is found, or the supplied
+terms involve variables which are free in the assumption or other reasons
+as given in the failure conditions of {\small\verb%X_CHOOSE_TAC%} and {\small\verb%SUBST1_TAC%}.
+
+\EXAMPLE
+Suppose that one wants to solve the following  goal:
+{\par\samepage\setseps\small\begin{verbatim}
+   "!w. LENGTH(BITS3 w) = 3"
+\end{verbatim}}
+\noindent The tactic {\small\verb%GEN_TAC THEN wordn_X_CASES_TAC "w" word3_CASES ["c1";"c2";"c3"]%}
+ may be used to transform it to
+{\par\samepage\setseps\small\begin{verbatim}
+   "LENGTH(BITS3(WORD3[c1;c2;c3])) = 3"
+\end{verbatim}}
+
+\SEEALSO
+{\small\verb%wordn_CASES_TAC%}, {\small\verb%prove_wordn_cases_thm%},
+{\small\verb%X_CHOOSE_TAC%}, {\small\verb%SUBST1_TAC%}.
+
+\ENDDOC

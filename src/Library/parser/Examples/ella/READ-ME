@@ -1,0 +1,38 @@
+The files in this directory comprise a parser for the ELLA hardware
+description language.  The grammar is divided into the following
+sections:
+
+  1. A1_1.grm  BASICS 
+  2. A1_2.grm  MAIN_LOOP
+  3. A1_3.grm  DECLARATIONS 
+  4. A1_4.grm  TYPES 
+  5. A1_5.grm  INTEGERS
+  6. A1_6.grm  CONSTANTS
+  7. A1_7.grm  FUNCTIONS
+  8. A1_8.grm  UNITS
+  9. A1_9.grm  SERIES
+ 10. A1_10.grm SEQUENCES 
+ 11. A1_11.grm MACROS 
+
+These sections reflect the organization of the grammar as specified in
+the ELLA language reference manual.  
+
+The parser converts ELLA input into a recursive data type suitable for
+pretty-printing.  Transformation functions may then be applied to
+convert the data type into the HOL logic.  The pretty printer is
+contained in the files PP_printer.ml, full-ella.ml, and PP_command.ml
+in the current directory, and were generated from the pretty printing
+language developed by Richard Boulton.
+
+To make the parser, edit the Makefile to point to the location of HOL as
+well as the general.ml file.  The parser may be regenerated from
+scratch by parsing each of the *.grm files (type =  ella list).  The order 
+in which they are converted is not important.
+
+To load in the generated parser, loadf the file loader.ml after editing
+the path to general.ml.  It contains the appropriate definitions of
+separators, as well as a call to new_syntax_block. 
+
+Sample input is provided in the ella_files directory.  These may be
+parsed using the ELLA_file function.
+

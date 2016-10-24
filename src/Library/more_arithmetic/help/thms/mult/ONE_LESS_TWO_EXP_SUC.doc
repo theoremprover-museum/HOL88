@@ -1,0 +1,3 @@
+\THEOREM ONE_LESS_TWO_EXP_SUC mult
+|- !n. 1 < (2 EXP (SUC n))
+\ENDTHEOREM

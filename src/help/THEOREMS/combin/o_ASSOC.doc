@@ -1,0 +1,3 @@
+\THEOREM o_ASSOC combin
+|- !f g h. f o (g o h) = (f o g) o h
+\ENDTHEOREM

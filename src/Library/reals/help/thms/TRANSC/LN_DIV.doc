@@ -1,0 +1,3 @@
+\THEOREM LN_DIV TRANSC
+|- !x. (& 0) < x /\ (& 0) < y ==> (ln(x / y) = (ln x) - (ln y))
+\ENDTHEOREM

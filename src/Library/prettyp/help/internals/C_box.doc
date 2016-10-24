@@ -1,0 +1,14 @@
+\DOC C_box
+
+\BLTYPE
+C_box :
+   ((((nat # nat # nat) # nat # (int # nat) # * print_box # * print_box) # *)}
+    -> * print_box)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

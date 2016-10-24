@@ -1,0 +1,5 @@
+\THEOREM PRIM_REC_EQN prim_rec
+|- !x f.
+    (!n. PRIM_REC_FUN x f 0 n = x) /\
+    (!m n. PRIM_REC_FUN x f(SUC m)n = f(PRIM_REC_FUN x f m(PRE n))n)
+\ENDTHEOREM

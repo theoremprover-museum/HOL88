@@ -1,0 +1,63 @@
+\DOC print_break
+
+\TYPE {print_break : ((int # int) -> void)}
+
+\SYNOPSIS
+Breaks a pretty printing block into parts.
+
+\DESCRIBE
+The function {print_break} is used within the print formatting block
+formed by either {print_begin} or {print_ibegin} and {print_end}. It is used
+to indicate points where breaks can occur within a list being printed. The
+function takes two integer arguments, the first indicating the width
+of the break and the second specifying an offset to be used if
+wrapping has to be done.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+We first set the margin to 13 by:
+{
+   #set_margin 13;;
+   72 : int
+}
+\noindent A simple formatting action is done in the ML segment given below:
+{
+   #let  example =
+      (print_begin 0;
+       print_string `first`;
+       print_break (1,2);
+       print_string `second`;
+       print_break (1,2);
+       print_end());;
+}
+\noindent In this fragment of code {print_break} is used to put a single
+space  between the strings. However if wrapping occurs, {print_break}
+indents the following line by two spaces. The result of this fragment is:
+{
+   first second example =
+   ()
+   : void
+}
+\noindent If we now change the margin to 10 and execute the same fragment (not
+given):
+{
+   #set_margin 10;;
+   13 : int
+}
+\noindent The result is wrapped with an indent of two character spaces from the
+left.
+{
+   first
+     second
+     example =
+   ()
+   : void
+}
+\noindent Wrapping took place due to the new margin setting.
+
+\SEEALSO
+print_begin, print_ibegin, print_end, print_newline
+
+\ENDDOC

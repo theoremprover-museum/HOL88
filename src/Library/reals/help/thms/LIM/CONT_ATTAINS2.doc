@@ -1,0 +1,7 @@
+\THEOREM CONT_ATTAINS2 LIM
+|- !f a b.
+    a <= b /\ (!x. a <= x /\ x <= b ==> f contl x) ==>
+    (?M.
+      (!x. a <= x /\ x <= b ==> M <= (f x)) /\
+      (?x. a <= x /\ x <= b /\ (f x = M)))
+\ENDTHEOREM

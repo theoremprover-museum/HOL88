@@ -1,0 +1,3 @@
+\THEOREM sup REAL
+|- !P. sup P = (@s. !y. (?x. P x /\ y < x) = y < s)
+\ENDTHEOREM

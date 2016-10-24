@@ -1,0 +1,289 @@
+%**********************************************
+%       No Chapter on chapter frontpage
+%**********************************************
+\def\@makechapterhead#1{ { \parskip 0pt \parindent 0pt
+ \raggedright
+ \ifnum \c@secnumdepth >\m@ne \Large\bf Chapter \thechapter \par \vskip 25pt
+    \hrule \vskip 50pt \fi \Huge \bf #1\par \vskip 50pt \hrule 
+ \nobreak \vskip 4cm } }
+
+\@ifundefined{chapter}
+           {\newcounter {fathm}[section]
+            \def\thefathm {\thesection.\arabic{fathm}}
+            \newcounter {facor}[section]
+            \def\thefacor {\thesection.\arabic{facor}}
+            \newcounter {falem}[section]
+            \def\thefalem {\thesection.\arabic{falem}}
+           }
+           {\newcounter {fathm}[chapter]
+            \def\thefathm {\thechapter.\arabic{fathm}}
+            \newcounter {facor}[chapter]
+            \def\thefacor {\thechapter.\arabic{facor}}
+            \newcounter {falem}[chapter]
+            \def\thefalem {\thechapter.\arabic{falem}}
+           }
+           
+\newcounter {faeq}
+\def\thefaeq {\arabic{faeq}}
+
+\def\faeqnarray{\setcounter{faeq}{1}\let\@currentlabel=\thefaeq
+\global\@eqnswfalse
+\global\@eqcnt\z@\tabskip\parindent\let\\=\@eqncr
+%$$\halign to \displaywidth\bgroup\@eqnsel\hskip\@centering
+$$\halign to \displaywidth\bgroup\@eqnsel\hskip\parskip
+  $\displaystyle\tabskip\z@{##}$&\global\@eqcnt\@ne 
+  \hskip 2\arraycolsep \hfil${##}$\hfil
+  &\global\@eqcnt\tw@ \hskip 2\arraycolsep $\displaystyle\tabskip\z@{##}$\hfil 
+   \tabskip\@centering&\llap{##}\tabskip\z@\cr}
+\def\endfaeqnarray{\@@eqncr\egroup
+      $$\global\@ignoretrue}
+
+%*********************************************************
+%*                   Theorem                             *
+%*********************************************************
+
+\def\tref#1{{\sf thm}~\ref{#1}}
+
+%\def\thm{\vspace{\baselineskip}\refstepcounter{fathm}
+\def\thm{\vspace{0mm}\refstepcounter{fathm}
+\bgroup
+\def\@faplab[##1]{\label{##1}}
+\def\@fahlab[##1]{\bgroup\let\@currentlabel=\thefathm
+\label{##1}\egroup}
+\let\@falab\@fahlab
+\def\nb{\global\@eqnswtrue\@ifnextchar [{\@falab}{}}
+\def\@eqnnum{{\rm ({\sf thm} \thefathm)}} 
+\def\@@eqncr{\let\@tempa\relax 
+    \ifcase\@eqcnt \def\@tempa{& & &}\or \def\@tempa{& &} 
+      \else \def\@tempa{&}\fi 
+     \@tempa \if@eqnsw\@eqnnum\stepcounter{faeq}\fi  %trick default nonumber
+     \global\@eqnswfalse\global\@eqcnt\z@\cr}
+\def\p{\end{faeqnarray}
+{\bf Proof:}
+\let\@falab\@faplab
+\def\@eqnnum{{\rm (\thefaeq)}} 
+\begin{faeqnarray}}
+\begin{faeqnarray}}
+
+%\def\endthm{\end{faeqnarray}{\mbox{$\Box$}}\par\egroup\addvspace{\baselineskip}}
+\def\endthm{\end{faeqnarray}{\mbox{$\Box$}}\par\egroup\addvspace{\baselineskip}}
+
+%*********************************************************
+%*                   Cor                                 *
+%*********************************************************
+
+\def\cref#1{{\sf cor}~\ref{#1}}
+
+\def\cor{\vspace{\baselineskip}\refstepcounter{facor}
+\bgroup
+\def\@faplab[##1]{\label{##1}}
+\def\@fahlab[##1]{\bgroup\let\@currentlabel=\thefacor
+\label{##1}\egroup}
+\let\@falab\@fahlab
+\def\nb{\global\@eqnswtrue\@ifnextchar [{\@falab}{}}
+\def\@eqnnum{{\rm ({\sf cor} \thefacor)}} 
+\def\@@eqncr{\let\@tempa\relax 
+    \ifcase\@eqcnt \def\@tempa{& & &}\or \def\@tempa{& &} 
+      \else \def\@tempa{&}\fi 
+     \@tempa \if@eqnsw\@eqnnum\stepcounter{faeq}\fi  %trick default nonumber
+     \global\@eqnswfalse\global\@eqcnt\z@\cr}
+\def\p{\end{faeqnarray}
+{\bf Proof:}
+\let\@falab\@faplab
+\def\@eqnnum{{\rm (\thefaeq)}} 
+\begin{faeqnarray}}
+\begin{faeqnarray}}
+
+\def\endcor{\end{faeqnarray}{\mbox{$\Box$}}\par\egroup\addvspace{\baselineskip}}
+
+%*********************************************************
+%*                   Lemma                               *
+%*********************************************************
+
+\def\lref#1{{\sf lem}~\ref{#1}}
+
+\def\lem{\vspace{\baselineskip}\refstepcounter{falem}
+\bgroup
+\def\@faplab[##1]{\label{##1}}
+\def\@fahlab[##1]{\bgroup\let\@currentlabel=\thefalem
+\label{##1}\egroup}
+\let\@falab\@fahlab
+\def\nb{\global\@eqnswtrue\@ifnextchar [{\@falab}{}}
+\def\@eqnnum{{\rm ({\sf lem} \thefalem)}} 
+\def\@@eqncr{\let\@tempa\relax 
+    \ifcase\@eqcnt \def\@tempa{& & &}\or \def\@tempa{& &} 
+      \else \def\@tempa{&}\fi 
+     \@tempa \if@eqnsw\@eqnnum\stepcounter{faeq}\fi  %trick default nonumber
+     \global\@eqnswfalse\global\@eqcnt\z@\cr}
+\def\p{\end{faeqnarray}
+{\bf Proof:}
+\let\@falab\@faplab
+\def\@eqnnum{{\rm (\thefaeq)}} 
+\begin{faeqnarray}}
+\begin{faeqnarray}}
+
+\def\endlem{\end{faeqnarray}{\mbox{$\Box$}}\par\egroup\addvspace{\baselineskip}}
+
+\def\myprooflistlabel#1{\hspace\labelsep \bf #1}
+\def\myprooflist{\list{}{\labelwidth\z@ \leftmargin\myprooflistmargin
+\itemindent-\leftmargin \topsep 0em \itemsep 0.5em \parsep 0em \rightmargin 1em
+ \let\makelabel\myprooflistlabel}}
+\let\endmyprooflist\endlist
+\newdimen\myprooflistmargin
+\myprooflistmargin=1em
+
+\def\mydescrlabel#1{\hspace\labelsep \rm #1}
+\def\mydescr{\list{}{\labelwidth\z@
+\itemindent-\leftmargin \topsep 0em \itemsep 0.5em \parsep 0em \rightmargin 1em
+ \let\makelabel\mydescrlabel}}
+\let\endmydescr\endlist
+\newdimen\mydescrmargin
+\mydescrmargin=1em
+
+% Proof environment TP 19-9-88
+
+% Style parameter	  Default	Description
+\newdimen\premisskip	% 0.7em		Distance between premisses
+\newdimen\ursep		% 0.3em		Distance between line and rulename
+\newdimen\overshoot	% 0.5em		Extra length of inference lines
+\newdimen\infthick	% 0.4pt		Thickness of inference lines
+
+\newbox\pp@box
+\newbox\p@box
+\newbox\f@box
+\newbox\n@box
+
+\newif\if@first@infere
+\newif\if@first@and
+
+\newdimen\p@skip
+\newdimen\p@width
+\newdimen\pp@skip
+\newdimen\pp@end
+
+\premisskip	1.0em
+\ursep		0.3em
+\overshoot	0.3em
+\infthick	0.4pt
+
+\def\d@tmp{\dimen0}
+\def\n@skip{\dimen1}
+\def\f@skip{\dimen2}
+\def\l@skip{\dimen3}
+\def\l@width{\dimen4}
+
+\def\@infere{
+   \if@first@infere
+      \@first@inferefalse
+      \setbox\p@box\box\f@box
+      \p@skip=0pt
+      \p@width\wd\p@box
+   \else
+      % f@skip := (p@width-wd(f@box))/2+p@skip
+      \f@skip\p@width
+      \advance\f@skip by-\wd\f@box
+      \divide\f@skip by\tw@
+      \advance\f@skip by\p@skip
+      \ifdim\f@skip>0pt
+         % n@skip := 0pt
+         \n@skip=0pt
+      \else
+         % n@skip := -f@skip
+         \n@skip=-\f@skip
+         % f@skip := 0pt
+         \f@skip=0pt
+      \fi
+      % l@skip := min( f@skip, n@skip+p@skip)
+      \d@tmp\n@skip
+      \advance\d@tmp by\p@skip
+      \l@skip\mindim{\f@skip}{\d@tmp}
+      % l@width := max( p@skip+p@width, f@skip+wd(f@box) ) - l@skip
+      \l@width\p@skip
+      \advance\l@width by \p@width
+      \d@tmp\f@skip
+      \advance\d@tmp by \wd\f@box
+      \l@width\maxdim{\l@width}{\d@tmp}
+      \advance\l@width by -\l@skip
+      % p@skip := f@skip
+      \p@skip\f@skip
+      % p@width := wd( f@box )
+      \p@width\wd\f@box
+      \setbox\p@box
+      \vbox
+         {\hbox{\kern\n@skip\box\p@box}
+          \nointerlineskip
+          \hbox{\kern\l@skip\vrule width\l@width
+          \raisebox{-0.5ex}[\infthick][0pt]{\kern\ursep\box\n@box}}
+          \nointerlineskip
+          \hbox{\kern\f@skip\box\f@box}
+         }
+   \fi
+}
+\def\mindim#1#2{\ifdim#1<#2#1\else#2\fi}
+\def\maxdim#1#2{\ifdim#1>#2#1\else#2\fi}
+
+\def\and@proof{
+   \if@first@and
+      \@first@andfalse
+      \pp@skip\p@skip
+      \pp@end\p@skip
+      \advance\pp@end by \p@width
+      \setbox\pp@box\box\p@box
+   \else
+      \pp@end\wd\pp@box
+      \advance\pp@end by\premisskip
+      \advance\pp@end by\p@skip
+      \advance\pp@end by\p@width
+      \setbox\pp@box\hbox{\vbox{\box\pp@box}\kern\premisskip\box\p@box}
+   \fi}
+
+\def\open@f@box{\setbox\f@box\vbox\bgroup\hbox\bgroup\kern\overshoot$\strut}
+\def\close@f@box{$\kern\overshoot\egroup\egroup}
+
+\def\open@p@box{\setbox\p@box
+                \vbox
+                   \bgroup
+                      \b@infere}
+\def\close@p@box{     \e@infere
+                      \global\dimen0\p@skip
+                      \global\dimen1\p@width
+                   \egroup
+                \p@skip\dimen0
+                \p@width\dimen1
+}
+
+\def\b@infere{\@first@inferetrue\open@f@box}
+\def\m@infere[#1]{\close@f@box\@infere\setbox\n@box\hbox{#1}\open@f@box}
+\def\e@infere{\close@f@box\@infere\box\p@box}
+
+\def\b@and{\close@f@box\@first@andtrue\open@p@box}
+\def\m@and{\close@p@box\and@proof\open@p@box}
+\def\e@and[#1]{\close@p@box\and@proof
+               \@first@inferefalse
+               \setbox\p@box\box\pp@box
+               \p@skip\pp@skip
+               \p@width\pp@end
+               \advance\p@width by-\p@skip
+               \setbox\n@box\hbox{#1}
+               \open@f@box}
+
+\def\@@infere{\@ifnextchar [{\m@infere}{\m@infere[]}}
+\def\@@and{\@ifnextchar [{\e@and}{\e@and[]}}
+
+\newenvironment{proof}{
+   \bgroup
+       \let\\=\@@infere
+       \let\Lproof=\b@and
+       \let\ANDproof=\m@and
+       \let\Rproof=\@@and
+       \b@infere
+}{     \e@infere
+   \egroup
+}
+
+\newenvironment{displayproof}{
+    \begin{displaymath}
+        \begin{proof}
+}{      \end{proof}
+    \end{displaymath}
+}

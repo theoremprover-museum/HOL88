@@ -1,0 +1,3 @@
+\THEOREM INSEG_WOSET WELLORDER
+|- !l m. m inseg l /\ woset l ==> woset m
+\ENDTHEOREM

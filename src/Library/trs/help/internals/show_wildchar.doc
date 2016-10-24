@@ -1,0 +1,10 @@
+\DOC show_wildchar
+
+\TYPE {show_wildchar : (wildchar -> string)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

@@ -1,0 +1,6 @@
+\THEOREM TRAT_ADD_TOTAL HRAT
+|- !h i.
+    h trat_eq i \/
+    (?d. h trat_eq (i trat_add d)) \/
+    (?d. i trat_eq (h trat_add d))
+\ENDTHEOREM

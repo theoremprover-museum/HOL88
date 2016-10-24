@@ -1,0 +1,35 @@
+\DOC BASEN_COMPARE_CONV
+
+\TYPE {BASEN_COMPARE_CONV : term -> thm}
+
+\SYNOPSIS
+Given a comparison of two numerals, returns a theorem relating their values
+with {"<"}, {">"}, or {"="}.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term of the form {"BASEN r [...] op BASEN r [...]"}, returns a theorem
+of the form
+{
+   |- ( BASEN r [...] ?? BASEN r [...] ) = T
+}
+where {??} is {<}, {>} or {=}.  Note that {op} from the input term is ignored.
+
+\EXAMPLE
+{
+#BASEN_COMPARE_CONV "BASEN 10 [1;2;3] < BASEN 10 [3;4;5]";;
+|- (BASEN 10[1;2;3]) < (BASEN 10[3;4;5]) = T
+
+#BASEN_COMPARE_CONV "BASEN 10 [7;8;9] < BASEN 10 [3;4;5]";;
+|- (BASEN 10[7;8;9]) > (BASEN 10[3;4;5]) = T
+}
+\FAILURE
+Fails if the numerals' radices are different, or if any element of either
+list is not a numeric constant, or is not less than the radix, or if the
+radix is 0 or 1.
+
+\SEEALSO
+BASEN_EQ_CONV, BASEN_LT_CONV, BASEN_LE_CONV, BASEN_GT_CONV, BASEN_GE_CONV.
+
+\ENDDOC

@@ -1,0 +1,4 @@
+\THEOREM HREAL_SUB_ISACUT HREAL
+|- !X Y.
+    X hreal_lt Y ==> isacut(\w. ?x. ~cut X x /\ cut Y(x hrat_add w))
+\ENDTHEOREM

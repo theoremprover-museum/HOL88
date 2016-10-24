@@ -1,0 +1,26 @@
+\DOC Hidden_types
+
+\TYPE {Hidden_types : type_selection}
+
+\SYNOPSIS
+Value used to control the amount of type information included in the print-tree
+of a term.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{Hidden_types} is a value used to instruct the term-to-print-tree conversion
+function as to how much type information to include in the tree. Type
+information is only included for variables which, although free, without type
+information appear to be bound. An example of such a variable is {"x:num"} in
+the term:
+{
+   "\(x:bool). (x:num)"
+}
+\noindent Without types, this term appears as {"\x. x"}. However, the two
+occurrences of {x} are different.
+
+\SEEALSO
+No_types, Useful_types, All_types, term_to_print_tree.
+
+\ENDDOC

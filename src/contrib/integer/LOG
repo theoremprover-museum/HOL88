@@ -1,0 +1,118 @@
+rm -f more_arith.th
+echo 'set_flag(`abort_when_fail`,true);;'\
+     'loadt `mk_more_arith`;;'\
+     'quit();;' | ../../hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 2.01 (Franz: pre-release), built on Nov 23 1991
+
+#false : bool
+
+
+.......................................() : void
+
+() : void
+
+AND_DIST_OR = |- !t1 t2 t3. t1 /\ (t2 \/ t3) = t1 /\ t2 \/ t1 /\ t3
+
+Theorem LESS_SUC autoloaded from theory `prim_rec`.
+LESS_SUC = |- !m n. m < n ==> m < (SUC n)
+
+Theorem ADD_CLAUSES autoloaded from theory `arithmetic`.
+ADD_CLAUSES = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+
+ADDL_GREATER = |- !m n p. m < n ==> m < (p + n)
+
+Theorem ADD_SYM autoloaded from theory `arithmetic`.
+ADD_SYM = |- !m n. m + n = n + m
+
+Theorem NOT_LESS_0 autoloaded from theory `prim_rec`.
+NOT_LESS_0 = |- !n. ~n < 0
+
+Theorem NOT_LESS autoloaded from theory `arithmetic`.
+NOT_LESS = |- !m n. ~m < n = n <= m
+
+Theorem LESS_EQ_LESS_EQ_MONO autoloaded from theory `arithmetic`.
+LESS_EQ_LESS_EQ_MONO = 
+|- !m n p q. m <= p /\ n <= q ==> (m + n) <= (p + q)
+
+ADDL_GREATER_EQ = |- !m n p. m <= n ==> m <= (p + n)
+
+ADDR_GREATER = |- !m n p. m < n ==> m < (n + p)
+
+ADDR_GREATER_EQ = |- !m n p. m <= n ==> m <= (n + p)
+
+Theorem SUB_ADD autoloaded from theory `arithmetic`.
+SUB_ADD = |- !m n. n <= m ==> ((m - n) + n = m)
+
+Theorem LESS_MONO_ADD_EQ autoloaded from theory `arithmetic`.
+LESS_MONO_ADD_EQ = |- !m n p. (m + p) < (n + p) = m < n
+
+SUB_LESS_TO_LESS_ADDR = 
+|- !m n p. p <= m ==> ((m - p) < n = m < (n + p))
+
+SUB_LESS_TO_LESS_ADDL = 
+|- !m n p. n <= m ==> ((m - n) < p = m < (n + p))
+
+LESS_SUB_TO_ADDR_LESS = 
+|- !m n p. p <= m ==> (n < (m - p) = (n + p) < m)
+
+LESS_SUB_TO_ADDL_LESS = 
+|- !m n p. n <= m ==> (p < (m - n) = (n + p) < m)
+
+Definition LESS_OR_EQ autoloaded from theory `arithmetic`.
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+
+Theorem SUB_EQ_0 autoloaded from theory `arithmetic`.
+SUB_EQ_0 = |- !m n. (m - n = 0) = m <= n
+
+SUB_SAME_EQ_0 = |- !m. m - m = 0
+
+Definition SUB autoloaded from theory `arithmetic`.
+SUB = 
+|- (!m. 0 - m = 0) /\ (!m n. (SUC m) - n = (m < n => 0 | SUC(m - n)))
+
+SUC_SUB = 
+|- !m n.
+    (m < n ==> ((SUC m) - n = 0)) /\
+    (~m < n ==> ((SUC m) - n = SUC(m - n)))
+
+DOUBLE_SUB = |- !m n p. (m - n) - p = m - (n + p)
+
+Definition ADD autoloaded from theory `arithmetic`.
+ADD = |- (!n. 0 + n = n) /\ (!m n. (SUC m) + n = SUC(m + n))
+
+SIMP1 = |- !m n p. p <= n ==> (m + (n - p) = (m + n) - p)
+
+SIMP2 = |- !m n p. p <= m ==> ((m - p) + n = (m + n) - p)
+
+SIMP3 = |- !m n p. n <= p ==> (m - (p - n) = (m + n) - p)
+
+Theorem MULT_SYM autoloaded from theory `arithmetic`.
+MULT_SYM = |- !m n. m * n = n * m
+
+Theorem RIGHT_SUB_DISTRIB autoloaded from theory `arithmetic`.
+RIGHT_SUB_DISTRIB = |- !m n p. (m - n) * p = (m * p) - (n * p)
+
+LEFT_SUB_DISTRIB = |- !m n p. m * (n - p) = (m * n) - (m * p)
+
+Theorem LESS_SUC_REFL autoloaded from theory `prim_rec`.
+LESS_SUC_REFL = |- !n. n < (SUC n)
+
+Theorem LESS_THM autoloaded from theory `prim_rec`.
+LESS_THM = |- !m n. m < (SUC n) = (m = n) \/ m < n
+
+GEN_INDUCTION = 
+|- !P. P 0 /\ (!n. (!m. m < n ==> P m) ==> P n) ==> (!n. P n)
+
+
+evaluation failed     load -- start_groups ml file not found
+evaluation failed     load -- num_tac.ml
+evaluation failed     load -- mk_more_arith

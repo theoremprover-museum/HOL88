@@ -1,0 +1,40 @@
+\DOC new_letter
+
+\TYPE {new_letter : (string -> void)}
+
+\SYNOPSIS
+Defines a character to be a letter.
+
+\DESCRIBE
+When given a string, which should be of length 1, {new_letter} extends
+the scope of the definition of `letter' as used by {is_letter}.
+(If the supplied string is null ({``}) {new_letter} has no effect.)
+
+The definition of a `letter' by default includes (only)
+{a..z A..Z}. A call to {new_letter} can affect ML lexical analysis dynamically,
+because the function {is_letter} is called by the lexical analyzer to check for
+the start of an identifier.
+
+\EXAMPLE
+In the default state, {-1} is parsed as the application of {-} to {1}:
+{
+   #let x = -1 ;;
+   x = -1 : int
+}
+\noindent but if we make {-} into a letter:
+{
+   #new_letter(`-`);;
+   () : void
+}
+\noindent then {-1} parses as an (undefined) identifier.
+{
+   #let x = -1;;
+   unbound or non-assignable variable -1
+}
+\FAILURE
+Fails if the string has length greater than 1.
+
+\SEEALSO
+ascii, ascii_code, is_alphanum, is_letter, new_alphanum.
+
+\ENDDOC

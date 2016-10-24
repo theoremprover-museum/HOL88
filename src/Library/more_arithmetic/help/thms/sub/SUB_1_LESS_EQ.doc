@@ -1,0 +1,3 @@
+\THEOREM SUB_1_LESS_EQ sub
+|- !m n. m < n ==> (n - 1) >= m
+\ENDTHEOREM

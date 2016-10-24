@@ -1,0 +1,3 @@
+\THEOREM tree_Axiom tree
+|- !f. ?! fn. !tl. fn(node tl) = f(MAP fn tl)tl
+\ENDTHEOREM

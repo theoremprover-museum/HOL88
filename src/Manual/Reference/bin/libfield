@@ -1,0 +1,16 @@
+#=======================================================================#
+# Creates a "\LIBRARY" field before the "\DESCRIBE" field of a doc file #
+# N.B. Will have no effect if the "\DESCRIBE" field isn't present.      #
+# Usage: libfield <library-name> <files to change>                      #
+# Example: libfield unwind *.doc                                        #
+#=======================================================================#
+
+for i in `shift; echo $*`; do
+(cat | ed - $i) <<+
+/^\\\\DESCRIBE/i
+\\LIBRARY $1
+
+.
+w
++
+done

@@ -1,0 +1,28 @@
+\DOC search_n_until_find
+
+\TYPE {search_n_until_find : (int -> searchstep -> searchstep)}
+
+\SYNOPSIS
+Function to continue a search for a specified number of steps or until a
+matching theorem is found.
+
+\LIBRARY trs
+
+\DESCRIBE
+{search_n_until_find} continues a search for a specified number of steps or
+until a matching theorem is found. If the list of theorems already found is
+non-empty the function does nothing. It takes an integer and a step
+of a search as arguments, and returns a new step.
+
+\FAILURE
+Fails if the steps are exhausted before a theorem is found or the specified
+number of steps have been completed. The function may fail for other reasons.
+Since the user may supply his/her own side-condition functions at the
+beginning of the search, an exhaustive list of possible failures cannot be
+given.
+
+\SEEALSO
+continue_search, CS, search_until_find, search_n_theories, find_theorems, FT,
+show_step, run_search, full_search.
+
+\ENDDOC

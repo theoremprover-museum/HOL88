@@ -1,0 +1,6 @@
+\THEOREM MTOP_TENDS_UNIQ NETS
+|- !g d.
+    dorder g ==>
+    (x tends x0)(mtop d,g) /\ (x tends x1)(mtop d,g) ==>
+    (x0 = x1)
+\ENDTHEOREM

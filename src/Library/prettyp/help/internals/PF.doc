@@ -1,0 +1,10 @@
+\DOC PF
+
+\TYPE {PF : (print_box_spec -> print_format)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

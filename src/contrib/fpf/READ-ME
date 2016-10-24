@@ -1,0 +1,68 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: fpf                                                        %
+%                                                                       %
+% DESCRIPTION: A theory of finite partial functions (finite maps).      %
+%                                                                       %
+% AUTHOR: Donald Syme                                                   %
+%                                                                       %
+% ADDRESS: Department of Computer Science                               %
+%          Australian National University                               %
+%          GPO Box 4,                                                   %
+%          Canberra, Australia, 2601                                    %
+%                                                                       %
+%          email: symdchon@cs.anu.edu.au                                %
+%  Also contact mcn@cs.anu.edu.au (Malcolm Newey)			%                                                                       %
+% DATE: 92.10.25                                                        %
+% --------------------------------------------------------------------- %
+
+
+NOTE:  
+   This contrib submission was developed under HOL88 2.0.  It relies on
+the sets library from this version, which should be (but may not be) fully
+compatible with the HOL88 2.1 version.  The finite sets library is not used.
+
+
+
+DESCRIPTION:
+   A short description of the type defined by the theory.  The only real 
+   documentation is the theorems proved.
+fpf.ml:
+   Theory construction file
+use_fpf.ml:
+   Theory autoloading file
+print_hacks.l:
+   Hacks to HOL pretty printer to support pretty-printing
+   of finite partial functions
+Makefile.fragments:
+   Partial entries for a makefile to create the theory and compile
+   the pretty printing code.
+SSMART_EXISTS_TAC.ml
+RENAME_TAC.ml
+ELIMINATE_TACS.ml
+   Tactics used in proving fpf theorems.  Definitive versions found in contrib/smarttacs
+
+Loading fpf.ml creates two theories:
+
+fpf.th  - the basic theory of finite maps (see DESCRIPTION)
+fpf_canon.th  -  an  uncompleted  but  possibly  useful  theory
+proving  the  existence  of a canonical list representation for
+each  finite  partial function. Some theorems are created using
+mk_thm  here,  but  all of these should be provable without too
+much  hassle.  The canonical list repr. may be useful in trying
+to  define  recursive  and  mutually  recursive type structures
+including finite partial functions.
+
+The file print-hacks.l is a set of small changes to the HOL 88 2.0
+version of the pretty printer which enables the printing
+of finite partial functions (nb. parsing is not supported).  It
+may be of interest to those who want to know how to hack the 
+pretty printer done in a similar fashions to Mike Gordon's hacks
+in rpoglogic88).  It should be bug free, but may not be.  The
+pretty printing follows exactly the same coding pattern as
+the pretty printing for the lists.  To load the compiled version
+of the lisp code:
+
+   lisp`(load "print_hacks.o")`;;
+
+
+

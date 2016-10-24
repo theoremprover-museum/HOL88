@@ -1,0 +1,5 @@
+\THEOREM COS_TOTAL TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==>
+    (?! x. (& 0) <= x /\ x <= pi /\ (cos x = y))
+\ENDTHEOREM

@@ -1,0 +1,6 @@
+\THEOREM ismet TOPOLOGY
+|- !m.
+    ismet m =
+    (!x y. (m(x,y) = & 0) = (x = y)) /\
+    (!x y z. (m(y,z)) <= ((m(x,y)) + (m(x,z))))
+\ENDTHEOREM

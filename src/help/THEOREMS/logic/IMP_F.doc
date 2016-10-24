@@ -1,0 +1,3 @@
+\THEOREM IMP_F \none
+|- !t.(t ==> F) ==> ~t
+\ENDTHEOREM

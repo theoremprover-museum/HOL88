@@ -1,0 +1,412 @@
+\appendix
+
+\section{Appendix: phase level correctness results}
+\label{apx-phase}
+
+Correctness results for each of the sixteen microinstructions
+are shown below.  These results are used to
+verify the microprogramming level operation of \Tamarack\ for
+both fully synchronous and fully asynchronous mode.
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 0)
+    ==>
+    (((val4 rep) o mpc) (t+1) =
+       ((~((idle t) \(\vee\) ~(dack t))) => 0 |
+        ((ireq t) \(\wedge\) ~(iack t)) => 1 | 2)) \(\wedge\)
+    (mar (t+1) = pc t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 1)
+    ==>
+    (((val4 rep) o mpc) (t+1) = 12) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = pc t) \(\wedge\)
+    (buf (t+1) = ((wordn rep) 0)) \(\wedge\)
+    (iack (t+1) = T) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+\newpage % PBHACK
+
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 2)
+    ==>
+    (((val4 rep) o mpc) (t+1) = ((dack t) => 3 | 2)) \(\wedge\)
+    (mar (t+1) = mar t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (ir (t+1) = datain t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = T) \(\wedge\)
+    (addr t = (address rep) (mar t))
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 3)
+    ==>
+    (((val4 rep) o mpc) (t+1) =
+       ((~((idle t) \(\vee\) ~(dack t))) => 3 |
+         (((val3 rep) ((opcode rep) (ir t))) + 4))) \(\wedge\)
+    (mar (t+1) = ir t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (ir (t+1) = ir t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+\newpage % PBHACK
+
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 4)
+    ==>
+    (((val4 rep) o mpc) (t+1) = (((iszero rep) (acc t)) => 5 | 11)) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (ir (t+1) = ir t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 5)
+    ==>
+    (((val4 rep) o mpc) (t+1) = 0) \(\wedge\)
+    (pc (t+1) = ir t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+\newpage % PBHACK
+
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 6)
+    ==>
+    (((val4 rep) o mpc) (t+1) =
+      ((~((idle t) \(\vee\) ~(dack t))) => 6 | 13)) \(\wedge\)
+    (mar (t+1) = mar t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (arg (t+1) = acc t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 7)
+    ==>
+    (((val4 rep) o mpc) (t+1) =
+      ((~((idle t) \(\vee\) ~(dack t))) => 7 | 14)) \(\wedge\)
+    (mar (t+1) = mar t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (arg (t+1) = acc t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+
+\newpage % PBHACK
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 8)
+    ==>
+    (((val4 rep) o mpc) (t+1) = ((dack t) => 11 | 8)) \(\wedge\)
+    (mar (t+1) = mar t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = datain t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = T) \(\wedge\)
+    (addr t = (address rep) (mar t))
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 9)
+    ==>
+    (((val4 rep) o mpc) (t+1) = ((dack t) => 11 | 9)) \(\wedge\)
+    (mar (t+1) = mar t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = acc t) \(\wedge\)
+    (wmem t = T) \(\wedge\)
+    (dreq t = T) \(\wedge\)
+    (addr t = (address rep) (mar t))
+\endtt
+\newpage % PBHACK
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 10)
+    ==>
+    (((val4 rep) o mpc) (t+1) = 0) \(\wedge\)
+    (pc (t+1) = rtn t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = F) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 11)
+    ==>
+    (((val4 rep) o mpc) (t+1) = 12) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (buf (t+1) = ((inc rep) (pc t))) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+\newpage % PBHACK
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 12)
+    ==>
+    (((val4 rep) o mpc) (t+1) = 0) \(\wedge\)
+    (pc (t+1) = buf t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 13)
+    ==>
+    (((val4 rep) o mpc) (t+1) = ((dack t) => 15 | 13)) \(\wedge\)
+    (mar (t+1) = mar t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (arg (t+1) = arg t) \(\wedge\)
+    (buf (t+1) = ((add rep) ((arg t),(datain t)))) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = T) \(\wedge\)
+    (addr t = (address rep) (mar t))
+\endtt
+\newpage % PBHACK
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 14)
+    ==>
+    (((val4 rep) o mpc) (t+1) = ((dack t) => 15 | 14)) \(\wedge\)
+    (mar (t+1) = mar t) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = acc t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (arg (t+1) = arg t) \(\wedge\)
+    (buf (t+1) = ((sub rep) ((arg t),(datain t)))) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = T) \(\wedge\)
+    (addr t = (address rep) (mar t))
+\endtt
+
+\begintt
+|- Val3_CASES_ASM rep \(\wedge\)
+   Val4Word4_ASM rep \(\wedge\)
+   TamarackImp rep (
+     datain,dack,idle,ireq,mpc,mar,pc,
+     acc,ir,rtn,arg,buf,iack,dataout,wmem,dreq,addr)
+   ==>
+   \(\forall\)t.
+    (((val4 rep) o mpc) t = 15)
+    ==>
+    (((val4 rep) o mpc) (t+1) = 11) \(\wedge\)
+    (pc (t+1) = pc t) \(\wedge\)
+    (acc (t+1) = buf t) \(\wedge\)
+    (rtn (t+1) = rtn t) \(\wedge\)
+    (iack (t+1) = iack t) \(\wedge\)
+    (dataout t = ((wordn rep) 0)) \(\wedge\)
+    (wmem t = F) \(\wedge\)
+    (dreq t = F)
+\endtt
+
+\newpage
+\section{Appendix: asynchronous memory specification}
+\label{apx-asynmem}
+
+The predicate \verb"ReceiverData" is a generalized specification
+for the receiving part of the handshaking interaction.
+The asynchronous memory model is an instance of this generalized
+specification.
+
+\begintt
+let When = new_infix_definition (`When`,"$when P Q = ((Q \(\TLImp\) P) \(\cup\) Q)");;
+
+let ReceiverData = new_definition (
+  `ReceiverData`,
+  "ReceiverData (f1:(*#**)->***,f2) (req,ack,mem,datain,dataout) =
+    (\(\forall\)x. VALID (((\(\TLNot\) req) \(\TLAnd\) (mem Eq x)) \(\TLImp\) (\(\bigcirc\) (mem Eq x)))) \(\wedge\)
+    (\(\forall\)x y.
+      VALID (
+        ((\(\TLNot\) req) \(\TLAnd\) (\(\bigcirc\) req)) \(\TLImp\)
+        (\(\bigcirc\) (mem Eq x)) \(\TLImp\)
+        (\(\bigcirc\) ((datain Eq y) \(\TLImp\) ((datain Eq y) \(\cup\) ack))) \(\TLImp\)
+        (\(\bigcirc\) ((((dataout Eq (f1 (x,y))) \(\TLAnd\) (mem Eq (f2 (x,y)))) \(\cup\) (\(\TLNot\) req))
+          when ack))))");;
+
+let ReadFunc = new_definition (
+  `ReadFunc`,
+  "ReadFunc (rep:^rep_ty) (memval,(wmemval,addrval,datainval)) =
+    (wmemval => datainval | ((fetch rep) (memval,addrval)))");;
+
+let WriteFunc = new_definition (
+  `WriteFunc`,
+  "WriteFunc (rep:^rep_ty) (memval,(wmemval,addrval,datainval)) =
+    (wmemval => ((store rep) (memval,addrval,datainval)) | memval)");;
+
+let AsynMemory = new_definition (
+  `AsynMemory`,
+  "AsynMemory (rep:^rep_ty) (
+    req,ack,mem,wmem,addr,datain,dataout) =
+    Receiver (req,ack) \(\wedge\)
+    ReceiverData (ReadFunc rep,WriteFunc rep)
+      (req,ack,mem,(\(\lambda\)t:time.(wmem t,addr t,datain t)),dataout)");;
+\endtt

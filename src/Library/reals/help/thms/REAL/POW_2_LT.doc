@@ -1,0 +1,3 @@
+\THEOREM POW_2_LT REAL
+|- !n. (& n) < ((& 2) pow n)
+\ENDTHEOREM

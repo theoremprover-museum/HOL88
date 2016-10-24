@@ -1,0 +1,98 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{The theory {\tt wordn\_base}}
+\THEOREM EXISTS\_wordn\_REP wordn\_base
+|- !n. ?l. (\l. LENGTH l = n)l
+\ENDTHEOREM
+\THEOREM wordn\_ABS\_REP wordn\_base
+|- !n.
+    (?rep. TYPE_DEFINITION(\l'. LENGTH l' = n)rep) ==>
+    (?REP ABS.
+      (!w. ABS(REP w) = w) /\ (!l. (LENGTH l = n) = (REP(ABS l) = l)))
+\ENDTHEOREM
+\THEOREM wordn\_FN\_DEF\_THM wordn\_base
+|- !n ABS REP.
+    (!a. ABS(REP a) = a) /\ (!r. (LENGTH r = n) = (REP(ABS r) = r)) ==>
+    (!f. ?! fn. !r. (LENGTH r = n) ==> (fn(ABS r) = f r))
+\ENDTHEOREM
+\section{The theory {\tt wordn\_bitops}}
+\THEOREM B\_AND\_ASSOC wordn\_bitops
+|- !l1 l2 l3.
+    (LENGTH l1 = LENGTH l2) /\ (LENGTH l2 = LENGTH l3) ==>
+    (B_AND l1(B_AND l2 l3) = B_AND(B_AND l1 l2)l3)
+\ENDTHEOREM
+\THEOREM B\_AND\_DEF wordn\_bitops
+|- (!l. B_AND[]l = []) /\
+   (!x1 l1 l2. B_AND(CONS x1 l1)l2 = CONS(x1 /\ HD l2)(B_AND l1(TL l2)))
+\ENDTHEOREM
+\THEOREM B\_AND\_SYM wordn\_bitops
+|- !l1 l2. (LENGTH l1 = LENGTH l2) ==> (B_AND l1 l2 = B_AND l2 l1)
+\ENDTHEOREM
+\THEOREM B\_NOT wordn\_bitops
+|- !l. B_NOT(B_NOT l) = l
+\ENDTHEOREM
+\THEOREM B\_NOT\_DEF wordn\_bitops
+|- (B_NOT[] = []) /\ (!x l. B_NOT(CONS x l) = CONS~x(B_NOT l))
+\ENDTHEOREM
+\THEOREM B\_OR\_ASSOC wordn\_bitops
+|- !l1 l2 l3.
+    (LENGTH l1 = LENGTH l2) /\ (LENGTH l2 = LENGTH l3) ==>
+    (B_OR l1(B_OR l2 l3) = B_OR(B_OR l1 l2)l3)
+\ENDTHEOREM
+\THEOREM B\_OR\_DEF wordn\_bitops
+|- (!l. B_OR[]l = []) /\
+   (!x1 l1 l2. B_OR(CONS x1 l1)l2 = CONS(x1 \/ HD l2)(B_OR l1(TL l2)))
+\ENDTHEOREM
+\THEOREM B\_OR\_SYM wordn\_bitops
+|- !l1 l2. (LENGTH l1 = LENGTH l2) ==> (B_OR l1 l2 = B_OR l2 l1)
+\ENDTHEOREM
+\THEOREM B\_XOR\_ASSOC wordn\_bitops
+|- !l1 l2 l3.
+    (LENGTH l1 = LENGTH l2) /\ (LENGTH l2 = LENGTH l3) ==>
+    (B_XOR l1(B_XOR l2 l3) = B_XOR(B_XOR l1 l2)l3)
+\ENDTHEOREM
+\THEOREM B\_XOR\_DEF wordn\_bitops
+|- (!l. B_XOR[]l = []) /\
+   (!x1 l1 l2. B_XOR(CONS x1 l1)l2 = CONS~(x1 = HD l2)(B_XOR l1(TL l2)))
+\ENDTHEOREM
+\THEOREM B\_XOR\_SYM wordn\_bitops
+|- !l1 l2. (LENGTH l1 = LENGTH l2) ==> (B_XOR l1 l2 = B_XOR l2 l1)
+\ENDTHEOREM
+\THEOREM XOR\_ASSOC wordn\_bitops
+|- !x y z. ~(x = ~(y = z)) = ~(~(x = y) = z)
+\ENDTHEOREM
+\section{The theory {\tt wordn\_num}}
+\THEOREM BV wordn\_num
+|- !b. BV b = (b => SUC 0 | 0)
+\ENDTHEOREM
+\THEOREM VAL wordn\_num
+|- (VAL[] = 0) /\
+   (!b bs. VAL(CONS b bs) = ((BV b) * (2 EXP (LENGTH bs))) + (VAL bs))
+\ENDTHEOREM
+\THEOREM VAL\_LESS wordn\_num
+|- !l. (VAL l) < (2 EXP (LENGTH l))
+\ENDTHEOREM
+\THEOREM VAL\_LESS\_EQ wordn\_num
+|- !l. (VAL l) <= ((2 EXP (LENGTH l)) - 1)
+\ENDTHEOREM
+\THEOREM VAL\_ONE\_ONE wordn\_num
+|- !l1 l2. (LENGTH l1 = LENGTH l2) ==> (VAL l1 = VAL l2) ==> (l1 = l2)
+\ENDTHEOREM
+\THEOREM VAL\_ONTO wordn\_num
+|- !l. ?n. VAL l = n
+\ENDTHEOREM
+\THEOREM VAL\_ONTO\_LEMMA wordn\_num
+|- !m n. n < (2 EXP m) ==> (?l. (LENGTH l = m) /\ (n = VAL l))
+\ENDTHEOREM
+\THEOREM WORDN wordn\_num
+|- !n m. (LENGTH(WORDN n m) = n) /\ (VAL(WORDN n m) = m MOD (2 EXP n))
+\ENDTHEOREM
+\THEOREM WORDN\_0 wordn\_num
+|- (!m. WORDN 0 m = []) /\ (!n. WORDN(SUC n)0 = CONS F(WORDN n 0))
+\ENDTHEOREM
+\THEOREM WORDN\_MOD wordn\_num
+|- !m n. WORDN n m = WORDN n(m MOD (2 EXP n))
+\ENDTHEOREM
+\THEOREM WORDN\_VAL wordn\_num
+|- !l. WORDN(LENGTH l)(VAL l) = l
+\ENDTHEOREM

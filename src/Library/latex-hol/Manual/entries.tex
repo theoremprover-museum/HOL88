@@ -1,0 +1,510 @@
+\chapter{ML Functions in the {\tt latex-hol} Library}
+\input{entries-intro}
+\DOC{latex\_all\_theorems\_add\_to}
+
+\TYPE {\small\verb%latex_all_theorems_add_to : (string -> (string -> thm) -> string list -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_theorems_add_to%} except the assumptions
+of the theorem are also printed.
+See manual entry of {\small\verb%latex_theorems_to%} for detail of usage.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+{\small\verb%latex_theorems_to%}, {\small\verb%latex_theorems_add_to%}, {\small\verb%latex_all_theorems_add_to%},
+{\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_all\_theorems\_to}
+
+\TYPE {\small\verb%latex_all_theorems_to : (string -> (string -> thm) -> string list -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_theorems_to%} except the assumptions of
+the theorem are also printed.
+See manual entry of {\small\verb%latex_theorems_to%} for detail of usage.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+{\small\verb%latex_theorems_to%}, {\small\verb%latex_theorems_add_to%}, {\small\verb%latex_all_theorems_add_to%},
+{\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_all\_thm}
+
+\TYPE {\small\verb%latex_all_thm : (thm -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_thm%} except the assumptions of the theorem
+are also printed.
+
+\FAILURE
+Fails if the argument is not an expression evaluated to having
+type {\small\verb%thm%}.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+and {\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_all\_thm\_add\_to}
+
+\TYPE {\small\verb%latex_all_thm_add_to : (string -> thm -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_thm_add_to%} except the assumptions of the 
+theorem are also printed.
+
+\FAILURE
+Fails if the argument is not an expression evaluated to having
+type {\small\verb%thm%}.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_theory_to%},
+{\small\verb%latex_theorems_to%} and {\small\verb%latex_theorems_add_to%}.
+
+\ENDDOC
+\DOC{latex\_all\_thm\_to}
+
+\TYPE {\small\verb%latex_all_thm_to : (string -> thm -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_thm_to%} except the assumptions of the 
+theorem are also printed.
+
+\FAILURE
+Fails if the argument is not an expression evaluated to having
+type {\small\verb%thm%}.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_add_to%}, {\small\verb%latex_theory_to%},
+{\small\verb%latex_theorems_to%} and {\small\verb%latex_theorems_add_to%}.
+
+\ENDDOC
+\DOC{latex\_term}
+
+\TYPE {\small\verb%latex_term : (term -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ terms to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+The function {\small\verb%latex_term%} converts a \HOL\ term to \LaTeX\ format for
+typesetting it. All \LaTeX\ special characters are escaped or changed
+to a \LaTeX\ command which should produces the desired symbol.  All
+constants are tagged with the command {\small\verb%\CONST%}. Numbers in variable
+names are converted to subscripts. The
+result is written to the user's terminal. 
+For example,
+{\par\samepage\setseps\small
+\begin{verbatim}
+# latex_term "x1 /\ x2";;
+"x_{\small\verb%1%} \AND  x_{\small\verb%2%}"
+() : void
+
+# latex_term "F ==> anything";;
+"\CONST{\small\verb%F%} \IMP  anything"
+() : void
+
+\end{verbatim}
+}
+The output of this function can be incorporated into a \LaTeX\
+document. They are usually in one of the math modes. The macro file
+{\small\verb%holmacs.tex%} should be input before where the terms appear.
+
+\FAILURE
+Fails if the argument is not a term.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+and {\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_term\_add\_to}
+
+\TYPE {\small\verb%latex_term_add_to : (string -> term -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ terms to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_term%} except the result is appended
+to a file whose name is specified as the first argument. If the named
+file does not exist, it is created.
+
+\FAILURE
+Fails if the second argument is not a term.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}, {\small\verb%latex_theory_to%},
+{\small\verb%latex_theorems_to%} and {\small\verb%latex_theorems_add_to%}.
+
+\ENDDOC
+\DOC{latex\_thm\_to}
+
+\TYPE {\small\verb%latex_thm_to : (string -> thm -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ terms to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_thm%} except the result is written
+to a file whose name is specified as the first argument. If the named
+file exists, it is overwritten, otherwise, a file having the given
+name is created.
+
+\FAILURE
+Fails if the second argument is not an expression evaluated to having
+ type {\small\verb%thm%}.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%},
+{\small\verb%latex_theory_to%}, {\small\verb%latex_theorems_to%} and {\small\verb%latex_theorems_add_to%}.
+
+\ENDDOC
+\DOC{latex\_theorems\_add\_to}
+
+\TYPE {\small\verb%latex_theorems_add_to : (string -> (string -> thm) -> string list -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_theorems_to%} except the result is
+appended to the named file. If the file does not exists, it is
+created. See manual entry of {\small\verb%latex_theorems_to%} for detail of usage.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+{\small\verb%latex_theorems_to%} and {\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_theorems\_to}
+
+\TYPE {\small\verb%latex_theorems_to : (string -> (string -> thm) -> string list -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function converts a list of theorems into \LaTeX\ format. The
+result is written into a file whose name is specified as the first
+argument. The second argument is a function which maps a string to a
+theorem. It is used to fetch the theorem given its name as a string.
+The last argument is a list of strings which are the names of the
+theorems to be converted to \LaTeX. Each theorem in the output file is
+enclosed by two lines. The line before the theorem contains the string
+value of the assignable ML identifier {\small\verb%latex_thm_tag%} appended with
+the name string of the theorem. the line after the theorem contains
+the string value of the assignable ML identifier {\small\verb%latex_thm_end%}. The
+values of these ML identifiers can be changed by the user to suit his/her
+requirements. The example below creates a file named {\small\verb%foo.i%} which
+contains two theorems in \LaTeX\ format:
+{\par\samepage\setseps\small
+\begin{verbatim}
+# latex_theorems_to `foo.i` (\s. theorem `list` s)
+# [`LENGTH_NIL`; `LENGTH_MAP`];;
+() : void
+\end{verbatim}
+}
+Provided {\small\verb%latex_thm_tag%} has been bound to the string {\small\verb%`@t `%} and
+{\small\verb%latex_thm_end%} to {\small\verb%`@e`%}, the file {\small\verb%foo.i%} looks like:
+{\par\samepage\setseps\small
+\begin{verbatim}
+@t LENGTH_NIL
+\THM \FORALL l\DOT (\CONST{\small\verb%LENGTH%} \,l = \CONST{\small\verb%0%}) = (l = \NIL )
+@e
+@t LENGTH_MAP
+\THM \FORALL l \,f\DOT
+        \CONST{\small\verb%LENGTH%} \,(\CONST{\small\verb%MAP%} \,f \,l) = \CONST{\small\verb%LENGTH%} \,l
+@e
+\end{verbatim}
+}
+The purpose of this file is to create a file containing all the
+theorems required in a document. This file can then be processed
+automatically to incorporate the theorems into the document.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+{\small\verb%latex_theorems_add_to%} and {\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_theory\_to}
+
+\TYPE {\small\verb%latex_theory_to : (string -> bool -> string -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theories to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function converts a theory to \LaTeX\ format for typsetting. The
+result is written to a file whose name is specified as the first
+argument. If such a file already exists, it is overwritten,
+otherwise, a file having the given name is created. The second
+argument specifies whether the output can be included in a larger
+\LaTeX\ document. If it is {\small\verb%true%}, the output can be included in a
+document, otherwise, the ouput can be formatted as a standalone
+document. The last argument specifies the name of the theory to be
+processed. For example,
+{\par\samepage\setseps\small
+\begin{verbatim}
+# latex_theory_to `bool.tex` false `bool`;;
+() : void
+\end{verbatim}
+}
+\noindent creates a file named {\small\verb%bool.tex%} which can then be formatted using the
+command {\small\verb%latex bool%}. This will produce a pretty printed copy of the
+\HOL\ theory {\small\verb%bool%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+{\small\verb%latex_theorems_to%} and {\small\verb%latex_theorems_add_to%}.
+
+\ENDDOC
+\DOC{latex\_thm}
+
+\TYPE {\small\verb%latex_thm : (thm -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+The function {\small\verb%latex_thm%} converts a \HOL\ theorem to \LaTeX\ format for
+typesetting it. All \LaTeX\ special characters are escaped or changed
+to a \LaTeX\ command which should produces the desired symbol. All
+constants are tagged with the command {\small\verb%\CONST%}. Numbers in variable
+names are converted to subscripts. The
+result is written to the user's terminal. 
+For example,
+{\par\samepage\setseps\small
+\begin{verbatim}
+# latex_thm INDUCTION;;
+\THM \FORALL P\DOT
+        P \,\CONST{\small\verb%0%} \AND 
+        (\FORALL n\DOT P \,n \IMP  P \,(\CONST{\small\verb%SUC%} \,n)) \IMP 
+           (\FORALL n\DOT P \,n)
+() : void
+\end{verbatim}
+}
+The output of this function can be incorporated into a \LaTeX\
+document. It should be put in one of the \LaTeX\ math modes, i.e.,
+enclosed between a pair of {\small\verb%$%}s or {\small\verb%\[ ... \]%}. The macro file
+{\small\verb%holmacs.tex%} should be input before where the theorems appear.
+
+\FAILURE
+Fails if the argument is not an expression evaluated to having type {\small\verb%thm%}.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+and {\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_thm\_add\_to}
+
+\TYPE {\small\verb%latex_thm_add_to : (string -> thm -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_thm%} except the result is appended
+to a file whose name is specified as the first argument. If the named
+file does not exist, it is created.
+
+\FAILURE
+Fails if the second argument is not an expression evaluated to having
+ type {\small\verb%thm%}.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}, {\small\verb%latex_theory_to%},
+{\small\verb%latex_theorems_to%} and {\small\verb%latex_theorems_add_to%}.
+
+\ENDDOC
+\DOC{latex\_thm\_to}
+
+\TYPE {\small\verb%latex_thm_to : (string -> thm -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_thm%} except the result is written
+to a file whose name is specified as the first argument. If the named
+file exists, it is overwritten, otherwise, a file having the given
+name is created.
+
+\FAILURE
+Fails if the second argument is not an expression evaluated to having
+type {\small\verb%thm%}.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}, {\small\verb%latex_theory_to%},
+{\small\verb%latex_theorems_to%} and {\small\verb%latex_theorems_add_to%}.
+
+\ENDDOC
+\DOC{latex\_type}
+
+\TYPE {\small\verb%latex_type : (type -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ types to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+The function {\small\verb%latex_type%} converts a \HOL\ type to \LaTeX\ format for
+typesetting it. All \LaTeX\ special characters are escaped or changed
+to a \LaTeX\ command which should produces the desired symbol.  The
+result is written to the user's terminal. 
+For example,
+{\par\samepage\setseps\small
+\begin{verbatim}
+# latex_type(":* # **");;
+":* \# **"
+() : void
+
+# latex_type(type_of"SUC");;
+":num -> num"
+() : void
+\end{verbatim}
+}
+The output of this function can be incorporated into a \LaTeX\
+document. Since types are usually printed in {\small\verb%typewriter%} font, the
+above output can be put into a document as follows:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   The type of {\small\verb%SUC%} is {\small\verb%\tt ":num -> num"%} while a generic
+   pair has type {\small\verb%\tt ":* \# **"%}.
+\end{verbatim}
+}
+This will produces: The type of {\small\verb%SUC%} is {\small\verb%":num -> num"%} while a generic
+pair has type {\small\verb%":* \# **"%}.
+
+\FAILURE
+Fails if the argument is not a type.
+
+\SEEALSO
+{\small\verb%latex_type_to%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+and {\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_type\_add\_to}
+
+\TYPE {\small\verb%latex_type_add_to : (string -> type -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ types to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_type%} except the result is appended
+to a file whose name is specified as the first argument. If the named
+file does not exist, it is created.
+
+\FAILURE
+Fails if the second argument is not a type.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+and {\small\verb%latex_theory_to%}
+
+\ENDDOC
+\DOC{latex\_type\_to}
+
+\TYPE {\small\verb%latex_type_to : (string -> type -> void)%}\egroup
+
+\SYNOPSIS
+Translate \HOL\ types to \LaTeX\ format for typesetting.
+
+\DESCRIBE
+This function is similar to {\small\verb%latex_type%} except the result is written
+to a file whose name is specified as the first argument. If the named
+file exists, it is overwritten, otherwise, a file having the given
+name is created.
+
+\FAILURE
+Fails if the second argument is not a type.
+
+\SEEALSO
+{\small\verb%latex_type%}, {\small\verb%latex_type_add_to%},
+{\small\verb%latex_term%}, {\small\verb%latex_term_to%}, {\small\verb%latex_term_add_to%},
+{\small\verb%latex_thm%}, {\small\verb%latex_thm_to%}, {\small\verb%latex_thm_add_to%},
+{\small\verb%latex_all_thm%}, {\small\verb%latex_all_thm_to%}, {\small\verb%latex_all_thm_add_to%}
+and {\small\verb%latex_theory_to%}
+
+\ENDDOC

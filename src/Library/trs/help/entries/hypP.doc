@@ -1,0 +1,27 @@
+\DOC hypP
+
+\TYPE {hypP : (term list -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern for testing the hypotheses of a theorem (partial match).
+
+\LIBRARY trs
+
+\DESCRIBE
+{hypP ts} returns a pattern that matches a theorem if and only if the
+terms {ts}, when interpreted as patterns, match the hypotheses of the theorem.
+Each term pattern must match to a distinct hypothesis, but if there are more
+hypotheses than patterns, the match may still succeed. Variables in a term {t}
+match any term of a matching type. Type variables in {t} match any type. If a
+variable or type variable occurs more than once in the list {ts}, it must
+match to the same object at each occurrence. If not, the match will not
+succeed.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+hypF, conc, kind, thryname, thmname, Andalso, Orelse, Not, Where, BigAnd,
+BigOr.
+
+\ENDDOC

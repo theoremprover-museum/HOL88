@@ -1,0 +1,5 @@
+\THEOREM SER_OFFSET SEQ
+|- !f.
+    summable f ==>
+    (!k. (\n. f(n num_add k)) sums ((suminf f) - (Sum(0,k)f)))
+\ENDTHEOREM

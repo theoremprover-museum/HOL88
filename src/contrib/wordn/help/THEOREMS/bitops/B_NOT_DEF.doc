@@ -1,0 +1,3 @@
+\THEOREM B_NOT_DEF wordn_bitops
+|- (B_NOT[] = []) /\ (!x l. B_NOT(CONS x l) = CONS~x(B_NOT l))
+\ENDTHEOREM

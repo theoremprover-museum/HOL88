@@ -1,0 +1,4 @@
+\THEOREM OPEN_SUBOPEN TOPOLOGY
+|- !S top.
+    open top S = (!x. S x ==> (?P. P x /\ open top P /\ P subset S))
+\ENDTHEOREM

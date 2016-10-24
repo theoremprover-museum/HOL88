@@ -1,0 +1,10 @@
+\DOC change_window
+
+\TYPE {change_window : ((window -> window) -> window_stack -> window_stack)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

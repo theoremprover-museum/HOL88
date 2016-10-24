@@ -1,0 +1,22 @@
+\DOC is_alphanum
+
+\TYPE {is_alphanum : (string -> bool)}
+
+\SYNOPSIS
+Tests whether a character is alphanumeric.
+
+\DESCRIBE
+When given a string, which should be of length 1, {is_alphanum} returns
+{true} iff the character is alphanumeric. By default this means that it
+is an upper or lower case letter, a digit, a prime ({'}) or an
+underscore ({_}). However the definition can be changed using the function
+{new_alphanum}.
+
+\FAILURE
+Fails if the string has length greater than 1. Returns {false} for the
+null string ({``}).
+
+\SEEALSO
+ascii, ascii_code, is_letter, new_alphanum, new_letter.
+
+\ENDDOC

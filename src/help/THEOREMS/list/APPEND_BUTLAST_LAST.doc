@@ -1,0 +1,3 @@
+\THEOREM APPEND_BUTLAST_LAST list
+|- !l. ~(l = []) ==> (APPEND(BUTLAST l)[LAST l] = l)
+\ENDTHEOREM

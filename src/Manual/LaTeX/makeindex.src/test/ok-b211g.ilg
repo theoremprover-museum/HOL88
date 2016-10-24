@@ -1,0 +1,39 @@
+This is makeindex, portable version 2.11 [11-Sep-1991].
+Scanning input file b211g.idx....done (39 entries accepted, 0 rejected).
+Sorting entries....done (196 comparisons).
+Generating output file b211g.ind....
+## Warning (input = b211g.idx, line = 14; output = b211g.ind, line = 18):
+   -- Illegal range formation: starting & ending pages are of different types.
+
+## Warning (input = b211g.idx, line = 21; output = b211g.ind, line = 23):
+   -- Inconsistent page encapsulator bold within range.
+
+## Warning (input = b211g.idx, line = 23; output = b211g.ind, line = 28):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b211g.idx, line = 24; output = b211g.ind, line = 28):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b211g.idx, line = 25; output = b211g.ind, line = 28):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b211g.idx, line = 26; output = b211g.ind, line = 28):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b211g.idx, line = 27; output = b211g.ind, line = 28):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b211g.idx, line = 28; output = b211g.ind, line = 29):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b211g.idx, line = 32; output = b211g.ind, line = 33):
+   -- Inconsistent page encapsulator bold within range.
+
+## Warning (input = b211g.idx, line = 33; output = b211g.ind, line = 33):
+   -- Inconsistent page encapsulator bold within range.
+
+## Warning (input = b211g.idx, line = 36; output = b211g.ind, line = 37):
+   -- Illegal range formation: starting & ending pages are of different types.
+done (43 lines written, 11 warnings).
+Output written in b211g.ind.
+Transcript written in b211g.ilg.

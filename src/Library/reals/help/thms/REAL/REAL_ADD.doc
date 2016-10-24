@@ -1,0 +1,3 @@
+\THEOREM REAL_ADD REAL
+|- !m n. (& m) + (& n) = &(m num_add n)
+\ENDTHEOREM

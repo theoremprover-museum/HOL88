@@ -1,0 +1,3 @@
+\THEOREM SUM_SUMMABLE SEQ
+|- !f l. f sums l ==> summable f
+\ENDTHEOREM

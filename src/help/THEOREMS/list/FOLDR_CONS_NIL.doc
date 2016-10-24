@@ -1,0 +1,3 @@
+\THEOREM FOLDR_CONS_NIL list
+|- !l. FOLDR CONS[]l = l
+\ENDTHEOREM

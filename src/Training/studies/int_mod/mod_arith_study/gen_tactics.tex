@@ -1,0 +1,451 @@
+
+\DOC{SUPPOSE\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+SUPPOSE_TAC : term -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A tactic for adding an assumption to a goal, with the condition
+that the assumption be proved later.
+
+
+
+\DESCRIBE
+The tactic {\small\verb%SUPPOSE_TAC t%} when applied to a goal {\small\verb%([a1;...;an],Goal)%}
+returns the two subgoals
+\vspace*{-3mm}{\small\begin{verbatim}
+   ([t;a1;...;an],Goal)
+
+   ([a1;...;an],t)
+\end{verbatim}}\vspace*{-3mm}
+
+
+\FAILURE
+The tactic {\small\verb%SUPPOSE_TAC%} fails if it is not given a term of type {\small\verb%":bool"%}.
+
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   SUPPOSE_TAC "?n. INT n = MIN"
+\end{verbatim}}\vspace*{-3mm}
+\noindent when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["POS MIN"], "?x:num. Y = ((MAX times (INT x)) plus REM)")
+\end{verbatim}}\vspace*{-3mm}
+returns the two subgoals
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["?n. INT n = MIN"; "POS MIN"], "?x. Y = ((MAX times (INT x)) plus REM)")
+
+   (["POS MIN"], "?n. INT n = MIN")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Adding new assumptions to a goal to assists in its proof.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+REV_SUPPOSE_TAC, ASSUME_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{REV\_SUPPOSE\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+REV_SUPPOSE_TAC : term -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A tactic for adding an assumption to a goal, with the condition
+that the assumption be proved first.
+
+\DESCRIBE
+The tactic {\small\verb%REV_SUPPOSE_TAC t%} when applied to a goal {\small\verb%([a1;...;an],Goal)%}
+returns the two subgoals
+\vspace*{-3mm}{\small\begin{verbatim}
+   ([a1;...;an],t)
+
+   ([t;a1;...;an],Goal)
+\end{verbatim}}\vspace*{-3mm}
+\noindent The differnce between {\small\verb%REV_SUPPOSE_TAC%} and {\small\verb%SUPPOSE_TAC%} is the
+order in which they reurn the subgoals.
+
+\FAILURE
+The tactic {\small\verb%REV_SUPPOSE_TAC%} fails if it is not given a term of type
+{\small\verb%":bool"%}.
+
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   REV_SUPPOSE_TAC "?n. INT n = MIN"
+\end{verbatim}}\vspace*{-3mm}
+\noindent when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["POS MIN"], "?x:num. Y = ((MAX times x) plus REM)")
+\end{verbatim}}\vspace*{-3mm}
+returns the two subgoals
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["POS MIN"], "?n. INT n = MIN")
+
+   (["?n. INT n = MIN"; "POS MIN"], "?x. Y = ((MAX times x) plus REM)")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Adding new assumptions to a goal to assists in its proof.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+SUPPOSE_TAC, ASSUME_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\DOC{ASSUME\_LIST\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+ASSUME_LIST_TAC : thm list -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A tactic for addin a list of theorems as assumptions to a goal.
+
+\DESCRIBE
+The tactic {\small\verb%ASSUME_LIST_TAC [thm1;...;thmn]%} when applied to a goal
+{\small\verb%([a1;...;am],Goal)%} returns the subgoal {\small\verb%([a1;...;am;thm1;...;thmn],Goal)%}.
+If {\small\verb%hyp%} is a hypothesis of one of the theorems {\small\verb%thmi%}, and {\small\verb%hyp%} is
+not among the assumptions {\small\verb%[a1;...;am]%} then the subgoal
+{\small\verb%([a1;...;am;...],hyp)%} is also returned.
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   ASSUME_LIST_TAC [integer_as_GROUP;int_mod_as_GROUP]
+\end{verbatim}}\vspace*{-3mm}
+where
+\vspace*{-3mm}{\small\begin{verbatim}
+   integer_as_GROUP = |- GROUP((\N. T),$plus)
+   int_mod_as_GROUP = |- GROUP(int_mod n,plus_mod n)
+\end{verbatim}}\vspace*{-3mm}
+when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   ([],"ID(int_mod n,plus_mod n) = mod n(INT 0)")
+\end{verbatim}}\vspace*{-3mm}
+returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(int_mod n,plus_mod n)"; "GROUP((\N. T),$plus)"],
+    "ID(int_mod n,plus_mod n) = mod n(INT 0)")
+\end{verbatim}}\vspace*{-3mm}
+\USES
+Adding a collection of standard facts to the assumptions of a goal
+so that hypotheses of theorems used in proving the goal will already
+be among the assumptions.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+ASSUME_TAC, SUPPOSE_TAC, REV_SUPPOSE_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{NEW\_SUBST1\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+NEW_SUBST1_TAC : thm -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+Substitutes all occurrences of an expression within a goal for an
+equal expression.
+
+\DESCRIBE
+The tactic {\small\verb%NEW_SUBST1_TAC thm%} where {\small\verb%thm = |- exp1 = exp2%},
+when applied to a goal {\small\verb%([a1;...;an],P(exp1))%} where {\small\verb%exp1%} does not
+occur in {\small\verb%P%}, returns the subgoal {\small\verb%([a1;...;an],P(exp2))%}.  If {\small\verb%hyp%}
+is a hypothesis of {\small\verb%thm%} which is not among the assumptions
+{\small\verb%[a1,...,an]%}, then the subgoal {\small\verb%([a1,...,an],hyp)%} is also returned.
+
+\FAILURE
+The tactic {\small\verb%NEW_SUBST1_TAC%} fails if the conclusionof the theorem it
+is given is not an equation.
+
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   NEW_SUBST1_TAC
+    (UNDISCH (SPECL ["neg((Y times QUOT) plus REM)"; "X:integer"]
+      PLUS_UNIQUE_INV))
+\end{verbatim}}\vspace*{-3mm}
+where
+\vspace*{-3mm}{\small\begin{verbatim}
+   PLUS_UNIQUE_INV = |- !x u. (u plus x = INT 0) ==> (u = neg x)
+\end{verbatim}}\vspace*{-3mm}
+when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["X minus ((Y times QUOT) plus REM) = INT 0"],
+    "MIN times X = TOP plus (MIN times REM)")
+\end{verbatim}}\vspace*{-3mm}
+returns the subgoals
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["X plus (neg((Y times QUOT) plus REM)) = INT 0";
+     "X minus ((Y times QUOT) plus REM) = INT 0"],
+    "MIN times (neg(neg((Y times QUOT) plus REM))) =
+     TOP plus (MIN times REM)");
+
+   (["X minus ((Y times QUOT) plus REM) = INT 0"],
+    "X plus (neg((Y times QUOT) plus REM)) = INT 0")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+For use when you need to carefully control the rewritng of a goal.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+SUBST1_TAC, SUBST_TAC, PURE_ONCE_REWRITE_TAC, REWRIET_TAC, SUBST_MATCH_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{SUBST\_MATCH\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+SUBST_MATCH_TAC : thm -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+Rewriting with a single theorem, particularly when the rewrite theorem
+has hypotheses.
+
+\DESCRIBE
+The tactic {\small\verb%SUBST_MATCH_TAC thm%} strips the theorem {\small\verb%thm%} to find an
+equation {\small\verb%lhs = rhs%} then looks for a match bewteen {\small\verb%lhs%} and the
+subterms of the goal.  Once a match is found the thmeorem is
+instantiated to the particular instance found, and {\small\verb%NEW_SUBST1_TAC%}
+is used to write the goal with the result.
+
+
+\FAILURE
+The tactic {\small\verb%SUBST_MATCH_TAC thm%} will fail if either {\small\verb%thm%} does not
+strip to and equation, or if no match is found with the left hand side
+of the equation.
+
+\EXAMPLE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   SUBST_MATCH_TAC (SYM (UNDISCH SBGP_ID_GP_ID))
+\end{verbatim}}\vspace*{-3mm}
+where 
+\vspace*{-3mm}{\small\begin{verbatim}
+   SBGP_ID_GP_ID = |- SUBGROUP(G,prod)H ==> (ID(H,prod) = ID(G,prod))
+\end{verbatim}}\vspace*{-3mm}
+when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["SUBGROUP((\N. T),$plus)H"],"H(ID((\N. T),$plus))")
+\end{verbatim}}\vspace*{-3mm}
+returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["SUBGROUP((\N. T),$plus)H"],"H(ID(H,$plus))")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Rewriting with a theorem that has hypotheses tha need to be
+instantiated by the matching of the rewriting.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+NEW_SUBST1_TAC, PURE_ONCE_REWRITE_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{MP\_IMP\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+MP_IMP_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+The tactic {\small\verb%MP_IMP_TAC thm%} uses modus ponens with the theorem {\small\verb%thm%}
+to reduce a goal.
+
+\DESCRIBE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   MP_IMP_TAC thm
+\end{verbatim}}\vspace*{-3mm}
+where {\small\verb%thm%} is a theorem of the form {\small\verb%|- A ==> B%}, when applied to the
+goal {\small\verb%([a1;...;an],B)%} returns the subgoal {\small\verb%([a1;...;an],A)%}.  If {\small\verb%hyp%}
+is a hypothesis of {\small\verb%thm%} which does not occor among the assumptions
+{\small\verb%[a1;...;an]%}, then the subgoal {\small\verb%([a1;...;an],hyp)%} is also returned.
+
+
+\FAILURE
+The tactic {\small\verb%MP_IMP_TAC thm%} fails if either the conclusion of {\small\verb%thm%} is
+not an implication, or if the consequent of the implication is not the
+statment of the goal.
+
+
+\EXAMPLE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   MP_IMP_TAC 
+    (SPECL ["N:integer";"N':integer";"N' times (INT(SUC n))"] TRANSIT)
+\end{verbatim}}\vspace*{-3mm}
+where
+\vspace*{-3mm}{\small\begin{verbatim}
+   TRANSIT = |- !M N P. M below N /\ N below P ==> M below P
+\end{verbatim}}\vspace*{-3mm}
+when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["N below N'"],"N below (N' times (INT(SUC n)))")
+\end{verbatim}}\vspace*{-3mm}
+returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["N below N'"], "N below N' /\ N' below (N' times (INT(SUC n)))")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Using a theorem to reduce a goal using modus ponens.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+MATCH_MP_IMP_TAC, REDUCE_TAC, REST_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{MATCH\_MP\_IMP\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+MATCH_MP_IMP_TAC : thm -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+Reduces a goal using modus ponens and a theorem which is an implication
+whose antecedent matches the statement of the goal.
+
+\DESCRIBE
+The tactic {\small\verb%MATCH_IMP_IMP_TAC thm%} where the statement of {\small\verb%thm%} is a
+(possibly universally quantified) implication {\small\verb%A ==> B%}, when applied to
+a goal {\small\verb%([a1;...;an],B')%}, where {\small\verb%B'%} is an instance of {\small\verb%B%}, returns the
+subgoal {\small\verb%([a1;...;an],A')%} where {\small\verb%A'%} is the corresponding instance of {\small\verb%A%}.
+If {\small\verb%thm%} has a hypothesis {\small\verb%hyp%} which does not occur among the assumptions
+{\small\verb%[a1;...;an]%}, then the subgoal {\small\verb%([a1;...;an],hyp)%} is also returned.
+
+\FAILURE
+The tactic {\small\verb%MATCH_MP_IMP_TAC thm%} fails if either the conclusion of
+{\small\verb%thm%} is not a (possibliy universally quantified) implication, or if
+the consequent of the implication does not match the statment of the goal.
+
+
+\EXAMPLE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   MATCH_MP_IMP_TAC INT_SBGP_NORMAL
+\end{verbatim}}\vspace*{-3mm}
+where
+\vspace*{-3mm}{\small\begin{verbatim}
+   INT_SUBGROUP_NORMAL =
+     |- !H. SUBGROUP((\N. T),$plus)H ==> NORMAL((\N. T),$plus)H
+\end{verbatim}}\vspace*{-3mm}
+when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   ([],"NORMAL((\N. T),$plus)(int_mult_set n)")
+\end{verbatim}}\vspace*{-3mm}
+returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+   ([],"SUBGROUP((\N. T),$plus)(int_mult_set n)")
+\end{verbatim}}\vspace*{-3mm}
+
+
+\USES
+Reducing goals using modus ponens with a theorem as a template.
+{\small\verb%MATCH_MP_IMP_TAC%} allows theorems to act as specialized tactics.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+MP_IMP_TAC, REDUCE_TAC, RES_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{REDUCE\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+REDUCE_TAC : thm list -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+Repeated reduces a goal using modus ponens and the given list of theorems.
+
+\DESCRIBE
+The tactic {\small\verb%REDUCE_TAC thm_list%} repeatedly reduces a goal by
+stripping and using modus ponens with any theorem from {\small\verb%thm_list%}
+which is an implication and whose implication conclusion matches the
+goal statement.  It also solves those subgoals which match any of the
+given theorems, or which are included among the assumptions.
+
+\EXAMPLE
+Then tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   REDUCE_TAC [CLOSURE; INV_CLOSURE]
+\end{verbatim}}\vspace*{-3mm}
+where
+\vspace*{-3mm}{\small\begin{verbatim}
+  CLOSURE = |- GROUP(G,prod) ==> (!x y. G x /\ G y ==> G(prod x y))
+  INV_LEMMA =
+    |- GROUP(G,prod) ==>
+        (!x. G x ==>
+             (prod(INV(G,prod)x)x = ID(G,prod)) /\
+             (prod x(INV(G,prod)x) = ID(G,prod)))
+\end{verbatim}}\vspace*{-3mm}
+when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(Mat,comb)"; "Mat Y"; "Mat X"],
+    "Mat(INV(Mat,comb)(comb X(INV(Mat,comb)Y)))")
+\end{verbatim}}\vspace*{-3mm}
+solves the goal.
+
+\USES
+The tactic {\small\verb%REDUCE_TAC%} when used with a collection theorems that
+act as reductions for a theory can finish routine goals for the thoery.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+MP_IMP_TAC, MATCH_MP_IMP_TAC, ASM_REWRITE_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{EXT\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+EXT_TAC : term -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+The tactic {\small\verb%EXT_TAC%} reduces a goal of showing that two functions are
+equal to showing that they are equal on all values.
+
+\DESCRIBE
+The tactic {\small\verb%EXT_TAC "x"%} when aplied to a goal {\small\verb%[a1;...;an],"f = g"%},
+where {\small\verb%x%} is a variable of the same type as the common domain of {\small\verb%f%}
+and {\small\verb%g%}, returns the subgoal {\small\verb%([a1;...;an],"!x. f x = g x")%}.
+
+\FAILURE
+The tactic {\small\verb%EXT_TAC var%} fails if {\small\verb%var%} is not a term variable, or if
+the tactic is applied to a goal that is not the equation of two functions
+with common domain type the same as the type of {\small\verb%var%}.
+
+\EXAMPLE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   EXT_TAC "N:integer"
+\end{verbatim}}\vspace*{-3mm}
+when applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   ([],"Mult = \x. ?m. (x = m times c)")
+\end{verbatim}}\vspace*{-3mm}
+returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+([], "!N. Mult N = (\x. ?m. x = m times c)N")
+\end{verbatim}}\vspace*{-3mm}
+which then can be further reduced by applications of {\small\verb%BETA_TAC%},
+{\small\verb%GEN_TAC%}, and {\small\verb%EQ_TAC%}.
+
+\USES
+Reducing the problem of showing that two functions are equal to an
+elementwise argument.
+
+\ENDDOC
+
+
+

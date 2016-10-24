@@ -1,0 +1,28 @@
+\DOC implode
+
+\TYPE {implode : (string list -> string)}
+
+\SYNOPSIS
+Converts a list of single-character strings into one string.
+
+\DESCRIBE
+{implode [s1;...;sn]} returns the string formed by concatenating the
+single-character strings {s1 ... sn}. If {n} is zero (the list is empty),
+then the empty string is returned.
+
+\FAILURE
+Fails if any of the strings in the argument list are null or longer than one
+character.
+
+\EXAMPLE
+{
+#implode [`e`;`x`;`a`;`m`;`p`;`l`;`e`];;
+`example` : string
+
+#implode [`ex`;`a`;`mpl`;``;`e`];;
+evaluation failed     implode
+}
+\SEEALSO
+explode, concat, concatl.
+
+\ENDDOC

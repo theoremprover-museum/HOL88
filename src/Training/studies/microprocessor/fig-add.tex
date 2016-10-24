@@ -1,0 +1,33 @@
+% ===== ADD Instruction Timing ========================================
+% ======================================================================
+\setlength{\unitlength}{1mm}
+\begin{picture}(135,38)(0,0)
+  \put(83,33){\vector(-1,0){31}}
+  \put(95,33){\vector(1,0){30}}
+  \put(89,33){\makebox(0,0)[c]{ADD}}
+  \put(50,33){\makebox(0,0)[c]{\verb"u"}}
+  \put(130,33){\makebox(0,0)[c]{\verb"u"$+$\verb"1"}}
+  \put(40,28){\makebox(0,0)[r]{programming level:}}
+  \put(40,19){\makebox(0,0)[r]{\verb"f":}}
+  \put(45,28){\line(1,0){90}}
+  \put(50,28){\makebox(0,0)[c]{$\bullet$}}
+  \put(50,26){\thicklines {\vector(0,-1){14}}}
+  \put(130,28){\makebox(0,0)[c]{$\bullet$}}
+  \put(130,26){\thicklines {\vector(0,-1){14}}}
+  \put(40,10){\makebox(0,0)[r]{microprogramming level:}}
+  \put(45,10){\line(1,0){90}}
+  \multiput(50,10)(10,0){9}{\makebox(0,0)[c]{$\bullet$}}
+  \put(50,5){\makebox(0,0)[c]{\verb"t"}}
+  \put(130,5){\makebox(0,0)[c]{\verb"t"$+$\verb"8"}}
+  \put(40,0){\makebox(0,0)[r]{\verb"mpc":}}
+  \put(50,0){\makebox(0,0)[c]{\verb"0"}}
+  \put(60,0){\makebox(0,0)[c]{\verb"2"}}
+  \put(70,0){\makebox(0,0)[c]{\verb"3"}}
+  \put(80,0){\makebox(0,0)[c]{\verb"6"}}
+  \put(90,0){\makebox(0,0)[c]{\verb"13"}}
+  \put(100,0){\makebox(0,0)[c]{\verb"15"}}
+  \put(110,0){\makebox(0,0)[c]{\verb"11"}}
+  \put(120,0){\makebox(0,0)[c]{\verb"12"}}
+  \put(130,0){\makebox(0,0)[c]{\verb"0"}}
+
+\end{picture}

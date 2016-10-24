@@ -1,0 +1,65 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: tooltool							%
+%									%
+% DESCRIPTION: SunView HOL interface tool (using tooltool)		%
+%									%
+% AUTHOR: David Shepherd						%
+%									%
+% ADDRESS: INMOS Ltd.							%
+%	   1000 Aztec West						%
+%          Almondsbury							%
+%          Bristol, BS6 6JG						%
+%	   England.							%
+%									%
+%	   email: des@uk.co.inmos					%
+%									%
+% DATE: 90.04.11							%
+% --------------------------------------------------------------------- %
+
+The files on contrib/tooltool are the sources for tooltool supplied to me 
+by David Shepherd of Inmos. His HOL interface is hol.tt (I have changed
+iserif.r.14 to serif.14 as SRI does not have iserif fonts).
+
+Here is a message from David Shepherd documenting the interface:
+
+From: David Shepherd <des@inmos.co.uk>
+Date: Fri, 12 May 89 13:29:36 BST
+To: mjcg@sri-cam
+Subject: Re: tooltool 
+
+Once you've made tooltool you can run my mini hol interface by
+
+tooltool -f hol.tt
+
+you may need to add a directory path to the "application" entry in hol.tt.
+
+After you have done this you will get a window with hol in it with a small
+window below with 5 "buttons" and a % symbol.
+
+If you move into this window and type the text will come up next to the %
+sign.  pressing return automatically sends the line to hol.
+
+Pressing the left mouse button on the "goal" button sets the goal to the
+text line contents (n.b. no need for "s round the term).
+
+Pressing the left mouse button on the "expand" button expands the current
+goal with the text line.
+
+the backup and rotate buttons do what you would expect and the exit button
+stops the tool.
+
+Example. (<xxxx> means pressing left mouse button on button "xxxx")
+
+! (x:*) . ? y . x=y <goal>
+STRIP_TAC <expand>
+EXISTS_TAC "y:*" <expand>
+<backup>
+EXISTS_TAC "x:*" <expand>
+REWRITE_TAC[] <expand>
+
+
+david
+
+
+MJCG
+12 May 1989

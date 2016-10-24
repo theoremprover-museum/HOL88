@@ -1,0 +1,31 @@
+\DOC string_EQ_CONV
+
+\TYPE {string_EQ_CONV : conv}
+
+\SYNOPSIS
+Decision-procedure for equality of string constants.
+
+\DESCRIBE 
+The conversion {string_EQ_CONV} expects its term argument to be an equation
+between character string constants (for example: {"`a`"}, {"`b`"}, {"`abc`"},
+etc).  Given such a term, the conversion {string_EQ_CONV} returns:
+{
+   |- (lhs = rhs) = T
+}
+\noindent if {lhs} and {rhs} are identical character strings.  Otherwise, the
+conversion returns:
+{
+   |- (lhs = rhs) = F
+}
+\FAILURE
+Fails if applied to a term that is not of the form specified above.
+
+\EXAMPLE
+{
+#string_EQ_CONV "`aax` = `aay`";;
+|- (`aax` = `aay`) = F
+}
+\SEEALSO
+ascii_EQ_CONV.
+
+\ENDDOC

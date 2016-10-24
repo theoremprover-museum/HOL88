@@ -1,0 +1,3 @@
+\THEOREM SEG_LENGTH_ID list
+|- !l. SEG(LENGTH l)0 l = l
+\ENDTHEOREM

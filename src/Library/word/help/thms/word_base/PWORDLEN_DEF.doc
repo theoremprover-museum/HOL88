@@ -1,0 +1,3 @@
+\THEOREM PWORDLEN_DEF word_base
+|- !n l. PWORDLEN n(WORD l) = (n = LENGTH l)
+\ENDTHEOREM

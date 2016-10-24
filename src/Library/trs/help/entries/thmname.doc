@@ -1,0 +1,24 @@
+\DOC thmname
+
+\TYPE {thmname : (string -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern for testing the name of a theorem.
+
+\LIBRARY trs
+
+\DESCRIBE
+{thmname s} returns a pattern that matches a theorem if and only if the
+string {s} when interpreted as a pattern for names matches the name of the
+theorem. The string is used as a pattern in which {*} is interpreted as
+`match any number of characters (including none)' and {?} is interpreted as
+`match any single character'. All other characters in the string are taken
+literally.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+thryname, kind, conc, hypP, hypF, Andalso, Orelse, Not, Where, BigAnd, BigOr.
+
+\ENDDOC

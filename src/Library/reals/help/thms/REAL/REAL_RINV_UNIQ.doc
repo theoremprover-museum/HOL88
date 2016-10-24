@@ -1,0 +1,3 @@
+\THEOREM REAL_RINV_UNIQ REAL
+|- !x y. (x * y = & 1) ==> (y = inv x)
+\ENDTHEOREM

@@ -1,0 +1,97 @@
+
+\chapter{Errors and debugging\label{debugging}}
+
+There are three places at which errors can occur:
+
+\begin{itemize}
+\item{during compilation}
+\item{on loading the generated code}
+\item{while using the printer}
+\end{itemize}
+
+\noindent
+In any of the three, the error could be due to a bug in the pretty-printer, but
+it is much more likely that it is due to a mistake by the user. If the
+exception raised by \ML\ is no more than the name of a system function, then it
+could well be a bug.
+
+Unfortunately, not all errors are detected at compile time. There is room for
+improvement here, but allowing \ML\ functions to be used within the
+pretty-printing language prohibits total error detection at compile time. It is
+also worth noting that rules can be written which cause non-terminating
+looping.
+
+
+\section{Compiler errors}
+
+Errors during compilation are of two kinds. The compiler may fail to parse
+the source code. In this case the error message specifies the kind of symbol
+the compiler was expecting and the kind of symbol it received. In addition,
+the compiler displays a few lines of the source file following the point at
+which the failure occurred. This should facilitate the location of the fault.
+
+The second kind of error occurs after the parse has completed successfully.
+At this point the compiler is converting the parse-tree into \ML. Faults at
+this point are due to additional restrictions not being met, and the error
+messages are correspondingly {\it ad hoc}. The part of the parse-tree under
+conversion is printed in the pretty-printing language. This may or may not be
+helpful, depending on the size of the tree.
+
+
+\section{Errors on loading the compiled code}
+
+Errors can occur when the generated \ML\ code is loaded. These are normally
+due to blocks of \ML\ code that have been used within the source code. The
+blocks of \ML\ code are not checked at compile time. They are copied directly
+from the source file to the destination file of generated code. Errors may
+occur due to the blocks of \ML\ code being syntactically malformed or failing
+to type-check.
+
+The error message produced by \ML\ refers to the generated code. In most
+circumstances the message should be equally applicable to the block of \ML\
+code in the source file. So, normal debugging techniques for \ML\ apply. If
+the message does not seem to correspond to the block of \ML\ code in the
+source file, it may be useful to examine the file of generated code.
+
+
+\section{Run-time errors}
+
+Errors at run-time are by far the most serious, for they may not show up until
+specific input is given to the printer. The most common errors of this kind
+are use of uninitialised parameters and reference to unknown metavariables.
+The latter are due to metavariables appearing in the format of a rule, but not
+in the pattern. Errors also occur if a metavariable is used in a place
+inappropriate for the value it is bound to. An example of this is an attempt
+to compare a string with a metavariable that is bound to a tree rather than a
+node-name.
+
+Use of negative indentations in formats may cause text to overflow the left
+margin, and an exception to be raised. Any user defined function may also
+cause a run-time error.
+
+The printing functions have been designed to trap exceptions and to print
+{`}{\small\verb%*error*%}{'}. This does not indicate what caused the error,
+but it may give some indication of where the error occurred. However, this is
+not the main reason for trapping exceptions.
+
+The \ML\ directive \ml{top\_print} installs a function of type
+{\small\verb%(%}$x$~{\small\verb%->%}~{\small\verb%void)%} as a printer for
+any object of type $x$. If an exception is raised within the function, it does
+not appear at the top-level of \ML. Instead, an obscure Lisp error is
+produced. Since the pretty-printing functions are normally used with
+\ml{top\_print}, it is best to avoid raising exceptions. For this reason the
+printing functions display {`}{\small\verb%*error*%}{'} instead.
+
+To find out what caused the error, either \ml{pretty\_print} or \ml{pp}
+should be used explicitly (i.e.~not through \ml{top\_print}) on the data
+which caused the error, but with the debugging option set. With debugging set,
+the functions allow errors to reach top-level. Care should be taken to exactly
+duplicate the arguments to the print functions (subject to the remarks below).
+
+The debugging option is set by adding {\small\verb%DEBUG%} to the parameter
+list. It does not matter what number is assigned to it. So, a call to the
+printer with debugging set might look like this:
+
+\begin{small}\begin{verbatim}
+   pp my_rules_fun `my_context` [(`DEBUG`,0)] (my_converter test_data)
+\end{verbatim}\end{small}

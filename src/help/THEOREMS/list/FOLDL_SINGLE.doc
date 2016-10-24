@@ -1,0 +1,3 @@
+\THEOREM FOLDL_SINGLE list
+|- !f e x. FOLDL f e[x] = f e x
+\ENDTHEOREM

@@ -1,0 +1,57 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: latex-hol						|
+|									|
+| DESCRIPTION   : A translator converting HOL tex to LaTeX source.	|
+|									|
+| AUTHOR	: Wai Wong						|
+| DATE		: 15 May 1990						|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+	filters.ml       functions for converting special characters into \LaTeX\ commands
+	formaters.ml     user interface of the HOL-to-\LaTeX\ translator  
+	hol_trees.ml     functions for converting HOL text into parser tree
+	holmac.tex       a set of \LaTeX\ macros for HOL
+	latex-hol.ml     functions for loading the library
+	latex_sets.pp    translation rules for the {\tt sets} library 
+	latex_term.pp    translation rules for HOL terms
+	latex_thm.pp     translation rules for HOL theorems
+	latex_type.pp    translation rules for HOL types
+	precedence.ml    definitions of precedence of HOL operators
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clobber" if pp code has to be recompiled, or otherwise
+      type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) Put the pathname of this library on the internal hol search path.
+
+   2) To load the library, load the file `latex-hol` or simply
+	load_library`latex-hol`;;.
+
+   3) Put the macro file holmac.tex to a directory in your LaTeX macro
+	 search path, usually /usr/local/lib/tex/inputs or ~/lib/tex/inputs
+
+See userguide for more detailed information.

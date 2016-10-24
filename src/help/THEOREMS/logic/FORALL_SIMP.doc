@@ -1,0 +1,4 @@
+\THEOREM FORALL_SIMP \none
+|- !t. (!x. t) = t
+\ENDTHEOREM
+

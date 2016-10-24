@@ -1,0 +1,9 @@
+\DOC pop_proofs
+
+\TYPE {pop_proofs : (subgoals list -> subgoals list)}
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC

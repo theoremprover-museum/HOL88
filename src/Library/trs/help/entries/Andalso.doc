@@ -1,0 +1,17 @@
+\DOC Andalso
+
+\TYPE {$Andalso : ((thmpattern # thmpattern) -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern that matches if and only if both the argument patterns
+match.
+
+\LIBRARY trs
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+Orelse, Not, Where, BigAnd, BigOr, kind, thryname, thmname, conc, hypP, hypF.
+
+\ENDDOC

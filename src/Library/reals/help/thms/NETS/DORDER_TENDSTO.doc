@@ -1,0 +1,3 @@
+\THEOREM DORDER_TENDSTO NETS
+|- !m x. dorder(tendsto(m,x))
+\ENDTHEOREM

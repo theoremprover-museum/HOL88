@@ -1,0 +1,42 @@
+\DOC show_the_tactic
+
+\TYPE {show_the_tactic : (string -> void)}
+
+\SYNOPSIS
+
+\DESCRIBE
+Prints out the tactic-tree currently attached to the proof named by
+the argument. The tactics at nodes which still haven't been explored
+are indicated by {----}.
+
+\FAILURE
+Fails if there is no proof tree with the given name.
+
+\USES
+After a proof is completed, {show_the_tactic} can be run to obtain the
+complete tactic which can then be stored in a log file for later
+re-runs.
+
+\EXAMPLE
+
+{
+
+# show_the_tactic `myproof` ;;
+
+(REPEAT STRIP_TAC)
+THEN EQ_TAC
+     THENL
+     [ STRIP_TAC
+       THEN (ASM_REWRITE_TAC []);
+       STRIP_TAC
+       THEN (ASM_REWRITE_TAC []) ]
+
+() : void
+}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs,
+show_all_subgoals, show_tac, subgoal_tac, top_goal.
+
+\ENDDOC

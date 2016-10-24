@@ -1,0 +1,41 @@
+\DOC prove_bit_op_thms
+
+\TYPE {prove_bit_op_thms : (int -> thm list)}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Proves some basic theorems about the bitwise logical operators.
+
+\DESCRIBE
+{prove_bit_op_thms} takes a single integer as its argument and returns
+a list of theorems about the basic properties of the bitwise logical
+operators. These theorems are the self-inversion of the {NOTn}
+operator, the symmetry and associativity of the {ANDn}, {ORn} and
+{XORn} operators. They are also stored in the current theory under the
+names {NOTn}, {ANDn_SYM}, {ORn_SYM}, {XORn_SYM}, {ANDn_ASSOC},
+{ORn_ASSOC} and {XORn_ASSOC}.
+
+\FAILURE
+Fails if either it is not in draft mode, or any of the operators has
+not been defined.
+
+\EXAMPLE
+{prove_bit_op_thms 3} returns the following list of theorems and
+stores them in the current theory under the names {NOT3},
+{AND3_SYM}, {OR3_SYM}, {XOR3_SYM}, {AND3_ASSOC}, {OR3_ASSOC} and
+{XOR3_ASSOC}, respectively.
+{
+   [ |- !w. NOT3(NOT3 w) = w;
+     |- !w1 w2. w1 AND3 w2 = w2 AND3 w1;
+     |- !w1 w2. w1 OR3 w2 = w2 OR3 w1;
+     |- !w1 w2. w1 XOR3 w2 = w2 XOR3 w1;
+     |- !w1 w2 w3. w1 AND3 (w2 AND3 w3) = (w1 AND3 w2) AND3 w3;
+     |- !w1 w2 w3. w1 OR3 (w2 OR3 w3) = (w1 OR3 w2) OR3 w3;
+     |- !w1 w2 w3. w1 XOR3 (w2 XOR3 w3) = (w1 XOR3 w2) XOR3 w3]
+}
+
+\SEEALSO
+{define_wordn_bit_ops}, {wordn_bit_ops}.
+
+\ENDDOC

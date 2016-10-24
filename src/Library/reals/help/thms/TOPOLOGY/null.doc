@@ -1,0 +1,3 @@
+\THEOREM null TOPOLOGY
+|- null = (\x. F)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM BASEN_EMPTY_EQ_0 numeral
+|- !r l. 1 < r ==> IS_NORMALIZED l ==> ((BASEN r l = 0) = (l = []))
+\ENDTHEOREM

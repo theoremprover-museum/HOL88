@@ -1,0 +1,3 @@
+\THEOREM SUM_TWO REAL
+|- !f n p. (Sum(0,n)f) + (Sum(n,p)f) = Sum(0,n num_add p)f
+\ENDTHEOREM

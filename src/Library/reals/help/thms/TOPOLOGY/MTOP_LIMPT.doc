@@ -1,0 +1,5 @@
+\THEOREM MTOP_LIMPT TOPOLOGY
+|- !m x S.
+    limpt(mtop m)x S =
+    (!e. (& 0) < e ==> (?y. ~(x = y) /\ S y /\ (dist m(x,y)) < e))
+\ENDTHEOREM

@@ -1,0 +1,4 @@
+\THEOREM sum REAL
+|- (!n f. sum n 0 f = & 0) /\
+   (!n m f. sum n(SUC m)f = (sum n m f) + (f(n num_add m)))
+\ENDTHEOREM

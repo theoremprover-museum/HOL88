@@ -1,0 +1,68 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: string						|
+|									|
+| DESCRIPTION   : definition of logical types for ascii character codes |
+|		  and ascii character strings.				|
+|									|
+| AUTHOR	: T Melham						|
+| DATE		: 88.04.20						|
+|									|
+| MODIFIED      : M. Gordon						|
+| DATE		: 23 March 89						|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    mk_ascii.ml	       creates the theory of 8-bit ascii character codes
+
+    mk_string.ml       creates the theory of character strings
+
+    ascii.ml	       defines ascii_EQ_CONV, a conversion for inferring
+	  	       the equality (or otherwise) of ascii character codes.
+
+    stringconv.ml      axiom scheme string_CONV for string constants.
+
+    string_rules.ml    defines string_EQ_CONV, a conversion for inferring
+	  	       the equality (or otherwise) of character strings.
+
+    string.ml          loads the library into hol.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) EITHER copy the files *_ml.o and *.th  in this library into your
+      current working directory, OR put the pathname of this library on
+      the internal hol search path.
+
+   2) To use strings, make "string.th" a parent of your theory.  E.g.
+      by executing 
+
+		new_parent `string`;;
+
+      in draft mode.
+
+   3) To load the library, load the file `string`.
+
+
+

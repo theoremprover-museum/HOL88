@@ -1,0 +1,28 @@
+\DOC min
+
+\TYPE {min : (int list -> int)}
+
+\SYNOPSIS
+Function to find the minimum element of a list of integers.
+
+\LIBRARY prettyp
+
+\FAILURE
+Fails if the argument is an empty list.
+
+\EXAMPLE
+{
+#min [2;1;3;5;3;4];;
+1 : int
+
+#min [];;
+evaluation failed     min -- null list given
+}
+\COMMENTS
+{min} is an internal function of the `{prettyp}' library, but is of general
+use.
+
+\SEEALSO
+max.
+
+\ENDDOC

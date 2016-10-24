@@ -1,0 +1,47 @@
+\DOC add_weak
+
+\TYPE {add_weak : (thm -> void)}
+
+\SYNOPSIS
+Adds a weakening rule to the window system tables.
+
+\LIBRARY window
+
+\DESCRIBE
+The window inference system can compensate for a missing window rule
+in its database by substituting a rule which preserves a relation which
+is stronger than the one the user wanted to preserve.
+To do this the system must know how to weaken a theorem where
+two terms are related by the stronger relation to a theorem where the two
+terms are related by the required relation.
+
+The system already knows that equality is stronger than any reflexive relation,
+and how to weaken a theorem which relates terms by equality to a theorem which
+relates the terms by any reflexive relation.
+Suppose you would like the system to know that the relation {"S"} is 
+stronger than the relation {"R"}.
+First you should define the following theorem:
+{
+   WEAK_SR |- !x y. (x S y) ==> (x R y)
+}
+\noindent Next you add this theorem with the command
+{add_weak WEAK_SR}.
+From this information system maintains lists of which relationships may be
+substituted for which.
+Suppose we had added to the system rules for weakening {"S"} to {"R"} and {"R"}
+to {"Q"}, the system can infer that both {"R"} and {"S"} can be used as
+substitutes for {"Q"}, but {"R"} is preferable since it is the weaker of the
+two relations.
+
+\FAILURE
+{add_weak} will fail if you try to add a rule which duplicates information
+already stored or inferred by the system.
+{add_weak} will fail if you try to add a rule which would create a cycle
+in the list of possible substitutes for a relation.
+{add_weak} will fail if you try to add a rule which would create a branch
+in the list of possible substitutes for a relation.
+
+\SEEALSO
+add_relation.
+
+\ENDDOC

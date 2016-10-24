@@ -1,0 +1,44 @@
+\documentstyle[12pt,fleqn,
+               ../../../Manual/LaTeX/alltt,
+               ../../../Manual/LaTeX/layout]{book}
+
+
+\input{../../../Manual/LaTeX/commands}
+\input{../../../Manual/LaTeX/ref-macros}
+
+\begin{document}
+
+\begin{titlepage}
+
+\ 
+\vskip 3in
+
+{\Huge \bf A New Subgoal Package for HOL}
+
+\begin{flushright}
+{\Large {\bf Sara Kalvala \footnote{current e-mail: kalvala@cs.ucdavis.edu}} \\
+University of Cambridge, Computer Lab}
+
+\end{flushright}
+
+\end{titlepage}
+
+\thispagestyle{empty}
+\mbox{}
+
+\newpage
+
+\tableofcontents
+
+   \pagenumbering{arabic}		 % arabic page numbers
+   \setcounter{page}{1}		         % start at page 1
+
+\chapter{ Description}
+
+\include{prooftree}
+
+\chapter{Entries}
+
+\include{entries}
+
+\end{document}

@@ -1,0 +1,3 @@
+\THEOREM REAL_MUL_LZERO REAL
+|- !x. (& 0) * x = & 0
+\ENDTHEOREM

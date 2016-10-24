@@ -1,0 +1,5 @@
+\THEOREM ABS_REP_THM BASIC-HOL
+|- !P.
+    (?rep. TYPE_DEFINITION P rep) ==>
+    (?rep abs. (!a. abs(rep a) = a) /\ (!r. P r = (rep(abs r) = r)))
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM POWSER_INSIDE POWSER
+|- !f x z.
+    summable(\n. (f n) * (x pow n)) /\ (abs z) < (abs x) ==>
+    summable(\n. (f n) * (z pow n))
+\ENDTHEOREM

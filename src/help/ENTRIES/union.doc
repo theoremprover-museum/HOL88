@@ -1,0 +1,29 @@
+\DOC union
+
+\TYPE {union : (* list -> * list -> * list)}
+
+\SYNOPSIS
+Computes the union of two `sets'.
+
+\KEYWORDS
+list, set.
+
+\DESCRIBE
+{union l1 l2} returns a list consisting of {l1} concatenated with those
+elements of {l2} which are not in {l1}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#union [1;2;3] [1;5;4;3];;
+[1; 2; 3; 5; 4] : int list
+
+#union [1;1;1] [1;2;3;2];;
+[1; 1; 1; 2; 3; 2] : int list
+}
+\SEEALSO
+setify, set_equal, intersect, subtract.
+
+\ENDDOC

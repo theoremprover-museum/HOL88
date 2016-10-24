@@ -1,0 +1,3 @@
+\THEOREM OPEN_OWN_NEIGH TOPOLOGY
+|- !S top x. open top S /\ S x ==> neigh top(S,x)
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM COS_ZERO_LEMMA TRANSC
+|- !x.
+    (& 0) <= x /\ (cos x = & 0) ==>
+    (?n. ~EVEN n /\ (x = (& n) * (pi / (& 2))))
+\ENDTHEOREM

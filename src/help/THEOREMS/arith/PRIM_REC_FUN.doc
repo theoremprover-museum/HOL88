@@ -1,0 +1,3 @@
+\THEOREM PRIM_REC_FUN prim_rec
+|- !x f. PRIM_REC_FUN x f = SIMP_REC(\n. x)(\fun n. f(fun(PRE n))n)
+\ENDTHEOREM

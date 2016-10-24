@@ -1,0 +1,6 @@
+\THEOREM hrat_mul HRAT
+|- !g00016 g00017.
+    g00016 hrat_mul g00017 =
+    mk_hrat
+    ($trat_eq(($@(dest_hrat g00016)) trat_mul ($@(dest_hrat g00017))))
+\ENDTHEOREM

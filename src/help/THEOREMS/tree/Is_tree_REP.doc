@@ -1,0 +1,3 @@
+\THEOREM Is_tree_REP tree
+|- Is_tree_REP = (\t. !P. (!tl. ALL_EL P tl ==> P(node_REP tl)) ==> P t)
+\ENDTHEOREM

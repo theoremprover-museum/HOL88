@@ -1,0 +1,118 @@
+\section{Using the Library}
+
+The \ml{more\_arithmetic} library is loaded into a user's \HOL\ session using the
+function \ml{load\_library} (see the \HOL\ manual for a general description of
+library loading). 
+First, the internal \HOL\ search paths are updated.  A pathname to
+the \ml{more\_arithmetic} library is added to the search path, so that theorems may be
+autoloaded from the constituent theories of the library; and the \HOL\
+help search path is updated with a pathname to online help files for the \ML\
+functions in the library. 
+
+After updating search paths, the load sequence for \ml{more\_arithmetic} depends on the
+current state of the \HOL\ session. If the system is in draft mode, the library
+theory \ml{more\_arithmetic} is added as a new parent to the current theory.  If the
+system is not in draft mode, but the current theory is an ancestor of the
+\ml{more\_arithmetic} theory in the library (e.g.\ the user is in a fresh \HOL\ session)
+then the \ml{more\_arithmetic} theory is made into the current theory.  In both cases,
+the \ML\ functions in the library are loaded into \HOL\, and the theorems in
+the library theories are set up to be autoloaded on demand.  The \ml{more\_arithmetic}
+library is at this point fully loaded into the user's \HOL\ session.
+
+\subsection{An Example of a Session}
+
+The following session shows how the \ml{more\_arithmetic} library may be
+loaded using the function
+\ml{load\_library}. Suppose, beginning in a fresh \HOL\ session, the user
+wishes to create a theory \ml{foo} whose parents include the theories in the
+\ml{more\_arithmetic} library. This may be done as follows:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{alltt}
+#new_theory `foo`;;
+() : void
+
+#load_library `more\_arithmetic`;;
+  \(\vdots\)
+Library `more\_arithmetic` loaded.
+() : void
+\end{alltt}\end{session}
+
+\noindent Loading the library while drafting the theory \ml{foo} makes the
+theory \ml{more\_arithmetic} into a parent of \ml{foo}.  The same effect could
+have been achieved (in a fresh session) by first loading the library and then
+creating \ml{foo}:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{alltt}
+#load_library `more\_arithmetic`;;
+  \(\vdots\)
+Library `more\_arithmetic` loaded.
+() : void
+
+#new_theory `foo`;;
+() : void
+\end{alltt}\end{session}
+
+\noindent Here, the theory \ml{more\_arithmetic} is first made the current theory of the
+new session.  It then automatically becomes a parent of \ml{foo} when this
+theory is created by\pagebreak[3] \ml{new\_theory}.
+
+Now, suppose that \ml{foo} has been created as shown above, and the user does
+some work in this theory, quits \HOL\, and in a later session wishes to load
+the theory \ml{foo}.  This must be done by {\it first\/} loading the
+\ml{more\_arithmetic} library and {\it then\/} loading the theory \ml{foo}.
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{alltt}
+#load_library `more\_arithmetic`;;
+  \(\vdots\)
+Library `more\_arithmetic` loaded.
+() : void
+
+#load_theory `foo`;;
+Theory foo loaded
+() : void
+\end{alltt}\end{session}
+
+\noindent This sequence of actions ensures that the system finds the parent
+theory \ml{more\_arithmetic} when it comes to load \ml{foo}, since loading the library
+updates the search path. 
+
+\subsection{The {\tt load\_more\_arithmetic} Function}%
+\index{load\_more\_arithmetic@{\ptt load\_more\_arithmetic}|(}
+
+The \ml{more\_arithmetic} library may in many cases simply be loaded into the system as
+illustrated by the examples given above.  There are, however, certain
+situations in which the \ml{more\_arithmetic} library cannot be fully loaded at the time
+when the \ml{load\_library} is used.  This occurs when the system is not in
+draft mode and the current theory is not an ancestor of the theory \ml{more\_arithmetic}.
+In this case, loading the library can and will update the search paths, as
+usual. But the \ml{more\_arithmetic} theory in the library can neither be made into a
+parent of the current theory nor can it be made the current theory.  This means
+that autoloading from the library cannot at this stage be activated.  Nor can
+the \ML\ code in the library be loaded into \HOL, since it requires access to
+some of the theorems in the library.
+
+In the situation described above---when the system is not in draft mode and the
+current theory is not an ancestor of the theory \ml{more\_arithmetic}---the library load
+sequence defines an \ML\ function called \ml{load\_more\_arithmetic} in the current \HOL\
+session.  If at a future point in the session the \ml{more\_arithmetic} theory (now
+accessible via the search path) becomes an ancestor of the current theory, this
+function can then be used to complete loading of the library. Evaluating
+
+\begin{hol}\begin{verbatim}
+   load_more_arithmetic();;
+\end{verbatim}\end{hol}
+
+\noindent in such a context loads the \ML\ functions of the \ml{more\_arithmetic} library
+into \HOL\ and activates autoloading from its theory files.  The function
+\ml{load\_more\_arithmetic} fails if the theory \ml{more\_arithmetic} is not a parent of the
+current theory.
+
+Note that the function \ml{load\_more\_arithmetic} becomes available when loading the
+\ml{more\_arithmetic} library only if the \ml{more\_arithmetic} theory at that point can neither be
+made into a new parent (i.e.\ the system is not in draft mode) nor be made the
+current theory.
+
+\index{load\_more\_arithmetic@{\ptt load\_more\_arithmetic}|)}

@@ -1,0 +1,90 @@
+% A1.10 SEQUENCES %
+
+sequence --> [BEGIN] sequence_BE [END] 
+           | [(] sequence_br [)].
+
+sequence_BE --> [SEQ] poss_seq_step [OUTPUT] 
+                {MK_two(`sequence_BEGINEND`,unit,POP)}.
+
+sequence_br --> [SEQ] poss_seq_step [OUTPUT] 
+                {MK_two(`sequence_brackets`,unit,POP)}.
+
+poss_seq_step --> {MK_one(`sequencestep`,sequencestep)} [;] more_seq_steps 
+                | {MK_zero(`sequencestep`)}.
+
+more_seq_steps --> {MK_one(`sequencestep`,sequencestep)}
+                   {add_to_list(POP,POP)} [;] more_seq_steps 
+                 | [].
+
+sequencestep --> [LET] letitem more_letitems {MK_one(`step_LET`,POP)}
+               | [VAR] varitem more_varitems {MK_one(`sequencestep_VAR`,POP)}
+               | [STATE] [VAR] statevaritem more_statevaritems
+                 {MK_one(`sequencestep_STATEVAR`,POP)}
+               | [PVAR] statevaritem more_statevaritems
+                 {MK_one(`sequencestep_PVAR`,POP)}
+               | [PRINT] printitem more_printitems
+                 {MK_one(`step_PRINT`,POP)}
+               | [FAULT] faultitem more_faultitems
+                 {MK_one(`step_FAULT`,POP)}
+               | declaration
+               | statement.
+
+varitem --> name [:=] {MK_two(`varitem`,POP,unit)}.
+
+more_varitems --> {add_to_list(POP,varitem)} more_varitems | [].
+
+statevaritem --> name init_or_other.
+
+init_or_other --> [INIT] {MK_two(`statevaritem_INIT`,POP,const1)}
+                  {MK_one(`statevaritem`,POP)} 
+                | [::=] {MK_two(`statevaritem`,POP,const1)}.
+
+more_statevaritems --> {add_to_list(POP,statevaritem)} more_statevaritems | [].
+
+statement --> [IF] boolean [THEN] statement poss_ifseq_else [FI]
+            | [CASE] unit [OF] seqchoices poss_caseseq_else [ESAC]
+            | [\[] [INT] name [=] int [..] 
+              {MK_four(`statement_INT`,POP,POP,int,statement)}
+            | [(] statement more_statements [)] {MK_one(`statements`,POP)}
+            | {MK_one(`varname`,varname)} [:=] 
+              {MK_two(`statement_assign`,POP,unit)}.
+
+poss_ifseq_else --> [ELSE] {MK_three(`statement_cond`,POP,POP,statement)}
+                  | {MK_two(`statement_cond`,POP,POP)}.
+
+poss_caseseq_else --> [ELSE] {MK_zero(`statement_ELSEOF`)}
+                      {MK_four(`statement_case`,POP,POP,POP,statement)}
+                    | [ELSEOF] seqchoices more_seq_elseofs
+                    | {MK_zero(`statement_ELSEOF`)} 
+                      {MK_three(`statement_case`,POP,POP,POP)}.
+
+more_seq_elseofs --> [ELSEOF] {add_to_list(POP,seqchoices)} 
+                     more_seq_elseofs
+                   | [ELSE] {MK_one(`statement_ELSEOF`,POP)}
+                     {MK_four(`statement_case`,POP,POP,POP,statement)}
+                   | {MK_one(`statement_ELSEOF`,POP)}
+                     {MK_three(`statement_case`,POP,POP,POP)}.
+
+more_statements --> [;] {add_to_list(POP,statement)} more_statements | [].
+
+seqchoices --> seqchoice more_seqchoices {MK_one(`seqchoices`,POP)}.
+
+seqchoice --> choosers [:] poss_statement.
+
+poss_statement --> {MK_two(`seqchoice`,POP,statement)} 
+                 | {MK_one(`seqchoice`,POP)}.
+
+more_seqchoices --> [,] {add_to_list(POP,seqchoice)} more_seqchoices | [].
+
+varname --> name rest_of_varname.
+
+rest_of_varname --> {MK_two(`varname`,POP,name)} rest_of_varname
+                  | [\[] var_brackets [\]]
+                  | [].
+
+var_brackets --> [\[] {MK_two(`varname_unit`,POP,unit)} [\]] 
+                 | int var_int_stuff.
+
+var_int_stuff --> [..] {MK_three(`varname_int_range`,POP,POP,int)} 
+                | {MK_two(`varname_int`,POP,POP)}.
+

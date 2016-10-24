@@ -1,0 +1,3 @@
+\THEOREM HEX_CONS_0 numeral
+|- !l. HEX(CONS 0 l) = HEX l
+\ENDTHEOREM

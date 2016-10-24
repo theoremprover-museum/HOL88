@@ -1,0 +1,23 @@
+\DOC used_conjectures
+
+\TYPE {used_conjectures : (window -> term list)}
+
+\SYNOPSIS
+The conjectures used by a window.
+
+\LIBRARY window
+
+\DESCRIBE
+A list of those conjectures that have actually been used in the transformation
+of the current window and will therefore need to be proven at some stage.
+Conjectures which have been used in the current window, and which are not
+available as hypotheses, lemmas, or conjectures in the parent window must be
+proven before the current window can be closed.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+used_hypotheses, conjectures, BAD_CONJECTURES
+
+\ENDDOC

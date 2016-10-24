@@ -1,0 +1,25 @@
+\DOC after
+
+\TYPE {after : (* list -> * list -> * list)}
+
+Finds the difference between two lists.
+
+\LIBRARY window
+
+\SYNOPSIS
+\DESCRIBE
+{after l1 l2} is the list {l} such that {(l1 @ l) = l2}.
+
+\FAILURE
+{after l1 l2} fails if {l1} is not a prefix of {l2}.
+
+\EXAMPLE
+{
+   #after [1; 2] [1; 2; 3];;
+   [3] : int list
+}
+
+\SEEALSO
+prefix, suffix, before
+
+\ENDDOC

@@ -1,0 +1,53 @@
+\section{Error messages}
+
+\index{errors!illegal pattern construction}
+This session illustrates some of the top-level error messages caused by using
+an illegal pattern constructor within a side-condition.
+
+\setcounter{sessioncount}{1}
+
+\begin{session}\begin{verbatim}
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 2
+
+#load_library `trs`;;
+Loading library `trs` ...
+Updating help search path
+.............................................................................
+......................
+Library `trs` loaded.
+() : void
+
+#find_theorems ((conc "x:bool") Where (kind Axiom))
+#              (Paths [Theory `arithmetic`]);;
+evaluation failed     Where -- `Kind' used in side-condition
+
+#find_theorems ((conc "x:bool") Where (conc "a * b"))
+#              (Paths [Theory `arithmetic`]);;
+evaluation failed     Where -- `Conc' used in side-condition
+
+#find_theorems ((conc "x:bool")
+#                 Where (("x:bool" contains "a * b")
+#                          Where ("a:num" contains "l - m")))
+#              (Paths [Theory `arithmetic`]);;
+evaluation failed     Where -- `Where' used in side-condition
+
+#find_theorems (((conc "x:bool") Where ("x:bool" contains "a * b"))
+#                 Where ("a:num" contains "l - m"))
+#              (Paths [Theory `arithmetic`]);;
+Searching theory arithmetic
+Step([((Theorem),
+       `arithmetic`,
+       `RIGHT_SUB_DISTRIB`,
+       |- !m n p. (m - n) * p = (m * p) - (n * p))],
+     -)
+: searchstep
+
+#quit();;
+$
+\end{verbatim}\end{session}
+

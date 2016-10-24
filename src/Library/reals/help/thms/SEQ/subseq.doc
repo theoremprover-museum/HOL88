@@ -1,0 +1,3 @@
+\THEOREM subseq SEQ
+|- !f. subseq f = (!m n. m num_lt n ==> (f m) num_lt (f n))
+\ENDTHEOREM

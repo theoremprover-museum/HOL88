@@ -1,0 +1,3 @@
+\THEOREM REAL_ARCH REAL
+|- !x. (& 0) < x ==> (!y. ?n. y < ((& n) * x))
+\ENDTHEOREM

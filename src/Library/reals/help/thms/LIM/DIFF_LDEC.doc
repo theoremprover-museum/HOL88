@@ -1,0 +1,5 @@
+\THEOREM DIFF_LDEC LIM
+|- !f x l.
+    (f diffl l)x /\ l < (& 0) ==>
+    (?d. (& 0) < d /\ (!h. (& 0) < h /\ h < d ==> (f x) < (f(x - h))))
+\ENDTHEOREM

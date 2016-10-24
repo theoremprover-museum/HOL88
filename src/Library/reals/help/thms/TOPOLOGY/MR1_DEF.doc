@@ -1,0 +1,3 @@
+\THEOREM MR1_DEF TOPOLOGY
+|- !x y. dist mr1(x,y) = abs(y - x)
+\ENDTHEOREM

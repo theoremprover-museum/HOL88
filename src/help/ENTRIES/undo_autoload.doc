@@ -1,0 +1,22 @@
+\DOC undo_autoload
+
+\TYPE {undo_autoload : (string -> bool)}
+
+\SYNOPSIS
+Cancels the autoloading action associated with a name.
+
+\DESCRIBE
+A call {undo_autoload `name`} cancels any autoloading action associated with
+the identifier {name}, whether this was specified by the general {autoload}
+function, or the more specialized {autoload_theory}. For more details of the
+autoloading mechanism, see the reference entries for those functions, or the
+DESCRIPTION. The call to {undo_autoload} returns {true} if there was an
+autoload action associated with that name, and {false} otherwise.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+autoload, autoload_theory, let_after, let_before.
+
+\ENDDOC

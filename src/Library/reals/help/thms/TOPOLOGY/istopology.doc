@@ -1,0 +1,8 @@
+\THEOREM istopology TOPOLOGY
+|- !L.
+    istopology L =
+    L null /\
+    L universe /\
+    (!a b. L a /\ L b ==> L(a intersect b)) /\
+    (!P. P subset L ==> L(Union P))
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM ORDINAL_UP WELLORDER
+|- !l.
+    ordinal l ==>
+    (!x. fl l x) \/ (?m x. ordinal m /\ fl m x /\ ~fl l x)
+\ENDTHEOREM

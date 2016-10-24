@@ -1,0 +1,23 @@
+%============================================================================%
+% LIBRARY:     reals                                                         %
+%                                                                            %
+% DESCRIPTION: Definitional theory of real numbers, including the elementary %
+%              transcendental functions.                                     %
+%                                                                            %
+% AUTHOR:      John Harrison                                                 %
+%              University of Cambridge Computer Laboratory                   %
+%              New Museums Site                                              %
+%              Pembroke Street                                               %
+%              Cambridge CB2 3QG                                             %
+%              England.                                                      %
+%                                                                            %
+%              jrh@cl.cam.ac.uk                                              %
+%                                                                            %
+% DATE:        21st July 1992                                                %
+%============================================================================%
+
+This library provides a theory of real numbers built up from Dedekind cuts of
+rationals. Some analytical theories are included, leading up to theories of the
+elementary transcendental functions (exp, sin, ln etc.)
+
+For fuller documentation, see "Manual/reals.dvi".

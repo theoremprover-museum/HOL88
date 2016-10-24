@@ -1,0 +1,31 @@
+\DOC preterm_antiquot
+
+\TYPE {preterm_antiquot : (term -> preterm)}
+
+\SYNOPSIS
+Constructs antiquoted preterm.
+
+\DESCRIBE
+{preterm_antiquot} is analogous to the oft-used HOL strategy of antiquotation.
+Since, however, preterms are untypechecked terms, the restrictions imposed
+when using antiquotation are not encountered until the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#preterm_antiquot "T";;
+preterm_antiquot"T" : preterm
+
+#preterm_comb(preterm_const `~`,it);;
+preterm_comb((preterm_const `~`), preterm_antiquot"T") : preterm
+
+#preterm_to_term it;;
+"~T" : term
+}
+\SEEALSO
+preterm_abs, preterm_comb, preterm_const, preterm_typed, preterm_var,
+preterm_to_term.
+
+\ENDDOC

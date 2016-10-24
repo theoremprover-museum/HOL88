@@ -1,0 +1,3 @@
+\THEOREM universe TOPOLOGY
+|- universe = (\x. T)
+\ENDTHEOREM

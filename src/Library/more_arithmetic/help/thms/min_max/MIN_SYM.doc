@@ -1,0 +1,3 @@
+\THEOREM MIN_SYM min_max
+|- !n p. MIN n p = MIN p n
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM SUC_DIV_CASES div_mod
+|- !n.
+    0 < n ==>
+    (!x. ((SUC x) DIV n = x DIV n) \/ ((SUC x) DIV n = SUC(x DIV n)))
+\ENDTHEOREM

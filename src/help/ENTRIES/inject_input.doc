@@ -1,0 +1,31 @@
+\DOC inject_input
+
+\TYPE {inject_input : (int list -> void)}
+
+\SYNOPSIS
+Passes a list of character codes to the ML interpreter.
+
+\DESCRIBE
+When applied to a list of character codes, {inject_input} passes these to the
+ML interpreter, which will, after evaluating other pending phrases, interpret
+them.
+
+\FAILURE
+The injection of input never fails, but of course the subsequent interpretation
+may do.
+
+\EXAMPLE
+{
+#inject_input (map ascii_code (explode `tty_write \`Yo!\`;;\
+#`));;
+() : void
+
+Yo!() : void
+}
+\COMMENTS
+The function {ML_eval} is similar, and easier to use.
+
+\SEEALSO
+let_after, let_before, ML_eval.
+
+\ENDDOC

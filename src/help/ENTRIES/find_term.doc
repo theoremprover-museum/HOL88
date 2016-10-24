@@ -1,0 +1,29 @@
+\DOC find_term
+
+\TYPE {find_term: ((term -> bool) -> term -> term)}
+
+\SYNOPSIS
+Searches a term for a subterm that satisfies a given predicate.
+
+\DESCRIBE
+The largest subterm, in a depth-first, left-to-right search
+of the given term, that satisfies the predicate is returned.
+
+\FAILURE
+Fails if no subterm of the given term satisfies the predicate.
+
+\EXAMPLE
+{
+#find_term is_pred "SUC 0";;
+"SUC 0" : term
+
+#find_term is_const "SUC 0";;
+"SUC" : term
+
+#find_term is_var "SUC n";;
+"n" : term
+}
+\SEEALSO
+find_terms
+
+\ENDDOC

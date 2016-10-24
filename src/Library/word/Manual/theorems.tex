@@ -1,0 +1,769 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{The theory {\tt word\_base}}
+\THEOREM BIT0 word\_base
+|- !b. BIT 0(WORD[b]) = b
+\ENDTHEOREM
+\THEOREM BIT\_DEF word\_base
+|- !k l. BIT k(WORD l) = ELL k l
+\ENDTHEOREM
+\THEOREM BIT\_EQ\_IMP\_WORD\_EQ word\_base
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     (!k. k < n ==> (BIT k w1 = BIT k w2)) ==> (w1 = w2)
+\ENDTHEOREM
+\THEOREM BIT\_WCAT1 word\_base
+|- !n. !w :: PWORDLEN n. !b. BIT n(WCAT(WORD[b],w)) = b
+\ENDTHEOREM
+\THEOREM BIT\_WCAT\_FST word\_base
+|- !n1 n2.
+    !w1 :: PWORDLEN n1.
+     !w2 :: PWORDLEN n2.
+      !k.
+       n2 <= k /\ k < (n1 + n2) ==> (BIT k(WCAT(w1,w2)) = BIT(k - n2)w1)
+\ENDTHEOREM
+\THEOREM BIT\_WCAT\_SND word\_base
+|- !n1 n2.
+    !w1 :: PWORDLEN n1.
+     !w2 :: PWORDLEN n2. !k. k < n2 ==> (BIT k(WCAT(w1,w2)) = BIT k w2)
+\ENDTHEOREM
+\THEOREM BIT\_WSEG word\_base
+|- !n.
+    !w :: PWORDLEN n.
+     !m k j.
+      (m + k) <= n ==> j < m ==> (BIT j(WSEG m k w) = BIT(j + k)w)
+\ENDTHEOREM
+\THEOREM LSB word\_base
+|- !n. !w :: PWORDLEN n. 0 < n ==> (LSB w = BIT 0 w)
+\ENDTHEOREM
+\THEOREM LSB\_DEF word\_base
+|- !l. LSB(WORD l) = LAST l
+\ENDTHEOREM
+\THEOREM MSB word\_base
+|- !n. !w :: PWORDLEN n. 0 < n ==> (MSB w = BIT(PRE n)w)
+\ENDTHEOREM
+\THEOREM MSB\_DEF word\_base
+|- !l. MSB(WORD l) = HD l
+\ENDTHEOREM
+\THEOREM PWORDLEN word\_base
+|- !n w. PWORDLEN n w = (WORDLEN w = n)
+\ENDTHEOREM
+\THEOREM PWORDLEN0 word\_base
+|- !w. PWORDLEN 0 w ==> (w = WORD[])
+\ENDTHEOREM
+\THEOREM PWORDLEN1 word\_base
+|- !x. PWORDLEN 1(WORD[x])
+\ENDTHEOREM
+\THEOREM PWORDLEN\_DEF word\_base
+|- !n l. PWORDLEN n(WORD l) = (n = LENGTH l)
+\ENDTHEOREM
+\THEOREM WCAT0 word\_base
+|- !w. (WCAT(WORD[],w) = w) /\ (WCAT(w,WORD[]) = w)
+\ENDTHEOREM
+\THEOREM WCAT\_11 word\_base
+|- !m n.
+    !wm1 wm2 :: PWORDLEN m.
+     !wn1 wn2 :: PWORDLEN n.
+      (WCAT(wm1,wn1) = WCAT(wm2,wn2)) = (wm1 = wm2) /\ (wn1 = wn2)
+\ENDTHEOREM
+\THEOREM WCAT\_ASSOC word\_base
+|- !w1 w2 w3. WCAT(w1,WCAT(w2,w3)) = WCAT(WCAT(w1,w2),w3)
+\ENDTHEOREM
+\THEOREM WCAT\_DEF word\_base
+|- !l1 l2. WCAT(WORD l1,WORD l2) = WORD(APPEND l1 l2)
+\ENDTHEOREM
+\THEOREM WCAT\_PWORDLEN word\_base
+|- !n1.
+    !w1 :: PWORDLEN n1.
+     !n2. !w2 :: PWORDLEN n2. PWORDLEN(n1 + n2)(WCAT(w1,w2))
+\ENDTHEOREM
+\THEOREM WCAT\_WSEG\_WSEG word\_base
+|- !n.
+    !w :: PWORDLEN n.
+     !m1 m2 k.
+      (m1 + (m2 + k)) <= n ==>
+      (WCAT(WSEG m2(m1 + k)w,WSEG m1 k w) = WSEG(m1 + m2)k w)
+\ENDTHEOREM
+\THEOREM WORDLEN\_DEF word\_base
+|- !l. WORDLEN(WORD l) = LENGTH l
+\ENDTHEOREM
+\THEOREM WORDLEN\_SUC\_WCAT word\_base
+|- !n w.
+    PWORDLEN(SUC n)w ==>
+    (?b :: PWORDLEN 1. ?w' :: PWORDLEN n. w = WCAT(b,w'))
+\ENDTHEOREM
+\THEOREM WORDLEN\_SUC\_WCAT\_BIT\_WSEG word\_base
+|- !n. !w :: PWORDLEN(SUC n). w = WCAT(WORD[BIT n w],WSEG n 0 w)
+\ENDTHEOREM
+\THEOREM WORDLEN\_SUC\_WCAT\_BIT\_WSEG\_RIGHT word\_base
+|- !n. !w :: PWORDLEN(SUC n). w = WCAT(WSEG n 1 w,WORD[BIT 0 w])
+\ENDTHEOREM
+\THEOREM WORDLEN\_SUC\_WCAT\_WSEG\_WSEG word\_base
+|- !w :: PWORDLEN(SUC n). w = WCAT(WSEG 1 n w,WSEG n 0 w)
+\ENDTHEOREM
+\THEOREM WORDLEN\_SUC\_WCAT\_WSEG\_WSEG\_RIGHT word\_base
+|- !w :: PWORDLEN(SUC n). w = WCAT(WSEG n 1 w,WSEG 1 0 w)
+\ENDTHEOREM
+\THEOREM WORD\_11 word\_base
+|- !l l'. (WORD l = WORD l') = (l = l')
+\ENDTHEOREM
+\THEOREM word\_Ax word\_base
+|- !f. ?! fn. !l. fn(WORD l) = f l
+\ENDTHEOREM
+\THEOREM word\_cases word\_base
+|- !w. ?l. w = WORD l
+\ENDTHEOREM
+\THEOREM WORD\_CONS\_WCAT word\_base
+|- !x l. WORD(CONS x l) = WCAT(WORD[x],WORD l)
+\ENDTHEOREM
+\THEOREM WORD\_DEF word\_base
+|- !l. WORD l = ABS_word(Node l[])
+\ENDTHEOREM
+\THEOREM word\_induct word\_base
+|- !P. (!l. P(WORD l)) ==> (!w. P w)
+\ENDTHEOREM
+\THEOREM word\_ISO\_DEF word\_base
+|- (!a. ABS_word(REP_word a) = a) /\
+   (!r.
+     TRP(\v tl. (?l. v = l) /\ (LENGTH tl = 0))r =
+     (REP_word(ABS_word r) = r))
+\ENDTHEOREM
+\THEOREM WORD\_PARTITION word\_base
+|- (!n. !w :: PWORDLEN n. !m. m <= n ==> (WCAT(WSPLIT m w) = w)) /\
+   (!n m.
+     !w1 :: PWORDLEN n. !w2 :: PWORDLEN m. WSPLIT m(WCAT(w1,w2)) = w1,w2)
+\ENDTHEOREM
+\THEOREM WORD\_SNOC\_WCAT word\_base
+|- !x l. WORD(SNOC x l) = WCAT(WORD l,WORD[x])
+\ENDTHEOREM
+\THEOREM WORD\_SPLIT word\_base
+|- !n1 n2. !w :: PWORDLEN(n1 + n2). w = WCAT(WSEG n1 n2 w,WSEG n2 0 w)
+\ENDTHEOREM
+\THEOREM word\_TY\_DEF word\_base
+|- ?rep. TYPE_DEFINITION(TRP(\v tl. (?l. v = l) /\ (LENGTH tl = 0)))rep
+\ENDTHEOREM
+\THEOREM WSEG0 word\_base
+|- !k w. WSEG 0 k w = WORD[]
+\ENDTHEOREM
+\THEOREM WSEG\_BIT word\_base
+|- !n. !w :: PWORDLEN n. !k. k < n ==> (WSEG 1 k w = WORD[BIT k w])
+\ENDTHEOREM
+\THEOREM WSEG\_DEF word\_base
+|- !m k l. WSEG m k(WORD l) = WORD(LASTN m(BUTLASTN k l))
+\ENDTHEOREM
+\THEOREM WSEG\_PWORDLEN word\_base
+|- !n. !w :: PWORDLEN n. !m k. (m + k) <= n ==> PWORDLEN m(WSEG m k w)
+\ENDTHEOREM
+\THEOREM WSEG\_WCAT1 word\_base
+|- !n1 n2.
+    !w1 :: PWORDLEN n1. !w2 :: PWORDLEN n2. WSEG n1 n2(WCAT(w1,w2)) = w1
+\ENDTHEOREM
+\THEOREM WSEG\_WCAT2 word\_base
+|- !n1 n2.
+    !w1 :: PWORDLEN n1. !w2 :: PWORDLEN n2. WSEG n2 0(WCAT(w1,w2)) = w2
+\ENDTHEOREM
+\THEOREM WSEG\_WCAT\_WSEG word\_base
+|- !n1 n2.
+    !w1 :: PWORDLEN n1.
+     !w2 :: PWORDLEN n2.
+      !m k.
+       (m + k) <= (n1 + n2) /\ k < n2 /\ n2 <= (m + k) ==>
+       (WSEG m k(WCAT(w1,w2)) =
+        WCAT(WSEG((m + k) - n2)0 w1,WSEG(n2 - k)k w2))
+\ENDTHEOREM
+\THEOREM WSEG\_WCAT\_WSEG1 word\_base
+|- !n1 n2.
+    !w1 :: PWORDLEN n1.
+     !w2 :: PWORDLEN n2.
+      !m k.
+       m <= n1 /\ n2 <= k ==> (WSEG m k(WCAT(w1,w2)) = WSEG m(k - n2)w1)
+\ENDTHEOREM
+\THEOREM WSEG\_WCAT\_WSEG2 word\_base
+|- !n1 n2.
+    !w1 :: PWORDLEN n1.
+     !w2 :: PWORDLEN n2.
+      !m k. (m + k) <= n2 ==> (WSEG m k(WCAT(w1,w2)) = WSEG m k w2)
+\ENDTHEOREM
+\THEOREM WSEG\_WORDLEN word\_base
+|- !n.
+    !w :: PWORDLEN n. !m k. (m + k) <= n ==> (WORDLEN(WSEG m k w) = m)
+\ENDTHEOREM
+\THEOREM WSEG\_WORD\_LENGTH word\_base
+|- !n. !w :: PWORDLEN n. WSEG n 0 w = w
+\ENDTHEOREM
+\THEOREM WSEG\_WSEG word\_base
+|- !n.
+    !w :: PWORDLEN n.
+     !m1 k1 m2 k2.
+      (m1 + k1) <= n /\ (m2 + k2) <= m1 ==>
+      (WSEG m2 k2(WSEG m1 k1 w) = WSEG m2(k1 + k2)w)
+\ENDTHEOREM
+\THEOREM WSPLIT\_DEF word\_base
+|- !m l. WSPLIT m(WORD l) = WORD(BUTLASTN m l),WORD(LASTN m l)
+\ENDTHEOREM
+\THEOREM WSPLIT\_PWORDLEN word\_base
+|- !n.
+    !w :: PWORDLEN n.
+     !m.
+      m <= n ==>
+      PWORDLEN(n - m)(FST(WSPLIT m w)) /\ PWORDLEN m(SND(WSPLIT m w))
+\ENDTHEOREM
+\THEOREM WSPLIT\_WSEG word\_base
+|- !n.
+    !w :: PWORDLEN n.
+     !k. k <= n ==> (WSPLIT k w = WSEG(n - k)k w,WSEG k 0 w)
+\ENDTHEOREM
+\THEOREM WSPLIT\_WSEG1 word\_base
+|- !n.
+    !w :: PWORDLEN n. !k. k <= n ==> (FST(WSPLIT k w) = WSEG(n - k)k w)
+\ENDTHEOREM
+\THEOREM WSPLIT\_WSEG2 word\_base
+|- !n. !w :: PWORDLEN n. !k. k <= n ==> (SND(WSPLIT k w) = WSEG k 0 w)
+\ENDTHEOREM
+\section{The theory {\tt word\_bitop}}
+\THEOREM EXISTSABIT word\_bitop
+|- !n. !w :: PWORDLEN n. !P. EXISTSABIT P w = (?k. k < n /\ P(BIT k w))
+\ENDTHEOREM
+\THEOREM EXISTSABIT\_DEF word\_bitop
+|- !P l. EXISTSABIT P(WORD l) = SOME_EL P l
+\ENDTHEOREM
+\THEOREM EXISTSABIT\_WCAT word\_bitop
+|- !w1 w2 P.
+    EXISTSABIT P(WCAT(w1,w2)) = EXISTSABIT P w1 \/ EXISTSABIT P w2
+\ENDTHEOREM
+\THEOREM EXISTSABIT\_WSEG word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) <= n ==> (!P. EXISTSABIT P(WSEG m k w) ==> EXISTSABIT P w)
+\ENDTHEOREM
+\THEOREM FORALLBITS word\_bitop
+|- !n. !w :: PWORDLEN n. !P. FORALLBITS P w = (!k. k < n ==> P(BIT k w))
+\ENDTHEOREM
+\THEOREM FORALLBITS\_DEF word\_bitop
+|- !P l. FORALLBITS P(WORD l) = ALL_EL P l
+\ENDTHEOREM
+\THEOREM FORALLBITS\_WCAT word\_bitop
+|- !w1 w2 P.
+    FORALLBITS P(WCAT(w1,w2)) = FORALLBITS P w1 /\ FORALLBITS P w2
+\ENDTHEOREM
+\THEOREM FORALLBITS\_WSEG word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !P.
+      FORALLBITS P w ==>
+      (!m k. (m + k) <= n ==> FORALLBITS P(WSEG m k w))
+\ENDTHEOREM
+\THEOREM NOT\_EXISTSABIT word\_bitop
+|- !P w. ~EXISTSABIT P w = FORALLBITS($~ o P)w
+\ENDTHEOREM
+\THEOREM NOT\_FORALLBITS word\_bitop
+|- !P w. ~FORALLBITS P w = EXISTSABIT($~ o P)w
+\ENDTHEOREM
+\THEOREM PBITBOP\_DEF word\_bitop
+|- !op.
+    PBITBOP op =
+    (!n.
+      !w1 :: PWORDLEN n.
+       !w2 :: PWORDLEN n.
+        PWORDLEN n(op w1 w2) /\
+        (!m k.
+          (m + k) <= n ==>
+          (op(WSEG m k w1)(WSEG m k w2) = WSEG m k(op w1 w2))))
+\ENDTHEOREM
+\THEOREM PBITBOP\_EXISTS word\_bitop
+|- !f. ?fn. !l1 l2. fn(WORD l1)(WORD l2) = WORD(MAP2 f l1 l2)
+\ENDTHEOREM
+\THEOREM PBITBOP\_PWORDLEN word\_bitop
+|- !op :: PBITBOP.
+    !n. !w1 :: PWORDLEN n. !w2 :: PWORDLEN n. PWORDLEN n(op w1 w2)
+\ENDTHEOREM
+\THEOREM PBITBOP\_WSEG word\_bitop
+|- !op :: PBITBOP.
+    !n.
+     !w1 :: PWORDLEN n.
+      !w2 :: PWORDLEN n.
+       !m k.
+        (m + k) <= n ==>
+        (op(WSEG m k w1)(WSEG m k w2) = WSEG m k(op w1 w2))
+\ENDTHEOREM
+\THEOREM PBITOP\_BIT word\_bitop
+|- !op :: PBITOP.
+    !n.
+     !w :: PWORDLEN n.
+      !k. k < n ==> (op(WORD[BIT k w]) = WORD[BIT k(op w)])
+\ENDTHEOREM
+\THEOREM PBITOP\_DEF word\_bitop
+|- !op.
+    PBITOP op =
+    (!n.
+      !w :: PWORDLEN n.
+       PWORDLEN n(op w) /\
+       (!m k. (m + k) <= n ==> (op(WSEG m k w) = WSEG m k(op w))))
+\ENDTHEOREM
+\THEOREM PBITOP\_PWORDLEN word\_bitop
+|- !op :: PBITOP. !n. !w :: PWORDLEN n. PWORDLEN n(op w)
+\ENDTHEOREM
+\THEOREM PBITOP\_WSEG word\_bitop
+|- !op :: PBITOP.
+    !n.
+     !w :: PWORDLEN n.
+      !m k. (m + k) <= n ==> (op(WSEG m k w) = WSEG m k(op w))
+\ENDTHEOREM
+\THEOREM SHL\_DEF word\_bitop
+|- !f w b.
+    SHL f w b =
+    BIT(PRE(WORDLEN w))w,
+    WCAT(WSEG(PRE(WORDLEN w))0 w,(f => WSEG 1 0 w | WORD[b]))
+\ENDTHEOREM
+\THEOREM SHL\_WSEG word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) <= n ==>
+      0 < m ==>
+      (!f b.
+        SHL f(WSEG m k w)b =
+        BIT(k + (m - 1))w,
+        (f => 
+         WCAT(WSEG(m - 1)k w,WSEG 1 k w) | 
+         WCAT(WSEG(m - 1)k w,WORD[b])))
+\ENDTHEOREM
+\THEOREM SHL\_WSEG\_1F word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) <= n ==>
+      0 < m ==>
+      (!b.
+        SHL F(WSEG m k w)b =
+        BIT(k + (m - 1))w,WCAT(WSEG(m - 1)k w,WORD[b]))
+\ENDTHEOREM
+\THEOREM SHL\_WSEG\_NF word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) <= n ==>
+      0 < m ==>
+      0 < k ==>
+      (SHL F(WSEG m k w)(BIT(k - 1)w) =
+       BIT(k + (m - 1))w,WSEG m(k - 1)w)
+\ENDTHEOREM
+\THEOREM SHR\_DEF word\_bitop
+|- !f b w.
+    SHR f b w =
+    WCAT
+    ((f => WSEG 1(PRE(WORDLEN w))w | WORD[b]),WSEG(PRE(WORDLEN w))1 w),
+    BIT 0 w
+\ENDTHEOREM
+\THEOREM SHR\_WSEG word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) <= n ==>
+      0 < m ==>
+      (!f b.
+        SHR f b(WSEG m k w) =
+        (f => 
+         WCAT(WSEG 1(k + (m - 1))w,WSEG(m - 1)(k + 1)w) | 
+         WCAT(WORD[b],WSEG(m - 1)(k + 1)w)),BIT k w)
+\ENDTHEOREM
+\THEOREM SHR\_WSEG\_1F word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) <= n ==>
+      0 < m ==>
+      (!b.
+        SHR F b(WSEG m k w) = WCAT(WORD[b],WSEG(m - 1)(k + 1)w),BIT k w)
+\ENDTHEOREM
+\THEOREM SHR\_WSEG\_NF word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) < n ==>
+      0 < m ==>
+      (SHR F(BIT(m + k)w)(WSEG m k w) = WSEG m(k + 1)w,BIT k w)
+\ENDTHEOREM
+\THEOREM WMAP\_0 word\_bitop
+|- !f. WMAP f(WORD[]) = WORD[]
+\ENDTHEOREM
+\THEOREM WMAP\_BIT word\_bitop
+|- !n.
+    !w :: PWORDLEN n. !k. k < n ==> (!f. BIT k(WMAP f w) = f(BIT k w))
+\ENDTHEOREM
+\THEOREM WMAP\_DEF word\_bitop
+|- !f l. WMAP f(WORD l) = WORD(MAP f l)
+\ENDTHEOREM
+\THEOREM WMAP\_o word\_bitop
+|- !w f g. WMAP g(WMAP f w) = WMAP(g o f)w
+\ENDTHEOREM
+\THEOREM WMAP\_PBITOP word\_bitop
+|- !f. PBITOP(WMAP f)
+\ENDTHEOREM
+\THEOREM WMAP\_PWORDLEN word\_bitop
+|- !w :: PWORDLEN n. !f. PWORDLEN n(WMAP f w)
+\ENDTHEOREM
+\THEOREM WMAP\_WCAT word\_bitop
+|- !w1 w2 f. WMAP f(WCAT(w1,w2)) = WCAT(WMAP f w1,WMAP f w2)
+\ENDTHEOREM
+\THEOREM WMAP\_WSEG word\_bitop
+|- !n.
+    !w :: PWORDLEN n.
+     !m k.
+      (m + k) <= n ==> (!f. WMAP f(WSEG m k w) = WSEG m k(WMAP f w))
+\ENDTHEOREM
+\THEOREM WSEG\_SHL word\_bitop
+|- !n.
+    !w :: PWORDLEN(SUC n).
+     !m k.
+      0 < k /\ (m + k) <= (SUC n) ==>
+      (!b. WSEG m k(SND(SHL f w b)) = WSEG m(k - 1)w)
+\ENDTHEOREM
+\THEOREM WSEG\_SHL\_0 word\_bitop
+|- !n.
+    !w :: PWORDLEN(SUC n).
+     !m b.
+      0 < m /\ m <= (SUC n) ==>
+      (WSEG m 0(SND(SHL f w b)) =
+       WCAT(WSEG(m - 1)0 w,(f => WSEG 1 0 w | WORD[b])))
+\ENDTHEOREM
+\section{The theory {\tt word\_num}}
+\THEOREM LVAL word\_num
+|- (!f b. LVAL f b[] = 0) /\
+   (!l f b x.
+     LVAL f b(CONS x l) = ((f x) * (b EXP (LENGTH l))) + (LVAL f b l))
+\ENDTHEOREM
+\THEOREM LVAL\_DEF word\_num
+|- !f b l. LVAL f b l = FOLDL(\e x. (b * e) + (f x))0 l
+\ENDTHEOREM
+\THEOREM LVAL\_MAX word\_num
+|- !l f b. (!x. (f x) < b) ==> (LVAL f b l) < (b EXP (LENGTH l))
+\ENDTHEOREM
+\THEOREM LVAL\_SNOC word\_num
+|- !l h f b. LVAL f b(SNOC h l) = ((LVAL f b l) * b) + (f h)
+\ENDTHEOREM
+\THEOREM NLIST\_DEF word\_num
+|- (!frep b m. NLIST 0 frep b m = []) /\
+   (!n frep b m.
+     NLIST(SUC n)frep b m = SNOC(frep(m MOD b))(NLIST n frep b(m DIV b)))
+\ENDTHEOREM
+\THEOREM NVAL0 word\_num
+|- !f b. NVAL f b(WORD[]) = 0
+\ENDTHEOREM
+\THEOREM NVAL1 word\_num
+|- !f b x. NVAL f b(WORD[x]) = f x
+\ENDTHEOREM
+\THEOREM NVAL\_DEF word\_num
+|- !f b l. NVAL f b(WORD l) = LVAL f b l
+\ENDTHEOREM
+\THEOREM NVAL\_MAX word\_num
+|- !f b.
+    (!x. (f x) < b) ==> (!n. !w :: PWORDLEN n. (NVAL f b w) < (b EXP n))
+\ENDTHEOREM
+\THEOREM NVAL\_WCAT word\_num
+|- !n m.
+    !w1 :: PWORDLEN n.
+     !w2 :: PWORDLEN m.
+      !f b.
+       NVAL f b(WCAT(w1,w2)) =
+       ((NVAL f b w1) * (b EXP m)) + (NVAL f b w2)
+\ENDTHEOREM
+\THEOREM NVAL\_WCAT1 word\_num
+|- !w f b x. NVAL f b(WCAT(w,WORD[x])) = ((NVAL f b w) * b) + (f x)
+\ENDTHEOREM
+\THEOREM NVAL\_WCAT2 word\_num
+|- !n.
+    !w :: PWORDLEN n.
+     !f b x.
+      NVAL f b(WCAT(WORD[x],w)) = ((f x) * (b EXP n)) + (NVAL f b w)
+\ENDTHEOREM
+\THEOREM NVAL\_WORDLEN\_0 word\_num
+|- !w :: PWORDLEN 0. !fv r. NVAL fv r w = 0
+\ENDTHEOREM
+\THEOREM NWORD\_DEF word\_num
+|- !n frep b m. NWORD n frep b m = WORD(NLIST n frep b m)
+\ENDTHEOREM
+\THEOREM NWORD\_LENGTH word\_num
+|- !n f b m. WORDLEN(NWORD n f b m) = n
+\ENDTHEOREM
+\THEOREM NWORD\_PWORDLEN word\_num
+|- !n f b m. PWORDLEN n(NWORD n f b m)
+\ENDTHEOREM
+\section{The theory {\tt bword\_bitop}}
+\THEOREM PBITBOP\_WAND bword\_bitop
+|- PBITBOP $WAND
+\ENDTHEOREM
+\THEOREM PBITBOP\_WOR bword\_bitop
+|- PBITBOP $WOR
+\ENDTHEOREM
+\THEOREM PBITBOP\_WXOR bword\_bitop
+|- PBITBOP $WXOR
+\ENDTHEOREM
+\THEOREM PBITOP\_WNOT bword\_bitop
+|- PBITOP WNOT
+\ENDTHEOREM
+\THEOREM WAND\_DEF bword\_bitop
+|- !l1 l2. (WORD l1) WAND (WORD l2) = WORD(MAP2 $/\ l1 l2)
+\ENDTHEOREM
+\THEOREM WCAT\_WNOT bword\_bitop
+|- !n1 n2.
+    !w1 :: PWORDLEN n1.
+     !w2 :: PWORDLEN n2. WCAT(WNOT w1,WNOT w2) = WNOT(WCAT(w1,w2))
+\ENDTHEOREM
+\THEOREM WNOT\_DEF bword\_bitop
+|- !l. WNOT(WORD l) = WORD(MAP $~ l)
+\ENDTHEOREM
+\THEOREM WNOT\_WNOT bword\_bitop
+|- !w. WNOT(WNOT w) = w
+\ENDTHEOREM
+\THEOREM WOR\_DEF bword\_bitop
+|- !l1 l2. (WORD l1) WOR (WORD l2) = WORD(MAP2 $\/ l1 l2)
+\ENDTHEOREM
+\THEOREM WXOR\_DEF bword\_bitop
+|- !l1 l2. (WORD l1) WXOR (WORD l2) = WORD(MAP2(\x y. ~(x = y))l1 l2)
+\ENDTHEOREM
+\section{The theory {\tt bword\_num}}
+\THEOREM ADD\_BNVAL\_LEFT bword\_num
+|- !n.
+    !w1 w2 :: PWORDLEN(SUC n).
+     (BNVAL w1) + (BNVAL w2) =
+     (((BV(BIT n w1)) + (BV(BIT n w2))) * (2 EXP n)) +
+     ((BNVAL(WSEG n 0 w1)) + (BNVAL(WSEG n 0 w2)))
+\ENDTHEOREM
+\THEOREM ADD\_BNVAL\_RIGHT bword\_num
+|- !n.
+    !w1 w2 :: PWORDLEN(SUC n).
+     (BNVAL w1) + (BNVAL w2) =
+     (((BNVAL(WSEG n 1 w1)) + (BNVAL(WSEG n 1 w2))) * 2) +
+     ((BV(BIT 0 w1)) + (BV(BIT 0 w2)))
+\ENDTHEOREM
+\THEOREM ADD\_BNVAL\_SPLIT bword\_num
+|- !n1 n2.
+    !w1 w2 :: PWORDLEN(n1 + n2).
+     (BNVAL w1) + (BNVAL w2) =
+     (((BNVAL(WSEG n1 n2 w1)) + (BNVAL(WSEG n1 n2 w2))) * (2 EXP n2)) +
+     ((BNVAL(WSEG n2 0 w1)) + (BNVAL(WSEG n2 0 w2)))
+\ENDTHEOREM
+\THEOREM BIT\_NBWORD0 bword\_num
+|- !k n. k < n ==> (BIT k(NBWORD n 0) = F)
+\ENDTHEOREM
+\THEOREM BNVAL0 bword\_num
+|- BNVAL(WORD[]) = 0
+\ENDTHEOREM
+\THEOREM BNVAL\_11 bword\_num
+|- !w1 w2.
+    (WORDLEN w1 = WORDLEN w2) ==> (BNVAL w1 = BNVAL w2) ==> (w1 = w2)
+\ENDTHEOREM
+\THEOREM BNVAL\_DEF bword\_num
+|- !l. BNVAL(WORD l) = LVAL BV 2 l
+\ENDTHEOREM
+\THEOREM BNVAL\_MAX bword\_num
+|- !n. !w :: PWORDLEN n. (BNVAL w) < (2 EXP n)
+\ENDTHEOREM
+\THEOREM BNVAL\_NBWORD bword\_num
+|- !n m. m < (2 EXP n) ==> (BNVAL(NBWORD n m) = m)
+\ENDTHEOREM
+\THEOREM BNVAL\_NVAL bword\_num
+|- !w. BNVAL w = NVAL BV 2 w
+\ENDTHEOREM
+\THEOREM BNVAL\_ONTO bword\_num
+|- !w. ?n. BNVAL w = n
+\ENDTHEOREM
+\THEOREM BNVAL\_WCAT bword\_num
+|- !n m.
+    !w1 :: PWORDLEN n.
+     !w2 :: PWORDLEN m.
+      BNVAL(WCAT(w1,w2)) = ((BNVAL w1) * (2 EXP m)) + (BNVAL w2)
+\ENDTHEOREM
+\THEOREM BNVAL\_WCAT1 bword\_num
+|- !n.
+    !w :: PWORDLEN n.
+     !x. BNVAL(WCAT(w,WORD[x])) = ((BNVAL w) * 2) + (BV x)
+\ENDTHEOREM
+\THEOREM BNVAL\_WCAT2 bword\_num
+|- !n.
+    !w :: PWORDLEN n.
+     !x. BNVAL(WCAT(WORD[x],w)) = ((BV x) * (2 EXP n)) + (BNVAL w)
+\ENDTHEOREM
+\THEOREM BV\_DEF bword\_num
+|- !b. BV b = (b => SUC 0 | 0)
+\ENDTHEOREM
+\THEOREM BV\_LESS\_2 bword\_num
+|- !x. (BV x) < 2
+\ENDTHEOREM
+\THEOREM BV\_VB bword\_num
+|- !x. x < 2 ==> (BV(VB x) = x)
+\ENDTHEOREM
+\THEOREM DOUBL\_EQ\_SHL bword\_num
+|- !n.
+    0 < n ==>
+    (!w :: PWORDLEN n.
+      !b. NBWORD n((BNVAL w) + ((BNVAL w) + (BV b))) = SND(SHL F w b))
+\ENDTHEOREM
+\THEOREM EQ\_NBWORD0\_SPLIT bword\_num
+|- !n.
+    !w :: PWORDLEN n.
+     !m.
+      m <= n ==>
+      ((w = NBWORD n 0) =
+       (WSEG(n - m)m w = NBWORD(n - m)0) /\ (WSEG m 0 w = NBWORD m 0))
+\ENDTHEOREM
+\THEOREM MSB\_NBWORD bword\_num
+|- !n m. BIT n(NBWORD(SUC n)m) = VB((m DIV (2 EXP n)) MOD 2)
+\ENDTHEOREM
+\THEOREM NBWORD0 bword\_num
+|- !m. NBWORD 0 m = WORD[]
+\ENDTHEOREM
+\THEOREM NBWORD\_BNVAL bword\_num
+|- !n. !w :: PWORDLEN n. NBWORD n(BNVAL w) = w
+\ENDTHEOREM
+\THEOREM NBWORD\_DEF bword\_num
+|- !n m. NBWORD n m = WORD(NLIST n VB 2 m)
+\ENDTHEOREM
+\THEOREM NBWORD\_MOD bword\_num
+|- !n m. NBWORD n(m MOD (2 EXP n)) = NBWORD n m
+\ENDTHEOREM
+\THEOREM NBWORD\_SPLIT bword\_num
+|- !n1 n2 m.
+    NBWORD(n1 + n2)m = WCAT(NBWORD n1(m DIV (2 EXP n2)),NBWORD n2 m)
+\ENDTHEOREM
+\THEOREM NBWORD\_SUC bword\_num
+|- !n m. NBWORD(SUC n)m = WCAT(NBWORD n(m DIV 2),WORD[VB(m MOD 2)])
+\ENDTHEOREM
+\THEOREM NBWORD\_SUC\_FST bword\_num
+|- !n m.
+    NBWORD(SUC n)m = WCAT(WORD[VB((m DIV (2 EXP n)) MOD 2)],NBWORD n m)
+\ENDTHEOREM
+\THEOREM NBWORD\_SUC\_WSEG bword\_num
+|- !n. !w :: PWORDLEN(SUC n). NBWORD n(BNVAL w) = WSEG n 0 w
+\ENDTHEOREM
+\THEOREM PWORDLEN\_NBWORD bword\_num
+|- !n m. PWORDLEN n(NBWORD n m)
+\ENDTHEOREM
+\THEOREM VB\_BV bword\_num
+|- !x. VB(BV x) = x
+\ENDTHEOREM
+\THEOREM VB\_DEF bword\_num
+|- !n. VB n = ~(n MOD 2 = 0)
+\ENDTHEOREM
+\THEOREM WCAT\_NBWORD\_0 bword\_num
+|- !n1 n2. WCAT(NBWORD n1 0,NBWORD n2 0) = NBWORD(n1 + n2)0
+\ENDTHEOREM
+\THEOREM WORDLEN\_NBWORD bword\_num
+|- !n m. WORDLEN(NBWORD n m) = n
+\ENDTHEOREM
+\THEOREM WSEG\_NBWORD bword\_num
+|- !m k n.
+    (m + k) <= n ==>
+    (!l. WSEG m k(NBWORD n l) = NBWORD m(l DIV (2 EXP k)))
+\ENDTHEOREM
+\THEOREM WSEG\_NBWORD\_SUC bword\_num
+|- !n m. WSEG n 0(NBWORD(SUC n)m) = NBWORD n m
+\ENDTHEOREM
+\THEOREM WSPLIT\_NBWORD\_0 bword\_num
+|- !m n. m <= n ==> (WSPLIT m(NBWORD n 0) = NBWORD(n - m)0,NBWORD m 0)
+\ENDTHEOREM
+\THEOREM ZERO\_WORD\_VAL bword\_num
+|- !n. !w :: PWORDLEN n. (w = NBWORD n 0) = (BNVAL w = 0)
+\ENDTHEOREM
+\section{The theory {\tt bword\_arith}}
+\THEOREM ACARRY\_ACARRY\_WSEG bword\_arith
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     !cin m k1 k2.
+      k1 < m /\ k2 < n /\ (m + k2) <= n ==>
+      (ACARRY k1(WSEG m k2 w1)(WSEG m k2 w2)(ACARRY k2 w1 w2 cin) =
+       ACARRY(k1 + k2)w1 w2 cin)
+\ENDTHEOREM
+\THEOREM ACARRY\_DEF bword\_arith
+|- (!w1 w2 cin. ACARRY 0 w1 w2 cin = cin) /\
+   (!n w1 w2 cin.
+     ACARRY(SUC n)w1 w2 cin =
+     VB
+     (((BV(BIT n w1)) + ((BV(BIT n w2)) + (BV(ACARRY n w1 w2 cin)))) DIV
+      2))
+\ENDTHEOREM
+\THEOREM ACARRY\_EQ\_ADD\_DIV bword\_arith
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     !k.
+      k < n ==>
+      (BV(ACARRY k w1 w2 cin) =
+       ((BNVAL(WSEG k 0 w1)) + ((BNVAL(WSEG k 0 w2)) + (BV cin))) DIV
+       (2 EXP k))
+\ENDTHEOREM
+\THEOREM ACARRY\_EQ\_ICARRY bword\_arith
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     !cin k. k <= n ==> (ACARRY k w1 w2 cin = ICARRY k w1 w2 cin)
+\ENDTHEOREM
+\THEOREM ACARRY\_MSB bword\_arith
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     !cin.
+      ACARRY n w1 w2 cin =
+      BIT n(NBWORD(SUC n)((BNVAL w1) + ((BNVAL w2) + (BV cin))))
+\ENDTHEOREM
+\THEOREM ACARRY\_WSEG bword\_arith
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     !cin k m.
+      k < m /\ m <= n ==>
+      (ACARRY k(WSEG m 0 w1)(WSEG m 0 w2)cin = ACARRY k w1 w2 cin)
+\ENDTHEOREM
+\THEOREM ADD\_NBWORD\_EQ0\_SPLIT bword\_arith
+|- !n1 n2.
+    !w1 w2 :: PWORDLEN(n1 + n2).
+     !cin.
+      (NBWORD(n1 + n2)((BNVAL w1) + ((BNVAL w2) + (BV cin))) =
+       NBWORD(n1 + n2)0) =
+      (NBWORD 
+       n1
+       ((BNVAL(WSEG n1 n2 w1)) +
+        ((BNVAL(WSEG n1 n2 w2)) + (BV(ACARRY n2 w1 w2 cin)))) =
+       NBWORD n1 0) /\
+      (NBWORD 
+       n2
+       ((BNVAL(WSEG n2 0 w1)) + ((BNVAL(WSEG n2 0 w2)) + (BV cin))) =
+       NBWORD n2 0)
+\ENDTHEOREM
+\THEOREM ADD\_WORD\_SPLIT bword\_arith
+|- !n1 n2.
+    !w1 w2 :: PWORDLEN(n1 + n2).
+     !cin.
+      NBWORD(n1 + n2)((BNVAL w1) + ((BNVAL w2) + (BV cin))) =
+      WCAT
+      (NBWORD 
+       n1
+       ((BNVAL(WSEG n1 n2 w1)) +
+        ((BNVAL(WSEG n1 n2 w2)) + (BV(ACARRY n2 w1 w2 cin)))),
+       NBWORD 
+       n2
+       ((BNVAL(WSEG n2 0 w1)) + ((BNVAL(WSEG n2 0 w2)) + (BV cin))))
+\ENDTHEOREM
+\THEOREM ICARRY\_DEF bword\_arith
+|- (!w1 w2 cin. ICARRY 0 w1 w2 cin = cin) /\
+   (!n w1 w2 cin.
+     ICARRY(SUC n)w1 w2 cin =
+     BIT n w1 /\ BIT n w2 \/
+     (BIT n w1 \/ BIT n w2) /\ ICARRY n w1 w2 cin)
+\ENDTHEOREM
+\THEOREM ICARRY\_WSEG bword\_arith
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     !cin k m.
+      k < m /\ m <= n ==>
+      (ICARRY k(WSEG m 0 w1)(WSEG m 0 w2)cin = ICARRY k w1 w2 cin)
+\ENDTHEOREM
+\THEOREM WSEG\_NBWORD\_ADD bword\_arith
+|- !n.
+    !w1 w2 :: PWORDLEN n.
+     !m k cin.
+      (m + k) <= n ==>
+      (WSEG m k(NBWORD n((BNVAL w1) + ((BNVAL w2) + (BV cin)))) =
+       NBWORD 
+       m
+       ((BNVAL(WSEG m k w1)) +
+        ((BNVAL(WSEG m k w2)) + (BV(ACARRY k w1 w2 cin)))))
+\ENDTHEOREM

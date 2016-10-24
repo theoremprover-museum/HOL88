@@ -1,0 +1,10 @@
+\DOC top_window
+
+\TYPE {top_window : (window_stack -> window)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

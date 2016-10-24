@@ -1,0 +1,3 @@
+\THEOREM wo_Union WELLORDER
+|- !P. Union P = (\x. ?p. P p /\ p x)
+\ENDTHEOREM

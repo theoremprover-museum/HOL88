@@ -1,0 +1,10 @@
+\DOC print_nat
+
+\TYPE {print_nat : (nat -> void)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

@@ -1,0 +1,10 @@
+\DOC make_window
+
+\TYPE {make_window:(term->thm list->thmlist->goal list->term list->window)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

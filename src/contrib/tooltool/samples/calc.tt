@@ -1,0 +1,63 @@
+application "bc"
+   size 2 by 20 characters
+   label "<< Calculator >>"
+gadgets
+   bottom
+   proportional
+   font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+   button
+      normal	" Clear "	send "c\n";
+   end_button
+   button
+      normal	" Close "	close;
+      shift	" Quit "	exit;
+   end_button
+   button
+      normal	" 7 "		send "7";
+   end_button
+   button
+      normal	" 8 "		send "8";
+   end_button
+   button
+      normal	" 9 "		send "9";
+   end_button
+   button
+      normal	" / "		send "/";
+   end_button
+   button
+      normal	" 4 "		send "4";
+   end_button
+   button
+      normal	" 5 "		send "5";
+   end_button
+   button
+      normal	" 6 "		send "6";
+   end_button
+   button
+      normal	" X "		send "*";
+   end_button
+   button
+      normal	" 1 "		send "1";
+   end_button
+   button
+      normal	" 2 "		send "2";
+   end_button
+   button
+      normal	" 3 "		send "3";
+   end_button
+   button
+      normal	" - "		send "-";
+   end_button
+   button
+      normal	" 0 "		send "0";
+   end_button
+   button
+      normal	" . "		send ".";
+   end_button
+   button
+      normal	" = "		send "\n";
+   end_button
+   button
+      normal	" + "		send "+";
+   end_button
+end_gadgets

@@ -1,0 +1,35 @@
+# =====================================================================
+# Makefile for the hol LIBRARIES documentation
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# List of libraries that have documentation
+# ---------------------------------------------------------------------
+Libraries = abs_theory arith finite_sets latex-hol more_arithmetic \
+            more_lists pair parser pred_sets prettyp reals reduce  \
+            sets string taut trs unwind wellorder window
+
+# ---------------------------------------------------------------------
+# Pathname to libraries directory
+# ---------------------------------------------------------------------
+Libp=../../Library
+
+default:
+	@echo "INSTRUCTIONS: Type \"make all\" to make LIBRARIES"
+
+clean:
+	rm -f *.dvi *.aux *.toc *.log 
+
+individual-libraries:
+	for lib in ${Libraries} ; \
+	    do (cd ${Libp}/$$lib/Manual; make all) ; \
+	done
+	@echo "===> all library documentation typeset"
+
+libraries:
+	latex libraries.tex
+
+all: 
+	make clean; make individual-libraries; make libraries
+
+

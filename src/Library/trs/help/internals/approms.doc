@@ -1,0 +1,15 @@
+\DOC approms
+
+\BLTYPE
+approms : ((void -> result_of_match) ->
+           (void -> result_of_match) ->
+           void ->
+           result_of_match)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

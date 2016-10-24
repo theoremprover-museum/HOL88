@@ -1,0 +1,3 @@
+\THEOREM FACT_LESS arithmetic
+|- !n. 0 < (FACT n)
+\ENDTHEOREM

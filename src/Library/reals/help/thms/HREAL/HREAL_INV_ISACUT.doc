@@ -1,0 +1,6 @@
+\THEOREM HREAL_INV_ISACUT HREAL
+|- !X.
+    isacut
+    (\w.
+      ?d. d hrat_lt hrat_1 /\ (!x. cut X x ==> (w hrat_mul x) hrat_lt d))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM ADD arithmetic
+|- (!n. 0 + n = n) /\ (!m n. (SUC m) + n = SUC(m + n))
+\ENDTHEOREM

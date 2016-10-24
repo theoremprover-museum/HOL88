@@ -1,0 +1,367 @@
+\DOC{GROUP\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+GROUP_TAC : thm list -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A tactic for solving or reducing goals of group membership.
+
+\DESCRIBE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_TAC thm_list
+\end{verbatim}}\vspace*{-3mm}
+\noindent repeatedly reduces the goal using matching and reverse modus
+ponens with the assumptions, the theorems from {\small\verb%elt_gp.th%} which express
+closure facts, and the theorem in {\small\verb%thm_list%}.  It returns those subgoal
+which cannot be further reduced with the given facts.
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_TAC [INT_SBGP_neg;INT_SBGP_TIMES_CLOSED]
+\end{verbatim}}\vspace*{-3mm}
+\noindent applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(H,$plus)"; "H N"; "H MIN"], "H(N plus (neg(MAX times MIN)))")
+\end{verbatim}}\vspace*{-3mm}
+\noindent where
+\vspace*{-3mm}{\small\begin{verbatim}
+   INT_SBGP_neg =
+     |- !H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))
+
+   INT_SBGP_TIMES_CLOSED =
+     |- !H. SUBGROUP((\N. T),$plus)H ==> (!m p. H p ==> H(m times p))
+\end{verbatim}}\vspace*{-3mm}
+\noindent solves the goal, whereas
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_ELT_TAC
+\end{verbatim}}\vspace*{-3mm}
+\noindent returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(H,$plus)"; "H N"; "H MIN"], "H(neg(MAX times MIN))")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Reducing a goal of showing that a compound element is in a group using
+standard group theory closure facts, and any others added by the user.
+
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+REDUCE_TAC, GROUP_ELT_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\DOC{GROUP\_ELT\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+GROUP_ELT_TAC : tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A tactic to solve or reduce routine goals of group membership.
+
+\DESCRIBE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_ELT_TAC
+\end{verbatim}}\vspace*{-3mm}
+\noindent has the same effect as
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_TAC []
+\end{verbatim}}\vspace*{-3mm}
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_ELT_TAC
+\end{verbatim}}\vspace*{-3mm}
+\noindent applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(H,$plus)"; "H N"; "H MIN"],
+    "H(N plus (INV(H,$plus)(MAX times MIN)))")
+\end{verbatim}}\vspace*{-3mm}
+\noindent returns the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(H,$plus)"; "H N"; "H MIN"], "H(MAX times MIN)")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Solving or reducing routine goals of group membership.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+REDUCE_TAC, GROUP_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{GROUP\_RIGHT\_ASSOC\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+GROUP_RIGHT_ASSOC_TAC : term -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+Reassociate a subterm from left to right.
+
+\DESCRIBE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_RIGHT_ASSOC_TAC tm
+\end{verbatim}}\vspace*{-3mm}
+\noindent rewrites a goal {\small\verb%P(tm)%} into {\small\verb%P(tm')%} where {\small\verb%tm%} is of the form
+{\small\verb%(prod (prod a b) c)%} for some product {\small\verb%prod%} and terms {\small\verb%a%}, {\small\verb%b%} and {\small\verb%c%},
+and {\small\verb%tm'%} is {\small\verb%(prod a (prod b c))%} provided the goal has an assumption
+of the form {\small\verb%GROUP(G,prod)%}.  {\small\verb%GROUP_RIGHT_ASSOC_TAC%} uses {\small\verb%GROUP_ELT_TAC%}
+to handle the group membership requirements which arise.
+
+\FAILURE
+The tactic {\small\verb%GROUP_RIGHT_ASSOC_TAC%} fails if it is not given a term of
+the form {\small\verb%(prod (prod a b) c)%}, or if it does not find an assumption
+of the form {\small\verb%GROUP(G,prod)%}.
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_RIGHT_ASSOC_TAC "comb (comb (comb u v) s) t)"
+\end{verbatim}}\vspace*{-3mm}
+\noindent applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(M,comb)";"M s"; "M t"; "M u"; "M v"],
+    "comb(comb(comb(comb u v)s)t)(INV(M,comb)(comb s t)) = comb u v")
+\end{verbatim}}\vspace*{-3mm}
+\noindent returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["M(comb u v)"; "GROUP(M,comb)"; "M s"; "M t"; "M u"; "M v"],
+    "comb(comb(comb u v)(comb s t))(INV(M,comb)(comb s t)) = comb u v")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Careful rewriting of computational expressions.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+GROUP_LEFT_ASSOC_TAC, INT_RIGHT_ASSOC_TAC, INT_LEFT_ASSOC_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{GROUP\_LEFT\_ASSOC\_TAC}
+\vspace*{-3mm}{\small\begin{verbatim}
+GROUP_LEFT_ASSOC_TAC : term -> tactic
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+Reassociate a subterm from right to left.
+
+\DESCRIBE
+The tactic
+\vspace*{-3mm}{\small\begin{verbatim}
+  GROUP_LEFT_ASSOC_TAC tm
+\end{verbatim}}\vspace*{-3mm}
+\noindent rewrites a goal {\small\verb%P(tm)%} into {\small\verb%P(tm')%} where {\small\verb%tm%} is of the form
+{\small\verb%(prod a (prod b c))%} for some product {\small\verb%prod%} and terms {\small\verb%a%}, {\small\verb%b%} and {\small\verb%c%},
+and {\small\verb%tm'%} is {\small\verb%(prod (prod a b) c)%} provided the goal has an assumption
+of the form {\small\verb%GROUP(G,prod)%}.  {\small\verb%GROUP_LEFT_ASSOC_TAC%} uses {\small\verb%GROUP_ELT_TAC%}
+to handle the group membership requirements which arise.
+
+\FAILURE
+The tactic {\small\verb%GROUP_LEFT_ASSOC_TAC%} fails if it is not given a term of
+the form {\small\verb%(prod a (prod b c))%}, or if it does not find an assumption
+of the form {\small\verb%GROUP(G,prod)%}.
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   GROUP_LEFT_ASSOC_TAC "comb u (comb v (comb s t))"
+\end{verbatim}}\vspace*{-3mm}
+\noindent applied to the goal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["GROUP(M,comb)"; "M s"; "M t"; "M u"; "M v"],
+    "comb(INV(M,comb)(comb u v))(comb u(comb v(comb s t))) = comb s t")
+\end{verbatim}}\vspace*{-3mm}
+\noindent returns the subgoal
+\vspace*{-3mm}{\small\begin{verbatim}
+   (["M(comb s t)"; "GROUP(M,comb)"; "M s"; "M t"; "M u"; "M v"],
+    "comb(INV(M,comb)(comb u v))(comb(comb u v)(comb s t)) = comb s t")
+\end{verbatim}}\vspace*{-3mm}
+
+\USES
+Careful rewriting of computational expressions.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+GROUP_RIGHT_ASSOC_TAC, INT_RIGHT_ASSOC_TAC, INT_LEFT_ASSOC_TAC
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{return\_GROUP\_thm}
+\vspace*{-3mm}{\small\begin{verbatim}
+return_GROUP_thm : string -> thm -> thm list -> thm
+return_GROUP_thm : string -> thm -> proof
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A function for instantiating and simplifying a theorem from {\small\verb%elt_gp.th%}.
+
+\DESCRIBE
+The function
+\vspace*{-3mm}{\small\begin{verbatim}
+   return_GROUP_thm thm_name is_group_thm rewrite_list
+\end{verbatim}}\vspace*{-3mm}
+\noindent returns the result of instantiating the theorem named {\small\verb%thm_name%}
+in the theory {\small\verb%elt_gp.th%} with the group and product given in the theorem
+{\small\verb%is_group_thm%}, removing the {\small\verb%GROUP(G,prod)%} hypothesis from it using this
+theorem, and rewriting it with {\small\verb%rewrite_list%}.
+
+\FAILURE
+The function {\small\verb%return_GROUP_thm%} fails if it is not given a theorem
+of the form {\small\verb%|- GROUP(G,prod)%}.
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+  return_GROUP_thm
+    `INV_LEMMA`
+    (theorem `integer` `integer_as_GROUP`)
+    [(SYM (definition `integer` `neg_DEF`)); (theorem `integer` `ID_EQ_0`)];;
+\end{verbatim}}\vspace*{-3mm}
+\noindent returns
+\vspace*{-3mm}{\small\begin{verbatim}
+  |- !x. ((neg x) plus x = INT 0) /\ (x plus (neg x) = INT 0)
+\end{verbatim}}\vspace*{-3mm}
+\noindent which is what the theorem {\small\verb%INV_LEMMA%} from {\small\verb%elt_gp.th%} says
+in the case of the integers.
+
+\USES
+Accessing a specific theorem from {\small\verb%elt_gp.th%} reworded in a theory which is an
+instance of a group.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+include_GROUP_thm, return_GROUP_theory, include_GROUP_theory
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{include\_GROUP\_thm}
+\vspace*{-3mm}{\small\begin{verbatim}
+include_GROUP_thm : string -> string -> thm -> thm list -> thm
+include_GROUP_thm : string -> string -> thm -> proof
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A function for instantiating and simplifying, and then storing a theorem
+from {\small\verb%elt_gp.th%}.
+
+\DESCRIBE
+The function
+\vspace*{-3mm}{\small\begin{verbatim}
+   include_GROUP_thm elt_gp_name new_thm_name is_group_thm rewrite_list
+\end{verbatim}}\vspace*{-3mm}
+\noindent has the effect of
+\vspace*{-3mm}{\small\begin{verbatim}
+   save_thm (new_thm_name,
+             (return_GROUP_thm elt_gp_name is_group_thm rewrite_list));;
+\end{verbatim}}\vspace*{-3mm}
+
+\FAILURE
+The function {\small\verb%include_GROUP_thm%} fails either if it is not given a
+theorem of the form {\small\verb%|- GROUP(G,prod)%}, causing {\small\verb%return_GROUP_thm%} to
+fail, or if it is given a string that is the same as the name of a
+previously saved theorem, causing {\small\verb%save_thm%} to fail.
+
+\EXAMPLE
+\vspace*{-3mm}{\small\begin{verbatim}
+   include_GROUP_thm
+     `INV_LEMMA`
+     `PLUS_neg_LEMMA`
+     (theorem `integer` `integer_as_GROUP`)
+     [(SYM (definition `integer` `neg_DEF`)); (theorem `integer` `ID_EQ_0`)];;
+\end{verbatim}}\vspace*{-3mm}
+\noindent saves the theorem
+\vspace*{-3mm}{\small\begin{verbatim}
+   |- !x. ((neg x) plus x = INT 0) /\ (x plus (neg x) = INT 0)
+\end{verbatim}}\vspace*{-3mm}
+\noindent under the name {\small\verb%PLUS_neg_LEMMA%} in the current theory.
+
+\USES
+Adding to the current theory a specific theorem for group theory in a
+theory which is an instance of a group.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+return_GROUP_thm, return_GROUP_theory, include_GROUP_theory
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{return\_GROUP\_theory}
+\vspace*{-3mm}{\small\begin{verbatim}
+return_GROUP_theory : string -> thm -> thm list -> (string # thm)list
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A function for instantiating and simplifying all the theorems from
+{\small\verb%elt_gp.th%}.
+
+
+\DESCRIBE
+The function
+\vspace*{-3mm}{\small\begin{verbatim}
+   return_GROUP_theory prefix is_group_thm rewrite_list
+\end{verbatim}}\vspace*{-3mm}
+\noindent returns the list resulting from of instantiating the each
+theorem in the theory {\small\verb%elt_gp.th%} with the group and product given in
+the theorem {\small\verb%is_group_thm%}, removing the {\small\verb%GROUP(G,prod)%} hypothesis
+from it using this theorem, rewriting it with {\small\verb%rewrite_list%},
+and pairing it with its original name prefixed by {\small\verb%prefix%}.
+
+\FAILURE
+The function {\small\verb%return_GROUP_theory%} fails if it is not given a theorem
+of the form {\small\verb%|- GROUP(G,prod)%}.
+
+\USES
+Accessing all the theorems from {\small\verb%elt_gp.th%} reworded in a theory which is an
+instance of a group, in order to further modify some of the theorems before
+storing the collection in the current theory.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+return_GROUP_thm, include_GROUP_thm, include_GROUP_theory
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC
+
+\DOC{include\_GROUP\_theory}
+\vspace*{-3mm}{\small\begin{verbatim}
+include_GROUP_theory : string -> thm -> thm list -> thm list
+\end{verbatim}}\vspace*{-3mm}
+
+\SYNOPSIS
+A function for instantiating and simplifying, and then storing all
+the theorems from {\small\verb%elt_gp.th%}.
+
+\DESCRIBE
+The function
+\vspace*{-3mm}{\small\begin{verbatim}
+   include_GROUP_theory prefix is_group_thm rewrite_list
+\end{verbatim}}\vspace*{-3mm}
+\noindent has the effect of mapping {\small\verb%save_thm%} over the result of
+\vspace*{-3mm}{\small\begin{verbatim}
+   return_GROUP_theory prefix is_group_thm rewrite_list
+\end{verbatim}}\vspace*{-3mm}
+\noindent after removing all trivial theorems ({\small\verb%|- T%}) from the list.
+
+\FAILURE
+The function {\small\verb%include_GROUP_theory%} fails either if it is not given a
+theorem of the form {\small\verb%|- GROUP(G,prod)%}, causing {\small\verb%return_GROUP_theory%}
+to fail, or if one of the names in the list returned by
+{\small\verb%return_GROUP_theory%} is the same as the name of a previously saved
+theorem, causing {\small\verb%save_thm%} to fail.
+
+\USES
+Adding to the current theory all the theorems from {\small\verb%elt_gp.th%}, in a form
+that is compatible with the current theory.
+
+\SEEALSO
+\vspace*{-3mm}{\small\begin{verbatim}
+return_GROUP_thm, include_GROUP_thm, return_GROUP_theory
+\end{verbatim}}\vspace*{-3mm}
+
+\ENDDOC

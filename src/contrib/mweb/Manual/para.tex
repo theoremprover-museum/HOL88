@@ -1,0 +1,197 @@
+% Document Type: LaTeX
+\section{Parameters}
+
+\noindent\cmdrule
+
+\begin{describepara}{char_anon_sec}{\verb*|A|}\\describe
+This parameter associates with the \cmd{begin_anon_section} command
+which begins an anonymous section. 
+\end{describepara}
+\begin{describepara}{char_begin_para}{\verb*|{|}\\describe
+This parameter begins the argument to a command. It must be a signle
+character string.
+\end{describepara}
+\begin{describepara}{char_begin_sec}{\verb*| |}\\describe
+This parameter associates with the \cmd{begin_section} command
+which begins an ordinary section. 
+\end{describepara}
+\begin{describepara}{char_begin_star_sec}{\verb*|*|}\\describe
+This parameter associates with the \cmd{begin_star_section} command
+which begins a major section. 
+\end{describepara}
+\begin{describepara}{char_begin_tag}{\verb*|t|}\\describe
+This parameter associates with the \cmd{begin_tag} command.
+which begins a tagged text block in a tag file or marks the position
+for replacing by a tagged text block in a master file.
+\end{describepara}
+\begin{describepara}{char_cmd}{\verb*|@|}\\describe
+This parameter is the command escape character.
+\end{describepara}
+\begin{describepara}{char_end_para}{\verb*|}|}\\describe
+This parameter terminates the argument to a command. It must be a signle
+character string.
+\end{describepara}
+\begin{describepara}{char_end_sec}{\verb*|-|}\\describe
+This parameter associates with the \cmd{end_section} command
+which terminates a section. 
+\end{describepara}
+\begin{describepara}{char_end_tag}{\verb*|e|}\\describe
+This parameter associates with the \cmd{end_tag} command.
+which terminates a tagged text block in a tag file.
+\end{describepara}
+\begin{describepara}{char_incl_file}{\verb*|I|}\\describe
+This parameter associates with the \cmd{incl_file} command.
+which specifies the name of a tag file to be included.
+\end{describepara}
+\begin{describepara}{char_ml_sec}{\verb*|M|}\\describe
+This parameter associates with the \cmd{begin_ml_section} command
+which begins an `ML only' section. Sections started with this command
+will not appear in the document if the ML only mode is active.
+\end{describepara}
+\begin{describepara}{char_new}{\verb*|N|}\\describe
+This parameter associates with the \cmd{native_part} command
+which begins the native-language part within a section. 
+\end{describepara}
+\begin{describepara}{char_old}{\verb*|O|}\\describe
+This parameter associates with the \cmd{other_part} command
+which begins the other-language part within a section. 
+\end{describepara}
+\begin{describepara}{char_para_def}{\verb*|D|}\\describe
+This parameter associates with the \cmd{para_def} command
+which defines the value of a parameter.
+\end{describepara}
+\begin{describepara}{char_str_esc}{\verb*|\\|}\\describe
+This parameter specifies the escape character in a string. Its value must
+be a single character string. When defining the value of a parameter,
+the string at the right hand side of the equation may contain this
+escape character. All character in the string is literal except this
+escape character. It is interpreted together with the next character.
+If the next character is also an escape character, it becomes a single
+escape character. If the next character is an `{\tt n}', it is
+interpreted as a `newline' character. If the next character is a digit
+from 0 to 7, then the next two characters must be digits as well. This
+three digit number is interpreted as an octal number specifying the
+ASCII code of a character.
+\end{describepara}
+\begin{describepara}{char_str_quote}{\verb*|\"|}\\describe
+This parameter specifies the quote character for strings. Its value
+must be a character string. This character marks the beginning and the
+end of a string in parameter value definition.
+\end{describepara}
+\begin{describepara}{doc_only_mode}{\verb*||}\\describe
+The value of this parameter is boolean. When it is true, the document
+only mode is active.
+\end{describepara}
+\begin{describepara}{filter_mode}{\verb*||}\\describe
+The value of this parameter is boolean. When it is true, the filter
+mode is active.
+\end{describepara}
+\begin{describepara}{insuffix}{\verb*|.m|}\\describe
+The value of this parameter is the default suffix of the input file.
+If the name of input file given on the command line has no suffix,
+this string is appended to it. The \mweb\ programs attempt to open a
+file of this resulting name for inputting.
+\end{describepara}
+\begin{describepara}{mac_after_tag}{\verb*|\\end{verbatim}\n|}\\describe
+The value of this parameter is output to the document file after the
+tagged text block.
+\end{describepara}
+\begin{describepara}{mac_before_tag}{\verb*|\\begin{verbatim}\n|}\\describe
+The value of this parameter is output to the document file before the
+tagged text block.
+\end{describepara}
+\begin{describepara}{mac_begin_arg}{\verb*|{|}\\describe
+The value of this parameter is output to the document file before a line
+from other-language part or native-language part.
+\end{describepara}
+\begin{describepara}{mac_begin_doc}{\verb*||}\\describe
+The value of this parameter is output to the document file to mark
+beginning of document part of every section.
+\end{describepara}
+\begin{describepara}{mac_begin_env}{\verb*|\\begin{paralines}\n|}\\describe
+The value of this parameter is output to the document file to
+mark the beginning of the environment for program lines.
+\end{describepara}
+\begin{describepara}{mac_changed}{\verb*|[c]|}\\describe
+The value of this parameter is output to the document file following
+the string of the parameter \para{mac_begin_env} if the contents of the two
+language parts are different.
+\end{describepara}
+\begin{describepara}{mac_end_arg}{\verb*|}|}\\describe
+The value of this parameter is output to the document file after a line
+from other-language part or native-language part.
+\end{describepara}
+\begin{describepara}{mac_end_doc}{\verb*||}\\describe
+The value of this parameter is output to the document file to mark
+end of document part of every section.
+\end{describepara}
+\begin{describepara}{mac_end_env}{\verb*|\\end{paralines}\n|}\\describe
+The value of this parameter is output to the document file to
+mark the end of the environment for program lines.
+\end{describepara}
+\begin{describepara}{mac_end_sec}{\verb*|\n|}\\describe
+The value of this parameter is output to the document file to
+mark the end of a section.
+\end{describepara}
+\begin{describepara}{mac_filler}{\verb*||}\\describe
+The value of this parameter is output to the document file following
+the string of the parameter \para{mac_begin_env} if the contents of the two
+language parts are the same.
+\end{describepara}
+\begin{describepara}{mac_line}{\verb*|\\pline|}\\describe
+The value of this parameter is output to the document file at the
+beginning of every pair of program lines.
+\end{describepara}
+\begin{describepara}{mac_sec}{\verb*|\\subsect|}\\describe
+The value of this parameter is output to the document file to start an
+ordinary section, or ML only section is the ML only mode is inactive.
+\end{describepara}
+\begin{describepara}{mac_sec_default}{\verb*|\\subsect{}|}\\describe
+The value of this parameter is output to the document file to start an
+ordinary section if there is no section name given.
+\end{describepara}
+\begin{describepara}{mac_star_sec}{\verb*|\\sect|}\\describe
+The value of this parameter is output to the document file to start a
+major section.
+\end{describepara}
+\begin{describepara}{ml_comm_begin}{\verb*|%-|}\\describe
+The value of this parameter is output to the program file to mark the
+beginning of a comment.
+\end{describepara}
+\begin{describepara}{ml_comm_end}{\verb*|-%|}\\describe
+The value of this parameter is output to the program file to mark the
+end of a comment.
+\end{describepara}
+\begin{describepara}{ml_line_count}{\verb*|200|}\\describe
+The value of this parameter specifies the maximum number of program
+lines in a section. It must be a string consisting of only decimal digit.
+\end{describepara}
+\begin{describepara}{ml_line_length}{\verb*|80|}\\describe
+The value of this parameter specifies the maximum number of characters
+on a program line. It must be a string consisting of only decimal digit.
+\end{describepara}
+\begin{describepara}{ml_only}{\verb*||}\\describe
+The value of this parameter is boolean. When it is true, the ML
+only mode is active.
+\end{describepara}
+\begin{describepara}{outsuffixmtangle}{\verb*|.ml|}\\describe
+The value of this parameter is the default suffix of the output file
+of \tangle. If only one file name is given on the command line,
+this string is appended to it after any suffix has been stripped to
+obtain a name for the output file.
+\end{describepara}
+\begin{describepara}{outsuffixmweave}{\verb*|.tex|}\\describe
+The value of this parameter is the default suffix of the output file
+of \weave. If only one file name is given on the command line,
+this string is appended to it after any suffix has been stripped to
+obtain a name for the output file.\end{describepara}
+\begin{describepara}{outsuffixwinnow}{\verb*|.m|}\\describe
+The value of this parameter is the default suffix of the output file
+of {\tt winnow}. If only one file name is given on the command line,
+this string is appended to it after any suffix has been stripped to
+obtain a name for the output file.
+\end{describepara}
+\begin{describepara}{str_blank}{\verb*|\n\t |}\\describe
+This parameter string contains all characters which are interpreted as
+blank character in a parameter definition.
+\end{describepara}

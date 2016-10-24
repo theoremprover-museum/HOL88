@@ -1,0 +1,3 @@
+\THEOREM closed TOPOLOGY
+|- !L S. closed L S = open L(compl S)
+\ENDTHEOREM

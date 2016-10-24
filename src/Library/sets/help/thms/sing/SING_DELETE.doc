@@ -1,0 +1,3 @@
+\THEOREM SING_DELETE sets
+|- !x. {{x}} DELETE x = {{}}
+\ENDTHEOREM

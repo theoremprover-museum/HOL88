@@ -1,0 +1,11 @@
+\DOC quit
+
+\TYPE {quit : (void -> void)}
+
+\SYNOPSIS
+Evaluating {quit()} terminates the current HOL session.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

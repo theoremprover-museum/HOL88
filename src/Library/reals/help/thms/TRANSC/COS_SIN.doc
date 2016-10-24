@@ -1,0 +1,3 @@
+\THEOREM COS_SIN TRANSC
+|- !x. cos x = sin((pi / (& 2)) - x)
+\ENDTHEOREM

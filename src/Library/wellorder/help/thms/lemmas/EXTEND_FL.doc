@@ -1,0 +1,3 @@
+\THEOREM EXTEND_FL WELLORDER
+|- !l x. woset l ==> (fl(\(x,y). l(x,y) /\ l(y,a))x = l(x,a))
+\ENDTHEOREM

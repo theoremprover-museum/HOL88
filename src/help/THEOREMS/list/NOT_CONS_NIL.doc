@@ -1,0 +1,3 @@
+\THEOREM NOT_CONS_NIL list
+|- !h t. ~(CONS h t = [])
+\ENDTHEOREM

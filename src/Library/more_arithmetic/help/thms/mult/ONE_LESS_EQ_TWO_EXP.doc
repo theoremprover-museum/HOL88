@@ -1,0 +1,3 @@
+\THEOREM ONE_LESS_EQ_TWO_EXP mult
+|- !n. 1 <= (2 EXP n)
+\ENDTHEOREM

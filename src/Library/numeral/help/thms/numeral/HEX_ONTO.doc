@@ -1,0 +1,3 @@
+\THEOREM HEX_ONTO numeral
+|- !l. ?n. HEX l = n
+\ENDTHEOREM

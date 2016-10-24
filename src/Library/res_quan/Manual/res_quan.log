@@ -1,0 +1,233 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:22
+**res_quan.tex
+(res_quan.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (/usr/lib/tex/macros/latex/makeidx.sty
+Document style option `makeidx' - released 21 Oct 91
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+\@indexfile=\write3
+
+Writing index file res_quan.idx 
+(res_quan.aux (title.aux) (description.aux) (entries.aux) (theorems.aux))
+(title.tex
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 16.
+[1
+
+
+] [2]) (res_quan.toc)
+\tf@toc=\write4
+ [3
+
+
+] [4
+
+] (description.tex
+Chapter 1.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 3.
+[1
+
+
+] [2]
+Overfull \hbox (1.882pt too wide) in paragraph at lines 149--151
+[]\twlrm The the-o-rems [] and [] state the re-order-ing prop-
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[3] [4] [5] [6] [7] [8]) [9] (entries.tex [10
+
+
+
+]
+Chapter 2.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 1.
+(entries-intro.tex) [11] [12]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 15.47705
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 371.92262fil
+..\frtnbf D
+..\frtnbf e
+..\frtnbf s
+..\frtnbf c
+..\frtnbf r
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [13]
+[14] [15]
+Underfull \vbox (badness 1122) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.24094
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 371.92262fil
+..\frtnbf D
+..\frtnbf e
+..\frtnbf s
+..\frtnbf c
+..\frtnbf r
+..etc.
+.\penalty 10000
+.\glue(\parskip) 0.0 plus 1.0
+.\glue(\baselineskip) 4.8667
+.etc.
+
+ [16]
+[17] [18]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 21.09335
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.34921
+..\hbox(0.0+0.0)x0.0
+..\elvtt C
+..\elvtt O
+..\elvtt N
+..\elvtt D
+..etc.
+.\glue(\baselineskip) 5.33337
+.\hbox(8.33331+2.43333)x455.24408, glue set - 0.36163
+..\hbox(0.0+0.0)x0.0
+..\elvtt a
+..\elvtt s
+..\elvtt m
+..\twlrm .
+..etc.
+.\penalty 100
+.etc.
+
+ [19]
+[20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 24.18478
+.\glue(\topskip) 3.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 140.67374fil
+..\twlrm c
+..\twlrm o
+..\twlrm n
+..\twlrm s
+..\twlrm t
+..etc.
+.\penalty 10000
+.\glue 12.0 plus 3.0 minus 2.0
+.\glue 0.0 plus 1.0
+.etc.
+
+ [32]
+Overfull \hbox (3.43106pt too wide) in paragraph at lines 1022--1031
+\twlrm ment, and a term giv-ing the de-sired def-i-ni-tion. The value re-turned
+ by []\elvtt new_resq_definition
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\twlrm m
+.\twlrm e
+.\twlrm n
+.\kern-0.32639
+.\twlrm t
+.etc.
+
+[33] [34] [35] [36]
+Overfull \hbox (10.91988pt too wide) in paragraph at lines 1201--1204
+\twlrm When ap-plied to a term of the form []\elvtt !x::P. !y::Q. R\twlrm , the
+ con-ver-sion []\elvtt RESQ_FORALL_SWAP_CONV
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\twlrm W
+.\twlrm h
+.\twlrm e
+.\twlrm n
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[37] [38] [39] [40] [41] [42] [43]
+Overfull \hbox (3.30327pt too wide) in paragraph at lines 1551--1553
+[]\twlrm Given a theorem-tactic []\elvtt ttac\twlrm , ap-ply-ing the tac-tic []
+\elvtt RESQ_RES_THEN ttac \twlrm to a goal []\elvtt (asml,gl)
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm G
+.\twlrm i
+.\twlrm v
+.\kern-0.32639
+.etc.
+
+[44] [45] [46] [47]
+Overfull \hbox (5.19403pt too wide) in paragraph at lines 1750--1754
+\twlrm where the sub-sti-tu-tions are made se-quen-tially left-to-right in the 
+same way as for []\elvtt RESQ_SPEC\twlrm ,
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm w
+.\twlrm h
+.\twlrm e
+.\twlrm r
+.\twlrm e
+.etc.
+
+[48]
+Overfull \hbox (8.65239pt too wide) in paragraph at lines 1780--1789
+\twlrm When ap-plied to a the-o-rem []\elvtt A |- !x1::P1. ...!xn::Pn. t\twlrm 
+, the in-fer-ence rule []\elvtt RESQ_SPEC_ALL
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm W
+.\twlrm h
+.\twlrm e
+.\twlrm n
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[49] [50] [51]) [52] (theorems.tex
+Chapter 3.
+(theorems-intro.tex)) [53
+
+
+
+] (res_quan.ind [54
+
+
+] [55
+
+]) (res_quan.aux (title.aux)
+(description.aux) (entries.aux) (theorems.aux)) ) 
+Here is how much of TeX's memory you used:
+ 451 strings out of 11977
+ 3812 string characters out of 87025
+ 39681 words of memory out of 262141
+ 2301 multiletter control sequences out of 9500
+ 19640 words of font info for 75 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 19i,12n,19p,254b,519s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on res_quan.dvi (59 pages, 110728 bytes).

@@ -1,0 +1,3 @@
+\THEOREM FILTER_FILTER list
+|- !P Q l. FILTER P(FILTER Q l) = FILTER(\x. P x /\ Q x)l
+\ENDTHEOREM

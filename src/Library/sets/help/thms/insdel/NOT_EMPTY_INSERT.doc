@@ -1,0 +1,3 @@
+\THEOREM NOT_EMPTY_INSERT sets
+|- !x s. ~({{}} = x INSERT s)
+\ENDTHEOREM

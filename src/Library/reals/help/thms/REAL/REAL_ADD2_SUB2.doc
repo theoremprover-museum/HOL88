@@ -1,0 +1,3 @@
+\THEOREM REAL_ADD2_SUB2 REAL
+|- !a b c d. (a + b) - (c + d) = (a - c) + (b - d)
+\ENDTHEOREM

@@ -1,0 +1,14 @@
+% ===== Instruction Word Format ========================================
+% ======================================================================
+\setlength{\unitlength}{1mm}
+\begin{picture}(125,16)(0,0)
+
+  {\thicklines {\put(0,9){\framebox(125,7)[c]{}}}}
+  {\thicklines {\put(35,9.5){\line(0,1){6}}}}
+
+  \put(17.5,5){\makebox(0,0)[c]{$\underbrace{\rule{32mm}{0mm}}$}}
+  \put(80,5){\makebox(0,0)[c]{$\underbrace{\rule{87mm}{0mm}}$}}
+  \put(17.5,3){\makebox(0,0)[t]{3-bit opcode}}
+  \put(80,3){\makebox(0,0)[t]{operand address}}
+
+\end{picture}

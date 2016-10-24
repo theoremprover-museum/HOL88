@@ -1,0 +1,3 @@
+\THEOREM SING_DEF sets
+|- !s. SING s = (?x. s = {{x}})
+\ENDTHEOREM

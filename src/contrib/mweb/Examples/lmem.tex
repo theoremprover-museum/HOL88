@@ -1,0 +1,38 @@
+\sect{The theory {\tt lmem}}
+
+This theory contains definition of the constant \CONST{LMEM} and a theorem.
+
+\subsect{Definition of \protect\CONST{LMEM}}
+
+The constant \CONST{LMEM} is a predicate asserting the membership of an
+element in a list.
+\begin{equation}
+\THM (\FORALL x\DOT \CONST{LMEM} \,x \,\NIL  = \CONST{F}) \AND 
+     (\FORALL x \,h \,t\DOT \CONST{LMEM} \,x \,(\CONST{CONS} \,h \,t) =
+                               (x = h) \OR  \CONST{LMEM} \,x \,t)
+\end{equation}
+\begin{comment} 
+\pline{
+}{let\ LMEM\char"5F DEF\ =\ new\char"5F list\char"5F rec\char"5F definition(`LMEM\char"5F DEF`,}
+\pline{
+}{\ "(LMEM\ x\ []\ =\ F)\ /\char"5C }
+\pline{
+}{\ \ (LMEM\ x\ (CONS\ (h:*)\ t)\ =\ (x\ =\ h)\ \char"5C /\ (LMEM\ x\ t))");;}
+\end{comment}
+
+\subsect{A theorem}
+
+The theorem \mlname{NULL_NOT_LMEM} states that nothing is an element
+of an empty list. 
+\begin{equation}
+\THM \FORALL x \,l\DOT \CONST{NULL} \,l \IMP  \NOT \CONST{LMEM} \,x \,l
+\end{equation}
+\begin{comment} 
+\pline{
+}{let\ NULL\char"5F NOT\char"5F LMEM\ =\ prove\char"5F thm(`NULL\char"5F NOT\char"5F LMEM`,}
+\pline{
+}{\ \ \ \ "!(x:*)\ l.\ NULL\ l\ ==>\ \char"7E (LMEM\ x\ l)",}
+\pline{
+}{\ \ \ \ GEN\char"5F TAC\ THEN\ LIST\char"5F INDUCT\char"5F TAC\ THEN\ REWRITE\char"5F TAC[NULL;LMEM\char"5F DEF]);;}
+\end{comment}
+

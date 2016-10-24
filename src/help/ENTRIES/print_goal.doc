@@ -1,0 +1,37 @@
+\DOC print_goal
+
+\TYPE {print_goal : (goal -> void)}
+
+\SYNOPSIS
+Prints a goal, including its assumptions.
+
+\DESCRIBE
+The function {print_goal} takes a goal as argument and prints the goal
+and its list of assumptions.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+If we define a goal in the following manner:
+{
+   #let goal = ([],"!a. a /\ T ==> a");;
+   goal = ([], "!a. a /\ T ==> a") : (* list # term)
+
+}
+\noindent and then do:
+{
+   #print_goal goal;;
+}
+\noindent The system responds with:
+{
+   "!a. a /\ T ==> a"
+
+   () : void
+}
+\noindent If there were assumptions these would also have been printed.
+
+\SEEALSO
+print_thm
+
+\ENDDOC

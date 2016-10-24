@@ -1,0 +1,5 @@
+\THEOREM trf tree
+|- !n f.
+    trf n f =
+    (@fn. !trl. (HT(node trl)) <= n ==> (fn(node trl) = f(MAP fn trl)))
+\ENDTHEOREM

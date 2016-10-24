@@ -1,0 +1,3 @@
+\THEOREM DECIMAL_ONTO numeral
+|- !l. ?n. DECIMAL l = n
+\ENDTHEOREM

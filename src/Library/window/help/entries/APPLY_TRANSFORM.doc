@@ -1,0 +1,17 @@
+\DOC APPLY_TRANSFORM
+
+\TYPE {APPLY_TRANSFORM : ((window -> window) -> void)}
+
+\SYNOPSIS
+Apply a window transforming function to the top window.
+
+\LIBRARY window
+
+\DESCRIBE
+{APPLY_TRANSFORM fn} transforms the window on top of the window stack by
+applying {fn} to it.
+
+\FAILURE
+Fails if the window stack is empty.
+
+\ENDDOC

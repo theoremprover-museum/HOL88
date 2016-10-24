@@ -1,0 +1,121 @@
+\DOC library_loader
+
+\BLTYPE
+library_loader : ((string # string list # string list #
+    string list # string # string # string list) -> void)
+\ELTYPE
+
+\KEYWORDS
+library
+
+\SYNOPSIS
+Performs the actual loading of a library.
+
+\DESCRIBE
+This function is a generic library loader which carries out the
+standard loading procedures for loading library. This provides a
+simple interface for library authors to write the library load file.
+A library consists of three parts: theories, codes and document. Any
+of these may be absent (however, it is strongly recommanded to provide
+proper document for all libraries). The standard procedures of loading
+a library are:
+    1) update the system search path to include the library directory;
+    2) load any libraries on which the current library depends;
+    3) load the theories (if there are any);
+    4) load the codes (if there are any);
+    5) update the help search path to include the current library document;
+    6) set up auto-loading of theorems, definitions, etc.
+
+When a library, say {foo}, is loaded into a HOL session by evaluating
+{
+   load_library `foo`;;
+}
+\noindent the system will load a file named `{foo.ml}' in the directory
+`{foo}' which is in the library search path. The generic library
+loader {library_loader} should be called with appropriate arguments
+in this file. In addition to the standard loading procedures, extra
+functions may be called in this file to set up special environment
+necessary for working with the library.
+
+The function {library_loader} takes a 6-tuple
+{
+   (lib_name, parent_libs, theories, codes, load_parent, part_path, help_paths)
+}
+\noindent as its argument. The meanings of the fields are described below.
+ {lib_name : string} is the name of the library. It should be the name
+    of the directory where the library is found, and the basename of
+    the load file.
+ {parent_libs : string list} are the names of the libraries on which the
+    current library depends. They will be loaded in the order given
+    before the theories and codes of the current library are loaded.
+ {theories : string list} are the names of the theories in this
+    library. If the library contains more than one theory, the
+    descendant of all other theories should be the first in the list.
+    This theory will be loaded and it becomes the current theory or the new
+    parent of the current theory depending on whether the system is in
+    draft mode. If we are not in draft mode and this theory is not an
+    ancestor of the current theory, it will not be loaded. Instead, a
+    function whose name is created by prefixing the string {load_} to
+    the name of the library is defined. This may be called later to
+    complete the loading of the library. The order of other names is
+    not important. The axioms, definitions and theorems in all the
+    theories listed are set up to be autoloaded. If there is no theory
+    in the library, this field should be a null list.
+  {codes : string list} are the names of the code files. They will be
+    loaded in the order given after loading the first theory in
+    {theories}. If there is no code files in the library, this field should
+    be a null list.
+  {load_parent : string} is the name of a file to be loaded before the
+    code files are loaded. If we are not currently in draft mode, the
+    parent libraries may not be loaded completely. Instead, functions
+    having name prefixed by {load_} will be defined. If the codes of
+    the current theory depend on the parent libraries, these loading
+    functions should be called before loading the codes. A file
+    containing the calls of the loading functions and possibly other
+    neccessory functions to set up the working environment will be
+    loaded. The name of this file is given in this field.
+  {part_path : string} is the directory name of the library part. If
+    only part of the library is to be loaded, the string {lib_name} should have
+    the part separator {:} in it, e.g. {`lib:part`}. It such case, the
+    files of the library part may reside in a sub-directory. The name of
+    this sub-directory is specified by this field, and it is added to
+    the search path.
+  {help_paths : string list} are the names of directories containing the
+    help files. These are relative to the subdirectory `help` of the
+    library. They are added to the {help_search_path}.
+
+\FAILURE
+It fails if any parent libraries, theories or files cannot be loaded.
+
+\EXAMPLE
+Suppose the the name of the library is {mylib}. It depends on the
+libraries {lib1} and {lib2}, and it consists of two theories {thy1}
+and {thy2}, and a single code file {mylib_convs.ml}. A load file for
+this library will be as below:
+{
+   let this_lib_name = `mylib`
+   and parent_libs = [`lib1`; `lib2`]
+   and theories = [`thy2`; `thy1`]
+   and codes = [`mylib_convs`]
+   and load_parent = `load_parent`
+   and part_path = ``
+   and help_paths = [`entries`]
+   in
+   library_loader (this_lib_name, parent_libs, theories, codes,
+    load_parent, part_path, help_paths);;
+}
+\noindent If both of the libraries {lib1} and {lib2} have theories and they are
+independent, and if the library {mylib} is loaded when we are not in
+draft mode, a function for loading the second parent {lib2}, namely
+{load_lib2},  will be defined. This should be called in the file
+{load_parent.ml} to complete the loading of {lib2}.
+
+\USES
+This function is primarily used in library load files. The user
+function for loading a library is {load_library}.
+
+\SEEALSO 
+library_pathname, load_library, set_library_search_path,
+define_load_lib_function.
+
+\ENDDOC

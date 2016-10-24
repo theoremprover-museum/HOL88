@@ -1,0 +1,29 @@
+\DOC mk_let
+
+\TYPE {mk_let : ((term # term) -> term)}
+
+\SYNOPSIS
+Constructs a {let} term.
+
+\DESCRIBE
+{mk_let("f","x")} returns {"LET f x"}. If {f} is of the form {"\y. t"} then
+the result will be pretty-printed as {"let y=x in t"}.
+
+\FAILURE
+Fails with {mk_let} if the types of {f} and {x} are such that {"LET f x"} is
+not well-typed. {"LET"} has most general type:
+{
+   ":(* -> **) -> * -> **"
+}
+\EXAMPLE
+{
+#mk_let("$= 1","2");;
+"LET($= 1)2" : term
+
+#mk_let("\x. x = 1","2");;
+"let x = 2 in (x = 1)" : term
+}
+\SEEALSO
+dest_let, is_let.
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM SETOK_LE_LT REAL
+|- !P.
+    (?x. P x) /\ (?z. !x. P x ==> x <= z) =
+    (?x. P x) /\ (?z. !x. P x ==> x < z)
+\ENDTHEOREM

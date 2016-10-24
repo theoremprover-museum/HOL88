@@ -1,0 +1,70 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: quotient						|
+|									|
+| DESCRIPTION   : Definition of quotient types.                         |
+|									|
+| AUTHOR	: T. kalker						|
+| DATE		: 8 JUNE 1989  			         		|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    mk_quotient.ml    creates the theory of quotients.
+
+    quotientfns.ml    functions for creating quotient types,
+                      and some associated tactics.
+
+    quotient.ml       loads the library into hol.
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+ 
+Given an equivalence relation, the function 'new_quotient_definition'
+creates the type of equivalence classes. 
+
+Example: defining the constant "EQUI_POTENT:(*->bool)->(*->bool)->bool"
+         in some natural way, one proves
+
+         EQUIVALENCE_THM = |- EQUIVALENCE EQUI_POTENT
+
+         The call 'new_quotient_definition(`card`,EQUIVALENCE_THM)'
+
+         creates the type (*)card of cardinals of type *.
+
+         The call returns 3 theorems, asserting that the
+         canonical projection is surjective and universal for
+         the equivalence relation.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+    
+   0) necessary libraries: auxiliary
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `quotient`;;
+
+

@@ -1,0 +1,52 @@
+\DOC current_proof_file
+
+\TYPE {current_proof_file : void -> string}
+
+\KEYWORDS
+proof recording.
+
+\LIBRARY
+record_proof
+
+\SYNOPSIS
+Get the name of the current proof file.
+
+\DESCRIBE
+The function {current_proof_file} returns the name of the current
+proof file which has been opened by calling the function {new_proof_file}.
+A null string {``} indicates that no current proof file is opened.
+
+\FAILURE
+Never fail.
+
+\EXAMPLE
+Below is an example showing the use of this function:
+{
+#new_theory`THY`;;
+() : void
+
+#new_proof_file`myproof`;;
+() : void
+
+#prove_thm(`ADD_0`,
+#  "!m. m + 0 = m",
+#   INDUCT_TAC THEN ASM_REWRITE_TAC[ADD]);;
+|- !m. m + 0 = m
+
+#current_proof_file();;
+`myproof` : string
+
+#close_proof_file ();;
+() : void
+
+#current_proof_file();;
+`` : string
+}
+
+
+\SEEALSO
+current_proof, close_proof_file, new_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm
+
+\ENDDOC
+

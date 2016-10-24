@@ -1,0 +1,21 @@
+\DOC is_letter
+
+\TYPE {is_letter : (string -> bool)}
+
+\SYNOPSIS
+Tests whether a character is a letter.
+
+\DESCRIBE
+When given a string, which should be of length 1, {is_letter} returns
+{true} iff the character is a letter. By default this means what one
+would expect, namely one of {a..z A..Z}. However the scope of the
+definition can be increased using {new_letter}.
+
+\FAILURE
+Fails if the string has length greater than 1. Returns {false} for the
+null string ({``}).
+
+\SEEALSO
+ascii, ascii_code, is_alphanum, new_alphanum, new_letter.
+
+\ENDDOC

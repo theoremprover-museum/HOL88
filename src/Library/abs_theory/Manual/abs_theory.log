@@ -1,0 +1,508 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:05
+**abs_theory.tex
+(abs_theory.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+(hol_macros.tex)
+\@indexfile=\write3
+
+Writing index file abs_theory.idx 
+(abs_theory.aux (title.aux) (description.aux) (entries.aux) (index.aux))
+(title.tex
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 16.
+[1
+
+
+] [2]) (abs_theory.toc)
+\tf@toc=\write4
+ [1
+
+
+] (description.tex [2
+
+
+]
+Chapter 1.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 6.
+[3] [4] [5] [6]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 252--256
+[]  
+
+\hbox(24.50801+19.03304)x448.84409
+.\hbox(24.50801+19.03304)x454.84409
+..\mathon
+..\vbox(24.50801+19.03304)x454.84409
+...\hbox(39.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+[7]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 261--268
+[]  
+
+\hbox(43.55176+38.07677)x448.84409
+.\hbox(43.55176+38.07677)x454.84409
+..\mathon
+..\vbox(43.55176+38.07677)x454.84409
+...\hbox(77.5485+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 278--286
+[]  
+
+\hbox(44.00801+38.53304)x448.84409
+.\hbox(44.00801+38.53304)x454.84409
+..\mathon
+..\vbox(44.00801+38.53304)x454.84409
+...\hbox(78.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 298--303
+[]  
+
+\hbox(23.51947+18.04448)x448.84409
+.\hbox(23.51947+18.04448)x454.84409
+..\mathon
+..\vbox(23.51947+18.04448)x454.84409
+...\hbox(37.48392+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 306--312
+[]  
+
+\hbox(31.46426+25.98927)x448.84409
+.\hbox(31.46426+25.98927)x454.84409
+..\mathon
+..\vbox(31.46426+25.98927)x454.84409
+...\hbox(53.3735+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+[8]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 316--328
+[]  
+
+\hbox(70.46426+64.98927)x448.84409
+.\hbox(70.46426+64.98927)x454.84409
+..\mathon
+..\vbox(70.46426+64.98927)x454.84409
+...\hbox(131.3735+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 334--351
+[]  
+
+\hbox(102.96426+97.48927)x448.84409
+.\hbox(102.96426+97.48927)x454.84409
+..\mathon
+..\vbox(102.96426+97.48927)x454.84409
+...\hbox(196.3735+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 354--367
+[]  
+
+\hbox(76.96426+71.48927)x448.84409
+.\hbox(76.96426+71.48927)x454.84409
+..\mathon
+..\vbox(76.96426+71.48927)x454.84409
+...\hbox(144.3735+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+[9]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 370--385
+[]  
+
+\hbox(89.96426+84.48927)x448.84409
+.\hbox(89.96426+84.48927)x454.84409
+..\mathon
+..\vbox(89.96426+84.48927)x454.84409
+...\hbox(170.3735+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 388--406
+[]  
+
+\hbox(107.79135+102.31636)x448.84409
+.\hbox(107.79135+102.31636)x454.84409
+..\mathon
+..\vbox(107.79135+102.31636)x454.84409
+...\hbox(206.02768+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 419--435
+[]  
+
+\hbox(94.79135+89.31636)x448.84409
+.\hbox(94.79135+89.31636)x454.84409
+..\mathon
+..\vbox(94.79135+89.31636)x454.84409
+...\hbox(180.02768+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+[10]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 453--459
+[]  
+
+\hbox(37.50801+32.03304)x448.84409
+.\hbox(37.50801+32.03304)x454.84409
+..\mathon
+..\vbox(37.50801+32.03304)x454.84409
+...\hbox(65.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 465--475
+[]  
+
+\hbox(56.55176+51.07677)x448.84409
+.\hbox(56.55176+51.07677)x454.84409
+..\mathon
+..\vbox(56.55176+51.07677)x454.84409
+...\hbox(103.5485+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Underfull \vbox (badness 2735) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.0162
+.\glue(\topskip) 0.0
+.\hbox(100.29688+94.29688)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(100.29688+94.29688)x455.04408
+...\mathon
+...\vbox(100.29688+94.29688)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 10.0 plus 4.0 minus 6.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [11]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 485--494
+[]  
+
+\hbox(57.00801+51.53304)x448.84409
+.\hbox(57.00801+51.53304)x454.84409
+..\mathon
+..\vbox(57.00801+51.53304)x454.84409
+...\hbox(104.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 501--512
+[]  
+
+\hbox(57.00801+51.53304)x448.84409
+.\hbox(57.00801+51.53304)x454.84409
+..\mathon
+..\vbox(57.00801+51.53304)x454.84409
+...\hbox(104.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 521--531
+[]  
+
+\hbox(50.50801+45.03304)x448.84409
+.\hbox(50.50801+45.03304)x454.84409
+..\mathon
+..\vbox(50.50801+45.03304)x454.84409
+...\hbox(91.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+[12]
+Overfull \hbox (19.85928pt too wide) in paragraph at lines 539--542
+\twlrm the fol-low-ing check of the type of the ab-stract rep-re-sen-ta-tion va
+ri-able [] in []: 
+
+\hbox(8.33331+2.66666)x455.24408, glue set - 1.0
+.\twlrm t
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm f
+.etc.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 542--546
+[]  
+
+\hbox(24.96426+19.48927)x448.84409
+.\hbox(24.96426+19.48927)x454.84409
+..\mathon
+..\vbox(24.96426+19.48927)x454.84409
+...\hbox(40.3735+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 551--571
+[]  
+
+\hbox(115.50801+110.03304)x448.84409
+.\hbox(115.50801+110.03304)x454.84409
+..\mathon
+..\vbox(115.50801+110.03304)x454.84409
+...\hbox(221.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+[13]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 580--599
+[]  
+
+\hbox(109.00801+103.53304)x448.84409
+.\hbox(109.00801+103.53304)x454.84409
+..\mathon
+..\vbox(109.00801+103.53304)x454.84409
+...\hbox(208.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 609--626
+[]  
+
+\hbox(102.50801+97.03304)x448.84409
+.\hbox(102.50801+97.03304)x454.84409
+..\mathon
+..\vbox(102.50801+97.03304)x454.84409
+...\hbox(195.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (22.99396pt too wide) in paragraph at lines 627--632
+\twlrm be used. In this case, we use [] and so the tac-tic []
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm b
+.\kern0.32639
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm u
+.etc.
+
+[14]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 638--646
+[]  
+
+\hbox(50.50801+45.03304)x448.84409
+.\hbox(50.50801+45.03304)x454.84409
+..\mathon
+..\vbox(50.50801+45.03304)x454.84409
+...\hbox(91.46101+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 650--658
+[]  
+
+\hbox(50.05176+44.57677)x448.84409
+.\hbox(50.05176+44.57677)x454.84409
+..\mathon
+..\vbox(50.05176+44.57677)x454.84409
+...\hbox(90.5485+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Overfull \hbox (25.78333pt too wide) in paragraph at lines 659--661
+\twlrm Note that we have cre-ated our con-crete rep-re-sen-ta-tion us-ing []. 
+
+\hbox(8.33331+2.66666)x455.24408, glue set - 1.0
+.\twlrm N
+.\twlrm o
+.\twlrm t
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 665--689
+[]  
+
+\hbox(147.24757+141.7726)x448.84409
+.\hbox(147.24757+141.7726)x454.84409
+..\mathon
+..\vbox(147.24757+141.7726)x454.84409
+...\hbox(284.94014+4.08003)x454.84409 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0 plus 1.0fil
+.\glue(\rightskip) 0.0 plus 1.0fil
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 9.25282
+.\glue(\topskip) 2.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 304.72112fil
+..\hbox(9.27998+0.0)x50.59962
+...\glue 0.0
+...\frtnbf 1
+...\frtnbf .
+...\frtnbf 3
+...\frtnbf .
+...etc.
+..\frtnbf U
+..\frtnbf s
+..\frtnbf i
+..\frtnbf n
+..etc.
+.\write2{\@writefile{toc}{\string\contentsline\space {subsection}{\string\numb\
+ETC.}
+.\penalty 10000
+.\glue 7.75 plus 1.03331
+.etc.
+
+ [15]
+[16]) [17
+
+] (entries.tex [18
+
+
+
+]
+Chapter 2.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 1.
+(entries-intro.tex) [19] [20] [21]
+Overfull \hbox (39.14307pt too wide) in paragraph at lines 145--146
+[]\elvtt instantiate_abstract_definition : string -> string -> thm -> (term # t
+erm) list -> thm 
+
+\hbox(7.60416+2.43333)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\elvtt i
+.\elvtt n
+.\elvtt s
+.\elvtt t
+.etc.
+
+
+Overfull \hbox (67.8865pt too wide) in paragraph at lines 171--172
+[]\elvtt instantiate_abstract_theorem : string -> string -> (term # term) list 
+-> (thm) list) -> thm 
+
+\hbox(7.60416+2.43333)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\elvtt i
+.\elvtt n
+.\elvtt s
+.\elvtt t
+.etc.
+
+[22] [23] [24] [25] [26] [27]) [28] (index.tex [29
+
+
+
+
+]) (abs_theory.aux (title.aux) (description.aux) (entries.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 480 strings out of 11977
+ 3883 string characters out of 87025
+ 40381 words of memory out of 262141
+ 2337 multiletter control sequences out of 9500
+ 19472 words of font info for 74 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 17i,17n,17p,258b,806s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on abs_theory.dvi (31 pages, 66436 bytes).

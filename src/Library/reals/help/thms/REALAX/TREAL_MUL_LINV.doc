@@ -1,0 +1,4 @@
+\THEOREM TREAL_MUL_LINV REALAX
+|- !x.
+    ~x treal_eq treal_0 ==> ((treal_inv x) treal_mul x) treal_eq treal_1
+\ENDTHEOREM

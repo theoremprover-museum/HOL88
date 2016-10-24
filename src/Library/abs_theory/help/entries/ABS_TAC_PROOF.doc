@@ -1,0 +1,28 @@
+\DOC ABS_TAC_PROOF
+
+\TYPE{ABS_TAC_PROOF : ((goal # tactic) -> thm)}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Attempts to prove an abstract goal using a given tactic.
+
+\DESCRIBE 
+
+When applied to a goal-tactic pair {(A ?- t,tac)}, {ABS_TAC_PROOF}
+attempts to prove the goal {A ?- t}, using the tactic {tac}. Before
+the proof of {A ?- t} is attempted, the theory obligations for each
+abstract object used in the goal are added to the assumption list.  If the
+proof succeeds, it returns the theorem {A' |- t} corresponding to the
+goal, where the assumption list {A'} may be a proper superset of {A}
+unless the tactic is valid; there is no inbuilt validity checking.
+
+\FAILURE
+Fails if appropriate theory obligations cannot be found.
+Fails unless the goal has hypotheses and conclusions all of type {bool},
+and the tactic can solve the goal.
+
+\SEEALSO
+prove_abs_thm, TAC_PROOF.
+
+\ENDDOC

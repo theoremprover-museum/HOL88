@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_NZ REAL
+|- !n. ~(& n = & 0) = (& 0) < (& n)
+\ENDTHEOREM

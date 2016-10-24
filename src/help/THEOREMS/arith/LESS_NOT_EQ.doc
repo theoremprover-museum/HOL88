@@ -1,0 +1,3 @@
+\THEOREM LESS_NOT_EQ prim_rec
+|- !m n. m < n ==> ~(m = n)
+\ENDTHEOREM

@@ -1,0 +1,31 @@
+\DOC transform
+
+\TYPE {transform : (term -> term list -> thm list -> (window -> window) -> thm)}
+
+\SYNOPSIS
+Create and transform a window and return the theorem generated.
+
+\LIBRARY window
+
+\DESCRIBE
+{transform "r f" hyps thms fn} creates a window with:
+focus {"f"}, relation {"r"}, hypotheses {hyps}, relevant theorems {thms}.
+The function {fn} is then applied to that window and the theorem held by the
+resulting window returned.
+
+\USES
+The basic command for rerunning noninteractive proofs.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#transform "(==>) (A /\ T)" [] [] (rewrite_win []);;
+|- A ==> A /\ T
+}
+
+\SEEALSO
+create_win
+
+\ENDDOC

@@ -1,0 +1,36 @@
+\DOC subst
+
+\TYPE {subst : ((term # term) list -> term -> term)}
+
+\SYNOPSIS
+Substitutes terms in a term.
+
+\DESCRIBE
+Given a list of term pairs {[("a_1","b_1"),...,("a_n","b_n")]}
+and a term {"c"}, {subst} attempts to substitute  all free occurrences of
+{"b_i"} in {"c"} by {"a_i"} for all {i} ranging between {1} and {n}.
+
+\FAILURE
+Failure occurs if for some {i} ranging between {1} and {n}, the substitution
+of {"b_i"} by {"a_i"} fails.
+The substitution of  {"b_i"} by {"a_i"} fails for some {i},
+if the types of {"a_i"} and  {"b_i"} are not the same.
+
+\EXAMPLE
+{
+   #subst [("1","SUC 0")] "SUC(SUC 0)";;
+   "SUC 1" : term
+
+   #subst [("1","SUC 0");("2","SUC 1")] "SUC(SUC 0)";;
+   "SUC 1" : term
+
+   #subst [("1","SUC 0");("2","SUC 1")] "SUC(SUC 0) = SUC 1";;
+   "SUC 1 = 2" : term
+
+   #subst [("b:num","a:num")] "\a:num. (b:num)";;
+   "\a. b" : term
+
+   #subst [("foo:*","flip:*")] "waddle:*";;
+   "waddle" : term
+}
+\ENDDOC

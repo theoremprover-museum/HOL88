@@ -1,0 +1,1127 @@
+% Document Type: LaTeX
+\section{A tutorial introduction}
+
+\subsection{What is {\tt mweb}?}
+
+\mweb\ is a suite of utility programs for documenting and managing \HOL\ proof
+scripts. It is inspired by the idea of {\em literate
+programming\/} of D.~Knuth\cite{Knuth:CJ-27-2-97}. The core of this idea
+is to treat programs as {\it works of literature\/}. When programming
+in this method, one creates a master file containing both the document
+and the program text. This master file is processed by utility
+programs to generate a program file and a document file separately. The
+program file is then processed by a compiler or interpreter whilst the
+document file is processed by a text formatter to produce a human
+readable document. The programs developed by Knuth which embodied this
+idea are known as the {\tt WEB} system. It has been used to develop one
+of the most popular text formatters \TeX.\footnote{The whole program of
+\TeX\ has been published as a book \cite{Knuth:ct-b} which
+contains the program text and detail documentation in one volume.} The
+main advantage of keeping both the program 
+source and the document in a single file is that it is much easier to
+keep them both up-to-date in respect to each other and to produce a more
+accurate and significantly better document.
+
+\mweb\ is a suite of such utility programs principally for developing
+proof scripts in \HOL, and essentially for programming in ML.  It is
+simple to use. It has a number of special features, such as multiple
+languages, including tag files, special operation modes and
+user-definable parameter values. Probably the most important feature
+of \mweb\ is its highly programmable input syntax and output
+format. This allows \mweb\ to be easily customised to work with
+different specification languages, programming languages and text
+formatters, ant to suit different applications, requirements and
+individual styles. Section~\ref{sec-winnow} describes such an
+extension to the basic \mweb\ suite.
+
+The basic \mweb\ utility consists of two programs: \tangle\ and \weave.
+\tangle\ processes the master file to generate an ML file which can
+then be loaded into \HOL\ to perform the proof. \weave\ processes the
+master file to generate a \LaTeX\ file which can then be formatted
+using \LaTeX\ to produce a document. \weave\ also accepts extra files,
+known as the include files or {\it tag\/} files. These files usually
+contains the results from running the script through \HOL. This
+process is illustrated in Figure~\ref{fig-web-proc}.
+\begin{figure}
+\begin{center}
+\input{web}
+\end{center}
+\caption{Operation of \mweb\label{fig-web-proc}}
+\end{figure}
+Both utilities share a common core, thus parameters, command line
+options, etc. described in Section~\ref{sec-cmd-opt}--\ref{sec-para}
+apply to both. 
+
+\subsection{How to use {\tt mweb}?}
+
+In the following tutorial example, we assume that the text formatter
+is \LaTeX\ and the proof script is in \HOL88, i.e., in classic ML. The
+procedures can easily be generalised to use other formatter and
+programming languages.
+The basic procedures of developing and managing proof script using
+\mweb\ are:
+\begin{enumerate}
+\item preparing a master file, say {\tt foo.m};
+\item running \tangle\ to generate an ML file {\tt foo.ml};
+\item loading {\tt foo.ml} into \HOL\ to perform the proof;
+\item preparing a tag file using the result from \HOL\ if there is any
+tag command in the master file;
+\item running \weave\ to generate a \LaTeX\ file {\tt foo.tex};
+\item running \LaTeX\ to produce a document.
+\end{enumerate}
+These procedures can be managed automatically using a {\tt Makefile}
+with the utility {\tt make}. The remainder of this section describes a
+simple example step by step. Suppose we have a master file called {\tt
+lmem.m} which contains the following lines.
+
+\begingroup
+ \makeatletter
+%redefine font used in verbatim environment
+ \catcode`\`=\active
+ \def\verbatim@font{\footnotesize\tt \catcode96\active
+   \def`{\leavevmode\kern\z@\char96 }}
+ \makeatother
+
+\verbatimnumbered{../Examples/lmem.m}
+
+This file creates a theory named {\tt lmem}. A
+constant definition defines a \HOL\ constant \CONST*{LMEM}. A theorem
+about this constant is proved and stored in the theory. In the master
+file listed above, there are a number of \mweb\ commands which tell
+the utility programs how to process the file. Commands start with a
+\verb|@| character at the beginning of a line. This is followed by a
+command character. A master file is divided into sections. For
+example, the command \verb|@*| in line~9 begins 
+a major section. In addition to the \verb|@*|
+command, there are three other commands which begin a section. Two of
+these has been used in this file. They are \verb*|@ | which begins an
+ordinary section as in lines~18 and~28, and \verb|@M| which begins an
+ML-only section as in lines~12, 38 and~47. The command \verb|@-|
+terminates a section. There are six sections in this master file.
+
+Each section consists of three parts: the document part, the
+other-language part and the native-language part. All parts are
+optional. The document part
+contains text lines which describe the programs that appear in the other
+two parts. These lines are simply copied to the \LaTeX\ file. Any
+\LaTeX\ macros can appear in this part. For example, lines 19--21 are
+the documentation for the constant definition in that section. No
+other-language part has been used in this file, so its usage will be
+explained in a later section. The native-language part contains \HOL\
+text or ML programs. It starts with the command \verb|@N| as in
+lines~13, 22, 32, 39 and~48. Lines in this part will be copied to the
+ML file, and they may also appear in the \LaTeX\ file. Whether lines
+in this part appear in the \LaTeX\ file and how they appear in the
+final document can be controlled by the user using
+various means. For simplicity, this master file has been processed in
+a way that no program lines appear in the final document. Any
+\HOL\ and ML commands can appear in the native-language part. 
+The ML file, {\tt lmem.ml}, generated by \tangle\ from this master file
+is listed below.
+\newpage
+\verbatimnumbered{../Examples/lmem.ml}
+
+As can be seen in the above listing, the ML program  from each section in
+the master file is preceded by a comment line. It contains the line
+number, the section number which is automatically generated by
+\tangle\ and the name of the section if it is present. This helps to
+trace the source of problems if failure occurs when the file is loaded
+into \HOL. However, one usually works directly with the master file
+while developing a proof in an interactive \HOL\ session.
+
+There are still a couple of commands in the master file that have not been
+explained. First is the command \verb|@D| which appeared in lines~2
+to~7. This is the parameter definition command. \mweb\ has been
+developed in a way in which the actual input command and output
+format can be programmed by the user. This is done by redefining the
+values of a set of parameters using the \verb|@D| command. The precise
+meanings of the parameters will be described in
+Section~\ref{sec-para}. Another command appearing in lines~21 and 31 in
+the master file is \verb|@t|, known as the tag command. The string
+enclosed in a pair of braces following the tag command is the name of
+the tag. This command instructs \weave\ to find a text block in a tag
+file which has the same name, and to output this text block in place
+of the tag command to the \LaTeX\ file. These text blocks usually
+contain theorems generated by \HOL. In fact, any text and macros
+understood by \LaTeX\ can appear in these blocks. In the second last
+section of the master file, the function
+\mlname{latex_all_theorems_to} in the {\tt latex-hol} library is
+called to generate the tag file which is listed below.
+
+\verbatimnumbered{../Examples/lmem.tag}
+
+This file contains two tagged blocks. Each of them is a theorem in
+\LaTeX\ format. They will be output to the \LaTeX\ file in place of
+the tag commands in Line~21 and 31 when the following system command
+is executed:
+\begin{verbatim}
+   mweave -Ilmem.tag lmem.m lmem.tex
+\end{verbatim}
+This command produces a \LaTeX\ file named {\tt lmem.tex}. In a simple
+application which consists of only a single master, all \LaTeX\
+preamble and post-amble materials can be put into the master file.
+More often, applications consists of more than a single master file.
+In this case, the preamble and post-amble materials can be put into a main
+\LaTeX\ file which, in turn, includes all the files produced by \weave.
+The result of formatting the file {\tt lmem.tex} is shown in the box below.
+
+\noindent
+\begin{center}
+\begin{boxedminipage}{\textwidth}
+\def\sect{\subsection}\def\subsect{\subsubsection}
+\def\mlname{\begingroup\makeulother\dotoken{\tt}}
+\def\CONST{\begingroup\makeulother\dotoken{\constfont}}
+\def\KEYWD{\begingroup\makeulother\dotoken{\keyfont}}
+\vspace*{12pt}
+\input{../Examples/lmem.tex}
+\vspace*{12pt}
+\end{boxedminipage}
+\end{center}
+Note that \weave\ assumes a set of \LaTeX\ macros for formatting the
+document. A set of default definitions of macros is in the file {\tt
+  mwecmac.tex} which should be included in the \LaTeX\ file explicitly.
+\endgroup
+
+\section{The command line}\label{sec-cmd-opt}
+
+The command  given to the operating system to invoke the \mweb\
+programs takes the following form:
+\begin{quote}
+{\it progname} [ {\it options} ] [ {\it infile\/} ] [ {\it outfile\/} ]
+\end{quote}
+where {\it progname\/} is the program name, e.g., {\tt mtangle} or
+{\tt mweave}. {\it infile\/} is the input file name. If this name has
+no suffix, i.e., the dot character \mbox{{\tt.}} does not
+occur in the name, the current value of the parameter \para{insuffix}
+is appended to {\it infile\/}. Similarly, {\it outfile\/} is the name
+of the output file. If it has no suffix, the current value 
+of the {\tt outsuffix} parameter of the program is appended. For
+example, the {\tt outsuffix} parameter of \weave\ is
+\para{outsuffixmweave}. The default input file suffix is {\tt .m}. The
+default \tangle\ output file suffix is {\tt .ml}, and the default
+\weave\ output file suffix is {\tt .tex}.
+
+Both the input and output file names can be omitted.  In such a case,
+the program reads from the standard input and writes to the standard
+output. If only one file name is given, it is taken as the name of the
+input file. The name of the output file is derived from this by
+replacing (if it has suffix) or appending the suffix. If two file
+names are given, no suffix checking is carried out. They are taken
+literally as the input and output file names.
+
+\index{command line options}
+Options which may change the behaviour of the program can be specified
+when invoking the \mweb\ programs. For example,  the command
+\begin{verbatim}
+   mweave -f filename
+\end{verbatim}
+will cause \weave\ to run in filter mode. All options are single
+character and begin with a hyphen(-). Some of the options can take an
+argument. All options are listed below.
+\begin{description}
+\item[{\tt -h -H}] --- help: print this message
+\item[{\tt -v}] --- verbose: print processing information (default)
+\item[{\tt -s}] --- silent: do not print processing information
+\item[{\tt -L\ }{\it lang\/}] --- specify a language for \tangle
+\item[{\tt -I\ }{\it file\/}] --- specify an include file
+\item[{\tt -D\ }{\it para\/}{\tt=}{\it value\/}] --- set the parameter {\it
+para\/} to {\it value\/}
+\item[{\tt -m}] --- activate ML only mode
+\item[{\tt -f}] --- activate filter mode
+\item[{\tt -d}] --- activate document only mode
+\item[{\tt -r}] --- activate raw text mode
+\item[{\tt -p}] --- deactivate parallel mode
+\item[{\tt -l}] --- activate line mode
+\end{description}
+\index{command line options!-h@{\tt -h}}
+\index{command line options!-H@{\tt -H}}
+\index{command line options!-v@{\tt -v}}
+\index{command line options!-s@{\tt -s}}
+\index{command line options!-I@{\tt -L}}
+\index{command line options!-I@{\tt -I}}
+\index{command line options!-D@{\tt -D}}
+\index{command line options!-m@{\tt -m}}
+\index{command line options!-f@{\tt -f}}
+\index{command line options!-d@{\tt -d}}
+\index{command line options!-r@{\tt -r}}
+\index{command line options!-p@{\tt -p}}
+\index{command line options!-p@{\tt -l}}
+The exact behaviour of the different operation modes will be described
+in Section~\ref{sec-modes}
+
+\section{Operation of \mweb}
+
+Since \mweb\ is highly programmable, the actual input commands and
+output strings can be changed very easily. In the example described in
+the previous section, the concrete strings of the default settings
+have been shown. In the following
+description, generic command names and parameter names will be used
+instead of the concrete strings. For instance, the default command for
+starting a section is the string \verb*|@ |, instead the command
+\cmd{begin_section} will be used in the following description.
+Command names will be typeset in a {\sf sans serif} font, and
+parameter names will typeset in a {\tt typewriter} font.
+
+\subsection{Master file format}
+
+\begin{figure}
+\begin{center}
+\begin{boxedminipage}{5in}
+\it
+\begin{quote}
+ \vspace*{12pt}
+\hspace*{1.5em} ... \\
+\cmd{begin_section} optional section name \\
+\hspace*{1.5em} ... \\
+\hspace*{1.5em} document part \\
+\hspace*{1.5em} ... \\
+\cmd{other_part} \\
+\hspace*{1.5em} ... \\
+\hspace*{1.5em} other-language part \\
+\hspace*{1.5em} ... \\
+\cmd{native_part} \\
+\hspace*{1.5em} ... \\
+\hspace*{1.5em} native-language part \\
+\hspace*{1.5em} ... \\
+\cmd{end_section}
+ \\
+\hspace*{1.5em} ... more sections\\
+ \\
+\end{quote}
+\end{boxedminipage}
+\end{center}
+\caption{Master file format\label{fig-input-format}}
+\end{figure}
+The master file is divided into a number of {\it sections\/}. Each
+section is divided into three parts: the {\it document} part, the {\it
+other-language} part and the {\it native-language} part. They should
+appear in the order as illustrated in Figure~\ref{fig-input-format}.
+However, all the parts  
+are optional. For instance, a section may contain only the document
+part or the document part and the native-language part.
+
+The document part contains text describing the \HOL\ proof script or
+specification in the other
+two parts. It will be formatted by the text formatter, i.e., \LaTeX. All text
+formatter commands can appear in this part providing the first
+character of any line is not a command escape character (by default \verb|@|).
+The native-language part contains program text which will be output to
+a file which will eventually be executed. \HOL\ or ML is the default
+native language. The purpose of the
+other-language part is to allow specifications written in other
+languages to be included in the same document so that it can be
+compared to the native language program. For instance, a circuit
+specification in a 
+hardware description language can be included in the
+other-language part. The translation of this specification into \HOL\ is
+written in the native-language part. The document part describes the
+circuit and any differences in syntax or semantics in the two.
+These two specifications will appear in the final
+document side-by-side. A human reader will be able to compare them
+very easily.
+
+A section starts with one of the four section begin commands:
+\cmd{begin_section}, \cmd{begin_star_section},
+\cmd{begin_ml_section} and \cmd{begin_anon_section}. The other-language
+part starts with the \cmd{other_part} command, and similarly the
+native-language part starts with the \cmd{native_part} command.
+The command \cmd{end_section} terminates a section. 
+
+The intention of providing four different kinds of sections is to
+allow them to be processed in different ways. The sections started by
+the commands \cmd{begin_section} and \cmd{begin_star_section} are
+ordinary sections. The difference between them is that they are output
+into the document as two levels of sectioning commands. The purpose of
+the ML sections, i.e., started by the command \cmd{begin_ml_section},
+is to hide the contents of the whole section.
+For example, some libraries have to be loaded to set up the operation
+environment in \HOL\ before the real work begins. The ML code for this
+can be put in an ML section, and it will not appear in the final
+document. The anonymous section stops the section heading from being output
+to the document file. Thus, one can divided a logical section that
+will appear in the final document into several smaller sections. All
+these sections except the first one become anonymous sections. No
+extra section headings will be printed. 
+
+
+\subsection{Command format}\label{sec-command-format}
+
+All commands are on separate lines called {\it command lines\/}.
+A command can be divided into three parts. The first is the command
+escape character which must be the first character 
+of a command line. It marks the beginning of a command. The command
+escape character is usually a single character, but it can be
+programmed to be a multi-character string.
+
+The second part is the command string. It must follow the command
+escape character immediately without leaving any intervening spaces.
+The actual string representing each command is the current value of
+the parameter associated with that command. For instance, the
+parameter associated with the \cmd{begin_section} command is
+\para{char_begin_sec} whose default value is a single space character
+\verb*| |. In fact, the default strings of all commands are single
+characters.
+
+The last part of a command is the argument. Some commands have
+mandatory arguments, such as the \cmd{incl_file} command which requires
+an argument to specify the name of the include file. Other commands
+have optional arguments, such as the \cmd{begin_section} command whose
+argument is the name of the section. If the argument is absent, the
+section will have no name. Only the section number will appear in the
+document. Still, other commands require no argument at all, such as
+the \cmd{native_part} command.
+
+The command argument, if it is present must follow immediately the
+command string without leaving any intervening spaces. It must be
+enclosed by a pair of braces(\verb|{}|). In fact, the braces are just
+the default values of the parameters \para{char_begin_para} and
+\para{char_end_para}. They can be changed to other characters, but they
+must be a single character. Using the default settings, a concrete
+example of a command starting a 
+section whose name is `First section' is
+\begin{verbatim}
+@ {First section}
+\end{verbatim}
+
+\subsection{Operation modes}\label{sec-modes}
+
+In ordinary operation, text before the first section, after the last
+section and in between sections is ignored by the programs. Only the
+command lines and text lines enclosed by  the \cmd{begin_section} and
+\cmd{end_section} commands are significant.
+
+The \tangle\ program  copies to the output file all the text lines
+in the native-language part. For the purpose of debugging, a comment
+line in the native language precedes the text of each part in the
+output file. It contains the line number and the section number. If a name
+is given to a section, it also appears in this comment line. The
+comment line starts with the current value of the parameter
+\para{ml_comm_begin} and ends with the current value of the parameter
+\para{ml_comm_end}. The default strings of these parameters are
+\verb|%-| and \verb|-%|, respectively. Figure~\ref{fig-tangleio} shows
+the general form of input and the corresponding output written by \tangle.
+\begin{figure}
+\begin{center}\it
+\begin{tabular}{|l|c|l|}
+\multicolumn{1}{c}{\rm input } & \multicolumn{1}{c}{} &
+ \multicolumn{1}{c}{\rm \tangle\ output}\\
+ \cline{1-1}\cline{3-3}
+ & & \\
+\cmd{begin_section} section name & \hspace*{1em} &
+                       \para{ml_comm_begin} line No. section No.\\
+  document lines   & & \hspace*{2em} section name \para{ml_comm_end}\\
+ \cmd{other_part}  & & \\
+ otherline 1       & & \\
+ otherline 2       & & \\
+  \ldots           & & \\
+ \cmd{native_part} & & \\
+ nativeline 1      & & nativeline 1 \\
+ nativeline 2      & & nativeline 2 \\
+  \ldots           & &  \ldots \\
+                   & & \\
+ \cmd{end_section} & & \\
+ & & \\
+\cline{1-1}\cline{3-3}
+\end{tabular}
+\end{center}
+\caption{Input format and corresponding output from \tangle\label{fig-tangleio}}
+\end{figure}
+
+The \weave\ program copies to the output file all the text lines
+in the document part. If a \cmd{begin_tag} command occurs in this
+part, instead of copying the command, \weave\ will output the text
+block whose name is the same as the name specified in the command.
+This block of text is preceded by the string which is the current
+value of the parameter \para{mac_before_tag} and terminated by the
+string which is the current value of the parameter \para{mac_after_tag}.
+Tagged text blocks are read by \weave\ from the include files, and
+saved in an internal buffer. If such a text block cannot be found,
+\weave\ issues a warning message and carries on.
+
+By default, \weave\ outputs to the output file all the 
+lines in the language parts in a side-by-side formatting environment.
+The default environment is called {\tt paralines}. When entering an
+other-language part, \weave\ saves all lines in an internal buffer
+until it finds the native-language part. It then saves all lines in
+the native-language part in
+another internal buffer until the end of the section. When it sees the
+\cmd{end_section} command, it processes the two lists of saved lines
+and outputs the `begin environment' string which is the current value of
+the parameter \para{mac_begin_env}. It then outputs the corresponding
+lines from the two parts, i.e. Line~1 of both parts and then Line~2 of
+both parts, etc., as the arguments to a line macro which is the
+current value of the parameter \para{mac_line}. This is terminated by
+the `end environment' string. For instance, the
+default line macro is the string \verb|\pline|. The output of a
+section looks like
+\begin{verbatim}
+\begin{paralines}
+\pline{otherline 1}{nativeline 1}
+\pline{otherline 2}{nativeline 2}
+...
+\pline{otherline m}{nativeline m}
+\pline{otherline m+1}{}
+...
+\pline{otherline n}{}
+\end{paralines}
+\end{verbatim}
+If any part is missing or has fewer lines, the corresponding
+argument to the line macro is simply empty. The braces enclosing the
+lines are also programmable. They are the current value of the parameters
+\para{mac_begin_arg} and \para{mac_end_arg}.
+Figure~\ref{fig-weaveio} shows the general form of 
+input and the corresponding output from \weave.
+\begin{figure}
+\begin{center}\it
+\begin{tabular}{|l|c|l|}
+\multicolumn{1}{c}{\rm input } & \multicolumn{1}{c}{} &
+ \multicolumn{1}{c}{\rm \weave\ output}\\
+ \cline{1-1}\cline{3-3}
+ & & \\
+\cmd{begin_section} section name & \hspace*{1em} &
+ \para{mac_begin_sec} section name\hspace*{2em} \\
+                   & & \para{mac_begin_doc} \\
+   document lines   & & document lines  \\
+ \cmd{begin_tag}   & & \para{mac_before_tag}\\
+                   & & tagged text block \\
+                   & & \para{mac_after_tag} \\
+  more lines       & & more lines \\
+                   & & \para{mac_end_doc} \\
+ \cmd{other_part}  & & \para{mac_begin_env}\ \para{mac_changed}  \\
+ otherline 1       & & \para{mac_line} \\
+ otherline 2       & & \para{mac_begin_arg} otherline 1 \para{mac_end_arg}\\
+  \ldots           & & \para{mac_begin_arg} nativeline 1 \para{mac_end_arg}\\
+ \cmd{native_part} & & \\
+ nativeline 1      & & \para{mac_line} \\
+ nativeline 2      & & \para{mac_begin_arg} otherline 2 \para{mac_end_arg}\\
+  \ldots           & & \para{mac_begin_arg} nativeline 2 \para{mac_end_arg}\\
+  \ldots           & &  \ldots \\
+                   & & \para{mac_end_env} \\
+ \cmd{end_section} & & \para{mac_end_sec} \\
+ & & \\
+\cline{1-1}\cline{3-3}
+\end{tabular}
+\end{center}
+\caption{Input format and corresponding output from \weave\label{fig-weaveio}}
+\end{figure}
+
+Text in the default {\tt paralines} environment will be printed in two
+columns. Each column contains text from a language part. Different
+fonts can be used to typeset them to provide visual distinction between
+the two languages. 
+A \LaTeX\ macro file, named {\tt mwebmac.tex}, containing the definition of 
+this parallel environment is distributed with the package. This should
+be explicitly input into the \LaTeX\ file.\index{LATEX file@\LaTeX\ file}
+
+\index{operation modes}
+There are a number of special operation modes which can be activated
+by the user to perform special tasks. By default, all modes are in
+their inactive states except parallel mode which is active. The
+operation modes are: 
+\begin{description}
+\item[{\it document only mode}]--- \index{operation modes!document only}
+If this mode is activated, \weave\ will only output the text in the
+document part to the \LaTeX\ file. Thus, one can omit the program text
+from the document. 
+\item[{\it filter mode}]--- \index{operation modes!filter}
+If this mode is activated, \weave\ will copy all lines outside any
+sections to the output file.
+\item[{\it ML only mode}]--- \index{operation modes!ML only}
+If this mode is activated, \weave\ will ignore all sections which
+start with the command \cmd{begin_ml_section}. They will not appear in
+the final document at all. However, \tangle\ is
+not affected by this mode, so lines in the native language part of
+these sections will still be output to the ML file.
+\item[{\it raw text mode}]--- \index{operation modes!raw text}
+If this mode is activated, the program lines in both the other-language
+part and the native-language part will be copied to the output file as
+they are. Otherwise, the program lines are processed. Special characters
+are converted to their ASCII code in hexadecimal notation and prefixed with the
+string which is the current value of the parameter
+\para{mac_spec_char}. Special characters are defined as one of the
+characters in the string which is the current value of the parameter
+\para{spec_chars}. For example, with the default setting, the
+character \verb|#| is a special character which is converted to
+\verb|\char"23| since its ASCII code is 23 in hexadecimal.
+\item[{\it parallel mode}]--- \index{operation modes!parallel}
+This is the default operation mode of \weave. If it is deactivated,
+the programs in the other-language part and in the native-language
+part will output as two separate blocks of text. The lines from the
+other-language part will be output first, and they are followed by the
+lines from the native-language part.
+The lines from the other-language part are enclosed by the
+strings which are the current values of the parameters
+\para{mac_begin_other} and \para{mac_end_other}. Similarly, the lines
+from the native-language part are enclosed by the
+strings which are the current values of the parameters
+\para{mac_begin_native} and \para{mac_end_native}.
+\item[{\it line mode}]---\index{operation modes!line}
+This operation mode affects \tangle\ only. When this mode is active,
+the program lines in the output file will have the same line
+number as in the master file. The lines of document part and other
+language part will become blank lines in the output file. This is
+useful in debugging since many compilers will report errors with a line
+number. By keeping the same line number in the program file, one can
+easily find and fix the errors in the master file.
+\end{description}
+All these modes can be activated either by using command line options
+or by changing the value of their associated parameter. If
+using command line options, the modes are active from the beginning of
+the file. If changing the parameter values, filter mode will become
+active from the next input line. The other modes will become active
+from the next section. All modes can be deactivated by changing the
+parameter value. The new value takes effect in the same way as
+described above.
+
+\subsection{Multiple language parts}
+
+Although two different languages are used in many applications in
+formal verification, sometimes more than two languages or more than
+two specifications in the same language are needed. To handle such
+cases, the language parts can be generalised to allow any number of
+different language parts in a section. A new command
+\cmd{language_part} can be used instead of the \cmd{other_part} and
+\cmd{native_part} commands. This command takes the name of the
+language as an argument. In addition to the standard command argument
+syntax described in Section~\ref{sec-command-format}, a shorthand
+format is also allowed in this command. This takes the form of a
+string immediately following the command character with no braces. It
+is terminated by the first blank character. For example, given the
+default command character of \cmd{language_part} is {\tt L}, the following
+two command lines have the same meaning which begins the language part
+whose name is {\tt top-level}:
+\begin{verbatim}
+@L {top-level}
+@Ltop-level
+\end{verbatim}
+
+A command line option for \tangle\ allows the user to specify which
+language to output to the program file.  The default action of
+\tangle\ is to output the lines in the language part whose name is the
+same as that specified at the command line option.  If no language
+option is specified, the \cmd{native-part} is output.  Note that no
+checking is performed on the language names so be sure to spell them
+precisely in every section and in the command line option, otherwise,
+lines in the misspelled part will be missing from the output file.
+
+The lines in the language parts are output to the \LaTeX\ file by
+\weave\ if the {\it document only\/} mode is not active. Each language
+part is enclosed in an environment whose name is the name of the
+language as illustrated below:
+\begin{center}\it
+\begin{boxedminipage}{5in}
+\begin{quote}
+\para{mac_begin_lang} \para{mac_begin_arg} $\langle name\rangle$ \para{mac_end_arg}\\
+lines in the language part whose name is $\langle name\rangle$\\
+\para{mac_end_lang} \para{mac_begin_arg} $\langle name\rangle$ \para{mac_end_arg}
+\end{quote}
+\end{boxedminipage}
+\end{center}
+
+Within a section, both the generalized language parts and the other-
+and native-parts can be occur. The generalised language parts may be
+place either before or after the other- and native parts. However, the
+use of only generalised language parts are recommended if side-by-side
+printing of two language parts is not required. Note also that
+\tangle\ is unable to output lines in the other-language part.
+
+\section{Commands}
+
+The utility programs have been implemented in a way that the actual command
+strings and the exact output strings can be customised by changing the
+values of a set of parameters by the user. The exact meanings of the
+commands and their associate parameters are described in this section.
+\vspace{20pt}
+
+\noindent\cmdrule
+
+\begin{describecmd}{begin_anon_section}{char_anon_sec}{\opt}
+{\verb|@A|}
+\describe
+This command begins an anonymous section. 
+The actions for this command is the same as the \cmd{begin_section}
+command except that \weave\ does not output the section macro and the
+section name to the \LaTeX\ file.
+\end{describecmd}
+
+\begin{describecmd}{begin_ml_section}{char_ml_sec}{\opt}
+{\verb|@M|}
+\describe
+This command begins an `ML only' section. 
+\tangleaction: save the section name if it is present.
+\weaveaction: same as \cmd{begin_section} command if the value of
+the parameter \para{ml_only} is false, otherwise, nothing is generated
+in the output file for the whole section.
+\end{describecmd}
+
+\begin{describecmd}{begin_section}{char_begin_sec}{\opt}
+{\verb*|@ |}
+\describe
+This command begins an ordinary section.
+\tangleaction: save the section name if it is present.
+\weaveaction: output  section macro \para{mac_sec} and the section
+name as the argument to the macro if a name is present, otherwise,
+output a default section macro \para{mac_sec_default}. 
+Then, copy all input lines to the output until one of the following
+commands is found: \cmd{end_sec}, \cmd{other_part}, \cmd{native_part}.
+\end{describecmd}
+
+\begin{describecmd}{begin_star_section}{char_begin_star_sec}{\man}
+{\verb|@*|}
+\describe
+This command begins a major section.
+\tangleaction: save the section name.
+\weaveaction: output major section macro \para{mac_star_sec} and the section
+name as the argument to the macro. Then, copy all input lines to the
+output until one of the following 
+commands is found: \cmd{end_sec}, \cmd{other_part}, \cmd{native_part}.
+\end{describecmd}
+
+\begin{describecmd}{begin_tag}{char_begin_tag}{\man}
+{\verb|@t|}
+\describe
+In a master file, this command marks the position a tagged text
+block should be placed. The argument to this command is the name of
+the block. There must be a block having the same name appear in a tag
+file. This file is included by \weave\ when processing the master file.
+In a tag file, this command begins a text block. All input lines are
+saved until an \cmd{end_tag} command is found. 
+\tangleaction: do nothing.
+\weaveaction:  output the text block whose name is the
+same as the argument. If no block of the same name can be found, a
+warning message is printed. The block is enclosed by the parameters
+\para{mac_before_tag} and \para{mac_after_tag}.
+\end{describecmd}
+
+\begin{describecmd}{end_section}{char_end_sec}{\none}
+{\verb|@-|}
+\describe
+This command terminates a section.
+\tangleaction: do nothing.
+\weaveaction: output the section. The text line saved in the
+internal buffers (if any) is processed and output in an environment
+enclosed by the parameters \para{mac_begin_env} and \para{mac_end_env}.
+\end{describecmd}
+
+\begin{describecmd}{end_tag}{char_end_tag}{\opt}
+{\verb|@e|}
+\describe
+This command marks the end of a tagged text block in a tag file.
+If the optional argument is present it should be the same as the
+argument to the associated \cmd{begin_block} command.
+\end{describecmd}
+
+\begin{describecmd}{incl_file}{char_incl_file}{\man}
+{\verb|@I|}
+\describe
+This command inputs an include file. The argument specifies the name
+of a file to be read. It can only appear outside any section. The file
+is expected to contain only parameter definitions and tagged text
+blocks. 
+\end{describecmd}
+
+\begin{describecmd}{language_part}{char_lang}{\man}
+{\verb|@L|}
+\describe
+This command begins a programming language part. It can only occur
+after one of the `begin section' commands. It takes the name of the
+language as its argument. Two formats are allowed for this argument.
+The first is a string enclosed in a pair of braces which are the
+values of the parameters \para{char_begin_para} and
+\para{char_end_para} or a pair of quotes which are the value of the
+parameter \para{char_str_quote}. Blank space between the command and
+its argument in this form is optional. The second format is a string
+immediately after the command. It is ended by the first blank
+character.
+\tangleaction: if the language name is equal to the language specified
+in the command line option, output a comment line, then output
+subsequent input lines until an \cmd{end_sec}, \cmd{other_part},
+\cmd{native_part} or another \cmd{language_part} command is found.
+\weaveaction: output the subsequent input lines in an environment
+whose name is the language name.
+\end{describecmd}
+
+\begin{describecmd}{native_part}{char_new}{\none}
+{\verb|@N|}
+\describe
+This command begins the native-language part. It can only occur after
+one of the `begin section' commands. It must follow an
+\cmd{other_part} command if one is present in the same section.
+\tangleaction: output a comment line, then output subsequent input
+lines until an \cmd{end_sec} command is found.
+\weaveaction: save the subsequent input lines in an internal buffer
+ until an \cmd{end_sec} is encountered.
+\end{describecmd}
+
+\begin{describecmd}{other_part}{char_old}{\none}
+{\verb|@O|}
+\describe
+This command begins the other-language part. It can only occur after one
+of the `begin section' commands.
+\tangleaction: do nothing.
+\weaveaction: save the subsequent input lines in an internal buffer
+ until a command line is encountered.
+\end{describecmd}
+
+\begin{describecmd}{para_def}{char_para_def}{\man}
+{\verb|@D|}
+\describe
+The command defines the value of a parameter.
+It can only appear outside any section. The parameter value defines by
+this command will take effect from the next section.
+The argument to this command should be an equation. The left hand side
+is a string representing the name of a parameter. The right hand side
+is also a string representing the value of the parameter. If the
+parameter takes only a boolean value, a null string, i.e., \verb|""| is
+interpreted as false.
+\end{describecmd}
+
+
+\section{Parameters}\label{sec-para}
+
+This section describes all parameters understood by \mweb. Their
+values are all strings. A few of them must be single character string
+which are indicated in the description. Some of the strings are
+interpreted as boolean value. A null ({\tt""}) string means false, and
+any other string means true. 
+
+The value of a parameter can be redefined by the user using the
+\cmd{para_def} command or the command line option {\tt -D}. The syntax
+of parameter definition is
+\begin{quote}\it
+name {\tt =} value
+\end{quote}
+Both $name$ and $value$ are strings. A string is a sequence of
+non-blank characters optionally enclosed by a pair of characters which
+is the value of the parameter \para{char_str_quote} or by a left
+bracket which is the value of \para{char_begin_para} and a right
+bracket which is the value of \para{char_end_para}. The default
+characters are  double quote({\tt "}), left brace({\tt\{}) and
+right brace({\tt\}}), respectively. For example, \verb|{String}| and
+\verb|"String"| are legal strings. A null string is a string of zero
+character. This can be written as either \verb|""| or \verb|{}|.
+
+Spaces around the equal sign are optional. The
+string on the left hand side of the equation should be the name of one
+of the parameters listed below. The string on the right hand side
+denotes the new value of this parameter.
+
+Within a string, all characters are literal except the escape
+character. This is the current value of the parameter
+\para{char_str_esc}. The default string escape character is
+backslash(\verb|\|). The interpretation of the string escape will be
+explained in the entry of the parameter \para{char_sstr_esc}. The
+default string of the parameters shown in the entries is in the form
+one has to type on the right hand side of the parameter definition
+equation. For example, the equation below defines the parameter
+\para{mac_sec} to the \LaTeX\ macro \verb|\subsec|:
+\begin{verbatim}
+  "mac_sec" = "\\subsec"
+\end{verbatim}
+where the double backslash is interpreted as a single backslash by the
+\mweb\ programs.
+
+\noindent\cmdrule
+
+\begin{describepara}{char_anon_sec}{\verb*|A|}\describe
+This parameter associates with the \cmd{begin_anon_section} command
+which begins an anonymous section. 
+\end{describepara}
+\begin{describepara}{char_begin_para}{\verb*|{|}\describe
+This parameter begins the argument to a command. It must be a single
+character string.
+\end{describepara}
+\begin{describepara}{char_begin_sec}{\verb*| |}\describe
+This parameter associates with the \cmd{begin_section} command
+which begins an ordinary section. 
+\end{describepara}
+\begin{describepara}{char_begin_star_sec}{\verb*|*|}\describe
+This parameter associates with the \cmd{begin_star_section} command
+which begins a major section. 
+\end{describepara}
+\begin{describepara}{char_begin_tag}{\verb*|t|}\describe
+This parameter associates with the \cmd{begin_tag} command.
+which begins a tagged text block in a tag file or marks the position
+for replacing by a tagged text block in a master file.
+\end{describepara}
+\begin{describepara}{char_cmd}{\verb*|@|}\describe
+This parameter is the command escape character.
+\end{describepara}
+\begin{describepara}{char_end_para}{\verb*|}|}\describe
+This parameter terminates the argument to a command. It must be a single
+character string.
+\end{describepara}
+\begin{describepara}{char_end_sec}{\verb*|-|}\describe
+This parameter associates with the \cmd{end_section} command
+which terminates a section. 
+\end{describepara}
+\begin{describepara}{char_end_tag}{\verb*|e|}\describe
+This parameter associates with the \cmd{end_tag} command
+which terminates a tagged text block in a tag file.
+\end{describepara}
+\begin{describepara}{char_incl_file}{\verb*|I|}\describe
+This parameter associates with the \cmd{incl_file} command
+which specifies the name of a tag file to be included.
+\end{describepara}
+\begin{describepara}{char_lang}{\verb*|L|}\describe
+This parameter associates with the \cmd{language_part} command
+which begins a language part within a section. 
+\end{describepara}
+\begin{describepara}{char_ml_sec}{\verb*|M|}\describe
+This parameter associates with the \cmd{begin_ml_section} command
+which begins an `ML only' section. Sections started with this command
+will not appear in the document if the ML only mode is active.
+\end{describepara}
+\begin{describepara}{char_new}{\verb*|N|}\describe
+This parameter associates with the \cmd{native_part} command
+which begins the native-language part within a section. 
+\end{describepara}
+\begin{describepara}{char_old}{\verb*|O|}\describe
+This parameter associates with the \cmd{other_part} command
+which begins the other-language part within a section. 
+\end{describepara}
+\begin{describepara}{char_para_def}{\verb*|D|}\describe
+This parameter associates with the \cmd{para_def} command
+which defines the value of a parameter.
+\end{describepara}
+\begin{describepara}{char_str_esc}{\verb*|\\|}\describe
+This parameter specifies the escape character in a string. Its value must
+be a single character string. When defining the value of a parameter,
+the string at the right hand side of the equation may contain this
+escape character. All characters in the string are literal except this
+escape character. It is interpreted together with the next character.
+If the next character is also an escape character, it becomes a single
+escape character. If the next character is an `{\tt n}', it is
+interpreted as a `newline' character. If the next character is a `{\tt
+t}', it becomes a TAB character (ASCII code 9). If the next character
+is the current value of the parameter \para{char_str_quote}, it
+becomes that character. If the next character is a digit
+from 0 to 7, then the next two characters must be digits as well. This
+three digit number is interpreted as an octal number specifying the
+ASCII code of a character.
+\end{describepara}
+\begin{describepara}{char_str_quote}{\verb*|\"|}\describe
+This parameter specifies the quote character for strings. Its value
+must be a character string. This character marks the beginning and the
+end of a string in parameter value definition.
+\end{describepara}
+\begin{describepara}{doc_only_mode}{null string}\describe
+The value of this parameter is boolean. When it is true, the document
+only mode is active.
+\end{describepara}
+\begin{describepara}{filter_mode}{null string}\describe
+The value of this parameter is boolean. When it is true, the filter
+mode is active.
+\end{describepara}
+\begin{describepara}{insuffix}{\verb*|.m|}\describe
+The value of this parameter is the default suffix of the input file.
+If the name of the input file given on the command line has no suffix,
+this string is appended to it. The \mweb\ programs attempt to open a
+file of this resulting name for inputting.
+\end{describepara}
+\begin{describepara}{line_mode}{null string}\describe
+The value of this parameter is boolean with default value false.
+It affects \tangle\ only. When this mode is active,
+the program lines in the output file will have the same line
+number as in the master file. The lines of the document part and other
+language part will become blank lines in the output file. This is
+useful in debugging since many compilers will report errors with line
+munber. By keeping the same line number in the program file, one can
+easily find and fix the errors in the master file.
+\end{describepara}
+\begin{describepara}{mac_after_tag}{\verb*|\\end{verbatim}\n|}\describe
+The value of this parameter is output to the document file after the
+tagged text block.
+\end{describepara}
+\begin{describepara}{mac_before_tag}{\verb*|\\begin{verbatim}\n|}\describe
+The value of this parameter is output to the document file before the
+tagged text block.
+\end{describepara}
+\begin{describepara}{mac_begin_arg}{\verb*|{|}\describe
+The value of this parameter is output to the document file before a line
+from other-language part or native-language part.
+\end{describepara}
+\begin{describepara}{mac_begin_doc}{null string}\describe
+The value of this parameter is output to the document file to mark
+the beginning of the document part of every section.
+\end{describepara}
+\begin{describepara}{mac_begin_env}{\verb*|\\begin{paralines}|}\describe
+The value of this parameter is output to the document file to
+mark the beginning of the environment for program lines.
+\end{describepara}
+\begin{describepara}{mac_begin_lang}{\verb*|\\begin|}\describe
+The value of this parameter is output to the document file before the
+subsequent lines in a language part. It is followed immediately by the
+name of the language enclosed in the delimiters which are the values of the
+parameters \para{mac_begin_arg} and \para{mac_end_arg}.
+\end{describepara}
+\begin{describepara}{mac_begin_native}{\verb*|\\begin{native}\n|}\describe
+The value of this parameter is output to the document file before the lines
+from the native-language part if the operation mode is not parallel.
+\end{describepara}
+\begin{describepara}{mac_begin_other}{\verb*|\\begin{other}\n|}\describe
+The value of this parameter is output to the document file before the lines
+from the other-language part if the operation mode is not parallel.
+\end{describepara}
+\begin{describepara}{mac_changed}{\verb*|[c]\n|}\describe
+The value of this parameter is output to the document file following
+the string of the parameter \para{mac_begin_env} if the contents of the two
+language parts are different.
+\end{describepara}
+\begin{describepara}{mac_end_arg}{\verb*|}|}\describe
+The value of this parameter is output to the document file after a line
+from other-language part or native-language part.
+\end{describepara}
+\begin{describepara}{mac_end_doc}{null string}\describe
+The value of this parameter is output to the document file to mark
+end of document part of every section.
+\end{describepara}
+\begin{describepara}{mac_end_env}{\verb*|\\end{paralines}\n|}\describe
+The value of this parameter is output to the document file to
+mark the end of the environment for program lines.
+\end{describepara}
+\begin{describepara}{mac_end_lang}{\verb*|\\end|}\describe
+The value of this parameter is output to the document file after the
+lines in a language part. It is followed immediately by the
+name of the language enclosed in the delimiters which are the values of the
+parameters \para{mac_begin_arg} and \para{mac_end_arg}.
+\end{describepara}
+\begin{describepara}{mac_end_native}{\verb*|\\end{native}\n|}\describe
+The value of this parameter is output to the document file after the lines
+from the native-language part if the operation mode is not parallel.
+\end{describepara}
+\begin{describepara}{mac_end_other}{\verb*|\\end{other}\n|}\describe
+The value of this parameter is output to the document file after the lines
+from the other-language part if the operation mode is not parallel.
+\end{describepara}
+\begin{describepara}{mac_end_sec}{\verb*|\n|}\describe
+The value of this parameter is output to the document file to
+mark the end of a section.
+\end{describepara}
+\begin{describepara}{mac_filler}{\verb|\n|}\describe
+The value of this parameter is output to the document file following
+the string of the parameter \para{mac_begin_env} if the contents of the two
+language parts are the same.
+\end{describepara}
+\begin{describepara}{mac_line}{\verb*|\\pline|}\describe
+The value of this parameter is output to the document file at the
+beginning of every pair of program lines.
+\end{describepara}
+\begin{describepara}{mac_native_line}{\verb*|\n|}\describe
+The value of this parameter is output to the document file at the
+beginning of every line of the native-language part if parallel mode
+is inactive.
+\end{describepara}
+\begin{describepara}{mac_other_line}{\verb*|\n|}\describe
+The value of this parameter is output to the document file at the
+beginning of every line of the other-language part if parallel mode
+is inactive.
+\end{describepara}\begin{describepara}{mac_sec}{\verb*|\\subsect|}\describe
+The value of this parameter is output to the document file to start an
+ordinary section, or ML only section if the ML only mode is inactive.
+\end{describepara}
+\begin{describepara}{mac_sec_default}{\verb*|\\subsect{}|}\describe
+The value of this parameter is output to the document file to start an
+ordinary section if there is no section name given.
+\end{describepara}
+\begin{describepara}{mac_spec_char}{\verb*|\\char\"|}\describe
+The value of this parameter is prefixed to the ASCII code in
+hexadecimal notation of each special character which occurs in the program
+text in either other-language part or native-language part when raw
+tex mode is not active.
+\end{describepara}
+\begin{describepara}{mac_star_sec}{\verb*|\\sect|}\describe
+The value of this parameter is output to the document file to start a
+major section.
+\end{describepara}
+\begin{describepara}{ml_comm_begin}{\verb*|%-|}\describe
+The value of this parameter is output to the program file to mark the
+beginning of a comment.
+\end{describepara}
+\begin{describepara}{ml_comm_end}{\verb*|-%|}\describe
+The value of this parameter is output to the program file to mark the
+end of a comment.
+\end{describepara}
+\begin{describepara}{ml_line_count}{\verb*|200|}\describe
+The value of this parameter specifies the maximum number of program
+lines in a section. It must be a string consisting of only decimal digits.
+\end{describepara}
+\begin{describepara}{ml_line_length}{\verb*|80|}\describe
+The value of this parameter specifies the maximum number of characters
+on a program line. It must be a string consisting of only decimal digits.
+\end{describepara}
+\begin{describepara}{ml_only}{null string}\describe
+The value of this parameter is boolean. When it is true, the ML
+only mode is active.
+\end{describepara}
+\begin{describepara}{outsuffixmtangle}{\verb*|.ml|}\describe
+The value of this parameter is the default suffix of the output file
+of \tangle. If only one file name is given on the command line,
+this string is appended to it after any suffix has been stripped to
+obtain a name for the output file.
+\end{describepara}
+\begin{describepara}{outsuffixmweave}{\verb*|.tex|}\describe
+The value of this parameter is the default suffix of the output file
+of \weave. If only one file name is given on the command line,
+this string is appended to it after any suffix has been stripped to
+obtain a name for the output file.\end{describepara}
+\begin{describepara}{outsuffixwinnow}{\verb*|.m|}\describe
+The value of this parameter is the default suffix of the output file
+of {\tt winnow}. If only one file name is given on the command line,
+this string is appended to it after any suffix has been stripped to
+obtain a name for the output file.
+\end{describepara}
+\begin{describepara}{parallel_mode}{\verb*|true|}\describe
+The value of this parameter is boolean. When it is false, the lines
+from the other-language part and from the native-language part are
+output to the \LaTeX\ file as two blocks of text with the other-language
+block appearing first. The blocks are enclosed by the strings which
+are the current values of the parameters \para{mac_begin_other},
+\para{mac_end_other} and \para{mac_begin_native},
+\para{mac_end_native}, respectively.
+\end{describepara}
+\begin{describepara}{spec_chars}{\verb*|`#$%&~_^{}\\|}\describe
+Characters in this string are special characters. If the raw text mode
+is inactive, every special character in either other-language part or
+native-language part will be converted to their ASCII codes and
+prefixed with the string value of the parameter \para{mac_spec_char}
+when output to the document file.
+\end{describepara}
+\begin{describepara}{str_blank}{\verb*|\n\t |}\describe
+This parameter string contains all characters which are interpreted as
+blank character in a parameter definition.
+\end{describepara}
+\begin{describepara}{raw_text_mode}{null string}\describe
+The value of this parameter is boolean. When it is false, the lines
+from the other-language part and from the native-language part are
+copied to the \LaTeX\ file without being processed. When it is true,
+special characters appearing in these lines are converted into their
+ASCII codes and prefixed with the string value of the parameter
+\para{mac_spec_char}. The parameter string \para{spec_chars} defines
+which character is special.
+\end{describepara}
+\begin{describepara}{tab_spaces}{\verb*|8|}\describe
+A TAB character in  any language parts will be converted into a number
+of space characters when the raw text mode is not active.
+The value of this parameter specifies the exact number of space characters
+to be output into the \LaTeX\ file.
+It must be a string consisting of only decimal digits.
+\end{describepara}
+\begin{describepara}{tangle_lang}{null string}\describe
+The value of this parameter is the name of the language \tangle\
+is to output to the program file. It is set either by the command line
+option {\tt -L} or by assigning a new value directly to this parameter.
+\end{describepara}
+
+\vspace*{14pt}
+
+Note: a new parameter can be defined by simply using a name on the left
+hand side of a parameter definition equation, but basic \mweb\
+programs do not understand it. There is no way to tell the programs
+how to use new parameters yet.
+
+
+% Local Variables: 
+% mode: latex
+% TeX-master: t
+% End: 

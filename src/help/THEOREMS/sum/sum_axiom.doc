@@ -1,0 +1,3 @@
+\THEOREM sum_axiom sum
+|- !f g. ?! h. (h o INL = f) /\ (h o INR = g)
+\ENDTHEOREM

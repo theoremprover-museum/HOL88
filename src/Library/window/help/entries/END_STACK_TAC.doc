@@ -1,0 +1,60 @@
+\DOC END_STACK_TAC
+
+\TYPE {END_STACK_TAC : (string -> tactic)}
+
+\SYNOPSIS
+Closes a subwindow opened on the current goal of the subgoals package.
+
+\LIBRARY window
+
+\DESCRIBE
+{END_STACK_TAC} name closes all the subwindows on the window stack called
+{name} and returns to the parent window of the stack.
+The theorem in this window is used to generate a theorem of the form
+{(H |- goal' ==> goal)} where goal is the current goal of the subgoal package.
+The current goal is transformed from {goal} to {goal'} and the named 
+stacked ended.
+
+\FAILURE
+{END_STACK_TAC} will fail if you have done any other tactical reasoning
+since opening the window with {BEGIN_STACK_TAC}.
+{END_STACK_TAC} will also fail if there are any used conjectures in the 
+current window.
+{END_STACK_TAC} will fail if the named stack was not created with
+{BEGIN_STACK_TAC}.
+
+\EXAMPLE
+{
+   #set_goal ([], "A \/ (B \/ F)");;
+   "A \/ B \/ F"
+   
+   () : void
+   
+   #e (BEGIN_STACK_TAC `tac` [RAND] []);;
+   OK..
+       ! ~A
+   ==> * B \/ F
+   "A \/ B \/ F"
+   
+   () : void
+   
+   #REWRITE_WIN [];;
+       ! ~A
+   ==> * B
+   () : void
+   
+   #e (END_STACK_TAC `tac`);;
+   OK..
+   "A \/ B"
+   
+   () : void
+}
+
+\COMMENTS
+{END_STACK_TAC} is for interactive use only.
+For noninteractive applications use {open_TAC}.
+
+\SEEALSO
+BEGIN_STACK_TAC, open_TAC
+
+\ENDDOC

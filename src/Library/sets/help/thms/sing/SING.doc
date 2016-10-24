@@ -1,0 +1,3 @@
+\THEOREM SING sets
+|- !x. SING{{x}}
+\ENDTHEOREM

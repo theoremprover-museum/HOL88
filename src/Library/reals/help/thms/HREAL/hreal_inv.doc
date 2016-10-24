@@ -1,0 +1,7 @@
+\THEOREM hreal_inv HREAL
+|- !X.
+    hreal_inv X =
+    hreal
+    (\w.
+      ?d. d hrat_lt hrat_1 /\ (!x. cut X x ==> (w hrat_mul x) hrat_lt d))
+\ENDTHEOREM

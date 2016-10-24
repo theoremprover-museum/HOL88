@@ -1,0 +1,3 @@
+\THEOREM SUM_LESS add
+|- !m n p. (m + n) < p ==> m < p /\ n < p
+\ENDTHEOREM

@@ -1,0 +1,8 @@
+\THEOREM DECIMAL_11 numeral
+|- !l1 l2.
+    IS_DECIMAL l1 ==>
+    IS_DECIMAL l2 ==>
+    (LENGTH l1 = LENGTH l2) ==>
+    (DECIMAL l1 = DECIMAL l2) ==>
+    (l1 = l2)
+\ENDTHEOREM

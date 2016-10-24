@@ -1,0 +1,3 @@
+\THEOREM SUB_BOTH_SIDES sub
+|- !m n p. (m = n) ==> (m - p = n - p)
+\ENDTHEOREM

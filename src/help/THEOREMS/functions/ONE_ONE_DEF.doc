@@ -1,0 +1,3 @@
+\THEOREM ONE_ONE_DEF bool
+|- !f. ONE_ONE f = (!x1 x2. (f x1 = f x2) ==> (x1 = x2))
+\ENDTHEOREM

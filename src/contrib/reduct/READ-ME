@@ -1,0 +1,40 @@
+%============================================================================%
+%    DIRECTORY: reduct                                                       %
+%                                                                            %
+%  DESCRIPTION: General theorems about reflexive/symmetric/transitive        %
+%               closure of binary relations ("rstc.ml" / "rstc.sml").        %
+%                                                                            %
+%               Some basic theorems about confluence and termination of      %
+%               abstract reduction relations ("reduct.ml" / "reduct.sml").   %
+%                                                                            %
+%       AUTHOR: John Harrison                                                %
+%               University of Cambridge Computer Laboratory                  %
+%               New Museums Site                                             %
+%               Pembroke Street                                              %
+%               Cambridge CB2 3QG                                            %
+%               England.                                                     %
+%               jrh@cl.cam.ac.uk                                             %
+%                                                                            %
+%         DATE: 31st May 1993                                                %
+%============================================================================%
+
+The file "rstc.[s]ml" is a general theory of reflexive, symmetric and transitive
+closures of arbitrary binary relations (represented as curried functions of type
+":*->*->bool"). All distinct combinations of these closures are defined, and a
+fairly extensive set of theorems proved about each. Although only a few of these
+are defined using the inductive definitions package (and some of those
+gratuitously), induction and cases theorems of the standard form are derived, to
+allow use of the standard rule induction tactics.
+
+The file "reduct.[s]ml" is a basic theory of abstract reduction relations (again
+the nature of the relations is arbitrary). This is far from complete, but provides
+some potentially useful theorems, e.g. Newman's Lemma (weak confluence /\ strong
+normalization ==> confluence).
+
+The files have been tested in HOL88 v2.01 and hol90.5 as appropriate, and appear
+to work.
+
+Any bug reports or suggestions for improvements should be sent by email to me
+at jrh@cl.cam.ac.uk.
+
+John Harrison, 31st May 1993.

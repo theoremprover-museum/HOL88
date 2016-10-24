@@ -1,0 +1,57 @@
+\DOC match
+
+\TYPE {match : (term -> term -> ((term # term) list # (type # type) list))}
+
+\SYNOPSIS
+Finds instantiations to match one term to another.
+
+\DESCRIBE
+When applied to two terms, with no outer quantifiers in the first, {match}
+attempts to find type and term instantiations for the first term (only) to make
+it match the second. If it succeeds, it returns the instantiations in the form
+of a pair containing a list of term replacements and a list of type
+instantiations. If the first term represents the conclusion of a theorem, the
+returned instantiations are of the appropriate form to be passed to
+{INST_TY_TERM}.
+
+\FAILURE
+Fails if the term cannot be matched by one-way instantiation.
+
+\EXAMPLE
+The following shows how {match} could be used to match the conclusion of a
+theorem to a term.
+{
+   #let th = REFL "x:*";;
+   th = |- x = x
+
+   #match (concl th) "1 = 1";;
+   ([("1", "x")], [(":num", ":*")])
+   : ((term # term) list # (type # type) list)
+
+   #INST_TY_TERM it th;;
+   |- 1 = 1
+}
+\COMMENTS
+Note that there is no guarantee that the returned instantiations will be
+possible for {INST_TY_TERM} to achieve, because some of the variables (term or
+type) which need to be instantiated may be free in the assumptions, eg:
+{
+   #top_print print_all_thm;;
+   - : (thm -> void)
+
+   #let th = ASSUME "x:* = x";;
+   th = x = x |- x = x
+
+   #match (concl th) "1 = 1";;
+   ([("1", "x")], [(":num", ":*")])
+   : ((term # term) list # (type # type) list)
+
+   #INST_TY_TERM it th;;
+   evaluation failed     INST_TYPE: type variable free in assumptions
+}
+\noindent In fact, for instantiating a theorem, {PART_MATCH} is usually easier.
+
+\SEEALSO
+INST_TY_TERM, PART_MATCH.
+
+\ENDDOC

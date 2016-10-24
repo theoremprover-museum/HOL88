@@ -1,0 +1,3 @@
+\THEOREM SUB_1_LESS sub
+|- !m n. ~(m = 0) /\ m < (SUC n) ==> (m - 1) < n
+\ENDTHEOREM

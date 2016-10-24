@@ -1,0 +1,32 @@
+\DOC ge
+
+\TYPE {ge : (int -> int -> bool)}
+
+\SYNOPSIS
+Greater-than-or-equal comparison of integers.
+
+\LIBRARY window
+
+\DESCRIBE
+{ge} is an infix relation between numbers.
+{n1 ge n2} is true iff {n1} is greater than, or equal to {n2}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+   #1 le 2;;
+   false : bool
+
+   #2 le 2;;
+   true : bool
+
+   #3 le 2;;
+   true : bool
+}
+
+\SEEALSO
+le
+
+\ENDDOC

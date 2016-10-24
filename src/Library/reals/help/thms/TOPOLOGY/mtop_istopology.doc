@@ -1,0 +1,5 @@
+\THEOREM mtop_istopology TOPOLOGY
+|- !m.
+    istopology
+    (\S. !x. S x ==> (?e. (& 0) < e /\ (!y. (dist m(x,y)) < e ==> S y)))
+\ENDTHEOREM

@@ -1,0 +1,44 @@
+\DOC set_interface_map
+
+\TYPE {set_interface_map : ((string # string) list -> (string # string) list)}
+
+\SYNOPSIS
+Sets up a new interface map.
+
+\DESCRIBE
+A call {set_interface_map [(a1,c1);...;(an,cn)]}, where the {c}'s are the names
+of existing constants, will set up the corresponding interface map, and return
+the previous one. This means that a variable or constant with the name {ai}
+occurring in a quoted term will be translated into the corresponding {ci}.
+Furthermore, if the flag {interface_print} is set, the transformation will be
+reversed when terms are printed. For more details of interface maps, refer to
+the DESCRIPTION. Note that each call of {set_interface_map} starts from
+scratch; it is not possible to augment a previous interface map by a second
+call.
+
+\FAILURE
+The call will fail if the given map is invalid, for one of the following
+reasons: if any of the {c}'s are not the names of existing constants,
+or if the map has multiple {c}'s corresponding to a single {a} or vice versa,
+or if one of the {a}'s is a constant name which is not redefined by the map
+(this would create a confusing interface where two different constants would
+have to be printed identically).
+
+\EXAMPLE
+{
+#set_interface_map[`and`,`/\\`; `or`,`\\/`];;
+[] : (string # string) list
+
+#"T and F";;
+"T and F" : term
+
+#set_flag(`interface_print`,false);;
+true : bool
+
+#"T and F";;
+"T /\ F" : term
+}
+\SEEALSO
+interface_map.
+
+\ENDDOC

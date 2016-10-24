@@ -1,0 +1,3 @@
+\THEOREM FLAT list
+|- (FLAT[] = []) /\ (!h t. FLAT(CONS h t) = APPEND h(FLAT t))
+\ENDTHEOREM

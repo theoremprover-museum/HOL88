@@ -1,0 +1,14 @@
+% ===== Save Boxes must be loaded before using =========================
+% ======================================================================
+\setlength{\unitlength}{1truemm}
+\newsavebox{\loopcirc}
+\savebox{\loopcirc}(10,20)[r]{
+  \begin{picture}(10,20)(0,0)
+    \put(0,0){\thicklines{\circle{10}}}
+    \put(0,-10){\thicklines{\line(1,0){7}}}
+    \put(7,-7){\thicklines{\oval(6,6)[br]}}
+    \put(10,-7){\thicklines{\line(0,1){14}}}
+    \put(7,7){\thicklines{\oval(6,6)[tr]}}
+    \put(7,10){\thicklines{\line(-1,0){4}}}
+    \put(3,7){\thicklines{\oval(6,6)[tl]}}
+  \end{picture}}

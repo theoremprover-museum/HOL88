@@ -1,0 +1,3 @@
+\THEOREM LESS_ADD_1 arithmetic
+|- !m n. n < m ==> (?p. m = n + (p + 1))
+\ENDTHEOREM

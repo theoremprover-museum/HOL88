@@ -1,0 +1,31 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\THEOREM DISJ\_RESQ\_EXISTS\_DIST res\_quan
+|- !P Q R.
+   (?i :: \i. P i \/ Q i. R i) = (?i :: P. R i) \/ (?i :: Q. R i)
+\ENDTHEOREM
+\THEOREM RESQ\_EXISTS\_DISJ\_DIST res\_quan
+|- !P Q R. (?i :: P. Q i \/ R i) = (?i :: P. Q i) \/ (?i :: P. R i)
+\ENDTHEOREM
+\THEOREM RESQ\_EXISTS\_REORDER res\_quan
+|- !P Q R. (?i :: P. ?j :: Q. R i j) = (?j :: Q. ?i :: P. R i j)
+\ENDTHEOREM
+\THEOREM RESQ\_EXISTS\_UNIQUE res\_quan
+|- !P j. (?i :: $= j. P i) = P j
+\ENDTHEOREM
+\THEOREM RESQ\_FORALL\_CONJ\_DIST res\_quan
+|- !P Q R. (!i :: P. Q i /\ R i) = (!i :: P. Q i) /\ (!i :: P. R i)
+\ENDTHEOREM
+\THEOREM RESQ\_FORALL\_DISJ\_DIST res\_quan
+|- !P Q R.
+   (!i :: \i. P i \/ Q i. R i) = (!i :: P. R i) /\ (!i :: Q. R i)
+\ENDTHEOREM
+\THEOREM RESQ\_FORALL\_FORALL res\_quan
+|- !P R x. (!x. !i :: P. R i x) = (!i :: P. !x. R i x)
+\ENDTHEOREM
+\THEOREM RESQ\_FORALL\_REORDER res\_quan
+|- !P Q R. (!i :: P. !j :: Q. R i j) = (!j :: Q. !i :: P. R i j)
+\ENDTHEOREM
+\THEOREM RESQ\_FORALL\_UNIQUE res\_quan
+|- !P j. (!i :: $= j. P i) = P j
+\ENDTHEOREM

@@ -1,0 +1,18 @@
+\DOC flags
+
+\TYPE {flags : (void -> string list)}
+
+\SYNOPSIS
+Returns a list of settable system flags.
+
+\DESCRIBE
+Given the {void} argument {()}, {flags} returns a list of settable system
+flags. The default values of these flags can be altered by {set_flag}.
+
+\COMMENTS
+A full explanation of the standard flags is given in the DESCRIPTION.
+
+\SEEALSO
+set_flag.
+
+\ENDDOC

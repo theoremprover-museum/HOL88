@@ -1,0 +1,3 @@
+\THEOREM POW_NZ REAL
+|- !c n. ~(c = & 0) ==> ~(c pow n = & 0)
+\ENDTHEOREM

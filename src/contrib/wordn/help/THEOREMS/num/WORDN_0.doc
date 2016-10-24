@@ -1,0 +1,3 @@
+\THEOREM WORDN_0 wordn_num
+|- (!m. WORDN 0 m = []) /\ (!n. WORDN(SUC n)0 = CONS F(WORDN n 0))
+\ENDTHEOREM

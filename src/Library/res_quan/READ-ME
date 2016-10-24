@@ -1,0 +1,56 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: res_quan						|
+|									|
+| DESCRIPTION   : library for dealing with restricted quantifiers.      |
+|									|
+| AUTHOR	: Wai WONG						|
+| DATE		: Aug 1992  			         		|
+|									|
+| ACKNOWLEGMENT : Thanks to Andy Gordon who gave me the source of some 	|
+|		of the functions in this library.			|
+|									|
++ =====================================================================	+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+mk_res_quan.ml --- create the theory res_quan which contains a number of
+	 useful theorems about restricted quatifiers.
+res_quan.ml --- for loading the library.
+load_res_quan.ml --- for loading the libary.
+res_rules.ml --- source of ML functions.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clobber"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+Type "load_library `res_quan`;;" to load the whole library, or
+type "load_library `res_quan:cond_rewrite`;;" to load only the
+conditional rewriting tools.
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+A manual is in the directory Manual.
+On-line help entries are in the directory help.

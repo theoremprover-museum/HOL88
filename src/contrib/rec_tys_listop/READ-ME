@@ -1,0 +1,135 @@
+% =========================================================================== %
+% DIRECTORY	: rec_tys_listop					      %
+%                                                                             %
+% DESCRIPTION   : An extension to the types which can be automatically        %
+%                 defined, admitting constructors with the list operator      %
+%                 applied to the type being defined.                          %
+%                                                                             %
+% AUTHOR	: (c) B. Graham	                                              %
+%                                                                             %
+% ADDRESS       : Computer Laboratory                                         %
+%                 University of Cambridge                                     %
+%                 New Museums Site                                            %
+%                 Pembroke Street                                             %
+%                 Cambridge, U.K.  CB2 3QG                                    %
+%                                                                             %
+%                 email: btg@cl.cam.ac.uk                                     %
+% 			                                                      %
+% DATE		: 07.05.93					              %
+% =========================================================================== %
+
+This directory contains 3 files which extend the recursive types which
+can be automatically defined in hol.  This extension permits type constructors
+to have one instance at most of a list of the type being defined.  
+
+This is an ad-hoc extension of the package, in the sense that other equally
+valid forms of recursive types are not admitted (see Tom Melham's note in
+the info-hol archive, message number 0363), and a rationalization of the types
+which should be admitted was not attempted.  This single extension however
+is recognized as useful for a number of users.  When such a rationalization
+occurs, this can be discarded.  Note also that the technique used was described
+by Tom Melham in an example of nonautomatic type definition (archive message
+number 0365).  
+
+The implementation redefines a number of functions in the HOL system.  The
+three files are modifications of the standard built-in files.
+
+in rt_lop_tydefs.ml:
+- define_type
+
+
+in rt_lop_prim_rec.ml:
+- prove_rec_fn_exists
+- new_recursive_definition
+
+
+in rt_lop_tyfns.ml:
+- prove_induction_thm
+- prove_cases_thm
+- prove_constructors_one_one
+- prove_constructors_distinct
+
+Aside from the extension to the definable types, these functions give the
+same results when applied to types defined without using this extension.
+
+The type specification given as the second argument to define_type must be a
+string of the form:
+
+   `op = C1 ty ... ty | C2 ty ... ty | ... | Cn ty ... ty`
+
+where op is the name of the type constant or type operator to be
+defined, C1, ..., Cn are identifiers, and each ty is either:
+1. a (logical) type expression valid in the current theory (in which case ty
+   must not contain op), or
+2. just the identifier `op' itself, or
+3. the identifier `op' as an argument to the type operator `list' 
+   (ie. `(op)list').
+There can be no more than one instance of the third possibility for 
+any constructor.
+
+***************************************************************************
+Examples:
+
+#let DS_axiom = define_type `DS`
+    `DS = Num num | Bool bool | REC (DS)list | MRO DS (DS)list`;;
+
+#DS_axiom = 
+|- !f0 f1 f2 f3
+    ?! fn.
+     (!n. fn(Num n) = f0 n) /\
+     (!b. fn(Bool b) = f1 b) /\
+     (!Dlst. fn(REC Dlst) = f2(MAP fn Dlst)Dlst) /\
+     (!D Dlst. fn(MRO D Dlst) = f3(fn D)(MAP fn Dlst)D Dlst)
+
+#let DS_Induct = prove_induction_thm DS_axiom;;
+DS_Induct = 
+|- !P.
+    (!n. P(Num n)) /\
+    (!b. P(Bool b)) /\
+    (!Dlst. EVERY P Dlst ==> P(REC Dlst)) /\
+    (!D Dlst. P D /\ EVERY P Dlst ==> P(MRO D Dlst)) ==>
+    (!D. P D)
+
+#let DS_11 = prove_constructors_one_one DS_axiom;;
+DS_11 = 
+|- (!n n'. (Num n = Num n') = (n = n')) /\
+   (!b b'. (Bool b = Bool b') = (b = b')) /\
+   (!Dlst Dlst'. (REC Dlst = REC Dlst') = (Dlst = Dlst')) /\
+   (!D Dlst D' Dlst'.
+     (MRO D Dlst = MRO D' Dlst') = (D = D') /\ (Dlst = Dlst'))
+
+#let DS_distinct = prove_constructors_distinct DS_axiom;;
+DS_distinct = 
+|- (!n b. ~(Num n = Bool b)) /\
+   (!n Dlst. ~(Num n = REC Dlst)) /\
+   (!n D Dlst. ~(Num n = MRO D Dlst)) /\
+   (!b Dlst. ~(Bool b = REC Dlst)) /\
+   (!b D Dlst. ~(Bool b = MRO D Dlst)) /\
+   (!Dlst D Dlst'. ~(REC Dlst = MRO D Dlst'))
+
+#let DS_cases = prove_cases_thm DS_Induct;;
+DS_cases = 
+|- !D.
+    (?n. D = Num n) \/
+    (?b. D = Bool b) \/
+    (?Dlst. D = REC Dlst) \/
+    (?D' Dlst. D = MRO D' Dlst)
+
+#let fn =
+    new_recursive_definition false DS_axiom `fn`
+    "(fn (Num (x:num)) = (x = 0) => [ F ] | [ T ]) /\
+     (fn (Bool (b:bool)) = [ b ]) /\
+     (fn (REC DSl) = FLAT (MAP fn DSl)) /\
+     (fn (MRO DS1 DSlst) = (NULL DSlst) => (fn DS1)
+                                         | FLAT (MAP fn DSlst))";;
+######fn = 
+|- (!x. fn(Num x) = ((x = 0) => [F] | [T])) /\
+   (!b. fn(Bool b) = [b]) /\
+   (!DSl. fn(REC DSl) = FLAT(MAP fn DSl)) /\
+   (!DS1 DSlst.
+     fn(MRO DS1 DSlst) = (NULL DSlst => fn DS1 | FLAT(MAP fn DSlst)))
+***************************************************************************
+
+The set of three files can be loaded using the command:
+
+	loadf `<...path to this directory...>/load_rec_tys_listop`;;

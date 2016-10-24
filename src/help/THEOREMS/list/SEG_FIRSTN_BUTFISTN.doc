@@ -1,0 +1,4 @@
+\THEOREM SEG_FIRSTN_BUTFISTN list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==> (SEG n m l = FIRSTN n(BUTFIRSTN m l))
+\ENDTHEOREM

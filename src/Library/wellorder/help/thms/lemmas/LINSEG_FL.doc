@@ -1,0 +1,3 @@
+\THEOREM LINSEG_FL WELLORDER
+|- !l a x. woset l ==> (fl(linseg l a)x = less l(x,a))
+\ENDTHEOREM

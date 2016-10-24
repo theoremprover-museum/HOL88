@@ -1,0 +1,3 @@
+\THEOREM DECOMPOSITION sets
+|- !s x. x IN s = (?t. (s = x INSERT t) /\ ~x IN t)
+\ENDTHEOREM

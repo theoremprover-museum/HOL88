@@ -1,0 +1,12 @@
+\DOC arb_term
+
+\TYPE {arb_term : term}
+
+\SYNOPSIS
+This identifier is bound for implementation reasons only.
+
+\DESCRIBE
+{arb_term} is the term {"arb:*"}, i.e. it is a variable named {arb} of logical
+type {":*"}.
+
+\ENDDOC

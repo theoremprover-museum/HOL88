@@ -1,0 +1,77 @@
+\DOC write_proof_to
+
+\TYPE {write_proof_to : string -> string -> thm list -> line list -> void}
+
+\KEYWORDS
+proof recording.
+
+\LIBRARY
+record_proof
+
+\SYNOPSIS
+Output a proof to a proof file.
+
+\DESCRIBE
+A proof is a list of inference steps.  The proof recorder records
+every inference performed by the system in an internal buffer.
+When a proof is completed, the raw records are converted into a list
+of proof lines as in Hilbert's style proofs. These lines are then
+output to a disk file. This file is in the {prf} format specified in
+[1].
+
+{write_proof_to} is the output function for writing a proof to a
+file. The first argument is the name of the output file. The second is
+the name of the proof. The third is a list of theorems that are
+to be derived in the proof. The fourth is the list of proof lines.
+
+If a file of the same name as the first argument already exists, it
+will be overwritten. The current proof environment will be written to
+the file before the proof.
+
+
+\FAILURE
+Never fail.
+
+\EXAMPLE
+Below is an example showing the use of this function in writing the
+proof lines of an extremely simple proof:
+{
+#let th = SPEC_ALL ADD_SYM;;
+Theorem ADD_SYM autoloading from theory `arithmetic` ...
+ADD_SYM = |- !m n. m + n = n + m
+
+th = |- m + n = n + m
+
+#let v = genvar ":num";;
+"GEN%VAR%385" : term
+
+#record_proof true;;
+() : void
+
+#let th1 = (REFL "SUC(m + n)");;
+th1 = |- SUC(m + n) = SUC(m + n)
+
+#let th2 = SUBST [th,v] "SUC(m + n) = SUC ^v" th1;;
+th2 = |- SUC(m + n) = SUC(n + m)
+
+#record_proof false;;
+() : void
+
+#write_proof_to `ap_term.prf` `ap_term` [] (MakeProof(get_steps()));;
+() : void
+}
+
+
+\COMMENTS
+This function is used to implement higher level user functions for
+recording proof in the library {record_proof}. It is much more
+convenient to use those functions than this function directly.
+
+\SEEALSO
+write_line, write_thm_list, write_env,
+write_proof_add_to, write_last_proof,
+current_proof, current_proof_file,
+new_proof_file, close_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm
+
+\ENDDOC

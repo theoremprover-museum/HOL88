@@ -1,0 +1,37 @@
+\DOC compiling
+
+\TYPE {compiling : bool}
+
+\SYNOPSIS
+Assignable variable: true when compiling, false when loading.
+
+\DESCRIBE
+The identifier {compiling} is an assignable ML variable of type {bool} which
+used to indicate whether the expressions currently being evaluated by ML are
+being compiled or loaded.  At the start of the evaluation of a call to
+{compile} or its variants, the variable {compiling} is set to {true}; and at
+the start of the evaluation of a call to {load} or its variants, {compiling} is
+set to {false}.  In both cases, the previous value of {compiling} is restored
+at the end of evaluation.  The initial value of {compiling} when HOL is run is
+{false}.
+
+\FAILURE
+Evaluation of the variable {compiling} never fails.
+
+\USES
+The main function of {compiling} is to provide a mechanism by which expressions
+may be conditionally evaluated, depending on whether they are being compiled or
+not.  In particular, the main purpose of {compiling} is to allow conditional
+loading of files in ML. For example, suppose that the line
+{
+   if compiling then load(`foo`,false);;
+}
+\noindent appears at the start of an ML file {bar.ml}.  Then whenever the file
+{bar.ml} is compiled, the file {foo.ml} will be loaded.  But whenever the file
+{bar.ml} is merely loaded (whether in compiled form or not) the file {bar.ml}
+will not be loaded.
+
+\SEEALSO
+compiling_stack.
+
+\ENDDOC

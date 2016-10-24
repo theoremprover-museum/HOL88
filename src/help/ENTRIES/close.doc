@@ -1,0 +1,31 @@
+\DOC close
+
+\TYPE {close : (string -> void)}
+
+\SYNOPSIS
+Closes an {ML} port.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+The function {close} closes a port that had been opened for
+reading (by {openi}) or writing (by {openw} or {append_openw}).
+Ports are represented by the strings that are returned by one of the
+functions {append-openw}, {openi} and {openw}.
+
+\FAILURE
+Fails when the named port is not open.
+
+\EXAMPLE
+{
+#openw `foo`;;
+`%foo` : string
+
+#close it;;
+() : void
+}
+\SEEALSO
+append_openw, openi, openw, read, write
+
+\ENDDOC

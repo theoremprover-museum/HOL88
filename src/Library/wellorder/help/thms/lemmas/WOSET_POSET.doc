@@ -1,0 +1,3 @@
+\THEOREM WOSET_POSET WELLORDER
+|- !l. woset l ==> poset l
+\ENDTHEOREM

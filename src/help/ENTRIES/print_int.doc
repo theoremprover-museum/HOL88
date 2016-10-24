@@ -1,0 +1,28 @@
+\DOC print_int
+
+\TYPE {print_int : (int -> void)}
+
+\SYNOPSIS
+Prints an ML integer to the terminal.
+
+\DESCRIBE
+{print_int n} returns {():void} with the side-effect of printing the value
+of {n} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#print_int 2;;
+2() : void
+
+#print_int (-10);;
+-10() : void
+}
+\SEEALSO
+print_begin, print_end, print_newline.
+
+\ENDDOC

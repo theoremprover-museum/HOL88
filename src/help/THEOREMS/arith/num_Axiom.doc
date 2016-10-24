@@ -1,0 +1,3 @@
+\THEOREM num_Axiom prim_rec
+|- !e f. ?! fn. (fn 0 = e) /\ (!n. fn(SUC n) = f(fn n)n)
+\ENDTHEOREM

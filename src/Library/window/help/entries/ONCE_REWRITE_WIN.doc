@@ -1,0 +1,22 @@
+\DOC ONCE_REWRITE_WIN
+
+\TYPE {ONCE_REWRITE_WIN :  (thm list -> void)}
+
+\SYNOPSIS
+Rewrite the top focus with a list of theorems and basic rewritings.
+
+\LIBRARY window
+
+\FAILURE
+{ONCE_REWRITE_WIN thms} will fail if the
+hypotheses of any of the theorems in {thms} are not a subset of the
+context of the window.
+
+\SEEALSO
+GEN_REWRITE_WIN, PURE_REWRITE_WIN, REWRITE_WIN,
+PURE_ONCE_REWRITE_WIN, PURE_ASM_REWRITE_WIN, ASM_REWRITE_WIN,
+PURE_ONCE_ASM_REWRITE_WIN, ONCE_ASM_REWRITE_WIN,
+FILTER_PURE_ASM_REWRITE_WIN, FILTER_ASM_REWRITE_WIN,
+FILTER_PURE_ONCE_ASM_REWRITE_WIN, FILTER_ONCE_ASM_REWRITE_WIN
+
+\ENDDOC

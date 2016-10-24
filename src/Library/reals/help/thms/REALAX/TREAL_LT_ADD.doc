@@ -1,0 +1,3 @@
+\THEOREM TREAL_LT_ADD REALAX
+|- !x y z. y treal_lt z ==> (x treal_add y) treal_lt (x treal_add z)
+\ENDTHEOREM

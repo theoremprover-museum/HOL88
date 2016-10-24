@@ -1,0 +1,61 @@
+\indexentry{ascii\_Axiom@{\ptt ascii\_Axiom}|(}{1}
+\indexentry{function definitions!on type {\tt ascii}|(}{2}
+\indexentry{ascii\_Axiom@{\ptt ascii\_Axiom}|)}{2}
+\indexentry{function definitions!on type {\tt ascii}|)}{2}
+\indexentry{theorems!about the type {\tt ascii}|(}{2}
+\indexentry{ASCII\_11@{\ptt ASCII\_11}}{2}
+\indexentry{ascii\_Induct@{\ptt ascii\_Induct}}{2}
+\indexentry{case analysis!on type {\tt ascii}|(}{2}
+\indexentry{ascii\_CASES@{\ptt ascii\_CASES}}{2}
+\indexentry{case analysis!on type {\tt ascii}|)}{2}
+\indexentry{theorems!about the type {\tt ascii}|)}{2}
+\indexentry{ascii\_EQ\_CONV@{\ptt ascii\_EQ\_CONV}}{3}
+\indexentry{ASCII\_11@{\ptt ASCII\_11}}{3}
+\indexentry{string\_Axiom@{\ptt string\_Axiom}|(}{3}
+\indexentry{function definitions!on type {\tt string}|(}{4}
+\indexentry{string\_Axiom@{\ptt string\_Axiom}|)}{4}
+\indexentry{function definitions!on type {\tt string}|)}{4}
+\indexentry{theorems!about the type {\tt string}|(}{4}
+\indexentry{NOT\_EMPTY\_STRING@{\ptt NOT\_EMPTY\_STRING}}{4}
+\indexentry{NOT\_STRING\_EMPTY@{\ptt NOT\_STRING\_EMPTY}}{4}
+\indexentry{STRING\_11@{\ptt STRING\_11}}{4}
+\indexentry{structural induction|(}{4}
+\indexentry{case analysis!on type {\tt string}|(}{4}
+\indexentry{string\_Induct@{\ptt string\_Induct}}{4}
+\indexentry{string\_CASES@{\ptt string\_CASES}}{4}
+\indexentry{structural induction|)}{4}
+\indexentry{case analysis!on type {\tt string}|)}{4}
+\indexentry{theorems!about the type {\tt string}|)}{4}
+\indexentry{string constants|(}{5}
+\indexentry{\\\@\verb+""`+$\dots$\verb+`""+ (string constants)|(}{5}
+\indexentry{string\_CONV@{\ptt string\_CONV}|(}{5}
+\indexentry{string constants|)}{6}
+\indexentry{\\\@\verb+""`+$\dots$\verb+`""+ (string constants)|)}{6}
+\indexentry{string\_CONV@{\ptt string\_CONV}|)}{6}
+\indexentry{string\_EQ\_CONV@{\ptt string\_EQ\_CONV}|(}{6}
+\indexentry{STRING\_11@{\ptt STRING\_11}}{6}
+\indexentry{ASCII\_11@{\ptt ASCII\_11}}{6}
+\indexentry{string\_EQ\_CONV@{\ptt string\_EQ\_CONV}|)}{6}
+\indexentry{load\_string@{\ptt load\_string}|(}{8}
+\indexentry{load\_string@{\ptt load\_string}|)}{8}
+\indexentry{ascii\_EQ\_CONV@{\ptt ascii\_EQ\_CONV}}{9}
+\indexentry{load\_string@{\ptt load\_string}}{10}
+\indexentry{string\_CONV@{\ptt string\_CONV}}{10}
+\indexentry{string\_EQ\_CONV@{\ptt string\_EQ\_CONV}}{11}
+\indexentry{ASCII\_DEF@{\ptt ASCII\_DEF}}{13}
+\indexentry{ascii\_ISO\_DEF@{\ptt ascii\_ISO\_DEF}}{13}
+\indexentry{ascii\_TY\_DEF@{\ptt ascii\_TY\_DEF}}{13}
+\indexentry{STRING\_DEF@{\ptt STRING\_DEF}}{13}
+\indexentry{string\_ISO\_DEF@{\ptt string\_ISO\_DEF}}{14}
+\indexentry{string\_TY\_DEF@{\ptt string\_TY\_DEF}}{14}
+\indexentry{``\_DEF@{\ptt ``\_DEF}}{14}
+\indexentry{ASCII\_11@{\ptt ASCII\_11}}{14}
+\indexentry{ascii\_Axiom@{\ptt ascii\_Axiom}}{14}
+\indexentry{ascii\_CASES@{\ptt ascii\_CASES}}{14}
+\indexentry{ascii\_Induct@{\ptt ascii\_Induct}}{15}
+\indexentry{NOT\_EMPTY\_STRING@{\ptt NOT\_EMPTY\_STRING}}{15}
+\indexentry{NOT\_STRING\_EMPTY@{\ptt NOT\_STRING\_EMPTY}}{15}
+\indexentry{STRING\_11@{\ptt STRING\_11}}{15}
+\indexentry{string\_Axiom@{\ptt string\_Axiom}}{15}
+\indexentry{string\_CASES@{\ptt string\_CASES}}{15}
+\indexentry{string\_Induct@{\ptt string\_Induct}}{15}

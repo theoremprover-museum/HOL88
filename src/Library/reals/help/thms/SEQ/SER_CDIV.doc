@@ -1,0 +1,3 @@
+\THEOREM SER_CDIV SEQ
+|- !x x0 c. x sums x0 ==> (\n. (x n) / c) sums (x0 / c)
+\ENDTHEOREM

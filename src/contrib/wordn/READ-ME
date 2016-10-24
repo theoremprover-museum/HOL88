@@ -1,0 +1,169 @@
+%========================================================================%
+%	Library wordn							 %
+%========================================================================%
+
+	SUMMARY OF THE wordn LIBRARY
+	============================
+
+
+The wordn library consists of several theories whose ancestry
+is as below:
+
+	wordn_base    wordn_bitops   wordn_num
+	     |             |              |
+	     |             |              |
+	     ------------------------------
+	                   |
+	                 wordn
+
+Each thoery may have a number of definitions and/or theorems stored in it,
+and there may also be some derived rules and conversions associated with it.
+A brief description of each theory and a list of ML functions available
+with the library is given below.
+
+
+wordn_base:
+	This thoery is for defining the types of n-bit words. For a
+speific word length N, a type, namely :wordN, can be defined, together
+with a constructor WORDN and a destructor BITSN. The underlying
+representation type of :wordN is :(bool)list and the subset of
+:(bool)list which represents :wordN satisfies (\l. length l = N).
+As far as the users concern, the representation of :wordn is hidden
+unless you really want to work with :(bool)list rather than :wordn.
+
+	There are serval theorems stored in this theory, but they
+should be of no interest to the users. There are also a number of ML
+functions implementing derived rules and conversions, such as proving
+induction theorem, and so on.
+
+wordn_bitops:
+	This theory is for defining bitwise operators and proving
+theorems about them. There are ML functions performing these tasks. To
+define a (binary) bitwise operator on a type :wordN, the user should
+supply a function of type :bool->bool->bool, eg. $/\ and the name of
+the new constant as a string, eg. `ANDN`. A constant
+ANDN:wordN->wordN->wordN will be defined for you. To prove a theorem
+stating the symmetry of the operator ANDN, the user should supply the
+definiton and a theorem stating the symmetry of the underlying
+operator, namely CONJ_SYM, then a theorem
+ |- !w1 w2. w1 ANDN w2 = w2 ANDN w1
+will be derived. There are also function for defining constant to
+split a word into two parts and to join two words into a longer word.
+For example, JOIN_n_m:(wordn # wordm) -> wordl and
+ SPLIT_n_m:wordl -> (wordn # wordn).
+
+The above two theories and associated functions treat a word just as a
+bit vector. They do not concern with how these bits are interpreted.
+In contrast, the theory wordn_num maps n-bit words to natural numbers.
+
+wordn_num:
+	This theory interprets n-bit words as natural numbers in a
+big-endian format, ie. #011 = 3. Constants for mapping between :wordn
+and :num can be defined. And there are conversions for the some
+purposes.
+
+wordn:
+	This theory contains no definition nor theorems. It just acts
+as a common descendant for all the theories.
+
+Since the library has been organized as modules, theories implementing
+other interpretations, eg. integers and little-endian, can be added
+without difficuty.
+
+A list of User functions
+========================
+
+define_wordn_type = - : (string -> int -> thm)
+	define a type for n-bit word.
+
+prove_BITS_one_one = - : (thm -> thm)
+prove_BITS_onto = - : (thm -> thm)
+prove_WORD_one_one = - : (thm -> thm)
+prove_WORD_onto = - : (thm -> thm)
+prove_LENGTH_BITS_thm = - : (thm -> thm)
+prove_BITS_WORD = - : (thm -> thm)
+prove_function_defn_thm = - : (thm -> thm)
+prove_wordn_induction_thm = - : (thm -> thm)
+prove_wordn_cases_thm = - : (thm -> thm)
+	prove theorems about the type and its constructor and destructor.
+
+new_wordn_definition = - : (bool -> thm -> string -> conv)
+	define new constants on the wordn type.
+
+wordn_CASES_TAC = - : (term -> thm_tactic)
+wordn_X_CASES_TAC = - : (term -> thm -> term list -> tactic)
+	tactics for working with :wordn.
+
+define_bit_op = - : (thm -> string -> string -> conv)
+define_bin_bit_op = - : (bool -> thm -> string -> string -> conv)
+	define bitwise operators, such as NOTn, ANDn.
+
+prove_not_thm = - : (thm -> thm -> thm -> thm -> thm)
+prove_sym_thm = - : (thm -> thm -> thm -> thm)
+prove_assoc_thm = - : (thm -> thm -> thm -> thm -> thm)
+	prove theorems about bitwise operators.
+
+define_word_val = - : (thm -> (string # string) -> (string # string) -> thm list)
+	define mapping function between :wordn and :num.
+
+prove_word_val = - : (thm -> thm -> thm -> thm)
+prove_NWORD_MOD = - : (thm -> thm)
+	prove theorems on this mapping.
+
+VAL_CONV = - : conv
+wordn_NVAL_CONV = - : (thm -> thm -> conv)
+NVAL_CONV = - : (thm -> thm -> conv)
+wordn_NWORD_CONV = - : (thm -> conv)
+NWORD_CONV = - : (thm -> thm -> conv)
+	conversions for this mapping.
+
+define_wordn_msb = - : (thm -> string -> thm)
+prove_msb_thm = - : (thm -> thm -> thm)
+MSB_CONV = - : (thm -> conv)
+	Most Significant Bit.
+
+define_wordn_lsb = - : (thm -> string -> thm)
+prove_lsb_thm = - : (thm -> thm -> thm)
+LSB_CONV = - : (thm -> conv)
+	Least Significant Bit.
+
+define_wordn_bit = - : (thm -> string -> thm)
+prove_bit_thm = - : (thm -> thm -> int -> thm)
+BIT_CONV = - : (thm -> conv)
+	Extract the i-th bit of a word.
+
+define_wordn_seg = - : (thm -> string -> int -> thm)
+prove_seg_thm = - : (thm -> thm -> int -> thm)
+SEG_CONV = - : (thm -> conv)
+	Extract an m-bit segment from an n-bit word.
+
+define_wordn_pad = - : (thm -> string -> int -> thm)
+prove_pad_thm = - : (thm -> thm -> thm -> int -> thm)
+PAD_CONV = - : (thm -> conv)
+	update an m-bit segement within an n-bit word.
+
+define_wordn_partition = - : ((string # string) -> thm list -> (thm # thm))
+wordn_JOIN_CONV = - : (thm -> conv)
+wordn_SPLIT_CONV = - : (thm -> conv)
+prove_partition_thm = - : ((thm # thm) -> proof)
+	split a word into two segments or join two words to form a longer word.
+
+define_wordn_shift_right = - : (thm -> string -> thm)
+prove_shift_right_thm = - : (thm -> thm -> thm)
+SHR_CONV = - : (thm -> conv -> conv)
+	shift right.
+
+define_wordn_shift_left = - : (thm -> string -> thm)
+prove_shift_left_thm = - : (thm -> thm -> thm)
+SHL_CONV = - : (thm -> conv -> conv)
+	shift left.
+
+define_wordn_rotate_right = - : (thm -> string -> thm)
+prove_rotate_right_thm = - : (thm -> thm -> thm)
+ROR_CONV = - : (thm -> conv)
+	rotate right.
+
+define_wordn_rotate_left = - : (thm -> string -> thm)
+prove_rotate_left_thm = - : (thm -> thm -> thm)
+ROL_CONV = - : (thm -> conv)
+	rotate left.

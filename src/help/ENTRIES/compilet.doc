@@ -1,0 +1,26 @@
+\DOC compilet
+
+\TYPE {compilet : (string -> void)}
+
+\SYNOPSIS
+Compiles the named ML source file with verbose messages.
+
+\DESCRIBE
+Given a string {`name`}, {compile} loads the named file, and then compiles it
+into LISP generating a file {name_ml.l}. It then calls the LISP compiler to
+create an object file {name_ml.o}. The intermediate LISP file is automatically
+deleted once the {name_ml.o} file has been generated. Loading and compilation
+are verbose.
+
+\FAILURE
+Fails if the named ML source file does not exist, or if the load is
+unsuccessful. In the latter case, the intermediate {name_ml.l} file is left
+undeleted.
+
+\COMMENTS
+The function call {compilet `foo`} is the same as {compile (`foo`,true)}.
+
+\SEEALSO
+compile, compilet, load, loadf, loadt
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM NOT_SUC_LESS_EQ_0 arithmetic
+|- !n. ~(SUC n) <= 0
+\ENDTHEOREM

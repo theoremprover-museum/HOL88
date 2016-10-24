@@ -1,0 +1,3 @@
+\THEOREM IS_BASEN_CONS_EQ numeral
+|- !r l e. IS_BASEN r(CONS e l) = e < r /\ IS_BASEN r l
+\ENDTHEOREM

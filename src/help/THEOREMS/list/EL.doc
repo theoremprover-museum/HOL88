@@ -1,0 +1,3 @@
+\THEOREM EL list
+|- (!l. EL 0 l = HD l) /\ (!l n. EL(SUC n)l = EL n(TL l))
+\ENDTHEOREM

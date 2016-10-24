@@ -1,0 +1,3 @@
+\THEOREM SUC_GREATER_EQ_SUC suc
+|- !n m. (SUC m) >= (SUC n) = m >= n
+\ENDTHEOREM

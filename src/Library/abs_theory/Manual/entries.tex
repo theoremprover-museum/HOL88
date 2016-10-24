@@ -1,0 +1,425 @@
+\chapter{ML Functions in the {\tt abs\_theory} Library}
+\input{entries-intro}
+\DOC{ABS\_TAC\_PROOF}
+
+\TYPE{\small\verb%ABS_TAC_PROOF : ((goal # tactic) -> thm)%}\egroup
+
+\SYNOPSIS
+Attempts to prove an abstract goal using a given tactic.
+
+\DESCRIBE 
+
+When applied to a goal-tactic pair {\small\verb%(A ?- t,tac)%}, {\small\verb%ABS_TAC_PROOF%}
+attempts to prove the goal {\small\verb%A ?- t%}, using the tactic {\small\verb%tac%}. Before
+the proof of {\small\verb%A ?- t%} is attempted, the theory obligations for each
+abstract object used in the goal are added to the assumption list.  If the
+proof succeeds, it returns the theorem {\small\verb%A' |- t%} corresponding to the
+goal, where the assumption list {\small\verb%A'%} may be a proper superset of {\small\verb%A%}
+unless the tactic is valid; there is no inbuilt validity checking.
+
+\FAILURE
+Fails if appropriate theory obligations cannot be found.
+Fails unless the goal has hypotheses and conclusions all of type {\small\verb%bool%},
+and the tactic can solve the goal.
+
+\SEEALSO
+prove_abs_thm, TAC_PROOF.
+
+\ENDDOC
+\DOC{abs\_type\_info}
+
+\TYPE {\small\verb%abs_type_info : (thm -> type)%}\egroup
+
+\SYNOPSIS
+Retrieves the type of an abstract representation.
+
+\DESCRIBE
+A call to {\small\verb%abs_type_info thm%} returns a type representing the abstract
+type of the object declared in the theorem {\small\verb%thm%}.
+
+\USES
+{\small\verb%abs_type_info%} is used to get the type of an abstract representation
+for use in making definitions and proving theorems about the abstract
+representation.  
+
+\FAILURE
+Fails if theorem is not of the form returned by
+{\small\verb%new_abstract_representation%}. 
+
+\SEEALSO
+new_abstract_representation
+
+\ENDDOC
+\DOC{close\_theory}
+
+\TYPE {\small\verb%close_theory : (void -> void)%}\egroup
+
+\SYNOPSIS
+Finishes a session in draft mode, writing changes to the theory file.
+Removes any theory obligations from the theory obligation list.
+
+\DESCRIBE 
+Executing {\small\verb%close_theory()%} finishes a session in draft mode. It
+switches the system to proof mode. Changes made to the current theory
+segment are written to the theory file associated with it. For a theory
+segment named {\small\verb%`thy`%}, the associated file will be {\small\verb%thy.th%} in the
+directory from which HOL was called. If the theory file does not exist, it
+will be created.  Any theory obligations are flushed from the theory
+obligation list. If HOL is quit before {\small\verb%close_theory%} is invoked, the
+additions made to the segment may not persist to future HOL sessions.
+While in proof mode, the only changes which may be made to the theory are
+the addition of theorems. The theory segment may later be extended with
+{\small\verb%extend_theory%}.
+
+\FAILURE
+A call to {\small\verb%close_theory%} will fail if the system is not in draft mode.
+Since it involves writing to the file system, if the write fails for
+any reason {\small\verb%close_theory%} will fail.
+
+\SEEALSO
+extend_theory, new_theory, print_theory.
+
+\ENDDOC
+\DOC{EXPAND\_THOBS\_TAC}
+
+\TYPE {\small\verb%EXPAND_THOBS_TAC : (string -> tactic)%}\egroup
+
+
+\SYNOPSIS 
+Expands a goal using the abstract definition and theory
+obligations for the named theory.
+
+\DESCRIBE When applied to a goal {\small\verb%A ?- thob_def(rep)%}, where
+{\small\verb%thob_def%} is a theory obligation and {\small\verb%rep%} is a representation, the
+tactic expands the definition of the theory obligation and reduces the
+terms resulting from the abstract definitions.  This tactic is usually the
+first step in proving that a given representation meets the abstract theory
+obligations.
+
+\FAILURE
+Fails if the named theory is not an ancestor.
+
+
+\SEEALSO
+new_theory_obligations, new_abstract_representation
+
+\ENDDOC
+\DOC{g}
+
+\TYPE {\small\verb%g : (term -> void)%}\egroup
+
+\SYNOPSIS
+Initializes the subgoal package with a new goal which has no assumptions
+except those created from the theory obligations.
+
+\DESCRIBE
+The call
+{\par\samepage\setseps\small
+\begin{verbatim}
+   g "tm"
+\end{verbatim}
+}
+\noindent is equivalent to
+{\par\samepage\setseps\small
+\begin{verbatim}
+   set_abs_goal([],"tm")
+\end{verbatim}
+}
+\noindent 
+and clearly more convenient if a goal has no assumptions.
+For a description of the subgoal package, see  {\small\verb%set_abs_goal%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, get_state, p, print_state, r,
+rotate, save_top_thm, set_abs_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+
+
+
+\DOC{instantiate\_abstract\_definition}
+
+\TYPE {\small\verb%instantiate_abstract_definition : string -> string -> thm -> (term # term) list -> thm%}\egroup
+
+\SYNOPSIS 
+Instantiates a definition that is made in terms of a definition
+from an abstract theory.
+
+\DESCRIBE 
+A call of {\small\verb%instantiate_abstract_definition `thy` `th` def
+tpl%} retrieves the abstract definition {\small\verb%th%} from the abstract theory
+{\small\verb%thy%} rewrites {\small\verb%def%} with it and instantiates the result using
+{\small\verb%tpl%}, where {\small\verb%tpl%} is a list of paired terms where the first term is
+the variable to be instantiated and the second term is the instantiation.
+The abstract theory {\small\verb%thy%} must be an ancestor of the current theory.
+
+\FAILURE 
+The call will fail if the theory {\small\verb%thy%} is not an ancestor of the
+current theory.  It will fail if there does not exist a definition {\small\verb%th%}
+in theory segment {\small\verb%thy%}.
+
+
+\SEEALSO
+instantiate_abstract_theorem
+
+\ENDDOC
+\DOC{instantiate\_abstract\_theorem}
+
+\TYPE {\small\verb%instantiate_abstract_theorem : string -> string -> (term # term) list -> (thm) list) -> thm%}\egroup
+
+\SYNOPSIS
+Instantiates an abstract theorem. 
+
+\DESCRIBE
+
+The call {\small\verb%instantiate_abstract_theorem `thy` `th` tpl val%}
+instantiates the theorem {\small\verb%th%} from the abstract theory {\small\verb%thy%} using
+the instantiation {\small\verb%tpl%} and validation {\small\verb%val%}, where {\small\verb%tpl%} is a
+list of paired terms where the first term is the variable to be
+instantiated and the second term is the instantiation and {\small\verb%val%} is a
+proof that the instantiation meets the theory obligations for the source
+abstract theorem. The instantiation works whether the theory obligations
+were made implicit or explicit in the original goal.  The resulting theorem
+is {\small\verb%\em not%} automatically saved in the current theory segment, but must be
+explicitly saved using {\small\verb%save_thm%}.
+
+\FAILURE
+Fails if the instantiation cannot be resolved with the source theorem or
+the validation does not match the instantiation.  Fails if the {\small\verb%thy%}
+is not an ancestor or the {\small\verb%th%} is not found in {\small\verb%thy%}. 
+
+\SEEALSO
+instantiate_abstract_definition, save_thm
+
+\ENDDOC
+\DOC{new\_abstract\_representation}
+
+\TYPE {\small\verb%new_abstract_representation : string -> (string # type) list -> thm%}\egroup
+
+\SYNOPSIS
+Declares a new abstract representation.
+
+\DESCRIBE
+A call to {\small\verb%new_abstract_representation name decl%} creates a new abstract
+structure with the name {\small\verb%name%} using the declaration list {\small\verb%decl%}, where
+{\small\verb%decl%} is a list of string--type pairs giving the name and type of the
+constituent abstract objects.  
+The structure name, {\small\verb%name%}, is used as the constructor when building
+representations. 
+The returned theorem is used by the function {\small\verb%abs_type_info%}.
+
+\FAILURE
+Fails if any of the names have been used in the theory segment.  
+
+\ENDDOC
+\DOC{new\_abs\_parent}
+
+\TYPE {\small\verb%new_abs_parent : (string -> void)%}\egroup
+
+\SYNOPSIS
+Extends the current theory with a new abstract parent theory.
+
+\DESCRIBE 
+
+Executing {\small\verb%new_abs_parent `thy`%} extends the current theory by making the
+existing abstract theory named  {\small\verb%thy%} a parent of the current theory
+segment. The extended theory contains the theory segments of both
+constituent theories and any theory obligations declared in the parent.
+The theory  {\small\verb%thy%} is loaded into the system. The message ` {\small\verb%Theory thy
+loaded%}' is printed.  The effect of the call may not be written to the
+theory file of the segment until  {\small\verb%close_theory%} is invoked.  If HOL is
+quit before this, the effect may not persist to future HOL sessions.
+
+\FAILURE
+
+Executing {\small\verb%new_abs_parent `thy`%} will fail if the system is not in
+draft mode. It will fail if {\small\verb%thy%} is not a theory on the current search
+path. It will fail if there is a type in theory {\small\verb%thy%} with the same name
+as a type in the current theory. It will fail if there is a constant in
+theory {\small\verb%thy%} with the same name as a constant in the current theory. It
+will fail if an ancestor of theory {\small\verb%thy%} has been extended with either
+new types or constants which clash with names in theory {\small\verb%thy%}. It will
+also fail if any of the theory files of theory {\small\verb%thy%} have been damaged. On
+failure, the system recovers cleanly, unloading any theory segments it had
+loaded before the failure was detected.
+
+\SEEALSO
+new_parent, close_theory, extend_theory, new_theory, print_theory, search_path.
+
+\ENDDOC
+\DOC{new\_theory}
+
+\TYPE {\small\verb%new_theory : (string -> void)%}\egroup
+
+\SYNOPSIS
+Creates a new theory by extending the current theory with a new theory segment.
+
+\DESCRIBE 
+A theory consists of a hierarchy of named parts called theory
+segments. The theory segment at the top of the hierarchy tree in each
+theory is said to be current. All theory segments have a theory of the same
+name associated with them consisting of the theory segment itself and all
+its ancestors.  Each axiom, definition, specification and theorem belongs
+to a particular theory segment.
+
+Calling {\small\verb%new_theory `thy`%} creates a new theory segment and associated
+theory having name {\small\verb%thy%}. The theory segment which was current before the
+call becomes a parent of the new theory segment. The new theory therefore
+consists of the current theory extended with the new theory segment. The
+new theory segment replaces its parent as the current theory segment. The
+call switches the system into draft mode and flushes the theory obligation
+list. This allows new axioms, constants, types, constant specifications,
+infix constants, binders and parents to be added to the theory segment.
+Inconsistencies will be introduced into the theory if inconsistent axioms
+are asserted.  New theorems can also be added as when in proof mode. The
+theory file in which the data of the new theory segment is ultimately
+stored will have name {\small\verb%thy.th%} in the directory from which HOL was called.
+The theory segment might not be written to this file until the session is
+finished with a call to {\small\verb%close_theory%}. If HOL is quit without closing the
+session with {\small\verb%close_theory%}, parts of the theory segment created during the
+session may be lost. If the system is in draft mode when a call to
+{\small\verb%new_theory%} is made, the previous session is closed; all changes made in
+it will be written to the associated theory file.
+
+\FAILURE The call {\small\verb%new_theory `thy`%} will fail if there already exists
+a file {\small\verb%thy.th%} in the current search path. It will also fail if the
+name {\small\verb%thy.th%} is unsuitable for a filename. Since it could involve writing
+to the file system, if a write fails for any reason {\small\verb%new_theory%} will
+fail.
+
+\USES Hierarchically extending the current theory.  By splitting a theory
+into theory segments using {\small\verb%new_theory%}, the work required if
+definitions, etc., need to be changed is minimized. Only the associated
+segment and its descendants need be redefined.
+
+\SEEALSO
+close_theory, current_theory, extend_theory, load_theory, new_axiom,
+new_binder, new_constant, new_definition, new_infix, new_parent,
+new_specification, new_type, print_theory, save_thm, search_path.
+
+\ENDDOC
+\DOC{new\_theory\_obligations}
+
+\TYPE {\small\verb%new_theory_obligations : (string # term) -> void%}\egroup
+
+\SYNOPSIS
+Declares new theory obligations.
+
+
+\DESCRIBE 
+A call to {\small\verb%new_theory_obligations stp%} adds the theory obligation in
+{\small\verb%stp%} to theory obligation list in the current theory, where {\small\verb%stp%}
+is a string--term pair where the first string is the name of the obligation
+and the term is a predicate that must be met for an instantiation to be
+valid. 
+
+\USES
+Declaring theory obligations for an abstract object declared in an abstract
+theory.
+
+\FAILURE
+Fails if a term in {\small\verb%stp%} is not a predicate.
+
+\SEEALSO
+new_abstract_representation, instantiate_abstract_theorem
+
+\ENDDOC
+\DOC{prove\_abs\_thm}
+
+\TYPE {\small\verb%prove_abs_thm : ((string # term # tactic) -> thm)%}\egroup
+
+\SYNOPSIS
+Attempts to prove a boolean term with abstract components
+using the supplied tactic, then save the theorem.
+
+\DESCRIBE 
+The function {\small\verb%prove_abs_thm%}
+is identical to {\small\verb%prove_thm%} except that 
+the theory obligations for any abstract objects in the goal 
+are added to the assumption list before the proof is performed.
+
+\FAILURE Fails if the term is not of type {\small\verb%bool%} (and so cannot possibly
+be the conclusion of a theorem), or if the tactic cannot solve the goal.
+In the latter case {\small\verb%prove_abs_thm%} will list the unsolved goals to
+help the user.  In addition, {\small\verb%prove_abs_thm%} will fail if the theorem
+cannot be saved, e.g.  because there is already a theorem of that name in
+the current theory segment, or if the resulting theorem has assumptions;
+clearly this can only happen if the tactic was invalid, so this gives some
+measure of validity checking.
+
+\SEEALSO
+prove_thm
+
+\ENDDOC
+\DOC{set\_abs\_goal}
+
+\TYPE {\small\verb%set_abs_goal : (goal -> void)%}\egroup
+
+\SYNOPSIS
+Initializes the subgoal package with a new abstract goal.
+
+\DESCRIBE 
+The function {\small\verb%set_abs_goal%} is identical to {\small\verb%set_goal%} except that 
+the theory obligations for any abstract objects in the goal 
+are added to the assumption list.
+
+\FAILURE
+Never fails.
+
+\USES
+Starting an interactive proof session with the subgoal package for an
+abstract goal.
+
+\SEEALSO
+set_goal
+
+\ENDDOC
+\DOC{STRIP\_THOBS\_TAC}
+
+\TYPE {\small\verb%STRIP_THOBS_TAC : tactic%}\egroup
+
+\SYNOPSIS
+Strips an explicitly declared theory obligation from a goal, expands it,
+and puts the results in the hypotheses.
+
+\DESCRIBE
+Removes one explicitly declared theory obligation from a goal
+substituting the definition of the theory obligation for the
+name.  The abstract object may or may not be universally quantified.  The
+theory obligations are placed on the assumption list using
+{\small\verb%STRIP_ASSUME_TAC%}.
+
+\FAILURE 
+Fails if theory obligation list is empty (e.g. can occur when no
+abstract parent has been declared).
+
+\SEEALSO
+STRIP_THOBS_THEN, STRIP_TAC, STRIP_ASSUME_TAC
+
+\ENDDOC
+\DOC{STRIP\_THOBS\_THEN}
+
+\TYPE {\small\verb%STRIP_THOBS_THEN : thm_tactic -> tactic%}\egroup
+
+\SYNOPSIS 
+Strips an explicitly declared theory obligation from a goal,
+expands it, and applies the theorem tactic to the result.
+
+\DESCRIBE
+Removes one explicitly declared theory obligation from a goal
+substituting the definition of the theory obligation for the
+name.  The abstract object may or may not be universally quantified. The
+result is used as an argument to the theorem-tactic.
+
+
+\FAILURE 
+Fails if theory obligation list is empty (e.g. can occur when no
+abstract parent has been declared).
+
+\SEEALSO
+STRIP_THOBS_TAC, STRIP_TAC
+
+\ENDDOC

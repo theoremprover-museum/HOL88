@@ -1,0 +1,12 @@
+\THEOREM AGREE_LEMMA WELLORDER
+|- !l h ms m n f g z.
+    woset l /\
+    (!x. fl l(ms x)) /\
+    (!f f' x.
+      (!y. less l(ms y,ms x) ==> (f y = f' y)) ==> (h f x = h f' x)) /\
+    (!x. l(ms x,m) ==> (f x = h f x)) /\
+    (!x. l(ms x,n) ==> (g x = h g x)) /\
+    l(ms z,m) /\
+    l(ms z,n) ==>
+    (f z = g z)
+\ENDTHEOREM

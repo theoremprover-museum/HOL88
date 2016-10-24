@@ -1,0 +1,3 @@
+\THEOREM COMMA_DEF bool
+|- !x y. x,y = (@p. REP_prod p = MK_PAIR x y)
+\ENDTHEOREM

@@ -1,0 +1,17 @@
+\DOC relation
+
+\TYPE {relation : (window -> term)}
+
+\SYNOPSIS
+The relation preserved by a window.
+
+\LIBRARY window
+
+\DESCRIBE
+Returns the relation which the window is supposed to preserve between
+successive focusses.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM OUTR sum
+|- !x. OUTR(INR x) = x
+\ENDTHEOREM

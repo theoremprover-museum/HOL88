@@ -1,0 +1,108 @@
+% =====================================================================
+% HOL Manual LaTeX Source: description
+% =====================================================================
+
+\documentstyle[makeidx,12pt,fleqn,../LaTeX/alltt,../LaTeX/layout]{book}
+
+% ---------------------------------------------------------------------
+% Input defined macros and commands
+% ---------------------------------------------------------------------
+\input{../LaTeX/commands}
+
+%\includeonly{title,contents,preface,ML,logic,semantics,system,drules,conv,see}
+
+%\includeonly{title,contents,preface,ML,logic,semantics,system,drules,conv,index,see}
+
+%\includeonly{title,contents,preface,ML}
+%\includeonly{tactics}
+%\includeonly{preface,ack}
+%\includeonly{logic,semantics}
+
+\makeindex
+
+\begin{document}
+
+   \setlength{\unitlength}{1mm}		  % unit of length = 1mm
+   \setlength{\baselineskip}{16pt}        % line spacing = 16pt
+
+   % ---------------------------------------------------------------------
+   % prelims
+   % ---------------------------------------------------------------------
+
+   \pagenumbering{roman}	          % roman page numbers for prelims
+   \setcounter{page}{1}		          % start at page 1
+
+   \include{title}			  % description title page
+   \include{preface}		          % preface to entire description
+   \include{../LaTeX/ack}	          % global acknowledgements
+   \include{contents}		          % table of contents   
+
+
+   % ---------------------------------------------------------------------
+   % part 1: The Metalanguage ML
+   % ---------------------------------------------------------------------
+
+   \pagenumbering{arabic}		 % arabic page numbers
+   \setcounter{page}{1}		         % start at page 1
+
+   \part{The Meta-language ML \label{MLpart}}
+
+   \include{ML}				 % ML manual
+
+   % ---------------------------------------------------------------------
+   % part 2: The HOL Logic
+   % ---------------------------------------------------------------------
+
+   \part{The HOL Logic \label{HOL-logic}}
+
+   \include{logic}			 % Syntax and informal semantics
+   \include{semantics}			 % formal semantics
+
+   % ---------------------------------------------------------------------
+   % part 3: The HOL System
+   % ---------------------------------------------------------------------
+
+   \part{The HOL System \label{HOL-SYS}}
+
+
+   \include{system}			 % embedding HOL logic in ML
+
+   % ---------------------------------------------------------------------
+   % part 4: Theorem Proving with HOL
+   % ---------------------------------------------------------------------
+
+   \part{Theorem Proving with HOL}	 % new part
+
+   \include{drules}		         % derived rules
+   \include{conv}			 % conversions
+   \include{tactics}			 % tactics
+   \include{see}   
+
+   % ---------------------------------------------------------------------
+   % references to entire description
+   % ---------------------------------------------------------------------
+
+   \include{references}
+
+   % ---------------------------------------------------------------------
+   % Appendix describing Version 2.0
+   % ---------------------------------------------------------------------
+
+   \include{version2}
+
+   % ---------------------------------------------------------------------
+   % Index
+   % ---------------------------------------------------------------------
+
+
+
+   % \printindex
+
+   \include{index}
+
+\end{document}
+
+
+
+
+

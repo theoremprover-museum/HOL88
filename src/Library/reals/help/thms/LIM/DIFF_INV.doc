@@ -1,0 +1,5 @@
+\THEOREM DIFF_INV LIM
+|- !f l x.
+    (f diffl l)x /\ ~(f x = & 0) ==>
+    ((\x. inv(f x)) diffl (--(l / ((f x) pow 2))))x
+\ENDTHEOREM

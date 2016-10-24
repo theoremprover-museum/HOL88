@@ -1,0 +1,5 @@
+\THEOREM SIMP_REC_FUN_LEMMA prim_rec
+|- (?fun. SIMP_REC_REL fun x f n) =
+   (SIMP_REC_FUN x f n 0 = x) /\
+   (!m. m < n ==> (SIMP_REC_FUN x f n(SUC m) = f(SIMP_REC_FUN x f n m)))
+\ENDTHEOREM

@@ -1,0 +1,2310 @@
+\section{Subgroups of the integers, revisited}
+
+This section is the last in this study designed to help the user of
+\HOL\ become familiar with using the group theory and integer theory
+contained in the Library.  In the section Subgroups of the Integers,
+you were asked to prove some basic results about subgroups of the
+integers.  In the section Basic Modular Arithmetic, you used the
+results of the previous section to define the set of integers mod
+{\small\tt n}, and to prove that they formed a group.  Then, after
+proving a few theorems to be used as rewrites, we imported the first
+order group theory theorems, massaged them a bit to get them into a
+more usable form, and then saved them.  In this section we shall
+return to proving facts about subgroups of the integers.  In
+particular, we shall have as our goal to prove that every subgroup of
+the integers is cyclic.  The work involved in proving this result is a
+goodly piece of the work necessary to prove that greatest common
+divisors exist.
+
+The purpose of this section is to familiarize you with two of the
+more powerful techniques for proving theorems about the integers.
+The first technique is to break a problem about the integers up into
+cases, either positive, negative and zero cases, or the cases
+corresponding to the natural numbers and corresponding to the negative
+of the natural numbers.  By reducing a problem to such cases as these
+we can frequently further reduce the problem to one that can be solved
+by induction over the natural numbers.  The second technique is to use
+maximal or minimal elements of bounded sets of integers to solve
+existential problems.  For each of these techniques there are tactics
+which we will be learning to use in this section,
+
+As before, we shall be assuming that you are working within an emacs
+editor.  For this section, I suggest you store your work in a file
+named something like {\small\verb+int_sbgp.show2.ml+}.  You can find a
+file containing essentially the same work as you will be doing in the
+file
+\begin{verbatim}
+   hol/Library/int_mod/int_sbgp.show2.ml
+\end{verbatim}
+and a copy of the shell script in the file
+\begin{verbatim}
+   hol/Training/study/int_mod/int_sbgp.shell2
+\end{verbatim}
+Please feel free to consult these as we go along.
+
+In this section, we will not be creating a new theory.  Instead, we
+shall be modifying an existing theory.  The theory we wish to modify
+is {\small\verb+int_sbgp.th+}, which was created in the section
+Subgroups of the Integers.  To be able to modify
+{\small\verb+int_sbgp.th+}, it must be our current theory.  We will
+not be making any definitions in this section, so we do not need to be
+in draft mode.  Hence, we may begin by
+\begin{session}
+\begin{verbatim}
+faulkner% hol88
+
+       _  _    __    _      __    __
+|___   |__|   |  |   |     |__|  |__|
+|      |  |   |__|   |__   |__|  |__|
+
+  Version 1.07, built on Jul 13 1989
+
+#load_theory `int_sbgp`;;
+Theory int_sbgp loaded
+() : void
+\end{verbatim}
+\end{session}
+
+As before, we will be wanting access to the group theory and integer
+theory.
+\begin{session}
+\begin{verbatim}
+#load_library `group`;;
+Loading library `group` ...
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+#load_library `integer`;;
+Loading library `integer` ...
+\end{verbatim}
+\evdots
+\end{session}
+
+Also, we would like the results saved in the first tutorial to be
+available to us, bound to the names under which they were stored.
+\begin{session}
+\begin{verbatim}
+#include_theory `int_sbgp`;;
+() : void
+
+\end{verbatim}
+\end{session}
+
+The first result we will work on in this tutorial is that any
+subgroup of the integers is closed under multiplication from any
+integer.  This result will be useful in proving that every subgroup of
+the integers is cyclic, but it is also of interest in its own right.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"!H. SUBGROUP((\N.T),$plus)H ==> 
+#                  !m p. H p ==> H (m times p)");;
+"!H. SUBGROUP((\N. T),$plus)H ==> (!m p. H p ==> H(m times p))"
+
+() : void
+\end{verbatim}
+\end{session}
+
+The first thing we wish to do in working to prove this theorem is to
+remove the generalization and move the hypothesis that {\small\tt H}
+is a subgroup over into the assumptions, leaving us with a goal of
+\begin{verbatim}
+   "!m p. H p ==> H (m times p)"
+\end{verbatim}
+We will want to work with this goal in this form.  If we used
+{\small\verb+(REPEAT STRIP_TAC)+}, it would go further, removing the
+generalizations of {\small\tt m} and {\small\tt p} and moving the
+hypothesis that {\small\tt p} is in {\small\tt H} also over into the
+assumptions.  Since we don't want to go this far, we will have to do
+the two steps we do want individually.
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN DISCH_TAC);;
+OK..
+"!m p. H p ==> H(m times p)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Some of the theorems that we will need in order to prove this result
+will have as hypothesis that we be dealing with a subgroup; others
+will require that we be dealing with a group.  Therefore, we would
+like to have among our hypotheses both that {\small\tt H} is a
+subgroup of the integers, and what this means in terms of the
+definition of subgroup.  Therefore, just as we did in the first
+tutorial, we want to add to the assumptions the result of rewriting
+the clause {\small\verb+SUBGROUP((\N.T).$plus)H+} using the
+definition, while still keeping this clause among the assumptions.
+\begin{session}
+\begin{verbatim}
+#expand (FIRST_ASSUM \thm. (STRIP_ASSUME_TAC
+#     (PURE_ONCE_REWRITE_RULE [SUBGROUP_DEF] thm)));;
+Definition SUBGROUP_DEF autoloaded from theory `more_gp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"!m p. H p ==> H(m times p)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+This goal says that for all integers {\small\tt m} and {\small\tt p},
+if {\small\tt p} is in the subgroup {\small\tt H}, then so is
+{\small\verb+m times p+}.  If we were trying to prove something like
+this over the natural numbers, we would proceed by induction, which
+would allow us to reduce the multiplication to an addition, which is
+the operation of the subgroup {\small\tt H}.  However, we are dealing
+with the integers here, and induction is not valid over the integers;
+there is no least element to get started.  So how should we proceed?
+Well, if we could show this result for all positive integers, zero,
+and all negative numbers, then by {\small\verb+TRICHOTOMY+} we would
+have the result for all integers. Moreover, by
+{\small\verb+NON_NEG_INT_IS_NUM+}, the set of positive integers
+together with zero is the image of the set of natural numbers under
+{\small\verb+INT+}.  Using this, then, we can reduce half our problem
+to one over the natural numbers where we can use induction.  And
+frequently the other half of the problem, showing the result for the
+negative numbers, follows from the first half.  The tactic which
+allows us to reduce our problem to the two problems of showing the
+result over the natural numbers, and showing the result for the
+negatives, assuming the result for the positives, is
+{\small\verb+INT_CASES_TAC+}.
+\begin{session}
+\begin{verbatim}
+#expand INT_CASES_TAC;;
+OK..
+2 subgoals
+"!n2 p. H p ==> H((neg(INT n2)) times p)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!n1 p. H p ==> H((INT n1) times p)" ]
+
+"!n1 p. H p ==> H((INT n1) times p)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+In the subgoals returned, {\small\tt n1} and {\small\tt n2} are both
+natural numbers.  For the positive case, we want to induct on
+{\small\tt n1}.  (Remember to label the cases in your work so that you
+will be able to put everything together when you are done.) 
+\begin{session}
+\begin{verbatim}
+#expand INDUCT_TAC;;
+OK..
+2 subgoals
+"!p. H p ==> H((INT(SUC n1)) times p)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!p. H p ==> H((INT n1) times p)" ]
+
+"!p. H p ==> H((INT 0) times p)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+First, for the {\small\tt 0} case (that is, the case where {\small\tt n1}
+is the natural number {\small\tt 0}).  By {\small\verb+TIMES_ZERO+}, we
+can rewrite {\small\verb+((INT 0) times p)+} to {\small\verb+(INT 0)+}.
+From there the conclusion follows from {\small\verb+INT_SBGP_ZERO+}.
+(The hypothesis that {\small\tt p} is in {\small\tt H} is irrelevant.)
+\begin{session}
+\begin{verbatim}
+#expand ((REPEAT STRIP_TAC) THEN
+#  (REWRITE_TAC[TIMES_ZERO;(UNDISCH (SPEC_ALL INT_SBGP_ZERO))]));;
+Theorem INT_SBGP_ZERO autoloaded from theory `int_sbgp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+goal proved
+. |- !p. H p ==> H((INT 0) times p)
+
+Previous subproof:
+"!p. H p ==> H((INT(SUC n1)) times p)"
+\end{verbatim}
+\evdots
+\end{session}
+
+Next, for the inductive step of the induction.  We want to show that
+{\small\verb+((INT(SUC n1)) times p)+} is in {\small\tt H}, given that
+{\small\verb+((INT n1) times p)+} is.  First, let us rework the goal
+so that it more precisely says this. 
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN DISCH_TAC THEN RES_TAC);;
+OK..
+"H((INT(SUC n1)) times p)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H p" ]
+    [ "H((INT n1) times p)" ]
+    [ "(\N. T)((INT n1) times p)" ]
+    [ "(\N. T)p" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The next thing we want to do is convert {\small\verb+(INT(SUC n1))+}
+into an addition in the integers.  (You will probably want to use the
+theorem {\small\verb+ADD1+} from the theory {\small\verb+arithmetic+}.)
+\begin{session}
+\begin{verbatim}
+#expand (PURE_REWRITE_TAC[ADD1;(SYM (SPEC_ALL NUM_ADD_IS_INT_ADD))]);;
+Theorem NUM_ADD_IS_INT_ADD autoloaded from theory `integer`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"H(((INT n1) plus (INT 1)) times p)"
+\end{verbatim}
+\evdots
+\end{session}
+
+Next we would like to distribute the multiplication by {\small\tt p} over
+this sum and simplify the result.  This should give us the term
+{\small\verb+(((INT n1) times p) plus p)+}.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_REWRITE_TAC[RIGHT_PLUS_DISTRIB;TIMES_IDENTITY]);;
+Theorem TIMES_IDENTITY autoloaded from theory `integer`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"H(((INT n1) times p) plus p)"
+\end{verbatim}
+\evdots
+\end{session}
+
+Now, we want to show that {\small\verb+(((INT n1) times p) plus p)+}
+is in {\small\tt H}.  But we already have that
+{\small\verb+((INT n1) times p)+} is in {\small\tt H} and that
+{\small\tt p} is in {\small\tt H}.  Therefore, this is just 
+the kind of problem that {\small\verb+GROUP_ELT_TAC+} is good at. 
+\begin{session}
+\begin{verbatim}
+#expand GROUP_ELT_TAC;;
+OK..
+goal proved
+... |- H(((INT n1) times p) plus p)
+... |- H(((INT n1) plus (INT 1)) times p)
+... |- H((INT(SUC n1)) times p)
+... |- !p. H p ==> H((INT(SUC n1)) times p)
+... |- !n1 p. H p ==> H((INT n1) times p)
+
+Previous subproof:
+"!n2 p. H p ==> H((neg(INT n2)) times p)"
+\end{verbatim}
+\evdots
+\end{session}
+This finishes the induction which finishes the positive case, and
+leaves us dealing with the negative case.
+
+To be able to use the positive case to help with the negative case, we
+need to reduce the problem of showing that
+{\small\verb+((neg(INT n2)) times p)+} is in {\small\tt H} to the
+problem of showing that {\small\verb+((INT n2) times p)+} is in
+{\small\tt H}, so that the positive case will apply.  Now, the theorem
+{\small\verb+TIMES_neg+} will allow us to rewrite
+{\small\verb+((neg(INT n2)) times p)+} to
+{\small\verb+(neg((INT n2) times p))+}, and the theorem
+{\small\verb+INT_SBGP_neg+}, which we proved earlier, allows us to
+reduce showing that {\small\verb+neg N+} is in {\small\tt H} to
+showing that {\small\tt N} is in {\small\tt H}, for any integer 
+{\small\tt N}.
+\begin{session}
+\begin{verbatim}
+#expand ((REPEAT STRIP_TAC) THEN
+#  (PURE_ONCE_REWRITE_TAC[TIMES_neg]) THEN
+#  (MATCH_MP_IMP_TAC (UNDISCH (SPEC_ALL INT_SBGP_neg))));;
+Theorem INT_SBGP_neg autoloaded from theory `int_sbgp`.
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"H((INT n2) times p)"
+\end{\verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!n1 p. H p ==> H((INT n1) times p)" ]
+    [ "H p" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now we have a goal that matches the consequent of the assumption for
+the positive case.  So let's use the positive case to finish off our
+goal.  We can access the assumption by using ASSUME.
+\begin{session}
+\begin{verbatim}
+#expand (NEW_MATCH_ACCEPT_TAC (UNDISCH (SPEC_ALL
+#   (ASSUME "!n1 p. H p ==> H((INT n1) times p)"))));;
+OK..
+goal proved
+.. |- H((INT n2) times p)
+.. |- !n2 p. H p ==> H((neg(INT n2)) times p)
+... |- !m p. H p ==> H(m times p)
+. |- !m p. H p ==> H(m times p)
+|- !H. SUBGROUP((\N. T),$plus)H ==> (!m p. H p ==> H(m times p))
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+This finishes off the negative case, which finishes off the theorem.
+The composition of the work above is
+\begin{session}
+\begin{verbatim}
+#let INT_SBGP_TIMES_CLOSED = prove_thm(`INT_SBGP_TIMES_CLOSED`,
+#"!H. SUBGROUP((\N.T),$plus)H ==> !m p. H p ==> H (m times p)",
+#(GEN_TAC THEN DISCH_TAC THEN
+# (FIRST_ASSUM \thm.(STRIP_ASSUME_TAC
+#   (PURE_ONCE_REWRITE_RULE[SUBGROUP_DEF] thm))) THEN
+# INT_CASES_TAC THENL
+# [(INDUCT_TAC THENL
+#   [((REPEAT STRIP_TAC) THEN
+#     (REWRITE_TAC[TIMES_ZERO;(UNDISCH (SPEC_ALL INT_SBGP_ZERO))]));
+#    (GEN_TAC THEN DISCH_TAC THEN RES_TAC THEN
+#     (PURE_REWRITE_TAC[ADD1;(SYM (SPEC_ALL NUM_ADD_IS_INT_ADD))]) THEN
+#     (PURE_REWRITE_TAC[RIGHT_PLUS_DISTRIB;TIMES_IDENTITY]) THEN
+#     GROUP_ELT_TAC)]);
+#  ((REPEAT STRIP_TAC) THEN
+#   (PURE_ONCE_REWRITE_TAC[TIMES_neg]) THEN
+#   (MATCH_MP_IMP_TAC (UNDISCH (SPEC_ALL INT_SBGP_neg))) THEN
+#   (NEW_MATCH_ACCEPT_TAC (UNDISCH (SPEC_ALL
+#     (ASSUME "!n1 p. H p ==> H((INT n1) times p)")))))]));;
+INT_SBGP_TIMES_CLOSED = 
+|- !H. SUBGROUP((\N. T),$plus)H ==> (!m p. H p ==> H(m times p))
+\end{verbatim}
+\end{session}
+
+Now let us move on to proving that every subgroup of the integers is
+cyclic.  By cyclic we mean that the subgroup is generated by one
+element which is repeatedly added to itself.  That is, every element
+in the subgroup is a multiple of one fixed element.  We already have a
+name for the set integers which are the multiples of one fixed one,
+say {\small\tt n}.  That name is {\small\verb+(int_mult_set n)+}.  We
+are asking to show that, if {\small\tt H} is a subgroup of the
+integers, then there exists an integer {\small\tt n} such that
+{\small\verb+H = (int_mult_set n)+}.  But we can show a little bit
+more than this.  We can show this where {\small\tt n} is a
+non-negative integer.  We can phrase this using the natural numbers.
+\begin{session}
+\begin{verbatim}
+#set_goal([],"!H. SUBGROUP((\N.T),$plus)H ==>
+#              ? n.(H = int_mult_set (INT n))");;
+"!H. SUBGROUP((\N. T),$plus)H ==> (?n. H = int_mult_set(INT n))"
+
+() : void
+\end{verbatim}
+\end{session}
+
+To begin with, we will be needing as assumptions both that {\small\tt H} is
+a subgroup of the integers and that it is a group in its own right.
+Therefore, we may as well begin as we did for the previous theorem.
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN DISCH_TAC THEN
+#  (FIRST_ASSUM
+#   \thm.(STRIP_ASSUME_TAC
+#     (PURE_ONCE_REWRITE_RULE[SUBGROUP_DEF] thm))));;
+OK..
+"?n. H = int_mult_set(INT n)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+Now, we are faced with proving the existence of a natural number that
+will generate {\small\tt H}.  Where are we to get it from?   Well,
+there are really two cases, one where {\small\tt H} is just the
+singleton {\small\verb+(INT 0)+}, and there other where {\small\tt H}
+contains more (and hence contains infinitely many positive and
+negative integers).  In the first case our generator is
+{\small\verb+(INT 0)+}.  In the  second case, the generator will be
+the least positive element of {\small\tt H}.  The cases are different,
+since in the first case {\small\tt H} does not contain a least
+positive element.  Let us proceed by first expanding out the
+definition of {\small\verb+int_mult_set+}, and then assuming either
+that the only thing in {\small\tt H} is {\small\verb+(INT 0)+}, or that
+{\small\verb+(INT 0)+} isn't the only thing in {\small\tt H}.
+\begin{session}
+\begin{verbatim}
+#expand ((PURE_ONCE_REWRITE_TAC [INT_MULT_SET_DEF]) THEN
+# (ASM_CASES_TAC "!m1. (H m1) ==> (m1 = (INT 0))"));;
+Definition INT_MULT_SET_DEF autoloaded from theory `int_sbgp`.
+INT_MULT_SET_DEF = |- !n. int_mult_set n = (\m. ?p. m = p times n)
+
+OK..
+2 subgoals
+"?n. H = (\m. ?p. m = p times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~(!m1. H m1 ==> (m1 = INT 0))" ]
+
+"?n. H = (\m. ?p. m = p times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!m1. H m1 ==> (m1 = INT 0)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+I chose to use an implication in the case split instead of an
+equality or logical equivalence, because its negation will be a bit
+easier to deal with in the second case.
+
+For the first case, that {\small\tt H} consists only of
+{\small\verb+(INT 0)+}.  In this case the natural number we need is
+{\small\tt 0}. 
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "0");;
+OK..
+"H = (\m. ?p. m = p times (INT 0))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!m1. H m1 ==> (m1 = INT 0)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+To show that these two sets (functions) are the same, we want to show
+they contain exactly the same elements; i.e. they behave the same on
+all elements.
+\begin{session}
+\begin{verbatim}
+#expand ((EXT_TAC "m1:integer") THEN BETA_TAC);;
+OK..
+"!m1. H m1 = (?p. m1 = p times (INT 0))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!m1. H m1 ==> (m1 = INT 0)" ]
+
+() : void
+\end{verbatim}
+\evdots
+\end{session}
+
+Next we would like to reduce the {\small\verb+(p times (INT 0))+} to
+simply {\small\verb+(INT 0)+}.  If we use a {\small\verb+REWRITE_TAC+}
+instead of a {\small\verb+PURE_REWRITE_TAC+}, it will also remove the
+then superfluous existential quantification of {\small\tt p}.
+
+\begin{session}
+\begin{verbatim}
+#expand (REWRITE_TAC [TIMES_ZERO]);;
+OK..
+"!m1. H m1 = (m1 = INT 0)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!m1. H m1 ==> (m1 = INT 0)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+To show this resultant goal, we really want to consider two implications:
+\begin{verbatim}
+   "!m1. H m1 ==> (m1 = INT 0)"
+\end{verbatim}
+and
+\begin{verbatim}
+   "!m1.(m1 = INT 0) ==> H m1"
+\end{verbatim}
+Therefore, let us spilt up the equality.  (In essence, we are showing
+that two sets are the same by showing that every element that is in
+one is in the other, and vice versa.)
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN EQ_TAC);;
+OK..
+2 subgoals
+"(m1 = INT 0) ==> H m1"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!m1. H m1 ==> (m1 = INT 0)" ]
+
+"H m1 ==> (m1 = INT 0)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!m1. H m1 ==> (m1 = INT 0)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The first implication is what we have in the assumptions.
+\begin{session}
+\begin{verbatim}
+#expand (FIRST_ASSUM (\thm.(ACCEPT_TAC (SPEC_ALL thm))));;
+OK..
+goal proved
+. |- H m1 ==> (m1 = INT 0)
+
+Previous subproof:
+"(m1 = INT 0) ==> H m1"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!m1. H m1 ==> (m1 = INT 0)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+(Yes, we could have done {\small\verb+ASM_REWRTIE_TAC+} or a number of other
+things.) 
+
+If we move the antecedent of the implication in this goal over to the
+assumptions, and then rewrite with the assumptions, the resulting goal,
+{\small\verb+H (INT 0)+}, is given to us by {\small\verb+INT_SBGP_ZERO+}.
+
+\newpage % PBHACK
+
+\begin{session}
+\begin{verbatim}
+#expand (DISCH_TAC THEN
+#  (ASM_REWRITE_TAC [(UNDISCH (SPEC_ALL INT_SBGP_ZERO))]));;
+OK..
+goal proved
+. |- (m1 = INT 0) ==> H m1
+.. |- !m1. H m1 = (m1 = INT 0)
+.. |- !m1. H m1 = (?p. m1 = p times (INT 0))
+.. |- H = (\m. ?p. m = p times (INT 0))
+.. |- ?n. H = (\m. ?p. m = p times (INT n))
+
+Previous subproof:
+"?n. H = (\m. ?p. m = p times (INT n))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+    [ "GROUP((\N. T),$plus)" ]
+    [ "!x. H x ==> (\N. T)x" ]
+    [ "GROUP(H,$plus)" ]
+    [ "~(!m1. H m1 ==> (m1 = INT 0))" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now on to the more substantial case, where {\small\tt H} contains more
+than just {\small\verb+(INT 0)+}.  We are still confronted with showing
+that a generator exists.  In this case, we said the generator would be
+the minimum positive element in {\small\tt H}.  For this to make any
+sense we are going need to have that such a minimum element exists.  If
+we had that the set of positive elements in {\small\tt H} was non-empty
+and bounded below, then by the theorem {\small\verb+DISCRETE+} we would
+have that there exists a minimum positive element of {\small\tt H}.  We
+could then use {\small\verb+STRIP_ASSUME_TAC+} to introduce a name for
+this minimum positive element, and to add to the assumptions the
+consequences of its being a minimum positive element of {\small\tt H}.
+To make all this a bit easier, there exists a tactic
+{\small\verb+INT_MIN_TAC+}, which when given a set predicate, say
+{\small\verb+S:integer -> bool+}, takes a goal, introduces a proposed
+minimum element, {\small\verb+MIN+}, for {\small\tt S}, and returns
+the goal with the added assumptions that {\small\verb+MIN+} is in
+{\small\tt S}, and that for every {\small\tt N}, if {\small\tt N} is
+below {\small\verb+MIN+}, then {\small\tt N} is not in {\small\tt S},
+as well as returning the subgoals of showing that {\small\tt S} is
+nonempty and showing that {\small\tt S} is bounded below.  In our
+case, we would like to use this tactic with the predicate describing
+the positive elements in {\small\tt H}.
+
+\newpage % PBHACK
+
+\begin{session}
+\begin{verbatim}
+#expand (INT_MIN_TAC "\N. (POS N /\ H N)");;
+OK..
+3 subgoals
+"?LB. !N. N below LB ==> ~(POS N /\ H N)"
+ \end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~(!m1. H m1 ==> (m1 = INT 0))" ]
+    [ "POS M /\ H M" ]
+
+"?M. POS M /\ H M"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~(!m1. H m1 ==> (m1 = INT 0))" ]
+
+"?n. H = (\m. ?p. m = p times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~(!m1. H m1 ==> (m1 = INT 0))" ]
+    [ "!N. N below MIN ==> ~(POS N /\ H N)" ]
+    [ "POS MIN /\ H MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The assumption {\small\verb+POS MIN /\ H MIN+} will be more useful to
+us as separate assumptions, so let us replace it by each of its conjuncts.
+\begin{session}
+\begin{verbatim}
+#expand (POP_ASSUM STRIP_ASSUME_TAC);;
+OK..
+"?n. H = (\m. ?p. m = p times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N. N below MIN ==> ~(POS N /\ H N)" ]
+    [ "POS MIN" ]
+    [ "H MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, we want to use {\small\verb+MIN+} to remove the existential
+quantifier from our goal.  Unfortunately, the types don't match.  Our
+goal needs a natural number, but {\small\verb+MIN+} is an integer.
+However, {\small\verb+MIN+} is a positive integer.  Therefore, there
+will be a natural number that corresponds to it.  For the time being,
+let us suppose that one such exists.  To allow us to make such
+suppositions in the middle of proving a theorem, the tactic
+{\small\verb+SUPPOSE_TAC+} allows us to add an assumption to our goal,
+at the price of having to prove it at the end.  There is also the
+tactic {\small\verb+REV_SUPPOSE_TAC+} that will allow you to add an
+assumption to the goal, but requires you to prove it first and then
+returns you to the original goal after.  (The effect of 
+{\small\verb+REV_SUPPOSE_TAC+} could be achieved by using
+{\small\verb+SUPPOSE_TAC+} and then doing a {\small\verb+rotate 1;;+}
+to switch the goal stack around.)  So, for the time-being, let's use
+{\small\verb+SUPPOSE_TAC+} to assume that such a natural number
+exists, and show that this gets us the theorem.  Then we will come
+back and prove it exists afterwards.  That is, let's use
+{\small\verb+SUPPOSE_TAC+} to add {\small\verb+?n. (INT n) = MI+}
+as an assumption to our goal.
+\begin{session}
+\begin{verbatim}
+#expand (SUPPOSE_TAC "?n. (INT n) = MIN");;
+OK..
+2 subgoals
+"?n. INT n = MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+    [ "H MIN" ]
+
+"?n. H = (\m. ?p. m = p times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+    [ "H MIN" ]
+    [ "?n. INT n = MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+If we now pop the assumption that there exists a natural number
+corresponding to the integer {\small\verb+MIN+} and pass it through
+{\small\verb+STRIP_ASSUME_TAC+}, we will introduce {\small\tt n} as a
+name for this natural number which we can use to solve our existence
+problem, and at the same acquire and equation that we will want to
+rewrite with shortly. 
+\begin{session}
+\begin{verbatim}
+#expand (POP_ASSUM STRIP_ASSUME_TAC);;
+OK..
+"?n. H = (\m. ?p. m = p times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+    [ "H MIN" ]
+    [ "INT n = MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now we are in a position to eliminate the existential quantifier.  The
+{\small\tt n} we want to use is the {\small\tt n} just introduced by
+{\small\verb+STRIP_ASSUME_TAC+}, the one that corresponds to
+{\small\verb+MIN+}.
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "n:num");;
+OK..
+"H = (\m. ?p. m = p times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+    [ "INT n = MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Since {\small\verb+MIN+} is the value that we really want to be
+reasoning about, we would like to replace {\small\verb+(INT n)+} by
+{\small\verb+MIN+}.  At the same time, let's remove the assumption
+{\small\verb+INT n = MIN+}, for this is the only use we shall have for
+it and the list of assumptions will be long enough as is. 
+\begin{session}
+\begin{verbatim}
+#expand (POP_ASSUM \thm. PURE_ONCE_REWRITE_TAC [thm]);;
+OK..
+"H = (\m. ?p. m = p times MIN)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now we are faced with trying to prove that two set are equal.  As
+usual, we want to reduce this to an elementwise argument.  Also, in
+general, when trying to show that two sets are equal, this is done by 
+showing two implications: if something is in one then it is in the
+other, and vice versa.  That is how we will proceed in this case.
+\begin{session}
+\begin{verbatim}
+#expand ((EXT_TAC "m:integer") THEN BETA_TAC THEN
+#  GEN_TAC THEN EQ_TAC);;  
+OK..
+2 subgoals
+"(?p. m = p times MIN) ==> H m"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+
+"H m ==> (?p. m = p times MIN)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now we are confronted with two goals: to show that if something is in
+{\small\tt H}, then it is a multiple of {\small\verb+MIN+}, and to
+show that if something is a multiple of {\small\verb+MIN+}, then it is
+in {\small\tt H}.  (You might recognize that the second goal is
+closely related to the first theorem we proved in this section.)  For
+the first goal, let's break it up into the cases where {\small\tt m}
+is positive, where it is negative, and where it is zero.  There is a
+tactic, similar to {\small\verb+INT_CASES_TAC+}, for doing just this.
+The tactic is {\small\verb+SIMPLE_INT_CASES_TAC+}, and like
+{\small\verb+INT_CASES_TAC+}, it must be given a universally quantified
+goal. 
+\begin{session}
+\begin{verbatim}
+#expand ((SPEC_TAC ("m:integer","N:integer")) THEN SIMPLE_INT_CASES_TAC);;
+OK..
+3 subgoals
+"H(INT 0) ==> (?p. INT 0 = p times MIN)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+
+"!N. NEG N ==> H N ==> (?p. N = p times MIN)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+    [ "!N. POS N ==> H N ==> (?p. N = p times MIN)" ]
+
+"!N. POS N ==> H N ==> (?p. N = p times MIN)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+So what do we do in the positive case?  First let's reduce to the
+existence problem.
+\begin{session}
+\begin{verbatim}
+#expand (REPEAT STRIP_TAC);;
+OK..
+"?p. N = p times MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+    [ "POS N" ]
+    [ "H N" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+What {\small\tt p} are we looking for?  Well, we want the number of
+times {\small\verb+MIN+} divides into {\small\tt N}.  We want the
+maximum integer that we can multiply times {\small\verb+MIN+} and get
+a value that, when it is subtracted from {\small\tt N}, is not negative.
+Just as there is {\small\verb+INT_MIN_TAC+} to help us access minimum
+values of sets of integers, there is also the tactic
+{\small\verb+INT_MAX_TAC+} to help us access maximum values of sets.
+The set whose maximum we want is the set of integers {\small\tt X}
+such that {\small\verb+(N minus (X times MIN))+} is not negative. 
+\begin{session}
+\begin{verbatim}
+#expand (INT_MAX_TAC "\X.~(NEG(N minus (X times MIN)))");;
+OK..
+3 subgoals
+"?UB. !N'. UB below N' ==> ~~NEG(N minus (N' times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H N" ]
+    [ "~NEG(N minus (M times MIN))" ]
+
+"?M. ~NEG(N minus (M times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H N" ]
+
+"?p. N = p times MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H N" ]
+    [ "!N'. MAX below N' ==> ~~NEG(N minus (N' times MIN))" ]
+    [ "~NEG(N minus (MAX times MIN))" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+We can eliminate the existential quantifier now.
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "MAX:integer");;
+OK..
+"N = MAX times MIN"
+\end{verbatim}
+\evdots
+\end{session}
+
+To show that {\small\verb+N = (MAX times MIN)+}, it suffices to show
+that {\small\verb+(N minus (MAX times MIN)) = (INT 0)+}.  This
+requires (backing up to) adding {\small\verb+(neg (MAX times MIN))+}
+to both sides.  (You'll probably want to use a partially specialize
+version of a theorem about {\small\verb+plus+} in the integers
+together with {\small\verb+MATCH_MP_IMP_TAC+}). 
+\begin{session}
+\begin{verbatim}
+#expand ((MATCH_MP_IMP_TAC
+#          (SPEC "neg (MAX times MIN)" PLUS_RIGHT_CANCELLATION)) THEN
+#  (PURE_REWRITE_TAC [PLUS_INV_LEMMA;(SYM (SPEC_ALL MINUS_DEF))]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"N minus (MAX times MIN) = INT 0"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~NEG(N minus (MAX times MIN))" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+To show that this value is {\small\verb+(INT 0)+}, by
+{\small\verb+TRICHOTOMY+} it should suffice to show that it is not
+negative (which we have among our assumptions) and that it is not
+positive.  That is, we want to use {\small\verb+DISJ_CASES_TAC+}
+together with the first conjunct of {\small\verb+TRICHOTOMY+}
+specialized to this value. 
+\begin{session}
+\begin{verbatim}
+#expand (DISJ_CASES_TAC (CONJUNCT1
+#   (SPEC "N minus (MAX times MIN)" TRICHOTOMY)));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+2 subgoals
+"N minus (MAX times MIN) = INT 0"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~NEG(N minus (MAX times MIN))" ]
+    [ "NEG(N minus (MAX times MIN)) \/ (N minus (MAX times MIN) = INT 0)" ]
+
+"N minus (MAX times MIN) = INT 0"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N. N below MIN ==> ~(POS N /\ H N)" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~NEG(N minus (MAX times MIN))" ]
+    [ "POS(N minus (MAX times MIN))" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+In the case where we assume that our value is positive, we need to
+arrive at a contradiction.  So where is this contradiction going to
+come from?  If we knew that this value were less than
+{\small\verb+MIN+} and that it were in {\small\tt H}, then by one of
+our hypotheses, we would have that it was not positive.  So let's
+suppose each of these in turn and then get our contradiction (using
+{\small\verb+RES_TAC THEN RES_TAC+}).  (Why twice?)
+\begin{session}
+\begin{verbatim}
+#expand (SUPPOSE_TAC "(N minus (MAX times MIN)) below MIN");;
+OK..
+2 subgoals
+"(N minus (MAX times MIN)) below MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS(N minus (MAX times MIN))" ]
+
+"N minus (MAX times MIN) = INT 0"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N. N below MIN ==> ~(POS N /\ H N)" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS(N minus (MAX times MIN))" ]
+    [ "(N minus (MAX times MIN)) below MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+\begin{session}
+\begin{verbatim}
+#expand (SUPPOSE_TAC "(H (N minus (MAX times MIN))):bool");;
+OK..
+2 subgoals
+"H(N minus (MAX times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "(N minus (MAX times MIN)) below MIN" ]
+
+"N minus (MAX times MIN) = INT 0"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N. N below MIN ==> ~(POS N /\ H N)" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS(N minus (MAX times MIN))" ]
+    [ "(N minus (MAX times MIN)) below MIN" ]
+    [ "H(N minus (MAX times MIN))" ]
+
+() : void
+\end{verbatim}
+\end{session}
+\begin{session}
+\begin{verbatim}
+#expand (RES_TAC THEN RES_TAC);;
+OK..
+goal proved
+....... |- N minus (MAX times MIN) = INT 0
+
+Previous subproof:
+"H(N minus (MAX times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H N" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "(N minus (MAX times MIN)) below MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now we begin to pay the piper.  We have made a number of suppositions
+as we have gone along and this is the first of them to appear needing
+to be proved.  It's the last assumption we made.  Now, we are trying
+to show that {\small\verb+N minus (MAX times MIN))+} is in {\small\tt H}.
+Since we have that {\small\tt N} is in {\small\tt H}, it would be
+beneficial to rewrite {\small\verb+minus+} to {\small\verb+plus neg+}.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC [MINUS_DEF]);;
+OK..
+"H(N plus (neg(MAX times MIN)))"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H N" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "(N minus (MAX times MIN)) below MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+At this point in time, if we were to use {\small\verb+GROUP_ELT_TAC+}
+on this goal, it would reduce it to showing {\small\tt N} is in
+{\small\tt H}, which it would then finish off, and to showing that
+{\small\verb+(neg(MAX times MIN))+} is in {\small\tt H}.  We could
+then use {\small\verb+INT_SBGP_neg+} to reduce the goal of showing
+that {\small\verb+MAX times MIN+} is in {\small\tt H}, followed by
+using {\small\verb+INT_SBGP_TIMES_CLOSED+} to reduce it further to the
+goal of showing that {\small\verb+MIN+} is in {\small\tt H}, which is
+one of our assumptions.  There is a tactic that is a bit more general
+than {\small\verb+GROUP_ELT_TAC+} which can do all of this for us, if
+given the theorems {\small\verb+INT_SBGP_neg+} and
+{\small\verb+INT_SGBP_TIMES_CLOSED+}.  That tactic is
+{\small\verb+GROUP_TAC+}, and it takes a list of theorems to use to
+help reduce group membership goals. 
+\begin{session}
+\begin{verbatim}
+#expand (GROUP_TAC [INT_SBGP_neg;INT_SBGP_TIMES_CLOSED]);;
+OK..
+goal proved
+.... |- H(N plus (neg(MAX times MIN)))
+.... |- H(N minus (MAX times MIN))
+........ |- N minus (MAX times MIN) = INT 0
+
+Previous subproof:
+"(N minus (MAX times MIN)) below MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N'. MAX below N' ==> ~~NEG(N minus (N' times MIN))" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+This puts us back at having to show that
+{\small\verb+N minus (MAX times MIN)+} is less than
+{\small\verb+MIN+}.  Why should this be so anyway?  Well, 
+{\small\verb+(N minus (MAX times MIN))+} must be below
+{\small\verb+MIN+} because {\small\verb+(N minus ((MAX plus (INT 1))
+times MIN))+} must be negative (or rather not not negative), since
+{\small\verb+MAX+} is less than {\small\verb+(MAX plus (INT 1))+}.
+And we have as any assumption that any integer that is bigger than
+{\small\verb+MAX+} has the property that {\small\tt N} minus the
+product of it and {\small\verb+MIN+} is negative.  So, to get started,
+let's convert the {\small\verb+below+} relating
+{\small\verb+(N minus (MAX times MIN))+} to {\small\verb+MIN+} using the
+definition.  
+
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC [BELOW_DEF]);;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"POS(MIN minus (N minus (MAX times MIN)))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N'. MAX below N' ==> ~~NEG(N minus (N' times MIN))" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+What we are now confronted with is that
+{\small\verb+MIN minus (N minus (MAX times MIN))+} is positive,
+whereas we want to be trying to show that
+{\small\verb+(N minus ((MAX plus (INT 1)) times MIN))+} must be
+negative.  Let us work towards this by first converting the positive
+into a negative.  This will require using the fact that
+\begin{verbatim}
+PLUS_INV_INV_LEMMA = |- !x. neg(neg x) = x
+\end{verbatim}
+\begin{session}
+\begin{verbatim}
+#expand ((NEW_SUBST1_TAC 
+#     (SYM (SPEC "MIN minus (N minus (MAX times MIN))"
+#        PLUS_INV_INV_LEMMA))) THEN
+#   (PURE_ONCE_REWRITE_TAC [(SYM (SPEC_ALL(NEG_DEF)))]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"NEG(neg(MIN minus (N minus (MAX times MIN))))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N'. MAX below N' ==> ~~NEG(N minus (N' times MIN))" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+Now we have a {\small\verb+neg (MIN minus (N minus (MAX times MIN)))+}.  It
+would take us closer to the form we want to change this into
+{\small\verb+(N plus (neg (MAX times MIN))) plus (neg MIN)+}.  
+\begin{session}
+\begin{verbatim}
+#expand (PURE_REWRITE_TAC
+#    [MINUS_DEF;
+#     (SYM (SPEC_ALL (PLUS_DIST_INV_LEMMA)));
+#     PLUS_INV_INV_LEMMA]);;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"NEG((N plus (neg(MAX times MIN))) plus (neg MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N'. MAX below N' ==> ~~NEG(N minus (N' times MIN))" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+The next thing we would like to do is regroup and incorporate the
+{\small\verb+MIN+} in with the {\small\verb+MAX times MIN+} to get
+{\small\verb+(N minus ((MAX times MIN) plus MIN)))+}.  Because
+reassociating terms is something that one often has to do when pushing
+them into a more desirable form, there are tactics to help make this
+task a bit easier.  The tactics {\small\verb+INT_RIGHT_ASSOC_TAC+} and
+{\small\verb+INT_LEFT_ASSOC_TAC+} take as argument a term which is either
+left associated for the first or right associated for the second and
+rewrite the goal with the term reassociated in the opposite fashion.
+This is most useful when you have several layers of addition and you
+do not want them all pushed to the left or all pushed to the right.
+\begin{session}
+\begin{verbatim}
+#expand ((INT_RIGHT_ASSOC_TAC
+#     "(N plus (neg (MAX times MIN))) plus (neg MIN)") THEN
+#  (PURE_REWRITE_TAC
+#     [(SYM neg_PLUS_DISTRIB);(SYM (SPEC_ALL MINUS_DEF))]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"NEG(N minus ((MAX times MIN) plus MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N'. MAX below N' ==> ~~NEG(N minus (N' times MIN))" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+To finish with our rewriting, we would like to convert the
+{\small\verb+((MAX times MIN) plus MIN)+} into
+{\small\verb+((MAX plus (INT 1)) times MIN)+}.  Rewriting the
+{\small\verb+(MAX times MIN) plus MIN)+} requires using distributivity,
+which in turn requires that we rewrite the last {\small\verb+MIN+} into
+{\small\verb+((INT 1) times MIN)+}.  This is a bit of a pain, since
+{\small\verb+MIN+} occurs twice in the goal, and its only the last one
+that we wish to rewrite.  Probably the easiest way to deal with this
+is to to rewrite with an instantiated and rewritten version of
+distributivity.  That is, let's rewrite the rewrite theorem instead of
+the goal.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC
+#    [(PURE_ONCE_REWRITE_RULE [TIMES_IDENTITY] (SYM
+#      (SPECL ["MAX:integer";"INT 1";"MIN:integer"]
+#        RIGHT_PLUS_DISTRIB)))]);;
+OK..
+"NEG(N minus ((MAX plus (INT 1)) times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N'. MAX below N' ==> ~~NEG(N minus (N' times MIN))" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+All of this rewriting that we have been doing has been to allow us to
+use one of our hypotheses to reduce the goal.  The hypothesis to which
+I am referring is the one that says that for all {\small\verb+N'+}, if
+we have {\small\verb+MAX below N'+}, then
+{\small\verb+(N minus (N' times MIN))+} is (not not) negative.  If we
+take {\small\verb+N'+} to be {\small\verb+(MAX plus (INT 1))+}, then
+the conclusion of this hypothesis is almost exactly our goal.  So
+let's use a rewritten version of this hypothesis together with
+{\small\verb+MATCH_MP_IMP_TAC+} to reduce this goal. 
+\begin{session}
+\begin{verbatim}
+#expand (MATCH_MP_IMP_TAC (ONCE_REWRITE_RULE []
+#    (ASSUME "!N'.MAX below N' ==>~~NEG (N minus (N' times MIN))")));;
+OK..
+"MAX below (MAX plus (INT 1))"
+\end{verbatim}
+\evdots
+\end{session}
+
+To show this resultant inequality, let's add {\small\verb+(neg MAX)+} to
+both sides of it and then simplify the left-hand side to
+{\small\verb+(INT 0)+} and the right-hand side to {\small\verb+(INT
+1)+}.  We can then translate this inequality into one over the natural
+numbers. 
+\begin{session}
+\begin{verbatim}
+#expand ((SUBST_MATCH_TAC
+#    (PURE_ONCE_REWRITE_RULE [COMM_PLUS]
+#      (SPECL ["A:integer";"B:integer";"neg MAX"]
+#        PLUS_BELOW_TRANSL))) THEN
+#   (PURE_REWRITE_TAC
+#       [(SYM (SPEC_ALL PLUS_GROUP_ASSOC));
+#        PLUS_INV_LEMMA;
+#        (SYM (SPEC_ALL NUM_LESS_IS_INT_BELOW));
+#	PLUS_ID_LEMMA]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"0 < 1"
+\end{verbatim}
+\evdots
+\end{session}
+
+To show that {\small\verb+0 < 1+}, we want to use the theorem
+{\small\verb+LESS_0_0+} from the theory {\small\verb+prim_rec+}, which
+says {\small\verb+|- 0 < (SUC 0)+}.  This requires converting
+{\small\tt 1} into {\small\verb+(SUC 0)+}.  Probably the easiest way
+to do that is with a {\small\verb+CONV_TAC (DEPTH_CONV num_CONV)+}.
+\begin{session}
+\begin{verbatim}
+#expand ((CONV_TAC (DEPTH_CONV num_CONV)) THEN
+#  (ACCEPT_TAC (theorem `prim_rec` `LESS_0_0`)));;
+OK..
+goal proved
+|- 0 < 1
+|- MAX below (MAX plus (INT 1))
+. |- NEG(N minus ((MAX plus (INT 1)) times MIN))
+. |- NEG(N minus ((MAX times MIN) plus MIN))
+. |- NEG((N plus (neg(MAX times MIN))) plus (neg MIN))
+. |- NEG(neg(MIN minus (N minus (MAX times MIN))))
+. |- POS(MIN minus (N minus (MAX times MIN)))
+. |- (N minus (MAX times MIN)) below MIN
+........ |- N minus (MAX times MIN) = INT 0
+
+Previous subproof:
+"N minus (MAX times MIN) = INT 0"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~NEG(N minus (MAX times MIN))" ]
+    [ "NEG(N minus (MAX times MIN)) \/ (N minus (MAX times MIN) = INT 0)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+This finishes off the assumptions we made in showing that
+{\small\verb+(N minus (MAX times MIN))+} is not positive.  (Or rather,
+more precisely, if it is positive then it is zero.)  Now we are left to
+deal with the case where it is either negative or zero.  If we were to
+split up these two cases, then {\small\verb+RES_TAC+} would take of the
+negative case because it and its negation would both be assumptions.
+The zero case would be taken care of by
+{\small\verb+(FIRST_ASSUM ACCEPT_TAC)+}.
+
+\newpage % PBHACK
+
+\begin{session}
+\begin{verbatim}
+#expand ((POP_ASSUM DISJ_CASES_TAC) THENL
+#    [RES_TAC;(FIRST_ASSUM ACCEPT_TAC)]);;
+OK..
+goal proved
+.. |- N minus (MAX times MIN) = INT 0
+........ |- N minus (MAX times MIN) = INT 0
+........ |- N = MAX times MIN
+........ |- ?p. N = p times MIN
+
+Previous subproof:
+2 subgoals
+"?UB. !N'. UB below N' ==> ~~NEG(N minus (N' times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+
+"?M. ~NEG(N minus (M times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS N" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+We have just finished showing that {\small\tt N}, an arbitrary
+positive element of our subgroup {\small\tt H}, is a multiple of the
+minimum positive element in {\small\tt H}, given certain assumptions:
+that there exists a minimum positive element, that this minimum
+positive element corresponds to a natural number, and that there
+exists a maximum number of times that this minimum element can be
+subtracted from {\small\tt N} leaving a non-negative result.  We now
+find ourselves confronted with having to have to prove the last of
+these: that there exists a maximum number of times that the minimum
+positive element can be subtracted from {\small\tt N}.  (It was to be
+able to prove this that we needed to consider cases where {\small\tt N}
+was positive, negative, or zero.)  The tactic we used to introduce
+{\small\verb+MAX+}, {\small\verb+INT_MAX_TAC+}, has already reduced
+the problem of showing that {\small\verb+MAX+} exists to the subgoals
+of showing that there is a multiple of {\small\verb+MIN+} which when
+subtracted from {\small\tt N} gives a non-negative result (the set is
+non-empty), and of showing that there is a value {\small\verb+UB+}
+such that any value greater than {\small\verb+UB+}, if multiplied
+times {\small\verb+MIN+} and then subtracted from {\small\tt N},
+yields a negative result (the set is bounded above).  So, first we
+must show that there exists some number of times that we can subtract
+{\small\verb+MIN+} from {\small\tt N} and still get a non-negative
+result.  For this, zero will do very nicely (since we are in the case
+where {\small\tt N} is positive).  Moreover, we can then simplify this
+down to the goal of showing that {\small\tt N} is not negative.
+
+\newpage % PBHACK
+
+\begin{session}
+\begin{verbatim}
+#expand ((EXISTS_TAC "INT 0") THEN 
+#  (PURE_REWRITE_TAC
+#    [MINUS_DEF;TIMES_ZERO;PLUS_INV_ID_LEMMA;PLUS_ID_LEMMA]));;
+#    [MINUS_DEF;TIMES_ZERO;PLUS_INV_ID_LEMMA;PLUS_ID_LEMMA]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"~NEG N"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS N" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+We know that {\small\tt N} is not negative since we have the
+assumption that it is positive, and we know from
+{\small\verb+TRICHOTOMY+} that an integer is not both positive and
+negative.
+\begin{session}
+\begin{verbatim}
+#expand (ACCEPT_TAC (REWRITE_RULE [(ASSUME "POS N")]
+#    (CONJUNCT1 (CONJUNCT2 (SPEC "N:integer" TRICHOTOMY)))));;
+OK..
+goal proved
+. |- ~NEG N
+. |- ?M. ~NEG(N minus (M times MIN))
+
+Previous subproof:
+"?UB. !N'. UB below N' ==> ~~NEG(N minus (N' times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+Next, for the second half of showing that {\small\verb+MAX+} exists,
+we have to show that there is some value {\small\verb+UB+} that when
+we multiply anything bigger than it times {\small\verb+MIN+} and
+subtract the result from {\small\tt N}, we get a negative number.
+(You might recognize this as essentially the Archemidian Principle).
+So what value shall we take?  Well, since {\small\verb+MIN+} is a
+positive number, about the only thing we know about it is that it is
+at least as big as {\small\verb+(INT 1)+}.  (In fact, it could be
+{\small\verb+(INT 1)+}.)  Therefore, to be on the safe side, the value
+had better be at least {\small\tt N}.
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "N:integer");;
+OK..
+"!N'. N below N' ==> ~~NEG(N minus (N' times MIN))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+Now, the antecedent of our current goal is {\small\verb+N below N'+},
+whereas the conclusion is that {\small\verb+N minus (N' times MIN)+}
+is negative (or rather not not negative).  It would be helpful if we
+were to put these to into the same terms, \ie, either both in terms of
+something is below something else, or something minus something else
+is either positive or negative.  Let's put them both in terms of the
+order relation, {\small\verb+below+} (mainly for the practice of using
+facts about {\small\verb+below+}). 
+\begin{session}
+\begin{verbatim}
+#expand ((REWRITE_TAC
+#     [NEG_DEF;
+#      MINUS_DEF;
+#      (SYM (SPEC_ALL PLUS_DIST_INV_LEMMA));
+#      PLUS_INV_INV_LEMMA]) THEN
+#  (PURE_REWRITE_TAC[(SYM (SPEC_ALL MINUS_DEF));
+#      (SYM (SPEC_ALL BELOW_DEF))]));;
+OK..
+"!N'. N below N' ==> N below (N' times MIN)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+We have as one of our assumptions that {\small\verb+MIN+} is positive.
+By the definition of positive there exists some natural number
+{\small\tt n} such that {\small\verb+MIN = INT (SUC n)+}.  Let's add
+this into our assumptions and then rewrite our goal with it (with an
+eye to working a {\small\tt 1} into things). 
+\begin{session}
+\begin{verbatim}
+#expand ((STRIP_ASSUME_TAC
+#    (PURE_ONCE_REWRITE_RULE [POS_DEF] (ASSUME "POS MIN"))) THEN
+#  (PURE_ONCE_ASM_REWRITE_TAC[]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"!N'. N below N' ==> N below (N' times (INT(SUC n)))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "MIN = INT(SUC n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Now, there are two possibilities to be considered here.  Either
+{\small\verb+O = n+}, in which case {\small\verb+N' times (INT(SUC n))+} 
+simplifies to {\small\verb+N'+} and we are done, or {\small\verb+0 < n+}.
+(The theorem giving us these cases is {\small\verb+LESS_0_CASES+} from
+the theory {\small\verb+arithmetic+}.) 
+\begin{session}
+\begin{verbatim}
+#expand ((DISJ_CASES_TAC (SPEC "n:num" LESS_0_CASES)) THENL
+#    [(POP_ASSUM \thm. (ASM_REWRITE_TAC
+#        [(SYM thm);(SYM (num_CONV "1"));TIMES_IDENTITY]));
+#     ALL_TAC]);;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"!N'. N below N' ==> N below (N' times (INT(SUC n)))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "MIN = INT(SUC n)" ]
+    [ "0 < n" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+For the case of {\small\verb+0 < n+}, by transitivity, given the
+assumption {\small\verb+N below N'+}, it suffices to show
+{\small\verb+N' below (N' times (INT(SUC n)))+}.
+\begin{session}
+\begin{verbatim}
+#expand ((REPEAT STRIP_TAC) THEN
+#  (MP_IMP_TAC
+#    (SPECL ["N:integer";"N':integer";"N' times (INT(SUC n))"]
+#     TRANSIT)) THEN
+#  (ASM_REWRITE_TAC []));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"N' below (N' times (INT(SUC n)))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "MIN = INT(SUC n)" ]
+    [ "0 < n" ]
+    [ "N below N'" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The next thing to do is to convert {\small\verb+(N' times (INT(SUC n)))+}
+into {\small\verb+(N' times (INT n)) plus N'+} and then reduce the
+problem to showing {\small\verb+(INT 0) below (N' times (INT n))+}.
+\begin{session}
+\begin{verbatim}
+#expand ((PURE_REWRITE_TAC
+#     [ADD1; (SYM (SPEC_ALL NUM_ADD_IS_INT_ADD));
+#      LEFT_PLUS_DISTRIB; TIMES_IDENTITY]) THEN
+#  (NEW_SUBST1_TAC
+#    (SPECL ["N':integer";"(N' times (INT n)) plus N'";"neg N'"]
+#      PLUS_BELOW_TRANSL)) THEN
+#  (PURE_REWRITE_TAC [PLUS_GROUP_ASSOC;PLUS_INV_LEMMA;PLUS_ID_LEMMA]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"(INT 0) below (N' times (INT n))"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS N" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "0 < n" ]
+    [ "N below N'" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Using {\small\verb+POS_MULT_PRES_BELOW+}, to show that
+{\small\verb+(INT 0)+} is below {\small\verb+(N' times (INT n))+}, it
+suffices to show that {\small\verb+N'+} is positive and that
+{\small\verb+(INT 0)+} is below {\small\verb+(INT n)+}.
+\begin{session}
+\begin{verbatim}
+#expand ((NEW_SUBST1_TAC 
+#    (SYM (CONJUNCT1 (SPEC "N':integer" TIMES_ZERO)))) THEN
+#  (NEW_SUBST1_TAC
+#    (SYM (UNDISCH (SPECL ["N':integer"; "INT 0"; "INT n"]
+#      POS_MULT_PRES_BELOW)))));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+2 subgoals
+"POS N'"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS N" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "0 < n" ]
+    [ "N below N'" ]
+
+"(INT 0) below (INT n)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "0 < n" ]
+    [ "N below N'" ]
+    [ "POS N'" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+That {\small\verb+(INT 0)+} is below {\small\verb+(INT n)+} follows
+from {\small\verb+NUM_LESS_IS_INT_BELOW+} and the assumption that
+{\small\verb+0 < n+}.
+\begin{session}
+\begin{verbatim}
+#expand (ASM_REWRITE_TAC [(SYM (SPEC_ALL (NUM_LESS_IS_INT_BELOW)))]);;
+OK..
+goal proved
+. |- (INT 0) below (INT n)
+
+Previous subproof:
+"POS N'"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS N" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "N below N'" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+By {\small\verb+POS_IS_ZERO_BELOW+}, to show that {\small\verb+N'+} is
+positive is to show that {\small\verb+(INT 0)+} is below
+{\small\verb+N'+}.  And since we have that {\small\tt N} is below
+{\small\verb+N'+}, by transitivity it suffices to show that
+{\small\verb+(INT 0)+} is below {\small\tt N}.  But this we already
+have, since {\small\tt N} is positive.
+\begin{session}
+\begin{verbatim}
+#expand ((PURE_ONCE_REWRITE_TAC [POS_IS_ZERO_BELOW]) THEN
+#  (MP_IMP_TAC (SPECL ["INT 0";"N:integer";"N':integer"] TRANSIT)) THEN
+#  (ASM_REWRITE_TAC[(SYM (SPEC_ALL POS_IS_ZERO_BELOW))]));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+goal proved
+.. |- POS N'
+... |- (INT 0) below (N' times (INT n))
+... |- N' below (N' times (INT(SUC n)))
+.. |- !N'. N below N' ==> N below (N' times (INT(SUC n)))
+. |- !N'. N below N' ==> N below (N' times (INT(SUC n)))
+.. |- !N'. N below N' ==> N below (N' times MIN)
+.. |- !N'. N below N' ==> ~~NEG(N minus (N' times MIN))
+.. |- ?UB. !N'. UB below N' ==> ~~NEG(N minus (N' times MIN))
+........ |- ?p. N = p times MIN
+...... |- !N. POS N ==> H N ==> (?p. N = p times MIN)
+
+Previous subproof:
+2 subgoals
+"H(INT 0) ==> (?p. INT 0 = p times MIN)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+
+"!N. NEG N ==> H N ==> (?p. N = p times MIN)"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N. POS N ==> H N ==> (?p. N = p times MIN)" ]
+
+() : void
+
+\end{verbatim}
+\end{session}
+
+With this, we have finished showing that there exists some value
+such that, if any larger value is multiplied times {\small\verb+MIN+}
+and then subtracted from {\small\tt N}, the result is negative.  This,
+in turn, finishes showing that there exists a maximum number of times
+that {\small\verb+MIN+} can be subtracted from {\small\tt N}.  And
+this, in turn, finishes showing that if {\small\tt N} is positive,
+then it is a multiple of {\small\verb+MIN+}.  (All of this presupposes
+that {\small\verb+MIN+} exists, of course.)  This leaves us back at
+needing to deal with the case where {\small\tt N} is negative and the
+case where {\small\tt N} is zero.
+
+To show the negative case, we want to reduce it to the positive case
+which we have just finished.  To begin this, we need to change the
+hypothesis of {\small\verb+NEG N+} into an assumption in terms of
+{\small\verb+POS+}.  Also, the particular instance of the positive
+case that we are reducing to is that of {\small\verb+(neg N)+}.
+Therefore, it would be helpful, as well, to express {\small\tt N} in
+the conclusion as {\small\verb+(neg (neg N))+}. 
+\begin{session}
+\begin{verbatim}
+#expand ((PURE_ONCE_REWRITE_TAC [NEG_DEF]) THEN
+#  (REPEAT STRIP_TAC) THEN
+#  (NEW_SUBST1_TAC (SYM (SPEC "N:integer" PLUS_INV_INV_LEMMA))));;
+OK..
+"?p. neg(neg N) = p times MIN"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N. POS N ==> H N ==> (?p. N = p times MIN)" ]
+    [ "POS(neg N)" ]
+    [ "H N" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Let us work on the assumptions a bit.  We know that we have the
+positive case in our assumptions.  We also know that we are interested
+in the particular instance of {\small\verb+(neg N)+}.  In the instance
+of {\small\verb+(neg N)+} the positive case has the hypothesis that
+{\small\verb+(neg N)+} is in {\small\tt H}.  Using
+{\small\verb+INT_SBGP_neg+}, we can satisfy that hypothesis, since we
+have that {\small\tt N} is {\small\tt H}.  Therefore, using the
+positive case and {\small\verb+INT_SBGP_neg+}, let's use
+{\small\verb+STRIP_ASSUME_TAC+} to introduce a {\small\tt p} and add
+to the assumptions that {\small\verb+N = p times MIN+}.
+\begin{session}
+\begin{verbatim}
+#expand (STRIP_ASSUME_TAC (MP
+#    (UNDISCH (SPEC "neg N"
+#      (ASSUME "!N. POS N ==> H N ==> (?p. N = p times MIN)")))
+#    (UNDISCH (SPEC "N:integer" (UNDISCH
+#      (SPEC "H:integer -> bool" INT_SBGP_neg))))));;
+OK..
+"?p. neg(neg N) = p times MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "!N. POS N ==> H N ==> (?p. N = p times MIN)" ]
+    [ "POS(neg N)" ]
+    [ "H N" ]
+    [ "neg N = p times MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+The multiple of {\small\verb+MIN+} we need in order to get
+{\small\verb+(neg(neg N))+} is the negative of the multiple needed to
+get {\small\verb+(neg N)+}.  If we then rewrite with the assumptions
+and {\small\verb+TIME_neg+}, we will finish of this goal. 
+\begin{session}
+\begin{verbatim}
+#expand ((EXISTS_TAC "neg p") THEN (ASM_REWRITE_TAC [TIMES_neg]));;
+OK..
+goal proved
+. |- ?p. neg(neg N) = p times MIN
+.... |- ?p. neg(neg N) = p times MIN
+.. |- !N. NEG N ==> H N ==> (?p. N = p times MIN)
+
+Previous subproof:
+"H(INT 0) ==> (?p. INT 0 = p times MIN)"
+\end{verbatim}
+\evdots
+\end{session}
+
+We've done the positive case and the negative case, which leaves us
+back at doing the zero case.  The multiple of {\small\verb+MIN+} we
+need to get zero is zero, since zero times anything is zero.
+\begin{session}
+\begin{verbatim}
+#expand (DISCH_TAC THEN (EXISTS_TAC "INT 0") THEN
+#  (REWRITE_TAC [TIMES_ZERO]));;
+OK..
+goal proved
+|- H(INT 0) ==> (?p. INT 0 = p times MIN)
+...... |- H m ==> (?p. m = p times MIN)
+
+Previous subproof:
+"(?p. m = p times MIN) ==> H m"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H MIN" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+With finishing off the zero case, we have finished showing that, if
+{\small\tt N} is an element in {\small\tt H}, then {\small\tt N} is a
+multiple of {\small\verb+MIN+}, and hence is in the subgroup generated
+by {\small\verb+MIN+}.  To show that {\small\tt H} and the subgroup
+generated by {\small\verb+MIN+} are the same, we still have to show
+that if {\small\tt N} is a multiple of {\small\verb+MIN+}, then
+{\small\tt N} is in {\small\tt H}.  (We also have to show that
+{\small\verb+MIN+} exists and that it corresponds to an integer, but
+we'll get to that in a bit.)  Since we have that {\small\verb+MIN+} is
+in {\small\tt H}, by {\small\verb+INT_SBGP_TIMES_CLOSED+} we have that
+all multiples of {\small\verb+MIN+} are in {\small\tt H}. 
+\begin{session}
+\begin{verbatim}
+#expand (STRIP_TAC THEN (ASM_REWRITE_TAC []) THEN
+#  (NEW_MATCH_ACCEPT_TAC
+#    (UNDISCH (SPEC_ALL (UNDISCH (SPEC_ALL INT_SBGP_TIMES_CLOSED))))));;
+OK..
+goal proved
+.. |- (?p. m = p times MIN) ==> H m
+...... |- H = (\m. ?p. m = p times MIN)
+....... |- H = (\m. ?p. m = p times (INT n))
+....... |- ?n. H = (\m. ?p. m = p times (INT n))
+....... |- ?n. H = (\m. ?p. m = p times (INT n))
+
+Previous subproof:
+Previous subproof:
+"?n. INT n = MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+\end{verbatim}
+\evdots
+\end{session}
+
+To show that {\small\verb+MIN+} corresponds to an integer, let's first
+add to our assumptions what it means for {\small\verb+MIN+} to be
+positive.
+\begin{session}
+\begin{verbatim}
+#expand (STRIP_ASSUME_TAC
+#    (PURE_ONCE_REWRITE_RULE [POS_DEF] (ASSUME "POS MIN")));;
+OK..
+"?n. INT n = MIN"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "POS MIN" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "MIN = INT(SUC n)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+Then we see that the integer we need is just {\small\verb+(SUC n)+},
+given to us by the fact that {\small\verb+MIN+} is positive.
+\begin{session}
+\begin{verbatim}
+#expand ((EXISTS_TAC "SUC n") THEN (ASM_REWRITE_TAC []));;
+OK..
+goal proved
+. |- ?n. INT n = MIN
+. |- ?n. INT n = MIN
+...... |- ?n. H = (\m. ?p. m = p times (INT n))
+..... |- ?n. H = (\m. ?p. m = p times (INT n))
+
+Previous subproof:
+2 subgoals
+"?LB. !N. N below LB ==> ~(POS N /\ H N)"
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+
+"?M. POS M /\ H M"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "~(!m1. H m1 ==> (m1 = INT 0))" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+This puts us back at showing that {\small\verb+MIN+} exists.  Recall
+that {\small\verb+MIN+} was the minimum positive element in {\small\tt H}.
+Just as  before with {\small\verb+INT_MAX_TAC+} and {\small\verb+MAX+},
+the tactic {\small\verb+INT_MIN_TAC+} has already broken this problem
+down into the two subgoals of showing that there is a positive element
+in {\small\tt H}, and showing that there is an integer, such that
+anything less than that is not a positive element of {\small\tt H}.
+
+First, for the goal of showing that there exists a positive element in
+{\small\tt H}.  The top assumption states that it is not the case that
+every element of {\small\tt H} is equal to zero.  It would be more
+convenient for us if we could turn this around into the declaration
+that for some particular {\small\verb+m1+}, {\small\verb+m1+} is in
+{\small\tt H} and {\small\verb+m1+} is not equal to zero.  We can
+convert the {\small\verb+~(!m1.+\ldots\small\tt)} into a
+{\small\verb+?m1.~(+\ldots\small\tt)} by the use of
+{\small\verb+NOT_FORALL_CONV+}.  And we can further break up the
+{\small\verb+~(+\ldots\small\verb+==>+\ldots\small\tt)} by using the
+theorems {\small\verb+IMP_DISJ_THM+} and {\small\verb+DE_MORGAN_THM+}.
+\begin{session}
+\begin{verbatim}
+#expand (POP_ASSUM \thm. STRIP_ASSUME_TAC 
+#    (REWRITE_RULE [IMP_DISJ_THM;DE_MORGAN_THM]
+#     (CONV_RULE NOT_FORALL_CONV thm)));;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"?M. POS M /\ H M"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H m1" ]
+    [ "~(m1 = INT 0)" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+So far, we have an element {\small\verb+m1+} of {\small\tt H}, and we
+know its not zero, but we don't know whether it positive or negative.
+It sounds like another cases argument.  Furthermore, we know how to
+handle the positive case and the zero case.
+\begin{session}
+\begin{verbatim}
+#expand ((DISJ_CASES_TAC
+#    (CONJUNCT1 (SPEC "m1:integer" TRICHOTOMY))) THENL
+#  [((EXISTS_TAC "m1:integer") THEN (ASM_REWRITE_TAC []));
+#   ((POP_ASSUM DISJ_CASES_TAC) THENL
+#    [ALL_TAC; RES_TAC])]);;
+OK..
+"?M. POS M /\ H M"
+    [ "SUBGROUP((\N. T),$plus)H" ]
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+    [ "H m1" ]
+    [ "~(m1 = INT 0)" ]
+    [ "NEG m1" ]
+
+() : void
+\end{verbatim}
+\end{session}
+
+For the negative case, the {\small\tt M} we want is {\small\verb+(neg m1)+}.
+The goal then follows from the definition of {\small\verb+NEG+} and
+the theorem {\small\verb+INT_SBGP_neg+}.
+\begin{session}
+\begin{verbatim}
+#expand ((EXISTS_TAC "neg m1") THEN
+#  (ASM_REWRITE_TAC
+#    [(SYM (SPEC_ALL NEG_DEF));
+#     (UNDISCH (SPEC "m1:integer"
+#      (UNDISCH (SPEC_ALL INT_SBGP_neg))))]));;
+OK..
+goal proved
+... |- ?M. POS M /\ H M
+... |- ?M. POS M /\ H M
+.. |- ?M. POS M /\ H M
+
+
+Previous subproof:
+"?LB. !N. N below LB ==> ~(POS N /\ H N)"
+\end{verbatim}
+\evdots
+\end{session}
+
+Lastly to show that the set of positive elements of {\small\tt H} is
+bounded below.  The obvious lower bound to the set of positive
+elements is zero.
+\begin{session}
+\begin{verbatim}
+#expand (EXISTS_TAC "INT 0");;
+OK..
+"!N. N below (INT 0) ==> ~(POS N /\ H N)"
+\end{verbatim}
+\evdots
+\end{session}
+
+By {\small\verb+NEG_IS_BELOW_ZERO+}, that {\small\tt N} is below
+{\small\verb+(INT 0)+} is the same thing as that {\small\tt N} is
+negative.
+\begin{session}
+\begin{verbatim}
+#expand (PURE_ONCE_REWRITE_TAC [(SYM (SPEC_ALL NEG_IS_BELOW_ZERO))]);;
+\end{verbatim}
+\mvdots
+\begin{verbatim}
+OK..
+"!N. NEG N ==> ~(POS N /\ H N)"
+\end{verbatim}
+\evdots
+\end{session}
+
+Given that {\small\tt N} is negative, by the second conjunct of
+{\small\verb+TRICHOTOMY+}, we have that {\small\tt N} is not positive,
+and hence that it is not a positive element of {\small\tt H}.
+\begin{session}
+\begin{verbatim}
+#expand (GEN_TAC THEN DISCH_TAC THEN
+#  (REWRITE_TAC
+#    [(REWRITE_RULE[(ASSUME "NEG N")]
+#    (CONJUNCT1 (CONJUNCT2 (SPEC "N:integer" TRICHOTOMY))))]));;
+OK..
+goal proved
+|- !N. NEG N ==> ~(POS N /\ H N)
+|- !N. N below (INT 0) ==> ~(POS N /\ H N)
+|- ?LB. !N. N below LB ==> ~(POS N /\ H N)
+.... |- ?n. H = (\m. ?p. m = p times (INT n))
+... |- ?n. H = int_mult_set(INT n)
+|- !H. SUBGROUP((\N. T),$plus)H ==> (?n. H = int_mult_set(INT n))
+
+Previous subproof:
+goal proved
+() : void
+\end{verbatim}
+\end{session}
+
+With this we finish showing that the set of positive elements in
+{\small\tt H} is bounded below, which finishes showing that
+{\small\verb+MIN+} exits, which finishes showing the {\small\tt H} is
+a cyclic subgroup  (generated by {\small\verb+MIN+}).  For the last
+time, let us compose the above work and save it.   Saving it is a
+little more difficult than previously.  This time the composite tactic
+is physically so large that on most emacs editors you can not enter it
+directly into a shell.  What you should do instead is to put the
+composed work into a separate file named something like
+{\small\verb+temp.ml+}, save this file, and then enter into the shell:
+\begin{session}
+\begin{verbatim}
+#loadt `temp`;;
+
+	INT_SBGP_CYCLIC = 
+	|- !H. SUBGROUP((\N. T),$plus)H ==> (?n. H = int_mult_set(INT n))
+
+
+	File temp loaded
+	() : void
+
+\end{verbatim}
+\end{session}
+
+Here is what the composite work yields.
+\begin{verbatim}
+let INT_SBGP_CYCLIC = prove_thm(`INT_SBGP_CYCLIC`,
+"!H. SUBGROUP((\N.T),$plus)H ==> ? n.(H = int_mult_set (INT n))",
+(GEN_TAC THEN DISCH_TAC THEN
+ (FIRST_ASSUM
+   \thm.(STRIP_ASSUME_TAC
+     (PURE_ONCE_REWRITE_RULE[SUBGROUP_DEF] thm))) THEN
+ (PURE_ONCE_REWRITE_TAC [INT_MULT_SET_DEF]) THEN
+ (ASM_CASES_TAC "!m1. (H m1) ==> (m1 = (INT 0))") THENL
+ [((EXISTS_TAC "0") THEN
+   (EXT_TAC "m1:integer") THEN BETA_TAC THEN
+   (REWRITE_TAC [TIMES_ZERO]) THEN
+   GEN_TAC THEN EQ_TAC THENL
+   [(FIRST_ASSUM (\thm.(ACCEPT_TAC (SPEC_ALL thm))));
+    (DISCH_TAC THEN
+     (ASM_REWRITE_TAC [(UNDISCH (SPEC_ALL INT_SBGP_ZERO))]))]);
+  ((INT_MIN_TAC "\N. (POS N /\ H N)") THENL
+   [((POP_ASSUM STRIP_ASSUME_TAC) THEN
+     (SUPPOSE_TAC "?n. (INT n) = MIN") THENL
+     [((POP_ASSUM STRIP_ASSUME_TAC) THEN
+       (EXISTS_TAC "n:num") THEN
+       (POP_ASSUM \thm. PURE_ONCE_REWRITE_TAC [thm]) THEN
+       (EXT_TAC "m:integer") THEN BETA_TAC THEN
+       GEN_TAC THEN EQ_TAC THENL
+       [((SPEC_TAC ("m:integer","N:integer")) THEN
+         SIMPLE_INT_CASES_TAC THENL
+         [((REPEAT STRIP_TAC) THEN
+           (INT_MAX_TAC "\X.~(NEG(N minus (X times MIN)))") THENL
+           [((EXISTS_TAC "MAX:integer") THEN
+             (MATCH_MP_IMP_TAC
+               (SPEC "neg (MAX times MIN)" PLUS_RIGHT_CANCELLATION)) THEN
+             (PURE_REWRITE_TAC
+               [PLUS_INV_LEMMA;(SYM (SPEC_ALL MINUS_DEF))]) THEN
+             (DISJ_CASES_TAC (CONJUNCT1
+               (SPEC "N minus (MAX times MIN)" TRICHOTOMY))) THENL
+             [((SUPPOSE_TAC "(N minus (MAX times MIN)) below MIN") THENL
+               [((SUPPOSE_TAC "(H (N minus (MAX times MIN))):bool") THENL
+                 [(RES_TAC THEN RES_TAC);
+                  ((PURE_ONCE_REWRITE_TAC [MINUS_DEF]) THEN
+                   (GROUP_TAC [INT_SBGP_neg;INT_SBGP_TIMES_CLOSED]))]);
+                ((PURE_ONCE_REWRITE_TAC [BELOW_DEF]) THEN
+                 (NEW_SUBST1_TAC 
+                   (SYM (SPEC "MIN minus (N minus (MAX times MIN))"
+                     PLUS_INV_INV_LEMMA))) THEN
+                 (PURE_ONCE_REWRITE_TAC [(SYM (SPEC_ALL(NEG_DEF)))]) THEN
+                 (PURE_REWRITE_TAC
+                    [MINUS_DEF;
+                     (SYM (SPEC_ALL (PLUS_DIST_INV_LEMMA)));
+                     PLUS_INV_INV_LEMMA]) THEN
+                 (INT_RIGHT_ASSOC_TAC
+                   "(N plus (neg (MAX times MIN))) plus (neg MIN)") THEN
+                 (PURE_REWRITE_TAC
+                    [(SYM neg_PLUS_DISTRIB);(SYM (SPEC_ALL MINUS_DEF))]) THEN
+                 (PURE_ONCE_REWRITE_TAC
+                   [(PURE_ONCE_REWRITE_RULE [TIMES_IDENTITY] (SYM
+                     (SPECL ["MAX:integer";"INT 1";"MIN:integer"]
+                       RIGHT_PLUS_DISTRIB)))]) THEN
+                 (MATCH_MP_IMP_TAC (ONCE_REWRITE_RULE []
+                   (ASSUME
+                     "!N'.MAX below N' ==>
+                       ~~NEG (N minus (N' times MIN))"))) THEN
+                 (SUBST_MATCH_TAC
+                   (PURE_ONCE_REWRITE_RULE [COMM_PLUS]
+                     (SPECL ["A:integer";"B:integer";"neg MAX"]
+                       PLUS_BELOW_TRANSL))) THEN
+                 (PURE_REWRITE_TAC
+                    [(SYM (SPEC_ALL PLUS_GROUP_ASSOC));
+                     PLUS_INV_LEMMA;
+                     (SYM (SPEC_ALL NUM_LESS_IS_INT_BELOW));
+                     PLUS_ID_LEMMA]) THEN
+                 (CONV_TAC (DEPTH_CONV num_CONV)) THEN
+                 (ACCEPT_TAC (theorem `prim_rec` `LESS_0_0`)))]);
+              ((POP_ASSUM DISJ_CASES_TAC) THENL
+               [RES_TAC;(FIRST_ASSUM ACCEPT_TAC)])]);
+            ((EXISTS_TAC "INT 0") THEN 
+             (PURE_REWRITE_TAC
+               [MINUS_DEF;TIMES_ZERO;PLUS_INV_ID_LEMMA;PLUS_ID_LEMMA]) THEN
+             (ACCEPT_TAC (REWRITE_RULE [(ASSUME "POS N")]
+               (CONJUNCT1 (CONJUNCT2 (SPEC "N:integer" TRICHOTOMY))))));
+            ((EXISTS_TAC "N:integer") THEN
+             (REWRITE_TAC
+               [NEG_DEF;
+                MINUS_DEF;
+                (SYM (SPEC_ALL PLUS_DIST_INV_LEMMA));
+                PLUS_INV_INV_LEMMA]) THEN
+             (PURE_REWRITE_TAC[(SYM (SPEC_ALL MINUS_DEF));
+                (SYM (SPEC_ALL BELOW_DEF))]) THEN
+             (STRIP_ASSUME_TAC
+               (PURE_ONCE_REWRITE_RULE [POS_DEF] (ASSUME "POS MIN"))) THEN
+             (PURE_ONCE_ASM_REWRITE_TAC[]) THEN
+             ((DISJ_CASES_TAC (SPEC "n:num" LESS_0_CASES)) THENL
+              [(POP_ASSUM \thm. (ASM_REWRITE_TAC
+                 [(SYM thm);(SYM (num_CONV "1"));TIMES_IDENTITY]));
+               ALL_TAC]) THEN
+             (REPEAT STRIP_TAC) THEN
+             (MP_IMP_TAC
+               (SPECL ["N:integer";"N':integer";"N' times (INT(SUC n))"]
+                TRANSIT)) THEN
+             (ASM_REWRITE_TAC []) THEN
+             (PURE_REWRITE_TAC
+               [ADD1; (SYM (SPEC_ALL NUM_ADD_IS_INT_ADD));
+                LEFT_PLUS_DISTRIB; TIMES_IDENTITY]) THEN
+             (NEW_SUBST1_TAC
+               (SPECL ["N':integer";"(N' times (INT n)) plus N'";"neg N'"]
+                 PLUS_BELOW_TRANSL)) THEN
+             (PURE_REWRITE_TAC
+               [PLUS_GROUP_ASSOC;PLUS_INV_LEMMA;PLUS_ID_LEMMA]) THEN
+             (NEW_SUBST1_TAC 
+              (SYM (CONJUNCT1 (SPEC "N':integer" TIMES_ZERO)))) THEN
+             (NEW_SUBST1_TAC
+               (SYM (UNDISCH (SPECL ["N':integer"; "INT 0"; "INT n"]
+                 POS_MULT_PRES_BELOW)))) THENL
+             [(ASM_REWRITE_TAC [(SYM (SPEC_ALL (NUM_LESS_IS_INT_BELOW)))]);
+              ((PURE_ONCE_REWRITE_TAC [POS_IS_ZERO_BELOW]) THEN
+               (MP_IMP_TAC
+                 (SPECL ["INT 0";"N:integer";"N':integer"] TRANSIT)) THEN
+               (ASM_REWRITE_TAC[(SYM (SPEC_ALL POS_IS_ZERO_BELOW))]))])]);
+          ((PURE_ONCE_REWRITE_TAC [NEG_DEF]) THEN
+           (REPEAT STRIP_TAC) THEN
+           (NEW_SUBST1_TAC (SYM (SPEC "N:integer" PLUS_INV_INV_LEMMA))) THEN
+           (STRIP_ASSUME_TAC (MP
+             (UNDISCH (SPEC "neg N"
+               (ASSUME "!N. POS N ==> H N ==> (?p. N = p times MIN)")))
+             (UNDISCH (SPEC "N:integer" (UNDISCH
+               (SPEC "H:integer -> bool" INT_SBGP_neg)))))) THEN
+           (EXISTS_TAC "neg p") THEN (ASM_REWRITE_TAC [TIMES_neg]));
+          (DISCH_TAC THEN (EXISTS_TAC "INT 0") THEN
+           (REWRITE_TAC [TIMES_ZERO]))]);
+        (STRIP_TAC THEN (ASM_REWRITE_TAC []) THEN
+         (NEW_MATCH_ACCEPT_TAC
+           (UNDISCH (SPEC_ALL (UNDISCH (SPEC_ALL INT_SBGP_TIMES_CLOSED))))))]);
+      ((STRIP_ASSUME_TAC
+         (PURE_ONCE_REWRITE_RULE [POS_DEF] (ASSUME "POS MIN"))) THEN
+       (EXISTS_TAC "SUC n") THEN (ASM_REWRITE_TAC []))]);
+    ((POP_ASSUM \thm. STRIP_ASSUME_TAC 
+       (REWRITE_RULE [IMP_DISJ_THM;DE_MORGAN_THM]
+         (CONV_RULE NOT_FORALL_CONV thm))) THEN
+     ((DISJ_CASES_TAC
+        (CONJUNCT1 (SPEC "m1:integer" TRICHOTOMY))) THENL
+      [((EXISTS_TAC "m1:integer") THEN (ASM_REWRITE_TAC []));
+       ((POP_ASSUM DISJ_CASES_TAC) THENL
+        [ALL_TAC; RES_TAC])]) THEN
+     (EXISTS_TAC "neg m1") THEN
+     (ASM_REWRITE_TAC
+       [(SYM (SPEC_ALL NEG_DEF));
+        (UNDISCH (SPEC "m1:integer"
+          (UNDISCH (SPEC_ALL INT_SBGP_neg))))]));
+    ((EXISTS_TAC "INT 0") THEN
+     (PURE_ONCE_REWRITE_TAC [(SYM (SPEC_ALL NEG_IS_BELOW_ZERO))]) THEN
+     GEN_TAC THEN DISCH_TAC THEN
+     (REWRITE_TAC
+       [(REWRITE_RULE[(ASSUME "NEG N")]
+        (CONJUNCT1 (CONJUNCT2 (SPEC "N:integer" TRICHOTOMY))))]))])]));;
+\end{verbatim}
+
+Since we used {\small\verb+load_theory+} to enter
+{\small\verb+int_sbgp+}, and thus were not in draft mode, we do not
+need to use {\small\verb+close_theory ()+}, but only
+{\small\verb+quit()+} to close down. 
+\begin{session}
+\begin{verbatim}
+#quit();;
+faulkner%
+\end{verbatim}
+\end{session}
+
+Over the course of this study, you have gained enough familiarity with
+the definitions and facts in the group theory library to be able to
+use them in a concrete setting, namely, the setting of the integers.
+You have practiced importing (or instantiating) an abstract theory,
+that of elementary group theory, in a different theory, that of
+modular arithmetic, which in turn may be viewed as an abstract theory
+waiting to be instantiated by a given integer.  Finally, you have had
+the experience of working through a fairly long and complicated proof
+of the fact that every subgroup of the integers is cyclic, \ie, is the
+set of multiples of a given element.  Along the way, you gained
+experience with reasoning by the cases of positive, negative or zero,
+with reducing a problem over the integers to one over the natural
+numbers, and with using maximal and minimal elements of bounded sets
+of integers to solve problems of existence.  It is hoped that all this
+experience will stand you in good stead as you go on to use the group
+theory and the integers in stating and solving your own individual
+problems.
+
+For those of you who would like a parting project, at the beginning of
+this section, it was said that the fact that every subgroup of the
+integers is cyclic is a goodly piece of the work necessary to show
+that greatest common divisors exist for the integers.  An outline of
+how to see this will follow.  The project is to implement this in \HOL.
+
+For each pair of integers {\small\tt M} and {\small\tt N}, consider
+the set of sums of multiples of {\small\tt M} and {\small\tt N}
+decribed by the predicate 
+\begin{verbatim}
+   \X:integer. (?A B. (X = (A times M) plus (B times N)))
+\end{verbatim}
+In number theory this set is sometimes called the {\it modulus} of
+{\small\tt M} and {\small\tt N}.  Show that for all {\small\tt M} and
+{\small\tt N}, this set always forms a subgroup of the integers.
+Since this set is a subgroup of the integers, by the previous theorem,
+it is cyclic.  Define the {\small\verb+gcd(M,N)+} to be the generator
+of this subgroup.  That {\small\tt M} and {\small\tt N} are both
+multiples of {\small\verb+gcd(M,N)+} follows from the fact that both
+{\small\tt M} and {\small\tt N} are in this subgroup.  To see that the
+{\small\verb+gcd(M,N)+} is a multiple of any {\small\tt C} which
+divides both {\small\tt M} and {\small\tt N}, recall that the
+{\small\verb+gcd(M,N)+} must be of the form
+{\small\verb+(A times M) plus (B times N)+} for some integers
+{\small\tt A} and {\small\tt B}.  Since {\small\tt M} is a multiple of
+{\small\tt C} and {\small\tt N} is a multiple of {\small\tt C}, by
+distributivity the {\small\verb+gcd(M,N)+} being
+{\small\verb+(A times M) plus (B times N)+} is a multiple of
+{\small\tt C}.  If you want to see that the {\small\verb+gcd(M,N)+} is
+actually the greast divisor of both {\small\tt M} and {\small\tt N} in
+order theoretic terms (provided at least one of {\small\tt M} or
+{\small\tt N} is not {\small\verb+(INT 0)+}) show that, if {\small\tt X}
+and {\small\tt Y} are positive integers and {\small\verb+Z = X times Y+},
+then {\small\tt X} is below {\small\tt Z}. 
+
+Happy Theorem Proving and Best Wishes, Elsa L. Gunter
+

@@ -1,0 +1,21 @@
+\DOC store_rule
+
+\TYPE {store_rule : (window_rule -> void)}
+
+\SYNOPSIS
+Adds a window rule to the window system's tables.
+
+\LIBRARY window
+
+\DESCRIBE
+The system maintains a table of window rules for opening subwindows.
+This command takes such a rule and adds it to the table maintained by the
+system.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+empty_rules
+
+\ENDDOC

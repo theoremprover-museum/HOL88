@@ -1,0 +1,3 @@
+\THEOREM EXP_TOTAL TRANSC
+|- !y. (& 0) < y ==> (?x. exp x = y)
+\ENDTHEOREM

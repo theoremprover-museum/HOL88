@@ -1,0 +1,85 @@
+\DOC compile
+
+\TYPE {compile : ((string # bool) -> void)}
+
+\SYNOPSIS
+Compiles the named ML source file.
+
+\DESCRIBE
+Given a pair {(`name`,flag)}, {compile} loads the named file and then compiles
+it into LISP, generating a file {name_ml.l}. It then calls the LISP compiler to
+create an object file {name_ml.o}. The intermediate LISP file is automatically
+deleted once the {name_ml.o} file has been generated. If {flag} is {true}, a
+verbose account of the compilation is generated, if {flag} is {false},
+compilation is silent.
+
+\FAILURE
+Fails if the named {ML} source file does not exist, or if the load is
+unsuccessful. In the latter case, the intermediate {name_ml.l} file is
+left undeleted.
+
+\EXAMPLE
+To compile two files {a.ml} and {b.ml}, where {b.ml} depends on definitions
+made in {a.ml}, one can type:
+{
+   #compile (`a`,true);;
+   #compile (`b`,true);;
+}
+\noindent Suppose one exists the {HOL} session and attempts to
+load the files in a new session:
+{
+   #load(`a`,false);;
+   [fasl a_ml.o]
+   #load(`b`,false);;
+   [fasl b_ml.o]
+}
+\noindent Note that {load} always loads an object file if one exists,
+regardless of its creation date. Loading {a_ml.o} sets up the static bindings
+necessary for {b_ml.o} to run. File {b.ml} may be edited without recompilation
+of {a.ml}, however, if {a.ml} is edited and recompiled, then {b.ml} has to be
+recompiled before being used. Consequently, if the {ML} code built into the
+system is recompiled, users have to recompile all their programs.
+
+\COMMENTS
+Compiled {ML} runs faster than interpreted {ML}, and loads almost
+instantaneously.
+
+There is a potential problem with compiling code that mentions the names of
+theorems set up to be autoloaded.  Suppose a file {f.ml} is to be compiled and
+contains the following code:
+{
+   let f x = SPEC x num_CASES;;
+}
+\noindent where {num_CASES} is a built-in theorem which is set up to be
+autoloaded on demand.  If, in a given session, the theorem {num_CASES} has
+already been autoloaded before the file {f.ml} is compiled, then the resulting
+object code will not itself autoload this theorem; it will just evaluate a
+compiled version of the identifier {num_CASES} when the function {f} is called.
+In particular, an unbound identifier error will occur if the compiled file
+{f_ml.o} is loaded in a separate session and the function {f} is then called.
+
+To get around this problem, one should rewrite functions that refer to
+autoloaded values so that they explicitly fetch the required theorems from
+disk. In general, one must arrange for code to be compiled not to invoke any
+autoloading action.  For the example shown above, this could be done by
+defining the function {f} as follows.
+{
+   let f =
+       let thm = theorem `arithmetic` `num_CASES` in
+       \x. SPEC x thm;;
+}
+\noindent Note that {thm} in this definition is not the name of any
+automatically autoloaded theorem.  Note also that it would be most
+undesirable to define {f} by:
+{
+   let f x =
+       let thm = theorem `arithmetic` `num_CASES` in
+       SPEC x thm;;
+}
+\noindent With this definition, function {f} fetches {num_CASES} off disk each
+time it is called, rather than just once when it is defined.
+
+\SEEALSO
+compilef, compilet, load, loadf, loadt.
+
+\ENDDOC

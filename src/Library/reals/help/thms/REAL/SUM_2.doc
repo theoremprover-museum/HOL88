@@ -1,0 +1,3 @@
+\THEOREM SUM_2 REAL
+|- !f n. Sum(n,2)f = (f n) + (f(n num_add 1))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM FOLDL_APPEND list
+|- !f e l1 l2. FOLDL f e(APPEND l1 l2) = FOLDL f(FOLDL f e l1)l2
+\ENDTHEOREM

@@ -1,0 +1,3156 @@
+\chapter{General Functions}
+\DOC{\#}
+
+\TYPE {\small\verb%$# : (((* -> **) # (*** -> ****)) -> (* # ***) -> (** # ****))%}\egroup
+
+\SYNOPSIS
+Pointwise application of two functions to a pair:
+{\small\verb%(f # g) (x,y)%} = {\small\verb%(f x, g y)%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+B, C, Co, I, K, KI, o, oo, S, W.
+
+\ENDDOC
+\DOC{*}
+
+\TYPE {\small\verb%$* : (int # int) -> int%}\egroup
+
+\SYNOPSIS
+Performs multiplication on ML integers.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+
+\DOC{+}
+
+\TYPE {\small\verb%$+ : (int # int) -> int%}\egroup
+
+\SYNOPSIS
+Performs addition on ML integers.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+
+\DOC{-}
+
+\TYPE {\small\verb%$- : (int # int) -> int%}\egroup
+
+\SYNOPSIS
+Performs subtraction on ML integers.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+Unary {\small\verb%-%} exists as an internal parser object, but not as a function.  So,
+whilst typing in {\small\verb%-1;;%} will work, {\small\verb%-;;%} will return a parse error.
+
+\ENDDOC
+
+\DOC{\char'056}
+
+\TYPE {\small\verb%$. : (* # * list) -> * list%}\egroup
+
+\SYNOPSIS
+List construction (Lisp {\small\verb%cons%}): {\small\verb%x . [x1;....;xn]%} = {\small\verb%[x;x1;...;xn]%}.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+
+\DOC{/}
+
+\TYPE {\small\verb%$/ : (int # int) -> int%}\egroup
+
+\SYNOPSIS
+Performs division on ML integers.
+
+\FAILURE
+Fails on division by zero.
+
+\ENDDOC
+
+\DOC{\char'136}
+
+\TYPE {\small\verb%$^ : (string -> string -> string)%}\egroup
+
+\SYNOPSIS
+ML infix string concatenation operator.
+
+\DESCRIBE
+If {\small\verb%s1%} and {\small\verb%s2%} are strings, then {\small\verb%s1^s2%} gives a string which is their
+concatenation.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#`Hello `^`world`;;
+`Hello world` : string
+\end{verbatim}}
+\COMMENTS
+The ML role of the {\small\verb%^%} operator should not be confused with its use in
+quoted terms to introduce antiquotation (see DESCRIPTION for details).
+
+\SEEALSO
+concat, concatl.
+
+\ENDDOC
+
+\DOC{<}
+
+\TYPE {\small\verb%$< : (int # int) -> bool%}\egroup
+
+\SYNOPSIS
+Less-than operation on ML integers.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+
+\DOC{<<}
+
+\TYPE {\small\verb%$<< : (* # **) -> bool%}\egroup
+
+\SYNOPSIS
+Lexical comparaison of values.
+
+\DESCRIBE
+{\small\verb%$<<%} performs a fast ordering on values.  It is substitutive with
+respect to equality in ML (i.e. if {\small\verb%x << y%} and {\small\verb%x = x'%} and {\small\verb%y = y'%}
+then {\small\verb%x' << y'%}).
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+=.
+
+\ENDDOC
+
+\DOC{=}
+
+\TYPE {\small\verb%$= : (* # *) -> bool%}\egroup
+
+\SYNOPSIS
+ML equality.
+
+\DESCRIBE
+{\small\verb%$=%} works as expected on non-function types.  It may give unexpected
+results when applied to function types, and should be considered unreliable
+in those situations.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#1 = 2;;
+false : bool
+
+#1 = 1;;
+true : bool
+
+#let f x = x + 1 and g x = x + 2;;
+f = - : (int -> int)
+g = - : (int -> int)
+
+#let f' = f and h x = f x and h' x = x + 1;;
+f' = - : (int -> int)
+h = - : (int -> int)
+h' = - : (int -> int)
+
+#f=f;;
+true : bool
+
+#f = f';;
+true : bool
+
+#f = g;;
+false : bool
+
+#f =h;;
+false : bool
+
+#f=h';;
+false : bool
+
+#h = h';;
+false : bool
+\end{verbatim}}
+\ENDDOC
+
+\DOC{>}
+
+\TYPE {\small\verb%$> : (int # int) -> bool%}\egroup
+
+\SYNOPSIS
+Greater-than operation on ML integers.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+
+\DOC{\char'100}
+
+\TYPE {\small\verb%$@ : (* list # * list) -> * list%}\egroup
+
+\SYNOPSIS
+Concatenates two lists.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#[1;2;3] @ [4;5;6];;
+[1; 2; 3; 4; 5; 6] : int list
+\end{verbatim}}
+
+\SEEALSO
+append.
+
+\ENDDOC
+
+\DOC{append}
+
+\TYPE {\small\verb%append : * list -> * list -> * list%}\egroup
+
+\SYNOPSIS
+Concatenates two lists.
+
+\DESCRIBE
+{\small\verb%append [x1;...;xn] [y1;...;ym]%} returns {\small\verb%[x1;...;xn;y1;...;ym]%}.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+Performs the same operation as {\small\verb%$@%}.
+
+\ENDDOC
+\DOC{ascii}
+
+\TYPE {\small\verb%ascii : (int -> string)%}\egroup
+
+\SYNOPSIS
+Maps an integer to the corresponding ASCII character.
+
+\DESCRIBE
+When given an integer, {\small\verb%ascii%} returns a string consisting of
+the single character corresponding to that integer under the ASCII
+encoding.
+
+\FAILURE
+Fails unless the integer supplied is in the range {\small\verb%0 <= x < 128%}.
+
+\SEEALSO
+ascii_code, int_of_string, is_alphanum, is_letter, string_of_int.
+
+\ENDDOC
+\DOC{ascii\_code}
+
+\TYPE {\small\verb%ascii_code : (string -> int)%}\egroup
+
+\SYNOPSIS
+Converts character to corresponding ASCII numeric code.
+
+\DESCRIBE
+When given a string, {\small\verb%ascii_code%} returns the numeric encoding in the
+ASCII character set of the first character of that string.
+
+\FAILURE
+Fails if the string is empty ({\small\verb%``%}).
+
+\SEEALSO
+ascii, int_of_string, is_alphanum, is_letter, string_of_int.
+
+\ENDDOC
+\DOC{assert}
+
+\TYPE {\small\verb%assert : (* -> bool) -> * -> *%}\egroup
+
+\SYNOPSIS
+Checks that a value satisfies a predicate.
+
+\DESCRIBE
+{\small\verb%assert p x%} returns {\small\verb%x%} if the application {\small\verb%p x%} yields {\small\verb%true%}. Otherwise,
+{\small\verb%assert p x%} fails.
+
+\FAILURE
+{\small\verb%assert p x%} fails with the string {\small\verb%`fail`%} if the predicate {\small\verb%p%} yields
+{\small\verb%false%} when applied to the value {\small\verb%x%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#null [];;
+true : bool
+
+#assert null [];;
+[] : * list
+
+#null [1];;
+false : bool
+
+#assert null [1];;
+evaluation failed     fail
+\end{verbatim}}
+\SEEALSO
+can.
+
+\ENDDOC
+\DOC{assoc}
+
+\TYPE {\small\verb%assoc : * -> (* # **) list -> (* # **)%}\egroup
+
+\SYNOPSIS
+Searches a list of pairs for a pair whose first component equals a specified
+value.
+
+\DESCRIBE
+{\small\verb%assoc x [(x1,y1);...;(xn,yn)]%} returns the first {\small\verb%(xi,yi)%} in the list such
+that {\small\verb%xi%} equals {\small\verb%x%}.
+
+\FAILURE
+Fails if no matching pair is found. This will always be the case if the list
+is empty.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#assoc 2 [(1,4);(3,2);(2,5);(2,6)];;
+(2, 5) : (int # int)
+\end{verbatim}}
+
+\SEEALSO
+rev_assoc, find, mem, tryfind, exists, forall.
+
+\ENDDOC
+\DOC{associate\_restriction}
+
+\TYPE {\small\verb%associate_restriction : (string # string) -> void%}\egroup
+
+\SYNOPSIS
+Associates a restriction semantics with a binder.
+
+\DESCRIBE
+If {\small\verb%B%} is a binder and {\small\verb%RES_B%} a constant then
+{\par\samepage\setseps\small\begin{verbatim}
+   associate_restriction(`B`, `RES_B`)
+\end{verbatim}}
+will cause the parser and pretty-printer to support:
+{\par\samepage\setseps\small\begin{verbatim}
+               ---- parse ---->
+   Bv::P. B                       RES_B  P (\v. B)
+              <---- print ----
+\end{verbatim}}
+Anything can be written between the binder and {\small\verb%`::`%} that could be
+written between the binder and {\small\verb%`.`%} in the old notation. See the
+examples below.
+
+Associations between user defined binders and their restrictions are not 
+stored in the theory, so they have to be set up for each hol session 
+(e.g. with a {\small\verb%hol-init.ml%} file).
+
+The flag {\small\verb%`print_restrict`%} has default {\small\verb%true%}, but if set to {\small\verb%false%} will
+disable the pretty printing. This is useful for seeing what the
+semantics of particular restricted abstractions are.
+
+The following associations are predefined:
+{\par\samepage\setseps\small\begin{verbatim}
+   \v::P. B    <---->   RES_ABTRACT P (\v. B)
+   !v::P. B    <---->   RES_FORALL  P (\v. B)
+   ?v::P. B    <---->   RES_EXISTS  P (\v. B)
+   @v::P. B    <---->   RES_SELECT  P (\v. B)
+\end{verbatim}}
+Where the constants {\small\verb%RES_ABSTRACT%}, {\small\verb%RES_FORALL%}, {\small\verb%RES_EXISTS%} and 
+{\small\verb%RES_SELECT%} are defined in the theory {\small\verb%`bool`%} by:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- RES_ABSTRACT P B =  \x:*. (P x => B x | ARB:**)
+
+   |- RES_FORALL P B   =  !x:*. P x ==> B x
+
+   |- RES_EXISTS P B   =  ?x:*. P x /\ B x
+
+   |- RES_SELECT P B   =  @x:*. P x /\ B x
+\end{verbatim}}
+where {\small\verb%ARB%} is defined in the theory {\small\verb%`bool`%} by:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- ARB  =  @x:*. T
+\end{verbatim}}
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#new_binder_definition(`DURING`, "DURING(p:num#num->bool) = $!p");;
+|- !p. $DURING p = $! p
+
+#"DURING x::(m,n). p x";;
+no restriction constant associated with DURING
+skipping: x " ;; parse failed  
+
+#new_definition
+# (`RES_DURING`, "RES_DURING(m,n)p = !x. m<=x /\ x<=n ==> p x");;
+|- !m n p. RES_DURING(m,n)p = (!x. m <= x /\ x <= n ==> p x)
+
+#associate_restriction(`DURING`,`RES_DURING`);;
+() : void
+
+#"DURING x::(m,n). p x";;
+"DURING x :: (m,n). p x" : term
+
+#set_flag(`print_restrict`,false);;
+true : bool
+
+#"DURING x::(m,n). p x";;
+"RES_DURING(m,n)(\x. p x)" : term
+\end{verbatim}}
+\ENDDOC
+
+
+
+
+\DOC{B}
+
+\TYPE {\small\verb%B : ((* -> **) -> (*** -> *) -> *** -> **)%}\egroup
+
+\SYNOPSIS
+Curried function-composition combinator: {\small\verb%B f g x%} = {\small\verb%f (g x)%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, C, Co, I, K, KI, o, oo, S, W.
+
+\ENDDOC
+\DOC{basic\_rewrites}
+
+\TYPE{\small\verb% basic_rewrites: thm list%}\egroup
+
+\SYNOPSIS
+A list containing several built-in tautologies.
+
+\DESCRIBE
+The variable {\small\verb%basic_rewrites%} contains polymorphic tautologies which
+are often used for simplifying and solving a goal through rewriting.
+They include the clause for reflexivity:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !x. (x = x) = T;
+\end{verbatim}}
+\noindent as well as rules to reason about equality:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !t.
+      ((T = t) = t) /\ ((t = T) = t) /\ ((F = t) = ~t) /\ ((t = F) = ~t);
+\end{verbatim}}
+Negations are manipulated by the following clauses:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- (!t. ~~t = t) /\ (~T = F) /\ (~F = T);
+\end{verbatim}}
+The set of tautologies includes truth tables for conjunctions,
+disjunctions, and implications:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !t.
+       (T /\ t = t) /\
+       (t /\ T = t) /\
+       (F /\ t = F) /\
+       (t /\ F = F) /\
+       (t /\ t = t);
+   |- !t.
+       (T \/ t = T) /\
+       (t \/ T = T) /\
+       (F \/ t = t) /\
+       (t \/ F = t) /\
+       (t \/ t = t);
+   |- !t.
+       (T ==> t = t) /\
+       (t ==> T = T) /\
+       (F ==> t = T) /\
+       (t ==> t = T) /\
+       (t ==> F = ~t);
+\end{verbatim}}
+Simple rules for reasoning about conditionals are given by:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !t1 t2. ((T => t1 | t2) = t1) /\ ((F => t1 | t2) = t2);
+\end{verbatim}}
+Rewriting with the following tautologies allows simplification of
+universally and existentially quantified variables and abstractions:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !t. (!x. t) = t;
+   |- !t. (?x. t) = t;
+   |- !t1 t2. (\x. t1)t2 = t1;
+\end{verbatim}}
+The list {\small\verb%basic_rewrites%} also includes rules for reasoning about
+pairs in HOL:
+{\par\samepage\setseps\small\begin{verbatim}
+   |- !x. FST x,SND x = x;
+   |- !x y. FST(x,y) = x;
+   |- !x y. SND(x,y) = y]
+\end{verbatim}}
+
+\USES
+The {\small\verb%basic_rewrites%} are included in the set of equations used by some
+of the rewriting tools.
+
+\SEEALSO
+ABS_SIMP, AND_CLAUSES, COND_CLAUSES, EQ_CLAUSES, EXISTS_SIMP,
+FORALL_SIMP, FST, GEN_REWRITE_RULE, GEN_REWRITE_TAC, IMP_CLAUSES,
+NOT_CLAUSES, OR_CLAUSES, PAIR, REFL_CLAUSE, REWRITE_RULE, REWRITE_TAC,
+SND.
+
+\ENDDOC
+\DOC{butlast}
+
+\TYPE {\small\verb%butlast : * list -> * list%}\egroup
+
+\SYNOPSIS
+Computes the sub-list of a list consisting of all but the last element.
+
+\DESCRIBE
+{\small\verb%butlast [x1;...;xn]%} returns {\small\verb%[x1;...;x(n-1)]%}.
+
+\FAILURE
+Fails with {\small\verb%butlast%} if the list is empty.
+
+\SEEALSO
+last, hd, tl, el, null.
+
+\ENDDOC
+\DOC{C}
+
+\TYPE {\small\verb%C : ((* -> ** -> ***) -> ** -> * -> ***)%}\egroup
+
+\SYNOPSIS
+Permutator combinator: {\small\verb%C f x y%} = {\small\verb%f y x%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, Co, I, K, KI, o, oo, S, W.
+
+\ENDDOC
+\DOC{can}
+
+\TYPE {\small\verb%can : (* -> **) -> * -> bool%}\egroup
+
+\SYNOPSIS
+Tests for failure.
+
+\DESCRIBE
+{\small\verb%can f x%} evaluates to {\small\verb%true%} if the application of {\small\verb%f%} to {\small\verb%x%} succeeds.
+It evaluates to {\small\verb%false%} if the application fails.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#hd [];;
+evaluation failed     hd
+
+#can hd [];;
+false : bool
+\end{verbatim}}
+\SEEALSO
+assert.
+
+\ENDDOC
+\DOC{chop\_list}
+
+\TYPE {\small\verb%chop_list : int -> * list -> (* list # * list)%}\egroup
+
+\SYNOPSIS
+Chops a list into two parts at a specified point.
+
+\DESCRIBE
+{\small\verb%chop_list i [x1;...;xn]%} returns {\small\verb%([x1;...;xi],[x(i+1);...;xn])%}.
+
+\FAILURE
+Fails with {\small\verb%chop_list%} if {\small\verb%i%} is negative or greater than the length of the
+list.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#chop_list 3 [1;2;3;4;5];;
+([1; 2; 3], [4; 5]) : (int list # int list)
+\end{verbatim}}
+
+\SEEALSO
+partition.
+
+\ENDDOC
+\DOC{Co}
+
+\TYPE {\small\verb%$Co : (((* -> ** -> ***) # (**** -> *)) -> ** -> **** -> ***)%}\egroup
+
+\SYNOPSIS
+Permuted function-composition combinator: {\small\verb%(f Co g) x y%} = {\small\verb%f (g y) x%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, I, K, KI, o, oo, S, W.
+
+\ENDDOC
+\DOC{com}
+
+\TYPE {\small\verb%$com : (* list # ** list) -> (* # **) list%}\egroup
+
+\SYNOPSIS
+Converts a pair of lists into a list of pairs (infix version).
+
+\DESCRIBE
+{\small\verb%[x1;...;xn] com [y1;...;yn]%} returns {\small\verb%[(x1,y1);...;(xn,yn)]%}.
+
+\FAILURE
+Fails with {\small\verb%combine%} if the two lists are of different lengths.
+
+\COMMENTS
+Has the same functionality as {\small\verb%combine%}.
+Perhaps it should fail with the string {\small\verb%`com`%}?
+
+\SEEALSO
+combine, split.
+
+\ENDDOC
+\DOC{combine}
+
+\TYPE {\small\verb%combine : (* list # ** list) -> (* # **) list%}\egroup
+
+\SYNOPSIS
+Converts a pair of lists into a list of pairs.
+
+\DESCRIBE
+{\small\verb%combine ([x1;...;xn],[y1;...;yn])%} returns {\small\verb%[(x1,y1);...;(xn,yn)]%}.
+
+\FAILURE
+Fails with {\small\verb%combine%} if the two lists are of different lengths.
+
+\COMMENTS
+Has the same functionality as {\small\verb%com%}.
+
+\SEEALSO
+com, split.
+
+\ENDDOC
+\DOC{compiling}
+
+\TYPE {\small\verb%compiling : bool%}\egroup
+
+\SYNOPSIS
+Assignable variable: true when compiling, false when loading.
+
+\DESCRIBE 
+The identifier {\small\verb%compiling%} is an assignable ML variable of type {\small\verb%:bool%} which
+used to indicate whether the expressions currently being evaluated by ML are
+being compiled or loaded.  At the start of the evaluation of a call to
+{\small\verb%compile%} or its variants, the variable {\small\verb%compiling%} is set to {\small\verb%true%}; and at
+the start of the evaluation of a call to {\small\verb%load%} or its variants, {\small\verb%compiling%} is
+set to {\small\verb%false%}.  In both cases, the previous value of {\small\verb%compiling%} is restored
+at the end of evaluation.  The initial value of {\small\verb%compiling%} when HOL is run is
+{\small\verb%false%}.
+
+\FAILURE
+Evaluation of the variable {\small\verb%compiling%} never fails.
+
+\USES
+The main function of {\small\verb%compiling%} is to provide a mechanism by which expressions
+may be conditionally evaluated, depending on whether they are being compiled or
+not.  In particular, the main purpose of {\small\verb%compiling%} is to allow conditional
+loading of files in ML. For example, suppose that the line
+{\par\samepage\setseps\small\begin{verbatim}
+   if compiling then load(`foo`,false);;
+\end{verbatim}}
+\noindent appears at the start of an ML file {\small\verb%bar.ml%}.  Then whenever the file
+{\small\verb%bar.ml%} is compiled, the file {\small\verb%foo.ml%} will be loaded.  But whenever the file
+{\small\verb%bar.ml%} is merely loaded (whether in compiled form or not) the file {\small\verb%bar.ml%}
+will not be loaded.  
+
+\SEEALSO
+compiling_stack.
+
+\ENDDOC
+\DOC{compiling\_stack}
+
+\TYPE {\small\verb%compiling_stack : bool list%}\egroup
+
+\SYNOPSIS
+An assignable variable used internally by the system to keep track of the
+value of the assignable variable {\small\verb%compiling%}.
+
+\DESCRIBE 
+The identifier {\small\verb%compiling_stack%} is an assignable ML variable of type 
+{\small\verb%bool list%} which used internally by the system to keep track of the value of
+the assignable variable {\small\verb%compiling%} during nested calls to {\small\verb%compile%} and {\small\verb%load%}
+(and their variants).  The {\small\verb%compiling_stack%} is not intended for general use,
+and no value should be assigned by users to this variable.
+
+\FAILURE
+Evaluation of the variable {\small\verb%compiling_stack%} never fails.
+
+\SEEALSO
+compiling.
+
+\ENDDOC
+\DOC{concat}
+
+\TYPE {\small\verb%concat : string -> string -> string%}\egroup
+
+\SYNOPSIS
+Concatenate two ML strings.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#concat `1` ``;;
+`1` : string
+
+#concat `hello` `world`;;
+`helloworld` : string
+
+#concat `hello` (concat ` ` `world`);;
+`hello world` : string
+\end{verbatim}}
+
+\SEEALSO
+concatl, \char'136.
+
+\ENDDOC
+
+\DOC{concatl}
+
+\TYPE {\small\verb%concatl : string list -> string%}\egroup
+
+\SYNOPSIS
+Concatenate a list of ML strings.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#concatl [];;
+`` : string
+
+#concatl [`hello`;`world`];;
+`helloworld` : string
+
+#concatl [`hello`;` `;`world`];;
+`hello world` : string
+\end{verbatim}}
+
+\SEEALSO
+concat, \char'136.
+
+\ENDDOC
+
+\DOC{curry}
+
+\TYPE {\small\verb%curry : ((* # **) -> ***) -> * -> ** -> ***%}\egroup
+
+\SYNOPSIS
+Converts a function taking a pair as argument into a function taking the two
+components of the pair as two separate arguments.
+
+\DESCRIBE
+{\small\verb%curry f%} returns {\small\verb%\x y. f(x,y)%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+uncurry.
+
+\ENDDOC
+\DOC{distinct}
+
+\TYPE {\small\verb%distinct : * list -> bool%}\egroup
+
+\SYNOPSIS
+Checks whether the elements of a list are all distinct. Checks whether a list
+is a `set'.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+setify.
+
+\ENDDOC
+\DOC{dropout}
+
+\TYPE {\small\verb%dropout : void -> void%}\egroup
+
+\SYNOPSIS
+Move from top-level ML to top-level Lisp.
+
+\DESCRIBE
+Unlike {\small\verb%lsp%}, which breaks out of ML, and leaves one in a position to
+return to it by continuing lisp execution, {\small\verb%dropout%} returns the user to
+the Lisp top-level.  The function {\small\verb%(tml)%} must then be invoked to return to
+ML.  This is inherently dangerous (internal state may not be consistent),
+and should be avoided.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 1.12 (Sun3/Franz), built on Feb 23 1991
+
+#dropout();;
+
+[Return to top level]
+-> ^D
+EOF
+-> (tml)
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 1.12 (Sun3/Franz), built on Feb 23 1991
+
+##
+\end{verbatim}}
+
+\COMMENTS
+Behaviour of {\small\verb%dropout%} is unpredictable in Common Lisp, but performs as
+advertised in plain Franz Lisp.  {\small\verb%dropout%} is not meant for general use,
+and should be treated with great care.  If one is not wary, it is 
+entirely possible to corrupt HOL by using it.
+
+\SEEALSO
+lisp, lsp.
+
+\ENDDOC
+
+\DOC{el}
+
+\TYPE {\small\verb%el : int -> * list -> *%}\egroup
+
+\SYNOPSIS
+Extracts a specified element from a list.
+
+\DESCRIBE
+{\small\verb%el i [x1;...;xn]%} returns {\small\verb%xi%}.
+
+\FAILURE
+Fails with {\small\verb%el%} if the integer argument is less than 1 or greater than the
+length of the list.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#el 3 [1;2;7;1];;
+7 : int
+\end{verbatim}}
+
+\SEEALSO
+hd, tl.
+
+\ENDDOC
+\DOC{end\_itlist}
+
+\TYPE {\small\verb%end_itlist : (* -> * -> *) -> * list -> *%}\egroup
+
+\SYNOPSIS
+List iteration function. Applies a binary function between adjacent elements
+of a list.
+
+\DESCRIBE
+{\small\verb%end_itlist f [x1;...;xn]%} returns {\small\verb%f x1 ( ... (f x(n-1) xn)...)%}.
+Returns {\small\verb%x%} for a one-element list {\small\verb%[x]%}.
+
+\FAILURE
+Fails with {\small\verb%end_itlist%} if list is empty.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#end_itlist (\x y. x + y) [1;2;3;4];;
+10 : int
+\end{verbatim}}
+
+\SEEALSO
+itlist, rev_itlist.
+
+\ENDDOC
+\DOC{exists}
+
+\TYPE {\small\verb%exists : (* -> bool) -> * list -> bool%}\egroup
+
+\SYNOPSIS
+Tests a list to see if it has at least one element satisfying a predicate.
+
+\DESCRIBE
+{\small\verb%exists p l%} applies {\small\verb%p%} to the elements of {\small\verb%l%} in order until one is found
+which satisfies {\small\verb%p%}, or until the list is exhausted, returning {\small\verb%true%} or
+{\small\verb%false%} accordingly.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+forall, find, tryfind, mem, assoc, rev_assoc.
+
+\ENDDOC
+\DOC{explode}
+
+\TYPE {\small\verb%explode : string -> string list%}\egroup
+
+\SYNOPSIS
+Converts a string into a list of single-character strings.
+
+\DESCRIBE
+{\small\verb%explode s%} returns the list of single-character strings that make up {\small\verb%s%}, in
+the order in which they appear in {\small\verb%s%}. If {\small\verb%s%} is the empty string, then an
+empty list is returned.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#explode `example`;;
+[`e`; `x`; `a`; `m`; `p`; `l`; `e`] : string list
+\end{verbatim}}
+\SEEALSO
+implode, concat, concatl.
+
+\ENDDOC
+\DOC{filter}
+
+\TYPE {\small\verb%filter : (* -> bool) -> * list -> * list%}\egroup
+
+\SYNOPSIS
+Filters a list to the sublist of elements satisfying a predicate.
+
+\DESCRIBE
+{\small\verb%filter p l%} applies {\small\verb%p%} to every element of {\small\verb%l%}, returning a list of those
+that satisfy {\small\verb%p%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+mapfilter, partition, remove.
+
+\ENDDOC
+\DOC{find}
+
+\TYPE {\small\verb%find : (* -> bool) -> * list -> *%}\egroup
+
+\SYNOPSIS
+Returns the first element of a list which satisfies a predicate.
+
+\DESCRIBE
+{\small\verb%find p [x1;...;xn]%} returns the first {\small\verb%xi%} in the list such that {\small\verb%(p xi)%}
+equals {\small\verb%true%}.
+
+\FAILURE
+Fails with {\small\verb%find%} if no element satisfies the predicate. This will always be
+the case if the list is empty.
+
+\SEEALSO
+tryfind, mem, exists, forall, assoc, rev_assoc.
+
+\ENDDOC
+\DOC{flat}
+
+\TYPE {\small\verb%flat : * list list -> * list%}\egroup
+
+\SYNOPSIS
+Flattens a list of lists into one long list.
+
+\DESCRIBE
+{\small\verb%flat [l1;...;ln]%} returns {\small\verb%(l1 @ ... @ ln)%} where each li is a list and {\small\verb%@%}
+is list concatenation.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#flat [[1;2];[3;4;5];[6]];;
+[1; 2; 3; 4; 5; 6] : int list
+\end{verbatim}}
+
+\ENDDOC
+\DOC{forall}
+
+\TYPE {\small\verb%forall : (* -> bool) -> * list -> bool%}\egroup
+
+\SYNOPSIS
+Tests a list to see if all its elements satisfy a predicate.
+
+\DESCRIBE
+{\small\verb%forall p [x1;...;xn]%} returns {\small\verb%true%} if {\small\verb%(p xi)%} is true for all {\small\verb%xi%} in the
+list. Otherwise it returns {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+exists, find, tryfind, mem, assoc, rev_assoc.
+
+\ENDDOC
+\DOC{fst}
+
+\TYPE {\small\verb%fst : (* # **) -> *%}\egroup
+
+\SYNOPSIS
+Extracts the first component of a pair.
+
+\DESCRIBE
+{\small\verb%fst (x,y)%} returns {\small\verb%x%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+snd, pair.
+
+\ENDDOC
+\DOC{funpow}
+
+\TYPE {\small\verb%funpow : int -> (* -> *) -> * -> *%}\egroup
+
+\SYNOPSIS
+Iterates a function a fixed number of times.
+
+\DESCRIBE
+{\small\verb%funpow n f x%} applies {\small\verb%f%} to {\small\verb%x%}, {\small\verb%n%} times. So the result is
+{\small\verb%f (f ... (f x)...)%} where the number of {\small\verb%f%}'s is {\small\verb%n%}.
+{\small\verb%funpow 0 f x%} returns {\small\verb%x%}. If {\small\verb%n%} is negative, {\small\verb%funpow n f x%} will either
+fail or loop indefinitely, depending on the values of {\small\verb%f%} and {\small\verb%x%}.
+
+\FAILURE
+{\small\verb%funpow n f x%} fails if any of the {\small\verb%n%} applications of f fail.
+
+\EXAMPLE
+Apply {\small\verb%tl%} three times to a list:
+{\par\samepage\setseps\small\begin{verbatim}
+   #funpow 3 tl [1;2;3;4;5];;
+   [4; 5] : int list
+\end{verbatim}}
+\noindent Apply {\small\verb%tl%} zero times:
+{\par\samepage\setseps\small\begin{verbatim}
+   #funpow 0 tl [1;2;3;4;5];;
+   [1; 2; 3; 4; 5] : int list
+\end{verbatim}}
+\noindent Apply {\small\verb%tl%} six times to a list of only five elements:
+{\par\samepage\setseps\small\begin{verbatim}
+   #funpow 6 tl [1;2;3;4;5];;
+   evaluation failed     tl
+\end{verbatim}}
+\noindent Next, an application of {\small\verb%funpow%} in which the integer argument is negative.
+Since the function cannot be applied to the argument an arbitrary number of
+times, the application of {\small\verb%funpow%} fails.
+{\par\samepage\setseps\small\begin{verbatim}
+   #funpow (-1) tl [1;2;3;4;5];;
+   evaluation failed     tl
+\end{verbatim}}
+\noindent An example that causes indefinite looping:
+{\par\samepage\setseps\small\begin{verbatim}
+   #funpow (-1) I [1;2;3;4;5];;
+\end{verbatim}}
+\ENDDOC
+\DOC{getenv}
+
+\TYPE {\small\verb%getenv : string -> string%}\egroup
+
+\SYNOPSIS
+Returns the value of a Unix environment varaible
+
+\DESCRIBE
+{\small\verb%getenv x%} returns the value of {\small\verb%x%} from the underlying shell.
+
+\FAILURE
+If in a Unix environment, fails with {\small\verb%getenv%} if the variable is undefined, 
+or has an empty value.  Fails by default if not using Unix.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#getenv `SHELL`;;
+`/bin/csh` : string
+\end{verbatim}}
+
+\ENDDOC
+\DOC{hd}
+
+\TYPE {\small\verb%hd : * list -> *%}\egroup
+
+\SYNOPSIS
+Computes the first element (the head) of a list.
+
+\DESCRIBE
+{\small\verb%hd [x1;...;xn]%} returns {\small\verb%x1%}.
+
+\FAILURE
+Fails with {\small\verb%hd%} if the list is empty.
+
+\SEEALSO
+tl, el, null.
+
+\ENDDOC
+\DOC{help}
+
+\TYPE {\small\verb%help : string -> void%}\egroup
+
+\SYNOPSIS
+Display help on a given identifier in the system.
+
+\DESCRIBE
+{\small\verb%help%} will attempt to display the help file associated with a particular
+identifier in the system.  The identifier is provided as an ML string, and
+the file should be located somewhere on the help search path.
+
+\FAILURE
+Fails if no information can be found on the identifier in question.
+
+\SEEALSO
+help_search_path, set_help_search_path.
+
+\ENDDOC
+
+\DOC{help\_search\_path}
+
+\TYPE {\small\verb%help_search_path : (void -> string list)%}\egroup
+
+\SYNOPSIS
+Returns the internal search path use by HOL to find online help files.
+
+\DESCRIBE 
+Evaluating {\small\verb%help_search_path()%} returns a list of strings representing the
+pathnames of the directories that are searched when the {\small\verb%help%} function
+searches for online help files. Although the help search path can be set to an
+arbitrary list of strings, each string is normally expected to be either empty
+({\small\verb%``%}) or a pathname with `{\small\verb%/%}' as its final character.  When the {\small\verb%help%}
+function looks for an online help file, the directories in the help search path
+are searched in the order in which they occur in the list returned by
+{\small\verb%help_search_path%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+install, search_path, set_help_search_path, set_search_path.
+
+\ENDDOC
+\DOC{I}
+
+\TYPE {\small\verb%I : (* -> *)%}\egroup
+
+\SYNOPSIS
+Identity function: {\small\verb%I x%} = {\small\verb%x%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, K, KI, o, oo, S, W.
+
+\ENDDOC
+\DOC{implode}
+
+\TYPE {\small\verb%implode : string list -> string%}\egroup
+
+\SYNOPSIS
+Converts a list of single-character strings into one string.
+
+\DESCRIBE
+{\small\verb%implode [s1;...;sn]%} returns the string formed by concatenating the
+single-character strings {\small\verb%s1%} through {\small\verb%sn%}. If {\small\verb%n%} is zero (the list is empty),
+then the empty string is returned.
+
+\FAILURE
+Fails if any of the strings in the argument list are null or longer than one
+character.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#implode [`e`;`x`;`a`;`m`;`p`;`l`;`e`];;
+`example` : string
+
+#implode [`ex`;`a`;`mpl`;``;`e`];;
+evaluation failed     implode
+\end{verbatim}}
+\SEEALSO
+explode, concat, concatl.
+
+\ENDDOC
+\DOC{install}
+
+\TYPE {\small\verb%install : (string -> void)%}\egroup
+
+\SYNOPSIS
+Inform HOL of the absolute pathname to the hol distribution directory.
+
+\DESCRIBE
+{\small\verb%install%} reconfigures a running HOL system to a new root directory.  The
+string argument to {\small\verb%install%} should be the absolute path name to the
+directory in which the HOL system is located. Executing 
+{\par\samepage\setseps\small\begin{verbatim}
+   install `/dir1/dir2/dir3/.../hol`;;
+\end{verbatim}}
+\noindent sets the internal HOL search path to:
+{\par\samepage\setseps\small\begin{verbatim}
+   [``; `~/`; `/dir1/dir2/dir3/.../hol/theories/`]
+\end{verbatim}}
+\noindent and sets up the internal search path used by HOL to find the standard
+online help files and the internal pathname used by HOL to find libraries.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+help_search_path, library_pathname, search_path, set_help_search_path,
+set_search_path.
+
+\ENDDOC
+\DOC{intersect}
+
+\TYPE {\small\verb%intersect : * list -> * list -> * list%}\egroup
+
+\SYNOPSIS
+Computes the intersection of two `sets'.
+
+\DESCRIBE
+{\small\verb%intersect l1 l2%} returns a list consisting of those elements of {\small\verb%l1%} that
+also appear in {\small\verb%l2%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#intersect [1;2;3] [3;5;4;1];;
+[1; 3] : int list
+
+#intersect [1;2;4;1] [1;2;3;2];;
+[1; 2; 1] : int list
+\end{verbatim}}
+
+\SEEALSO
+setify, set_equal, union, subtract.
+
+\ENDDOC
+\DOC{int\_of\_string}
+
+\TYPE {\small\verb%int_of_string : (string -> int)%}\egroup
+
+\SYNOPSIS
+Maps a string of numbers to the corresponding integer.
+
+\DESCRIBE
+Given a string representing an integer in standard decimal notation,
+possibly including a leading plus sign or minus sign and/or leading zeros,
+{\small\verb%int_of_string%} returns the corresponding integer constant.
+
+\FAILURE
+Fails unless the string is a valid decimal representation as specified
+above.
+
+\SEEALSO
+ascii, ascii_code, string_of_int.
+
+\ENDDOC
+\DOC{is\_alphanum}
+
+\TYPE {\small\verb%is_alphanum : (string -> bool)%}\egroup
+
+\SYNOPSIS
+Tests whether a character is alphanumeric.
+
+\DESCRIBE
+When given a string, which should be of length 1, {\small\verb%is_alphanum%} returns
+{\small\verb%true%} iff the character is alphanumeric. By default this means that it
+is an upper or lower case letter, a digit, a prime ({\small\verb%'%}) or an
+underscore ({\small\verb%_%}). However the definition can be changed using the function
+{\small\verb%new_alphanum%}.
+
+\FAILURE
+Fails if the string has length greater than 1. Returns {\small\verb%false%} for the
+null string ({\small\verb%``%}).
+
+\SEEALSO
+ascii, ascii_code, is_letter, new_alphanum, new_letter.
+
+\ENDDOC
+\DOC{is\_letter}
+
+\TYPE {\small\verb%is_letter : (string -> bool)%}\egroup
+
+\SYNOPSIS
+Tests whether a character is a letter.
+
+\DESCRIBE
+When given a string, which should be of length 1, {\small\verb%is_letter%} returns
+{\small\verb%true%} iff the character is a letter. By default this means what one
+would expect, namely one of {\small\verb%a..z A..Z%}. However the scope of the
+definition can be increased using {\small\verb%new_letter%}.
+
+\FAILURE
+Fails if the string has length greater than 1. Returns {\small\verb%false%} for the
+null string ({\small\verb%``%}).
+
+\SEEALSO
+ascii, ascii_code, is_alphanum, new_alphanum, new_letter.
+
+\ENDDOC
+\DOC{is\_ml\_curried\_infix}
+
+\TYPE {\small\verb%is_ml_curried_infix : string -> bool%}\egroup
+
+\SYNOPSIS
+Tests whether a string is the name of a user-defined curried ML infix.
+
+\DESCRIBE
+{\small\verb%is_ml_curried_infix `string`%} returns {\small\verb%true%} if {\small\verb%string%} is the name of a
+user-defined curried ML infix, and {\small\verb%false%} otherwise.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_ml_paired_infix, is_ml_infix, ml_curried_infix.
+
+\ENDDOC
+\DOC{is\_ml\_infix}
+
+\TYPE {\small\verb%is_ml_infix : string -> bool%}\egroup
+
+\SYNOPSIS
+Tests whether a string is the name of an ML infix.
+
+\DESCRIBE
+{\small\verb%is_ml_infix `string`%} returns {\small\verb%true%} if {\small\verb%string%} is the name of a built-in
+or user-defined ML infix, and {\small\verb%false%} otherwise.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_ml_paired_infix, is_ml_curried_infix, ml_paired_infix, ml_curried_infix.
+
+\ENDDOC
+\DOC{is\_ml\_paired\_infix}
+
+\TYPE {\small\verb%is_ml_paired_infix : string -> bool%}\egroup
+
+\SYNOPSIS
+Tests whether a string is the name of a user-defined paired ML infix.
+
+\DESCRIBE
+{\small\verb%is_ml_paired_infix `string`%} returns {\small\verb%true%} if {\small\verb%string%} is the name of a
+user-defined paired ML infix, and {\small\verb%false%} otherwise.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+is_ml_curried_infix, is_ml_infix, ml_paired_infix.
+
+\ENDDOC
+\DOC{itlist}
+
+\TYPE {\small\verb%itlist : (* -> ** -> **) -> * list -> ** -> **%}\egroup
+
+\SYNOPSIS
+List iteration function. Applies a binary function between adjacent elements
+of a list.
+
+\DESCRIBE
+{\small\verb%itlist f [x1;...;xn] y%} returns
+{\par\samepage\setseps\small\begin{verbatim}
+   f x1 (f x2 ... (f xn y)...)
+\end{verbatim}}
+\noindent It returns {\small\verb%y%} if list is empty.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#itlist (\x y. x + y) [1;2;3;4] 0;;
+10 : int
+\end{verbatim}}
+
+\SEEALSO
+rev_itlist, end_itlist.
+
+\ENDDOC
+\DOC{itlist2}
+
+\TYPE {\small\verb%itlist2 : ((* # **) -> *** -> ***) -> (* list # ** list) -> *** -> ***%}\egroup
+
+\SYNOPSIS
+List iteration function for a pair of lists.
+
+\DESCRIBE
+{\small\verb%itlist2 f ([x1;...;xn],[y1;...;yn]) z%} returns
+{\par\samepage\setseps\small\begin{verbatim}
+   f (x1,y1) (f (x2,y2) ... (f (xn,yn) z)...)
+\end{verbatim}}
+\noindent It returns {\small\verb%z%} if both lists are empty.
+
+\FAILURE
+Fails with {\small\verb%itlist2%} if the two lists are of different lengths.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#itlist2 (\(x,y) z. (x * y) + z) ([1;2],[3;4]) 0;;
+11 : int
+\end{verbatim}}
+
+\SEEALSO
+itlist, rev_itlist, end_itlist, uncurry.
+
+\ENDDOC
+\DOC{K}
+
+\TYPE {\small\verb%K : (* -> ** -> *)%}\egroup
+
+\SYNOPSIS
+Combinator for forming constant functions: {\small\verb%(K x) y%} = {\small\verb%x%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, I, KI, o, oo, S, W.
+
+\ENDDOC
+\DOC{KI}
+
+\TYPE {\small\verb%KI : (* -> ** -> **)%}\egroup
+
+\SYNOPSIS
+Combinator dual to {\small\verb%K%}. Maps a value to the identity function:
+{\small\verb%(KI x) y%} = {\small\verb%y%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, I, K, o, oo, S, W.
+
+\ENDDOC
+\DOC{last}
+
+\TYPE {\small\verb%last : * list -> *%}\egroup
+
+\SYNOPSIS
+Computes the last element of a list.
+
+\DESCRIBE
+{\small\verb%last [x1;...;xn]%} returns {\small\verb%xn%}.
+
+\FAILURE
+Fails with {\small\verb%last%} if the list is empty.
+
+\SEEALSO
+butlast, hd, tl, el, null.
+
+\ENDDOC
+\DOC{length}
+
+\TYPE {\small\verb%length : (* list -> int)%}\egroup
+
+\SYNOPSIS
+Computes the length of a list: {\small\verb%length [x1;...;xn]%} returns {\small\verb%n%}.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+\DOC{libraries}
+
+\TYPE {\small\verb%libraries : (void -> string list)%}\egroup
+
+\SYNOPSIS
+Evaluating {\small\verb%libraries()%} returns a list of the libraries that have been 
+sucessfully loaded during the current session.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+library_pathname, load_library.
+
+\ENDDOC
+\DOC{library\_pathname}
+
+\TYPE {\small\verb%library_pathname : (void -> string)%}\egroup
+
+\SYNOPSIS
+Returns the absolute pathname to the HOL library directory.
+
+\DESCRIBE 
+Evaluating {\small\verb%library_pathname()%} returns a string giving the absolute pathname
+to the HOL system library.
+
+\FAILURE
+Never fails.
+
+\USES
+The main purpose of the function {\small\verb%library_pathname%} is to allow library
+load-files to update the internal HOL search paths in a site-independent way.
+A very typical application is illustrated by the following code from the
+built-in {\small\verb%string%} library:
+{\par\samepage\setseps\small\begin{verbatim}
+   let path = library_pathname() ^ `/string/` in
+       set_search_path (union (search_path()) [path]);;
+\end{verbatim}}
+\noindent This adds the pathname to the {\small\verb%string%} library to the internal HOL
+search path.
+
+\SEEALSO
+help_search_path, search_path, set_help_search_path, set_search_path.
+
+\ENDDOC
+\DOC{lisp}
+
+\TYPE {\small\verb%lisp : string -> void%}\egroup
+
+\SYNOPSIS
+Execute a lisp command from ML.
+
+\DESCRIBE
+{\small\verb%lisp%} executes a lisp s-expression (written as an ML string).  Returned
+values do not appear on the standard output, unless they are explicitly
+printed.
+
+\FAILURE
+Fails if the s-expression is improperly constructed or fails when
+evaluated by lisp.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#lisp `(princ "hello")`;;
+hello() : void
+
+#lisp `(cons 'a 'b)`;;
+() : void
+
+#lisp `(princ (cons 'a 'b))`;;
+(A . B)() : void
+
+#lisp `(car 'a)`;;
+Error: Attempt to take the car of A which is not a cons.
+evaluation failed     lisp -- NIL
+
+#lisp `(princ "hello"`;;
+Error: eof encountered on input stream #<string input stream  @ #x869fe6>
+evaluation failed     lisp -- NIL
+\end{verbatim}}
+
+\COMMENTS
+{\small\verb%lisp%} is not meant for general use, and should be treated with great
+care.  If one is not wary, it is entirely possible to corrupt HOL by
+using it.
+
+\SEEALSO
+dropout, lsp.
+
+\ENDDOC
+
+\DOC{lisp\_dir\_pathname}
+
+\TYPE {\small\verb%lisp_dir_pathname : string%}\egroup
+
+\SYNOPSIS
+Absolute pathname to the HOL lisp sources.
+
+\DESCRIBE 
+For implementation reasons, the ML variable {\small\verb%lisp_dir_pathname%} is bound when
+the system if built to a string giving the absolute pathname of the directory
+containing the HOL lisp sources.  This value is not for general use.
+
+\FAILURE
+Evaluating {\small\verb%lisp_dir_pathname%} never fails.
+
+\SEEALSO
+ml_dir_pathname.
+
+\ENDDOC
+\DOC{list\_of\_binders}
+
+\TYPE {\small\verb%list_of_binders : term list%}\egroup
+
+\SYNOPSIS
+List of binders in the current theory.
+
+\DESCRIBE 
+For implementation reasons, a list containing the binders in the current theory
+is maintained in the assignable ML variable {\small\verb%list_of_binders%}.  This variable
+is not for general use, and users should never make assignments to it.
+
+\FAILURE
+Evaluating the assignable variable {\small\verb%list_of_binders%} never fails.
+
+\ENDDOC
+\DOC{loadf}
+
+\TYPE {\small\verb%loadf : (string -> void)%}\egroup
+
+\SYNOPSIS 
+{\small\verb%loadf%} loads an ML file with the verbose flag set to {\small\verb%false%}.
+
+\DESCRIBE 
+The function {\small\verb%loadf%} takes a string indicating the ML file name as
+argument and loads it in the same manner as {\small\verb%load%}, except that the
+verbose flag is always set to false.
+
+\FAILURE
+{\small\verb%loadf%} will fail if the file named by the argument does not exist in
+the search path. It will fail in the same manner if the file is not a
+valid  ML file. Failure in the ML file will terminate loading.
+
+\EXAMPLE 
+If we have a ML file called foo.ml which contains the line
+{\par\samepage\setseps\small\begin{verbatim}
+   let x=2+2;;
+\end{verbatim}}
+\noindent this can be loaded as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   #loadf `foo.ml`;;
+\end{verbatim}}
+\noindent and the system would respond with:
+{\par\samepage\setseps\small\begin{verbatim}
+   .() : void
+\end{verbatim}}
+
+\USES
+Essentially an abbreviation for {\small\verb%load%}.
+
+\SEEALSO
+load, loadf.
+
+\ENDDOC
+\DOC{loadt}
+
+\TYPE {\small\verb%loadt : (string -> void)%}\egroup
+
+\SYNOPSIS 
+{\small\verb%loadt%} loads an ML file with the verbose flag set to {\small\verb%true%}.
+
+\DESCRIBE 
+The function {\small\verb%loadt%} takes a string indicating the ML file name as
+argument and loads it in the same manner as {\small\verb%load%}, except that the
+verbose flag is always set to {\small\verb%true%}.
+
+\FAILURE
+{\small\verb%loadt%} will fail if the file named by the argument does not exist in
+the search path. It will fail in the same manner if the file is not a
+valid ML file. Failure in the ML file will also terminate loading.
+
+\EXAMPLE 
+If we have an ML file called foo.ml which contains the line
+{\par\samepage\setseps\small\begin{verbatim}
+   let x=2+2;;
+\end{verbatim}}
+\noindent this can be loaded as follows:
+{\par\samepage\setseps\small\begin{verbatim}
+   #loadt `foo.ml`;;
+\end{verbatim}}
+\noindent and the system would respond with:
+{\par\samepage\setseps\small\begin{verbatim}
+   x = 4 : int
+
+   File foo.ml loaded
+   () : void
+\end{verbatim}}
+
+\USES
+Essentially an abbreviation for {\small\verb%load%}.
+
+\SEEALSO
+load, loadf.
+
+\ENDDOC
+\DOC{lsp}
+
+\TYPE {\small\verb%lsp : void -> void%}\egroup
+
+\SYNOPSIS
+Break out of top-level ML to Lisp.
+
+\DESCRIBE
+{\small\verb%lsp%} breaks out of top-level ML to Lisp in such a fashion that one finds
+oneself in the particular Lisp's break-level debugger.  ML execution may
+be continued safely by issuing the appropriate continuation command to
+the Lisp in question.  In Franz, this is a {\small\verb%Control-D%}, in Allegro CL it
+is {\small\verb%:continue%}, in Lucid CL it is {\small\verb%(q)%}, and in AKCL it is {\small\verb%:r%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#lsp();;
+
+Break nil
+<1>: ^D
+[Return to top level]
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 1.12 (Sun3/Franz), built on Feb 23 1991
+
+#
+\end{verbatim}}
+
+\COMMENTS
+{\small\verb%lsp%} is not meant for general use, and should be treated with great
+care.  If one is not wary, it is entirely possible to corrupt HOL by
+using it.
+
+\SEEALSO
+dropout, lisp.
+
+\ENDDOC
+
+\DOC{map}
+
+\TYPE {\small\verb%map : (* -> **) -> * list -> ** list%}\egroup
+
+\SYNOPSIS
+Applies a function to every element of a list.
+
+\DESCRIBE
+{\small\verb%map f [x1;...;xn]%} returns {\small\verb%[(f x1);...;(f xn)]%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#map (\x. x * 2) [];;
+[] : int list
+
+#map (\x. x * 2) [1;2;3];;
+[2; 4; 6] : int list
+\end{verbatim}}
+
+\ENDDOC
+\DOC{map2}
+
+\TYPE {\small\verb%map2 : ((* # **) -> ***) -> (* list # ** list) -> *** list%}\egroup
+
+\SYNOPSIS
+Maps a binary function over two lists to create one new list.
+
+\DESCRIBE
+{\small\verb%map2 f ([x1;...;xn],[y1;...;yn])%} returns {\small\verb%[f(x1,y1);...;f(xn,yn)]%}.
+
+\FAILURE
+Fails with {\small\verb%map2%} if the two lists are of different lengths.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#map2 $+ ([1;2;3],[3;2;1]);;
+[4; 4; 4] : int list
+\end{verbatim}}
+
+\SEEALSO
+map, uncurry.
+
+\ENDDOC
+\DOC{mapfilter}
+
+\TYPE {\small\verb%mapfilter : (* -> **) -> * list -> ** list%}\egroup
+
+\SYNOPSIS
+Applies a function to every element of a list, returning a list of results
+for those elements for which application succeeds.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#mapfilter hd [[1;2;3];[4;5];[];[6;7;8];[]];;
+[1; 4; 6] : int list
+\end{verbatim}}
+
+\SEEALSO
+filter, map.
+
+\ENDDOC
+\DOC{max\_print\_depth}
+
+\TYPE {\small\verb%max_print_depth : (int -> int)%}\egroup
+
+\SYNOPSIS 
+Sets depth of block nesting.
+
+\DESCRIBE 
+The function {\small\verb%max_print_depth%} is used to define the maximum depth of
+nesting that the pretty printer will allow. If the number of blocks
+is greater than the the value set by {\small\verb%max_print_depth%} then
+the blocks are truncated and this is indicated by the holophrast {\small\verb%&%}.
+The function always returns the previous maximum depth setting.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+\noindent If the maximum depth setting is the default (500) and we want to
+change this to 20 the command will be:
+{\par\samepage\setseps\small\begin{verbatim}
+   #max_print_depth 20;;
+\end{verbatim}}
+\noindent The system will then return the following:
+{\par\samepage\setseps\small\begin{verbatim}
+   500 : int
+\end{verbatim}}
+
+\SEEALSO
+print_begin, print_ibegin, print_end, set_margin, print_break
+
+\ENDDOC
+\DOC{mem}
+
+\TYPE {\small\verb%mem : * -> * list -> bool%}\egroup
+
+\SYNOPSIS
+Tests a list for containment of a specified value.
+
+\DESCRIBE
+{\small\verb%mem x [x1;...;xn]%} returns {\small\verb%true%} if some {\small\verb%xi%} in the list is equal to {\small\verb%x%}.
+Otherwise it returns {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+find, tryfind, exists, forall, assoc, rev_assoc.
+
+\ENDDOC
+\DOC{message}
+
+\TYPE {\small\verb%message : string -> void%}\egroup
+
+\SYNOPSIS
+Prints a message to the terminal.
+
+\DESCRIBE
+{\small\verb%message s%} returns {\small\verb%():void%} with the side-effect of printing the string {\small\verb%s%}
+to the terminal followed by a carriage return. String quotes are not printed
+around the string. The text is queued until the pretty-printer decides where
+line breaks are needed, or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#message `This is an example`;;
+This is an example
+() : void
+\end{verbatim}}
+\SEEALSO
+print_string, print_tok, print_begin, print_end, print_newline.
+
+\ENDDOC
+\DOC{ml\_curried\_infix}
+
+\TYPE {\small\verb%ml_curried_infix : string -> void%}\egroup
+
+\SYNOPSIS
+Declares an ML identifier to have infix status (for curried functions).
+
+\DESCRIBE
+{\small\verb%ml_curried_infix `string`%} declares to the ML parser that {\small\verb%string%} has infix
+status. The identifier {\small\verb%string%} should be bound to a curried function.
+
+\FAILURE
+Only ordinary identifiers and certain single character, non-digit, non-layout
+strings can be used as infixes. An attempt to infix other strings may fail,
+or it may succeed but have unpredictable effects on the parser.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#ml_curried_infix `plus`;;
+() : void
+
+#let x plus y = x + y;;
+plus = - : (int -> int -> int)
+
+#1 plus 2;;
+3 : int
+\end{verbatim}}
+\SEEALSO
+ml_paired_infix, is_ml_curried_infix, is_ml_paired_infix, is_ml_infix.
+
+\ENDDOC
+\DOC{ml\_dir\_pathname}
+
+\TYPE {\small\verb%ml_dir_pathname : string%}\egroup
+
+\SYNOPSIS
+Absolute pathname to the HOL ML sources.
+
+\DESCRIBE 
+For implementation reasons, the ML variable {\small\verb%ml_dir_pathname%} is bound when
+the system if built to a string giving the absolute pathname of the directory
+containing the HOL ML sources.  This value is not for general use.
+
+\FAILURE
+Evaluating {\small\verb%ml_dir_pathname%} never fails.
+
+\SEEALSO
+lisp_dir_pathname.
+
+\ENDDOC
+\DOC{ml\_paired\_infix}
+
+\TYPE {\small\verb%ml_paired_infix : string -> void%}\egroup
+
+\SYNOPSIS
+Declares an ML identifier to have infix status
+(for functions that take a pair as argument).
+
+\DESCRIBE
+{\small\verb%ml_paired_infix `string`%} declares to the ML parser that {\small\verb%string%} has infix
+status. {\small\verb%string%} should be bound to a function that takes a pair as its
+argument.
+
+\FAILURE
+Only ordinary identifiers and certain single character, non-digit, non-layout
+strings can be used as infixes. An attempt to infix other strings may fail,
+or it may succeed but have unpredictable effects on the parser.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#ml_paired_infix `plus`;;
+() : void
+
+#let x plus y = x + y;;
+plus = - : ((int # int) -> int)
+
+#1 plus 2;;
+3 : int
+\end{verbatim}}
+\SEEALSO
+ml_curried_infix, is_ml_paired_infix, is_ml_curried_infix, is_ml_infix.
+
+\ENDDOC
+\DOC{new\_syntax\_block}
+
+\TYPE {\small\verb%new_syntax_block : string # string # string -> void%}\egroup
+
+\SYNOPSIS
+Declares a new syntax block.
+
+
+\DESCRIBE
+A syntax block starts with keyword and ends with a terminator and is
+associated with a function of strings. When such a block is
+encountered in the input stream, all the characters between the start
+keyword and the terminator are made into a string to which the
+associated function is applied.
+
+The ML function {\small\verb%new_syntax_block%} declares a new syntax block. The
+first argument is the start keyword of the block, the second argument
+is the terminator and the third argument is the name of a function
+having a type which is an instance of {\small\verb%string->*%}. The effect of
+{\par\samepage\setseps\small\begin{verbatim}
+   new_syntax_block(`XXX`, `YYY`, `Fun`);;
+\end{verbatim}}
+\noindent is that if
+{\par\samepage\setseps\small\begin{verbatim}
+   XXX 
+    
+      ...
+
+   YYY
+\end{verbatim}}
+\noindent occurs in the input, then it is as though
+{\par\samepage\setseps\small\begin{verbatim}
+   Fun `
+
+      ...
+
+   `
+\end{verbatim}}
+\noindent were input. 
+
+\FAILURE
+Never fails.
+
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#let foo s = print_string `Hello: `; print_string s; print_newline();;
+foo = - : (string -> void)
+
+#new_syntax_block(`FOO`,`OOF`, `foo`);;
+() : void
+ 
+#FOO 123OO44OOF;;
+Hello: 123OO44
+() : void
+
+#FOO
+#splat
+#OOF;;
+Hello: splat
+
+() : void
+
+#
+\end{verbatim}}
+
+\USES
+Interfacing parsers to HOL.
+
+\ENDDOC
+\DOC{not}
+
+\TYPE {\small\verb%$not : (bool -> bool)%}\egroup
+
+\SYNOPSIS
+Built-in ML logical negation (needs {\small\verb%$%} to suppress special status).
+
+\DESCRIBE
+When given a boolean value, {\small\verb%not%} returns its negation.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{\small\verb%&%}, or.
+
+\ENDDOC
+\DOC{null}
+
+\TYPE {\small\verb%null : * list -> bool%}\egroup
+
+\SYNOPSIS
+Tests for empty list.
+
+\DESCRIBE
+Returns {\small\verb%true%} for an empty list. Otherwise it returns {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#null [];;
+true : bool
+
+#null [1;2;3];;
+false : bool
+\end{verbatim}}
+
+\ENDDOC
+\DOC{o}
+
+\TYPE {\small\verb%$o : (((* -> **) # (*** -> *)) -> *** -> **)%}\egroup
+
+\SYNOPSIS
+Paired infix function-composition combinator: {\small\verb%(f o g) x%} = {\small\verb%f (g x)%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, I, K, KI, oo, S, W.
+
+\ENDDOC
+\DOC{oo}
+
+\TYPE {\small\verb%$oo : ((((* # **) -> ***) # (**** -> *) # (**** -> **)) -> **** -> ***)%}\egroup
+
+\SYNOPSIS 
+Combinator for composition on the right with pointwise application of two
+functions to a pair: {\small\verb%(f oo (g,h)) x%} = {\small\verb%f (g x, h x)%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, I, K, KI, o, S, W.
+
+\ENDDOC
+\DOC{pair}
+
+\TYPE {\small\verb%pair : * -> ** -> (* # **)%}\egroup
+
+\SYNOPSIS
+Makes two values into a pair.
+
+\DESCRIBE
+{\small\verb%pair x y%} returns {\small\verb%(x,y)%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+fst, snd, curry, uncurry.
+
+\ENDDOC
+\DOC{partition}
+
+\TYPE {\small\verb%partition : (* -> bool) -> * list -> (* list # * list)%}\egroup
+
+\SYNOPSIS
+Separates a list into two lists using a predicate.
+
+\DESCRIBE
+{\small\verb%partition p l%} returns a pair of lists. The first list contains the elements
+which satisfy {\small\verb%p%}. The second list contains all the other elements.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#partition (\x. x + x = x * x) [1;2;3;4;5];;
+([2], [1; 3; 4; 5]) : (int list # int list)
+\end{verbatim}}
+
+\SEEALSO
+chop_list, remove, filter.
+
+\ENDDOC
+\DOC{print\_begin }
+
+\TYPE {\small\verb%print_begin : (int -> void)%}\egroup
+
+\SYNOPSIS 
+Initiates a pretty printing block.
+
+\DESCRIBE 
+The function {\small\verb%print_begin%} initiates a consistent printing block. Consistent
+breaks cause uniform indentation at each break. This means that if a list is
+printed and the total list is wider than the margin then the list will be
+broken at every possible breaking point. The argument is the offset of the
+block that {\small\verb%print_begin%} initiates. This offset is added to the indentation
+of any lines broken inside. This offset is virtually never used and should
+preferably be avoided. 
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+\noindent As a first step we set the margin to be 13 charaters wide:
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_margin 13;;
+\end{verbatim}}
+\noindent The second is to initialize the block using {\small\verb%print_begin%}:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let  example =
+      (print_newline();
+       print_begin 0;
+       print_string `first`;
+       print_break (1,2);
+       print_string `second`;
+       print_break (1,2);
+       print_string `third`;
+       print_end();
+       print_newline());;
+\end{verbatim}}
+
+\noindent After initialization of the block three strings `first',`second'
+and `third' are printed each with a break between them. The total
+width of the three strings is more than 13 (margin) but the first two (`first'
+and `second') combined with the space between them is less than 13. From the
+result of consistent formatting shown below it is clear that if any wrapping
+takes place everything will be wrapped. To clearly
+see what consistent breaking means contrast the above with {\small\verb%print_ibegin%}
+where the same example is used but with inconsistent formatting.
+
+\noindent The output we obtain is the following:
+{\par\samepage\setseps\small\begin{verbatim}
+   first
+     second
+     third
+   example = 
+   ()
+   : void
+\end{verbatim}}
+
+\SEEALSO
+print_ibegin, print_break, print_end, max_print_depth, set_margin,
+print_newline 
+
+\ENDDOC
+\DOC{print\_bool}
+
+\TYPE {\small\verb%print_bool : (bool -> void)%}\egroup
+
+\SYNOPSIS 
+Prints the value of a boolean variable.
+
+\FAILURE
+Never Fails.
+
+\EXAMPLE 
+As a simple example, assign the value true to a variable:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let B = true;;
+
+   B = true : bool
+\end{verbatim}}
+\noindent If we now want find the value of B we type:
+{\par\samepage\setseps\small\begin{verbatim}
+   #print_bool B;;
+\end{verbatim}}
+\noindent and the system responds with:
+{\par\samepage\setseps\small\begin{verbatim}
+   true() : void
+\end{verbatim}}
+
+\ENDDOC
+\DOC{print\_break }
+
+\TYPE {\small\verb%print_break : ((int # int) -> void)%}\egroup
+
+\SYNOPSIS 
+Used to break pretty printing block into parts.
+
+\DESCRIBE 
+The function {\small\verb%print_break%} is used within the print formatting block
+formed by either {\small\verb%print_begin%} or {\small\verb%print_ibegin%} and {\small\verb%print_end%}. It is used
+to indicate points where breaks can occur within a list being printed. The
+function takes two integer arguments, the first indicating the width
+of the break and the second specifying an offset to be used if
+wrapping has to be done.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+We first set the margin to 13 by:
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_margin 13;;
+   72 : int
+\end{verbatim}}
+
+\noindent A simple formatting action is done in the ML segment given below:
+
+{\par\samepage\setseps\small\begin{verbatim}
+   #let  example =
+      (print_begin 0;
+       print_string `first`;
+       print_break (1,2);
+       print_string `second`;
+       print_break (1,2);
+       print_end());;
+\end{verbatim}}
+
+\noindent In this fragment of code {\small\verb%print_break%} is used to put a single
+space  between the strings. However if wrapping occurs, {\small\verb%print_break%}
+indents the following line by two spaces. The result of this fragment is:
+
+{\par\samepage\setseps\small\begin{verbatim}
+   first second example =
+   ()
+   : void
+\end{verbatim}}
+\noindent If we now change the margin to 10 and execute the same fragment (not
+given):
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_margin 10;;
+   13 : int
+\end{verbatim}}
+\noindent The result is wrapped with an indent of two charater spaces from the
+left.  
+{\par\samepage\setseps\small\begin{verbatim}
+   first
+     second
+     example =
+   ()
+   : void
+\end{verbatim}}
+\noindent Wrapping took place due to the new margin setting.
+
+\SEEALSO
+print_begin, print_ibegin, print_end, print_newline
+
+\ENDDOC
+\DOC{print\_defined\_types}
+
+\TYPE {\small\verb%print_defined_types :  (void -> void)%}\egroup
+
+\SYNOPSIS 
+Prints all currently defined ML types known to the system.
+
+\DESCRIBE 
+The function prints all ML types defined by means of {\small\verb%lettype%}. It also
+lists all abstract types in the system. The printing of {\small\verb%lettype%}
+defined types can be suppressed by setting the flag {\small\verb%print_lettypes%} to
+{\small\verb%false%}. The resulting suppression is only partial as only the outer
+level of defined types is expanded. 
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+\DOC{print\_end}
+
+\TYPE {\small\verb%print_end :  (void -> void)%}\egroup
+
+\SYNOPSIS 
+This function closes a formatting block.
+
+\DESCRIBE 
+This function closes a formatting block initialized
+by {\small\verb%print_begin%} or {\small\verb%print_ibegin%}. It terminates the offset settings
+that were defined within the block.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+
+{\par\samepage\setseps\small\begin{verbatim}
+#let  example =
+   (print_begin 0;
+    print_string `first`;
+    print_break (0,2);
+    print_string `second`;
+    print_break (0,2);
+    print_end());;
+\end{verbatim}}
+\noindent It is immediately clear how the function terminates the formatting
+block.
+
+\SEEALSO
+print_begin, print_ibegin
+
+\ENDDOC
+\DOC{print\_ibegin }
+
+\TYPE {\small\verb%print_ibegin : (int -> void)%}\egroup
+
+\SYNOPSIS 
+Initiates a pretty printing block with inconsistent breaks.
+
+\DESCRIBE 
+The function {\small\verb%print_ibegin%} initiates a inconsistent printing block.
+Inconsistent breaks cause non-uniform 
+indentation at each break which is unlike the `all or nothing'
+approach  of consistent formatting (see {\small\verb%print_begin%}). The argument is the
+offset of the block that {\small\verb%print_ibegin%} initiates. This offset is added to the
+indentation of any lines broken inside. This offset is very seldom used. 
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+\noindent Set the margin to be 13 characters wide:
+{\par\samepage\setseps\small\begin{verbatim}
+#set_margin 13;;
+13 : int
+\end{verbatim}}
+\noindent Then initialize the block using {\small\verb%print_ibegin%}:
+{\par\samepage\setseps\small\begin{verbatim}
+#let  example =
+   (print_newline();
+    print_ibegin 0;
+    print_string `first`;
+    print_break (1,2);
+    print_string `second`;
+    print_break (1,2);
+    print_string `third`;
+    print_end();
+    print_newline());;
+
+\end{verbatim}}
+\noindent After the initialization of the block the strings
+`first', `second' and `third' are printed with breaks between them. The first
+line does not break because we only
+have 12 characters on the line {\small\verb%first second%}. When starting to print `third'
+though wrapping has to take place. 
+
+\noindent The output we obtain is the following:
+{\par\samepage\setseps\small\begin{verbatim}
+   first second
+     third
+   example =
+   ()
+   : void
+\end{verbatim}}
+
+\SEEALSO
+print_break, print_end, max_print_depth, print_begin
+
+\ENDDOC
+\DOC{print\_int}
+
+\TYPE {\small\verb%print_int : int -> void%}\egroup
+
+\SYNOPSIS
+Prints an ML integer to the terminal.
+
+\DESCRIBE
+{\small\verb%print_int n%} returns {\small\verb%():void%} with the side-effect of printing the value
+of {\small\verb%n%} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#print_int 2;;
+2() : void
+
+#print_int (-10);;
+-10() : void
+\end{verbatim}}
+\SEEALSO
+print_begin, print_end, print_newline.
+
+\ENDDOC
+\DOC{print\_list}
+
+\TYPE {\small\verb%print_list : bool -> string -> (* -> **) -> * list -> void%}\egroup
+
+\SYNOPSIS
+Prints a list to the terminal in a specific format.
+
+\DESCRIBE
+{\small\verb%print_list incon name prfn l%} returns {\small\verb%():void%} with the side-effect of
+printing the elements of {\small\verb%l%} to the terminal using the print function {\small\verb%prfn%}.
+The string {\small\verb%name%} is also displayed and the flag {\small\verb%incon%} specifies whether
+line breaking between elements of the list is to be inconsistent ({\small\verb%incon%} is
+{\small\verb%true%}) or consistent ({\small\verb%incon%} is {\small\verb%false%}). If the list {\small\verb%l%} is empty, no text
+is displayed. When {\small\verb%l%} is not empty, the elements of the list are printed in
+reverse order.
+
+The format of the output is illustrated in the example. {\small\verb%print_list%} is used
+within the HOL system for printing theories. It is unlikely to be of use in
+general.
+
+\FAILURE
+Fails if the print function {\small\verb%prfn%} fails on any of the arguments of the
+list {\small\verb%l%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#set_margin 15;;
+72 : int
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+#print_list true `Test1:` print_int [1;2;3;4;5;6];;
+Test1: --
+  6     5
+  4     3
+  2     1
+() : void
+\end{verbatim}}
+{\par\samepage\setseps\small\begin{verbatim}
+#print_list false `Test2:` print_int [1;2;3;4;5;6];;
+Test2: --
+  6
+  5
+  4
+  3
+  2
+  1
+
+() : void
+\end{verbatim}}
+\SEEALSO
+print_theory, print_begin, print_end, print_newline.
+
+\ENDDOC
+\DOC{print\_newline}
+
+\TYPE {\small\verb%print_newline :  (void -> void)%}\egroup
+
+\SYNOPSIS 
+This function prints a newline.
+
+\DESCRIBE 
+The function {\small\verb%print_newline%} starts the text following it on the next
+line. This is done irrespective of consistent or inconsistent
+formatting and margin settings.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+A simple example is:
+{\par\samepage\setseps\small\begin{verbatim}
+   #let example =
+      (print_string `first`;
+       print_newline();
+       print_string `second`;
+       print_newline());;
+\end{verbatim}}
+\noindent The result is:
+{\par\samepage\setseps\small\begin{verbatim}
+   first
+   second
+   example = () : void
+\end{verbatim}}
+
+\SEEALSO
+print_begin, print_end, print_break
+
+\ENDDOC
+\DOC{print\_string}
+
+\TYPE {\small\verb%print_string : string -> void%}\egroup
+
+\SYNOPSIS
+Prints an ML string to the terminal (without surrounding string quotes).
+
+\DESCRIBE
+{\small\verb%print_string s%} returns {\small\verb%():void%} with the side-effect of printing the string
+{\small\verb%s%} to the terminal. String quotes are not printed around the string, and the
+text is not terminated with a carriage return. In fact, the text is queued
+until the pretty-printer decides where line breaks are needed, or until the
+queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#print_string `This is an example`;;
+This is an example() : void
+\end{verbatim}}
+\SEEALSO
+print_tok, message, print_begin, print_end, print_newline.
+
+\ENDDOC
+\DOC{print\_tok}
+
+\TYPE {\small\verb%print_tok : string -> void%}\egroup
+
+\SYNOPSIS
+Prints an ML string to the terminal (with surrounding string quotes).
+
+\DESCRIBE
+{\small\verb%print_tok s%} returns {\small\verb%():void%} with the side-effect of printing the string
+{\small\verb%s%} to the terminal. String quotes are printed around the string but the text
+is not terminated with a carriage return. In fact, the text is queued until
+the pretty-printer decides where line breaks are needed, or until the queue is
+explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#print_tok `This is an example`;;
+`This is an example`() : void
+\end{verbatim}}
+\SEEALSO
+print_string, message, print_begin, print_end, print_newline.
+
+\ENDDOC
+\DOC{print\_void}
+
+\TYPE {\small\verb%print_void : void -> void%}\egroup
+
+\SYNOPSIS
+Prints {\small\verb%()%} to the terminal.
+
+\DESCRIBE
+{\small\verb%print_void ()%} returns {\small\verb%():void%} with the side-effect of printing the value
+{\small\verb%()%} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#print_void();;
+()() : void
+\end{verbatim}}
+\SEEALSO
+print_begin, print_end, print_newline.
+
+\ENDDOC
+\DOC{prompt}
+
+\TYPE {\small\verb%prompt : (bool -> bool)%}\egroup
+
+\SYNOPSIS
+Switches the ML prompt on or off.
+
+\DESCRIBE
+{\small\verb%PROMPT true%} switches on the ML prompt (which is `{\small\verb%#%}' by default);
+{\small\verb%PROMPT false%} switches it off. In either case, {\small\verb%PROMPT%} returns the previous
+state ({\small\verb%true%} for on, {\small\verb%false%} for off).
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+set_prompt.
+
+\ENDDOC
+\DOC{quit}
+
+\TYPE {\small\verb%quit : (void -> void)%}\egroup
+
+\SYNOPSIS
+Evaluating {\small\verb%quit()%} terminates the current HOL session.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+\DOC{remove}
+
+\TYPE {\small\verb%remove : (* -> bool) -> * list -> (* # * list)%}\egroup
+
+\SYNOPSIS
+Separates the first element of a list to satisfy a predicate from the rest of
+the list.
+
+\FAILURE
+Fails with {\small\verb%hd%} if no element satisifes the predicate. This will always be the
+case for an empty list.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#remove (\x. x = 3) [1;2;3;4;5;6];;
+(3, [1; 2; 4; 5; 6]) : (int # int list)
+\end{verbatim}}
+
+\SEEALSO
+partition, filter.
+
+\ENDDOC
+\DOC{replicate}
+
+\TYPE {\small\verb%replicate : * -> int -> * list%}\egroup
+
+\SYNOPSIS
+Makes a list consisting of a value replicated a specified number of times.
+
+\DESCRIBE
+{\small\verb%replicate x n%} returns {\small\verb%[x;...;x]%}, a list of length {\small\verb%n%}.
+
+\FAILURE
+Fails if number of replications is less than zero.
+
+\ENDDOC
+\DOC{rev}
+
+\TYPE {\small\verb%rev : * list -> * list%}\egroup
+
+\SYNOPSIS
+Reverses a list.
+
+\DESCRIBE
+{\small\verb%rev [x1;...;xn]%} returns {\small\verb%[xn;...;x1]%}.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+\DOC{rev\_assoc}
+
+\TYPE {\small\verb%rev_assoc : * -> (** # *) list -> (** # *)%}\egroup
+
+\SYNOPSIS
+Searches a list of pairs for a pair whose second component equals a specified
+value.
+
+\DESCRIBE
+{\small\verb%rev_assoc y [(x1,y1);...;(xn,yn)]%} returns the first {\small\verb%(xi,yi)%} in the list
+such that {\small\verb%yi%} equals {\small\verb%y%}.
+
+\FAILURE
+Fails if no matching pair is found. This will always be the case if the list
+is empty.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#rev_assoc 2 [(1,4);(3,2);(2,5);(2,6)];;
+(3, 2) : (int # int)
+\end{verbatim}}
+
+\SEEALSO
+assoc, find, mem, tryfind, exists, forall.
+
+\ENDDOC
+\DOC{rev\_itlist}
+
+\TYPE {\small\verb%rev_itlist : (* -> ** -> **) -> * list -> ** -> **%}\egroup
+
+\SYNOPSIS
+List iteration function. Applies a binary function between adjacent elements
+of the reverse of a list.
+
+\DESCRIBE
+{\small\verb%rev_itlist f [x1;...;xn] y%} returns {\small\verb%f xn ( ... (f x2 (f x1 y))...)%}.
+Returns {\small\verb%y%} if list is empty.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#rev_itlist (\x y. x * y) [1;2;3;4] 1;;
+24 : int
+\end{verbatim}}
+
+\SEEALSO
+itlist, end_itlist.
+
+\ENDDOC
+\DOC{S}
+
+\TYPE {\small\verb%S : ((* -> ** -> ***) -> (* -> **) -> * -> ***)%}\egroup
+
+\SYNOPSIS
+Function-composition combinator: {\small\verb%S f g x%} = {\small\verb%f x (g x)%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, I, K, KI, o, oo, W.
+
+\ENDDOC
+\DOC{search\_path}
+
+\TYPE {\small\verb%search_path : (void -> string list)%}\egroup
+
+\SYNOPSIS
+Returns the internal search path use by HOL to find files.
+
+\DESCRIBE 
+Evaluating {\small\verb%search_path()%} returns a list of strings representing the pathnames
+of the directories that are searched when HOL makes access to files on disk
+(using {\small\verb%load%}, {\small\verb%compile%}, {\small\verb%load_theory%}, etc.). Although the search path can be
+set to an arbitrary list of strings, each string in the search path is normally
+expected to be either empty ({\small\verb%``%}) or a pathname with `{\small\verb%/%}' as its final
+character.  When HOL looks for a file, the directories in the search path are
+searched in the order in which they occur in the list returned by
+{\small\verb%search_path%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+A typical search path is the following:
+{\par\samepage\setseps\small\begin{verbatim}
+   #search_path();;
+   [``; `~/`; `/usr/lib/hol/theories/`] : string list
+\end{verbatim}}
+\noindent With this search path, HOL first looks for a file in the current
+working directory (the pathname represented by {\small\verb%``%}), then in the user`s home
+directory {\small\verb%`~/`%}, and finally in the directory {\small\verb% `/usr/lib/hol/theories/`%} (the
+directory containing HOL`s built-in theories).
+
+\SEEALSO
+help_search_path, install, set_help_search_path, set_search_path.
+
+\ENDDOC
+\DOC{setify}
+
+\TYPE {\small\verb%setify : * list -> * list%}\egroup
+
+\SYNOPSIS
+Removes repeated elements from a list. Makes a list into a `set'.
+
+\DESCRIBE
+{\small\verb%setify l%} removes repeated elements from {\small\verb%l%}, leaving the last occurrence of
+each duplicate in the list.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#setify [1;2;3;1;4;3];;
+[2; 1; 4; 3] : int list
+\end{verbatim}}
+
+\COMMENTS
+Perhaps the first occurrence of each duplicate should be left in the list, not
+the last? However, other functions may rely on the ordering currently used.
+
+\SEEALSO
+distinct.
+
+\ENDDOC
+\DOC{set\_equal}
+
+\TYPE {\small\verb%set_equal : * list -> * list -> bool%}\egroup
+
+\SYNOPSIS
+Tests two `sets' for equality.
+
+\DESCRIBE
+{\small\verb%set_equal l1 l2%} returns {\small\verb%true%} if every element of {\small\verb%l1%} appears in {\small\verb%l2%} and
+every element of {\small\verb%l2%} appears in {\small\verb%l1%}. Otherwise it returns {\small\verb%false%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#set_equal [1;2] [2;1;2];;
+true : bool
+
+#set_equal [1;2] [1;3];;
+false : bool
+\end{verbatim}}
+
+\SEEALSO
+setify, union, intersect, subtract.
+
+\ENDDOC
+\DOC{set\_help}
+
+\TYPE {\small\verb%set_help : string -> string%}\egroup
+
+\SYNOPSIS
+Installs a new string as the current help function.
+
+\DESCRIBE
+Evaluating {\small\verb%help `FOO`%} pipes the appropriate help file into the current help 
+function, with the top level of ML being the standard output. 
+The old help function is returned (in the form of a system level string). 
+
+The default help function is {\small\verb%`cat`%}, so the Unix {\small\verb%cat%} command is used to
+print help files. Previous versions of HOL used the Unix {\small\verb%more%} command.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#set_help `lpr`;;
+`cat` : string
+\end{verbatim}}
+\noindent This causes the help file to be printed instead of being displayed.
+
+\SEEALSO
+help, help_search_path, set_help_search_path
+
+\ENDDOC
+\DOC{set\_help\_search\_path}
+
+\TYPE {\small\verb%set_help_search_path : (string list -> void)%}\egroup
+
+\SYNOPSIS
+Sets the internal search path use by HOL to find files.
+
+\DESCRIBE 
+When applied to a list of strings {\small\verb%l%}, each of which represents a the pathname
+to a directory, {\small\verb%set_help_search_path%} sets the internal search path used when
+the {\small\verb%help%} function searches for online help files to the list {\small\verb%l%}. Although
+the help search path can be set to an arbitrary list of strings, each string is
+normally expected to be either empty ({\small\verb%``%}) or a pathname with `{\small\verb%/%}' as its
+final character.  When {\small\verb%help%} looks for a help file, the directories in the
+search path are searched in the order in which they occur in the list supplied
+to {\small\verb%set_help_search_path%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+help_search_path, install, search_path, set_search_path.
+
+\ENDDOC
+\DOC{set\_prompt}
+
+\TYPE {\small\verb%set_prompt : (string -> string)%}\egroup
+
+\SYNOPSIS
+Changes the ML prompt string.
+
+\DESCRIBE
+If {\small\verb%s%} is a string, then {\small\verb%set_prompt s%} sets the ML prompt (which is `{\small\verb%#%}' by
+default) to the string {\small\verb%s%}, and returns the previous prompt string. The string
+may contain newlines, or be null (although {\small\verb%prompt false%} is a cleaner way of
+completely eliminating the prompt).
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+In the following session, the prompt is set to {\small\verb%`Ready`%} on a line of its own,
+then reset to its original state.
+{\par\samepage\setseps\small\begin{verbatim}
+   #let oldprompt = set_prompt `Ready\
+   #`;;
+   oldprompt = `#` : string
+
+   Ready
+   (\x.()) (set_prompt t);;
+   () : void
+
+   # ...more ML...
+\end{verbatim}}
+\SEEALSO
+prompt, set_lambda, set_turnstile.
+
+\ENDDOC
+\DOC{set\_search\_path}
+
+\TYPE {\small\verb%set_search_path : (string list -> void)%}\egroup
+
+\SYNOPSIS
+Sets the internal search path use by HOL to find files.
+
+\DESCRIBE 
+When applied to a list of strings {\small\verb%l%}, each of which represents a directory
+pathname, {\small\verb%set_search_path%} sets the internal search path used when HOL makes
+access to files on disk to the list {\small\verb%l%}. Although the search path can be set to
+an arbitrary list of strings, each string in the search path is normally
+expected to be either empty ({\small\verb%``%}) or a pathname with `{\small\verb%/%}' as its final
+character.  When HOL looks for a file, the directories in the search path are
+searched in the order in which they occur in the list supplied to
+{\small\verb%set_search_path%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+A typical search path is the following:
+{\par\samepage\setseps\small\begin{verbatim}
+   #search_path();;
+   [``; `~/`; `/usr/lib/hol/theories/`] : string list
+\end{verbatim}}
+\noindent With this search path, HOL first looks for a file in the current
+working directory (the pathname represented by {\small\verb%``%}), then in the user`s home
+directory {\small\verb%`~/`%}, and finally in the directory {\small\verb% `/usr/lib/hol/theories/`%} (the
+directory containing HOL`s built-in theories).  
+
+One might augment this search path by doing:
+{\par\samepage\setseps\small\begin{verbatim}
+   #set_search_path(`/foo/bar/` . search_path());;
+   () : void
+\end{verbatim}}
+\noindent so that the directory {\small\verb%/foo/bar/%} is also searched, and searched
+first, when HOL tries to find a file.
+
+
+\SEEALSO
+help_search_path, install, search_path, set_help_search_path.
+
+\ENDDOC
+\DOC{set\_string\_escape}
+
+\TYPE {\small\verb%set_string_escape : int -> int%}\egroup
+
+
+\SYNOPSIS
+Changes the escape character inside strings.
+
+\DESCRIBE 
+{\small\verb%set_string_escape n%} changes the escape character in strings to be the
+character with ascii code {\small\verb%n%}. The previous character code is returned.
+Initially the escape is ascii 92 (i.e. `{\small\verb%\%}'). If {\small\verb%n%} is not an ascii code
+then there is no escape character available.
+
+\FAILURE
+Never fails (not even if the supplied code is not an ascii code).
+
+\ENDDOC
+\DOC{snd}
+
+\TYPE {\small\verb%snd : (* # **) -> **%}\egroup
+
+\SYNOPSIS
+Extracts the second component of a pair.
+
+\DESCRIBE
+{\small\verb%snd (x,y)%} returns {\small\verb%y%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+fst, pair.
+
+\ENDDOC
+\DOC{split}
+
+\TYPE {\small\verb%split : (* # **) list -> (* list # ** list)%}\egroup
+
+\SYNOPSIS
+Converts a list of pairs into a pair of lists.
+
+\DESCRIBE
+{\small\verb%split [(x1,y1);...;(xn,yn)]%} returns {\small\verb%([x1;...;xn],[y1;...;yn])%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+combine, com.
+
+\ENDDOC
+\DOC{string\_of\_int}
+
+\TYPE {\small\verb%string_of_int : (int -> string)%}\egroup
+
+\SYNOPSIS
+Maps an integer to the corresponding decimal string.
+
+\DESCRIBE
+When given an integer, {\small\verb%string_of_int%} returns a string representing
+the number in standard decimal notation, with a leading minus sign
+if the number is negative, and no leading zeros.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+ascii, ascii_code, int_of_string.
+
+\ENDDOC
+\DOC{subtract}
+
+\TYPE {\small\verb%subtract : * list -> * list -> * list%}\egroup
+
+\SYNOPSIS
+Computes the set-theoretic difference of two `sets'.
+
+\DESCRIBE
+{\small\verb%subtract l1 l2%} returns a list consisting of those elements of {\small\verb%l1%} that do
+not appear in {\small\verb%l2%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#subtract [1;2;3] [3;5;4;1];;
+[2] : int list
+
+#subtract [1;2;4;1] [4;5];;
+[1; 2; 1] : int list
+\end{verbatim}}
+
+\SEEALSO
+setify, set_equal, union, intersect.
+
+\ENDDOC
+\DOC{tl}
+
+\TYPE {\small\verb%tl : * list -> * list%}\egroup
+
+\SYNOPSIS
+Computes the tail of a list (the original list less the first element).
+
+\DESCRIBE
+{\small\verb%tl [x1;...;xn]%} returns {\small\verb%[x2;...;xn]%}.
+
+\FAILURE
+Fails with {\small\verb%tl%} if the list is empty.
+
+\SEEALSO
+hd, el, null.
+
+\ENDDOC
+\DOC{tryfind}
+
+\TYPE {\small\verb%tryfind : (* -> **) -> * list -> **%}\egroup
+
+\SYNOPSIS
+Returns the result of the first successful application of a function to the
+elements of a list.
+
+\DESCRIBE
+{\small\verb%tryfind f [x1;...;xn]%} returns {\small\verb%(f xi)%} for the first {\small\verb%xi%} in the list for
+which application of {\small\verb%f%} succeeds.
+
+\FAILURE
+Fails with {\small\verb%tryfind%} if the application of the function fails for all elements
+in the list. This will always be the case if the list is empty.
+
+\SEEALSO
+find, mem, exists, forall, assoc, rev_assoc.
+
+\ENDDOC
+\DOC{uncurry}
+
+\TYPE {\small\verb%uncurry : (* -> ** -> ***) -> (* # **) -> ***%}\egroup
+
+\SYNOPSIS
+Converts a function taking two arguments into a function taking a single
+paired argument.
+
+\DESCRIBE
+{\small\verb%uncurry f%} returns {\small\verb%\(x,y). f x y%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+curry.
+
+\ENDDOC
+\DOC{union}
+
+\TYPE {\small\verb%union : * list -> * list -> * list%}\egroup
+
+\SYNOPSIS
+Computes the union of two `sets'.
+
+\DESCRIBE
+{\small\verb%union l1 l2%} returns a list consisting of {\small\verb%l1%} concatenated with those
+elements of {\small\verb%l2%} which are not in {\small\verb%l1%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#union [1;2;3] [1;5;4;3];;
+[1; 2; 3; 5; 4] : int list
+
+#union [1;1;1] [1;2;3;2];;
+[1; 1; 1; 2; 3; 2] : int list
+\end{verbatim}}
+
+\SEEALSO
+setify, set_equal, intersect, subtract.
+
+\ENDDOC
+\DOC{W}
+
+\TYPE {\small\verb%W : ((* -> * -> **) -> * -> **)%}\egroup
+
+\SYNOPSIS
+Duplicator combinator: {\small\verb%W f x%} = {\small\verb%f x x%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, I, K, KI, o, oo, S.
+
+\ENDDOC

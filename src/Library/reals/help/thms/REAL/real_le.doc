@@ -1,0 +1,3 @@
+\THEOREM real_le REAL
+|- !x y. x <= y = ~y < x
+\ENDTHEOREM

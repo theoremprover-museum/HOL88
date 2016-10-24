@@ -1,0 +1,27 @@
+\DOC goal_frees
+
+\TYPE {goal_frees : (goal -> term list)}
+
+\SYNOPSIS
+Returns a list of the variables free in a assumptions and conclusion of a goal.
+
+\LIBRARY window
+
+\DESCRIBE
+
+When applied to a goal, {A ?- t}, the function goal_frees returns a list,
+without repetitions, of those variables which are free either in t or in
+some member of the assumption list A.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+When applied to the goal {(SUC m) < (SUC n) ?- m < n}
+goal_frees returns the list {["m"; "n"]}. The term {SUC} is a
+constant, not a variable, so that is not included.
+
+\SEEALSO
+frees, freesl, free_in, thm_frees.
+
+\ENDDOC

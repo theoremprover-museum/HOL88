@@ -1,0 +1,15 @@
+
+
+This directory contains the first release of an inductive definitions package
+for HOL.  There is no manual at present, but preliminary documentation can be
+found in the Manual directory.  Note that this is an initial release, and
+at least following changes are proposed:
+
+  * to add a function that maps rules as theorems to ML inference rules
+
+  * to strengthen the implication proved by derive_cases_thm to equality
+
+Please report any bugs or other problems to me.
+
+Tom Melham  (tfm@cl.cam.ac.uk)
+September 1991

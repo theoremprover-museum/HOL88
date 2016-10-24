@@ -1,0 +1,5 @@
+\THEOREM IS_DECIMAL_NORMALIZED numeral
+|- !digits.
+    IS_DECIMAL_NORMALIZED digits =
+    IS_DECIMAL digits /\ IS_NORMALIZED digits
+\ENDTHEOREM

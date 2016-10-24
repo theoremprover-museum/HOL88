@@ -1,0 +1,3 @@
+\THEOREM LEFT_OR_OVER_AND \none
+|- !t1 t2 t3. t1 \/ t2 /\ t3 = (t1 \/ t2) /\ (t1 \/ t3)
+\ENDTHEOREM

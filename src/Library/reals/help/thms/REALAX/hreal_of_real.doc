@@ -1,0 +1,3 @@
+\THEOREM hreal_of_real REALAX
+|- !g00032. hreal_of_real g00032 = hreal_of_treal($@(dest_real g00032))
+\ENDTHEOREM

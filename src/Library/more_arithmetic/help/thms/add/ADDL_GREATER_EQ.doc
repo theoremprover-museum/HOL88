@@ -1,0 +1,3 @@
+\THEOREM ADDL_GREATER_EQ add
+|- !m n p. m <= n ==> m <= (p + n)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM one_TY_DEF one
+|- ?rep. TYPE_DEFINITION(\b. b)rep
+\ENDTHEOREM

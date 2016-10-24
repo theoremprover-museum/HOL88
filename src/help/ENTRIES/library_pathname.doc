@@ -1,0 +1,36 @@
+\DOC library_pathname
+
+\TYPE {library_pathname : (void -> string)}
+
+\SYNOPSIS
+Returns the pathname to the current library directory.
+
+\DESCRIBE
+Evaluating {library_pathname()} returns a string giving the root pathname of
+the current library directory.  Usually, this is just the absolute pathname 
+to the HOL system library.  But during the evaluation of a call to
+{load_library}, the string returned by {library_pathname()} is the library
+directory in which the library being loaded resides.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+A very typical application is illustrated by the following code from the
+load file for the built-in {string} library:
+{
+   let path = library_pathname() ^ `/string/` in
+       set_search_path (union (search_path()) [path]);;
+}
+\noindent When the {string} library load file is loaded using {load_library},
+this part of the code adds the pathname to the {string} library to the internal
+HOL search path.
+
+\USES
+The main purpose of the function {library_pathname} is to allow library
+load files to update the internal HOL search paths in a site-independent way.
+
+\SEEALSO
+install, library_search_path, set_library_search_path.
+
+\ENDDOC

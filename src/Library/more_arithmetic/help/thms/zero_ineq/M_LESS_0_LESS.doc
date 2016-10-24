@@ -1,0 +1,3 @@
+\THEOREM M_LESS_0_LESS zero_ineq
+|- !m n. m < n ==> 0 < n
+\ENDTHEOREM

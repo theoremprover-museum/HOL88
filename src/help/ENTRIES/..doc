@@ -1,0 +1,18 @@
+\DOC \char'056
+
+\TYPE {$. : ((* # * list) -> * list)}
+
+\SYNOPSIS
+Adds single element to the head of a list.
+
+\KEYWORDS
+list, construct.
+
+\DESCRIBE
+The {.} operator is an infixed primitive list constructor, analogous to {CONS}
+in LISP. Its effect is {x . [x1;....;xn]} = {[x;x1;...;xn]}.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

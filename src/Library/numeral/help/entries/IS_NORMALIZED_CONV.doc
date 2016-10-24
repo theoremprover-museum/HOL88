@@ -1,0 +1,41 @@
+\DOC IS_NORMALIZED_CONV
+
+\TYPE {IS_NORMALIZED_CONV : term -> thm}
+
+\SYNOPSIS
+Proves that a list of digits is normalized (that is, that it has no leading
+zeros).
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} is a list of digits, and {m} is empty or the first digit of {m} is
+nonzero, then {IS_NORMALIZED_CONV "m"} returns the theorem:
+{
+        |- IS_NORMALIZED m = T
+}
+and if the first digit of {m} is zero, then {IS_NORMALIZED_CONV "m"} returns
+the theorem:
+{
+        |- IS_NORMALIZED m = F
+}
+\FAILURE
+The argument to {IS_NORMALIZED_CONV} must be a list of type num list, and
+either the list must be empty or the first element must be a numeric constant
+added with {CONS}.
+
+\EXAMPLE
+{
+#IS_NORMALIZED_CONV "IS_NORMALIZED [2;3;5;0]";;
+|- IS_NORMALIZED [2;3;5;0] = T
+
+#IS_NORMALIZED_CONV "IS_NORMALIZED [0;2;3;5;0]";;
+|- IS_NORMALIZED [0;2;3;5;0] = F
+
+#IS_NORMALIZED_CONV "IS_NORMALIZED []";;
+|- IS_NORMALIZED [] = T
+}
+\SEEALSO
+IS_BASEN_CONV, BASEN_NORMALIZE_CONV.
+
+\ENDDOC

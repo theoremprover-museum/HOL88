@@ -1,0 +1,6 @@
+\THEOREM EVEN_ODD_PLUS_CASES odd_even
+|- !n m.
+    (ODD n /\ ODD m ==> EVEN(n + m)) /\
+    (ODD n /\ EVEN m ==> ODD(n + m)) /\
+    (EVEN n /\ EVEN m ==> EVEN(n + m))
+\ENDTHEOREM

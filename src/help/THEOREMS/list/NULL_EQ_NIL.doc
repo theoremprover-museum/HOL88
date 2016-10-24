@@ -1,0 +1,3 @@
+\THEOREM NULL_EQ_NIL list
+|- !l. NULL l = (l = [])
+\ENDTHEOREM

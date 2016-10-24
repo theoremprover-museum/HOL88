@@ -1,0 +1,26 @@
+#!/bin/sh
+
+req=$*
+
+for i in FILES ACK CONTRIB COPYING PORTING README
+do
+  mail -s $i $req < $i
+  echo "Done sending $i to $req."
+done
+
+cd ./test
+i=test.tex
+mail -s $i $req < $i
+echo "Done sending $i to $req."
+
+cd ../doc
+i=makeindex.l
+mail -s $i $req < $i
+echo "Done sending $i to $req."
+
+cd ../src
+for i in *
+do
+  mail -s $i $req < $i
+  echo "Done sending $i to $req."
+done

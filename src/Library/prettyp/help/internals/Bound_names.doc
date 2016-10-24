@@ -1,0 +1,10 @@
+\DOC Bound_names
+
+\TYPE {Bound_names : ((string # address) list -> metavar_binding)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ arithmetic
+|- !m n. m < n = (SUC m) <= n
+\ENDTHEOREM

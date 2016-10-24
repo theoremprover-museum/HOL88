@@ -1,0 +1,37 @@
+\DOC loadt
+
+\TYPE {loadt : (string -> void)}
+
+\SYNOPSIS
+{loadt} loads an ML file with the verbose flag set to {true}.
+
+\DESCRIBE
+The function {loadt} takes a string indicating the ML file name as
+argument and loads it in the same manner as {load}, except that the
+verbose flag is always set to {true}.
+
+\FAILURE
+{loadt} will fail if the file named by the argument does not exist in
+the search path. It will fail in the same manner if the file is not a
+valid ML file. Failure in the ML file will also terminate loading.
+
+\EXAMPLE
+If we have an ML file called {foo.ml} which contains the line
+{
+   let x=2+2;;
+}
+\noindent this can be loaded as follows:
+{
+   #loadt `foo.ml`;;
+}
+\noindent and the system would respond with:
+{
+   x = 4 : int
+
+   File foo.ml loaded
+   () : void
+}
+\SEEALSO
+load, loadf.
+
+\ENDDOC

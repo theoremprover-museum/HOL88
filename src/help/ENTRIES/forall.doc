@@ -1,0 +1,22 @@
+\DOC forall
+
+\TYPE {forall : ((* -> bool) -> * list -> bool)}
+
+\SYNOPSIS
+Tests a list to see if all its elements satisfy a predicate.
+
+\KEYWORDS
+list.
+
+\DESCRIBE
+{forall p [x1;...;xn]} returns {true} if {(p xi)} is true for all {xi} in the
+list. Otherwise it returns {false}. If the list is empty, this function always
+returns true.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+exists, find, tryfind, mem, assoc, rev_assoc.
+
+\ENDDOC

@@ -1,0 +1,28 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: Licence					|
++ ===================================================================== +
+
+This directory contains the TeX source for the optional HOL licence agreement.
+
+HOL is a public domain system available for a nominal distribution fee. It
+is based on code written, in alphabetical order, by Mike Gordon, Gerard Huet
+(and others at Inria), Tom Melham, Robin Milner, Lockwood Morris, Malcolm
+Newey, Larry Paulson and Chris Wadsworth.
+
+Some users have asked to be issued with a HOL licence.  This is to legitimate
+their use of the system for commercial purposes.  After consultation with
+Robin Milner and the Cambridge University computing service (who have
+experience with software licencing), the licence agreement in this directory
+below was produced. The primary aims of the licence are:
+
+   * to prevent us being `ripped off' or sued;
+
+   * to prevent people claiming to have done a proof using HOL when 
+     in fact they used their own insecure modifications of it.
+     (in this case the licence merely requires the system to be called 
+     something else, it does not prevent such modifications being made).
+
+The signing of the licence is optional, but encouraged. Users of HOL are free
+to redistribute the system to others provided they let Mike Gordon know in
+writing. The simplest way to do this is to ask the party to whom HOL is given
+to sign the licence and send it to Mike.

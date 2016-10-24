@@ -1,0 +1,3 @@
+\THEOREM REAL_ADD_SYM REALAX
+|- !x y. x + y = y + x
+\ENDTHEOREM

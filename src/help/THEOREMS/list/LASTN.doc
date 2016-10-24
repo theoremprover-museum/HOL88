@@ -1,0 +1,4 @@
+\THEOREM LASTN list
+|- (!l. LASTN 0 l = []) /\
+   (!n x l. LASTN(SUC n)(SNOC x l) = SNOC x(LASTN n l))
+\ENDTHEOREM

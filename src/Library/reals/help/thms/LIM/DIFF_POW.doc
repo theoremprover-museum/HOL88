@@ -1,0 +1,3 @@
+\THEOREM DIFF_POW LIM
+|- !n x. ((\x'. x' pow n) diffl ((& n) * (x pow (n num_sub 1))))x
+\ENDTHEOREM

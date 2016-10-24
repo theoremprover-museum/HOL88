@@ -1,0 +1,31 @@
+\DOC activate_binders
+
+\TYPE {activate_binders : (string -> string list)}
+
+\SYNOPSIS
+Makes the quotation parser treat all binders in the current theory segment as
+such.
+
+\DESCRIBE
+The call
+{
+   activate_binders `thy`
+}
+\noindent where {thy} is an ancestor theory ({`-`} stands for the current
+theory), will return a list of all binders on that theory, and make the parser
+treat them all as binders, that is, for each binder {b}, will allow the
+syntactic sugaring {"b x. y"} as a shorthand for {"b (\x. y)"}. The special
+syntactic status may be suppressed by preceding {b} with a dollar sign. The
+function returns a list of all the binders dealt with.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+This function is mainly intended for internal use. All binders declared by
+{new_binder} or {new_binder_definition} are always parsed as such anyway.
+
+\SEEALSO
+activate_all_binders, binders, new_binder, parse_as_binder.
+
+\ENDDOC

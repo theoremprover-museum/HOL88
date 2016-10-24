@@ -1,0 +1,111 @@
+% A1.8 UNITS %
+
+unit --> [CONC] unit1 units_l {MK_one(`unit`,POP)}
+       | unit_fn units_l {MK_one(`unit`,POP)}
+       | unit_mac units_l {MK_one(`unit`,POP)}
+       | unit1 units_l {MK_one(`unit`,POP)}.
+
+units_l --> [CONC] unit1 units_l
+          | {add_to_list(POP,unit_fn)} units_l
+          | {add_to_list(POP,unit_mac)} units_l
+          | {add_to_list(POP,unit1)} units_l
+          | [].
+
+unit_fn --> {MK_three(`unit_fn`,fnname,unit_names,unit1)}.
+
+unit_mac --> macname mac_poss_parms_names.
+
+mac_poss_parms_names --> [\{] macparams [\}] 
+                         {MK_four(`unit_mac`,POP,POP,unit_names,unit1)}
+                       | {MK_three(`unit_mac`,POP,unit_names,unit1)}.
+
+unit_names --> [@] name more_unit_names {MK_one(`unit_names`,POP)}
+             | {MK_zero(`unit_names`)}.
+
+more_unit_names --> [@] {add_to_list(POP,name)} more_unit_names | [].
+ 
+macparams --> {MK_one(`macparam`,macparam)} more_macparams.
+
+macparam --> int | typ.
+
+more_macparams --> {add_to_list(POP,macparam)} more_macparams | [].
+
+unit1 --> [\[] int [\]] {MK_two(`unit1_4`,POP,unit1)}
+          {MK_one(`unit1`,POP)}
+        | [\[] [INT] name [=] int [..] int [\]] 
+          {MK_four(`unit1_5`,POP,POP,POP,unit1)}
+        | [STRING] [\[] int [\]] {MK_two(`unit1_7`,POP,unit1)}
+          {MK_one(`unit1`,POP)} 
+        | [IO] name poss_1st_int {MK_one(`unit1`,POP)} 
+        | {MK_one(`unit1`,unit_fn)} 
+        | {MK_one(`unit1`,unit_mac)} 
+        | name [&] {MK_two(`unit1_6`,POP,unit1)} {MK_one(`unit1`,POP)} 
+        | unit2 unit1_finish {MK_one(`unit1`,POP)}.
+
+unit1_finish --> [//] {MK_two(`unit1_8`,POP,name)}
+               | poss_unit1_names.
+
+poss_unit1_names --> [@] name unit_names {MK_two(`unit1_1`,POP,POP)}
+                   | {MK_two(`unit1_1`,POP,unit_names)}.
+
+poss_1st_int --> [\[] int [\]] poss_2nd_int
+               | {MK_one(`unit1_9`,POP)}.
+ 
+poss_2nd_int --> [\[] {MK_three(`unit1_9`,POP,POP,int)} [\]]
+               | {MK_two(`unit1_9`,POP,POP)}.
+
+unit2 --> [?] {MK_one(`unit2_uninit`,typ)} unit2_stuff
+        | [IF] boolean [THEN] unit [ELSE] 
+          {MK_three(`unit2_cond`,POP,POP,unit)} [FI] unit2_stuff
+        | name name_stuff unit2_stuff
+        | unit3 unit2_stuff.
+
+unit2_stuff --> [?] {MK_one(`unit2_uninit`,typ)} {add_to_list(POP,POP)} 
+                unit2_stuff
+              | [IF] boolean [THEN] unit [ELSE] 
+                {MK_three(`unit2_cond`,POP,POP,unit)}
+                [FI] {add_to_list(POP,POP)} unit2_stuff
+              | [\[] {MK_two(`unit2_int`,POP,int)} [\]]
+              | [\[] [\[] {MK_two(`unit2_unit`,POP,unit)} [\]] [\]]
+              | [\[] int [..] {MK_three(`unit2_int_range`,POP,POP,int)} [\]]
+              | name name_stuff {add_to_list(POP,POP)} unit2_stuff
+              | unit3 {add_to_list(POP,POP)} unit2_stuff
+              | [].
+
+name_stuff --> [/] {MK_two(`const2_formula2`,POP,formula2)}
+             | {MK_two(`const2_char`,POP,char)} 
+             | {MK_two(`const2_string`,POP,string)} 
+             | [].
+
+unit3 --> [CASE] caseclause
+        | series
+        | sequence
+        | [(] unit more_units [)] {MK_one(`units`,POP)}.
+
+more_units --> [,] {add_to_list(POP,unit)} more_units
+             | [].
+
+caseclause --> unit [OF] choices poss_case_else [ESAC].
+
+choices --> choosers [:] {MK_two(`choice`,POP,unit)} more_choices.
+
+more_choices --> [,] choosers [:] {MK_two(`choice`,POP,unit)} 
+                 {add_to_list(POP,POP)} more_choices
+               | {MK_one(`choices`,POP)}.
+
+choosers --> {MK_one(`choosers`,const)}.
+
+poss_case_else --> [ELSE] {MK_zero(`caseclause_ELSEOF`)}
+                   {MK_four(`caseclause`,POP,POP,POP,unit)}
+                 | [ELSEOF] choices more_elseofs
+                 | {MK_zero(`caseclause_ELSEOF`)}
+                   {MK_three(`caseclause`,POP,POP,POP)}.
+
+more_elseofs --> [ELSEOF] {add_to_list(POP,choices)} more_elseofs 
+               | end_game_case.
+
+end_game_case --> [ELSE] {MK_one(`caseclause_ELSEOF`,POP)}
+                  {MK_four(`caseclause`,POP,POP,POP,unit)} 
+                | {MK_one(`caseclause_ELSEOF`,POP)}
+                  {MK_three(`caseclause`,POP,POP,POP)}.
+

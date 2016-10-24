@@ -1,0 +1,1045 @@
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 1.12 (pre-release), built on Jan 21 1990
+
+#
+#%============================================================================%
+#% This file contains examples to illustrate the HOL tools to support         %
+#% programming logics provided in the library prog_logic88.                   %
+#% The principles underlying these tools are described in the paper:          %
+#%                                                                            %
+#%    "Mechanizing Programming Logics in Higher Order Logic",                 %
+#%    by M.J.C. Gordon, in "Current Trends in Hardware Verification and       %
+#%    Automated Theorem Proving" edited by P.A. Subrahmanyam and              %
+#%    Graham Birtwistle, Springer-Verlag, 1989.                               %
+#%                                                                            %
+#% It is hoped that if the ML phrases in this file are evaluated in the       %
+#% order given, the results will illustrate the contents of the library.      %
+#%                                                                            %
+#%============================================================================%
+#
+#%----------------------------------------------------------------------------%
+#% The naming convention used below is that ML variables th1, th2, etc        %
+#% are pure logic theorems, hth1, hth2, etc name theorems of Hoare Logic and  %
+#% tth1, tth2, etc name theorems in the Hoare Logic of total correctness      %
+#% (however, theorems of Hoare Logic (for both partial and total correctness) %
+#% are really only specially printed theorems of pure logic).                 %
+#%----------------------------------------------------------------------------%
+#
+#%----------------------------------------------------------------------------%
+#% Examples to illustrate the special parsing and printing. This is           %
+#% currently done in Lisp, but it is hoped eventually to provide ML-level     %
+#% facilities to support user programmable syntax. Work on this will be       %
+#% part of an Esprit Basic Research Action joint with Philips and IMEC.       %
+#%----------------------------------------------------------------------------%
+#
+#
+#%----------------------------------------------------------------------------%
+#% Examples to illustrate forward proof using Hoare Logic (hoare_logic.ml).   %
+#%----------------------------------------------------------------------------%
+#
+#%----------------------------------------------------------------------------%
+#% Load in the generated parser for the language.                             %
+#%----------------------------------------------------------------------------%
+#
+#loadf `/usr/users/jvt/HOL/CHEOPS/Parser/Examples/tiny/tiny_load`;;
+[fasl /usr/users/jvt/HOL/CHEOPS/Parser/ml/general_ml.o]
+............................prog_logic88 already loaded
+.........................................................................() : void
+
+#
+#%----------------------------------------------------------------------------%
+#% The Assignment Axiom                                                       %
+#%----------------------------------------------------------------------------%
+#
+#let hth1 = ASSIGN_AX (MK_NICE `"{(R=x) /\\ (Y=y)}"`) (MK_NICE `"R := X"`);;
+hth1 = |- {(X = x) /\ (Y = y)}R := X{(R = x) /\ (Y = y)}
+
+#let hth2 = ASSIGN_AX (MK_NICE `"{(R=x) /\\ (X=y)}"`) (MK_NICE `"X := Y"`);;
+hth2 = |- {(R = x) /\ (Y = y)}X := Y{(R = x) /\ (X = y)}
+
+#
+#pretty_off();;
+true : bool
+
+#
+#hth1;;
+|- MK_SPEC
+   ((\s. (s `X` = x) /\ (s `Y` = y)),MK_ASSIGN(`R`,(\s. s `X`)),
+    (\s. (s `R` = x) /\ (s `Y` = y)))
+
+#
+#MK_SPEC;;
+Definition MK_SPEC autoloaded from theory `semantics`.
+MK_SPEC = 
+|- !p c q. MK_SPEC(p,c,q) = (!s1 s2. p s1 /\ c(s1,s2) ==> q s2)
+
+|- !p c q. MK_SPEC(p,c,q) = (!s1 s2. p s1 /\ c(s1,s2) ==> q s2)
+
+#
+#pretty_on();;
+false : bool
+
+#
+#%----------------------------------------------------------------------------%
+#% The Sequencing Rule                                                        %
+#%----------------------------------------------------------------------------%
+#
+#let hth1 = ASSIGN_AX (MK_NICE `"{(R=x) /\\ (Y=y)}"`) (MK_NICE `"R:=X"`);;
+hth1 = |- {(X = x) /\ (Y = y)}R := X{(R = x) /\ (Y = y)}
+
+#let hth2 = ASSIGN_AX (MK_NICE `"{(R=x) /\\ (X=y)}"`) (MK_NICE `"X:=Y"`);;
+hth2 = |- {(R = x) /\ (Y = y)}X := Y{(R = x) /\ (X = y)}
+
+#let hth3 = ASSIGN_AX (MK_NICE `"{(Y=x) /\\ (X=y)}"`) (MK_NICE `"Y:=R"`);;
+hth3 = |- {(R = x) /\ (X = y)}Y := R{(Y = x) /\ (X = y)}
+
+#
+#SEQ_THM;;
+|- !p q r c1 c2. {p}c1{q} /\ {q}c2{r} ==> {p}c1; c2{r}
+
+#
+#let hth4 = SEQ_RULE (hth1,hth2);;
+hth4 = |- {(X = x) /\ (Y = y)}R := X; X := Y{(R = x) /\ (X = y)}
+
+#let hth5 = SEQ_RULE (hth4,hth3);;
+hth5 = |- {(X = x) /\ (Y = y)}R := X; X := Y; Y := R{(Y = x) /\ (X = y)}
+
+#
+#let hth6 = SEQL_RULE[hth1;hth2;hth3];;
+hth6 = |- {(X = x) /\ (Y = y)}R := X; X := Y; Y := R{(Y = x) /\ (X = y)}
+
+#
+#%----------------------------------------------------------------------------%
+#% Precondition Strengthening                                                 %
+#%----------------------------------------------------------------------------%
+#
+#let th1  = DISCH_ALL(CONTR "((X:num=x) /\ (Y:num=y))" (ASSUME (MK_NICE `"F"`)));;
+th1 = |- F ==> (X = x) /\ (Y = y)
+
+#
+#let hth7 = PRE_STRENGTH_RULE(th1,hth5);; 
+hth7 = |- {F}R := X; X := Y; Y := R{(Y = x) /\ (X = y)}
+
+#
+#%----------------------------------------------------------------------------%
+#% Postcondition Weakening                                                    %
+#%----------------------------------------------------------------------------%
+#
+#let th2  = prove("((Y:num=x) /\ (X:num=y)) ==> T", REWRITE_TAC[]);;
+th2 = |- (Y = x) /\ (X = y) ==> T
+
+#
+#let hth8 = POST_WEAK_RULE(hth5,th2);;
+hth8 = |- {(X = x) /\ (Y = y)}R := X; X := Y; Y := R{T}
+
+#
+#%----------------------------------------------------------------------------%
+#% On-armed Conditional Rule                                                  %
+#%----------------------------------------------------------------------------%
+#
+#new_theory`MAX` ? extend_theory `MAX` ? ();;
+() : void
+
+#
+#let MAX =
+# new_definition
+#  (`MAX`, "MAX(m,n) = ((m>n) => m | n)") ? definition `MAX` `MAX` ;;
+MAX = |- !m n. MAX(m,n) = (m > n => m | n)
+
+#
+#let hth9 = ASSIGN_AX "{X = MAX(x,y)}" (MK_NICE `"X := Y"`);;
+hth9 = |- {Y = MAX(x,y)}X := Y{X = MAX(x,y)}
+
+#
+#let MAX_LEMMA1 =
+# theorem `MAX` `MAX_LEMMA1`
+# ?
+# prove_thm
+#  (`MAX_LEMMA1`,
+#   "((X=x) /\ (Y=y)) /\ (Y>X) ==> (Y=MAX(x,y))",
+#   REWRITE_TAC[MAX;GREATER]
+#    THEN REPEAT STRIP_TAC
+#    THEN ASSUM_LIST(\thl. ONCE_REWRITE_TAC(mapfilter SYM thl))
+#    THEN ASM_CASES_TAC (MK_NICE `"Y<X"`)
+#    THEN ASM_REWRITE_TAC[]
+#    THEN IMP_RES_TAC LESS_ANTISYM);;
+Theorem LESS_ANTISYM autoloaded from theory `arithmetic`.
+LESS_ANTISYM = |- !m n. ~(m < n /\ n < m)
+
+Definition GREATER autoloaded from theory `arithmetic`.
+GREATER = |- !m n. m > n = n < m
+
+MAX_LEMMA1 = |- ((X = x) /\ (Y = y)) /\ Y > X ==> (Y = MAX(x,y))
+
+#
+#let hth10 = PRE_STRENGTH_RULE(MAX_LEMMA1,hth9);;
+hth10 = |- {((X = x) /\ (Y = y)) /\ Y > X}X := Y{X = MAX(x,y)}
+
+#
+#let MAX_LEMMA2 =
+# theorem `MAX` `MAX_LEMMA2`
+# ?
+# prove_thm
+#  (`MAX_LEMMA2`,
+#   "((X=x) /\ (Y=y)) /\ ~(Y>X) ==> (X=MAX(x,y))",
+#   REWRITE_TAC[MAX;GREATER;NOT_LESS;LESS_OR_EQ]
+#    THEN REPEAT STRIP_TAC
+#    THEN ASSUM_LIST(\thl. ONCE_REWRITE_TAC(mapfilter SYM thl))
+#    THEN ASM_CASES_TAC "Y<X"
+#    THEN ASM_REWRITE_TAC[]
+#   THEN RES_TAC);;
+Definition LESS_OR_EQ autoloaded from theory `arithmetic`.
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+
+Theorem NOT_LESS autoloaded from theory `arithmetic`.
+NOT_LESS = |- !m n. ~m < n = n <= m
+
+MAX_LEMMA2 = |- ((X = x) /\ (Y = y)) /\ ~Y > X ==> (X = MAX(x,y))
+
+#
+#let hth11 = IF1_RULE(hth10,MAX_LEMMA2);;
+hth11 = |- {(X = x) /\ (Y = y)}if Y > X then X := Y{X = MAX(x,y)}
+
+#
+#%----------------------------------------------------------------------------%
+#% Two-armed Conditional Rule                                                 %
+#%----------------------------------------------------------------------------%
+#
+#let hth12 = ASSIGN_AX "{R = MAX(x,y)}" (MK_NICE `"R := Y"`);;
+hth12 = |- {Y = MAX(x,y)}R := Y{R = MAX(x,y)}
+
+#
+#let hth13 = PRE_STRENGTH_RULE(MAX_LEMMA1,hth12);;
+hth13 = |- {((X = x) /\ (Y = y)) /\ Y > X}R := Y{R = MAX(x,y)}
+
+#
+#let hth14 = ASSIGN_AX "{R = MAX(x,y)}" (MK_NICE `"R := X"`);;
+hth14 = |- {X = MAX(x,y)}R := X{R = MAX(x,y)}
+
+#
+#let hth15 = PRE_STRENGTH_RULE(MAX_LEMMA2,hth14);;
+hth15 = |- {((X = x) /\ (Y = y)) /\ ~Y > X}R := X{R = MAX(x,y)}
+
+#
+#let hth16 = IF2_RULE(hth13,hth15);;
+hth16 = 
+|- {(X = x) /\ (Y = y)}if Y > X then R := Y else R := X{R = MAX(x,y)}
+
+#
+#%----------------------------------------------------------------------------%
+#% The WHILE-Rule                                                             %
+#%----------------------------------------------------------------------------%
+#
+#let hth17 = ASSIGN_AX (MK_NICE `"{X = R + (Y * Q)}"`) 
+#                      (MK_NICE `"Q := (Q + 1)"`);;
+hth17 = |- {X = R + (Y * (Q + 1))}Q := Q + 1{X = R + (Y * Q)}
+
+#
+#let hth18 = ASSIGN_AX (MK_NICE `"{X = R + (Y * (Q + 1))}"`) 
+#                      (MK_NICE `"R := (R-Y)"`);;
+hth18 = 
+|- {X = (R - Y) + (Y * (Q + 1))}R := R - Y{X = R + (Y * (Q + 1))}
+
+#
+#let hth19 = SEQ_RULE(hth18,hth17);;
+hth19 = 
+|- {X = (R - Y) + (Y * (Q + 1))}R := R - Y; Q := Q + 1{X = R + (Y * Q)}
+
+#
+#let th2 =
+# prove
+#  ((MK_NICE `"((X = R + (Y * Q)) /\\ (Y<=R)) ==> 
+#              (X = (R - Y) + (Y * (Q + 1)))"`),
+#   REPEAT STRIP_TAC
+#    THEN REWRITE_TAC[LEFT_ADD_DISTRIB;MULT_CLAUSES]
+#    THEN ONCE_REWRITE_TAC[SPEC (MK_NICE `"Y*Q"`) ADD_SYM]
+#    THEN ONCE_REWRITE_TAC[ADD_ASSOC]
+#    THEN IMP_RES_TAC SUB_ADD
+#    THEN ASM_REWRITE_TAC[]);;
+Theorem SUB_ADD autoloaded from theory `arithmetic`.
+SUB_ADD = |- !m n. n <= m ==> ((m - n) + n = m)
+
+Theorem ADD_ASSOC autoloaded from theory `arithmetic`.
+ADD_ASSOC = |- !m n p. m + (n + p) = (m + n) + p
+
+Theorem ADD_SYM autoloaded from theory `arithmetic`.
+ADD_SYM = |- !m n. m + n = n + m
+
+Theorem MULT_CLAUSES autoloaded from theory `arithmetic`.
+MULT_CLAUSES = 
+|- !m n.
+    (0 * m = 0) /\
+    (m * 0 = 0) /\
+    (1 * m = m) /\
+    (m * 1 = m) /\
+    ((SUC m) * n = (m * n) + n) /\
+    (m * (SUC n) = m + (m * n))
+
+Theorem LEFT_ADD_DISTRIB autoloaded from theory `arithmetic`.
+LEFT_ADD_DISTRIB = |- !m n p. p * (m + n) = (p * m) + (p * n)
+
+th2 = |- (X = R + (Y * Q)) /\ Y <= R ==> (X = (R - Y) + (Y * (Q + 1)))
+
+#
+#let hth20 = PRE_STRENGTH_RULE(th2,hth19);;
+hth20 = 
+|- {(X = R + (Y * Q)) /\ Y <= R}R := R - Y; Q := Q + 1{X = R + (Y * Q)}
+
+#
+#let hth21 = WHILE_RULE hth20;;
+hth21 = 
+|- {X = R + (Y * Q)}
+    while Y <= R do R := R - Y; Q := Q + 1
+   {(X = R + (Y * Q)) /\ ~Y <= R}
+
+#
+#pretty_off();;
+true : bool
+
+#
+#WHILE_THM;;
+|- !p c b.
+    MK_SPEC((\s. p s /\ b s),c,p) ==>
+    MK_SPEC(p,MK_WHILE(b,c),(\s. p s /\ ~b s))
+
+#
+#%----------------------------------------------------------------------------%
+#% The pretty printer needs more work ...                                     %
+#%----------------------------------------------------------------------------%
+#
+#pretty_on();;
+false : bool
+
+#
+#WHILE_THM;;  % "{p s /\ b s}" should print as "{p /\ s}" %
+|- !p c b. {p s /\ b s}c{p} ==> {p}while b do c{p s /\ ~b s}
+
+#
+#let hth22 =
+# SEQL_RULE
+#  [ASSIGN_AX (MK_NICE `"{X = R + (Y * 0)}"`) (MK_NICE `"R := X"`);
+#   ASSIGN_AX (MK_NICE `"{X = R + (Y * Q)}"`) (MK_NICE `"Q := 0"`);
+#   hth21];;
+hth22 = 
+|- {X = X + (Y * 0)}
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   {(X = R + (Y * Q)) /\ ~Y <= R}
+
+#
+#let th3 =
+# prove
+#  ((MK_NICE `"(~(Y <= R)) = (R < Y)"`),
+#   ONCE_REWRITE_TAC[SYM(SPEC (MK_NICE `"R<Y"`) (hd(CONJUNCTS NOT_CLAUSES)))]
+#    THEN PURE_REWRITE_TAC[NOT_LESS]
+#    THEN REFL_TAC);;
+th3 = |- ~Y <= R = R < Y
+
+#
+#let hth23 = REWRITE_RULE[th3;MULT_CLAUSES;ADD_CLAUSES]hth22;;
+Theorem ADD_CLAUSES autoloaded from theory `arithmetic`.
+ADD_CLAUSES = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+
+hth23 = 
+|- {T}
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   {(X = R + (Y * Q)) /\ R < Y}
+
+#
+#let hth24 =
+# SEQL_RULE
+#  [ASSIGN_AX (MK_NICE `"{X = R + (Y * 0)}"`) (MK_NICE `"R := X"`);
+#   ASSIGN_AX (MK_NICE `"{X = R + (Y * Q)}"`) (MK_NICE `"Q := 0"`);
+#   WHILE_RULE
+#    (PRE_STRENGTH_RULE
+#      (th2,SEQL_RULE
+#            [ASSIGN_AX (MK_NICE `"{X = R + (Y * (Q + 1))}"`) 
+#                       (MK_NICE `"R := (R-Y)"`);
+#             ASSIGN_AX (MK_NICE `"{X = R + (Y * Q)}"`) 
+#                       (MK_NICE `"Q := (Q + 1)"`)]))];;
+hth24 = 
+|- {X = X + (Y * 0)}
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   {(X = R + (Y * Q)) /\ ~Y <= R}
+
+#
+#%----------------------------------------------------------------------------%
+#% Examples to illustrate the generation of verification conditions           %
+#% using tactics (vc_gen.ml).                                                 %
+#%----------------------------------------------------------------------------%
+#
+#let goal = g and apply = expandf;;
+goal = - : (term -> void)
+apply = - : (tactic -> void)
+
+#
+#goal (MK_NICE
+#      `"{T}
+#        (R:=X;
+#         Q:=0;
+#         assert{(R = X) /\\ (Q = 0)};
+#         while Y<=R
+#          do (invariant{X = (R + (Y * Q))};
+#              R := R-Y; Q := Q+1))
+#        {(R < Y) /\\ (X = (R + (Y * Q)))}"`);;
+"{T}
+  R := X; 
+  Q := 0; 
+  assert{(R = X) /\ (Q = 0)}; 
+  while Y <= R do invariant{X = R + (Y * Q)}; R := R - Y; Q := Q + 1
+ {R < Y /\ (X = R + (Y * Q))}"
+
+() : void
+
+#
+#apply(SEQ_TAC);;
+OK..
+2 subgoals
+"{(R = X) /\ (Q = 0)}
+  while Y <= R do invariant{X = R + (Y * Q)}; R := R - Y; Q := Q + 1
+ {R < Y /\ (X = R + (Y * Q))}"
+
+"{T}R := X; Q := 0{(R = X) /\ (Q = 0)}"
+
+() : void
+
+#
+#apply(SEQ_TAC);;
+OK..
+"{T}R := X{(R = X) /\ (0 = 0)}"
+
+() : void
+
+#apply(ASSIGN_TAC);;
+OK..
+"T ==> (X = X) /\ (0 = 0)"
+
+() : void
+
+#apply(REWRITE_TAC[]);;
+OK..
+goal proved
+|- T ==> (X = X) /\ (0 = 0)
+|- {T}R := X{(R = X) /\ (0 = 0)}
+|- {T}R := X; Q := 0{(R = X) /\ (Q = 0)}
+
+Previous subproof:
+"{(R = X) /\ (Q = 0)}
+  while Y <= R do invariant{X = R + (Y * Q)}; R := R - Y; Q := Q + 1
+ {R < Y /\ (X = R + (Y * Q))}"
+
+() : void
+
+#
+#apply(WHILE_TAC);;
+OK..
+3 subgoals
+"(X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))"
+
+"{(X = R + (Y * Q)) /\ Y <= R}R := R - Y; Q := Q + 1{X = R + (Y * Q)}"
+
+"(R = X) /\ (Q = 0) ==> (X = R + (Y * Q))"
+
+() : void
+
+#
+#apply(STRIP_TAC);;
+OK..
+"X = R + (Y * Q)"
+    [ "R = X" ]
+    [ "Q = 0" ]
+
+() : void
+
+#apply(ASM_REWRITE_TAC[ADD_CLAUSES;MULT_CLAUSES]);;
+OK..
+goal proved
+.. |- X = R + (Y * Q)
+|- (R = X) /\ (Q = 0) ==> (X = R + (Y * Q))
+
+Previous subproof:
+2 subgoals
+"(X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))"
+
+"{(X = R + (Y * Q)) /\ Y <= R}R := R - Y; Q := Q + 1{X = R + (Y * Q)}"
+
+() : void
+
+#
+#apply(SEQ_TAC);;
+OK..
+"{(X = R + (Y * Q)) /\ Y <= R}R := R - Y{X = R + (Y * (Q + 1))}"
+
+() : void
+
+#apply(ASSIGN_TAC);;
+OK..
+"(X = R + (Y * Q)) /\ Y <= R ==> (X = (R - Y) + (Y * (Q + 1)))"
+
+() : void
+
+#apply(ACCEPT_TAC th2);;
+OK..
+goal proved
+|- (X = R + (Y * Q)) /\ Y <= R ==> (X = (R - Y) + (Y * (Q + 1)))
+|- {(X = R + (Y * Q)) /\ Y <= R}R := R - Y{X = R + (Y * (Q + 1))}
+|- {(X = R + (Y * Q)) /\ Y <= R}R := R - Y; Q := Q + 1{X = R + (Y * Q)}
+
+Previous subproof:
+"(X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))"
+
+() : void
+
+#
+#apply(REWRITE_TAC[SYM(SPEC_ALL NOT_LESS)]);;
+OK..
+"(X = R + (Y * Q)) /\ R < Y ==> R < Y /\ (X = R + (Y * Q))"
+
+() : void
+
+#apply(DISCH_TAC);;
+OK..
+"R < Y /\ (X = R + (Y * Q))"
+    [ "(X = R + (Y * Q)) /\ R < Y" ]
+
+() : void
+
+#apply(ASM_REWRITE_TAC[]);;
+OK..
+goal proved
+. |- R < Y /\ (X = R + (Y * Q))
+|- (X = R + (Y * Q)) /\ R < Y ==> R < Y /\ (X = R + (Y * Q))
+|- (X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))
+|- {(R = X) /\ (Q = 0)}
+    while Y <= R do R := R - Y; Q := Q + 1
+   {R < Y /\ (X = R + (Y * Q))}
+|- {T}
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   {R < Y /\ (X = R + (Y * Q))}
+
+Previous subproof:
+goal proved
+() : void
+
+#
+#let VC_TAC =
+# REPEAT(ASSIGN_TAC 
+#         ORELSE SEQ_TAC 
+#         ORELSE IF1_TAC 
+#         ORELSE IF2_TAC 
+#         ORELSE WHILE_TAC);;
+VC_TAC = - : tactic
+
+#
+#goal (MK_NICE
+#      `"{T}
+#        (R:=X;
+#         Q:=0;
+#         assert{(R = X) /\\ (Q = 0)};
+#         while Y<=R
+#          do (invariant{X = (R + (Y * Q))};
+#              R := R-Y; Q := Q+1))
+#        {(R < Y) /\\ (X = (R + (Y * Q)))}"`);;
+"{T}
+  R := X; 
+  Q := 0; 
+  assert{(R = X) /\ (Q = 0)}; 
+  while Y <= R do invariant{X = R + (Y * Q)}; R := R - Y; Q := Q + 1
+ {R < Y /\ (X = R + (Y * Q))}"
+
+() : void
+
+#
+#apply(VC_TAC);;
+OK..
+4 subgoals
+"(X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))"
+
+"(X = R + (Y * Q)) /\ Y <= R ==> (X = (R - Y) + (Y * (Q + 1)))"
+
+"(R = X) /\ (Q = 0) ==> (X = R + (Y * Q))"
+
+"T ==> (X = X) /\ (0 = 0)"
+
+() : void
+
+#
+#apply(REWRITE_TAC[]);;
+OK..
+goal proved
+|- T ==> (X = X) /\ (0 = 0)
+
+Previous subproof:
+3 subgoals
+"(X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))"
+
+"(X = R + (Y * Q)) /\ Y <= R ==> (X = (R - Y) + (Y * (Q + 1)))"
+
+"(R = X) /\ (Q = 0) ==> (X = R + (Y * Q))"
+
+() : void
+
+#
+#apply(STRIP_TAC);;
+OK..
+"X = R + (Y * Q)"
+    [ "R = X" ]
+    [ "Q = 0" ]
+
+() : void
+
+#apply(ASM_REWRITE_TAC[ADD_CLAUSES;MULT_CLAUSES]);;
+OK..
+goal proved
+.. |- X = R + (Y * Q)
+|- (R = X) /\ (Q = 0) ==> (X = R + (Y * Q))
+
+Previous subproof:
+2 subgoals
+"(X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))"
+
+"(X = R + (Y * Q)) /\ Y <= R ==> (X = (R - Y) + (Y * (Q + 1)))"
+
+() : void
+
+#
+#apply(ACCEPT_TAC th2);;
+OK..
+goal proved
+|- (X = R + (Y * Q)) /\ Y <= R ==> (X = (R - Y) + (Y * (Q + 1)))
+
+Previous subproof:
+"(X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))"
+
+() : void
+
+#
+#apply(REWRITE_TAC[SYM(SPEC_ALL NOT_LESS)]);;
+OK..
+"(X = R + (Y * Q)) /\ R < Y ==> R < Y /\ (X = R + (Y * Q))"
+
+() : void
+
+#apply(DISCH_TAC);;
+OK..
+"R < Y /\ (X = R + (Y * Q))"
+    [ "(X = R + (Y * Q)) /\ R < Y" ]
+
+() : void
+
+#apply(ASM_REWRITE_TAC[]);;
+OK..
+goal proved
+. |- R < Y /\ (X = R + (Y * Q))
+|- (X = R + (Y * Q)) /\ R < Y ==> R < Y /\ (X = R + (Y * Q))
+|- (X = R + (Y * Q)) /\ ~Y <= R ==> R < Y /\ (X = R + (Y * Q))
+|- {T}
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   {R < Y /\ (X = R + (Y * Q))}
+
+Previous subproof:
+goal proved
+() : void
+
+# 
+#prove
+# ((MK_NICE
+#        `"{T}
+#          (R:=X;
+#           Q:=0;
+#           assert{(R = X) /\\ (Q = 0)};
+#           while Y<=R
+#            do (invariant{X = (R + (Y * Q))};
+#                R:=R-Y; Q:=Q+1))
+#          {(R < Y) /\\ (X = (R + (Y * Q)))}"`),
+#   VC_TAC
+#    THENL
+#     [REWRITE_TAC[];
+#      STRIP_TAC
+#       THEN ASM_REWRITE_TAC[ADD_CLAUSES;MULT_CLAUSES];
+#      ACCEPT_TAC th2;
+#      REWRITE_TAC[SYM(SPEC_ALL NOT_LESS)]
+#       THEN DISCH_TAC
+#       THEN ASM_REWRITE_TAC[]
+#     ]);;
+|- {T}
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   {R < Y /\ (X = R + (Y * Q))}
+
+#
+#
+#%----------------------------------------------------------------------------%
+#% The Hoare Logic of total correctness in HOL (halts_logic.ml)               %
+#%----------------------------------------------------------------------------%
+#
+#let tth1 =
+# ASSIGN_T_AX (MK_NICE `"{(0 < Y /\\ (X = R + (Y * Q))) /\\ R < r}"`)
+#             (MK_NICE `"Q := (Q + 1)"`);;
+tth1 = 
+|- [(0 < Y /\ (X = R + (Y * (Q + 1)))) /\ R < r]
+    Q := Q + 1
+   [(0 < Y /\ (X = R + (Y * Q))) /\ R < r]
+
+#
+#pretty_off();;
+true : bool
+
+#
+#tth1;;
+|- T_SPEC
+   ((\s.
+      (0 < (s `Y`) /\ (s `X` = (s `R`) + ((s `Y`) * ((s `Q`) + 1)))) /\
+      (s `R`) < r),MK_ASSIGN(`Q`,(\s. (s `Q`) + 1)),
+    (\s.
+      (0 < (s `Y`) /\ (s `X` = (s `R`) + ((s `Y`) * (s `Q`)))) /\
+      (s `R`) < r))
+
+#
+#T_SPEC;;
+Definition T_SPEC autoloaded from theory `halts_thms`.
+T_SPEC = |- !p c q. T_SPEC(p,c,q) = MK_SPEC(p,c,q) /\ HALTS p c
+
+|- !p c q. T_SPEC(p,c,q) = MK_SPEC(p,c,q) /\ HALTS p c
+
+#
+#HALTS;;
+Definition HALTS autoloaded from theory `halts`.
+HALTS = |- !p c. HALTS p c = (!s. p s ==> (?s'. c(s,s')))
+
+|- !p c. HALTS p c = (!s. p s ==> (?s'. c(s,s')))
+
+#
+#pretty_on();;
+false : bool
+
+#
+#let tth2 =
+# ASSIGN_T_AX (MK_NICE `"{(0 < Y /\\ (X = R + (Y * (Q + 1)))) /\\ R < r}"`)
+#             (MK_NICE `"R := (R-Y)"`);;
+tth2 = 
+|- [(0 < Y /\ (X = (R - Y) + (Y * (Q + 1)))) /\ (R - Y) < r]
+    R := R - Y
+   [(0 < Y /\ (X = R + (Y * (Q + 1)))) /\ R < r]
+
+#
+#let tth3 = SEQ_T_RULE(tth2,tth1);;
+tth3 = 
+|- [(0 < Y /\ (X = (R - Y) + (Y * (Q + 1)))) /\ (R - Y) < r]
+    R := R - Y; Q := Q + 1
+   [(0 < Y /\ (X = R + (Y * Q))) /\ R < r]
+
+#
+#let th4 =
+# prove
+#  ("!m. 0 < m ==> !n. 0 < n ==> (n - m) < n",
+#   INDUCT_TAC
+#    THEN REWRITE_TAC[LESS_REFL;LESS_0]
+#    THEN INDUCT_TAC
+#    THEN REWRITE_TAC[LESS_REFL;LESS_0;SUB;LESS_MONO_EQ]
+#    THEN ASM_CASES_TAC "n < SUC m"
+#    THEN ASM_REWRITE_TAC[LESS_0;LESS_MONO_EQ]
+#    THEN ASM_CASES_TAC "0 < n"
+#    THEN RES_TAC
+#    THEN POP_ASSUM_LIST
+#          (\[th1;th2;th3;th4].
+#             STRIP_ASSUME_TAC(REWRITE_RULE[NOT_LESS](CONJ th1 th2)))
+#    THEN IMP_RES_TAC LESS_EQ_TRANS
+#    THEN IMP_RES_TAC OR_LESS
+#    THEN IMP_RES_TAC NOT_LESS_0);;
+Theorem NOT_LESS_0 autoloaded from theory `prim_rec`.
+NOT_LESS_0 = |- !n. ~n < 0
+
+Theorem OR_LESS autoloaded from theory `arithmetic`.
+OR_LESS = |- !m n. (SUC m) <= n ==> m < n
+
+Theorem LESS_EQ_TRANS autoloaded from theory `arithmetic`.
+LESS_EQ_TRANS = |- !m n p. m <= n /\ n <= p ==> m <= p
+
+Theorem LESS_MONO_EQ autoloaded from theory `arithmetic`.
+LESS_MONO_EQ = |- !m n. (SUC m) < (SUC n) = m < n
+
+Definition SUB autoloaded from theory `arithmetic`.
+SUB = 
+|- (!m. 0 - m = 0) /\ (!m n. (SUC m) - n = (m < n => 0 | SUC(m - n)))
+
+Theorem LESS_0 autoloaded from theory `prim_rec`.
+LESS_0 = |- !n. 0 < (SUC n)
+
+Theorem LESS_REFL autoloaded from theory `prim_rec`.
+LESS_REFL = |- !n. ~n < n
+
+th4 = |- !m. 0 < m ==> (!n. 0 < n ==> (n - m) < n)
+
+#
+#let th5 =
+# prove
+#  ("!m n p. m < n /\ n <= p ==> m < p",
+#   REWRITE_TAC[LESS_OR_EQ]
+#    THEN REPEAT STRIP_TAC
+#    THEN IMP_RES_TAC LESS_TRANS
+#    THEN ASSUM_LIST(\[th1;th2;th3]. REWRITE_TAC[SYM th2])
+#    THEN ASM_REWRITE_TAC[]);;
+Theorem LESS_TRANS autoloaded from theory `arithmetic`.
+LESS_TRANS = |- !m n p. m < n /\ n < p ==> m < p
+
+th5 = |- !m n p. m < n /\ n <= p ==> m < p
+
+#
+#let th6 =
+# prove
+#  ((MK_NICE `"((0 < Y /\\ (X = R + (Y * Q))) /\\ (Y<=R) /\\ (R = r))
+#     ==> (0 < Y /\\ (X = (R - Y) + (Y * (Q + 1)))) /\\ (R - Y) < r"`),
+#   REPEAT STRIP_TAC
+#    THEN REWRITE_TAC[LEFT_ADD_DISTRIB;MULT_CLAUSES]
+#    THEN ONCE_REWRITE_TAC[SPEC "Y*Q" ADD_SYM]
+#    THEN ONCE_REWRITE_TAC[ADD_ASSOC]
+#    THEN IMP_RES_TAC SUB_ADD
+#    THEN ASM_REWRITE_TAC[]
+#    THEN IMP_RES_TAC th5
+#    THEN ASSUM_LIST(\thl. REWRITE_TAC[SYM(el 4 thl)])
+#    THEN IMP_RES_TAC th4);;
+th6 = 
+|- (0 < Y /\ (X = R + (Y * Q))) /\ Y <= R /\ (R = r) ==>
+   (0 < Y /\ (X = (R - Y) + (Y * (Q + 1)))) /\ (R - Y) < r
+
+#
+#let tth4 = PRE_STRENGTH_T_RULE(th6,tth3);;
+tth4 = 
+|- [(0 < Y /\ (X = R + (Y * Q))) /\ Y <= R /\ (R = r)]
+    R := R - Y; Q := Q + 1
+   [(0 < Y /\ (X = R + (Y * Q))) /\ R < r]
+
+#
+#let tth5 = WHILE_T_RULE tth4;;
+tth5 = 
+|- [0 < Y /\ (X = R + (Y * Q))]
+    while Y <= R do R := R - Y; Q := Q + 1
+   [(0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R]
+
+#
+#let tth6 =
+# SEQL_T_RULE
+#  [ASSIGN_T_AX (MK_NICE `"{(0 < Y) /\\ (X = R + (Y * 0))}"`) 
+#               (MK_NICE `"R := X"`);
+#   ASSIGN_T_AX (MK_NICE `"{(0 < Y) /\\ (X = R + (Y * Q))}"`)
+#               (MK_NICE `"Q := 0"`);
+#   tth5];;
+tth6 = 
+|- [0 < Y /\ (X = X + (Y * 0))]
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   [(0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R]
+
+#
+#let th7 =
+# prove
+#  ((MK_NICE `"(~(Y <= R)) = (R < Y)"`),
+#   ONCE_REWRITE_TAC[SYM(SPEC "R<Y" (hd(CONJUNCTS NOT_CLAUSES)))]
+#    THEN PURE_REWRITE_TAC[NOT_LESS]
+#    THEN REFL_TAC);;
+th7 = |- ~Y <= R = R < Y
+
+#
+#let tth7 = REWRITE_RULE[th7;MULT_CLAUSES;ADD_CLAUSES]tth6;;
+tth7 = 
+|- [0 < Y]
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   [(0 < Y /\ (X = R + (Y * Q))) /\ R < Y]
+
+#
+#let tth6 =
+# SEQL_T_RULE
+#  [ASSIGN_T_AX (MK_NICE `"{(0 < Y) /\\ (X = R + (Y * 0))}"`)
+#               (MK_NICE `"R := X"`);
+#   ASSIGN_T_AX (MK_NICE `"{(0 < Y) /\\ (X = R + (Y * Q))}"`) 
+#               (MK_NICE `"Q := 0"`);
+#   WHILE_T_RULE
+#    (PRE_STRENGTH_T_RULE
+#      (th6,SEQL_T_RULE
+#            [ASSIGN_T_AX (MK_NICE `"{((0 < Y) /\\ (X = R + (Y * (Q + 1)))) /\\ 
+#                                     (R < r)}"`)
+#                         (MK_NICE `"R := (R-Y)"`);
+#             ASSIGN_T_AX (MK_NICE `"{((0 < Y) /\\ (X = R + (Y * Q))) /\\ 
+#                                    (R < r)}"`)
+#                         (MK_NICE `"Q := (Q + 1)"`)]))];;
+tth6 = 
+|- [0 < Y /\ (X = X + (Y * 0))]
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   [(0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R]
+
+#
+#%----------------------------------------------------------------------------%
+#% Verification conditions for total correctness (halts_vc_gen)               %
+#%----------------------------------------------------------------------------%
+#
+#goal
+# (MK_NICE
+#  `"[0 < Y]
+#    (R := X;
+#     Q := 0;
+#     assert{(0 < Y) /\\ (R=X) /\\ (Q=0)};
+#     while Y <= R
+#      do (invariant{(0 < Y) /\\ (X = R + (Y * Q))}; variant{R};
+#          R := R-Y; Q := Q+1))
+#    [(X = R + (Y * Q)) /\\ R < Y]"`);;
+"[0 < Y]
+  R := X; 
+  Q := 0; 
+  assert{0 < Y /\ (R = X) /\ (Q = 0)}; 
+  while Y <= R do 
+   invariant{0 < Y /\ (X = R + (Y * Q))}; 
+   variant{R}; R := R - Y; Q := Q + 1
+ [(X = R + (Y * Q)) /\ R < Y]"
+
+() : void
+
+#
+#apply(VC_T_TAC);;
+OK..
+4 subgoals
+"(0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R ==> (X = R + (Y * Q)) /\ R < Y"
+
+"(0 < Y /\ (X = R + (Y * Q))) /\ Y <= R /\ (R = r) ==>
+ (0 < Y /\ (X = (R - Y) + (Y * (Q + 1)))) /\ (R - Y) < r"
+
+"0 < Y /\ (R = X) /\ (Q = 0) ==> 0 < Y /\ (X = R + (Y * Q))"
+
+"0 < Y ==> 0 < Y /\ (X = X) /\ (0 = 0)"
+
+() : void
+
+#
+#apply(REWRITE_TAC[]);;
+OK..
+goal proved
+|- 0 < Y ==> 0 < Y /\ (X = X) /\ (0 = 0)
+
+Previous subproof:
+3 subgoals
+"(0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R ==> (X = R + (Y * Q)) /\ R < Y"
+
+"(0 < Y /\ (X = R + (Y * Q))) /\ Y <= R /\ (R = r) ==>
+ (0 < Y /\ (X = (R - Y) + (Y * (Q + 1)))) /\ (R - Y) < r"
+
+"0 < Y /\ (R = X) /\ (Q = 0) ==> 0 < Y /\ (X = R + (Y * Q))"
+
+() : void
+
+#
+#apply(STRIP_TAC THEN ASM_REWRITE_TAC[ADD_CLAUSES;MULT_CLAUSES]);;
+OK..
+goal proved
+|- 0 < Y /\ (R = X) /\ (Q = 0) ==> 0 < Y /\ (X = R + (Y * Q))
+
+Previous subproof:
+2 subgoals
+"(0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R ==> (X = R + (Y * Q)) /\ R < Y"
+
+"(0 < Y /\ (X = R + (Y * Q))) /\ Y <= R /\ (R = r) ==>
+ (0 < Y /\ (X = (R - Y) + (Y * (Q + 1)))) /\ (R - Y) < r"
+
+() : void
+
+#
+#apply(ACCEPT_TAC th6);;
+OK..
+goal proved
+|- (0 < Y /\ (X = R + (Y * Q))) /\ Y <= R /\ (R = r) ==>
+   (0 < Y /\ (X = (R - Y) + (Y * (Q + 1)))) /\ (R - Y) < r
+
+Previous subproof:
+"(0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R ==> (X = R + (Y * Q)) /\ R < Y"
+
+() : void
+
+#
+#apply(REWRITE_TAC[SYM(SPEC_ALL NOT_LESS)]);;
+OK..
+"(0 < Y /\ (X = R + (Y * Q))) /\ R < Y ==> (X = R + (Y * Q)) /\ R < Y"
+
+() : void
+
+#apply(DISCH_TAC);;
+OK..
+"(X = R + (Y * Q)) /\ R < Y"
+    [ "(0 < Y /\ (X = R + (Y * Q))) /\ R < Y" ]
+
+() : void
+
+#apply(ASM_REWRITE_TAC[]);;
+OK..
+goal proved
+. |- (X = R + (Y * Q)) /\ R < Y
+|- (0 < Y /\ (X = R + (Y * Q))) /\ R < Y ==> (X = R + (Y * Q)) /\ R < Y
+|- (0 < Y /\ (X = R + (Y * Q))) /\ ~Y <= R ==>
+   (X = R + (Y * Q)) /\ R < Y
+|- [0 < Y]
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   [(X = R + (Y * Q)) /\ R < Y]
+
+Previous subproof:
+goal proved
+() : void
+
+#
+#let DIV_CORRECT =
+# prove
+#  ((MK_NICE `"[0 < Y]
+#              (R:=X;
+#               Q:=0;
+#               assert{(0 < Y) /\\ (R = X) /\\ (Q = 0)};
+#               while Y<=R
+#                do (invariant{(0 < Y) /\\ (X = (R + (Y * Q)))};
+#                    variant{R};
+#                    R:=R-Y; Q:=Q+1))
+#              [(R < Y) /\\ (X = (R + (Y * Q)))]"`),
+#   VC_T_TAC
+#    THENL
+#     [REWRITE_TAC[];
+#      STRIP_TAC
+#       THEN ASM_REWRITE_TAC[ADD_CLAUSES;MULT_CLAUSES];
+#      ACCEPT_TAC th6;
+#      REWRITE_TAC[SYM(SPEC_ALL NOT_LESS)]
+#       THEN DISCH_TAC
+#       THEN ASM_REWRITE_TAC[]
+#     ]);;
+DIV_CORRECT = 
+|- [0 < Y]
+    R := X; Q := 0; while Y <= R do R := R - Y; Q := Q + 1
+   [R < Y /\ (X = R + (Y * Q))]
+
+#
+#pretty_off();;
+true : bool
+
+#
+#DIV_CORRECT;;
+|- T_SPEC
+   ((\s. 0 < (s `Y`)),
+    MK_SEQ
+    (MK_SEQ(MK_ASSIGN(`R`,(\s. s `X`)),MK_ASSIGN(`Q`,(\s. 0))),
+     MK_WHILE
+     ((\s. (s `Y`) <= (s `R`)),
+      MK_SEQ
+      (MK_ASSIGN(`R`,(\s. (s `R`) - (s `Y`))),
+       MK_ASSIGN(`Q`,(\s. (s `Q`) + 1))))),
+    (\s. (s `R`) < (s `Y`) /\ (s `X` = (s `R`) + ((s `Y`) * (s `Q`)))))
+
+#
+#pretty_on();;
+false : bool
+
+#
+#%----------------------------------------------------------------------------%
+#% To see how weakest preconditions and dynamic logic can be represented in   %
+#% HOL, browse the files mk_dijkstra.ml and mk_dynamic_logic.ml, respectively.%
+#%----------------------------------------------------------------------------%
+#
+[Return to top level]
+-> ÿ

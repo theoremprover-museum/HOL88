@@ -1,0 +1,3 @@
+\THEOREM LAST_LASTN_LAST list
+|- !n l. n <= (LENGTH l) ==> 0 < n ==> (LAST(LASTN n l) = LAST l)
+\ENDTHEOREM

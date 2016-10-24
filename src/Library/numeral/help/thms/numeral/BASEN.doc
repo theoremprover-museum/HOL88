@@ -1,0 +1,6 @@
+\THEOREM BASEN numeral
+|- (!radix. BASEN radix[] = 0) /\
+   (!radix digit digits.
+     BASEN radix(CONS digit digits) =
+     (digit * (radix EXP (LENGTH digits))) + (BASEN radix digits))
+\ENDTHEOREM

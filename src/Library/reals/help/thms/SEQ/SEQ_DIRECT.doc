@@ -1,0 +1,3 @@
+\THEOREM SEQ_DIRECT SEQ
+|- !f. subseq f ==> (!N1 N2. ?n. n num_ge N1 /\ (f n) num_ge N2)
+\ENDTHEOREM

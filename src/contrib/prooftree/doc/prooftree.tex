@@ -1,0 +1,324 @@
+
+\section{Goals and Proofs}
+
+A theorem in \HOL\ can be constructed by forward reasoning, by the
+application of inference rules (primitive or derived) to existing
+theorems. However, it is often easier to use backward proof method.
+Development of proofs in the \HOL\ system consists usually in setting a
+goal and simplifying it by the successive application of {\em
+tactics}, until the resulting subgoals can simply be inferred from the
+axioms.
+
+The proof steps needed for this are basically setting a goal,
+expanding it using tactics, and backtracking over tactics in case of 
+errors. One should be able to examine existing subgoals, and, when the
+proof is completed, one should be allowed to store the resulting
+theorem. These operations are parts of the subgoal package in \HOL,
+attributed to Paulson and inherited from \LCF.
+
+The subgoal package existing in \HOL\ is characterized by storing a
+{\em state}, which can either be a stack containing {\em only}
+subgoals which have not been explored, or the theorem which has been
+proved, with other stack(s) being used to store backups.
+
+\section{Current Methodology}
+
+The current subgoal package views the state of proof as a stack where
+the subgoal at the top of the stack is the one being manipulated by
+the user. This has a remarkably efficient implementation. However, it
+can be somewhat contrived or difficult to examine the state of the
+proof, change the target subgoal of tactics, or undo a whole set of
+tactics at once.
+
+Once a proof has been developed using the subgoal package, most users
+prefer to coalesce the tactics and obtain the desired theorem without
+employing the subgoal package. This can be complicated by the fact
+that many times one does not record the tree structure of the proof,
+which is needed to correctly join the individual tactics using
+tactical functions. The goal stack does not show the structure of the
+proof, and does not show the subgoals which have already been proved.
+
+Roger Flemming's subgoal package builds a tactic tree, thus allowing
+the system to `remember' tactics used in constructing proofs. This
+program also provides a mechanism to factor common tactics in separate
+branches of proofs. Commands are provided to traverse a tactic tree by
+going up or down the tree or moving to a left or right sibling.
+
+\section{ {\tt prooftree}: an enhanced subgoal package}
+
+The proof manager described here presents several improvements over
+the standard package.  Each proof is implemented as a {\em
+tree}, with nodes containing either subgoals or theorems which have
+been proved. A node is labeled as {\em explored} if it has
+been expanded by a tactic, and {\em proved} if either the tactic
+applied at that point has resulted in the goal being proved, or all
+the nodes below it are proved.
+
+In figure~\ref{showproof} we see a proof tree with several nodes, some
+proved, some explored, and some which are as yet unexplored.
+Following standard \HOL\ notation, theorems (proved nodes) are
+pretty-printed with a turnstile (\verb?|-?)  and goals (unproved nodes
+--- explored or unexplored) by enclosing their terms in quotes
+(\verb|"|).
+
+\begin{figure} \hrule
+{\small
+\begin{verbatim}
+
+	"!a b. a /\ b = b /\ a"
+	   (REPEAT STRIP_TAC)
+	   "a /\ b = b /\ a"
+	      EQ_TAC
+	      |- a /\ b ==> b /\ a
+	         STRIP_TAC
+	         b, a |- b /\ a
+	            (ASM_REWRITE_TAC [])
+	      "b /\ a ==> a /\ b"
+	         STRIP_TAC
+	         *** "a /\ b"
+	                   ["a"]
+	                   ["b"] ***
+
+\end{verbatim} }
+\hrule
+\caption{a proof tree}
+\label{showproof}
+\end{figure}
+
+Thus, the goal stack has been replaced by a tree structure, where the
+natural relation between different nodes --- all of them accessible
+directly by the user --- is still maintained. Access to the different
+nodes is by Dewey-style addressing, where the root node is addressed
+by a blank string (\verb|``|), its first child by \verb|`1`|, the
+second child of this last node by \verb|`1.2`|, and so on.
+
+\index{multiple goals}
+
+The second level of organization introduced here aims at supporting
+access to multiple goals.  Each proof tree is also given a name, so
+that several of them can exist simulatneously in a \HOL\ session. The
+user can easily move from one proof to another, with several
+functions which make it easy to switch between proofs. To facilitate
+use, the system keeps track of the last proof tree being manipulated,
+so that the name of the proof does not have to be specified at each
+point.
+
+The system also makes use of pretty-printing facilities to store the
+text of tactics being supplied by the user, so that they can be
+automatically composed and easily re-submitted. Thus, maintaining a
+log of a proof session is vastly simplified, and the user need not be
+concerned at the same time with both developing a proof and
+remembering how it was developed.
+
+The salient points of {\tt prooftree} can be summarized as:
+\begin{itemize}
+\item
+       The whole proof is stored as opposed to only the goal stack;
+        the nodes being of type unexplored, explored, or proved.
+\item
+       A tactic can be applied to any unexplored node in the tree,
+        not only the one which is currently on top of the stack
+        (which, however, is still available as the default).
+\item
+       Several proofs can exist at the same time, under different
+        names. There is also one default proof accessed by functions
+	in which the name need not be specified.
+\item
+       The functions used with the previous package (\ml{set\_goal},
+        \ml{expand}, \ml{backup}) are still available.
+\end{itemize}
+
+\section{ Developing proofs using {\tt prooftree}}
+
+Commands in the new subgoal package can be divided into two groups:
+those that manage the set of goals and proofs and those which develop
+a particular proof. The next two sections list and explain the
+commands. There are also several contracted forms of these commands,
+which are explained next.
+
+\subsection{ Manipulating lists of proofs}
+
+Functions in this group manage the lists of proofs, by adding goals to
+the set of goals, removing goals and proof trees, and examining the
+list of proofs. One may either enter a goal without specifying a name
+for the proof (in which case it is manipulated under the name
+\ml{`defaultproof`}) or one may specify a goal along with a name for
+the proof. 
+
+The list containing proofs and proof names should be viewed as a set,
+with any name denoting only one proof at any time. It is left to the
+user to discard proof trees once they are not needed anymore, to
+conserve machine space.
+
+\subsection{ Manipulating Proofs}
+
+The functions available with the old subgoal package allowed for
+applying a tactic to a goal, cancelling the last tactic applied, and
+rotating the goal stack to allow tactics to be applied to different
+subgoals.  The same functions are available here, in many different
+variations.
+
+\begin{description}
+\item[ Applying tactics:] one can apply tactics in the same order
+applicable in the previous subgoal package, or one can randomly choose
+any of the remaining subgoals. The fundamental function for applying a
+tactic is \verb|do_tac| of type
+\verb|(string -> string -> tactic -> void)|. 
+The first argument is the name of the proof, the second
+is the address or path to the node to be expanded by the tactic, and
+the third is the tactic itself.
+
+\item[ Cancelling tactics:] the equivalent of the previous \ml{backup}
+is available, as well as variants which allow marking as unexpanded
+any node (expanded or proved) in the tree. These tactics may eliminate
+large chunks of proof very easily and thus must be used carefully.
+
+\item[ Changing the proof tree:] the function \ml{compact} changes the
+structure of the proof tree by removing all the possible expanded
+nodes. 
+
+\end{description}
+
+\subsection{ Display functions}
+
+The structuring of the proof allows several different output
+functions, which provide more information to help develop a proof. For
+each proof, one can choose to examine only the current subgoal
+(corresponding to the ``top of the stack''), the whole proof tree,
+a list of all remaining subgoals in the proof, or the tactic currently
+applied to the original goal. One can obtain a
+listing of all proofs current in the set of proofs, with the name, the
+original goal, and the status---proved or unproved---being displayed.
+
+
+\subsection{ Use of Defaults}
+
+Most of the functions described above ask for the name of the proof
+and the location of a node in the proof to be explicitly indicated.
+However, when continuing to develop the same proof, and when following
+the nodes in the same order supported by the old subgoal package in
+\HOL, one can implicitly use the information which is stored in the
+system, by using abbreviated function calls
+
+The items stored by the system are the name of the last proof which
+was manipulated (a default proof) and, for each proof, the node
+corresponding to the top of the stack. The nodes at which tactics have
+been applied are also stored in order.
+
+The default values obtained as follows: the proof tree is the last one
+which has been manipulated (by \ml{set\_goal}, \ml{do\_tac},
+\ml{cancel\_tac}, etc.) or the one which has been chosen by applying
+\ml{move\_to\_proof}.  The node on which to apply the tactic is the
+same one which would be expanded in the existing subgoal package, and
+is indicated in the display of the tree.
+
+
+\subsection{ Compatibility}
+
+The enhanced system has been designed to work with the commands
+already used by the existing subgoal package: \ml{set\_goal} or
+\ml{g}, \ml{expand} or \ml{e}, \ml{backup} or \ml{b}, and
+\ml{save\_top\_thm}. Thus, proofs which have been executed using the
+previous subgoal package will still work.  The format of the output
+however will be enhanced, and one always has the option of using any
+of the other operations during a proof session.
+
+\section{ Programming issues}
+
+Programming the subgoal package involved several interesting
+programming strategies. One issue apparent at a closer inspection is
+of how the text of a tactic is generated. Suppose a user enters a
+command into \HOL:
+
+\begin{verbatim}
+#expand (STRIP_TAC THEN ASM_REWRITE_TAC []) ;;
+\end{verbatim}
+
+The \ML\ top-level reads this line, recognizes \ml{STRIP\_TAC} as an
+identifier, and invokes the appropriate function, which the subgoal
+package applies to the appropriate goal.  And, once that is done, the
+name gets lost, and only the value (the function) remains. This makes
+it impossible to store the characters, unless they are entered
+explicitly as strings. Thus, one solution would be entering tactics as
+strings:
+
+\begin{verbatim}
+#expand `STRIP_TAC THEN ASM_REWRITE_TAC []` ;;
+\end{verbatim}
+
+The string representing the tactic can then be stored, and used to
+label tactic applications and build up the tactic tree. Doing this
+however has its own problems: for one, it is not possible to simply
+get the value denoted by the string; this would depend on the
+existence of an {\tt eval} function which is semantically undesired in
+\ML, and not present in Standard \ML.
+
+Of course, a more obvious solution would be to simply have as input
+(either directly or through a simple front-end):
+
+\begin{verbatim}
+#expand `STRIP_TAC THEN ASM_REWRITE_TAC []` 
+        (STRIP_TAC THEN ASM_REWRITE_TAC []) ;;
+\end{verbatim}
+
+So that both name and denotation exist at the same time --- the string
+to label the tactic tree with and the denotation to give (tactic)
+function.
+
+Apart from the obvious ugliness of the above construct, there is also
+another problem. Even when we have the function and the 
+string, we may not want the full text as {\em one} string. This
+results in a problem with pretty-printing the text of the tactic.
+This could be solved by a simple grammar for strings which searches
+for common tacticals like \ml{THEN}, \ml{THENL}, \ml{ORELSE}, etc.
+This is still not a very general solution, specially considering that
+tactics can be arbitrarily complex \ML\ expressions.
+
+
+The solution which was found consists in actually using the (internal)
+\ML\ parser.  Specifically, the function \ml{get\_last\_parse\_tree}
+querries the \ML\ environment and returns the (lisp) parse tree. Thus, a
+side effect of the function which applies a tactic is to get the parse
+tree and store the subtree corresponding to the text of the tactic,
+for later pretty-printing.
+
+Note that we are talking about parsing at the {\em meta-language}
+level and not the {\em object-language level}. Manipulating \HOL\
+objects is quite straightforward, but changing the underlying \ML\
+read-eval loop is more complex.
+
+As another function worth implementing, but which also entails in
+semantic tricks in the meta-language level, a function deemed to be
+useful by several users (let us call it
+\ml{single\_tac}) takes a complex tactic apart and applies each
+tactic separately (as much as possible) to allow one to examine the
+proof. And, intuitively, separating a tactic tree based on \ml{THEN}
+and \ml{THENL} tacticals would be enough for most applications.
+%However, coding this is not possible under the current implementation
+%of \HOL: applying tactics works by side-effecting an environment
+%variable (the proof stack or tree); to access the variable 
+
+
+\section{ Interface}
+
+A logical next step in this work is  the development of a graphical
+front-end to the subgoal package.
+The advantages of having an interface for these subgoal management
+functions  are:
+\begin{itemize}
+\item easy access of focus for tactics: as at any instant any of the
+remaining subgoals can be worked on, but they need to be addressed
+(name of proof plus path from root)
+\item new functions: there are many new display control functions, as
+one may want to examine several different aspects of the proof state.
+it is easier to access this variety of functions through menus and
+buttons.
+\item clicking for tactics: an easy way to apply tactics is to find
+them on a menu and clicking on them.
+\end{itemize}
+
+Note that at this level the structure of each goal and term is not
+relevant --- the interface deals with the relation between goals and
+tactics in a proof tree, and the set of all prooftrees. Thus goals,
+terms, and tactics are viewed simply as strings of characters.
+

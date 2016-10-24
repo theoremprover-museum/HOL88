@@ -1,0 +1,24 @@
+\DOC bound_context
+
+\TYPE {bound_context : ((string # int) list -> print_binding -> string)}
+
+\SYNOPSIS
+Obtains the value of the current context from the pretty-printer environment.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+To make it easier to extract the value of the current context from its rather
+contorted representation in the parameter list, there is a function called
+{bound_context}. When presented with the current environment by way of its
+arguments, {bound_context} returns the character string representing the
+current context. The binding is not used, but is present for consistency.
+
+\FAILURE
+The function will not fail unless it is given an invalid parameter list.
+
+\SEEALSO
+is_a_member_of, bound_name, bound_names, bound_child, bound_children,
+bound_number.
+
+\ENDDOC

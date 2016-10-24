@@ -1,0 +1,64 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: auxiliary						|
+|									|
+| DESCRIPTION   : Definition of auxiliary theory.                       |
+|									|
+| AUTHOR	: T. kalker						|
+| DATE		: 8 JUNE 1989  			         		|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+ 
+    functions.ml              functions
+
+    tactics.ml                tactics
+  
+    rules.ml                  rules
+
+    theorems.ml               useful defs and theorems
+
+    conversions.ml            conversions
+
+    auxiliary.ml              loads the library into hol
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+This library contains a collection rules, tactics, conversions, 
+definitions and theorems for general use. Prominent are
+the filter tactics and the conversions. Included are also
+two resolution tactics which use renaming if necessary, and
+use specialising as little as possible.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `auxiliary`;;
+
+

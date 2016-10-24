@@ -1,0 +1,3 @@
+\THEOREM ELL_MAP list
+|- !n l f. n < (LENGTH l) ==> (ELL n(MAP f l) = f(ELL n l))
+\ENDTHEOREM

@@ -1,0 +1,7 @@
+\THEOREM NET_NULL_MUL NETS
+|- !g.
+    dorder g ==>
+    (!x y.
+      bounded(mr1,g)x /\ (y tends (real_of_num 0))(mtop mr1,g) ==>
+      ((\n. (x n) real_mul (y n)) tends (real_of_num 0))(mtop mr1,g))
+\ENDTHEOREM

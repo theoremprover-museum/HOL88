@@ -1,0 +1,3 @@
+\THEOREM REAL_SUB_LE REAL
+|- !x y. (& 0) <= (x - y) = y <= x
+\ENDTHEOREM

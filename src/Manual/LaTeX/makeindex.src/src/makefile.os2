@@ -1,0 +1,138 @@
+#  Makefile modified for IBM PC DOS (Microsoft C) [13-Jan-88] (only major
+#  targets supported)
+#
+#  Modified by Eberhard Mattes for OS/2 and MS C 6.0 [18-Jul-90]
+#
+#  Makefile for the program `makeindex'
+#
+#  Copyright (C) 1987	Pehong Chen	(phc@renoir.berkeley.edu)
+#  Computer Science Division
+#  University of California, Berkeley
+#
+
+CC = cl
+O = .obj
+X = .exe
+# INCLUDE = /usr/include
+# INCLUDE = c:/sys/msc/include
+
+DEST	      = /usr/local/bin
+DEST	      = c:/usr/bin
+
+MANDIR	      = /usr/local/man/manl
+MANDIR	      = nul
+
+MANUAL	      = makeindex.l
+
+DOC	      = makeindex.tex
+
+HDRS	      = genind.h \
+		mkind.h \
+		scanid.h \
+		scanst.h
+
+XCFLAGS=
+
+CFLAGS= -AL -Ocegls -W3 -F 2000 -Lp -Fb -B2 C2L -DOS_PCDOS -DIBM_PC_MICROSOFT $(XCFLAGS)
+#
+# -AL   	Large model
+# -Oc   	Block-level common subexpression optimization
+# -Oe   	Global register allocation
+# -Og   	Global code optimization
+# -Ol   	Loop code optimization
+# -Os           Optimize for space (I prefer small and slow programs)
+# -Oi           Generate intrinsic functions (not used, see line above)
+# -W3   	Set warning level (level 4 not required)
+# -F 2000 	Set stack size (hexadecimal!)
+# -Lp           Link for protected mode (use llibceP.lib)
+# -Fb           Invoke bind
+# -B2 C2L   	Large-model pass 2 (OS/2 only, required for -Og)
+
+
+LDFLAGS	      = $(CFLAGS)
+
+LIBS	      =
+
+LINKER	      = link
+
+MAKEFILE      = Makefile
+
+OBJS          = genind$(O) mkind$(O) qsort$(O) scanid$(O) scanst$(O) sortid$(O)
+
+PRINT	      = psgrind
+
+SRCS	      = genind.c \
+		mkind.c \
+		qsort.c \
+		scanid.c \
+		scanst.c \
+		sortid.c
+
+PROGRAM	      = makeindx
+
+TAR	      = $(PROGRAM).tar
+
+SHAR	      = $(PROGRAM).shar
+
+ALL	      = $(MAKEFILE) $(DOC) $(MANUAL) $(HDRS) $(SRCS)
+
+# Rules...
+
+.SUFFIXES:
+.SUFFIXES:      .obj .c
+
+.c.obj:
+		$(CC) -c $(CFLAGS) $*.c
+
+RM = del
+
+$(PROGRAM):	$(PROGRAM)$(X)
+
+$(PROGRAM)$(X): $(OBJS) $(PROGRAM).def
+		$(CC) -o $(PROGRAM)$(X) $(CFLAGS) $(OBJS) $(PROGRAM).def
+
+install:	$(PROGRAM)
+		install -c -s -m 0755 $(PROGRAM) $(DEST)
+		@ls -lgs $(DEST)/$(PROGRAM)
+
+tar:
+		@rm -f $(TAR)
+		tar -cf $(TAR) $(ALL)
+
+shar:
+		@rm -f $(SHAR)
+		shar $(SHAR) $(ALL)
+
+dist:
+		cp $(PROGRAM) $(DEST)
+		rcp $(PROGRAM) monet:$(DEST)
+		rcp $(PROGRAM) arpa:$(DEST)
+		rcp $(PROGRAM) harrison@vangogh:bin
+
+clean:
+		@rm -f $(OBJS) core $(PROGRAM) *$(O)
+
+depend:
+		@rm -f .#*.[chly]
+		mkmf -f $(MAKEFILE) PROGRAM=$(PROGRAM) DEST=$(DEST)
+
+index:
+		@ctags -wx $(HDRS) $(SRCS)
+
+print:
+		@$(PRINT) $(HDRS) $(SRCS)
+
+man:
+		ptroff -man $(MANUAL)
+
+program:	$(PROGRAM)
+
+tags:		$(HDRS) $(SRCS)
+		@ctags $(HDRS) $(SRCS)
+
+genind$(O):     mkind.h genind.h
+mkind$(O):      mkind.h
+qsort$(O):      mkind.h
+scanid$(O):     mkind.h scanid.h
+scanst$(O):     mkind.h scanst.h
+sortid$(O):     mkind.h

@@ -1,0 +1,3 @@
+\THEOREM COS_DOUBLE TRANSC
+|- !x. cos((& 2) * x) = ((cos x) pow 2) - ((sin x) pow 2)
+\ENDTHEOREM

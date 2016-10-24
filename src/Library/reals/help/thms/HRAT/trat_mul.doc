@@ -1,0 +1,5 @@
+\THEOREM trat_mul HRAT
+|- !x y x' y'.
+    (x,y) trat_mul (x',y') =
+    PRE((SUC x) * (SUC x')),PRE((SUC y) * (SUC y'))
+\ENDTHEOREM

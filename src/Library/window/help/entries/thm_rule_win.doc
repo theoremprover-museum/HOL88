@@ -1,0 +1,32 @@
+\DOC thm_rule_win
+
+\TYPE {thm_rule_win :  ((thm -> thm) -> window -> window)}
+
+\SYNOPSIS
+Apply an inference rule to the result of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+Assuming {RULE} is an inference rule of the following form:
+{
+      H |- fn R f
+    ---------------- RULE
+     H' |- fn' R' f
+}
+Then if {(thm_rule_win RULE)} is applied to a window holding the 
+theorem {H |- fn R f}, it will transform the window to one which holds the
+theorem {H' |- fn' R' f}, provided that {H'} is a subset of the context
+of the window and {R'} is as strong as {R}.
+This will effectively transform the focus from {fn} to {fn'}.
+
+\FAILURE
+{thm_rule_win r w} if {r (win_thm w)} is not of the form {H' |- fn' R' f}
+(note that this requires that {r} does not change {f});
+or if {H'} is not a subset of the context of the window, or {R'} is not as
+strong as {R}.
+
+\SEEALSO
+THM_RULE_WIN, rule_win, RULE_WIN, foc_rule_win, FOC_RULE_WIN, win_thm
+
+\ENDDOC

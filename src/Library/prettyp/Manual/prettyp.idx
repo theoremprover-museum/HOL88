@@ -1,0 +1,103 @@
+\indexentry{load\_library@{\ptt load\_library}}{1}
+\indexentry{help!updating search path}{1}
+\indexentry{line breaks!inconsistent}{31}
+\indexentry{line breaks!consistent}{31}
+\indexentry{node-names!non-alphanumeric}{39}
+\indexentry{node-names!clashing with reserved words}{39}
+\indexentry{sub-tree addresses|(}{41}
+\indexentry{address!of sub-trees|(}{41}
+\indexentry{address!of sub-trees|)}{42}
+\indexentry{sub-tree addresses|)}{42}
+\indexentry{context in the environment}{43}
+\indexentry{node-names!one rule for several names}{43}
+\indexentry{is\_a\_member\_of@{\ptt is\_a\_member\_of}|pin}{43}
+\indexentry{bound\_number@{\ptt bound\_number}|pin}{44}
+\indexentry{bound\_name@{\ptt bound\_name}|pin}{44}
+\indexentry{bound\_names@{\ptt bound\_names}|pin}{44}
+\indexentry{bound\_child@{\ptt bound\_child}|pin}{44}
+\indexentry{bound\_children@{\ptt bound\_children}|pin}{44}
+\indexentry{context in the environment}{44}
+\indexentry{bound\_context@{\ptt bound\_context}|pin}{44}
+\indexentry{apply1@{\ptt apply1}|pin}{45}
+\indexentry{apply2@{\ptt apply2}|pin}{45}
+\indexentry{apply0@{\ptt apply0}|pin}{46}
+\indexentry{new\_name@{\ptt new\_name}|pin}{46}
+\indexentry{new\_names@{\ptt new\_names}|pin}{46}
+\indexentry{new\_child@{\ptt new\_child}|pin}{46}
+\indexentry{new\_children@{\ptt new\_children}|pin}{46}
+\indexentry{type\_to\_print\_tree@{\ptt type\_to\_print\_tree}|pin}{51}
+\indexentry{term\_to\_print\_tree@{\ptt term\_to\_print\_tree}|pin}{53}
+\indexentry{thm\_to\_print\_tree@{\ptt thm\_to\_print\_tree}|pin}{54}
+\indexentry{pp\_convert\_term@{\ptt pp\_convert\_term}|pin}{55}
+\indexentry{pp\_convert\_type@{\ptt pp\_convert\_type}|pin}{56}
+\indexentry{pp\_convert\_thm@{\ptt pp\_convert\_thm}|pin}{56}
+\indexentry{pp\_convert\_all\_thm@{\ptt pp\_convert\_all\_thm}|pin}{56}
+\indexentry{PP\_to\_ML@{\ptt PP\_to\_ML}|pin}{56}
+\indexentry{filenames}{56}
+\indexentry{pretty\_print@{\ptt pretty\_print}|pin}{57}
+\indexentry{pp@{\ptt pp}|pin}{58}
+\indexentry{pp\_write@{\ptt pp\_write}|pin}{58}
+\indexentry{hol\_type\_rules\_fun@{\ptt hol\_type\_rules\_fun}|pin}{58}
+\indexentry{hol\_term\_rules\_fun@{\ptt hol\_term\_rules\_fun}|pin}{58}
+\indexentry{hol\_thm\_rules\_fun@{\ptt hol\_thm\_rules\_fun}|pin}{58}
+\indexentry{then\_try@{\ptt then\_try}|pin}{58}
+\indexentry{print-rule functions!composition of}{58}
+\indexentry{hol\_rules\_fun@{\ptt hol\_rules\_fun}|pin}{59}
+\indexentry{print-rules!defaults}{59}
+\indexentry{raw\_tree\_rules\_fun@{\ptt raw\_tree\_rules\_fun}|pin}{59}
+\indexentry{goals}{61}
+\indexentry{precedence}{76}
+\indexentry{precedence!in HOL terms}{94}
+\indexentry{associative operators in HOL terms}{96}
+\indexentry{Address@{\ptt Address}}{115}
+\indexentry{All\_types@{\ptt All\_types}}{116}
+\indexentry{apply0@{\ptt apply0}}{117}
+\indexentry{apply1@{\ptt apply1}}{118}
+\indexentry{apply2@{\ptt apply2}}{119}
+\indexentry{bound\_child@{\ptt bound\_child}}{120}
+\indexentry{bound\_children@{\ptt bound\_children}}{120}
+\indexentry{bound\_context@{\ptt bound\_context}}{121}
+\indexentry{bound\_name@{\ptt bound\_name}}{122}
+\indexentry{bound\_names@{\ptt bound\_names}}{122}
+\indexentry{bound\_number@{\ptt bound\_number}}{123}
+\indexentry{get\_margin@{\ptt get\_margin}}{124}
+\indexentry{Hidden\_types@{\ptt Hidden\_types}}{124}
+\indexentry{hol\_rules\_fun@{\ptt hol\_rules\_fun}}{125}
+\indexentry{hol\_term\_rules\_fun@{\ptt hol\_term\_rules\_fun}}{125}
+\indexentry{hol\_thm\_rules\_fun@{\ptt hol\_thm\_rules\_fun}}{125}
+\indexentry{hol\_type\_rules\_fun@{\ptt hol\_type\_rules\_fun}}{126}
+\indexentry{is\_a\_member\_of@{\ptt is\_a\_member\_of}}{126}
+\indexentry{max\_term\_prec@{\ptt max\_term\_prec}}{127}
+\indexentry{max\_type\_prec@{\ptt max\_type\_prec}}{127}
+\indexentry{min\_term\_prec@{\ptt min\_term\_prec}}{128}
+\indexentry{min\_type\_prec@{\ptt min\_type\_prec}}{128}
+\indexentry{new\_child@{\ptt new\_child}}{128}
+\indexentry{new\_children@{\ptt new\_children}}{129}
+\indexentry{new\_name@{\ptt new\_name}}{130}
+\indexentry{new\_names@{\ptt new\_names}}{131}
+\indexentry{No\_address@{\ptt No\_address}}{132}
+\indexentry{No\_types@{\ptt No\_types}}{133}
+\indexentry{pp@{\ptt pp}}{133}
+\indexentry{pp\_convert\_all\_thm@{\ptt pp\_convert\_all\_thm}}{134}
+\indexentry{pp\_convert\_term@{\ptt pp\_convert\_term}}{135}
+\indexentry{pp\_convert\_thm@{\ptt pp\_convert\_thm}}{135}
+\indexentry{pp\_convert\_type@{\ptt pp\_convert\_type}}{136}
+\indexentry{pp\_print\_all\_thm@{\ptt pp\_print\_all\_thm}}{137}
+\indexentry{pp\_print\_term@{\ptt pp\_print\_term}}{137}
+\indexentry{pp\_print\_theory@{\ptt pp\_print\_theory}}{137}
+\indexentry{pp\_print\_thm@{\ptt pp\_print\_thm}}{138}
+\indexentry{pp\_print\_type@{\ptt pp\_print\_type}}{138}
+\indexentry{PP\_to\_ML@{\ptt PP\_to\_ML}}{139}
+\indexentry{pp\_write@{\ptt pp\_write}}{140}
+\indexentry{pretty\_print@{\ptt pretty\_print}}{141}
+\indexentry{Print\_node@{\ptt Print\_node}}{142}
+\indexentry{print\_tree\_children@{\ptt print\_tree\_children}}{142}
+\indexentry{print\_tree\_name@{\ptt print\_tree\_name}}{142}
+\indexentry{raw\_tree\_rules\_fun@{\ptt raw\_tree\_rules\_fun}}{143}
+\indexentry{term\_prec@{\ptt term\_prec}}{143}
+\indexentry{term\_to\_print\_tree@{\ptt term\_to\_print\_tree}}{144}
+\indexentry{then\_try@{\ptt then\_try}}{145}
+\indexentry{thm\_to\_print\_tree@{\ptt thm\_to\_print\_tree}}{146}
+\indexentry{type\_prec@{\ptt type\_prec}}{147}
+\indexentry{type\_to\_print\_tree@{\ptt type\_to\_print\_tree}}{148}
+\indexentry{Useful\_types@{\ptt Useful\_types}}{148}

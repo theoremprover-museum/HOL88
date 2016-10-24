@@ -1,0 +1,68 @@
+# =====================================================================
+#
+# 		 MAKEFILE fragments for fpf contribution
+#
+# See READ-ME
+# =====================================================================
+
+
+Hol=hol
+
+# =====================================================================
+# Rules
+# =====================================================================
+
+.SUFFIXES+= .th .ml _ml.o
+
+%_ml.o: %.ml
+	echo 'letref retry = false;;' \
+             '(compilet `$*`;'\
+	     'quit());;' | ${Hol}
+
+%.th: %.ml
+	rm -f $*.th
+	echo  	'letref retry = false;; (loadt `$*`; quit());;' | ${Hol}
+ 
+
+# =====================================================================
+# Dependencies
+# =====================================================================
+
+printer_ml.o: SML_semantics.th SML_ops_ml.o
+
+
+
+fpf.th:
+
+Allegro_Case=:case-insensitive-upper
+LispType=cl
+#LispType=${LispType}
+
+Obj=o
+#Obj=${Obj}
+
+Lisp=/usr/contrib/bin/akcl
+#Lisp=/usr/groups/hol/franz/bin/lisp
+
+Liszt=
+#Liszt=${Liszt}
+
+LisztComm=
+#LispDir=../../lisp
+LispDir=holsys/lisp
+
+print_hacks.o: print_hacks.l
+	rm -f f-constants.$(Obj); ln -s $(LispDir)/f-constants.$(Obj) .
+	rm -f f-macro.$(Obj); ln -s $(LispDir)/f-macro.$(Obj) .
+	rm -f f-ol-rec.$(Obj); ln -s $(LispDir)/f-ol-rec.$(Obj) .
+	rm -f genmacs.$(Obj); ln -s $(LispDir)/genmacs.$(Obj) .
+	rm -f f-$(LispType).$(Obj); ln -s $(LispDir)/f-$(LispType).$(Obj) .
+	if [ $(LispType) = cl ]; then\
+	  echo '#+allegro (set-case-mode $(Allegro_Case))'\
+	       '(load "f-cl") (compile-file "print_hacks.l") (quit)'\
+	       | $(Lisp); else\
+	  $(Liszt) print_hacks.l; fi
+
+printerl_ml.o: print_hacks.o
+
+

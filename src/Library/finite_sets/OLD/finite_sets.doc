@@ -1,0 +1,216 @@
+
+
+			 A Theory for Finite Sets
+			       P. J. Windley
+		      University of California, Davis
+				May 12, 1989
+
+
+The HOL theory "sets.th" provides a theory of finite sets for HOL.  The
+theory is taken from chapter 10 of Manna and Waldinger's book "The Logical
+Basis for Computer Porgramming, VOL 1."  The theory presented there was
+formalized inside HOL.
+
+The theory of sets has two constructors EMPTY, which constructs the empty
+set and INSERT which constructs a new set from an atom and another set.
+
+There are two induction theorems (and tactics).  The first is the standard
+structural induction theorem returned from Tom Melham's type package:
+
+    set_induction = 
+      |- !P. P EMPTY /\ (!s. P s ==> (!x. P(INSERT x s))) ==> (!s. P s)
+
+The second is more specific to set and is quite useful.  It is derived from
+the first:
+
+    set_induction_2 = 
+     |- !P.
+        P EMPTY /\ (!s x. ~x IN s ==> P s ==> P(INSERT x s)) ==> (!s. P s)
+
+The two induction tactics are called SET_INDUCT_TAC and SET_INDUCT_2_TAC
+respectively. 
+
+The following is a list of theorems and definitions contained in the theory
+of sets: 
+
+
+    SET_DISTINCT = |- !x s. ~(EMPTY = INSERT x s)
+
+    SET_CASES_THM = |- !s. (s = EMPTY) \/ (?s' x. s = INSERT x s')
+
+    IN = 
+    |- (!x. x IN EMPTY = F) /\
+       (!x y s. x IN (INSERT y s) = (x = y) \/ x IN s)
+
+    COMPONENT = |- !x s. x IN (INSERT x s)
+
+    NONEMPTY_MEMBER = |- !s. ~(s = EMPTY) = (?x. x IN s)
+
+    ABSORPTION = |- !x s. x IN s ==> (INSERT x s = s)
+
+    MEMBER_DECOMP = |- !x s. x IN s ==> (?t. (s = INSERT x t) /\ ~x IN t)
+
+    SET_EQ = |- !s t. (s = t) = (!x. x IN s = x IN t)
+
+    UNION = 
+    |- (!s. EMPTY UNION s = s) /\
+       (!x s1 s2.
+	 (INSERT x s1) UNION s2 =
+	 (x IN s2 => s1 UNION s2 | INSERT x(s1 UNION s2)))
+
+    IN_UNION = |- !x s1 s2. x IN (s1 UNION s2) = x IN s1 \/ x IN s2
+
+    UNION_ASSOC = 
+    |- !s1 s2 s3. (s1 UNION s2) UNION s3 = s1 UNION (s2 UNION s3)
+
+    UNION_IDENT = |- !s. s UNION s = s
+
+    UNION_SYM = |- !s1 s2. s1 UNION s2 = s2 UNION s1
+
+    INTERSECT = 
+    |- (!s. EMPTY INTERSECT s = EMPTY) /\
+       (!x s1 s2.
+	 (INSERT x s1) INTERSECT s2 =
+	 (x IN s2 => INSERT x(s1 INTERSECT s2) | s1 INTERSECT s2))
+
+    IN_INTERSECT = |- !x s1 s2. x IN (s1 INTERSECT s2) = x IN s1 /\ x IN s2
+
+    INTERSECT_ASSOC = 
+    |- !s1 s2 s3.
+	(s1 INTERSECT s2) INTERSECT s3 = s1 INTERSECT (s2 INTERSECT s3)
+
+    INTERSECT_IDENT = |- !s. s INTERSECT s = s
+
+    INTERSECT_SYM = |- !s1 s2. s1 INTERSECT s2 = s2 INTERSECT s1
+
+    UNION_OVER_INTERSECT = 
+    |- !s1 s2 s3.
+	s1 INTERSECT (s2 UNION s3) =
+	(s1 INTERSECT s2) UNION (s1 INTERSECT s3)
+
+    INTERSECT_OVER_UNION = 
+    |- !s1 s2 s3.
+	s1 UNION (s2 INTERSECT s3) = (s1 UNION s2) INTERSECT (s1 UNION s3)
+
+    DISJOINT = |- !s t. DISJOINT s t = (s INTERSECT t = EMPTY)
+
+    DISJOINT_MEMBER = |- !s t. DISJOINT s t = ~(?x. x IN s /\ x IN t)
+
+    DELETE = 
+    |- (!x. EMPTY DELETE x = EMPTY) /\
+       (!x s y.
+	 (INSERT x s) DELETE y =
+	 ((x = y) => s DELETE y | INSERT x(s DELETE y)))
+
+    DELETE_MEMBER = |- !s x y. x IN (s DELETE y) = x IN s /\ ~(x = y)
+
+    DELETE_DECOMPOSITION = |- !s x. x IN s ==> (s = INSERT x(s DELETE x))
+
+    DELETE_ABSORPTION = |- !s x. ~x IN s ==> (s = s DELETE x)
+
+    CHOICE = |- !s. CHOICE s = (@x. x IN s)
+
+    REST = |- !s. REST s = s DELETE (CHOICE s)
+
+    CHOICE_MEMBER = |- !s. ~(s = EMPTY) ==> (CHOICE s) IN s
+
+    CHOICE_DECOMPOSITION = 
+    |- !s. ~(s = EMPTY) ==> (s = INSERT(CHOICE s)(REST s))
+
+    CHOICE_NON_MEMBER = |- !s. ~(s = EMPTY) ==> ~(CHOICE s) IN (REST s)
+
+    DIFF = 
+    |- (!s. s DIFF EMPTY = s) /\
+       (!s t x. s DIFF (INSERT x t) = (s DELETE x) DIFF t)
+
+    DIFF_MEMBER = |- !t s x. x IN (s DIFF t) = x IN s /\ ~x IN t
+
+    SUBSET = 
+    |- (!s. EMPTY SUBSET s = T) /\
+       (!x s t. (INSERT x s) SUBSET t = x IN t /\ s SUBSET t)
+
+    SUBSET_MEMBER = |- !s t. s SUBSET t = (!y. y IN s ==> y IN t)
+
+    SUBSET_UNION = |- !s t. s SUBSET (s UNION t) /\ t SUBSET (s UNION t)
+
+    SUBSET_INTERSECT = 
+    |- !s t. (s INTERSECT t) SUBSET s /\ (s INTERSECT t) SUBSET t
+
+    SUBSET_DELETE = |- !s x. ~(s = EMPTY) ==> (s DELETE x) SUBSET s
+
+    SUBSET_UNION_ABSORPTION = |- !s t. s SUBSET t = (s UNION t = t)
+
+    SUBSET_INTERSECT_ABSORPTION = |- !s t. s SUBSET t = (s INTERSECT t = s)
+
+    SUBSET_TRANS = 
+    |- !s1 s2 s3. s1 SUBSET s2 /\ s2 SUBSET s3 ==> s1 SUBSET s3
+
+    SUBSET_ANTISYM = |- !s t. s SUBSET t /\ t SUBSET s ==> (s = t)
+
+    SUBSET_REFL = |- !s. s SUBSET s
+
+    PSUBSET = |- !s t. s PSUBSET t = s SUBSET t /\ ~(s = t)
+
+    PSUBSET_TRANS = 
+    |- !s t.
+	s PSUBSET t = (!x. x IN s ==> x IN t) /\ (?y. y IN t /\ ~y IN s)
+
+    PSUBSET_REFL = |- !s. ~s PSUBSET s
+
+    PSUBSET_REST = |- !s. ~(s = EMPTY) ==> (REST s) PSUBSET s
+
+    MK_SET = 
+    |- (!f. MK_SET EMPTY f = EMPTY) /\
+       (!x s f.
+	 MK_SET(INSERT x s)f = (f x => INSERT x(MK_SET s f) | MK_SET s f))
+
+    MK_SET_MEMBER = |- !s x. x IN (MK_SET s f) = x IN s /\ f x
+
+    MK_SET_TRUE = |- !s. MK_SET s(\x. T) = s
+
+    MK_SET_FALSE = |- !s. MK_SET s(\x. F) = EMPTY
+
+    MK_SET_INTERSECT = |- !s t. s INTERSECT t = MK_SET s(\x. x IN t)
+
+    MK_SET_DELETE = |- !s y. s DELETE y = MK_SET s(\x. ~(x = y))
+
+    MK_SET_DIFF = |- !t s. s DIFF t = MK_SET s(\x. ~x IN t)
+
+    MK_SET_OR = 
+    |- !s f g. MK_SET s(\x. f x \/ g x) = (MK_SET s f) UNION (MK_SET s g)
+
+    MK_SET_AND = 
+    |- !s f g.
+	MK_SET s(\x. f x /\ g x) = (MK_SET s f) INTERSECT (MK_SET s g)
+
+    SING = |- !s. SING s = (?x. s = INSERT x EMPTY)
+
+    SING_CHOICE = |- !x. CHOICE(INSERT x EMPTY) = x
+
+    SING_REST = |- !s. SING s = ~(s = EMPTY) /\ (REST s = EMPTY)
+
+The following are the cardinality results
+(the theorem CARD is proved in the file
+card.ml composed by Philippe Leveilley):
+
+    CARD = 
+    |- (CARD EMPTY = 0) /\
+       (!x s. CARD(INSERT x s) = (x IN s => CARD s | (CARD s) + 1))
+
+    CARD_EQ_0 = |- !s. (CARD s = 0) ==> (s = EMPTY)
+
+    CARD_ABSORPTION = |- !s x. x IN s ==> (CARD(INSERT x s) = CARD s)
+
+    CARD_INTERSECT = 
+    |- !s t.
+	(CARD(s INTERSECT t)) <= (CARD s) /\
+	(CARD(s INTERSECT t)) <= (CARD t)
+
+    CARD_UNION = 
+    |- !s t. (CARD(s UNION t)) + (CARD(s INTERSECT t)) = (CARD s) + (CARD t)
+
+    CARD_SUBSET = |- !s t. s SUBSET t ==> (CARD s) <= (CARD t)
+
+    CARD_PSUBSET = |- !s t. s PSUBSET t ==> (CARD s) < (CARD t)
+
+    SING_CARD = |- !s. SING s = (CARD s = 1)

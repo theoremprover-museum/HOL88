@@ -1,0 +1,18 @@
+\DOC read_symb
+
+\BLTYPE
+read_symb : ((string -> string) ->
+             string ->
+             (string # string) list ->
+             string list ->
+             string list ->
+             string ->
+             (lex_symb # string))
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

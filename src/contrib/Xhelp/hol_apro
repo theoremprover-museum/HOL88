@@ -1,0 +1,28 @@
+
+
+
+APROPSED=/usr/groups/hol/HOL21/src/contrib/Xhelp/h_apro.sed
+DEFHOLHELPPATH=/usr/groups/hol/HOL21/src/help/ENTRIES
+CUR_HELP_PATH=`echo ${HOL_HELP_PATH} ${DEFHOLHELPPATH} |sed 's/ /:/g'`
+
+
+
+for i in `echo $CUR_HELP_PATH | sed 's/^:/.:/
+				s/::/:.:/g
+				s/:$/:./
+				s/:/ /g'`
+do
+	for j in $i/*${1}*doc
+	do
+	if test -f $j
+	then
+		sed -f  $APROPSED $j
+		echo ""
+	fi
+	done
+done
+
+echo "end of search"
+echo ""
+
+

@@ -1,0 +1,138 @@
+\begin{minipage}{156mm}
+
+\setlength{\unitlength}{1mm}
+\newcommand{\actionbox}[2]{
+\put(5,10){\thicklines{\circle{10}}}
+\put(5,10){\makebox(0,0)[c]{\Large #1}}
+\put(15,10){\makebox(0,0)[c]{$\Longrightarrow$}}
+\put(47,10){\thicklines{\oval(54,20)}}
+
+\put(91,10){\thicklines{\circle{10}}}
+\put(91,10){\makebox(0,0)[c]{\Large #2}}
+\put(101,10){\makebox(0,0)[c]{$\Longrightarrow$}}
+\put(133,10){\thicklines{\oval(54,20)}}
+}
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{0}{8}
+
+\put(23,10){\makebox(0,0)[l]{\verb"mar" $\leftarrow$ \verb"pc"}}
+
+\put(109,12.5){\makebox(0,0)[l]{\verb"acc" $\leftarrow$ \verb"datain"}}
+\put(109,7.5){\makebox(0,0)[l]{\verb"dreq" = \verb"T"}}
+
+\end{picture}
+
+\vskip .15in
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{1}{9}
+
+\put(23,15){\makebox(0,0)[l]{\verb"rtn" $\leftarrow$ \verb"pc"}}
+\put(23,10){\makebox(0,0)[l]{\verb"buf" $\leftarrow$ \verb"wordn 0"}}
+\put(23,5){\makebox(0,0)[l]{\verb"iack" $\leftarrow$ \verb"T"}}
+
+\put(109,15){\makebox(0,0)[l]{\verb"dataout" = \verb"acc"}}
+\put(109,10){\makebox(0,0)[l]{\verb"wmem" = \verb"T"}}
+\put(109,5){\makebox(0,0)[l]{\verb"dreq" = \verb"T"}}
+
+\end{picture}
+
+\vskip .15in
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{2}{10}
+
+\put(23,12.5){\makebox(0,0)[l]{\verb"ir" $\leftarrow$ \verb"datain"}}
+\put(23,7.5){\makebox(0,0)[l]{\verb"dreq" = \verb"T"}}
+
+\put(109,12.5){\makebox(0,0)[l]{\verb"pc" $\leftarrow$ \verb"rtn"}}
+\put(109,7.5){\makebox(0,0)[l]{\verb"iack" $\leftarrow$ F}}
+
+\end{picture}
+
+\vskip .15in
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{3}{11}
+
+\put(23,10){\makebox(0,0)[l]{\verb"mar" $\leftarrow$ \verb"ir"}}
+
+\put(109,10){\makebox(0,0)[l]{\verb"buf" $\leftarrow$ inc \verb"pc"}}
+
+\end{picture}
+
+\vskip .15in
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{4}{12}
+
+\put(23,10){\makebox(0,0)[l]{$<$nothing$>$}}
+
+\put(109,10){\makebox(0,0)[l]{\verb"pc" $\leftarrow$ \verb"buf"}}
+
+\end{picture}
+
+\vskip .15in
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{5}{13}
+
+\put(23,10){\makebox(0,0)[l]{\verb"pc" $\leftarrow$ \verb"ir"}}
+
+\put(109,12.5){\makebox(0,0)[l]{\verb"buf" $\leftarrow$ \verb"add (arg,datain)"}}
+\put(109,7.5){\makebox(0,0)[l]{\verb"dreq" = \verb"T"}}
+
+\end{picture}
+
+\vskip .15in
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{6}{14}
+
+\put(23,10){\makebox(0,0)[l]{\verb"arg" $\leftarrow$ \verb"acc"}}
+
+\put(109,12.5){\makebox(0,0)[l]{\verb"buf" $\leftarrow$ \verb"sub (arg,datain)"}}
+\put(109,7.5){\makebox(0,0)[l]{\verb"dreq" = \verb"T"}}
+
+\end{picture}
+
+\vskip .15in
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(156,20)
+
+\actionbox{7}{15}
+
+\put(23,10){\makebox(0,0)[l]{\verb"arg" $\leftarrow$ \verb"acc"}}
+
+\put(109,10){\makebox(0,0)[l]{\verb"acc" $\leftarrow$ \verb"buf"}}
+
+\end{picture}
+
+\vskip .25in
+
+in all states except where indicated otherwise:
+\hspace{3mm}
+\begin{minipage}[t]{40mm}
+\verb"wmem" = F\\
+\verb"dreq" = F\\
+\verb"dataout" = \verb"wordn 0"\\
+\verb"addr" = \verb"address mar"
+\end{minipage}
+
+\end{minipage}

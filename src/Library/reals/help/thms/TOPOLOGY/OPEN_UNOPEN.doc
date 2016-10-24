@@ -1,0 +1,3 @@
+\THEOREM OPEN_UNOPEN TOPOLOGY
+|- !S top. open top S = (Union(\P. open top P /\ P subset S) = S)
+\ENDTHEOREM

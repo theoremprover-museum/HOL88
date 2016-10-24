@@ -1,0 +1,3 @@
+\THEOREM WOSET_FLEQ WELLORDER
+|- !l. woset l ==> (!x. fl l x = l(x,x))
+\ENDTHEOREM

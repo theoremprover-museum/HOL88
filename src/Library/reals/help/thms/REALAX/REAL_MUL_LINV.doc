@@ -1,0 +1,3 @@
+\THEOREM REAL_MUL_LINV REALAX
+|- !x. ~(x = r0) ==> ((inv x) * x = r1)
+\ENDTHEOREM

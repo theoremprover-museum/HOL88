@@ -1,0 +1,3 @@
+\THEOREM SUP_ALLPOS_LEMMA4 REALAX
+|- !y. ~r0 < y ==> (!x. y < (real_of_hreal x))
+\ENDTHEOREM

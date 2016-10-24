@@ -1,0 +1,3 @@
+\THEOREM SNOC_INDUCT list
+|- !P. P[] /\ (!l. P l ==> (!x. P(SNOC x l))) ==> (!l. P l)
+\ENDTHEOREM

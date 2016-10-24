@@ -1,0 +1,25 @@
+\DOC \char'100
+
+\TYPE {$@ : ((* list # * list) -> * list)}
+
+\SYNOPSIS
+Concatenates two lists.
+
+\KEYWORDS
+list, join.
+
+\DESCRIBE
+{@} is an infix operator which concatenates two lists.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#[1;2;3] @ [4;5;6];;
+[1; 2; 3; 4; 5; 6] : int list
+}
+\SEEALSO
+append.
+
+\ENDDOC

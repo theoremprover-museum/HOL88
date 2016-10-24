@@ -1,0 +1,22 @@
+\DOC conjectures
+
+\TYPE {conjectures : (window -> term list)}
+
+\SYNOPSIS
+The conjectures of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+These are the conclusions of the suppositions of the window which have as
+their premises a subset of the hypotheses and lemmas of the window.
+The conjectures of a window are a set of terms which the user believes
+to the true in the context of the window, but which have not yet been proven.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+used_conjectures, BAD_CONJECTURES
+
+\ENDDOC

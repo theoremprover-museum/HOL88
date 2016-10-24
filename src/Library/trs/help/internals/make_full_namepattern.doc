@@ -1,0 +1,10 @@
+\DOC make_full_namepattern
+
+\TYPE {make_full_namepattern : ((string # string # string) -> namepattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

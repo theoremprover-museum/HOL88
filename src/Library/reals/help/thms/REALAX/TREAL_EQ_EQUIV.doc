@@ -1,0 +1,3 @@
+\THEOREM TREAL_EQ_EQUIV REALAX
+|- !p q. p treal_eq q = ($treal_eq p = $treal_eq q)
+\ENDTHEOREM

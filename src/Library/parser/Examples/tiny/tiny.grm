@@ -1,0 +1,117 @@
+%
+Tokens
+%
+
+FIRST_CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+             A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+             1 2 3 4 5 6 7 8 9 0`.
+
+CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+       A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+       1 2 3 4 5 6 7 8 9 0 _`.
+
+% Logical expressions (for use with assert and invariant) %
+
+logical_1 --> [/\\] {mk_conj(POP,logical_expr)}
+            | [\\/] {mk_disj(POP,logical_expr)}
+            | [==>] {mk_imp(POP,logical_expr)}
+            | [].
+
+logical_expr --> [(] logical_expr [)] logical_1
+               | bool_expr logical_1.
+%
+Expressions:
+%
+
+possible_paren --> [(] expression [)]
+                 | {mk_variable(TOKEN)}.
+
+rest_of_expression --> [+] {mk_plus(POP,possible_paren)} 
+                           rest_of_expression
+                     | [-] {mk_minus(POP,possible_paren)} 
+                           rest_of_expression
+                     | [*] {mk_mult(POP,possible_paren)} 
+                           rest_of_expression
+                     | [].
+
+expression --> [(] expression [)] rest_of_expression
+             | {mk_variable(TOKEN)} rest_of_expression.
+
+rest_of_bool --> [=] {mk_eq(POP,bool_1)}
+               | [>] {mk_gt(POP,bool_1)}
+               | [<] {mk_lt(POP,bool_1)}
+               | [<=] {mk_lte(POP,bool_1)}
+               | [>=] {mk_gte(POP,bool_1)}
+               | [<>] {mk_neq(POP,bool_1)}.
+
+bool_1 --> [~] {mk_neg(bool_1)}
+         | [(] bool_1 [)] poss_rest_of_bool
+         | [T] {mk_const(`T`,":bool")}
+         | [F] {mk_const(`F`,":bool")}
+         | expression poss_rest_of_bool.
+
+
+poss_rest_of_bool --> rest_of_bool | [].
+
+bool_expr --> [~] {mk_neg(bool_expr)}
+            | [(] bool_expr [)] poss_rest_of_bool
+            | [T] {mk_const(`T`,":bool")}
+            | [F] {mk_const(`F`,":bool")}
+            | expression rest_of_bool.
+%
+Assignment Statement:
+%
+
+assignment_stmnt --> [:=] {mk_semantic(expression)} {mk_assign(POP,POP)}.
+
+%
+If Statement:
+%
+
+more_if_stmnts --> [else] a_stmnt more_stmnts {mk_if2(POP,POP,POP)}
+                 | {mk_if1(POP,POP)}.
+
+rest_of_if --> [then] many_stmnts more_if_stmnts.
+
+%
+While Statement:
+%
+
+rest_of_while --> [do] {mk_while(POP,many_stmnts)}.
+
+%
+General Statements:
+%
+
+MAIN_LOOP --> [\{] {mk_semantic(logical_expr)} [\}] is_spec
+            | [\[] {mk_semantic(logical_expr)} [\]]
+              many_stmnts
+              [\[] {mk_semantic(logical_expr)} [\]]
+              {mk_t_spec(POP,POP,POP)} [EOF]
+            | [(] many_expr_logical [)][EOF]
+            | many_expr_logical.
+
+is_spec --> [EOF]
+          | many_stmnts
+            [\{] {mk_semantic(logical_expr)} [\}]
+            {mk_spec(POP,POP,POP)} [EOF].
+
+many_expr_logical --> many_stmnts | expression | bool_expr | logical_expr.
+
+more_stmnts --> [;] a_stmnt more_stmnts {mk_seq(POP,POP)}
+              | [].
+
+many_stmnts --> a_stmnt more_stmnts.
+
+meta_logical_stmnt --> [assert][\{] {mk_semantic(logical_expr)} [\}]
+                       {mk_assert(POP)}
+                     | [invariant] [\{] {mk_semantic(logical_expr)} [\}]
+                       {mk_invariant(POP)}
+                     | [variant] [\{] {mk_variable(TOKEN)} [\}]
+                       {mk_semantic(POP)} {mk_variant(POP)}.
+
+a_stmnt --> [(] many_stmnts [)]
+          | [if] {mk_semantic(bool_expr)} rest_of_if 
+          | [while] {mk_semantic(bool_expr)} rest_of_while
+          | meta_logical_stmnt
+          | {mk_variable_name(TOKEN)} assignment_stmnt.

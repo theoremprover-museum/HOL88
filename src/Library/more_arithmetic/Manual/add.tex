@@ -1,0 +1,24 @@
+\section{The Theory {\tt add}}
+
+The theory \ml{add}\index{add, theory@{\ptt add}, theory} contains an
+\adhoc\ collection of 
+theorems about addition. It contains no new definitions.
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+\begin{hol}
+\index{LESS\_EQ\_ADD1@{\ptt LESS\_EQ\_ADD1}}
+\index{ADD\_SYM\_ASSOC@{\ptt ADD\_SYM\_ASSOC}}
+\index{LESS\_EQ\_SPLIT@{\ptt LESS\_EQ\_SPLIT}}
+\index{ADDL\_GREATER@{\ptt ADDL\_GREATER}}
+\index{LESS\_ADD1@{\ptt LESS\_ADD1}}
+\begin{verbatim}
+  LESS_EQ_ADD1    |- !p n. p <= (n + p)
+
+  ADD_SYM_ASSOC   |- !a b c. a + (b + c) = b + (a + c)
+
+  LESS_EQ_SPLIT   |- !m n p. (m + n) <= p ==> n <= p /\ m <= p
+
+  ADDL_GREATER    |- !m n p. m < n ==> m < (p + n)
+
+  LESS_ADD1       |- !a. a < (a + 1)
+\end{verbatim}\end{hol}

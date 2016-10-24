@@ -1,0 +1,10 @@
+\THEOREM TERMDIFF POWSER
+|- !c K.
+    summable(\n. (c n) * (K pow n)) /\
+    summable(\n. (diffs c n) * (K pow n)) /\
+    summable(\n. (diffs(diffs c)n) * (K pow n)) /\
+    (abs x) < (abs K) ==>
+    ((\x. suminf(\n. (c n) * (x pow n))) diffl
+     (suminf(\n. (diffs c n) * (x pow n))))
+    x
+\ENDTHEOREM

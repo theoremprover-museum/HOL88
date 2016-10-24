@@ -1,0 +1,10 @@
+\DOC Const_name
+
+\TYPE {Const_name : ((string # child_metavar list) -> print_patt_tree)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

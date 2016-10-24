@@ -1,0 +1,568 @@
+\documentstyle[11pt,a4,bezier]{article}
+\parskip=8pt plus2pt minus2pt
+\begin{document}
+
+\input{./BoxMacro}
+
+% newcommand definitions
+% ======================
+\newcommand{\ie}	{\mbox{\it i.e.}}
+\newcommand{\inbox}[1]	{\begin{center}
+			 \framebox{\parbox{0.984\textwidth}{#1}}
+			 \end{center}}
+\newcommand{\AND}	{\mbox{$\wedge$}}
+
+% title, etc.
+% ======================
+{\LARGE
+\begin{center} Dealing with the Choice Operator in 
+HOL88\footnote{supported in part by Contract No.W2213-8-6362/01-SS
+with the Department of National Defence}
+\end{center}
+}
+\begin{center}
+by\\
+\ \ \\
+Brian Graham\\
+\ \ \\
+Computer Science Department,
+University of Calgary \\
+Calgary, Alberta, Canada T2N 1N4 \\
+Tel: (403) 220 7691 \\
+Fax: (403) 284 4707 \\
+Net: grahamb@cpsc.ucalgary.ca \\
+\ \ \\
+April 3, 1990 \\
+\end{center}
+\vfill
+{\abstract This paper discusses the choice operator \verb+@+ in HOL88.
+It gives an intuitive interpretation, as well as the definition, and
+presents proof strategies for goals that contain this operator, broken
+down into cases based on the number of values which satisfy the
+predicate argument.  A working knowlege of the HOL system is assumed.}
+\vfill
+\vfill
+\vfill
+\vfill
+\begin{center}
+\copyright Brian Graham
+\end{center}
+\clearpage
+
+% the paper ...
+% ======================
+My recent work on the proof of the SECD microprocessor
+(\cite{Graham89c}, \cite{Simpson89c}, \cite{Birtwistle90a}) has
+suffered from close encounters with the choice operator
+(``\verb+@+'').  It is a powerful device for making definitions, but
+we have quite limited capabilities of manipulating this constant.
+This is unfortunate, as it shows up in many fundamental definitions,
+including the definitions of {\it REP\/} functions created when new
+types are defined.  It is also used in the definition of the temporal
+abstraction function {\it TimeOf\/}\footnote{This function was defined
+by Tom Melham in~\cite{Melham88a} and Inder Dhingra
+in~\cite{Dhingra88b}.}, which is used when relating two granularities
+of time in hardware representation.
+
+I thought it useful to draw together all the axioms, rules,
+conversions, and tactics concerned with it, and suggest some
+techniques to handle it in (backward) proofs.
+
+\section{What the HOL88 System Supplies}
+
+The constant ``\verb+$@+'' is a binder, having the type
+\verb+$@:(*->bool)->*+.  
+In~\cite{Hol89b}, it is described as follows:
+\begin{quotation}
+\ldots if $t$ is a term having type $\sigma${\small\verb%->bool%}, 
+then {\small\verb%@x.%}$t${\small\verb% x%} (or, equivalently,
+{\small\verb%$@%}$t$) denotes {\it some\/} member of the set whose
+characteristic
+function is $t$. If the set is empty, then
+{\small\verb%@x.%}$t${\small\verb% x%} denotes an arbitrary member of the
+set denoted by $\sigma$. The constant {\small\verb%@%} is a higher order
+version of Hilbert's
+$\varepsilon$-operator; it is related to the constant
+$\iota$ in Church's formulation of higher order logic. For more details,
+see Church's original paper \cite{Church}, Leisenring's book 
+on Hilbert's $\varepsilon$-symbol \cite{Leisenring}, or
+Andrews' textbook on type theory \cite{Andrews}.
+\end{quotation}
+
+When applied to a predicate, it returns an
+arbitrary value of the correct type that satisfies the predicate, and
+in the case where no such value exists, it returns an arbitrary but
+undetermined value of the correct type.  It can be used to make a
+total function from a partial function.
+
+The following listing includes all built-in tools in the HOL88 system
+that are specific to the choice operator.
+
+\subsection{Axioms}
+\begintt
+    SELECT_AX : thm                   (in theory "bool")
+    
+    |- !(P:* -> bool) (x:*). P x ==> P($@ P)
+\endtt
+\subsection{Forward Inference Rules}
+\begintt
+    SELECT_INTRO : (thm -> thm)
+
+        A |- P t
+      -----------------
+       A |- P($@ P)
+
+
+    SELECT_ELIM : (thm -> (term # thm -> thm))		(cases)
+
+       A1 |- P($@ P)    ,    A2, "P v" |- t
+      ------------------------------------------ (v occurs nowhere
+                  A1 u A2 |- t			   except in "P v")
+
+    SELECT_RULE : (thm -> thm)
+
+        A |- ?x. t[x]
+      -----------------
+       A |- t[@x.t[x]]
+
+
+    SELECT_EQ : (term -> thm -> thm)		(@ abstraction)
+
+              A |- t1 = t2
+         -----------------------
+          A |- (@x.t1) = (@x.t2)
+\endtt
+\subsection{Conversions}
+\begintt
+    SELECT_CONV : conv
+    
+     "P [@x.P [x]]" ---> |- P [@x.P [x]] = ?x. P[x]
+\endtt
+\subsection{Tactics}
+\begintt
+    SELECT_TAC : (term -> tactic)           ( term = @x.P(x) )
+	(found in start_groups.ml in the "group" library)    
+
+        [A] P[@x.P(x)]
+    ======================
+         [A] ?x.P(x)
+\endtt
+\section{Manipulating the Choice Operator}
+
+We distinguish three cases for the values that the operator may return:
+\begin{enumerate}
+\item the predicate holds for no values, so the operator returns an
+   arbitrary but unspecified value of the correct type.
+\item the predicate holds for a single unique value.
+\item the predicate holds for more than one value.
+\end{enumerate}
+We deal with these cases individually in Sections~\ref{sec:none}~to~\ref{sec:many}.
+
+\subsection{No values satisfy}\label{sec:none}
+
+It is useful to observe the equivalence given by SELECT\_CONV.  The
+SELECT'ed value satisfies the predicate if and only if some value
+exists that satisfies the predicate.  From this we can prove the
+following is false:
+\begin{center}
+\verb+((@x. Q x) = y)  ==> Q y+
+\end{center}
+(\ie{} if the value at which Q holds equals y then Q holds at y.)
+By using AP\_TERM {\it Q\/} on the lhs of the implication, we get:
+\begin{center}
+\verb+(Q(@x. Q x) = Q y) ==> Q y+
+\end{center}
+Using SELECT\_CONV on the lhs gives:
+\begin{center}
+\verb+((?x. Q x) = Q y) ==> Q y+
+\end{center}
+If no value exists, then the equation simplifies to:
+\begin{center}
+\verb+(F = F) ==> F+
+\end{center}
+which is clearly false.  
+
+In short this means that it is not possible to prove
+anything about the specific value returned by the choice operator
+{\it unless\/} some value exists at which the predicate holds.  This 
+is relevent to the attempt to define an `arbitrary' value of the
+form \verb+"@x.F"+. 
+It is not possible to prove inequality of this term to any value of
+the appropriate type, but all such arbitrary terms are equal.
+
+\subsection{One value satisfies}\label{sec:one}
+
+In the case where a predicate is satisfied by a unique value, the
+choice operator applied to the predicate can be shown to be equivalent
+to that unique value.  We can prove:
+\begin{center}
+\verb+|- (?!x. Q x) ==> Q c ==> ((@x. Q x) = c)+
+\end{center}
+The definition of ``\verb+$?!+'' is:
+\begin{center}
+\verb+|- $?! = (\P. $? P /\ (!x y. P x /\ P y ==> (x = y)))+
+\end{center}
+From ``\verb+Q c+'' one can derive ``\verb+?x. Q x+'' (using EXISTS),
+so we can reduce the earlier theorem to :
+\begin{center}
+\verb+|- (!x y. Q x /\ Q y ==> (x = y)) ==> Q c ==> ((@x. Q x) = c)+
+\end{center}
+This has been implemented as a forward inference rule and tactic
+(see Appendix~\ref{AppendixA} for definitions).  SELECT\_UNIQUE\_RULE
+takes a pair of terms, a theorem that the predicate holds at the
+second term, and a theorem that the predicate has a unique value that
+satisfies it, and generates a theorem that the value returned by the
+choice operator applied to the predicate is the unique value.  
+\begintt
+    SELECT_UNIQUE_RULE : (term # term) -> thm -> thm -> thm
+
+    ("x","y")   A1 |- Q[y]  A2 |- !x y.(Q[x] \AND Q[y]) ==> (x=y)
+    ===========================================================
+    	A1 U A2 |- (@x.Q[x]) = y
+
+
+    SELECT_UNIQUE_TAC : tactic
+
+            [ A ] "(@x. Q[x]) = y"
+    =====================================================
+    [ A ] "Q[y]"   [ A ] "!x y.(Q[x] \AND Q[y]) ==> (x=y)"
+\endtt
+
+An example problem using this tactic arose in the proof of the
+correctness of the initial state of the SECD machine.  The essentials
+of the situation in that complex system are captured in the following
+simple example.
+
+We define a circuit composed of a mux, 2 inverters, and 2 D-type flip
+flops.  We sample all lines once per clock cycle, and assume that the
+D-types start up with the value {\it F\/} initially (a forced reset at a
+lower level of description).  Definitions for all components are in
+Appendix~\ref{AppendixB}.  Here we define only the circuit
+implementation:
+\begintt
+let circuit_imp = new_definition
+(`circuit_imp`,
+ "circuit_imp s0 s1 =
+  ? q c in0 in1:num->bool.
+    (D_type q s0)  \AND
+    (D_type s0 s1) \AND
+    (inv s1 in1)   \AND
+    (inv s0 c)     \AND
+    (mux2 c in0 in1 q) \AND
+    (gnd in0)"
+ );;
+\endtt
+\inbox{
+% origin:      ll
+% size:        13 x 13
+% inputs left: (0,2) (0,11)
+% input right: (13,6.5)
+% input top:   (5,13)
+% input bot:   (5,0)
+\newsavebox{\MUX}
+\savebox{\MUX}
+{\setlength{\unitlength}{1mm}\begin{picture}(13,13)
+\put(0,0) {\line (0,1) {4}}
+\put(0,4) {\line (4,1) {4}}
+\put(4,5) {\line (0,1) {3}}
+%\bezier{50}(3,6)(1.5,6.5)(0,7)
+\put(0,9) {\line (4,-1) {4}}
+\put(0,9) {\line (0,1) {4}}
+\put(0,13) {\line (1,0) {5}}
+\put(5,13) {\line (2,-1) {8}}
+\put(13,4) {\line (0,1) {5}}
+\put(5,0) {\line (2,1) {8}}
+\put(0,0) {\line (1,0) {5}}
+%\put(5.5,4.5) {\makebox(0,0)[b]{\tiny 2:1}}
+%\put(5.5,2.5) {\makebox(0,0)[b]{\tiny mux}}
+\put(5,5) {\shortstack{\tiny 2:1 \\ \tiny mux}}
+\end{picture}}
+
+\newsavebox{\BUFGATE}
+\savebox{\BUFGATE}
+{\setlength{\unitlength}{1mm}\begin{picture}(6,8)
+\put(0,0) {\line (0,1) {8}}
+\put(0,0) {\line (3,2) {6}}
+\put(0,8) {\line (3,-2) {6}}
+\end{picture}}
+
+% origin       ll
+% size:        8 x 8
+% inputs left: (0,4)
+% input right: (8,4)
+\newsavebox{\INVGATE}
+\savebox{\INVGATE}
+{\setlength{\unitlength}{1mm}\begin{picture}(8,8)
+\put(0,0){\usebox{\BUFGATE}}
+\put(7,4) {\circle {2}}
+\end{picture}}
+
+% origin       ll
+% size:        8 x 8
+% inputs left: (0,4)
+% input right: (8,4)
+\newsavebox{\revINVGATE}
+\savebox{\revINVGATE}
+{\setlength{\unitlength}{1mm}\begin{picture}(8,8)
+\put(8,0) {\line (0,1) {8}}
+\put(8,0) {\line (-3,2) {6}}
+\put(8,8) {\line (-3,-2) {6}}
+\put(1,4) {\circle {2}}
+\end{picture}}
+
+\newsavebox{\GND}
+\savebox{\GND}
+{\setlength{\unitlength}{1mm}\begin{picture}(4,4)
+\put(2,2) {\line (0,1) {2}}
+\put(0,2) {\line (1,0) {4}}
+\put(0.75,1) {\line (1,0) {2.5}}
+\put(1.5,0) {\line (1,0) {1}}
+\end{picture}}
+
+
+
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(104,31)(0,6)
+    \put(10,15){\usebox{\MUX}}
+    \put(40,15){\framebox(13,13){D\_type}}
+    \put(70,15){\framebox(13,13){D\_type}}
+    \put(0,22){\usebox{\GND}}
+    \put(25,6){\usebox{\revINVGATE}}
+    \put(25,29){\usebox{\revINVGATE}}
+
+    \put(23,21.5){\line(1,0){17}}
+    \put(53,21.5){\line(1,0){17}}
+    \put(61.5,21.5){\line(0,1){11.5}}
+    \put(61.5,21.5){\circle*{1}}
+    \put(61.5,33){\circle*{1}}
+    \put(83,21.5){\vector(1,0){17}}
+    \put(91.5,21.5){\line(0,-1){11.5}}
+    \put(91.5,21.5){\circle*{1}}
+
+    \put(33,10){\line(1,0){58.5}}
+    \put(25,10){\line(-1,0){20}}
+    \put(5,10){\line(0,1){7}}
+    \put(5,17){\line(1,0){5}}
+    \put(33,33){\vector(1,0){67}}
+    \put(25,33){\line(-1,0){10}}
+    \put(15,33){\line(0,-1){5}}
+    \put(10,26){\line(-1,0){8}}
+
+\tiny
+% Internal labels
+    \put(30,23){\makebox(0,0)[b]{q}}
+    \put(16,30){\makebox(0,0)[l]{c}}
+    \put(7.5,27){\makebox(0,0)[b]{in$_0$}}
+    \put(7.5,16){\makebox(0,0)[t]{in$_1$}}
+% Output labels
+    \put(102,33){\makebox(0,0)[l]{s$_0$}}
+    \put(102,21.5){\makebox(0,0)[l]{s$_1$}}
+
+
+\end{picture}
+\end{center}
+}
+
+This circuit implements a modulo 3 counter (convince yourself).  In
+order to show that the first time that the \verb+s1+ line is
+asserted is at time t = 2, we establish the goal:
+\begintt
+"TimeOf s1 0 = 2"
+    [ "circuit_imp s0 s1" ]
+\endtt
+Note that this use of the TimeOf function defines a mapping from the
+clock cycle time granularity to one that is sampled only when the
+{\it s1\/} line is asserted.   
+
+The definition of TimeOf is:
+\begin{center}
+\verb+|- !f n. TimeOf f n = (@t. IsTimeOf n f t)+.
+\end{center}
+After rewriting the goal with this definition, the choice operator is
+introduced. 
+\begintt
+"(@t. IsTimeOf 0 s1 t) = 2"
+    [ "circuit_imp s0 s1" ]
+\endtt
+Applying SELECT\_UNIQUE\_TAC reduces the goal to two subgoals, neither
+of which contains the choice operator.
+\begintt
+"!t t'. IsTimeOf 0 s1 t \AND IsTimeOf 0 s1 t' ==> (t = t')"
+    [ "circuit_imp s0 s1" ]
+
+"IsTimeOf 0 s1 2"
+    [ "circuit_imp s0 s1" ]
+\endtt
+The proof is simple. The first goal is proven by an existing
+theorem IsTimeOf\_IDENTITY\footnote{See Appendix~\ref{AppendixC}.}:
+\begin{center}
+\verb+|- !n f t1 t2. IsTimeOf n f t1 /\ IsTimeOf n f t2 ==> (t1 = t2)+
+\end{center}
+The second is solved by rewriting with the definition of IsTimeOf, and
+the various component definitions.
+(A complete proof is given in Appendix~\ref{AppendixB}.)
+
+The use of SELECT\_UNIQUE\_TAC has permitted us to eliminate the
+choice operator entirely from the subgoals, and prove that the value
+it represents is equal to a specific value.  Thus time {\it 0\/} of the
+coarser granularity of time corresponds to time {\it 2\/} at the finer
+granularity.  
+
+\subsection{More than one value satisfies}\label{sec:many}
+
+When the choice operator is applied to a predicate that is satisfied
+at multiple different values, there is no way to determine which
+specific value the expression represents.  One can only make use of
+the fact that the predicate is satisfied by the value.  An approach to
+proof in this situation is supplied by Elsa Gunter, and contained
+within the {\it start\_groups.ml\/} file in the {\it group\/}
+library\footnote{See the Modular Arithmetic Case Study
+in~\cite{Hol89c}.}.  The following tactic is provided:
+\begintt
+SUPPOSE_TAC : term -> tactic  (term = t)
+
+            [A] t1
+    =======================
+       [A;t] t1    [A] t
+\endtt
+(There is also a REV\_SUPPOSE\_TAC which merely reverses the order of
+the subgoals.)  The idea is to add an assumption that will be useful
+in solving the goal, and also requiring that the assumtion itself be
+proved.  This approach is useful in splitting a goal into major
+subgoals, and proceeding along one branch, while deferring some of the
+proof steps to a more convenient time.  This tactic can be useful on a
+goal of the form:
+\begin{center}
+\verb+[ A ] "Q (@x. P x)"+
+\end{center}
+\verb+SUPPOSE_TAC "?x. P x"+ gives the following subgoals:
+\vspace{-\parskip}
+\begin{center}
+\makebox[60mm][l]{\verb+[ A ; "?x. P x" ] "Q (@x. P x)"+}\\
+\makebox[60mm][l]{\verb+[ A ] "?x. P x"+}
+\end{center}
+In the first subgoal, using SELECT\_RULE on the new assumption gives:
+\begin{center}
+\verb+[ A ; "P (@x. P x)" ] "Q (@x. P x)"+
+\end{center}
+The properties given by the assumption \verb+"P (@x. P x)"+ may be
+helpful in solving the goal.
+
+We revert to the previously given circuit for a concrete example.  We
+start with the goal:
+\begintt
+"~s0(SUC(TimeOf s1 n))"
+    [ "circuit_imp s0 s1" ]
+\endtt
+We want to show that the line \verb+s0+ is always F following the
+point corresponding to the coarser granularity of time.  Using the
+definition of TimeOf to rewrite the goal,
+\begintt
+"~s0(SUC(@t. IsTimeOf n s1 t))"
+    [ "circuit_imp s0 s1" ]
+\endtt
+followed by the tactic:
+\verb+SUPPOSE_TAC "!n:num. ?t. IsTimeOf n s1 t"+, we get 2 subgoals:
+\begintt
+"!n. ?t. IsTimeOf n s1 t"
+    [ "circuit_imp s0 s1" ]
+
+"~s0(SUC(@t. IsTimeOf n s1 t))"
+    [ "circuit_imp s0 s1" ]
+    [ "!n. ?t. IsTimeOf n s1 t" ]
+\endtt
+The upper subgoal corresponds to proving a {\it liveness\/} property for
+the circuit: there is a finer grain time {\it t\/} that corresponds
+to every point in the coarser grain time.  In effect, the predicate
+{\it s1 t\/} is satisfied infinitely often.  The lower subgoal
+will permit us to use this property and the definition of the circuit
+in its proof.  Thus we have effectively separated
+the goal into 2 distinct parts: the {\it liveness\/} of the circuit, and
+the essential property of the circuit that we are trying to prove.
+Tackling the bottom subgoal, we can apply SELECT\_RULE to the bottom
+assumption to obtain
+\begin{center}
+\verb+"IsTimeOf n s1(@t. IsTimeOf n s1 t)"+,
+\end{center}
+and resolve this with the theorem IsTimeOf\_TRUE:
+\begin{center}
+\verb+IsTimeOf_TRUE = |- !n f t.  IsTimeOf n f t ==> f t+
+\end{center}
+to get the goal:
+\begintt
+"~s0(SUC(@t. IsTimeOf n s1 t))"
+    [ "circuit_imp s0 s1" ]
+    [ "IsTimeOf n s1(@t. IsTimeOf n s1 t)" ]
+    [ "s1(@t. IsTimeOf n s1 t)" ]
+\endtt
+
+Resolving the first assumption with an unwound circuit definition:
+\begin{center}
+\makebox[60mm][l]{\tt circuit\char'137unwound = }\\
+\makebox[60mm][l]{\tt |- circuit\char'137{}imp s0 s1 ==>}\\
+\makebox[60mm][l]{\tt \ \ \ (!t. s0 0 = F) /\char'134 x}\\
+\makebox[60mm][l]{\tt \ \ \ (!t. s0(SUC t) = ((~s0 t) => ~s1 t | F)) /\char'134 }\\
+\makebox[60mm][l]{\tt \ \ \ (!t. s1 0 = F) /\char'134 }\\
+\makebox[60mm][l]{\tt \ \ \ (!t. s1(SUC t) = s0 t) }
+\end{center}
+then rewriting with the theorem same\_branches:
+\begin{center}
+\verb+same_branches = |- !x (y:*). x => y | y = y+,
+\end{center}
+solves this subgoal.
+
+The previous subgoal can be solved using another application of
+SUPPOSE\_TAC, with the assumption \verb+"Inf s1"+, giving the
+subgoals: 
+\begintt
+"Inf s1"
+    [ "circuit_imp s0 s1" ]
+
+"!n. ?t. IsTimeOf n s1 t"
+    [ "circuit_imp s0 s1" ]
+    [ "Inf s1" ]
+\endtt
+The bottom subgoal is solved by resolving with the theorem
+IsTimeOf\_EXISTS: 
+\begin{center}
+\verb+|- !f. Inf f ==> !n. ?t. IsTimeOf n f t+.
+\end{center}
+The last subgoal requires proving that \verb+s1+ is asserted
+infinitely often.  This simple subgoal can be proven by a surprisingly
+lengthy proof using induction.  It is provided in
+Appendix~\ref{AppendixB} for the interested reader.  
+
+It should be noted that SUPPOSE\_TAC is more generally useful than
+just the cases given here, and it can be applied in the case where the
+predicate holds for only one value as well.
+
+\section{Conclusions}
+We have attempted to provide some useful examples of the approach to
+solving problems that involve the choice operator in HOL.  An informal
+analysis based on the number of values satisfying the predicate to
+which the choice operator was applied, examined what is provable about
+goals containing the operator.  A new tactic and inference rule for
+the case where a unique value satisfies the predicate were supplied.
+The techniques described were developed during the verification of the
+SECD microprocessor design.  
+
+\section*{Acknowledgements}
+This work was supported by Strategic, Operating, and Equipment Grants
+from the Natural Sciences and Engineering Research Council of Canada
+and The Canadian Microelectronics Corporation.  The Strategic Grant
+was also supported by The Alberta Microelectronic Centre and LSI
+Canada Inc.  The SECD verification effort was also supported by The
+Communication Research Establishment, Ottawa.  
+We are indebted to Mike Gordon, Tom Melham, and Inder Dhingra for
+assistance in learning and using the HOL system, and to Elsa Gunter,
+whose initial input on this topic led to this report.
+
+
+\nocite{Hol89a}
+{\small
+\bibliography{./select}
+\bibliographystyle{alpha}
+\include{select_appendix}
+}
+\end{document}

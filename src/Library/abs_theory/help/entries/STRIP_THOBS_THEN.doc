@@ -1,0 +1,25 @@
+\DOC STRIP_THOBS_THEN
+
+\TYPE {STRIP_THOBS_THEN : thm_tactic -> tactic}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS 
+Strips an explicitly declared theory obligation from a goal,
+expands it, and applies the theorem tactic to the result.
+
+\DESCRIBE
+Removes one explicitly declared theory obligation from a goal
+substituting the definition of the theory obligation for the
+name.  The abstract object may or may not be universally quantified. The
+result is used as an argument to the theorem-tactic.
+
+
+\FAILURE 
+Fails if theory obligation list is empty (e.g. can occur when no
+abstract parent has been declared).
+
+\SEEALSO
+STRIP_THOBS_TAC, STRIP_TAC
+
+\ENDDOC

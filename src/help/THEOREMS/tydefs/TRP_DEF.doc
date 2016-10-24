@@ -1,0 +1,3 @@
+\THEOREM TRP_DEF tydefs
+|- !P. TRP P = (@trp. !v tl. trp(Node v tl) = P v tl /\ ALL_EL trp tl)
+\ENDTHEOREM

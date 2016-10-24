@@ -1,0 +1,216 @@
+% Copyright 1991 by Norman Ramsey.  All rights reserved.
+% See file COPYRIGHT for more information.
+\section{Markup}
+This is the initial filter in the pipeline.
+Syntax from {\tt markup.ow}.
+Output may contain [[
+        @[begin|end] [code|docs] nnn ...
+        @text <line of text>
+        @quote
+        @endquote
+        @use <module name>
+        @nl
+        @file <filename>
+        @name <module name>
+        @line nnn [name]
+]]
+Here's the code that writes the output.
+We have one function to print the state, which takes care of
+[[@begin]] and [[@end]] and remembering what kind of chunk we have.
+Another function prints [[@name value]] pairs.
+If the [[value]] has a trailing newline, the pair is followed by [[@nl]].
+<<state and printing definitions>>=
+typedef enum state {Code=1, Docs=2} State;
+typedef enum mark {Begin=1, End=2} Mark;
+
+static char *states[] = { "bad state", "code", "docs" };
+static char *marks[]={ "bad mark", "begin", "end" };
+static char low_at_sign = '@';
+
+static void print_state(FILE *out, Mark be, State state, int count) {
+    fprintf(out, "%c%s %s %d\n", low_at_sign, marks[be], states[state], count);
+}
+
+static void print_pair(FILE *out, char *name, char *value) {
+    if (value) {
+        int last=strlen(value)-1;
+        if (last>=0 && value[last]=='\n')
+            fprintf(out, "%c%s %s%cnl\n", low_at_sign, name, value, low_at_sign);
+        else
+            fprintf(out, "%c%s %s\n", low_at_sign, name, value);
+    } else
+        fprintf(out, "%c%s\n", low_at_sign, name);
+}
+@
+<<*>>=
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "errors.h"
+#include "markup.h"
+#include "getline.h"
+#include "columns.h"
+
+<<state and printing definitions>>
+
+void markup (FILE* in, FILE *out, char *filename) {
+    State state = Docs;         /* what we are reading */
+    int quoting = 0;            /* currently quoting code? */
+    int count = 0;              /* number of current chunk, from 0 */
+    int missing_newline;        /* was last line missing a trailing \n? */
+
+    char *line;                 /* part of line up to mark (or end) */
+    char *mark;                 /* potentially marked part of line */
+#define MAX_MODNAME 255
+    char modname[MAX_MODNAME+1] = ""; /* name of module currently being read, 
+                                         [[""]] if no module is being read */ 
+
+    <<copy all lines from [[in]] to [[out]], adding markup>>
+}
+@
+A {\em noweb } file consists of a sequence of
+{\em chunks,} which may appear in any order.
+{\em noweb} supports two kinds of chunks: documentation chunks and code chunks.
+Documentation chunks begin with an at sign (@) at the beginning of a line,
+followed by a space 
+(or with an at sign on a line by itself).
+They have no names.
+Code chunks begin with
+$$\hbox{\tt@<<{\em chunk name\/}@>>=}$$
+on a line by itself.
+The left double angle bracket ({\tt @<<}) must be in the first column.
+Chunks are terminated by the beginning of another chunk, or by end of file.
+If the first line in the file does not signal the beginning of a documentation
+or code chunk, the first chunk is assumed to be a documentation chunk.
+
+We implement this by just looping through the document, looking for the
+beginnings of chunks.
+We use [[state]] to keep track of what's ending.
+We add a little extra markup for file name and module names
+Starting code and starting documentation are notably different: 
+code is started by a module definition, which must appear on a line by itself.
+Documentation is started by a character sequence, 
+and arbitrary documentation text can follow on the same line.
+<<copy all lines from [[in]] to [[out]], adding markup>>=
+    print_pair(out, "file", filename);
+    print_state(out, Begin, state, count);
+
+    while ((line = getline_expand(in)) != NULL) {
+        <<remember if a newline was missing from the last line>>
+        if (starts_code(line)) {
+            <<complain and correct unmatched open quote, if any>>
+            print_state(out, End, state, count);
+            count++;
+            state = Code;
+            print_state(out, Begin, state, count);
+            getmodname(modname,MAX_MODNAME,line);
+            print_pair(out,"defn",modname);
+            print_pair(out,"nl",0);     /* could be implicit but this is better */
+        } else {
+            if (starts_doc(line)) {
+                <<complain and correct unmatched open quote, if any>>
+                print_state(out, End, state, count);
+                count++;
+                state = Docs;       /* always reading docs after a stop */
+                print_state(out, Begin, state, count);
+                line = first_doc_line(line);
+            }
+            <<Check a bunch of ``mistake indicators''>>
+            switch(state) {
+                case Code: <<convert a code line>> break;
+                case Docs: <<convert a documentation line>> break;
+                default: impossible("bad state");
+            }    
+        }
+    }
+    <<add a trailing newline if one was missing>>
+    print_state(out, End, state, count);
+@
+We make it safe to assume henceforth that every chunk ends with newline,
+even if the file didn't end with newline.
+If the file didn't end with newline, we add a newline to the last line
+before printing the final [[@end]].
+<<remember if a newline was missing from the last line>>=
+missing_newline = line[strlen(line)-1] != '\n';
+<<add a trailing newline if one was missing>>=
+if (missing_newline) print_pair(out, "nl",0);
+@
+To convert a code line, we have to scan for the start and end of module 
+references. 
+<<convert a code line>>=
+while ((mark = mod_start(line,1)) != NULL) { 
+    if (*line) print_pair(out, "text",unescape(line)); 
+                                   /* emit string before module */
+    if ((line=mod_end(mark,1))==NULL) { /* no matching @>>; treat @<< as text */
+        line = mark - 2;	/* back up; point to @<< */
+        *line = '<';		/* restore missing < (was '\0') */
+        break;
+    } else {  
+        print_pair(out, "use",mark);       /* emit the module */
+    }
+}
+if (*line) print_pair(out, "text",unescape(line)); 
+                                  /* contribute the trailing string */
+@ To convert documentation lines, we have to track the quoting brackets.
+<<convert a documentation line>>=
+for (; (mark = (quoting ? quote_end : quote_start)(line,1)) != NULL; 
+       line = mark) {
+    if (*line) print_pair(out, "text", unescape(line));
+    print_pair(out, quoting ? "endquote" : "quote", 0);
+    quoting = !quoting;
+}
+if (*line) print_pair(out, "text", unescape(line)); 
+<<complain and correct unmatched open quote, if any>>=
+if (quoting) {
+    errormsg(Warning, "Open quote `[[' never closed");
+    quoting = 0;
+}
+@
+If we missed the module definition line, this might suggest to us
+that we've made a mistake.
+<<Check a bunch of ``mistake indicators''>>=
+    if (state != Code && (mod_start(line,0)!=NULL)) {
+        errormsg(Warning, "Warning: chunk name in documentation (or missing = in definition):\n\t%s", line);
+    }
+@
+Finally, we give the main program, which opens each file and passes it
+to [[markup]].
+Like many main programs, it's based on K \& R [[cat]].
+<<*>>=
+void main(int argc, char **argv) {
+
+    FILE *fp;
+    char *myself=*argv;
+    int i;
+
+    for (i = 1; i < argc && argv[i][0] == '-' && argv[i][1] != 0; i++)
+	switch(argv[i][1]) {
+	    case 't': <<handle [[-t]]>> break;
+            default : errormsg(Error, "%s: unknown option -%c\n", myself, argv[i][1]);
+                      break;
+        }
+    if (i < argc)
+        for (; i < argc; i++) {
+            if (!strcmp(argv[i], "-")) 
+	        markup(stdin,stdout,"");
+            else 
+                if ((fp=fopen(argv[i],"r"))==NULL)
+                    errormsg(Error, "%s: couldn't open file %s\n", myself, argv[i]);
+                else {
+                    markup(fp,stdout,argv[i]);
+                    fclose(fp);
+                }
+        }
+    else
+        markup(stdin,stdout,"");
+    exit(errorlevel);
+}
+@
+<<handle [[-t]]>>=
+if (isdigit(argv[i][2]))
+    tabsize = atoi(argv[i]+2);
+else if (argv[i][2]==0)
+    tabsize = 0; 		/* no tabs */
+else 
+    errormsg(Error, "%s: ill-formed option %s\n", myself, argv[i]);

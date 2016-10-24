@@ -1,0 +1,6 @@
+\THEOREM treal_mul REALAX
+|- !x1 y1 x2 y2.
+    (x1,y1) treal_mul (x2,y2) =
+    (x1 hreal_mul x2) hreal_add (y1 hreal_mul y2),
+    (x1 hreal_mul y2) hreal_add (y1 hreal_mul x2)
+\ENDTHEOREM

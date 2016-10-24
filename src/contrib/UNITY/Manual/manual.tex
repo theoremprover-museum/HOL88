@@ -1,0 +1,4802 @@
+\documentstyle[12pt,twoside,a4,fasty,unity]{report}
+
+\newcommand{\cn}{\mbox{ \hspace{3mm}}}
+\newcommand{\cnn}{\mbox{ \hspace{6mm}}}
+\newcommand{\cnnn}{\mbox{ \hspace{9mm}}}
+
+\newenvironment{mproof}{
+        \medskip
+        \begin{proof}
+}{      \end{proof}
+}
+
+\newcommand {\nl} {\begin{tabbing}\end{tabbing}}
+
+\newcommand{\Bx}{\mbox{\rm [\hspace{-.1em}]}}
+\newcommand{\Ls}{\mbox{\rm [\hspace{-.13em}[}}
+\newcommand{\Rs}{\mbox{\rm ]\hspace{-.13em}]}}
+%\newcommand{\Cn}{\mbox{$\rm =\hspace{-.35em}>$}}
+\newcommand{\Cn}{\mbox{$\rightarrow$}}
+
+\newcommand{\rqa}{\mbox{$rq_1$}}
+\newcommand{\gra}{\mbox{$gr_1$}}
+\newcommand{\rqb}{\mbox{$rq_2$}}
+\newcommand{\grb}{\mbox{$gr_2$}}
+\newcommand{\gri}{\mbox{$gr_{i}$}}
+\newcommand{\grj}{\mbox{$gr_{j}$}}
+\newcommand{\rqi}{\mbox{$rq_i$}}
+
+\newcommand{\Mp}{\mbox{$p$}}
+\newcommand{\Mq}{\mbox{$q$}}
+\newcommand{\mand}{\mbox{$\wedge$}}
+\newcommand{\mneg}{\mbox{$\neg$}}
+\newcommand{\mneq}{\mbox{$\neq$}}
+\newcommand{\mgeq}{\mbox{$\geq$}}
+\newcommand{\mequiv}{\mbox{$\equiv$}}
+\newcommand{\mor}{\mbox{$\vee$}}
+\newcommand{\leadto}{\mbox{\bf leadsto}}
+\newcommand{\mnot}{\mbox{$\neg$}}
+\newcommand{\mimply}{\mbox{$\Rightarrow$}}
+\newcommand{\mbullet}{\mbox{$\bullet$}}
+\newcommand{\mturn}{\mbox{$\vdash$}}
+\newcommand{\mQED}{\mbox{$\Box$}}
+
+\newcommand{\unless}{\mbox{\bf unless}}
+\newcommand{\ensures}{\mbox{\bf ensures}}
+\newcommand{\isstable}{\mbox{\bf is stable}}
+\newcommand{\stable}{\mbox{\bf stable}}
+\newcommand{\invariant}{\mbox{\bf invariant}}
+\newcommand{\isinvariant}{\mbox{\bf is invariant}}
+\newcommand{\initially}{\mbox{\bf initially}}
+\newcommand{\mof}{\mbox{\bf of}}
+\newcommand{\mprogram}{\mbox{\bf program}}
+\newcommand{\mend}{\mbox{\bf end}}
+\newcommand{\mbegin}{\mbox{\bf begin}}
+\newcommand{\mfalse}{\mbox{\bf false}}
+\newcommand{\mtrue}{\mbox{\bf true}}
+\newcommand{\mif}{\mbox{\bf if}}
+\newcommand{\mmin}{\mbox{\bf in}}
+\newcommand{\U}{\mbox{$[\hspace{-1pt}]$}}
+\newcommand{\mforall}{\mbox{$\forall i:$}}
+
+\input{psfig}
+
+\title{  {\Huge HOL-UNITY}\\ \ \\ \ \\
+           {\Large A Theory for UNITY\\
+                           in\\
+                   The Cambridge HOL System\\ \ \\ \ \\}
+           {\large PRELIMINARY VERSION}\\ \ \\ \ \\
+      }
+
+\author{Flemming Andersen}
+
+\setlength {\parskip} {1.5mm}
+\setlength {\parindent} {0mm}
+
+\begin{document}
+
+\bibliographystyle{alpha}
+\maketitle    
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+
+\cleardoublepage
+\chapter*{Preface}
+
+\markboth{Preface}{Preface}
+
+\addcontentsline{toc}{section}{{\bf Preface}}
+
+This report contains preliminary documentation of the present HOL-UNITY
+theory.\footnote{This work was supported partly by The Technical University,
+Lyngby, Denmark and partly by TFL.}  
+
+The report is intended to be turned into a manual with guide lines for using
+the HOL-UNITY system.
+
+
+\bigskip
+The report contains a brief introduction to a number of {\it theories} defined
+in the Cambridge HOL system \cite{Gordon87,HOLMAN}.  Collectively these
+theories completely formal define the UNITY theory, less formally put forward
+in \cite{CM88}, using the higher order logic notation supported by the HOL
+system.  Three examples apply the HOL-UNITY {\it theories} for obtaining a 
+mechanized verification of specified UNITY properties.
+
+\bigskip
+To read this document, knowledge of the HOL system and its notation is
+required.  More verbose presentations of the HOL-UNITY theories and the three
+examples using HOL-UNITY are also presented in \cite{FA92}.
+
+
+\cleardoublepage
+\chapter{Introduction}
+
+UNITY is a theory for proving properties ascribed to concurrent programs.  The
+theory defines a logic for describing safety and progress properties of
+programs, and includes a simple programming language for specifying algorithms
+which implement the behavior required by given properties.
+
+By implementing the UNITY theory in the HOL system, a mechanized theorem prover
+for UNITY has been developed with a rather general applicability.  The
+resulting UNITY theory, called HOL-UNITY, is a complete definition of the
+theory in \cite{CM88} with all definitions, theorems, corollaries and induction
+principles included.  At the present time, the syntactical representation of
+UNITY properties and programs must be given in HOL terms.  This problem may be
+overcome by implementing a syntactic interface to the present system, but has
+been postponed in this project.
+
+HOL-UNITY is defined as a conservative extension of the existing higher order
+logic supported by the HOL theorem prover.  This way of defining the UNITY
+theory guarantees that the resulting theory is sound and consistent.  However,
+although the HOL logic is relatively complete, the HOL-UNITY theory, defined
+here, is {\it not} complete, since it is defined in terms of pre- post
+conditions \cite{Hoare69,Dijk76}, meaning that the logic is defined as a
+universally quantified proof theory which range over all possible states
+dependent only of the variable (polymorphic) type of the state.  The price paid
+for this approach is the lack of the substitution theorem.  To get a HOL-UNITY
+theory including the substitution theorem (i.e., a complete theory), the
+definitions of the properties have to be restricted to the reachable states of
+the program for which the relations must hold.  The present theory may be
+modified to suit this requirement by restricting the quantification over states
+by a predicate which returns only program states.  In \cite{BS90a,Mi90,FA92}
+suggestions are presented on how to redefine the {\bf unless} and {\bf ensures}
+properties to meet the completeness requirement.
+
+\bigskip
+The HOL-UNITY theory is defined as a collection of HOL theories.  As a result,
+all the theorems and corollaries presented in \cite{CM88} are proved as HOL
+theorems derived from the HOL definitions of the logic properties given in
+\cite{CM88}.  Appendix A and B contains an overview of the theorems and
+definitions in the HOL-UNITY theories.
+
+\bigskip
+The defined theories are briefly introduced in the following sections.
+
+\section{Predicate Logic}
+
+First a predicate logic theory is defined with the usual operators of
+conjunction, disjunction, etc. The predicate logic is needed because the UNITY
+properties {\bf unless}, {\bf stable}, {\bf invariant}, {\bf ensures} and {\bf
+leadsto} are relations between predicates dependent on program states.  The
+predicate logic operators are denoted by their usual symbols postfixed by an
+asterisk ($*$). That is, e.g.\ logic conjunction:
+\begin{eqnarray*}
+p\; \wedge\; q
+\end{eqnarray*}
+becomes
+\begin{eqnarray*}
+p\; \wedge_*\; q\ =\ \lambda s.\ p\; s\; \wedge\; q\; s
+\end{eqnarray*}
+
+The other operators are defined in a similar way.  Several theorems known from
+traditional logic which are used in the later theories are proved for the
+defined predicates in the theory.
+
+\section{Safety Properties}
+
+This section defines the safety properties {\bf unless}, {\bf stable} and
+{\bf invariant} as described in \cite{CM88}:
+
+\begin{itemize}
+  \item {\bf $p$ unless $q$ in $Pr$} \ \\
+    whenever $Pr$ reaches a state in which $p$ holds, all transitions must
+    preserve $p$ or make $q$ hold.
+
+  \item {\bf $p$ stable in $Pr$} \ \\
+    is the special {\bf unless} relation {\bf $p$ unless {\it false} in $Pr$}.
+    Whenever $Pr$ reaches a state in which $p$ holds, all transitions must
+    preserve $p$.
+
+  \item {\bf $q$ invariant in $(Pr,\;Pr_{\it init})$} \ \\  
+    $q$ must hold in the initial states given by the predicate $Pr_{\it init}$,
+    and all state transitions must preserve $p$.
+\end{itemize}
+
+Formally, these properties are defined by:
+\begin{itemize}
+  \item $p\;{\bf unless}\;q\;{\bf in}\;Pr$\\
+     \begin{tabular}{ll}
+       $\ \;=$ & $\forall st \in Pr\!:\
+                     \{p\;\wedge\;\neg q\}\ st\ \{p\;\vee\;q\}$\\
+       $\ \;=$ & $\forall st \in Pr\!:\ \forall s\!:\
+              p\;s\;\wedge\;\neg q\;s \Rightarrow p\;(st\;s)\;\vee\;q\;(st\;s)$
+     \end{tabular}
+  \item $p\;{\bf stable}\;{\bf in}\;Pr$\\
+     \begin{tabular}{ll}
+       $\ \;=$ & $p\;{\bf unless}\;{\it false}\;{\bf in}\;Pr$
+     \end{tabular}
+  \item $p\;{\bf invariant}\;{\bf in}\;(p_{\it init},\;Pr)$\\
+     \begin{tabular}{ll}
+       $\ \;=$ & $(\forall s\!:\  p_{\it init}\;s \Rightarrow p\;s)\
+                   \wedge\ p\;{\bf unless}\;{\it false}\;{\bf in}\;Pr$
+     \end{tabular}
+\end{itemize}
+in higher order logic.
+
+\section{Progress Properties}
+
+This section describes the definition of the progress properties
+{\bf ensures} and {\bf leadsto}:
+\begin{itemize}
+  \item {\bf $p$ ensures $q$ in $Pr$} \ \\  
+    whenever $Pr$ reaches a state in which $p$ holds, all transitions must
+    preserve $p$ until $q$ hold. And (at least) one transition, from a state
+    satisfying $p$, exists which makes $q$ hold.
+  \item {\bf $p$ leadsto $q$ in $Pr$} \ \\  
+    The smallest  {\it transitive} and {\it disjunctive}
+    closure of \mbox{\bf ensures} properties.
+\end{itemize}
+
+Formally, these properties are defined by:
+\begin{itemize}
+  \item $p\;{\bf ensures}\;q\;{\bf in}\;Pr$\\
+     \begin{tabular}{ll}
+       $\ \;=$ & $p\;{\bf unless}\;q\;{\bf in}\;Pr\ \;\wedge$\\
+               & $\exists st \in Pr\!:\ \forall s\!:\
+                   p\;s\;\wedge\;\neg q\;s \Rightarrow q\;(st\;s)$
+     \end{tabular}
+  \item Define {\bf leadsto} as least fixed point of\\
+      \begin{tabular}{ll}
+        \({p\;{\bf ensures}\;q}\) &
+           \(\Rightarrow {p\;{\bf leadsto}\;q}\) \\
+           \((\exists r: {p\;{\bf leadsto}\;r \wedge r\;{\bf leadsto}\;q})\) &
+           \(\Rightarrow {p\;{\bf leadsto}\;q}\) \\
+           \((\exists P: (p=\bigcup P) \wedge
+             (\forall r\in P: r\;{\bf leadsto}\;q))\) &
+           \(\Rightarrow {p\;{\bf leadsto}\;q}\)
+       \end{tabular}
+\end{itemize}
+in higher order logic. In the definition of {\bf leadsto}, $\bigcup P$ is the
+least upper bound ({\bf lub}) of a set $P$ of state dependent predicates.
+
+\subsection*{The {\bf leadsto} Induction principles}
+
+From the definition of {\bf leadsto} as the least fixed point we may derive the
+two theorems below. These theorems are derived from the definition of 
+{\bf leadsto} as the minimal fixed point \cite{FA92}.  Hence, they are the
+mathematical foundation of the {\bf leadsto} induction principles used in
+\cite{CM88}.
+
+$\begin{array}{lll}
+ \forall X\!:\\
+  \cn (\forall p\;q\;Pr\!:\
+       p\;{\bf ensures}\;q\;{\bf in}\;Pr \Rightarrow X\;p\;q\;Pr)\ \wedge\\
+  \cn (\forall p\;q\;r\;Pr\!:\\
+  \cn \hspace{8mm}
+       p\;{\bf leadsto}\;r\;{\bf in}\;Pr \wedge X\;p\;r\;Pr\ \wedge
+       r\;{\bf leadsto}\;q\;{\bf in}\;Pr \wedge X\;r\;q\;Pr\\
+  \cn \hspace{5mm}
+      \Rightarrow X\;p\;q\;Pr)\ \wedge\\
+  \cn (\forall p\;q\;P\;Pr\!:\
+      (p = (\bigcup P))\ \wedge\\
+  \cn \hspace{8mm}
+      (\forall r \in P\!:\ X\;r\;q\;{\bf in}\;Pr) \wedge
+      (\forall r \in P\!:\ r\;{\bf leadsto}\;q\;{\bf in}\;Pr)\\
+  \cn \hspace{5mm}
+       \Rightarrow X\;p\;q\;Pr)\\
+ \ \hspace{3mm} \Rightarrow
+     (\forall  p\;q\;Pr\!:\
+          p\;{\bf leadsto}\;q\;{\bf in}\;Pr \Rightarrow X\;p\;q\;Pr)\\
+\end{array} $
+
+\medskip
+$\begin{array}{lll}
+ \forall X\!:\\
+  \cn (\forall p\;q\;Pr\!:\
+       p\;{\bf ensures}\;q\;{\bf in}\;Pr \Rightarrow X\;p\;q\;Pr)\ \wedge\\
+  \cn (\forall p\;q\;r\;Pr\!:\\
+  \cn \hspace{8mm}
+       p\;{\bf ensures}\;r\;{\bf in}\;Pr \wedge X\;p\;r\;Pr\ \wedge
+       r\;{\bf leadsto}\;q\;{\bf in}\;Pr \wedge X\;r\;q\;Pr\\
+  \cn \hspace{5mm}
+      \Rightarrow X\;p\;q\;Pr)\ \wedge\\
+  \cn (\forall p\;q\;P\;Pr\!:\
+      (p = (\bigcup P))\ \wedge\\
+  \cn \hspace{8mm}
+      (\forall r \in P\!:\ X\;r\;q\;{\bf in}\;Pr) \wedge
+      (\forall r \in P\!:\ r\;{\bf leadsto}\;q\;{\bf in}\;Pr)\\
+  \cn \hspace{5mm}
+       \Rightarrow X\;p\;q\;Pr)\\
+ \ \hspace{3mm} \Rightarrow
+     (\forall  p\;q\;Pr\!:\
+          p\;{\bf leadsto}\;q\;{\bf in}\;Pr \Rightarrow X\;p\;q\;Pr)\\
+\end{array} $
+
+Notice that the only difference between the two theorems lies in the assumption
+of the existence of a transitive closure step.
+
+The definition of {\bf leadsto} as the least fixed point and the proof of the
+two induction theorems are based on a fixed point theory described in
+\cite{FAKDP91,FA92}, originally proposed in \cite{Tarski55}.
+
+\section{Compositionality}
+
+In \cite{CM88} a simple compositionality principle is defined. This
+compositionality principle is easily proved to be satisfied as theorems in
+higher order logic derived from the above definitions of {\bf unless} and
+{\bf ensures}.
+
+An {\bf unless} property is satisfied by the composed program
+$(P_1\;\bigcup\;P_2)$ if and only if it is satisfied by each of the components
+$P_1$ and $P_2$.
+
+\begin{itemize}
+  \item {\bf unless} Compositionality\\
+ $\begin{array}{lll}
+    p\;{\bf unless}\;q\;{\bf in}\;(P_1\;\bigcup\;P_2)\\
+     \cn \begin{tabular}{ll}
+       $=$ & $(p\;{\bf unless}\;q\;{\bf in}\;P_1\;\wedge
+               p\;{\bf unless}\;q\;{\bf in}\;P_2)$
+     \end{tabular}
+  \end{array} $
+\end{itemize}
+
+An {\bf ensures} property is satisfied by the composed program
+$(P_1\;\bigcup\;P_2)$ if and only if {\bf unless} is satisfied by the one
+component and {\bf ensures} is satisfied by the other.
+
+\begin{itemize}
+  \item {\bf ensures} Compositionality\\
+ $\begin{array}{lll}
+    p\;{\bf ensures}\;q\;{\bf in}\;(P_1\;\bigcup\;P_2)\\
+     \cn \begin{tabular}{ll}
+       $=$ & $(p\;{\bf ensures}\;q\;{\bf in}\;P_1\;\wedge
+               p\;{\bf unless}\;q\;{\bf in}\;P_2)\ \;\vee$\\
+           & $(p\;{\bf ensures}\;q\;{\bf in}\;P_2\;\wedge
+                p\;{\bf unless}\;q\;{\bf in}\;P_1)$
+     \end{tabular}
+  \end{array} $
+\end{itemize}
+
+\section{Representing Programs in HOL-UNITY}
+
+In the present version of HOL-UNITY, a UNITY program is represented as a {\it
+list} of state transitions.  This decision was made because a {\it set} theory
+was not available in HOL at the beginning of this project.  The list
+representation is however still valid since no definition or theorem makes use
+of any particular ordering of state transitions of a program.  The validity of
+the representation is proved by theorems in the theory defining
+compositionality.  These theorems prove for every UNITY property ({\bf unless},
+{\bf stable}, {\bf invariant}, {\bf ensures} and {\bf leadsto}) that the
+set of program statements represented as a list of state transitions does not
+affect the validity of a property already satisfied even if the state
+transitions in the list are reordered.
+
+The transformation of a UNITY program into a list of state transitions is
+explained in \cite{FA92}.  However, the last two examples on using HOL-UNITY in
+this report also presents the used methods for representing a program as a list
+of conditional state transitions expressed as lambda expressions.
+
+\newpage
+\section{The Structure of the HOL-UNITY Theory Files}
+
+\begin{description}
+  \item[{\sf aux\_definitions}]
+         Defines some new special symbols needed to introduce the
+         state abstracted logical operators, and defines some tactics and ML
+         functions used.
+  \item[{\sf l\_unity}]
+         Load this file into your HOL system and you are working in
+         the defined UNITY theory.
+  \item[{\sf mk\_state\_logic}]
+         Defines state abstracted logical predicates and
+         theorems used in the HOL-UNITY theory.
+  \item[{\sf mk\_unless}]
+         Defines the UNITY safety properties: UNLESS, STABLE and INVARIANT
+         and proves the theorems and corollaries presented in \cite{CM88}.
+  \item[{\sf mk\_ensures}]
+         Defines the basic progress property: ENSURES and proves
+         the theorems and corollaries presented in \cite{CM88}.
+  \item[{\sf mk\_gen\_induct}]
+         Proves the theorem of generalized induction on the
+         natural numbers (used in the {\bf leadsto} theory).
+  \item[{\sf mk\_leadsto}] Defines the progress property: LEADSTO
+         and proves the theorems and corollaries presented in \cite{CM88}.
+  \item[{\sf leadsto\_induct0}]
+         Defines a LEADSTO induction tactic.
+  \item[{\sf mk\_comp\_unity}]
+         Proves the UNITY composition principle and the
+         theorems and corollaries of \cite{CM88} to be satisfied.
+  \item[{\sf mk\_until}]
+         This theory currently only contains the definition of the UNTIL
+         property.
+  \item[{\sf examples/mk\_example01}]
+         The mutual exclusion example in \cite{CM88} page 168-170.
+  \item[{\sf examples/mk\_example02}]
+         The readers/writers example in \cite{CM88} page 139-140.
+  \item[{\sf examples/mk\_example03}]
+         An example of a 2-arbiter (description in the program file).
+\end{description}
+
+\cleardoublepage
+\chapter{Applications of the Mechanized UNITY System} \label{ch:unityapplic}
+
+Since the mechanized UNITY theory HOL-UNITY is implemented as a theory using
+the HOL theorem prover, working with HOL-UNITY is just like working with the
+HOL system having the UNITY definitions and theorems available as proved
+theorems in the HOL logic.  A more user friendly mechanization of UNITY would
+require a syntactic interface, but to implement a syntax analyzer although not
+difficult has not been a goal of this work.
+
+In this chapter some guide lines for using the HOL-UNITY are presented.  For a
+complete understanding of this chapter knowledge of the HOL system is required.
+However, in order to support understanding the examples in HOL-UNITY notation, 
+these examples are related by page references to their respective presentation
+in UNITY.
+
+Using UNITY as described in \cite{CM88} an appropriate state space of a
+specification may simply be assumed.  However, the mechanized UNITY theory
+requires for each specification a formal definition of the state space needed
+to represent the objects and a representation of a program as a list of state
+transitions in which every state transition represents a UNITY assign
+statement.  Hence to use HOL-UNITY, these extra definitions must be elaborated
+and defined explicitly.
+
+The next section describes in general terms how a state and how the
+transformation from usual UNITY program notation into state transitions may be
+defined for any UNITY specification.  These methods are then applied in three
+examples.  The presentation is mainly in the notation used earlier, since the
+pure HOL examples are also found as a UNITY contribution to the HOL system.
+Section \ref{sec:mutexcl} explains how to make a composed specification.
+Section \ref{sec:readwrite} presents a method for proving the specified
+properties satisfied by the given program. And the example shows how it is
+possible to prove derived program properties by assuming some of the properties
+satisfied.  Section \ref{sec:2-Arbiter} is a complete example on how to specify
+a 2-Arbiter and user component by mutually assuming certain properties
+satisfied by the environment. It is proved that the presented 2-Arbiter program
+{\it Arb} satisfies the environment dependent properties.  This example further
+presents a method towards automating the proof of the basic UNITY properties
+\unless, \stable\ and \ensures.
+
+
+\section{Defining State and Program}
+
+As explained, HOL-UNITY requires a definition of the state representing the
+variables in a UNITY specification and a state transition representation of a
+program.  This section presents a method for defining the state and program
+representation.
+
+Every UNITY specification consists of a set of safety- and progress properties
+that are to be satisfied.  These properties are expressed as relations between
+ordered state dependent predicates.  The ordering is given by the state
+transitions possible by the statements of the UNITY program which satisfies the
+given properties.  If only general safety- and progress properties are
+specified, the state of the specification may often be defined as the undefined
+polymorphic type *.  Most specifications however describe properties between
+objects or variables that must be satisfied by the specified system.  Since
+such a system is always assumed to contains finitely many individual objects or
+variables, it is always possible to define an enumerated type which represents
+all individuals in a specification.  The state of the system may then be
+defined by the union of mapping every individual onto its value.  However, to
+define a type of this state, the value domain in the mapping must be the union
+type of all value types given by the individuals.
+
+Formally, let
+
+\vspace{2mm}
+\centerline{\hbox{$ \it \begin{array}{l}
+ Ind_{tp} = Ind_{rep1} \mid Ind_{rep2} \mid ... \mid Ind_{repn}
+\end{array} $}}
+\vspace{1mm}
+
+be the type representing all individuals.
+
+And let
+
+\vspace{2mm}
+\centerline{\hbox{$ \it \begin{array}{l}
+  Val_{tp} = Val_{tp1} \bigcup Val_{tp2} \bigcup ... \bigcup Val_{tpn}
+\end{array} $}}
+\vspace{1mm}
+
+be the union type of all individuals value types.
+
+Then the state is defined as by the type
+
+\vspace{2mm}
+\centerline{\hbox{$ \it \begin{array}{l}
+  State_{tp} = Ind_{tp}\!\rightarrow\!Val_{tp}
+\end{array} $}}
+\vspace{1mm}
+
+An individual ${\it Ind_i}$ is then defined by the state dependent value
+
+\vspace{2mm}
+\centerline{\hbox{$ \it \begin{array}{l}
+  Ind_i = \lambda \sigma\!:\!State_{tp}.\ s\!-\!Val_{tpi}\;(\sigma\;Ind_{repi})
+\end{array} $}}
+\vspace{1mm}
+
+notice that the value type of ${\it Ind_{i}}$ is explicitly selected.  In this
+way it is also possible to represent any kind of individuals, tex.\ an indexed
+by choosing the appropriate index value type.
+
+Other state representations are possible like tuples \cite{BA90}, but for the
+present, the mapping method seems to be the most convenient.
+
+The specification of a UNITY program has to be transformed into a list of state
+transitions to fit into HOL-UNITY. The basic idea of the transformation may be
+explained by the example of a simple assignment of a variable $v$ to the value
+of a conditional expression.  The value of $v$ is left unchanged if the
+condition in the expression evaluates to {\it false} otherwise $v$ will have
+the value of the expression after the assignment.  Let the example assignment
+be:
+
+\vspace{2mm}
+\centerline{\hbox{$ \it \begin{array}{l}
+  v\ :=\ \mbox{\it expr}\ {\bf if}\ \mbox{\it bool-expr}
+\end{array} $}}
+\vspace{1mm}
+
+in which \mbox{\it bool-expr} and \mbox{\it expr} are state dependent values.
+
+The assignment is then transformed into the equivalent state transition:
+
+\vspace{2mm}
+\centerline{\hbox{$ \it \begin{array}{l}
+  \lambda \sigma:State_{tp}.\
+      (\lambda v'.\ \Ls \mbox{\it bool-expr} \Rs_\sigma \wedge (v = v')\ \Cn\
+            \Ls \mbox{\it expr} \Rs_\sigma \mid \Ls v' \Rs_\sigma) \mid \sigma
+\end{array} $}}
+\vspace{1mm}
+
+More details on the program representation as lambda expressions are described
+in \cite{FA92}.  Here is just noticed that the shown representations of state
+and programs as state transitions are easily written in HOL notation as will be
+seen in the following examples.
+
+\bigskip
+This completes the introduction on how to meet requirements of the HOL-UNITY
+system.  The following three examples intends to elaborate the application of
+the system as explained above.
+
+\section{Mutual Exclusion} \label{sec:mutexcl}
+
+The intention of this example is to illustrate how one may specify and compose
+specifications using the HOL-UNITY theorem prover.
+
+The example is similar to the one found in (\cite{CM88}, pg.\ 168-170).
+However, whereas the example in \cite{CM88} is informal at certain points, the
+example presented here is a complete rigorous specification using HOL-UNITY
+notation.  This includes beside the specification as found in \cite{CM88} the
+definition of types, state and proofs of all used properties.  The full
+HOL-UNITY details of the example may be found as part of the HOL-UNITY
+package distributed together with the HOL system.
+
+The chosen example describes a version of the mutual exclusion problem.  The
+formal specification of the problem is given in two parts:
+\begin{itemize}
+   \item Users part, called {\it User}
+   \item Shared resource part, {\it G}
+\end{itemize}
+of which every part again has a conditional and unconditional part.  From the 
+specified properties, new properties of the composed system are derived using 
+the composition rules valid in HOL-UNITY.
+
+To make the example self contained, a short description of the mutual exclusion
+problem is informally given.  Next the specification is given as presented in
+\cite{CM88}, and finally the complete formal specification using HOL-UNITY is
+given followed by proofs of composed properties derived as consequences of the
+two specified parts of the system.
+
+\subsection{Introduction}
+
+Informally, a simple version of the mutual exclusion problem may be explained
+as follows.  A user {\it u} making use of the shared resource {\it G} may be
+viewed as being either: {\tt EATING}, {\tt THINKING}, or {\tt HUNGRY},
+depending on whether it has got the resource, does not need it, or is waiting
+for it.  Maintaining this picture of a user {\it u}, a {\tt HUNGRY} user
+{\it u}
+asks {\it G} to get the resource.  Unfortunately, the shared resource may only
+be used by a single {\tt EATING} user {\it u} at a time, but it is assumed that
+the resource allocating is fair such that a {\tt HUNGRY} user {\it u} will get
+the resource when possible and in a fair way. If no user is {\tt EATING},
+a {\tt HUNGRY} user gets the resource immediately, otherwise the
+user has to wait until another user already {\tt EATING} finishes
+his dining.  User's do have a finite stomach capacity. Hence, an {\tt EATING} 
+user {\it u} will become satisfied after a while and hence {\tt THINKING}
+again.  As expected, {\tt THINKING} user's may become {\tt HUNGRY} again.
+
+This means that the behavior of a user {\it u} follows the rules:
+\begin{itemize}
+  \item A {\tt THINKING} user {\it u} may become {\tt HUNGRY}
+  \item A {\tt HUNGRY} user {\it u} eventually becomes {\tt EATING}
+  \item An {\tt EATING} user {\it u} becomes satisfied after a while of eating 
+        and then {\tt THINKING} again.
+\end{itemize}
+
+Additionally, once a user has become {\tt HUNGRY} he will stay 
+{\tt HUNGRY} until it will be {\tt EATING}.
+
+From this description, it is evident that the following equivalences hold for
+any user {\tt u}:
+
+\cn $\begin{array}{llllll}
+ {\tt \neg(u = THINKING)} & = & {\tt (u = HUNGRY)}   & \vee &
+                       {\tt (u = EATING)} & (EQ1)\\
+ {\tt \neg(u = HUNGRY)}   & = & {\tt (u = EATING)}   & \vee &
+                       {\tt (u = THINKING)} & (EQ2)\\
+ {\tt \neg(u = EATING)}   & = & {\tt (u = THINKING)} & \vee &
+                       {\tt (u = HUNGRY)} & (EQ3)
+\end{array}$
+
+Further, the resource allocator guarantees that if an {\tt EATING} user {\it u}
+becomes satisfied within finite time then any {\tt HUNGRY} user {\it u} will 
+eventually get the shared resource.
+
+The description above may be viewed as two parts of a total system.  The one
+consists of the user's and the other of the resource allocator.  Obtaining
+this view, a specification may be formally given in UNITY.
+
+\subsection{UNITY Specification}
+
+In \cite{CM88}, the specification of the above given behavior is given using
+the terminology that user's are represented by a set of user's {\it u} in the 
+component {\it User} and the resource allocator by the component {\it G}.  The
+specification of the properties are here given by:
+
+\subsubsection{Properties given for a {\it User} component}
+
+\cn $\begin{array}{lllll}
+ \forall u:\ ({\tt thinking}\ u) & {\bf unless} & ({\tt hungry}\ u)   &
+                       {\bf in}\ User &  (U1)\\
+ \forall u:\ ({\tt hungry}\ u)   & {\bf stable} &              &
+                       {\bf in}\ User &  (U2)\\
+ \forall u:\ ({\tt eating}\ u)   & {\bf unless} & ({\tt thinking}\ u) &
+                       {\bf in}\ User &  (U3)
+\end{array}$
+
+\subsubsection{Properties given for a {\it G} component}
+
+\cn $\begin{array}{lllll}
+ \forall u:\ \ ({\tt thinking}\ u)    & {\bf stable} & {\bf in}\ G & (G1)\\
+ \forall u:\ \neg({\tt thinking}\ u) & {\bf stable} & {\bf in}\ G  & (G2)\\
+ \forall u:\ \ ({\tt eating}\ u)      & {\bf stable} & {\bf in}\ G & (G3)\\
+ \forall u:\ \neg({\tt eating}\ u)   & {\bf stable} & {\bf in}\ G  & (G4)
+\end{array}$
+
+\subsubsection{Conditional {\it G} Properties}
+
+\cn $\begin{array}{lllll}
+ \forall u_i\ u_j\ IC:\ \neg(u_i = u_j)\ \Rightarrow\\
+   \cnn \neg(({\tt eating}\ u_i) \wedge ({\tt eating}\ u_j))\
+                 {\bf invariant}\ {\bf in}\ (IC,\; G) & (CG1)
+\end{array}$
+
+\subsubsection{Conditional {\it User} Properties}
+
+\cn $\begin{array}{lllll}
+ \forall u\ G:\ (CG1)\ \Rightarrow\
+   ({\tt eating}\ u)\ {\bf leadsto}\ ({\tt thinking}\ u)\ {\bf in}\ User 
+     & (CU1)
+\end{array}$
+
+\subsubsection{Properties for the Composed System {$(User\ [\!]\ G)$}}
+
+\cn $\begin{array}{lllll}
+ \forall u_i\ u_j\ IC:\ \neg(u_i = u_j)\ \Rightarrow\\
+    \cnn \neg(({\tt eating}\ u_i)\ \wedge_*\ ({\tt eating}\ u_j))\
+           {\bf invariant}\ {\bf in}\ (IC,\; (User\ [\!]\ G)) & (CS1)\\
+ \forall u:\ ({\tt hungry}\ u)\ {\bf leadsto}\ ({\tt eating}\ u)\
+                          {\bf in}\ (User\ [\!]\ G) & (CS2)
+\end{array}$
+
+
+\subsubsection{Proof of Derived Properties}
+
+From the specification of {\it User} and {\it G} we may prove some derived
+properties of the composed system.  These proofs may also be found in 
+\cite{CM88}).
+
+\medskip
+The first property we prove is a property of {\it User}:
+
+\cn $\begin{array}{lllll} \label{thm1page}
+ \forall u:\ \neg({\tt eating}\ u)\ {\bf stable}\ {\bf in}\ User & (thm1)
+\end{array}$
+
+\smallskip
+{\bf proof:}
+
+\cn $\begin{array}{lll}
+ \forall u:\ ({\tt thinking}\ u)\ {\bf unless}\
+                    ({\tt hungry}\ u)\ {\bf in}\ User\\
+    \cnn $from specification of$\ User  & (1)\\
+ \forall u:\ ({\tt hungry}\ u)\ {\bf stable}\ {\bf in}\ User\\
+    \cnn $from specification of$\ User  & (2)\\
+ \forall u:\ (({\tt thinking}\ u)\ \vee_*\ ({\tt hungry}\ u))\
+                        \ {\bf unless}\ ({\tt false})\ {\bf in}\ User\\
+    \cnn $applying cancellation to$\ (1)\ $and$\ (2) & (3)\\
+ \forall u:\ (({\tt thinking}\ u)\ \vee_*\ ({\tt hungry}\ u))\
+            =\ \neg({\tt eating}\ u)\\
+    \cnn $any user$\ u\ $is in one of three states$ & (4)\\
+ \forall u:\ \neg({\tt eating}\ u)\ {\bf stable}\ {\bf in}\ User\\
+    \cnn $from$\ (3)\ $and$\ (4) & (thm1)
+\end{array}$
+
+\medskip
+Next we prove a property of the composed system $(User\ [\!]\ G)$:
+
+\cn $\begin{array}{lllll} \label{thm2page}
+ \forall u:\ ({\tt thinking}\ u)\ {\bf unless}\ ({\tt hungry}\ u)\
+                {\bf in}\ (User\ [\!]\ G) & (thm2)
+\end{array}$
+
+\smallskip
+{\bf proof:}
+
+\cn $\begin{array}{lll}
+ \forall u:\ ({\tt thinking}\ u)\ {\bf unless}\
+                    ({\tt hungry}\ u)\ {\bf in}\ User\\
+    \cnn $from specification of$\ User  & (1)\\
+ \forall u:\ ({\tt thinking}\ u)\ {\bf stable}\ {\bf in}\ G\\
+    \cnn $from specification of$\ G  & (2)\\
+ \forall u:\ ({\tt thinking}\ u)\ {\bf unless}\
+                    ({\tt hungry}\ u)\ {\bf in}\ (User\ [\!]\ G)\\
+    \cnn $union theorem on$\ (1)\ $and$\ (2)  & (thm2)\\
+\end{array}$
+
+\medskip
+Then we prove another property of the composed system $(User\ [\!]\ G)$:
+
+\cn $\begin{array}{lllll} \label{thm3page}
+ \forall u:\ ({\tt hungry}\ u)\ {\bf unless}\ ({\tt eating}\ u)\
+                {\bf in}\ (User\ [\!]\ G) & (thm3)
+\end{array}$
+
+\smallskip
+{\bf proof:}
+
+\cn $\begin{array}{lll}
+ \forall u:\ ({\tt hungry}\ u)\ {\bf stable}\ {\bf in}\ User\\
+    \cnn $from specification of$\ User  & (1)\\
+ \forall u:\ \neg({\tt thinking}\ u)\ {\bf stable}\ {\bf in}\ G\\
+    \cnn $from specification of$\ G  & (2)\\
+ \forall u:\ \neg({\tt thinking}\ u)\ =\
+                (({\tt hungry}\ u)\ \vee_*\ ({\tt eating}\ u))\\
+    \cnn $any user$\ u\ $is in one of three states$ & (3)\\
+ \forall u:\ (({\tt hungry}\ u)\ \vee_*\ ({\tt eating}\ u))\ {\bf stable}\
+                    {\bf in}\ G\\
+    \cnn $from$\ (2)\ $and$\ (3) using substitution & (4)\\
+ \forall u:\ ({\tt hungry}\ u)\ {\bf unless}\
+                    \neg({\tt hungry}\ u)\ {\bf in}\ G\\
+    \cnn $from the {\bf unless} antireflexivity rule$ & (5)\\
+ \forall u:\ ({\tt hungry}\ u)\ {\bf unless}\ ({\tt eating}\ u)\
+                {\bf in}\ G)\\
+    \cnn $conjunction on$\ (4)\ $and$\ (5)  & (6)\\
+ \forall u:\ ({\tt hungry}\ u)\ {\bf unless}\ ({\tt eating}\ u)\
+                {\bf in}\ (User\ [\!]\ G)\\
+    \cnn $union theorem on$\ (1)\ $and$\ (6)  & (thm3)\\
+\end{array}$
+
+\medskip
+And finally we prove property:
+
+\cn $\begin{array}{lllll} \label{thm4page}
+ \forall u:\ ({\tt eating}\ u)\ {\bf unless}\ ({\tt thinking}\ u)\
+                {\bf in}\ (User\ [\!]\ G) & (thm4)
+\end{array}$
+
+of the composed system.
+
+\smallskip
+{\bf proof:}
+
+\cn $\begin{array}{lll}
+ \forall u:\ ({\tt eating}\ u)\ {\bf unless}\
+                    \neg({\tt thinking}\ u)\ {\bf in}\ User\\
+    \cnn $from the specification of$\ User & (1)\\
+ \forall u:\ ({\tt eating}\ u)\ {\bf stable}\ {\bf in}\ G\\
+    \cnn $from specification of$\ G  & (2)\\
+ \forall u:\ ({\tt eating}\ u)\ {\bf unless}\ ({\tt thinking}\ u)\
+                {\bf in}\ (User\ [\!]\ G)\\
+    \cnn $union theorem on$\ (1)\ $and$\ (2)  & (thm4)\\
+\end{array}$
+
+This ends the description in UNITY.  The given specification will now be
+defined in the HOL-UNITY notation and the derived proofs are proven within
+the mechanized HOL-UNITY theorem proving system.
+
+\subsection{Specification in HOL-UNITY}
+
+To make a specification in the HOL-UNITY system, we need to define a new
+uniquely named theory to avoid collapse with existing theories.
+
+Assuming we may use the theory name {\tt example01}, we remove a potentially 
+old example theory:
+{\footnotesize 
+\begin{verbatim}
+system `/bin/rm example01.th`;;
+\end{verbatim}
+}
+
+Now the UNITY theories may be loaded into the HOL system:
+{\footnotesize 
+\begin{verbatim}
+loadt`l_unity`;;
+\end{verbatim}
+}
+Hence from now on, we are working in HOL-UNITY.
+
+Open a new theory named {\tt example01} for elaborating the UNITY example.
+{\footnotesize 
+\begin{verbatim}
+new_theory`example01`;;
+\end{verbatim}
+}
+Now we are ready to start the work on the example.
+
+\bigskip
+To make the specification in the HOL-UNITY notation, we must explicitly define
+a state for book keeping of the current activity of all users {\it u} in the
+{\it User} component.  As mentioned a user activity in any state may be asked
+by the predicates {\tt eating}, {\tt thinking}, and {\tt hungry} which takes a
+user {\tt u} as argument and returns the boolean value of the respective
+predicate in a given state. Notice that all UNITY {\it names} and {\it terms}
+are written as {\tt names} and {\tt terms} in HOL-UNITY notation.
+
+To reflect the given description in the HOL-UNITY specification, the type of
+the state may be defined as a mapping from user's {\tt u} onto one of their
+three possible current activities.  Hence, the state may be represented as a
+function from some unspecified type (i.e.\ {\tt the polymorphic type *}) of the
+user to a {\tt dine} type representing the actual activity in a given state:
+
+\hspace{6mm} {\tt s:*->dine}
+
+in which the {\tt dine} type may be expressed by an enumerated type:
+
+\hspace{6mm} {\tt dine = EATING | THINKING | HUNGRY}
+
+The state definition is a necessity to meet the requirements of a HOL-UNITY
+specification.  But as will be seen in a later example, we may choose
+other state representations more natural when working with programs.
+
+
+\subsubsection{Defining the Type {\tt dine} in HOL}
+
+In the current HOL system, enumerated types like {\tt dine} is best defined
+by using the type definition package \cite{Melham88}.
+
+The function {\tt define\_type} may be used for defining types:
+{\footnotesize 
+\begin{verbatim}
+let dine_Axiom = define_type `dine_Axiom` `dine = EATING | THINKING | HUNGRY`;;
+\end{verbatim}
+}
+
+It returns the theorem:
+{\footnotesize 
+\begin{verbatim}
+dine_Axiom = 
+|- !e0 e1 e2.
+    ?! fn. (fn EATING = e0) /\ (fn THINKING = e1) /\ (fn HUNGRY = e2)
+\end{verbatim}
+}
+expressing that for any values {\tt e0, e1, e2} of some unspecified but equal
+type there exists a unique function {\tt fn} which when applied to one of the
+three {\tt dine} values {\tt EATING, THINKING, HUNGRY} is equal to the
+respectively chosen values {\tt e0, e1, e2}.
+
+To prove properties of this type we may conveniently introduce an induction 
+theorem for the {\tt dine} type.  This may be defined by:
+{\footnotesize 
+\begin{verbatim}
+let dine_Induct = prove_induction_thm dine_Axiom;;
+\end{verbatim}
+}
+
+The HOL system uses tactics as a tool for facilitate the proving.  Hence,
+we define a tactic supporting use of the induction theorem:
+{\footnotesize 
+\begin{verbatim}
+let dine_INDUCT_TAC = INDUCT_THEN dine_Induct ASSUME_TAC;;
+\end{verbatim}
+}
+
+Now we are ready to define the state predicates for expressing the activity of
+user's.
+
+\subsubsection{Defining the {\tt dine} Predicates}
+
+First the {\tt eating} predicate.  The predicate takes a user {\tt u} as
+arguments and returns a state abstracted predicate which ask whether the given
+user {\tt u} is {\tt EATING} in state {\tt s}.
+
+{\footnotesize 
+\begin{verbatim}
+let eating = new_definition
+   (`eating`,
+    "eating (u:*) = (\s:*->dine. (s u) = EATING)");;
+\end{verbatim}
+}
+
+The predicates {\tt thinking} and {\tt hungry} are defined similarly.
+
+{\footnotesize 
+\begin{verbatim}
+let thinking = new_definition
+   (`thinking`,
+    "thinking (u:*) = (\s:*->dine. (s u) = THINKING)");;
+
+let hungry = new_definition
+   (`hungry`,
+    "hungry (u:*) = (\s:*->dine. (s u) = HUNGRY)");;
+\end{verbatim}
+}
+
+We may now prove the needed equalities {\it EQ1, EQ2, EQ3} between the
+predicates {\tt thinking, eating, hungry}.
+
+\subsubsection{Equalities between {\tt dine} Predicates}
+
+To prove the needed properties, we must have some additionally information
+about the type, as expressed above.  From the {\tt dine\_Axiom} we get two
+theorems:
+{\footnotesize 
+\begin{verbatim}
+let exists_dine_thm1 = prove_rec_fn_exists dine_Axiom 
+      "(f EATING = T) /\ (f THINKING = F) /\ (f HUNGRY = F)";;
+
+let exists_dine_thm2 = prove_rec_fn_exists dine_Axiom 
+      "(f EATING = F) /\ (f THINKING = T) /\ (f HUNGRY = F)";;
+\end{verbatim}
+}
+
+Now we are able to prove some trivial theorems about the type {\tt dine}, 
+which are needed to prove the used equalities in the example.
+
+We need to know that all {\tt dine} values are distinct.  Unfortunately this is
+not supported by the current version of the type package.
+
+We may prove this knowledge by using the selected theorems {\tt
+exists\_dine\_thm1, exists\_dine\_thm2}.  An example on how to prove this is
+given:
+{\footnotesize 
+\begin{verbatim}
+let dine_thm1 = TAC_PROOF
+  (([], "~(EATING = THINKING)"),
+   DISCH_TAC THEN
+   ASSUME_TAC exists_dine_thm1 THEN
+   UNDISCH_TAC "?f. (f EATING = T) /\ (f THINKING = F) /\ (f HUNGRY = F)" THEN
+   ASM_REWRITE_TAC [] THEN
+   REPEAT STRIP_TAC THEN
+   RES_TAC);;
+\end{verbatim}
+}
+
+Having proven all possible combinations of different {\tt dine} values, we may 
+prove the theorem:
+{\footnotesize
+\begin{verbatim}
+let dine_thm0 = TAC_PROOF
+  (([],
+   "~(EATING   = THINKING) /\ ~(THINKING   = EATING) /\ 
+    ~(EATING   = HUNGRY)   /\ ~(HUNGRY     = EATING) /\
+    ~(THINKING = HUNGRY)   /\ ~(HUNGRY     = THINKING)"),
+   REWRITE_TAC [dine_thm1;dine_thm2;dine_thm3;
+                dine_thm4;dine_thm5;dine_thm6]);;
+\end{verbatim}
+}
+
+Having proven {\tt dine\_thm0}, it is possible to prove the following
+equality theorem informally stated above as $(EQ3)$:
+
+{\footnotesize 
+\begin{verbatim}
+let dine_thm7 = TAC_PROOF
+  (([],
+   "!u:dine. ~(u = EATING) = ((u = THINKING) \/ (u = HUNGRY))"),
+   dine_INDUCT_TAC THENL
+     [REWRITE_TAC [DE_MORGAN_THM;dine_thm0];
+      REWRITE_TAC [DE_MORGAN_THM;dine_thm0];
+      REWRITE_TAC [DE_MORGAN_THM;dine_thm0]]);;
+\end{verbatim}
+}
+
+In the above proving we used the equality:
+{\footnotesize 
+\begin{verbatim}
+   ~eating u = thinking u \/ hungry u
+\end{verbatim}
+}
+was used.
+
+This may be proven by first deriving the following theorem from theorem
+{\tt dine\_thm7}:
+
+{\footnotesize 
+\begin{verbatim}
+   !u s. ~(s u = EATING) = (s u = THINKING) \/ (s u = HUNGRY)
+
+let dine_thm8 = GEN "u:*" (GEN "s:*->dine" (SPEC "(s:*->dine) u" dine_thm7));;
+\end{verbatim}
+}
+
+Theorem {\tt dine\_thm8} may now be used for proving the wanted inequality 
+valid:
+{\footnotesize 
+\begin{verbatim}
+let dine_thm9 = TAC_PROOF
+  (([], "!u:*. (~* (eating u)) = ((thinking u) \/* (hungry u))"),
+   REWRITE_TAC [eating;thinking;hungry] THEN
+   REWRITE_TAC [~*;\/*] THEN
+   CONV_TAC (DEPTH_CONV BETA_CONV) THEN
+   GEN_TAC THEN
+   STRIP_ASSUME_TAC (MK_ABS (SPEC "u:*" dine_thm8)));;
+\end{verbatim}
+}
+
+The equality:
+{\footnotesize 
+\begin{verbatim}
+   ~thinking u = hungry u \/ eating u
+\end{verbatim}
+}
+was also used, and is proven in a similar way.
+
+This completes the introductory work needed in order to establish the state
+environment for the specification and the used inequalities for proving the
+properties derived from the specification.
+
+\subsubsection{The Property Specification}
+
+The method used here is an attempt to bind specified properties to a certain 
+component.  This way of specifying may be changed if a better idea turns up.
+
+As specified above we define the presented properties but now as HOL-UNITY
+properties.  The defined properties are given names corresponding to the
+component of which they belong.
+
+
+\subsubsection{Specifying Properties given for the {\tt user} component}
+
+Specifying the properties {\it (U1), (U2)} and {\it (U3)}:
+{\footnotesize 
+\begin{verbatim}
+let user_safe1 = new_definition (`user_safe1`,
+   "user_safe1 user = !u:*. ((thinking u) UNLESS (hungry u)) user");;
+
+let user_safe2 = new_definition (`user_safe2`,
+   "user_safe2 user = !u:*. (hungry u) STABLE user");;
+
+let user_safe3 = new_definition (`user_safe3`,
+   "user_safe3 user = !u:*. ((eating u) UNLESS (thinking u)) user");;
+\end{verbatim}
+}
+
+\subsubsection{Specifying Properties given for the {\tt G} component}
+
+Specifying the properties {\it (G1), (G2), (G3)} and {\it (G4)}:
+{\footnotesize 
+\begin{verbatim}
+let G_safe1    =  new_definition (`G_safe1`,
+   "G_safe1 G = !u:*. (thinking u) STABLE G");;
+
+let G_safe2    =  new_definition (`G_safe2`,
+   "G_safe2 G = !u:*. (~*(thinking u)) STABLE G");;
+
+let G_safe3    =  new_definition
+  (`G_safe3`, "G_safe3 G = !u:*. (eating u) STABLE G");;
+
+let G_safe4    =  new_definition
+  (`G_safe4`, "G_safe4 G = !u:*. (~* (eating u)) STABLE G");;
+\end{verbatim}
+}
+
+\subsubsection{Specifying Conditional {\tt G} Properties component}
+
+Specifying the conditional property {\it (CG1)}:
+{\footnotesize 
+\begin{verbatim}
+let G_cond =  new_definition (`G_cond`,
+   "G_cond G IC = !(ui:*) uj. ~(ui = uj) ==>
+                (~*((eating ui) /\* (eating uj))) INVARIANT (IC, G)");;
+\end{verbatim}
+}
+
+\subsubsection{Specifying Conditional {\tt user} Properties component}
+
+Specifying the conditional property {\it (CU1)}:
+{\footnotesize 
+\begin{verbatim}
+let user_live1 = new_definition (`user_live1`,
+   "user_live1 user IC =
+      !(u:*) (G:((*->dine)->(*->dine))list).
+          G_cond G IC ==> ((eating u) LEADSTO (thinking u)) user");;
+\end{verbatim}
+}
+
+These were the properties specified for each of the components {\tt user}
+and {\tt G}.  Now the wanted properties that must be satisfied by the
+composed system are given.
+
+\subsubsection{Specifying Properties for the Composed System}
+
+Specifying the composed properties {\it (CS1)} and {\it (CS2)}:
+{\footnotesize 
+\begin{verbatim}
+let comp_safe1 = new_definition (`comp_safe1`,
+   "comp_safe1 G user IC =
+    !(ui:*) uj. ~(ui = uj) ==>
+    (~*((eating ui) /\* (eating uj))) INVARIANT (IC, (APPEND user G))");;
+
+let comp_live1 = new_definition (`comp_live1`,
+   "comp_live1 G user =
+      !u:*. ((hungry u) LEADSTO (eating u)) (APPEND user G)");;
+\end{verbatim}
+}
+
+Finally, we prove the derived properties as presented above, but this time
+using the HOL-UNITY theorem prover.
+
+\subsubsection{Proving Derived Properties of the Specification}
+
+Given properties {\tt user\_safe1, user\_safe2, user\_safe3}, we may prove that
+all users satisfy:
+
+{\footnotesize 
+\begin{verbatim}
+	!user u. user_safe1 user /\ user_safe2 user /\ user_safe3 user ==>
+            ~eating u is stable in user
+\end{verbatim}
+}
+Notice, that the assumed properties are given explicitly, since the HOL-UNITY
+system does not support an environment of specified properties, as one
+may conveniently do by manually proving.
+
+\smallskip
+This proof is similar to the proof of {\it (thm1)} on page~\pageref{thm1page}.
+
+{\footnotesize 
+\begin{verbatim}
+let user_thm1 = TAC_PROOF
+  (([], "!user (u:*).
+           user_safe1 user /\ user_safe2 user /\ user_safe3 user ==>
+               (~* (eating u)) STABLE user"),
+   REPEAT GEN_TAC THEN
+   REWRITE_TAC [user_safe1;user_safe2;user_safe3] THEN
+   REPEAT STRIP_TAC THEN
+   ASSUME_TAC (SPEC "u:*" (ASSUME "!u:*. (hungry u) STABLE user")) THEN
+   ASSUME_TAC
+       (SPEC "u:*" (ASSUME "!u:*. ((thinking u) UNLESS (hungry u)) user")) THEN
+   UNDISCH_TAC "(hungry (u:*)) STABLE user" THEN
+   REWRITE_TAC [STABLE] THEN
+   DISCH_TAC THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["((thinking (u:*)) UNLESS (hungry u))user";
+         "((hungry (u:*)) UNLESS FALSE)user"]
+         AND_INTRO_THM)) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["thinking (u:*)";"hungry (u:*)";
+         "FALSE:(*->dine)->bool";"user:((*->dine)->(*->dine))list"]
+         UNLESS_thm8)) THEN
+   UNDISCH_TAC "(((thinking (u:*)) \/* (hungry u)) UNLESS FALSE)user" THEN
+   REWRITE_TAC [SYM (SPEC_ALL dine_thm9)]);;
+\end{verbatim}
+}
+
+\medskip
+Given properties {\tt user\_safe1 and G\_safe1}, we may prove that all
+user's {\tt u} and {\tt G} components satisfy:
+
+{\footnotesize 
+\begin{verbatim}
+	!user G u. user_safe1 user /\ G_safe1 G ==>
+            (thinking u) unless (hungry u) in (user [] G)
+\end{verbatim}
+}
+in the composed system.
+
+\smallskip
+This proof is similar to the proof of {\it (thm2)} on page~\pageref{thm2page}.
+
+{\footnotesize 
+\begin{verbatim}
+let comp_thm1 = TAC_PROOF
+  (([], "!user G (u:*). user_safe1 user /\ G_safe1 G ==>
+               ((thinking u) UNLESS (hungry u)) (APPEND user G)"),
+   REPEAT GEN_TAC THEN
+   REWRITE_TAC [user_safe1;G_safe1] THEN
+   REPEAT STRIP_TAC THEN
+   ASSUME_TAC (SPEC_ALL (ASSUME
+        "!u:*. ((thinking u) UNLESS (hungry u))user")) THEN
+   ASSUME_TAC (SPEC_ALL (ASSUME "!u:*. (thinking u) STABLE G")) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+       ["((thinking (u:*)) UNLESS (hungry u))user";
+        "(thinking (u:*)) STABLE G"]
+        AND_INTRO_THM)) THEN
+   REWRITE_TAC [UNDISCH_ALL (SPECL
+       ["thinking (u:*)";"hungry (u:*)";"user:((*->dine)->(*->dine))list";
+        "G:((*->dine)->(*->dine))list"] COMP_UNITY_cor2)]);;
+\end{verbatim}
+}
+
+\medskip
+Given properties {\tt user\_safe2 and G\_safe2}, we may prove that all
+{\tt user}'s and {\tt G} components satisfy:
+
+{\footnotesize 
+\begin{verbatim}
+	!user G u. user_safe2 user /\ G_safe2 G ==>
+            (hungry u) unless (eating u) in (user [] G)
+\end{verbatim}
+}
+for any user {\tt u} in the composed system.
+
+\medskip
+The rewriting of boolean expressions are tedious.  For a future use, we need 
+to invent something better.
+
+\smallskip
+This proof is similar to the proof of {\it (thm3)} on page~\pageref{thm3page}.
+
+{\footnotesize 
+\begin{verbatim}
+let comp_thm2 = TAC_PROOF
+  (([], "!(u:*) user G. user_safe2 user /\ G_safe2 G ==>
+                     ((hungry u) UNLESS (eating u)) (APPEND G user)"),
+   REWRITE_TAC [user_safe2;G_safe2] THEN
+   REPEAT STRIP_TAC THEN
+   ASSUME_TAC (SPEC_ALL (ASSUME "!u:*. (~*(thinking u)) STABLE G")) THEN
+   ASSUME_TAC (SPEC_ALL (ASSUME "!u:*. (hungry u) STABLE user")) THEN
+   UNDISCH_TAC "(~*(thinking (u:*))) STABLE G" THEN
+   REWRITE_TAC [dine_thm12] THEN
+   ASSUME_TAC (SPECL
+        ["hungry (u:*)";"G:((*->dine)->(*->dine))list"] UNLESS_thm2) THEN
+   REWRITE_TAC [STABLE] THEN
+   ONCE_REWRITE_TAC [OR_COMM_lemma] THEN
+   DISCH_TAC THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["((hungry (u:*)) UNLESS (~*(hungry u)))G";
+         "(((eating (u:*)) \/* (hungry u)) UNLESS FALSE)G"]
+         AND_INTRO_THM)) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["hungry (u:*)";"~* (hungry (u:*))";
+         "(eating (u:*)) \/* (hungry u)";"FALSE:(*->dine)->bool";
+         "G:((*->dine)->(*->dine))list"] UNLESS_thm4)) THEN
+   UNDISCH_TAC
+         "(((hungry u) /\* ((eating u) \/* (hungry u))) UNLESS
+           ((((hungry (u:*)) /\* FALSE) \/*
+            (((eating u) \/* (hungry u)) /\* (~*(hungry u)))) \/*
+           ((~*(hungry u)) /\* FALSE))) G" THEN
+   REWRITE_TAC [AND_FALSE_lemma] THEN
+   REWRITE_TAC [OR_FALSE_lemma] THEN
+   ONCE_REWRITE_TAC [SPECL
+        ["FALSE:(*->dine)->bool";
+         "((eating (u:*)) \/* (hungry u)) /\* (~*(hungry u))"]
+         OR_COMM_lemma] THEN
+   REWRITE_TAC [OR_FALSE_lemma] THEN
+   ONCE_REWRITE_TAC [SPECL
+        ["hungry (u:*)";"eating (u:*)";"hungry (u:*)"]
+         AND_OR_DISTR_lemma] THEN
+   REWRITE_TAC [AND_AND_lemma] THEN
+   ONCE_REWRITE_TAC [SPECL
+        ["hungry (u:*)";"eating (u:*)"] AND_COMM_lemma] THEN
+   REWRITE_TAC [P_AND_Q_OR_Q_lemma] THEN
+   ONCE_REWRITE_TAC [AND_COMM_lemma] THEN
+   ONCE_REWRITE_TAC [SPECL
+        ["~* (hungry (u:*))";"eating (u:*)";"hungry (u:*)"]
+         AND_OR_DISTR_lemma] THEN
+   ONCE_REWRITE_TAC [AND_COMM_lemma] THEN
+   REWRITE_TAC [P_AND_NOT_P_lemma] THEN
+   REWRITE_TAC [OR_FALSE_lemma] THEN
+   DISCH_TAC THEN
+   ASSUME_TAC (SPECL
+        ["eating (u:*)";"~* (hungry (u:*))"]
+         SYM_AND_IMPLY_WEAK_lemma) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["((hungry (u:*)) UNLESS ((eating u) /\* (~*(hungry u))))G";
+         "!s:*->dine. ((eating u) /\* (~*(hungry u)))s ==> eating u s"]
+         AND_INTRO_THM)) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["hungry (u:*)";"(eating (u:*)) /\* (~*(hungry u))";
+         "eating (u:*)";"G:((*->dine)->(*->dine))list"]
+         UNLESS_thm3)) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["((hungry (u:*)) UNLESS (eating u))G";
+         "(hungry (u:*)) STABLE user"]
+         AND_INTRO_THM)) THEN
+   STRIP_ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["hungry (u:*)";"eating (u:*)";"G:((*->dine)->(*->dine))list";
+         "user:((*->dine)->(*->dine))list"] COMP_UNITY_cor2)));;
+\end{verbatim}
+}
+
+\medskip
+Given properties {\tt user\_safe3 and G\_safe3}, we may prove that all
+{\tt user}s and {\tt G} components satisfy:
+
+{\footnotesize 
+\begin{verbatim}
+  !user G u. user_safe3 user /\ G_safe3 G ==>
+               (eating u) unless (thinking u) in (user [] G)
+\end{verbatim}
+}
+for any user {\tt u} in the composed system.
+
+\smallskip
+This proof is similar to the proof of {\it (thm4)} on page~\pageref{thm4page}.
+
+{\footnotesize 
+\begin{verbatim}
+let comp_thm3 = TAC_PROOF
+  (([],
+   "!user G (u:*). user_safe3 user /\ G_safe3 G ==>
+                  ((eating u) UNLESS (thinking u)) (APPEND user G)"),
+   REWRITE_TAC [user_safe3;G_safe3] THEN
+   REPEAT STRIP_TAC THEN
+   ASSUME_TAC (SPEC_ALL (ASSUME "!u:*. (eating u) STABLE G")) THEN
+   ASSUME_TAC (SPEC_ALL (ASSUME
+        "!u:*. ((eating u) UNLESS (thinking u))user")) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["((eating (u:*)) UNLESS (thinking u))user";
+         "(eating (u:*)) STABLE G"]
+         AND_INTRO_THM)) THEN
+   STRIP_ASSUME_TAC (UNDISCH_ALL (SPECL
+        ["eating (u:*)";"thinking (u:*)";"user:((*->dine)->(*->dine))list";
+         "G:((*->dine)->(*->dine))list"] COMP_UNITY_cor2)));;
+\end{verbatim}
+}
+
+This ends the example on the mutual exclusion problem.
+
+
+\section{The {\it readers/writers} Problem} \label{sec:readwrite}
+
+The purpose of this example is to show how programs may be represented in the
+HOL-UNITY theorem prover and how it is proven that a given program meets its
+property specification.
+
+A subgoal is also to show how one may represent and work with programs
+containing variables of different type and represent such variables all
+having the natural number type.
+
+The section first presents the program and some of the properties using the
+notation \cite{CM88}, then the specification and proofs in HOL-UNITY notation
+are given.  The HOL-UNITY presentation simulates a HOL session.  Hence, this 
+example may be used as user's guideline for working with the HOL-UNITY theorem 
+proving system.
+
+\subsection{Introduction}
+
+The chosen example is a slightly modified version of the example page 139-140
+\cite{CM88}.  It is a small (rudimentary) example of the well known
+readers/writers problem.  The given program has the important property that it
+guarantees progress for writers.  Notice that the example still has to be
+completed with the proof of the two {\it (U7)} and {\it (U8)} program
+properties, but for the purpose of the example it is sufficient.
+
+To ease proving, one statement was changed in the program given on page 139
+\cite{CM88}.  The boolean variable {\tt B} is represented as a variable having
+the state dependent value 0 (zero) for FALSE and the value 1 for TRUE.  The
+modification was made in the assignment {\it \{set-b\}} such that this
+statement assigns the variable {\tt B} to 1 if the condition is true and 0
+otherwise.  Hence, also the statement {\it \{startwrite\}} had to be changed 
+to assign the value 0 to {\tt B}.  The representation of the variable {\tt B}
+makes the state definition of the program simpler, since all variables are now
+of type natural numbers.
+
+\subsection{A {\it readers/writers} Program with {\it writers} Progress}
+
+The program implementing the required behavior of readers and writers:
+
+\begin{unityProgram}{User}
+\declare
+ \dcl{\var{B, NR, NW, NQ}}{\pred{number}}
+\initial[initially]
+ \init{\var{B, NR, NW, NQ}}{0, 0, 0, 0}
+\initial[always]
+ \init{\var{t}}{N-(\var{NR}+N*NW)}
+\assign
+ \ifasg{\, \; \; \it \{startread\}}
+        {\var{NR}}{NR + 1}{t \geq 1 \wedge \neg(\var{B} = 1)}
+ \asg{[\hspace{-0.1em}]\ {\it \{endread\}}}
+        {\var{NR}}{\var{NR}-1}
+ \ifasg{[\hspace{-0.1em}]\ {\it \{startwrite\}}}
+        {\var{NW, NQ, B}}{NW+1, NQ-1, 0}{t \geq N \wedge \var{NQ} \geq 0}
+ \asg{[\hspace{-0.1em}]\ {\it \{endwrite\}}}
+        {\var{NW}}{\var{NW}-1}
+ \ifasg{[\hspace{-0.1em}]\ {\it \{set\!-\!b\}}}
+        {\var{B}}{1}{\var{NQ} > 0}
+ \elseasg{ }{ }{0}
+\end{unityProgram}
+
+\medskip
+Some important properties that must be satisfied by the {\it User} program:
+
+\cn $\begin{array}{llllll}
+\\
+ \forall k:\ ({\it NR} = {\it k} \wedge {\it k} > 0)\ {\bf leadsto}\
+              \neg({\it NW} = 1)\
+                       {\bf in}\ User &  (U4)\\
+\\
+ ({\it NQ} > 0)\ {\bf ensures}\ ({\it NW} = 1 \vee {\it B} = 1)\
+                       {\bf in}\ User &  (U7)\\
+\\
+ ({\it B} = 1 \wedge {\it NR} = 0)\ {\bf ensures}\ ({\it NW} = 1)\
+                       {\bf in}\ User &  (U8)\\
+\\
+ \forall k:\ ({\it B} = 1 \wedge {\it NR} = {\it k} \wedge
+                   {\it k} > 0)\ {\bf unless}\
+                  ({\it B} = 1 \wedge {\it NR} < {\it k})\
+                       {\bf in}\ User &  (U9)\\
+\\
+\end{array}$
+
+These are later proven valid during the session using the HOL-UNITY system.
+
+\medskip
+Using the presented properties, it is possible to prove that:
+
+\cn $\begin{array}{llllll} \label{U5page}
+\\
+ ({\it NQ} > 0)\ {\bf leadsto}\ ({\it NW} = 1)\
+                       {\bf in}\ User & \hspace{45mm} & & (U5)\\
+\\
+\end{array}$
+
+\medskip
+{\bf proof:}
+
+\cn $\begin{array}{llllll}
+\\
+ \forall k:\ ({\it B} = 1 \wedge {\it NR} = {\it k} \wedge {\it k} > 0)\
+                {\bf leadsto}\ ({\it B} = 1 \wedge {\it NR} < {\it k})\
+                       {\bf in}\ User\\
+ \cnn $using PSP theorem on$\ (U4)\ $and$\ (U9)  & (1)\\
+ ({\it B} = 1)\ {\bf leadsto}\ ({\it B} = 1 \wedge {\it NR} = 0)\
+                       {\bf in}\ User\\
+ \cnn $applying induction on$\ (1)               & (2)\\
+ ({\it B} = 1)\ {\bf leadsto}\ ({\it NW} = 1)\
+                       {\bf in}\ User\\
+ \cnn $transitivity on$\ (2)\ $and$\ (U8)        & (3)\\
+ ({\it NQ} > 0)\ {\bf leadsto}\ ({\it NW} = 1)\
+                       {\bf in}\ User\\
+ \cnn $cancellation on$\ (U7)\ $and$\ (3)        & (U5)\\
+\\
+\end{array}$
+
+Now, we want to prove that theorem {\it (U5)} holds for the {\it User} program
+by using the HOL-UNITY.  This means, assuming {\it (U4)} as done in the example
+\cite{CM88} we must prove that {\it (U7), (U8)} and {\it (U9)} holds for the
+program {\it User}.  Having proved these properties, we may prove that assuming
+{\it (U4)}) the property {\it (U5)} is satisfied by {\it User}.
+
+
+\subsection{Verifying {\it User} Properties using HOL-UNITY}
+
+Like before, we need to define a new uniquely named theory to avoid collapse
+with existing theories.
+
+Assuming we may use the theory name {\tt example02}, we remove a potentially 
+old example theory:
+{\footnotesize 
+\begin{verbatim}
+system `/bin/rm example02.th`;;
+\end{verbatim}
+}
+
+Load the UNITY theories into the HOL system:
+{\footnotesize 
+\begin{verbatim}
+loadt`l_unity`;;
+\end{verbatim}
+}Hence from now on, we are working in HOL-UNITY.
+
+Now, opening a new theory named {\tt example02} for elaborating the UNITY
+example
+{\footnotesize 
+\begin{verbatim}
+new_theory`example02`;;
+\end{verbatim}
+}
+we are ready to start working on the example.
+
+As mentioned before, this example will not be complete, but only contain enough
+details and proofs to give an introductory understanding of how to work with
+the current HOL-UNITY prototype system.
+
+First we define a HOL representation of the {\it User} program variables, the
+we prove a lemma needed for the defined variables, next we define a
+representation of a UNITY program, and finally we define the specified program.
+We prove that one of the assumed safety properties {\it (U9)} and is really 
+satisfied by the given program.  From this and assuming {\it (u4), (U7)} and
+{\it (U8)} we end the example by proving the progress property {\it (U10)}.
+
+These steps in the example are supposed to represent a way of working with the
+present HOL-UNITY prototype system.
+
+
+\subsection{Defining a Program Representation}
+
+In this section variables {\it name} are written with capital letters {\tt
+NAME}.  To make the specification in HOL-UNITY of a program, we need to define
+a representation of the program variables and the statements in the program
+must be defined as state transition functions.
+
+\subsubsection{Program Variables}
+
+We start by defining an enumerated like type representing the variables
+{\tt NR, NW, NQ} and {\tt B} as named constants in the program.
+
+{\footnotesize 
+\begin{verbatim}
+let Vtype_Axiom = define_type `Vtype_Axiom` `Vtype = NR | NW | NQ | B`;;
+\end{verbatim}
+}
+
+To prove the needed properties, we must have some additionally information
+about the type.  We prove that a function {\tt f} exists, which maps the
+enumerated constants {\tt NR, NW, NQ, B} onto the values {\tt 0, 1, 2, 3}:
+
+{\footnotesize 
+\begin{verbatim}
+let exists_Vtype_thm = prove_rec_fn_exists Vtype_Axiom 
+      "(f NR = 0) /\ (f NW = 1) /\ (f NQ = 2) /\ (f B = 3)";;
+\end{verbatim}
+}
+
+Now we are able to prove the trivial {\tt Vtype} theorem, that all program
+variables represented by the enumerated constants {\tt NR, NW, NQ, B} are 
+distinct.
+
+{\footnotesize 
+\begin{verbatim}
+let Vtype_thm1 = TAC_PROOF
+  (([],
+   "~(NR = NW) /\ ~(NW = NR) /\ ~(NR = NQ) /\ ~(NQ = NR) /\
+    ~(NR =  B) /\ ~(B  = NR) /\ ~(NW = NQ) /\ ~(NQ = NW) /\
+    ~(NW =  B) /\ ~(NQ = NW) /\ ~(NQ =  B) /\ ~(B  = NQ)"),
+   STRIP_ASSUME_TAC exists_Vtype_thm THEN
+   REPEAT STRIP_TAC THEN
+   POP_ASSUM (\thm. MP_TAC
+     (CONJ (REWRITE_RULE [thm] (ASSUME "(f:Vtype->num) NR = 0"))
+     (CONJ (REWRITE_RULE [thm] (ASSUME "(f:Vtype->num) NW = 1"))
+     (CONJ (REWRITE_RULE [thm] (ASSUME "(f:Vtype->num) NQ = 2"))
+           (REWRITE_RULE [thm] (ASSUME "(f:Vtype->num) B  = 3")))))) THEN
+   ASM_REWRITE_TAC [num_CONV "3";num_CONV "2";num_CONV "1"] THEN
+   REWRITE_TAC [INV_SUC_EQ] THEN
+   REWRITE_TAC [NOT_SUC] THEN
+   REWRITE_TAC [ONCE_REWRITE_RULE [EQ_SYM_EQ] NOT_SUC]);;
+\end{verbatim}
+}
+
+The enumerated constants and the proven property that all variables are
+distinct enables us to represent the program variables of the {\it User}
+program.  But we still need a representation of program statements.  A method
+which suits the semantic of UNITY programs are given in the next section.
+
+
+\subsubsection{Program Representation}
+
+In order to be able to define a UNITY program as a set (list representation) of
+state transitions, we need to define every conditional assignment in terms of a
+state transition function.
+
+Having defined such a function {\tt MK\_COND}, we may represent a UNITY 
+program as a list of such functions.
+
+We define the state transition function {\tt ST}, which updates a variable 
+{\tt nm} to a value given by the state dependent expression {\tt val}. The
+value of {\tt val} is defined by the old state {\tt s}. {\tt ST} returns the
+state {\tt s'} that is defined by {\tt s'} except that the variable {\tt nm} is
+given the value of {\tt val} in the old state {\tt s}.
+
+{\footnotesize 
+\begin{verbatim}
+let ST = new_definition
+  (`ST`, "ST ((nm:Vtype),(val:(Vtype->num)->num)) s s' =
+             (\n. (n = nm) => (val s) | (s' n))");;
+\end{verbatim}
+}
+
+Both states {\tt s} and {\tt s'} are needed, since we want to able to represent 
+a set of updates in which all expressions are evaluated in the state {\tt s}.
+The state {\tt s'} then contains the accumulated updates of variables.
+
+We may now define the function {\tt STL}, which reflects the state transition 
+as a result of a set (list representation) of assignments by recursively using 
+the {\tt ST} function for the state transition given by each assignment.
+
+{\footnotesize 
+\begin{verbatim}
+let STL = new_recursive_definition false list_Axiom `STL`
+  "(STL (s:Vtype->num) s' [] = s') /\
+   (STL s s' (CONS (as:(Vtype#((Vtype->num)->num))) asl) =
+                          (STL s (ST as s s') asl))";;
+\end{verbatim}
+}
+
+Finally, we represent a UNITY assignment as a conditional state transition 
+{\tt MK\_COND} defined by a state dependent enabling condition {\tt c} and a 
+list of parallel, but interleaved assignments.  Actually there is no concept 
+of conditional statements in UNITY (see \cite{CM88} pg 24).  However, since 
+side effects are not possible by evaluating expressions in UNITY, we may move 
+the condition of a conditional expression in front of an assignment if there 
+is no optional values in the expression.  This presented approach was taken to
+show how HOL-UNITY may also be used to verify {\it ST}
+(Synchronized Transitions \cite{JST88}) programs.
+
+Using pure UNITY expressions \cite{CM88}, no statement enabling condition is 
+present, hence the values {\tt val} must be represented by state dependent 
+conditional expression values alone.  An example of such a conditional 
+expression is found in the representation of the {\it User} program {\tt Prog}
+in the last {\tt MK\_COND} statement representing the {\it set\_b} statement.
+
+{\footnotesize 
+\begin{verbatim}
+let MK_COND = new_definition (`MK_COND`,
+   "MK_COND (c, asl) (s:Vtype->num) = ((c s) => (STL s s asl) | s)");;
+\end{verbatim}
+}
+
+To complete the description of the program representation we prove that
+the claimed equivalence between the two representations is actually satisfied.
+
+% $$$.
+
+This ends the description on how to represent programs in HOL-UNITY. The
+wanted program {\it User} is defined as {\tt Prog} in the next section.
+
+
+\subsubsection{Defining the Program {\it User}}
+
+An additional feature in UNITY is the {\it always} definitions. An
+{\it always} definition defines a shorthand for a complicated expression
+in the program, i.e.\ such a definition does not have a semantic itself. In
+HOL-UNITY this feature is achieved in an elegant way by using the possibility
+of referring to the contents of an ML defined term in another term.  We
+explain this feature by the example:
+
+{\footnotesize 
+\begin{verbatim}
+let v1 = "3 + 7";;
+
+let v2 = "v1 = ^v1 * 2 + 9";;
+\end{verbatim}
+}
+
+The result of the term {\tt v2} is:
+
+{\footnotesize 
+\begin{verbatim}
+let v2 = "v1 = (3 + 7) * 2 + 9";;
+\end{verbatim}
+}
+
+This feature in HOL is obviously equal to the {\it always} in UNITY.  Hence,
+we may define {\it t} in the {\it User} program by:
+
+{\footnotesize 
+\begin{verbatim}
+let t = "\s:Vtype->num. N - ((s NR) + (N * (s NW)))";;
+\end{verbatim}
+}
+
+This allows us to define the example program {\it User} by:
+
+{\footnotesize 
+\begin{verbatim}
+let Prog =
+ "[MK_COND((\s:Vtype->num. (^t s) >= 1 /\ ~((s B) = 1)),
+     [NR, (\s. (s NR) + 1)]);
+   MK_COND(TRUE, [NR, (\s. (s NR) - 1)]);
+   MK_COND((\s. ((^t s) >= N) /\ (s NQ) > 0),
+      [(NW, (\s. (s NW) + 1));(NQ, (\s. (s NQ) - 1));(B, (\s. 0))]);
+   MK_COND(TRUE, [NW, (\s. (s NW) - 1)]);
+   MK_COND(~* (\s. s B = 1), [B,  (\s. (s NQ) > 0 => 1 | 0)])]";;
+\end{verbatim}
+}
+
+The reader may convince himself that the program {\tt Prog} is equal to
+{\it User}.
+
+Now we may prove the properties given in the specification satisfied by the 
+program {\tt Prog}.
+
+
+\subsection{Proving Program Properties}
+
+To make the proving of the program properties easier, we first prove some 
+lemmas.  These lemmas are obvious to the reader but unfortunately currently not
+easy to prove in HOL.
+
+\bigskip
+We may prove the following lemmas in HOL.  The lemmas are needed in for proving
+properties satisfied in the specification.
+
+{\footnotesize 
+\begin{verbatim}
+U9_lemma1 = !k. k > 0 ==> (k - 1) < k
+U9_lemma2 = !N M. ~((N - M) > N)
+U9_lemma3 = !(n:num) m. ((SUC n) - (SUC m)) = (n - m)
+U9_lemma4 = !n m. (n - m) < (SUC n)
+U9_lemma5 = !(N:num) k. (k > 0) ==> (N > 0) ==> ((N - (k + (N * (s NW)))) < N)
+U9_lemma6 = !n m. (n < m) = ~(n >= m)
+U9_lemma7 = |- !N k. k > 0 ==> N > 0 ==> ~(N - (k + (N * (s NW)))) >= N
+\end{verbatim}
+}
+
+\subsubsection{Proving the Program Satisfying a Safety Property}
+
+Let us prove that the safety property, labeled {\it U9}:
+
+{\footnotesize 
+\begin{verbatim}
+	(B = 1) /\ (NR = k) /\ (k > 0) unless (B = 1) /\ (NR < k) in Pr
+\end{verbatim}
+}
+
+holds for the defined program {\tt Prog}.
+
+The property is proven in six steps. 5 proofs, one for each state transition in
+the program and one proof using the 5 proofs to prove that the property of the
+entire program holds.
+
+{\footnotesize 
+\begin{verbatim}
+let U9_tr1_thm1 = TAC_PROOF
+  (([],
+   "!N. (N > 0) ==>
+     (!k:num.
+      (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) UNLESS
+       ((\s. s B = 1) /\* (\s. s NR < k))) [^startwrite])"),
+   REPEAT GEN_TAC THEN
+   REWRITE_TAC [UNLESS;UNLESS_STMT;MK_COND;STL;ST;/\*;\/*;~*;TRUE_DEF] THEN
+   BETA_TAC THEN
+   REPEAT STRIP_TAC THEN
+   ASM_REWRITE_TAC []);;
+
+let U9_tr2_thm1 = TAC_PROOF
+  (([],
+   "!N. (N > 0) ==>
+     (!k:num.
+      (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) UNLESS
+       ((\s. s B = 1) /\* (\s. s NR < k))) [^endwrite])"),
+   REPEAT GEN_TAC THEN
+   REWRITE_TAC [UNLESS;UNLESS_STMT;MK_COND;STL;ST;/\*;\/*;~*;TRUE_DEF] THEN
+   BETA_TAC THEN
+   REPEAT STRIP_TAC THEN
+   BETA_TAC THEN
+   ASM_REWRITE_TAC [Vtype_thm1;ONCE_REWRITE_RULE [EQ_SYM_EQ] Vtype_thm1] THEN
+   DISJ2_TAC THEN
+   ACCEPT_TAC (MP (SPEC_ALL U9_lemma1) (ASSUME "k > 0")));;
+
+let U9_tr3_thm1 = TAC_PROOF
+  (([],
+   "!N. (N > 0) ==>
+     (!k:num.
+      (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) UNLESS
+       ((\s. s B = 1) /\* (\s. s NR < k))) [^startread])"),
+   REPEAT GEN_TAC THEN
+   REWRITE_TAC [UNLESS;UNLESS_STMT;MK_COND;STL;ST;/\*;\/*;~*;TRUE_DEF] THEN
+   BETA_TAC THEN
+   REPEAT STRIP_TAC THEN
+   ASM_REWRITE_TAC [] THEN
+   REPEAT COND_CASES_TAC THENL
+     [ % 2 Subgoals %
+      MP_TAC (REWRITE_RULE
+        [ASSUME "(N - (k + (N * (s NW)))) >= N /\ (s NQ) > 0"]
+          (MP (MP (SPEC_ALL U9_lemma7) (ASSUME "k > 0")) 
+              (ASSUME "N > 0"))) THEN
+      REWRITE_TAC []
+     ;
+      ASM_REWRITE_TAC []
+     ]);;
+
+let U9_tr4_thm1 = TAC_PROOF
+  (([],
+   "!N. (N > 0) ==>
+     (!k:num.
+      (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) UNLESS
+       ((\s. s B = 1) /\* (\s. s NR < k))) [^endread])"),
+   REPEAT STRIP_TAC THEN
+   REWRITE_TAC [UNLESS;UNLESS_STMT;MK_COND;STL;ST;/\*;\/*;~*;TRUE_DEF] THEN
+   BETA_TAC THEN
+   REPEAT STRIP_TAC THEN
+   BETA_TAC THEN
+   ASM_REWRITE_TAC [Vtype_thm1;ONCE_REWRITE_RULE [EQ_SYM_EQ] Vtype_thm1]);;
+
+let U9_tr5_thm1 = TAC_PROOF
+  (([],
+   "!N. (N > 0) ==>
+     (!k:num.
+      (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) UNLESS
+       ((\s. s B = 1) /\* (\s. s NR < k))) [^set_b])"),
+   REPEAT STRIP_TAC THEN
+   REWRITE_TAC [UNLESS;UNLESS_STMT;MK_COND;STL;ST;/\*;\/*;~*;
+                TRUE_DEF;FALSE_DEF] THEN
+   BETA_TAC THEN
+   REPEAT STRIP_TAC THEN
+   ASM_REWRITE_TAC []);;
+\end{verbatim}
+}
+
+Now we may prove that the property {\tt (U9)} holds for the given program
+
+{\footnotesize 
+\begin{verbatim}
+let U9 = TAC_PROOF
+  (([],
+   "!N. (N > 0) ==>
+     (!k:num.
+      (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) UNLESS
+       ((\s. s B = 1) /\* (\s. s NR < k))) ^Prog)"),
+   REPEAT STRIP_TAC THEN
+   ASM_REWRITE_TAC [UNLESS] THEN
+   REWRITE_TAC
+    [UNDISCH_ALL (REWRITE_RULE [UNLESS] (SPEC_ALL U9_tr1_thm1));
+     UNDISCH_ALL (REWRITE_RULE [UNLESS] (SPEC_ALL U9_tr2_thm1));
+     UNDISCH_ALL (REWRITE_RULE [UNLESS] (SPEC_ALL U9_tr3_thm1));
+     UNDISCH_ALL (REWRITE_RULE [UNLESS] (SPEC_ALL U9_tr4_thm1));
+     UNDISCH_ALL (REWRITE_RULE [UNLESS] (SPEC_ALL U9_tr5_thm1))]);;
+\end{verbatim}
+}
+
+The claimed theorems {\it (U7)} and {\it (U8)} may proven in a similar way.
+Since these two properties are {\bf ensures} properties, it is necessary to
+prove both the {\bf unless} property of the {\bf ensures} and the existence
+of a statement which satisfies the transition from a state satisfying the
+first predicate to one satisfying the last.  But apart from this the proving
+method is equal to the shown for {\tt (U9)}.
+
+Hence, assuming we have proven the two properties {\it (U7)} and {\it (U8)}:
+{\footnotesize
+\begin{verbatim}
+let U7 =
+   "((\s. s NQ > 0) ENSURES ((\s. s NW = 1) \/* (\s. s B = 1))) ^Prog";;
+let U8 =
+   "(((\s. s B = 1) /\* (\s. s NR = 0)) ENSURES ((\s. s NW = 1))) ^Prog";;
+\end{verbatim}
+}
+
+satisfied by the program {\tt Prog}.  We may prove {\it (U5)} assuming the
+property {\it (U4)}:
+{\footnotesize
+\begin{verbatim}
+let U4 =
+   "!k. (((\s. s NR = k) /\* (\s. k > 0)) LEADSTO (~* (\s. s NR = k))) ^Prog";;
+\end{verbatim}
+}
+
+We want to prove the progress property:
+{\footnotesize
+\begin{verbatim}
+
+(U5)
+     |- !N. (N > 0) ==> (U4) /\ (U7) /\ (U8)
+
+          ==> ((\s. s NQ > 0) LEADSTO (\s. s NW = 1)) Prog
+\end{verbatim}
+}
+satisfied.
+
+To prove this it turns out again that a couple of useful lemmas are needed.
+In all we prove seven lemmas before we get to the proof of {\tt (U5)} as
+presented above.
+
+First we prove a simple equivalence.
+{\footnotesize
+\begin{verbatim}
+let U5_lemma1 = TAC_PROOF
+  (([],
+   "!s. (((\s. s NR = k) /\*  (\s. k > 0)) /\*
+         ((\s. s  B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0)))) s
+       =
+        ((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) s"),
+   REWRITE_TAC [/\*] THEN
+   BETA_TAC THEN
+   GEN_TAC THEN
+   EQ_TAC THEN REPEAT STRIP_TAC THEN ASM_REWRITE_TAC []);;
+\end{verbatim}
+}
+
+Since the proof above was valid for all states {\tt s} we may rewrite the
+equivalence into one with state abstracted predicates.  This lemma will
+be used to simplify a predicate appearing in the proof of {\tt (U5)}.
+In proving manually such equivalences are simply assumed satisfied, but
+using HOL-UNITY they must be proven explicitly.
+{\footnotesize
+\begin{verbatim}
+
+  |- ((\s. s NR = k) /\*  (\s. k > 0)) /\*
+     ((\s. s  B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0)))
+    =
+     (\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))
+
+let U5_lemma2 = REWRITE_RULE [ETA_AX] (MK_ABS U5_lemma1);;
+\end{verbatim}
+}
+
+Another simplifying equivalence is needed. We proceed as before.
+{\footnotesize
+\begin{verbatim}
+let U5_lemma3 = TAC_PROOF
+  (([],
+   "!s. (((~*(\s. s NR = k)) /\*
+           ((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0)))) \/*
+          ((\s. s B = 1) /\* (\s. (s NR) < k))) s
+       =
+        ((\s. s B = 1) /\* (\s. (s NR) < k)) s"),
+   REWRITE_TAC [/\*;\/*;~*] THEN
+   BETA_TAC THEN
+   GEN_TAC THEN
+   EQ_TAC THEN REPEAT STRIP_TAC THEN ASM_REWRITE_TAC [] THEN
+   RES_TAC);;
+\end{verbatim}
+}
+
+Also this state abstracted equivalence will be used for simplification of an
+appearing predicate.
+{\footnotesize
+\begin{verbatim}
+
+  |- ((~*(\s. s NR = k)) /\*
+      ((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0)))) \/*
+      ((\s. s B = 1) /\* (\s. (s NR) < k))
+     =
+      (\s. s B = 1) /\* (\s. (s NR) < k)
+
+let U5_lemma4 = REWRITE_RULE [ETA_AX] (MK_ABS U5_lemma3);;
+\end{verbatim}
+}
+
+The UNITY {\bf leadsto} property satisfies that from any valid state abstracted
+implication we may conclude the {\bf leadsto} property satisfied for the
+non-empty program. That is we may deduce:
+{\footnotesize
+\begin{verbatim}
+!p q st Pr. (!s. p s ==> q s) ==> (p LEADSTO q) (CONS st Pr)
+\end{verbatim}
+}
+
+We use this deduction rule to prove the next lemma.
+{\footnotesize
+\begin{verbatim}
+
+  |- (((\s. s B = 1) /\* (\s. s NR = 0)) LEADSTO
+     (((\s. s B = 1) /\* (\s. (s NR) < 0)) \/*
+      ((\s. s B = 1) /\* (\s. s NR = 0))))
+     (CONS st Pr)
+
+let U5_lemma5 =
+   (REWRITE_RULE
+      [(ISPECL ["(\s. s B = 1) /\* (\s. s NR = 0)";
+                "(\s. s B = 1) /\* (\s. (s NR) < 0)"] SYM_OR_IMPLY_WEAK_lemma);
+       (SPEC_ALL (ISPECL ["(\s. s B = 1) /\* (\s. s NR = 0)"] LEADSTO_thm12))]
+         (ISPECL ["(\s. s B = 1) /\* (\s. s NR = 0)";
+                  "(\s. s B = 1) /\* (\s. s NR = 0)";
+                  "((\s. s B = 1) /\* (\s. (s NR) < 0)) \/*
+                   ((\s. s B = 1) /\* (\s. s NR = 0))";
+                  "CONS (st:(Vtype->num)->(Vtype->num)) Pr"]
+                  LEADSTO_cor9));;
+\end{verbatim}
+}
+
+This lemma will be needed in the proof of the lemma below.
+
+Next we prove by induction that the {\tt LEADSTO} property satisfied for
+any natural number constant {\tt k} greater than {\tt 0} implies the
+{\tt LEADSTO} property satisfied for any natural number constant {\tt m}.
+{\footnotesize
+\begin{verbatim}
+let U5_lemma6 = TAC_PROOF
+  (([],
+   "(!k. (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) LEADSTO
+          ((\s. s B = 1) /\* (\s. (s NR) < k))) (CONS st Pr))
+      ==>
+    (!m. (((\s. s B = 1) /\* (\s. s NR = m)) LEADSTO
+         (((\s. s B = 1) /\* (\s. (s NR) < m)) \/*
+          ((\s. s B = 1) /\* (\s. s NR = 0)))) (CONS st Pr))"),
+   DISCH_TAC THEN
+   INDUCT_TAC THENL
+    [
+     REWRITE_TAC [U5_lemma5]
+    ;
+     ACCEPT_TAC (REWRITE_RULE [(REWRITE_RULE
+      [GREATER;LESS_0;REWRITE_RULE [TRUE_DEF] AND_TRUE_lemma] (SPEC "SUC m"
+        (ASSUME
+          "!k. (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) LEADSTO
+                ((\s. s B = 1) /\* (\s. (s NR) < k))) (CONS st Pr)")));
+            (ISPECL ["((\s. s B = 1) /\* (\s. (s NR) < (SUC m)))";
+                   "((\s. s B = 1) /\* (\s. s NR = 0))"]
+                    OR_IMPLY_WEAK_lemma)]
+        (SPEC_ALL (ISPECL ["(\s. s B = 1) /\* (\s. (s NR) = (SUC m))";
+                    "(\s. s B = 1) /\* (\s. (s NR) < (SUC m))";
+                    "((\s. s B = 1) /\* (\s. (s NR) < (SUC m))) \/*
+                     ((\s. s B = 1) /\* (\s. s NR = 0))";
+                    "CONS (st:(Vtype->num)->(Vtype->num)) Pr"]
+                    LEADSTO_cor9)))
+    ]);;
+\end{verbatim}
+}
+
+We use this lemma for proving the next lemma needed in the proof of {\tt (U5)}.
+
+Finally we prove by induction on the program size, that the {\tt LEADSTO} 
+property satisfied for any natural number constant {\tt k} greater than 
+{\tt 0} implies a weakened {\tt LEADSTO} property satisfied for any natural 
+number constant {\tt m} and for any program {\tt Pr} including the empty.
+{\footnotesize
+\begin{verbatim}
+let U5_lemma7 = TAC_PROOF
+  (([],
+   "!Pr. (!k. (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) LEADSTO
+              ((\s. s B = 1) /\* (\s. (s NR) < k))) Pr)
+      ==>
+         (!m. (((\s. s B = 1) /\* (\s. s NR = m)) LEADSTO
+              (((\s. s B = 1) /\* (\s. (s NR) < m)) \/*
+               ((\s. s B = 1) /\* (\s. s NR = 0)))) Pr)"),
+   LIST_INDUCT_TAC THENL
+    [
+     REWRITE_TAC [LEADSTO_thm10]
+    ;
+     X_GEN_TAC "st:(Vtype->num)->(Vtype->num)" THEN
+     REWRITE_TAC [U5_lemma6]
+    ]);;
+\end{verbatim}
+}
+
+This lemma will be used in the proof of theorem {\tt (U5)}.
+
+Finally we may prove that assuming the properties {\tt (U4), (U7)} and {\tt
+(U8)} the property {\tt (U5)} is satisfied.  Notice that the proof follows the
+outline given in the specification section on page~\pageref{U5page}, but we now
+use the proved lemmas above to avoid the proof being too detailed.
+
+{\footnotesize
+\begin{verbatim}
+let U5 = TAC_PROOF
+  (([],
+   "!N. (N > 0) ==> (^Prog = Pr) ==> ^U4 /\ ^U7 /\ ^U8 ==>
+      ((\s. s NQ > 0) LEADSTO (\s. s NW = 1)) ^Prog"),
+   GEN_TAC THEN
+   DISCH_TAC THEN
+   DISCH_TAC THEN
+   MP_TAC (UNDISCH_ALL (SPEC_ALL U9)) THEN
+   ASM_REWRITE_TAC [] THEN
+   REPEAT STRIP_TAC THEN
+   IMP_RES_TAC LEADSTO_thm0 THEN
+   ASSUME_TAC (GEN "k:num" (REWRITE_RULE
+    [U5_lemma2;U5_lemma4] (REWRITE_RULE
+      [ASSUME "!k.
+       (((\s. s NR = k) /\* (\s. k > 0)) LEADSTO (~*(\s. (s NR) = k))) Pr";
+       ASSUME "!k.
+       (((\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))) UNLESS
+        ((\s. s B = 1) /\* (\s. (s NR) < k))) Pr"] (ISPECL
+          ["(\s. s NR = k) /\* (\s. k > 0)";"~*(\s:Vtype->num. (s NR) = k)";
+           "(\s. s B = 1) /\* ((\s. s NR = k) /\* (\s. k > 0))";
+           "(\s. s B = 1) /\* (\s. (s NR) < k)";
+           "Pr:((Vtype->num)->(Vtype->num))list"] LEADSTO_thm29)))) THEN
+   ASSUME_TAC (UNDISCH_ALL (SPEC_ALL U5_lemma7)) THEN
+   ASSUME_TAC (UNDISCH_ALL (BETA_RULE (ISPECL
+    ["\s. s B = 1";"(\s. s B = 1) /\* (\s. s NR = 0)";
+     "Pr:((Vtype->num)->(Vtype->num))list";"\s:Vtype->num. s NR"]
+     (REWRITE_RULE [EQmetric;LESSmetric] LEADSTO_thm32)))) THEN
+   IMP_RES_TAC LEADSTO_thm1 THEN
+   IMP_RES_TAC LEADSTO_thm28 THEN
+   ACCEPT_TAC (REWRITE_RULE [OR_OR_lemma] (ASSUME
+    "((\s. (s NQ) > 0) LEADSTO ((\s. s NW = 1) \/* (\s. s NW = 1)))Pr")));;
+\end{verbatim}
+}
+
+To complete the example also the properties {\tt (U7)} and {\tt (U8)} must be
+proven, but are left out in this presentation.
+
+Finally, the HOL-UNITY theory work is ended by closing the HOL session.
+{\footnotesize
+\begin{verbatim}
+close_theory( );;
+\end{verbatim}
+}
+
+
+\section{A 2-Arbiter} \label{sec:2-Arbiter}
+
+Informally an {\tt arbiter} may be described as a device which is supposed to 
+grant exclusive access to a shared resource in an arbitrary way.  A 
+{\tt 2-Arbiter} is an arbiter which is restricted to allow only two users to 
+request the resource simultaneously.
+%This restriction is not severe if the 
+%users are supposed to make request to the 2-Arbiter in a fair way. However,
+%this behavior of the users is neglected in the specification of the system,
+%since it does not affect the behavior of the 2-Arbiter.
+
+If the above explanation is unfamiliar to the reader, the 2-Arbiter may also be 
+viewed as a device for guaranteeing mutual exclusion between only two processes
+sharing a critical region.
+
+The 2-Arbiter is part of a larger system in which users makes request to the
+arbiter when wanting a grant of the resource that is supervised.  This enables
+viewing the 2-Arbiter as a component with a certain behavior and the
+environment of the 2-arbiter as the other component.  In this system, the
+arbiter may only guarantee to behave as required if the environment, that is,
+the users behave as required by the arbiter, and the users of the the arbiter
+may determine to put restrictions on the behavior of the 2-Arbiter before they
+guarantee to behave as required by the arbiter.  In this way the system
+consisting of the 2-Arbiter and its users will have a behavior of which the
+guaranteed behavior of each component is relying on the behavior of the other
+component.  Such specifications are also called rely/guarantee specifications
+(see also \cite{St85,GrHHL90}).
+
+The behavior of the components may informally be described by the following
+conditions. The 2-Arbiter must unconditionally guarantee that at most one grant
+is given at any time, and that grant is only given on request.  Further the
+arbiter must satisfy that any request is eventually satisfied and that a
+request which has been granted and is not wanted any more is eventually
+removed. The last two properties are however only guaranteed if the users
+maintain their request until a grant is given and that a user never makes a new
+request until an old grant is removed by the arbiter.  In addition the arbiter
+requires that only this device may decide to give and take grants as requested
+by the users.  The users of the 2-Arbiter must mutually guarantee, that if the
+arbiter guarantees access of only one user at a time, that only users may
+decide to make request and remove request, and that a given grant is kept until
+not requested any more then a granted request is eventually satisfied by its
+requester.
+
+It is noticed that this behavior is a description of the well-known four-phase-
+or handshaking protocol.
+
+The next section presents a specification of the described behavior of the
+2-Arbiter component and the required behavior of the users in the UNITY
+notation.  Some properties derived from the composition of the two
+specifications are proved to be satisfied.
+
+In the following section, a UNITY program is presented which is claimed to 
+satisfy the properties as specified for the 2-Arbiter component.  Finally, it 
+is proved that the required properties are actually satisfied by the program.
+
+In the last section, it is briefly shown how the 2-Arbiter program may be 
+defined using the HOL-UNITY system, and a tactic for proving all needed basic 
+safety- and progress properties is defined.  The proofs in HOL-UNITY are not 
+presented here, since they are equivalent to the proofs given in UNITY.
+
+\bigskip
+The 2-Arbiter specification and program used in this example was originally 
+developed by
+
+\begin{quotation}
+	   J{\o}rgen Staunstrup and Hans Henrik L{\o}vengreen
+
+	   Department of Computer Science,
+
+	   Technical University of Denmark
+\end{quotation}
+
+for teaching students at the university in using UNITY.
+
+\bigskip
+Some proofs and a conditional progress property of the arbiter that were
+missing in the original example have however been added in this presentation to
+complete the verification of the 2-Arbiter program properties.
+
+
+\subsection{Specifying the System}
+
+We want to specify a {\it System} using a shared resource as the composition 
+of a 2-Arbiter {\it Arb} and some users {\it Users} of the arbiter as described
+above.
+
+The entire system is then the composition of the two components:
+
+{\it
+\begin{center}
+     System = (Arb \U Users)
+\end{center}
+}
+
+We may graphically describe the composed system by:
+
+\begin{figure}[h]
+
+\centerline{\hbox{\psfig{figure=2arb.ps,width=11cm,height=6cm}}}
+
+\vspace{3mm}
+\caption[A 2-Arbiter system]{The 2-Arbiter system and its users}
+\end{figure}
+
+%\begin{verbatim}
+%--------------------------------------------------------
+%|                                                      |
+%| System                                               |
+%|                                                      |
+%|    ----------------------------------------------    |
+%|   |                                              |   |
+%|   |                    Arb                       |   |
+%|   |          gr1                           gr2   |   |
+%|    -----^-----|-----------------------^-----|----    |
+%|         |     |                       |     |        |
+%|    -----|-----v-----------------------|-----v----    |
+%|   |    rq1                           rq2         |   |
+%|   |                  Users                       |   |
+%|   |                                              |   |
+%|    ----------------------------------------------    |
+%|                                                      |
+%--------------------------------------------------------
+%\end{verbatim}
+
+The task of the {\it Arb} component is as described to ensure exclusive access 
+to one of possibly two users, who wants to get access to a shared resource, and
+the {\it Arb} component must guarantee grant \gri\ is eventually given on 
+request \rqi.  However as described, we only require the {\it Arb} component to
+satisfy these demands if the users {\it Users} of the arbiter behaves as 
+required.
+
+\subsubsection{The {\it Arb} Component}
+
+\begin{description}
+  \item [{\it Unconditional Properties}] \nl
+      
+      Independent of how the environment behaves {\it Arb} guarantees.
+
+      \smallskip
+      At most one grant at a time.
+
+      \cn $\begin{array}{lr}
+        \mnot(\gra\ \mand\ \grb)\ \invariant\ \mmin\ {\it Arb} &
+          \hspace{153pt} (A1)\\
+      \end{array}$
+
+      {\it Arb} never changes the value of \rqi.
+
+      \cn $\begin{array}{lrlr}
+        \mforall\ & \rqi\ & \stable\ \mmin\ {\it Arb}       &
+          \hspace{172pt} (A2)\\
+        \mforall\ &  \mnot\rqi\ & \stable\ \mmin\ {\it Arb} & (A3)\\
+      \end{array}$
+
+      grant \gri\ is maintained unless request \rqi\ disappears.
+      
+      \cn $\begin{array}{lrlr}
+        \mforall\ & \ \gri\ & \unless\ \mnot\rqi\ \mmin\ {\it Arb}   &
+          \hspace{148pt} (A4)\\
+      \end{array}$
+
+  \item [{\it Conditional Properties}] \nl
+
+      If the assumptions holds, the {\it Arb} component guarantees
+      that a reguest \rqi\ leads to a grant \gri\ in the composed
+      {\it System}.
+
+      \cn $\begin{array}{lr}
+        \{(U1), (U2), (U3), (U4),
+          (\mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ {\it System})\}\\
+          \cnn \mturn\ \mforall\ \rqi\ \leadto\ \gri\ \mmin\ {\it System} &
+          \hspace{30pt} (CA1)\\
+      \end{array}$
+
+      If the assumptions holds, the {\it Arb} component guarantees
+      that a given grant of a satisfied reguest \rqi\ is eventually removed.
+      in the composed {\it System}.
+
+      \cn $\begin{array}{lr}
+        \{(U1), (U2), (U3), (U4),
+        (\mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ {\it System})\}\\
+         \cnn \mturn\
+           \mforall\ (\mnot\rqi\ \mand\ \gri)\ \leadto\ \mnot\gri\
+                       \mmin\ {\it System} &
+          \hspace{30pt} (CA2)\\
+      \end{array}$
+\end{description}
+
+\subsubsection{The {\it Users} Component}
+
+\begin{description}
+  \item [{\it Unconditional Properties}] \nl
+
+      No matter how the environment behaves {\it Users} guarantees.
+      
+      \smallskip
+      No grant variable \gri\ is changed by {\it Users}.
+
+      \cn $\begin{array}{lrlr}
+         \mforall\ & \gri\      & \stable\ \mmin\ {\it Users} & (U1)\\
+         \mforall\ & \mnot\gri\ & \stable\ \mmin\ {\it Users} & 
+          \hspace{165pt} (U2)\\
+      \end{array}$
+
+      A request value \rqi\ (\mnot\rqi) is stable unless the respective grant 
+      value \gri\ (\mnot\gri) is set by the {\it Arb}.
+
+      \cn $\begin{array}{lrlrlr}
+        \mforall\ &      \rqi\ & \unless\ & \gri\ & \mmin\ {\it Users} & (U3)\\
+        \mforall\ & \mnot\rqi\ & \unless\ & \mnot\gri\ & \mmin\ {\it Users} &
+          \hspace{118pt} (U4)\\
+      \end{array}$
+
+  \item [{\it Conditional Properties}] \nl
+      
+      If the assumed properties holds in the environment, {\it Users}
+      guarantees that a satisfied grant \gri\ leads to a state in which
+      request \rqi\ is set to \mfalse.
+
+      \cn $\begin{array}{lr}
+      \{(A2), (A3), (A4),
+        \mnot(\gra\ \mand\ \grb)\ \invariant\ \mmin\ {\it System}\}\\
+        \cnn \mturn\ \mforall\ \gri\ \leadto\ \mnot \rqi\ \mmin\ {\it System} &
+          \hspace{26pt} (CU1)\\
+      \end{array}$
+\end{description}
+
+\subsubsection{Derived Properties Satisfied by {\it System}}
+
+We want to prove that the invariant property (A1) is satisfied by the composed
+system.
+\begin{thm}
+\mnot(\gra\;\mand\;\grb)\ \invariant\ \mmin\ (IC, {\it Users \U Arb})\nb[head1]
+\p
+\mnot(\gra\;\mand\;\grb)\ \invariant\ \mmin\ (IC, {\it Arb})\nb[p11]\\
+  \cnnn  \mbox{from (A1)}                 &\\
+\mnot\gra\ \stable\ \mmin\ {\it Users}\nb[p12]\\
+  \cnnn  \mbox{from (U1)}                 &\\
+\mnot\grb\ \stable\ \mmin\ {\it Users}\nb[p13]\\
+  \cnnn  \mbox{from (U1)}                 &\\
+\mnot(\gra\;\mand\;\grb)\ \stable\ \mmin\ {\it Users}\nb[p14]\\
+  \cnnn  \mbox{disj. of (\ref{p12}), (\ref{p13}), and rewrite}          &\\
+\mnot(\gra\;\mand\;\grb)\ \invariant\ \mmin\ (IC, {\it Users \U Arb})\nb[p15]\\
+  \cnnn  \mbox{composition corollary 3 on (\ref{p11}) and (\ref{p14})}
+\end{thm}
+
+We also prove that a given grant eventually leads to a satisfied request, i.e.\
+the request is removed in the composed system.
+\begin{thm} 
+\mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ ({\it Users \U Arb})\nb[head2]
+\p
+\{(A2), (A3), (A4),
+  \mnot(\gra\;\mand\;\grb)\ \invariant\ \mmin\ (IC, {\it Users \U Arb})\}\\
+  \cnn \mturn\
+      \mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ ({\it Users \U Arb})\nb[p21]\\
+  \cnnn  \mbox{from (CU1)}                 &\\
+\mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ ({\it Users \U Arb})\nb[p22]\\
+  \cnnn  \mbox{from \tref{head1} and spec. (A2), (A3), and (A4)}
+\end{thm}
+
+And a request eventually leads to a grant in the system:
+\begin{thm} 
+\mforall\ \rqi\ \leadto\ \gri\ \mmin\ ({\it Users \U Arb})\nb[head3]
+\p
+\{(U1), (U2), (U3), (U4),
+ \mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ ({\it Users \U Arb})\}\\
+ \cnn \mturn\
+        \mforall\ \rqi\ \leadto\ \gri\ \mmin\ ({\it Users \U Arb})\nb[p31]\\
+ \cnnn  \mbox{from (CA1)}                  &\\
+\mforall\ \rqi\ \leadto\ \gri\ \mmin\ ({\it Users \U Arb})\nb[p32]\\
+ \cnnn \mbox{from \tref{head2} and spec. (U1), (U2), (U3), and (U4)}
+\end{thm}
+
+Now, prove that a request leads to not request in the composed system:
+\begin{thm} 
+\mforall\ \rqi\ \leadto\ \mnot\rqi\ \mmin\ ({\it Users \U Arb})\nb[head4]
+\p
+\mforall\ \rqi\ \leadto\ \mnot\rqi\ \mmin\ ({\it Users \U Arb})\nb[p41]\\
+ \cnnn \mbox{from transitivity on \tref{head2} and \tref{head3}}
+\end{thm}
+
+Prove the that no longer request and still grant eventually leads to not grant 
+in the composed system:
+\begin{thm} 
+\mforall\ (\mnot\rqi\;\mand\;\gri)\ \leadto\
+              \mnot\gri\ \mmin\ ({\it Users \U Arb})\nb[head5]
+\p
+\{(U1), (U2), (U3), (U4),
+ \mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ ({\it Users \U Arb})\}\\
+   \cnn \mturn\
+     \mforall\ (\mnot\rqi\;\mand\;\gri)\ \leadto\
+                 \mnot\gri\ \mmin\ ({\it Users \U Arb})\nb[p51]\\
+ \cnnn  \mbox{from (CA2)}                  &\\
+\mforall\ (\mnot\rqi\;\mand\;\gri)\ \leadto\
+               \mnot\gri\ \mmin\ ({\it Users \U Arb})\nb[p52]\\
+ \cnnn \mbox{from \tref{head1}, and spec. (U1), (U2), (U3), and (U4)}
+\end{thm}
+
+Prove the evident fact that not grant without request maintains the not
+grant:
+\begin{thm} 
+\mforall\ (\mnot\rqi\;\mand\;\mnot\gri)\ \leadto\
+              \mnot\gri\ \mmin\ ({\it Users \U Arb})\nb[head6]
+\p
+\mforall\ (\mnot\rqi\;\mand\;\mnot\gri)\ \leadto\
+               \mnot\gri\ \mmin\ ({\it Users \U Arb})\nb[p61]\\
+ \cnnn \mbox{from reflexivity of leads to and weakening}
+\end{thm}
+
+Finally we prove that the system satisfies the property that from a state
+without request the system eventually reaches a state without grant:
+\begin{thm}
+\mforall\ \mnot\rqi\ \leadto\ \mnot\gri\ \mmin\ ({\it Users \U Arb})\nb[head7]
+\p
+\mforall\ \mnot\rqi\ \leadto\ \mnot\gri\ \mmin\ ({\it Users \U Arb})\nb[p71]\\
+ \cnnn \mbox{from leads to corollary 2 on \tref{head5} and \tref{head6}}
+\end{thm}
+
+Proving the derived properties verifies that the composed system has the wanted 
+properties of guaranteeing request eventually leading to grant and not request 
+eventually leading to not grant.  Hence we may conclude that the specification
+satisfies the required progress properties.
+
+The next step is to develop a 2-Arbiter program which satisfies the required
+properties as specified above.
+
+\subsection{A 2-Arbiter Program and its Verification}
+
+We start by claiming that the following program {\it Arb} satisfies the
+required behavior specified for the 2-Arbiter.
+
+\cn \mprogram\ \{ {\it Arb} \}
+
+\cn \begin{tabular}{llllllllllllllr}
+       & \initially & \ & \gra & = & \grb & = & \rqa & = & \rqb & = & \mfalse
+       & & (ps0)
+     \end{tabular}
+
+\cn \mbegin
+
+\cn \begin{tabular}{lllllllllllr}
+      &      & \gra  &       & :=     & \mtrue        &
+         & \  & \mif  & \ \rqa\ \mand\ \mnot\grb                & & (ps1)\\
+      & \U & \grb  &  & := & \mtrue &
+        & \  & \mif  & \mnot\rqa\ \mand\ \rqb\ \mand\ \mnot\gra & & (ps2)\\
+      & \U & \gra, & \grb\  & :=     & \mfalse,\ \rqb &
+              & \  & \mif  & \mnot \rqa\ \mand\ \gra            & & (ps3)\\
+      & \U & \grb\  &       & :=     & \mfalse        &
+              & \  & \mif  & \mnot\rqb\ \mand\ \grb             & & (ps4)
+     \end{tabular}
+
+\cn \mend
+
+Initially the program requires that all variables are set to \mfalse.  Actually
+this means that {\it Arb} must set \gri\ to \mfalse\ and the {\it Users}
+environment must set \rqi\ to \mfalse.  The program then has four statements
+that are executed in a fair interleaved way.  The statements (ps1) and (ps2)
+give grants on request whereas (ps3) and (ps4) remove grants when requests are
+satisfied, i.e.\ they have become false.  Notice however, that (ps3) may also
+give grant on request \rqb.  It is also important to notice that the fair
+behavior of the program is guaranteed through the asymmetry built into the
+statements.
+
+We now want to prove that the {\it Arb} program does indeed satisfy the
+behavior specified above for the 2-Arbiter.
+
+\subsubsection{Verifying the Properties of the {\it Arb} Program}
+
+The goal is to prove that the given program {\it Arb} satisfies the
+specification such that, assuming the required behavior of the users {\it
+Users}, we may conclude that a request \rqi\ leads to a satisfied grant \gri.
+We may write the wanted property as:
+
+\begin{center}
+  $\forall Users:$ \{(U1), (U2), (U3), (U4),
+       (\mforall\ \gri\ \leadto\ \mnot\rqi\ \mmin\ ({\it Arb \U Users}))\}\\
+        \cnn \mturn\ \mforall\ \rqi\ \leadto\ \gri\ \mmin\ ({\it Arb \U Users})
+\end{center}
+
+We may convince ourselves by inspection that the program {\it Arb} does
+actually satisfy the specified properties (A1), (A2), (A3), and (A4).
+
+In the later section on using HOL-UNITY such properties are easily proven by 
+use of the system applying a tactic defined for this purpose.
+
+\bigskip
+We start by proving two useful theorems satisfied by the \unless\ and the
+\stable\ relation.
+
+The first proves a strengthened \unless\ property assuming a \stable\ and an
+\unless\ property:
+\begin{thm} 
+ \{\Mp\ \unless\ \mnot\Mq\ \mmin\ {\it Pr}, \Mq\ \stable\ \mmin\ {\it Pr}\}\\
+   \cnn \mturn\ \Mp\ \unless\ \Mp\;\mand\;\mnot\Mq\ \mmin\ {\it Pr}\nb[head10]
+\p
+\Mp\ \unless\ \mnot\Mq\ \mmin\ {\it Pr}\nb[p101]\\
+ \cnnn  \mbox{from assumption of \tref{head10}}                 &\\
+\Mq\ \stable\ \mmin\ {\it Pr}\nb[p102]\\
+ \cnnn  \mbox{from assumption of \tref{head10}}                 &\\
+\Mp\;\mand\;\Mq\ \unless\ \mfalse\ \mmin\ {\it Pr}\nb[p103]\\
+ \cnnn  \mbox{\stable\ def. and conj. of (\ref{p101}) and (\ref{p102})} &\\
+\Mp\;\mand\;\mnot\Mq\ \unless\ \Mp\;\mand\;\mnot\Mq\ \mmin\ {\it Pr}\nb[p104]\\
+ \cnnn  \mbox{{\it reflexivity} of \unless}                 &\\
+\Mp\ \unless\ \mnot(\Mp\;\mand\;\Mq)\;\mand\;(\Mp\;\mand\;\mnot\Mq)
+                                                  \mmin\ {\it Pr}\nb[p105]\\
+ \cnnn  \mbox{disj. on (\ref{p103}) and (\ref{p104})}                  &\\
+\Mp\ \unless\ \Mp\;\mand\;\mnot\Mq\ \mmin\ {\it Pr}\nb[p106]\\
+ \cnnn \mbox{rewrite of (\ref{p105})}
+\end{thm}
+
+and the second also assumes a \stable\ and an \unless\ property but this theorem
+concludes a strengthened \stable\ property:
+\begin{thm}
+ \{\Mp\ \unless\ \Mq\ \mmin\ {\it Pr}, \mnot\Mq\ \stable\ \mmin\ {\it Pr}\}\\
+   \cnn \mturn\ \Mp\;\mand\;\mnot\Mq\ \stable\ \mmin\ {\it Pr}\nb[head11]
+\p
+\Mp\ \unless\ \mnot\Mq\ \mmin\ {\it Pr}\nb[p111]\\
+ \cnnn  \mbox{from assumption of \tref{head11}}                 &\\
+\mnot\Mq\ \stable\ \mmin\ {\it Pr}\nb[p112]\\
+ \cnnn  \mbox{from assumption of \tref{head11}}                 &\\
+\Mp\;\mand\;\mnot\Mq\ \unless\ \mfalse\ \mmin\ {\it Pr}\nb[p113]\\
+ \cnnn  \mbox{\stable\ def. and conj. of (\ref{p111}) and (\ref{p112})}  &\\
+\Mp\;\mand\;\mnot\Mq\ \stable\ \mmin\ {\it Pr}\nb[p114]\\
+ \cnnn \mbox{\stable\ def. on (\ref{p113})}
+\end{thm}
+
+These two theorems will be used for proving the required progress property
+satisfied.
+
+Progress of a program may be represented by an oriented graph or lattice in 
+which the nodes are marked with the present values in the state of the program.
+The outgoing arcs then represent the possible state transitions.  Inspecting 
+the {\it Arb} program using this method described in details in
+\cite{OwickiLamport82} would reveal the behavior graph of {\it Arb}.  This
+method was used in the original teaching example to cover the one branch
+progress:
+   \begin{center}
+      \rqb\ \leadto\ \grb\ \mmin\ ({\it Users \U Arb})
+   \end{center}
+of the {\it Arb} program.
+
+However, the UNITY theory supports a theorem which allows for proving progress
+in a way similar to this method. The theorem:
+
+\vspace{3mm}
+\centerline{\hbox{
+      \begin{mproof}
+          \Lproof   \mbox{p\ \mand\      b\ \leadto\ q,}
+          \ANDproof \mbox{p\ \mand\ \mnot\ b\ \leadto\ q} \Rproof[(CaseThm)]
+          \mbox{p\ \leadto\ q}
+      \end{mproof}
+}}
+\vspace{2mm}
+
+which is presented as a corollary in \cite{CM88} may be used for case 
+analysis of a program extending the precondition of a \leadto\ property until 
+it is strong enough to secure the progress of the program. This theorem will 
+be used to prove the second progress branch
+   \begin{center}
+      \rqa\ \leadto\ \gra\ \mmin\ ({\it Users \U Arb})
+   \end{center}
+of the {\it Arb} program.
+
+\bigskip
+In the following we often write {\it System} in place of the more verbose
+({\it Users~\U~Arb}).
+
+We start by proving a progress property which leads from a state in which the
+request \rqb\ occurs while the grant \gra\ is still given from the 2-Arbiter
+program {\it Arb}.  We have proven that the composed system satisfies the
+theorem \tref{head2} which guarantees that a grant \gri\ will eventually be
+satisfied, i.e.\ \rqi\ will be \mfalse.  Using this property we may prove that
+the system either reaches a state in which the request is satisfied with grant
+\grb\ or in a state in which we still have request \rqb\ and grant \gra\ but
+without request \rqa. Formally we may prove:
+\begin{thm} 
+ \rqb\;\mand\;\gra\ \leadto\ \mnot\rqa\;\mand\;\gra\;\mand\;\rqb\ \mor\ \grb\
+                      \mmin\ {\it System}\nb[head20]
+\p
+  \gra\ \unless\ \mnot\rqa\ \mmin\ {\it Arb}\nb[p201]\\
+ \cnnn  \mbox{from spec (A4)}     &\\
+  \rqa\ \stable\ \mmin\ {\it Arb}\nb[p202]\\
+ \cnnn  \mbox{from spec (A2)}     &\\
+  \gra\ \unless\ \mnot\rqa\;\mand\;\gra\ \mmin\ {\it Arb}\nb[p203]\\
+ \cnnn \mbox{from \tref{head10} on (\ref{p201}) and (\ref{p202})} & \\
+  \gra\ \stable\ \mmin\ {\it Users}\nb[p204]\\
+ \cnnn  \mbox{from spec (U1)}     &\\
+  \gra\ \unless\ \mnot\rqa\;\mand\;\gra\ \mmin\ ({\it Users \U Arb})\nb[p205]\\
+ \cnnn  \mbox{comp. corollary 2 on (\ref{p203}) and (\ref{p204})}   &\\
+  \gra\ \leadto\ \mnot\rqa\ \mmin\ {\it System}\nb[p206]\\
+ \cnnn  \mbox{from \tref{head2}}    &\\
+  \gra\ \leadto\ \mnot\rqa\;\mand\;\gra\ \mmin\ {\it System}\nb[p207]\\
+ \cnnn  \mbox{PSP theorem on (\ref{p205}) and (\ref{p206})}  &\\
+  \rqb\ \unless\ \grb\ \mmin\ {\it System}\nb[p208]\\
+ \cnnn  \mbox{comp. corollary 2 on (U3) and (A2)}  &\\
+  \rqb\;\mand\;\gra\ \leadto\ \mnot\rqa\;\mand\;\gra\;\mand\;\rqb\ \mor\ \grb\
+                      \mmin\ {\it System}\nb[p209]\\
+ \cnnn  \mbox{PSP theorem on (\ref{p207}) and (\ref{p208})}
+\end{thm}
+
+We wanted to prove the property
+  \begin{center}
+     \rqb\ \mand\ \gra\ \leadto\ \grb\ \mmin\ {\it System}
+  \end{center}
+but the theorem \tref{head20} above did not guarantee a final state with
+satisfied the grant \grb.  Fortunately UNITY provides the leads to cancellation
+theorem
+
+\vspace{3mm}
+\centerline{\hbox{
+      \begin{mproof}
+          \Lproof \mbox{p\ \leadto\ q\ \mor\ b,} \ANDproof
+          \mbox{b\ \leadto\ r} \Rproof[(CancelThm)]
+          \mbox{p\ \leadto\ q\ \mor\ r}
+      \end{mproof}
+}}
+\vspace{3mm}
+
+Hence, we prove 
+\begin{thm} 
+ \rqb\;\mand\;\gra\;\mand\;\mnot\rqa\ \leadto\ \grb\ \mmin\ {\it System}\nb[head21]
+\p
+ \rqb\;\mand\;\gra\;\mand\;\mnot\rqa\ \ensures\ \grb\ \mmin\ {\it Arb}\nb[p211]\\
+ \cnnn  \mbox{satisfied by the program}     &\\
+ \rqb\;\mand\;\gra\;\mand\;\mnot\rqa\ \unless\ \grb\ \mmin\ {\it Users}\nb[p212]\\
+ \cnnn  \mbox{from lemma \tref{head22}}     &\\
+ \rqb\;\mand\;\gra\;\mand\;\mnot\rqa\ \ensures\ \grb\ \mmin\ {\it System}\nb[p213]\\
+ \cnnn  \mbox{by the union theorem 1}     &\\
+ \rqb\;\mand\;\gra\;\mand\;\mnot\rqa\ \leadto\ \grb\ \mmin\ {\it System}\nb[p214]\\
+ \cnnn  \mbox{basic leads to inference rule}
+\end{thm}
+to use the cancellation theorem.
+
+We used the lemma \tref{head22} in the proof of theorem \tref{head21}:
+\begin{thm} 
+ \rqb\;\mand\;\gra\;\mand\;\mnot\rqa\ \unless\ \grb\ \mmin\ {\it System}\nb[head22]
+\p
+ \gra\ \stable\ \mmin\ {\it Users}\nb[p221]\\
+ \cnnn  \mbox{from spec. (U1)}     &\\
+ \mnot\rqa\ \unless\ \mnot\gra\ \mmin\ {\it Users}\nb[p222]\\
+ \cnnn  \mbox{from spec. (U4)}     &\\
+ \gra\;\mand\;\mnot\rqa\ \stable\ \mmin\ {\it Users}\nb[p223]\\
+ \cnnn  \mbox{theorem \tref{head11} on (\ref{p221}) and (\ref{p222})}     &\\
+ \rqb\ \unless\ \grb\ \mmin\ {\it Users}\nb[p224]\\
+ \cnnn  \mbox{from spec. (U3)}     &\\
+ \rqb\;\mand\;\gra\;\mand\;\mnot\rqa\ \unless\ \grb\ \mmin\ {\it System}\nb[p225]\\
+ \cnnn  \mbox{simple conj. on (\ref{p223}) and (\ref{p224})}
+\end{thm}
+
+Using the cancellation theorem we get
+\begin{thm} 
+ \rqb\;\mand\;\gra\ \leadto\ \grb\ \mmin\ {\it System}\nb[head23]
+\p
+ \rqb\;\mand\;\gra\ \leadto\ \grb\ \mmin\ {\it System}\nb[p231]\\
+ \cnnn  \mbox{cancellation on theorem \tref{head20} and \tref{head21}}
+\end{thm}
+
+This completes the proof of the first progress property.  Now to prove
+  \begin{center}
+     \rqb\ \leadto\ \grb\ \mmin\ {\it System}
+  \end{center}
+we may prove
+  \begin{center}
+     \rqb\ \mand\ \mnot\gra\ \leadto\ \grb\ \mmin\ {\it System}
+  \end{center}
+and use the above mentioned theorem for case analysis.
+
+It turns out that proving this progress property is more complicated.  The 
+precondition (\rqb~\mand~\mnot\gra) is not strong enough to guarantee progress 
+of the {\it Arb} program.  This means, we have to apply case analysis again.
+If we strengthen the precondition with the condition \grb\ we get two proofs.
+
+The first is trivially satisfied:
+\begin{thm}
+ \rqb\;\mand\;\mnot\gra\;\mand\;\grb\ \leadto\ \grb\ \mmin\ {\it System}\nb[head24]
+\p
+ \rqb\;\mand\;\mnot\gra\ \grb\ \leadto\ \grb\ \mmin\ {\it System}\nb[p241]\\
+ \cnnn  \mbox{trivially by leads to implication theorem}
+\end{thm}
+
+Hence, now we need to prove the property:
+  \begin{center}
+   \rqb\ \mand\ \mnot\gra\ \mand\ \mnot\grb\ \leadto\ \grb\ \mmin\ {\it System}
+  \end{center}
+But again we need more information to prove the property.  We present the
+two proofs needed and apply the case analysis theorem to prove the wanted
+property.
+
+The first proof with \rqa:
+\begin{thm}
+ \rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                              \leadto\ \grb\ \mmin\ {\it System}\nb[head25]
+\p
+ \rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                      \ensures\ \gra\;\mand\;\rqb\ \mmin\ {\it Arb}\nb[p251]\\
+ \cnnn  \mbox{satisfied by program {\it Arb}}     &\\
+ \gra\;\mand\;\mnot\rqa\ \stable\ \mmin\ {\it Users}\nb[p252]\\
+ \cnnn  \mbox{theorem \tref{head11} on (U1) and (U4)}     &\\
+ \grb\;\mand\;\mnot\rqb\ \stable\ \mmin\ {\it Users}\nb[p253]\\
+ \cnnn  \mbox{theorem \tref{head11} on (U1) and (U4)}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                                    \stable\ \mmin\ {\it System}\nb[p254]\\
+ \cnnn  \mbox{conj. on (\ref{p252}) and (\ref{p253})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                   \ensures\ \gra\;\mand\;\rqb\ \mmin\ {\it System}\nb[p255]\\
+ \cnnn  \mbox{union corollary 4 on (\ref{p254}) and (\ref{p251})}     &\\
+ \gra\ \leadto\ \mnot\rqa\;\mand\;\gra\ \mmin\ {\it System}\nb[p256]\\
+ \cnnn  \mbox{from line (\ref{p207}) in theorem \tref{head20}}     &\\
+ \rqb\ \unless\ \grb\ \mmin\ {\it System}\nb[p257]\\
+ \cnnn  \mbox{union corollary 1 on (U3) and (A2) from spec.}     &\\
+ \rqb\;\mand\;\gra\ \leadto\ \mnot\rqa\;\mand\;\gra\;\mand\;\rqb\ \mor\ \grb\
+                                  \mmin\ {\it System}\nb[p258]\\
+ \cnnn  \mbox{PSP theorem on (\ref{p256}) and (\ref{p257})}     &\\
+ \gra\;\mand\;\mnot\rqa\;\mand\;\rqb\ \unless\ \grb\
+                          \mmin\ {\it Users}\nb[p259]\\
+ \cnnn  \mbox{\stable\ def. and conj. on (\ref{p252}) and (U3)}     &\\
+ \gra\;\mand\;\mnot\rqa\;\mand\;\rqb\ \ensures\ \grb\
+                   \mmin\ {\it Arb}\nb[p2501]\\
+ \cnnn  \mbox{satisfied by program {\it Arb}}     &\\
+ \gra\;\mand\;\mnot\rqa\;\mand\;\rqb\ \ensures\ \grb\
+                   \mmin\ {\it System}\nb[p2502]\\
+ \cnnn  \mbox{union theorem 1 on (\ref{p259}) and (\ref{p2501})}     &\\
+ \rqb\;\mand\;\gra\ \leadto\ \grb\ \mmin\ {\it System}\nb[p2503]\\
+ \cnnn  \mbox{cancellation theorem on (\ref{p258}) and (\ref{p2502})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                               \leadto\ \grb\ \mmin\ {\it System}\nb[p2504]\\
+ \cnnn  \mbox{transitivity on (\ref{p255}) and (\ref{p2503})}
+\end{thm}
+
+Then the proof with \mnot\rqa:
+\begin{thm}
+ \mnot\rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                                 \leadto\ \grb\ \mmin\ {\it System}\nb[head26]
+\p
+ \mnot\rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                                    \ensures\ \grb\ \mmin\ {\it Arb}\nb[p261]\\
+ \cnnn  \mbox{satisfied by program {\it Arb}}     &\\
+ \mnot\rqa\ \unless\ \rqa\ \mmin\ {\it Users}\nb[p262]\\
+ \cnnn  \mbox{antireflexivity of \unless}     &\\
+ \mnot\gra\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p263]\\
+ \cnnn  \mbox{from spec. (U2) and \stable\ def.}     &\\
+ \mnot\rqa\;\mand\;\mnot\gra\ \unless\ \rqa\;\mand\;\mnot\gra\
+                             \mmin\ {\it Users}\nb[p264]\\
+ \cnnn  \mbox{conj. on (\ref{p262}) and (\ref{p263})}     &\\
+ \mnot\grb\ \unless\ \grb\ \mmin\ {\it Users}\nb[p265]\\
+ \cnnn  \mbox{antireflexivity of \unless}     &\\
+ \mnot\rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \unless\
+                    \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \mor\ \grb\
+                             \mmin\ {\it Users}\nb[p266]\\
+ \cnnn  \mbox{conj. on (\ref{p264}) and (\ref{p265})}     &\\
+ \rqb\ \unless\ \grb\ \mmin\ {\it Users}\nb[p267]\\
+ \cnnn  \mbox{from spec (U3)}     &\\
+ \mnot\rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\ \unless\
+            \rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\ \mor\ \grb\\
+                     \hspace{8cm}  \mmin\ {\it Users}\nb[p268]\\
+ \cnnn  \mbox{conj. on (\ref{p266}) and (\ref{p267})}     &\\
+ \mnot\rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\ \ensures\
+            \rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\ \mor\ \grb\\
+                     \hspace{8cm}  \mmin\ {\it System}\nb[p269]\\
+ \cnnn  \mbox{union theorem on (\ref{p268}) and (\ref{p261})}     &\\
+ \mnot\rqa\;\mand\;\mnot\gra\;\mand\;\rqb\;\mand\;\mnot\grb\
+                               \leadto\ \grb\ \mmin\ {\it System}\nb[p260]\\
+ \cnnn  \mbox{cancellation on (\ref{p269}) and theorem \tref{head25}}
+\end{thm}
+
+Hence we may now prove:
+\begin{thm}
+     \rqb\;\mand\;\mnot\gra\ \leadto\ \grb\ \mmin\ {\it System}\nb[head27]
+\p
+     \rqb\;\mand\;\mnot\gra\ \leadto\ \grb\ \mmin\ {\it System}\nb[p271]\\
+ \cnnn  \mbox{(CaseThm) on theorems \tref{head24}, \tref{head25} and \tref{head26}}
+\end{thm}
+
+And finally
+\begin{thm}
+     \rqb\ \leadto\ \grb\ \mmin\ {\it System}\nb[head28]
+\p
+     \rqb\ \leadto\ \grb\ \mmin\ {\it System}\nb[p281]\\
+ \cnnn  \mbox{(CaseThm) on theorems \tref{head23} and \tref{head27}}
+\end{thm}
+
+This completes the verification of the 2-Arbiter program {\it Arb} satisfying
+the required progress property of grant \grb\ on request \rqb.
+
+To complete the verification of the {\it Arb} program, we need to prove the 
+second progress property
+  \begin{center}
+     \rqa\ \leadto\ \gra\ \mmin\ {\it System}
+  \end{center}
+satisfied.
+
+Again we may use the theorem (CaseThm) for case analysis.  We start by proving
+the progress property of the case with the precondition
+(\rqa~\mand~\mnot\grb) satisfied, since this is easily proved.
+\begin{thm}
+  \rqa\;\mand\;\mnot\grb\ \leadto\ \gra\ \mmin\ {\it System}\nb[head30]
+\p
+  \rqa\;\mand\;\mnot\grb\ \ensures\ \gra\ \mmin\ {\it Arb}\nb[p301]
+ \cnnn  \mbox{satisfied by program {\it Arb}}     &\\
+  \rqa\ \unless\ \gra\ \mmin\ {\it Users}\nb[p302]
+ \cnnn  \mbox{from spec. (U3)}     &\\
+  \mnot\grb\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p303]
+ \cnnn  \mbox{from spec. (U2) and \stable\ def.}     &\\
+  \rqa\;\mand\;\mnot\grb\ \unless\ \gra\ \mmin\ {\it Users}\nb[p304]
+ \cnnn  \mbox{conj. on (\ref{p302}) and (\ref{p303}) and weakening}     &\\
+  \rqa\;\mand\;\mnot\grb\ \ensures\ \gra\ \mmin\ {\it System}\nb[p305]
+ \cnnn  \mbox{union theorem 1 on (\ref{p301}) and (\ref{p304})}     &\\
+  \rqa\;\mand\;\mnot\grb\ \leadto\ \gra\ \mmin\ {\it System}\nb[p306]\\
+ \cnnn  \mbox{basic leads to theorem on (\ref{p305})}
+\end{thm}
+
+Hence, we just need to prove
+  \begin{center}
+     \rqa\ \mand\ \grb\ \leadto\ \gra\ \mmin\ {\it System}
+  \end{center}
+which as above requires case analysis.
+
+If we strengthen the precondition with the condition \gra\ we get two proofs.
+
+The first is trivially satisfied:
+\begin{thm}
+ \rqa\;\mand\;\gra\;\mand\;\grb\ \leadto\ \gra\ \mmin\ {\it System}\nb[head31]
+\p
+ \rqa\;\mand\;\gra\;\mand\;\grb\ \leadto\ \gra\ \mmin\ {\it System}\nb[p311]\\
+ \cnnn  \mbox{trivially by leads to implication theorem}
+\end{thm}
+
+Hence, now we need to prove the property:
+  \begin{center}
+     \rqb\ \mand\ \mnot\gra\ \mand\ \grb\ \leadto\ \gra\ \mmin\ {\it System}
+  \end{center}
+But again we need strengthening the preconditions.  
+
+We present the two last proofs needing program progress:
+\begin{thm}
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\rqb\;\mand\;\grb\
+                       \leadto\ \gra\ \mmin\ {\it System}\nb[head32]
+\p
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\rqb\;\mand\;\grb\ \ensures\
+     \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \mmin\ {\it Arb}\nb[p3201]\\
+ \cnnn  \mbox{satisfied by {\it Arb} program}     &\\
+ \rqa\;\mand\;\mnot\gra\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p3202]\\
+ \cnnn  \mbox{theorem \tref{head11} on (U1) and (U4)}     &\\
+ \mnot\rqb\ \unless\ \mnot\grb\ \mmin\ {\it Users}\nb[p3203]\\
+ \cnnn  \mbox{from spec. (U4)}     &\\
+ \grb\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p3204]\\
+ \cnnn  \mbox{from spec. (U1) and \stable\ def.}     &\\
+ \mnot\rqb\;\mand\;\grb\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p3205]\\
+ \cnnn  \mbox{conj. on (\ref{p3203}) and (\ref{p3204})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\rqb\;\mand\;\grb\
+                      \unless\ \mfalse\ \mmin\ {\it Users}\nb[p3206]\\
+ \cnnn  \mbox{conj. on (\ref{p3202}) and (\ref{p3205})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\rqb\;\mand\;\grb\ \ensures\
+     \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \mmin\ {\it System}\nb[p3207]\\
+ \cnnn  \mbox{union corollary 4 on (\ref{p3201}) and (\ref{p3206})}     &\\
+ \mnot\grb\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p3208]\\
+ \cnnn  \mbox{from spec. (U2) and \stable\ def.}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \unless\ \mfalse\
+                            \mmin\ {\it Users}\nb[p3209]\\
+ \cnnn  \mbox{conj. on (\ref{p3202}) and (\ref{p3208})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \ensures\ \gra\
+                \mmin\ {\it Arb}\nb[p3210]\\
+ \cnnn  \mbox{satisfied by program {\it Arb}}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \ensures\ \gra\
+                            \mmin\ {\it System}\nb[p3211]\\
+ \cnnn  \mbox{union corollary 4 on (\ref{p3209}) and (\ref{p3210})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\rqb\;\mand\;\mnot\grb\ \leadto\ \gra\
+                            \mmin\ {\it System}\nb[p3212]\\
+ \cnnn  \mbox{transitivity on (\ref{p3201}) and (\ref{p3211})}
+\end{thm}
+
+It turns out that using theorem \tref{head32} we may prove the last progress
+property without proving first
+  \begin{center}
+    \rqa\ \mand\ \mnot\gra\ \mand\ \rqb\ \mand\ \grb\ \leadto\ \gra\
+          \mmin\ {\it System}
+  \end{center}
+
+We directly get:
+\begin{thm}
+ \rqa\;\mand\;\mnot\gra\;\mand\;\grb\ \leadto\ \gra\
+              \mmin\ {\it System}\nb[head33]
+\p
+ \grb\ \leadto\ \mnot\rqb\ \mmin\ {\it System}\nb[p3301]\\
+ \cnnn  \mbox{from theorem \tref{head2}}     &\\
+ \rqa\;\mand\;\mnot\gra\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p3302]\\
+ \cnnn  \mbox{theorem \tref{head11} on (U1) and (U4)}     &\\
+ \grb\ \unless\ \mfalse\ \mmin\ {\it Users}\nb[p3303]\\
+ \cnnn  \mbox{from spec. (U1)}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\grb\ \unless\ \mfalse\
+                    \mmin\ {\it Users}\nb[p3304]\\
+ \cnnn  \mbox{conj. on (\ref{p3302}) and (\ref{p3303})}     &\\
+ \rqa\ \unless\ \mfalse\ \mmin\ {\it Arb}\nb[p3305]\\
+ \cnnn  \mbox{from spec. (A2)}     &\\
+ \mnot\gra\ \unless\ \gra\ \mmin\ {\it Arb}\nb[p3306]\\
+ \cnnn  \mbox{antireflexivity of \unless}     &\\
+ \rqa\;\mand\;\mnot\gra\ \unless\ \gra\ \mmin\ {\it Arb}\nb[p3307]\\
+ \cnnn  \mbox{conj. on (\ref{p3305}) and (\ref{p3306})}     &\\
+ \grb\ \unless\ \mnot\grb\ \mmin\ {\it Arb}\nb[p3308]\\
+ \cnnn  \mbox{antireflexivity of \unless}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\grb\ \unless\
+          \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \mor\ \gra\
+                      \mmin\ {\it Arb}\nb[p3309]\\
+ \cnnn  \mbox{conj. on (\ref{p3307}) and (\ref{p3308})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\grb\ \unless\
+        \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\grb\ \mor\ \gra\
+                       \mmin\ {\it System}\nb[p3310]\\
+ \cnnn  \mbox{union corollary 2 on (\ref{p3304}) and (\ref{p3309})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\grb\ \leadto\
+        \rqa\;\mand\;\mnot\gra\;\mand\;\mnot\rqb\;\mand\;\mnot\grb\ \mor\
+        \rqa\;\mand\;\mnot\grb\ \mor\
+        \gra\\
+             \hspace{8cm} \mmin\ {\it System}\nb[p3311]\\
+ \cnnn  \mbox{PSP theorem on (\ref{p3301}) and (\ref{p3310})}     &\\
+ \rqa\;\mand\;\mnot\gra\;\mand\;\grb\ \leadto\ \gra\
+                     \mmin\ {\it System}\nb[p3312]\\
+ \cnnn \mbox{cancellation theorem on (\ref{p3311}), \tref{head32},
+                                      \tref{head30}}
+\end{thm}
+
+We may now prove:
+\begin{thm}
+     \rqa\;\mand\;\gra\ \leadto\ \gra\ \mmin\ {\it System}\nb[head34]
+\p
+     \rqa\;\mand\;\gra\ \leadto\ \gra\ \mmin\ {\it System}\nb[p341]\\
+ \cnnn  \mbox{(CaseThm) on theorems \tref{head31} and \tref{head33}}
+\end{thm}
+
+And
+\begin{thm}
+     \rqa\ \leadto\ \gra\ \mmin\ {\it System}\nb[head35]
+\p
+     \rqa\ \leadto\ \gra\ \mmin\ {\it System}\nb[p351]\\
+ \cnnn  \mbox{(CaseThm) on theorems \tref{head30} and \tref{head34}}
+\end{thm}
+
+This completes the verification of the 2-Arbiter program {\it Arb} satisfying
+the required progress property of grant \gra\ on request \rqa.
+
+This means, from theorem \tref{head28} and theorem \tref{head35} we may
+conclude that the 2-Arbiter program {\it Arb} composed with {\it Users}
+satisfies:
+\begin{center}
+   \mforall\ \rqi\ \leadto\ \gri\ \mmin\ {\it System}
+\end{center}
+which was exactly what was required in the specification by the property
+(CA1).
+
+The proof of the progress property (CA2) is left to the reader.
+
+\bigskip
+The 2-Arbiter specification and the program may of course be defined using the 
+HOL-UNITY system.  In this way the shown proofs may be mechanized.  The next
+section briefly describes how the specification can be defined and how the
+program may be represented.
+
+
+\subsection{The 2-Arbiter in HOL-UNITY}
+
+As described in the previous examples and in the introduction to the chapter,
+we need to define a state which reflects the specification before we are able
+to define anything in the HOL-UNITY system.
+
+In the section~\ref{sec:readwrite} describing the readers/writers problem, we
+defined the state described as a standard method in the introduction to the
+chapter.  However, in this example we want to introduce a state which reflects
+the specification in a more natural way.  In the specification the properties
+are defined as indexed safety- and progress properties that have to be
+satisfied for each of two requests \rqi\ and grants \gri.  Properties that have
+to be satisfied by either the 2-Arbiter or the users.
+
+We may define a state which is a mapping from the two entries onto a pair of
+variables. This is, the type of the state will be a mapping of an enumerated
+type with two elements onto a pair of boolean type representing each of the
+boolean variables.
+
+\subsubsection{Defining a state for the 2-Arbiter in HOL-UNITY}
+
+The enumerated type could be defined as:
+
+\cnn $ \begin{array}{l}
+	users\ =\ (U1, U2)
+\end{array} $
+
+and the state by:
+
+\cnn $ \begin{array}{l}
+	state\ = ((i:users)\!\rightarrow\!(bool, bool))
+\end{array} $
+
+The four predicate variables \rqa, \gra\ and \rqb, \grb\ may then be defined by
+the indexed variables:
+
+\cnn $ \begin{array}{l}
+	rq\;i\ =\ (\lambda (s:state).\ {\tt fst}\ (s\;i))\\
+	gr\;i\ =\ (\lambda (s:state).\ {\tt snd}\ (s\;i))
+\end{array} $
+
+With a state like the presented and the definition of the variables we may
+make a specification in HOL-UNITY.
+
+
+\subsubsection{Defining a state for the 2-Arbiter in HOL-UNITY}
+
+To define the 2-Arbiter program {\it Arb} we need to transform each assignment
+into a state transition and define the program as the list of these state
+transitions.
+
+\medskip
+We define the first assign statement
+
+\cnn $ \begin{array}{l}
+    gr\;U1\ :=\ {\it true}\ {\bf if}\ rq\;U1 \wedge \neg(gr\;U2)
+\end{array} $
+
+by the state transition which only change the state if the user is $U1$.
+Further the variable $gr\;U1$ is only changed if the condition is true in the
+given state. All other values are let unchanged in the new state.
+
+The following lambda expression defines the wanted state transition
+reflecting the perhaps more readable assignment given above:
+
+\cnn $ \begin{array}{l}
+     \lambda s.\ \lambda i.\
+        (i = U1)\ \wedge rq\;U1\;s \wedge \neg(gr\;U2\;s)\ =\!\succ
+          (rq\;U1\;s,{\it true}) \mid s\;i
+\end{array} $
+
+\medskip
+Similarly the assignment
+
+\cnn $ \begin{array}{l}
+      gr\;U2\ :=\ {\it true}\ {\bf if}\
+                                \neg(rq\;U1) \wedge \neg(gr\;U1) \wedge rq\;U2
+\end{array} $
+
+is defined by:
+
+\cnn $ \begin{array}{l}
+ \lambda s.\ \lambda i.\
+  (i = U2) \wedge \neg(rq\;U1\;s) \wedge \neg(gr\;U1\;s) \wedge rq\;U2\;s\\
+     \cn =\!\succ (rq\;U2\;s,{\it true}) \mid s\;i
+\end{array} $
+
+\medskip
+In the assignment
+
+\cnn $ \begin{array}{l}
+  gr\;U1, gr\;U2\ :=\ {\it false}, rq\;U2\ {\bf if}\ \neg(rq\;U1) \wedge gr\;U1
+\end{array} $
+
+two variables are changed.  Hence, we must define the assignment as the state
+transition changing both $(gr\;U1)$ and $(gr\;U2)$.  Notice that both values
+need a state satisfying the enabling condition before it may be changed.
+
+The following lambda expression defines the wanted transition and change
+of values in the state:
+
+\cnn $ \begin{array}{l}
+  \lambda s. \lambda i.
+    \neg(rq\;U1) \wedge gr\;U1 =\!\succ\\
+    \cnn (i = U1) =\!\succ (rq\;U1\;s, {\it false}) \mid
+         (i = U2) =\!\succ (rq\;U2\;s, rq\;U2\;s) \mid s\;i
+\end{array} $
+
+\medskip
+Finally the assignment
+
+\cnn $ \begin{array}{l}
+   gr\;U2\ :=\ {\it false}\ {\bf if}\ \neg(rq\;U2) \wedge gr\;U2
+\end{array} $ 
+
+is defined by:
+
+\cnn $ \begin{array}{l}
+  \lambda s.\ \lambda i.\
+    (i = U2) \wedge (\neg(rq\;U2) \wedge gr\;U2) =\!\succ
+        (rq\;U2 s, {\it false})
+        \mid s\;i
+\end{array} $
+
+These definitions enable us to define the wanted program as a list of the
+four state transitions.  Since the presented specification may immediately be
+transformed into HOL notation just like the previous examples we completely
+leave out the more verbose HOL-UNITY proofs.  The detailed proof may be found
+as part of the UNITY contribution to the HOL system.
+
+The example is completed by showing the possibility of automating the proof
+that the program meets the specified \unless, \stable\ and \ensures\
+properties.
+
+
+\subsubsection{Automated proof of basic {\it Arb} program properties}
+
+Since this example with the {\it Arb} program is a finite state example, the
+proving of the \unless, \stable\ and \ensures\ properties may be made almost
+automatically by the HOL theorem prover.  We just need to define a tactic which
+rewrites all definitions into HOL terms, does beta reduction and case analysis.
+
+It turned out that the tactic needed some extra theorems like the information
+that all the defined program variables are different and the explicit
+information about the excluded middle and de Morgan rules. And the proof of
+\ensures\ properties is currently limited to proving the existence of a state
+transition which guarantees the post condition to be fulfilled.
+
+Further it turned out that case analysis and beta reduction although not
+surprising had to be performed in as many levels as the nesting of the
+conditional state transitions.
+
+The defined tactic is presently only a hack.  But it is believed that a general
+method for developing tactics may be developed for examples with finite state
+space only.
+
+\bigskip
+The tactic defined below is the one used to prove the claimed safety properties
+(\unless, \stable) and the basic progress property \ensures\ in the HOL-UNITY
+version of the 2-Arbiter example.
+
+{\footnotesize
+\begin{verbatim}
+let PROVE_PROG_TAC =
+   REWRITE_TAC
+    [UNLESS;UNLESS_STMT;EXIST_TRANSITION;ENSURES;STABLE;INVARIANT;
+     ~*;/\*;\/*;TRUE_DEF;FALSE_DEF;req;gr;user_thm1;user_thm2] THEN
+   BETA_TAC THEN
+   REWRITE_TAC
+     [NOT_CLAUSES;AND_CLAUSES;OR_CLAUSES;
+      DE_MORGAN_THM;EXCLUDED_MIDDLE] THEN
+   REPEAT STRIP_TAC THEN
+   (ASM_REWRITE_TAC [] THEN
+    BETA_TAC THEN ASM_REWRITE_TAC [user_thm1] THEN RES_TAC THEN
+    UNDISCH_ONE_TAC THEN
+    ASM_REWRITE_TAC [] THEN
+    BETA_TAC THEN ASM_REWRITE_TAC [user_thm1] THEN RES_TAC) THEN
+   STRIP_TAC THEN
+   REPEAT COND_CASES_TAC THEN BETA_TAC THEN REWRITE_TAC [] THEN
+   BETA_TAC THEN
+   ASM_REWRITE_TAC [user_thm1;user_thm2;EXCLUDED_MIDDLE] THEN
+   UNDISCH_ONE_TAC THEN REPEAT COND_CASES_TAC THEN BETA_TAC THEN
+   ASM_REWRITE_TAC [user_thm1;user_thm2;EXCLUDED_MIDDLE];;
+\end{verbatim}
+}
+
+This completes the last example on how to make UNITY specifications in
+HOL-UNITY.
+
+
+
+\appendix
+
+\cleardoublepage
+\chapter*{Appendix A\protect\\ \protect\vspace{1cm}\protect
+       \protect \rule{\linewidth}{.3mm} \protect\\ \protect\vspace{1cm}\protect
+          \protect {\LARGE UNITY - Theorems and Corollaries}\protect\\
+       \protect\vspace{1cm} \protect \rule{\linewidth}{.3mm}\protect\\
+       \protect\vspace{4cm}}
+
+\markboth{APPENDIX A}{UNITY - Theorems and Corollaries}
+\addcontentsline{toc}{chapter}{\protect\numberline{Appendix A}
+                  \hspace{2cm}{UNITY - Theorems and Corollaries}}
+
+In this appendix all UNITY theorems and corollaries found in \cite{CM88} are
+listed.  The listing is sorted by starting with {\bf unless} and {\bf stable}
+properties followed by {\bf ensures} and {\bf leadsto} and ending with the
+compositionality properties.
+
+Every theorem and corollary is given a naming as in \cite{CM88} and is
+additionally labeled with the theorem naming in the HOL-UNITY theory.  A brief
+listing of these definitions and theorems are given in appendix B.
+
+\newpage
+\section*{{\bf unless} theorems}
+
+{\it reflexivity}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+  \mbox{p \unless\ p\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm1)}
+}
+
+\bigskip
+{\it antireflexivity}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \mbox{p \unless\ \mnot p\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm2)}
+}
+
+\bigskip
+{\it consequence weakening}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \unless\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{q \mimply\ r} \Rproof[]
+     \mbox{p \unless\ r}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm3)}
+}
+
+\bigskip
+{\it conjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p  \unless\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{p' \unless\ q'\ \mmin\ Pr} \Rproof[]
+     \mbox{(p \mand\ p') \unless\
+              (p \mand\ q') \mor\ (p' \mand\ q) \mor\ (q \mand\ q')\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm4)}
+}
+
+\bigskip
+{\it disjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p  \unless\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{p' \unless\ q'\ \mmin\ Pr} \Rproof[]
+     \mbox{(p \mor\ p') \unless\
+           (\mnot p \mand\ q') \mor\ (\mnot p' \mand\ q) \mor\ (q \mand\ q')
+          \ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm5)}
+}
+
+\bigskip
+{\it simple conjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p  \unless\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{p' \unless\ q'} \Rproof[]
+     \mbox{p \mand\ p' \unless\ q \mor\ q'\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm6)}
+}
+
+\bigskip
+{\it simple disjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p  \unless\ q\ \mmin\ Pr,}  \ANDproof
+             \mbox{p' \unless\ q'\ \mmin\ Pr} \Rproof[]
+     \mbox{p \mor\ p' \unless\ q \mor\ q'\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm7)}
+}
+
+\bigskip
+{\it cancellation}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \unless\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{q \unless\ r\ \mmin\ Pr} \Rproof[]
+     \mbox{p \mor\ q \unless\ r\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_thm8)}
+}
+
+
+\section*{{\bf unless} corollaries}
+
+\bigskip
+{\it unless introduction}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \mimply\ q} \Rproof[]
+     \mbox{p \unless\ q\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor1)}
+}
+
+\bigskip
+{\it unless introduction}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{\mnot p \mimply\ q} \Rproof[]
+     \mbox{p \unless\ q\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor2)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{0mm} $\begin{array}{l}
+  \mbox{p \unless\ q \mor\ r\ \mmin\ Pr\ =\
+        p \mand\ \mnot q \unless\ q \mor\ r\ \mmin\ Pr}
+\end{array}$
+\hfill {\footnotesize (UNLESS\_cor3)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \mor\ q \unless\ r} \Rproof[]
+     \mbox{p \unless\ q \mor\ r\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor4)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+  \mbox{p \unless\ {\it true}\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor5)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+  \mbox{{\it true} \unless\ p\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor6)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+  \mbox{{\it false} \unless\ p\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor7)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \mand\ \mnot q \mimply\ p' \mimply\ p \mor\ q} \Rproof[]
+     \mbox{p \unless\ q\ \mmin\ Pr = p' \unless\ q\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor8)}
+}
+
+\bigskip
+{\it generalized cancellation}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \mor\ p' \unless\ q \mor\ r\ \mmin\ Pr,} \ANDproof
+             \mbox{q \mor\ q' \unless\ p \mor\ r'\ \mmin\ Pr} \Rproof[]
+     \mbox{(p \mor\ p' \mor\ q \mor\ q') \unless\
+           ((p \mand\ q) \mor\ r \mor\ r' \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor9)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \mor\ q \stable\ \mmin\ Pr} \Rproof[]
+     \mbox{p \unless\ q\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor10)}
+}
+
+\bigskip
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \unless\ q \mmin\ Pr,} \ANDproof
+              \mbox{q \unless\ p \mmin\ Pr,} \ANDproof
+             \mbox{\mnot(p \mand\ q)} \Rproof[]
+     \mbox{(p \mor\ q) \stable\ \mmin\ Pr
+           ((p \mand\ q) \mor\ r \mor\ r' \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (UNLESS\_cor13)}
+}
+
+
+\section*{{\bf ensures} theorems}
+
+{\it empty ensures}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \mbox{p \ensures\ q\ \mmin\ \{ \} = {\it false}}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_thm0)}
+}
+
+\bigskip
+{\it reflexivity}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \mbox{p \ensures\ p\ \mmin\ (\{st\} $\bigcup$ Pr)}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_thm1)}
+}
+
+\bigskip
+{\it consequence weakening}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \ensures\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{q \mimply\ r} \Rproof[]
+     \mbox{p \ensures\ r\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_thm2)}
+}
+
+\bigskip
+{\it impossibility}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \ensures\ \mfalse\ \mmin\ Pr} \Rproof[]
+     \mbox{\mnot p}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_thm3)}
+}
+
+\bigskip
+{\it conjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p  \unless\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{p' \ensures\ q'\ \mmin\ Pr} \Rproof[]
+     \mbox{(p \mand\ p') \ensures
+           (p \mand\ q') \mor\ (p' \mand\ q) \mor\ (q \mand\ q')\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_thm4)}
+}
+
+\bigskip
+{\it disjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p  \ensures\ q\ \mmin\ Pr} \Rproof[]
+     \mbox{(p \mor\ r) \ensures\ q \mor\ r\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_thm5)}
+}
+
+
+\section*{{\bf ensures} corollaries}
+
+{\it ensures implication}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \mimply\ q} \Rproof[]
+     \mbox{p \ensures\ q\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_cor1)}
+}
+
+\bigskip
+{\it or elimination}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \mor\ q \ensures\ r\ \mmin\ Pr} \Rproof[]
+     \mbox{p \unless\ q \mor\ r\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (ENSURES\_cor3)}
+}
+
+
+\section*{{\bf leadsto} theorems}
+
+{\it implication theorem}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \mimply\ q} \Rproof[]
+     \mbox{p \leadto\ q\ \mmin\ (\{st\} $\bigcup$ Pr})
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_thm25)}
+}
+
+\bigskip
+{\it impossibility}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+     \Lproof \mbox{p \leadto\ \mfalse\ \mmin\ Pr} \Rproof[]
+     \mbox{\mnot p}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_thm30)}
+}
+
+\bigskip
+{\it disjunction (general)}
+
+\cn For any set well-founded set $W$:
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+  \Lproof
+    \mbox{$\langle \forall m: m \in W:: p_m \leadto\ q_m\ \mmin\ Pr \rangle$}
+  \Rproof[]
+    \mbox{$\langle \exists m: m \in W:: p_m \rangle
+      \leadto\ \langle \exists m: m \in W:: q_m \rangle\ \mmin\ Pr$}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_thm3a)}
+}
+This theorem is derived by weakening of the disjunctive
+closure property which in HOL-UNITY is proved as the theorem
+{\footnotesize (LEADSTO\_thm3)}.
+
+\bigskip
+{\it cancellation}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \leadto\ q \mor\ b\ \mmin\ Pr,} \ANDproof
+             \mbox{b \leadto\ r\ \mmin\ Pr} \Rproof[]
+     \mbox{p \leadto\ q \mor\ r\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_thm28)}
+}
+
+\bigskip
+{\it PSP (Progress-Safety-Progress)}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \leadto\ q\ \mmin\ Pr,} \ANDproof
+             \mbox{r \unless\ b\ \mmin\ Pr} \Rproof[]
+     \mbox{p \mand\ r \leadto\ (q \mand\ r) \mor\ b\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_thm29)}
+}
+
+\bigskip
+{\it completion}
+
+\cn For any finite set of predicates $p_{i}, q_{i}, 0 \leq i < N$:
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+  \Lproof
+  \mbox{$\langle \forall i:: p_{i} \leadto\ q_{i} \mor\ b\ \mmin\ Pr \rangle,$}
+  \ANDproof \mbox{$\langle \forall i:: q_{i} \unless\ b\ \mmin\ Pr \rangle$}
+     \Rproof[]
+       \mbox{$\langle \mand\ i:: p_{i} \rangle
+             \leadto\ \langle \mand\ i:: q_{i} \mor\ b\ \mmin\ Pr \rangle$}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_cor13)}
+}
+
+\bigskip
+{\it metric induction}
+
+\cn For any set well-founded set $W$:\\
+\makebox[\linewidth][lr]{
+\hspace{0mm} \begin{mproof}
+  \Lproof
+    \mbox{$\langle \forall m: m \in W:$\
+             p \mand\ (M $=_*$ $m$) \leadto\
+                (p \mand\ M $<_*$ $m$) \mor\ q\ \mmin\ Pr $\rangle$}
+  \Rproof[]
+    \mbox{p \leadto\ q\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_thm36)}
+}
+
+
+\section*{{\bf leadsto} corollaries}
+
+{\it finite disjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p  \leadto\ q\ \mmin\ Pr,}
+     \ANDproof \mbox{p' \leadto\ q'\ \mmin\ Pr}
+     \Rproof[] \mbox{p \mor\ p' \leadto\ q \mor\ q'\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_thm27)}
+}
+
+\bigskip
+{\it weakening disjunction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \mand\       b \leadto\ q\ \mmin\ Pr,}
+     \ANDproof \mbox{p \mand\ \mnot b \leadto\ q\ \mmin\ Pr} \Rproof[]
+     \mbox{p \leadto\ q\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_cor1)}
+}
+
+\bigskip
+{\it stable PSP}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \leadto\ q\ \mmin\ Pr,}
+     \ANDproof \mbox{r \stable\ \mmin\ Pr} \Rproof[]
+     \mbox{p \mand\ r \leadto\ q \mand\ r\ \mmin\ Pr}
+\end{mproof}
+\hfill {\footnotesize (LEADSTO\_cor2)}
+}
+
+
+\section*{compositionality theorems}
+
+{\it composed unless property}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} $\begin{array}{l}
+  \mbox{p \unless\ q\ \mmin\ (F $[\!]$ G)\ =}\\
+  \cnn \mbox{p \unless\ q\ \mmin\ F \mand\ p \unless\ q\ \mmin\ G}
+\end{array}$
+\hfill {\footnotesize (COMP\_UNLESS\_thm1)}
+}
+
+\bigskip
+{\it composed ensures property}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} $\begin{array}{l}
+  \mbox{p \ensures\ q\ \mmin\ (F $[\!]$ G)\ =}\\
+  \cnn \mbox{(p \ensures\ q\ \mmin\ F \mand\ p \unless\ q\ \mmin\ G)\ \mor}\\
+  \cnn \mbox{(p \ensures\ q\ \mmin\ G \mand\ p \unless\ q\ \mmin\ F)}
+\end{array}$
+\hfill {\footnotesize (COMP\_ENSURES\_thm1)}
+}
+
+\bigskip
+{\it program fixed point}
+
+\makebox[\linewidth][lr]{
+\hspace{0mm} $\begin{array}{l}
+  \mbox{FP\ \mof\ (F $[\!]$ G)\ =\ FP\ \mof\ F\ \mand\ FP\ \mof\ G}
+\end{array}$
+\hfill {\footnotesize (not proved)}
+}
+
+
+\section*{compositionality corollaries}
+
+{\it unless, stable deduction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p  \unless\ q\ \mmin\ F,}
+     \ANDproof \mbox{p \stable\ \mmin\ G}
+     \Rproof[] \mbox{p \unless\ q\ \mmin\ (F $[\!]$ G)}
+\end{mproof}
+\hfill {\footnotesize (COMP\_UNITY\_cor2)}
+}
+
+\bigskip
+{\it invariant, stable deduction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \invariant\ \mmin\ ($Pr_{\it init}$, F),}
+     \ANDproof \mbox{p \stable\ \mmin\ G}
+     \Rproof[] \mbox{p \invariant\ \mmin\ ($Pr_{\it init}$, F $[\!]$ G)}
+\end{mproof}
+\hfill {\footnotesize (COMP\_UNITY\_cor3)}
+}
+
+\bigskip
+{\it ensures, stable deduction}
+
+\makebox[\linewidth][lr]{
+\hspace{-10mm} \begin{mproof}
+     \Lproof \mbox{p \ensures\ q\ \mmin\ F,}
+     \ANDproof \mbox{p \stable\ \mmin\ G}
+     \Rproof[] \mbox{p \ensures\ \mmin\ (F $[\!]$ G)}
+\end{mproof}
+\hfill {\footnotesize (COMP\_UNITY\_cor4)}
+}
+
+\cleardoublepage
+\chapter*{Appendix B\protect\\ \protect\vspace{1cm}\protect
+       \protect \rule{\linewidth}{.3mm} \protect\\ \protect\vspace{1cm}\protect
+          \protect {\LARGE HOL-UNITY - Definitions and Theorems}\protect\\
+       \protect\vspace{1cm} \protect \rule{\linewidth}{.3mm}\protect\\
+       \protect\vspace{4cm}}
+
+\markboth{APPENDIX B}{HOL-UNITY - Definitions and Theorems}
+
+\addcontentsline{toc}{chapter}{\protect\numberline{Appendix B}
+                  \hspace{2cm}{HOL-UNITY - Definitions and Theorems}}
+
+{\footnotesize
+\section*{The Theory state\_logic}
+
+\begin{verbatim}
+Parents --  HOL     
+Constants --
+  /\* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  \/* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  ==>* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  <* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  <=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  =* ":(* -> **) -> ((* -> **) -> (* -> bool))"
+  =>* ":(* -> bool) -> ((* -> **) -> ((* -> **) -> (* -> **)))"
+  +* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  -* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ** ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ModX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  DivX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ExpX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  IndX ":(* -> (*1 -> *2)) -> ((* -> *1) -> (* -> *2))"
+  FALSE ":* -> bool"     TRUE ":* -> bool"
+  ~* ":(* -> bool) -> (* -> bool)"
+  !* ":(** -> (* -> bool)) -> (* -> bool)"
+  ?* ":(** -> (* -> bool)) -> (* -> bool)"
+  SucX ":(* -> num) -> (* -> num)"
+  PreX ":(* -> num) -> (* -> num)"
+  !<=* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  ?<=* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  ?<* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  /<=\* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  \<=/* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  /<\* ":(num -> (* -> bool)) -> (num -> (* -> bool))"
+  \</* ":(num -> (* -> bool)) -> (num -> (* -> bool))"     
+Infixes --
+  /\* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  \/* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  ==>* ":(* -> bool) -> ((* -> bool) -> (* -> bool))"
+  <* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  <=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  >=* ":(* -> num) -> ((* -> num) -> (* -> bool))"
+  =* ":(* -> **) -> ((* -> **) -> (* -> bool))"
+  =>* ":(* -> bool) -> ((* -> **) -> ((* -> **) -> (* -> **)))"
+  +* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  -* ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ** ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ModX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  DivX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  ExpX ":(* -> num) -> ((* -> num) -> (* -> num))"
+  IndX ":(* -> (*1 -> *2)) -> ((* -> *1) -> (* -> *2))"     
+Binders --
+  !* ":(** -> (* -> bool)) -> (* -> bool)"
+  ?* ":(** -> (* -> bool)) -> (* -> bool)"     
+Definitions --
+  FALSE_DEF  |- FALSE = (\s. F)
+  TRUE_DEF  |- TRUE = (\s. T)
+  ~*  |- !p. ~* p = (\s. ~p s)
+  /\*  |- !p q. p /\* q = (\s. p s /\ q s)
+  \/*  |- !p q. p \/* q = (\s. p s \/ q s)
+  !*  |- !P. $!* P = (\s. !x. P x s)
+  ?*  |- !P. $?* P = (\s. ?x. P x s)
+  ==>*  |- !p q. p ==>* q = (\s. p s ==> q s)
+  <*  |- !p q. p <* q = (\s. (p s) < (q s))
+  >*  |- !p q. p >* q = (\s. (p s) > (q s))
+  <=*  |- !p q. p <=* q = (\s. (p s) <= (q s))
+  >=*  |- !p q. p >=* q = (\s. (p s) >= (q s))
+  =*  |- !p q. p =* q = (\s. p s = q s)
+  =>*  |- !p r1 r2. (p =>* r1)r2 = (\s. (p s => r1 s | r2 s))
+  +*  |- !p q. p +* q = (\s. (p s) + (q s))
+  -*  |- !p q. p -* q = (\s. (p s) - (q s))
+  **  |- !p q. p ** q = (\s. (p s) * (q s))
+  SucX  |- !p. SucX p = (\s. SUC(p s))
+  PreX  |- !p. PreX p = (\s. PRE(p s))
+  ModX  |- !p q. p ModX q = (\s. (p s) MOD (q s))
+  DivX  |- !p q. p DivX q = (\s. (p s) DIV (q s))
+  ExpX  |- !p q. p ExpX q = (\s. (p s) EXP (q s))
+  IndX  |- !a i. a IndX i = (\s. a s(i s))
+  !<=*  |- !P m. !<=* P m = (\s. !i. i <= m ==> P i s)
+  ?<=*  |- !P m. ?<=* P m = (\s. ?i. i <= m /\ P i s)
+  ?<*  |- !P m. ?<* P m = (\s. ?i. i < m /\ P i s)
+  /<=\*
+    |- (!P. /<=\* P 0 = P 0) /\
+       (!i P. /<=\* P(SUC i) = (/<=\* P i) /\* (P(SUC i)))
+  \<=/*
+    |- (!P. \<=/* P 0 = P 0) /\
+       (!i P. \<=/* P(SUC i) = (\<=/* P i) \/* (P(SUC i)))
+  /<\*
+    |- (!P. /<\* P 0 = FALSE) /\
+       (!i P. /<\* P(SUC i) = (/<\* P i) /\* (P i))
+  \</*
+    |- (!P. \</* P 0 = FALSE) /\
+       (!i P. \</* P(SUC i) = (\</* P i) \/* (P i))
+  
+Theorems --
+  IMPLY_WEAK_lemma1
+    |- !p q p' q' s.
+        (((p /\* q') \/* (p' /\* q)) \/* (q /\* q'))s ==> (q \/* q')s
+  IMPLY_WEAK_lemma2
+    |- !p q p' q' s.
+        ((((~* p) /\* q') \/* ((~* p') /\* q)) \/* (q /\* q'))s ==>
+        (q \/* q')s
+  IMPLY_WEAK_lemma3
+    |- !p q r s.
+        ((((~* p) /\* r) \/* ((~* q) /\* q)) \/* (q /\* r))s ==> r s
+  IMPLY_WEAK_lemma4
+    |- !p q p' q' r r' s.
+        ((((~*(p \/* p')) /\* (p \/* r')) \/*
+          ((~*(q \/* q')) /\* (q \/* r))) \/*
+         ((q \/* r) /\* (p \/* r')))
+        s ==>
+        ((p /\* q) \/* (r \/* r'))s
+  IMPLY_WEAK_lemma5
+    |- !p q r s.
+        ((p /\* r) \/* (((p \/* q) /\* (q \/* r)) \/* r))s ==>
+        (q \/* r)s
+  IMPLY_WEAK_lemma6
+    |- !p q b r s.
+        ((r /\* q) \/* ((p /\* b) \/* (b /\* q)))s ==>
+        ((q /\* r) \/* b)s
+  IMPLY_WEAK_lemma7
+    |- !p q b r s.
+        (((r /\* q) \/* ((r /\* p) /\* b)) \/* (b /\* q))s ==>
+        ((q /\* r) \/* b)s
+  AND_COMM_OR_lemma  |- !p q r. (r /\* q) \/* p = (q /\* r) \/* p
+  AND_OR_COMM_lemma  |- !p q r. p /\* (r \/* q) = p /\* (q \/* r)
+  OR_COMM_AND_lemma  |- !p q r. (r \/* q) /\* p = (q \/* r) /\* p
+  OR_COMM_OR_lemma  |- !p q r. (r \/* q) \/* p = (q \/* r) \/* p
+  OR_OR_COMM_lemma  |- !p q r. p \/* (r \/* q) = p \/* (q \/* r)
+  AND_COMM_AND_lemma  |- !p q r. (r /\* q) /\* p = (q /\* r) /\* p
+  AND_AND_COMM_lemma  |- !p q r. p /\* (r /\* q) = p /\* (q /\* r)
+  OR_AND_COMM_lemma  |- !p q r. p \/* (r /\* q) = p \/* (q /\* r)
+  NOT_NOT_lemma  |- !p. ~*(~* p) = p
+  OR_COMM_lemma  |- !p q. p \/* q = q \/* p
+  OR_OR_lemma  |- !p. p \/* p = p
+  OR_ASSOC_lemma  |- !p q r. (p \/* q) \/* r = p \/* (q \/* r)
+  AND_IMPLY_WEAK_lemma  |- !p q s. (p /\* q)s ==> q s
+  SYM_AND_IMPLY_WEAK_lemma  |- !p q s. (p /\* q)s ==> p s
+  OR_IMPLY_WEAK_lemma  |- !p q s. p s ==> (p \/* q)s
+  SYM_OR_IMPLY_WEAK_lemma  |- !p q s. p s ==> (q \/* p)s
+  IMPLY_WEAK_AND_lemma
+    |- !p q r. (!s. p s ==> q s) ==> (!s. (p /\* r)s ==> (q /\* r)s)
+  IMPLY_WEAK_OR_lemma
+    |- !p q r. (!s. p s ==> q s) ==> (!s. (p \/* r)s ==> (q \/* r)s)
+  AND_AND_lemma  |- !p. p /\* p = p
+  AND_COMM_lemma  |- !p q. p /\* q = q /\* p
+  AND_ASSOC_lemma  |- !p q r. (p /\* q) /\* r = p /\* (q /\* r)
+  AND_TRUE_lemma  |- !p. p /\* TRUE = p
+  OR_TRUE_lemma  |- !p. p \/* TRUE = TRUE
+  AND_FALSE_lemma  |- !p. p /\* FALSE = FALSE
+  OR_FALSE_lemma  |- !p. p \/* FALSE = p
+  P_OR_NOT_P_lemma  |- !p. p \/* (~* p) = TRUE
+  P_AND_NOT_P_lemma  |- !p. p /\* (~* p) = FALSE
+  AND_COMPL_OR_lemma  |- !p q. (p /\* (~* q)) \/* (p /\* q) = p
+  OR_NOT_AND_lemma  |- !p q. (p \/* q) /\* (~* q) = p /\* (~* q)
+  P_AND_Q_OR_Q_lemma  |- !p q. (p /\* q) \/* q = q
+  P_OR_Q_AND_Q_lemma  |- !p q. (p \/* q) /\* q = q
+  NOT_OR_AND_NOT_lemma  |- !p q. ~*(p \/* q) = (~* p) /\* (~* q)
+  NOT_AND_OR_NOT_lemma  |- !p q. ~*(p /\* q) = (~* p) \/* (~* q)
+  NOT_IMPLY_OR_lemma  |- !p q. (!s. ~* p s ==> q s) = (!s. (p \/* q)s)
+  IMPLY_OR_lemma  |- !p q. (!s. p s ==> q s) = (!s. ((~* p) \/* q)s)
+  OR_IMPLY_lemma  |- !p q. (!s. (p \/* q)s) = (!s. ~* p s ==> q s)
+  NOT_OR_IMPLY_lemma  |- !p q. (!s. ((~* p) \/* q)s) = (!s. p s ==> q s)
+  OR_AND_DISTR_lemma
+    |- !p q r. p \/* (q /\* r) = (p \/* q) /\* (p \/* r)
+  AND_OR_DISTR_lemma
+    |- !p q r. p /\* (q \/* r) = (p /\* q) \/* (p /\* r)
+  NOT_IMPLIES_FALSE_lemma  |- !p. (!s. ~* p s) ==> (!s. p s = FALSE s)
+  NOT_P_IMPLIES_P_EQ_FALSE_lemma  |- !p. (!s. ~* p s) ==> (p = FALSE)
+  NOT_AND_IMPLIES_lemma
+    |- !p q. (!s. ~*(p /\* q)s) = (!s. p s ==> ~* q s)
+  NOT_AND_IMPLIES_lemma1
+    |- !p q. (!s. ~*(p /\* q)s) ==> (!s. p s ==> ~* q s)
+  NOT_AND_IMPLIES_lemma2
+    |- !p q. (!s. ~*(p /\* q)s) ==> (!s. q s ==> ~* p s)
+  AND_OR_EQ_lemma  |- !p q. p /\* (p \/* q) = p
+  AND_OR_EQ_AND_COMM_OR_lemma
+    |- !p q. p /\* (q \/* p) = p /\* (p \/* q)
+  IMPLY_WEAK_lemma  |- !p q. (!s. p s) ==> (!s. (p \/* q)s)
+  IMPLY_WEAK_lemma_b  |- !p q s. p s ==> (p \/* q)s
+  ALL_OR_lemma  |- !P i. $?* P = (P i) \/* ($?* P)
+  ALL_i_OR_lemma  |- !P. (\s. ?i. \<=/* P i s) = $?* P
+  
+******************** state_logic ********************
+\end{verbatim}
+
+\section*{The Theory unless}
+
+\begin{verbatim}
+Parents --  state_logic     
+Constants --
+  UNLESS_STMT
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *) -> (* -> bool)))"
+  UNLESS ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  STABLE ":(* -> bool) -> ((* -> *)list -> bool)"
+  INVARIANT ":(* -> bool) -> ((* -> bool) # (* -> *)list -> bool)"     
+Infixes --
+  UNLESS_STMT
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *) -> (* -> bool)))"
+  UNLESS ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  STABLE ":(* -> bool) -> ((* -> *)list -> bool)"
+  INVARIANT ":(* -> bool) -> ((* -> bool) # (* -> *)list -> bool)"     
+Definitions --
+  UNLESS_STMT
+    |- !p q st.
+        (p UNLESS_STMT q)st = (\s. p s /\ ~q s ==> p(st s) \/ q(st s))
+  UNLESS
+    |- (!p q. (p UNLESS q)[] = T) /\
+       (!p q st Pr.
+         (p UNLESS q)(CONS st Pr) =
+         (!s. (p UNLESS_STMT q)st s) /\ (p UNLESS q)Pr)
+  STABLE  |- !p Pr. p STABLE Pr = (p UNLESS FALSE)Pr
+  INVARIANT
+    |- !p p0 Pr. p INVARIANT (p0,Pr) = (!s. p0 s ==> p s) /\ p STABLE Pr
+  
+Theorems --
+  UNLESS_STMT_thm0  |- !p st s. (p UNLESS_STMT p)st s
+  UNLESS_STMT_thm1
+    |- !p q r st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. q s ==> r s) ==>
+        (!s. (p UNLESS_STMT r)st s)
+  UNLESS_STMT_thm2
+    |- !p q p' q' st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. (p' UNLESS_STMT q')st s) ==>
+        (!s. ((p \/* p') UNLESS_STMT (q \/* q'))st s)
+  UNLESS_STMT_thm3
+    |- !p q p' q' st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. (p' UNLESS_STMT q')st s) ==>
+        (!s.
+          ((p /\* p') UNLESS_STMT
+           (((p /\* q') \/* (p' /\* q)) \/* (q /\* q')))
+          st 
+          s)
+  UNLESS_STMT_thm4
+    |- !p q p' q' st.
+        (!s. (p UNLESS_STMT q)st s) /\ (!s. (p' UNLESS_STMT q')st s) ==>
+        (!s.
+          ((p \/* p') UNLESS_STMT
+           ((((~* p) /\* q') \/* ((~* p') /\* q)) \/* (q /\* q')))
+          st 
+          s)
+  UNLESS_STMT_thm5
+    |- !P q st.
+        (!m s. ((P m) UNLESS_STMT q)st s) ==>
+        (!s. ((\s. ?n. P n s) UNLESS_STMT q)st s)
+  UNLESS_thm1  |- !p Pr. (p UNLESS p)Pr
+  UNLESS_thm2  |- !p Pr. (p UNLESS (~* p))Pr
+  UNLESS_thm3
+    |- !p q r Pr. (p UNLESS q)Pr /\ (!s. q s ==> r s) ==> (p UNLESS r)Pr
+  UNLESS_thm4
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p /\* p') UNLESS (((p /\* q') \/* (p' /\* q)) \/* (q /\* q')))
+        Pr
+  UNLESS_thm5
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p \/* p') UNLESS
+         ((((~* p) /\* q') \/* ((~* p') /\* q)) \/* (q /\* q')))
+        Pr
+  UNLESS_thm6
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p /\* p') UNLESS (q \/* q'))Pr
+  UNLESS_thm7
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' UNLESS q')Pr ==>
+        ((p \/* p') UNLESS (q \/* q'))Pr
+  UNLESS_thm8
+    |- !p q r Pr.
+        (p UNLESS q)Pr /\ (q UNLESS r)Pr ==> ((p \/* q) UNLESS r)Pr
+  UNLESS_cor1  |- !p q Pr. (!s. p s ==> q s) ==> (p UNLESS q)Pr
+  UNLESS_cor2  |- !p q Pr. (!s. ~* p s ==> q s) ==> (p UNLESS q)Pr
+  UNLESS_cor3
+    |- !p q r Pr.
+        ((p /\* (~* q)) UNLESS (q \/* r))Pr = (p UNLESS (q \/* r))Pr
+  UNLESS_cor4
+    |- !p q r Pr. ((p \/* q) UNLESS r)Pr ==> (p UNLESS (q \/* r))Pr
+  UNLESS_cor5  |- !p Pr. (p UNLESS TRUE)Pr
+  UNLESS_cor6  |- !p Pr. (TRUE UNLESS p)Pr
+  UNLESS_cor7  |- !p Pr. (FALSE UNLESS p)Pr
+  UNLESS_cor8
+    |- !p q p' Pr.
+        (!s. p s /\ ~q s) ==>
+        (!s. p' s) ==>
+        (!s. p s \/ q s) ==>
+        (((p /\* (~* q)) UNLESS q)Pr = ((p' /\* (~* q)) UNLESS q)Pr)
+  UNLESS_cor9
+    |- !p q p' q' r r' Pr.
+        ((p \/* p') UNLESS (q \/* r))Pr /\
+        ((q \/* q') UNLESS (p \/* r'))Pr ==>
+        ((p \/* (p' \/* (q \/* q'))) UNLESS ((p /\* q) \/* (r \/* r')))
+        Pr
+  UNLESS_cor10  |- !p q Pr. (p \/* q) STABLE Pr ==> (p UNLESS q)Pr
+  UNLESS_cor11  |- !p Pr. (!s. ~* p s) ==> p STABLE Pr
+  UNLESS_cor12  |- !p Pr. (!s. ~* p s) ==> (~* p) STABLE Pr
+  UNLESS_cor13
+    |- !p q Pr.
+        (p UNLESS q)Pr /\ (q UNLESS p)Pr /\ (!s. ~*(p /\* q)s) ==>
+        (p \/* q) STABLE Pr
+  UNLESS_cor14
+    |- !p q Pr.
+        (p UNLESS (~* q))Pr /\ q STABLE Pr ==>
+        (p UNLESS (p /\* (~* q)))Pr
+  UNLESS_cor15
+    |- !P Q Pr.
+        (!i. ((P i) UNLESS ((P i) /\* (Q i)))Pr) ==>
+        (($!* P) UNLESS (($!* P) /\* ($?* Q)))Pr
+  UNLESS_cor16
+    |- !P Q Pr.
+        (!i. ((P i) UNLESS (Q i))Pr) ==>
+        (!i. ((/<=\* P i) UNLESS (\<=/* Q i))Pr)
+  UNLESS_cor17
+    |- !P q Pr.
+        (!i. ((P i) UNLESS q)Pr) ==> (!i. ((/<=\* P i) UNLESS q)Pr)
+  UNLESS_cor18
+    |- !P q Pr. (!m. ((P m) UNLESS q)Pr) ==> (($?* P) UNLESS q)Pr
+  UNLESS_cor19  |- !Pr. FALSE STABLE Pr
+  UNLESS_cor20
+    |- !p q Pr. p STABLE Pr /\ q STABLE Pr ==> (p /\* q) STABLE Pr
+  UNLESS_cor21
+    |- !p q Pr. p STABLE Pr /\ q STABLE Pr ==> (p \/* q) STABLE Pr
+  UNLESS_cor22
+    |- !p q r Pr.
+        (p UNLESS q)Pr /\ r STABLE Pr ==> ((p /\* r) UNLESS (q /\* r))Pr
+  
+******************** unless ********************
+\end{verbatim}
+
+\section*{The Theory ensures}
+
+\begin{verbatim}
+Parents --  unless     
+Constants --
+  EXIST_TRANSITION
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  ENSURES ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"     
+Infixes --
+  EXIST_TRANSITION
+    ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  ENSURES ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"     
+Definitions --
+  EXIST_TRANSITION
+    |- (!p q. (p EXIST_TRANSITION q)[] = F) /\
+       (!p q st Pr.
+         (p EXIST_TRANSITION q)(CONS st Pr) =
+         (!s. p s /\ ~q s ==> q(st s)) \/ (p EXIST_TRANSITION q)Pr)
+  ENSURES
+    |- !p q Pr.
+        (p ENSURES q)Pr = (p UNLESS q)Pr /\ (p EXIST_TRANSITION q)Pr
+  
+Theorems --
+  EXIST_TRANSITION_thm1
+    |- !p q r Pr.
+        (p EXIST_TRANSITION q)Pr /\ (!s. q s ==> r s) ==>
+        (p EXIST_TRANSITION r)Pr
+  EXIST_TRANSITION_thm2
+    |- !p Pr. (p EXIST_TRANSITION FALSE)Pr ==> (!s. ~* p s)
+  EXIST_TRANSITION_thm3
+    |- !p st Pr. (FALSE EXIST_TRANSITION p)(CONS st Pr)
+  ENSURES_thm0  |- !p q. (p ENSURES q)[] = F
+  ENSURES_thm1  |- !p st Pr. (p ENSURES p)(CONS st Pr)
+  ENSURES_thm2
+    |- !p q r Pr.
+        (p ENSURES q)Pr /\ (!s. q s ==> r s) ==> (p ENSURES r)Pr
+  ENSURES_thm3  |- !p Pr. (p ENSURES FALSE)Pr ==> (!s. ~* p s)
+  ENSURES_thm4
+    |- !p q p' q' Pr.
+        (p UNLESS q)Pr /\ (p' ENSURES q')Pr ==>
+        ((p /\* p') ENSURES
+         (((p /\* q') \/* (p' /\* q)) \/* (q /\* q')))
+        Pr
+  ENSURES_thm5
+    |- !p q r Pr. (p ENSURES q)Pr ==> ((p \/* r) ENSURES (q \/* r))Pr
+  ENSURES_cor1
+    |- !p q st Pr. (!s. p s ==> q s) ==> (p ENSURES q)(CONS st Pr)
+  ENSURES_cor2  |- !p q Pr. (p ENSURES q)Pr ==> (p UNLESS q)Pr
+  ENSURES_cor3
+    |- !p q r Pr. ((p \/* q) ENSURES r)Pr ==> (p ENSURES (q \/* r))Pr
+  ENSURES_cor4
+    |- !p q r Pr.
+        (p ENSURES (q \/* r))Pr ==> ((p /\* (~* q)) ENSURES (q \/* r))Pr
+  ENSURES_cor5
+    |- !p q r Pr. (p ENSURES q)Pr ==> (p ENSURES (q \/* r))Pr
+  ENSURES_cor6  |- !p st Pr. (FALSE ENSURES p)(CONS st Pr)
+  ENSURES_cor7
+    |- !p q r Pr.
+        (p ENSURES q)Pr /\ r STABLE Pr ==>
+        ((p /\* r) ENSURES (q /\* r))Pr
+  
+******************** ensures ********************
+\end{verbatim}
+
+\section*{The Theory gen\_induct}
+
+\begin{verbatim}
+Parents --  ensures     
+Theorems --
+  GEN_INDUCT_lemma1  |- !P. (!m n. n <= m ==> P n) ==> (!m. P m)
+  GEN_INDUCT_lemma2  |- !m n. n <= m = n < (SUC m)
+  GEN_INDUCT_lemma3
+    |- !P. (!m. (!n. n < m ==> P n) ==> P m) ==> (!m n. n <= m ==> P n)
+  GEN_INDUCT_thm  |- !P. (!m. (!n. n < m ==> P n) ==> P m) ==> (!m. P m)
+  
+******************** gen_induct ********************
+\end{verbatim}
+
+\section*{The Theory leadsto}
+
+\begin{verbatim}
+Parents --  gen_induct     
+Constants --
+  In ":(* -> bool) -> (((* -> bool) -> bool) -> bool)"
+  LEADSTO ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  EQmetric ":(* -> num) -> (num -> (* -> bool))"
+  LESSmetric ":(* -> num) -> (num -> (* -> bool))"
+  LUB ":((* -> bool) -> bool) -> (* -> bool)"
+  LeadstoRel
+    ":((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))) ->
+      ((* -> *)list -> bool)"
+  LEADSTO2Fn
+    ":((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))) ->
+      ((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool)))"
+  LEADSTO2 ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  LEADSTO2Fam
+    ":((* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))) ->
+      ((* -> *)list -> bool)"     
+Infixes --
+  In ":(* -> bool) -> (((* -> bool) -> bool) -> bool)"
+  LEADSTO ":(* -> bool) -> ((* -> bool) -> ((* -> *)list -> bool))"
+  EQmetric ":(* -> num) -> (num -> (* -> bool))"
+  LESSmetric ":(* -> num) -> (num -> (* -> bool))"     
+Definitions --
+  LUB  |- !P. LUB P = (\s. ?p. P p /\ p s)
+  In  |- !p P. p In P = P p
+  LeadstoRel
+    |- !R Pr.
+        LeadstoRel R Pr =
+        (!p q.
+          ((p ENSURES q)Pr ==> R p q Pr) /\
+          (!r. R p r Pr /\ R r q Pr ==> R p q Pr) /\
+          (!P. (p = LUB P) /\ (!p'. p' In P ==> R p' q Pr) ==> R p q Pr))
+  LEADSTO
+    |- !p q Pr. (p LEADSTO q)Pr = (!R. LeadstoRel R Pr ==> R p q Pr)
+  LEADSTO2Fn
+    |- !R.
+        LEADSTO2Fn R =
+        (\p q Pr.
+          (p ENSURES q)Pr \/
+          (?r. (p ENSURES r)Pr /\ R r q Pr) \/
+          (?P. (p = LUB P) /\ (!p'. p' In P ==> R p' q Pr)))
+  LEADSTO2
+    |- !p q Pr.
+        LEADSTO2 p q Pr =
+        (!R.
+          (!p' q'. LEADSTO2Fn R p' q' Pr ==> R p' q' Pr) ==> R p q Pr)
+  LEADSTO2Fam
+    |- !R Pr.
+        LEADSTO2Fam R Pr =
+        (!p q.
+          ((p ENSURES q)Pr ==> R p q Pr) /\
+          (!r. (p ENSURES r)Pr /\ R r q Pr ==> R p q Pr) /\
+          (!P. (!p'. p' In P ==> R p' q Pr) ==> R(LUB P)q Pr))
+  EQmetric  |- !M m. M EQmetric m = (\s. M s = m)
+  LESSmetric  |- !M m. M LESSmetric m = (\s. (M s) < m)
+  
+Theorems --
+  LEADSTO_thm0  |- !p q Pr. (p ENSURES q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm1
+    |- !p r q Pr. (p LEADSTO r)Pr /\ (r LEADSTO q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm2
+    |- !p r q Pr. (p ENSURES r)Pr /\ (r LEADSTO q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm2a
+    |- !p r q Pr. (p ENSURES r)Pr /\ (r ENSURES q)Pr ==> (p LEADSTO q)Pr
+  LEADSTO_thm3
+    |- !p P q Pr.
+        (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr) ==>
+        (p LEADSTO q)Pr
+  LEADSTO_thm3a
+    |- !P q Pr.
+        (!p. p In P ==> (p LEADSTO q)Pr) ==> ((LUB P) LEADSTO q)Pr
+  LEADSTO_thm3c
+    |- !P q Pr. (!i. ((P i) LEADSTO q)Pr) ==> (($?* P) LEADSTO q)Pr
+  LEADSTO_thm4
+    |- !p1 p2 q Pr.
+        (p1 LEADSTO q)Pr /\ (p2 LEADSTO q)Pr ==>
+        ((p1 \/* p2) LEADSTO q)Pr
+  LEADSTO_thm5
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p LEADSTO r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm6
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm7
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p ENSURES r)Pr /\ (r ENSURES q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm8
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm9
+    |- !p q Pr.
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm11
+    |- !p q st Pr.
+        (?r. (p ENSURES r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr)) =
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm12  |- !p st Pr. (p LEADSTO p)(CONS st Pr)
+  LEADSTO_thm13
+    |- !p q st Pr.
+        (?r. (p LEADSTO r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr)) =
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm14
+    |- !p q st Pr.
+        (?r. (p LEADSTO r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr)) =
+        (?r. (p ENSURES r)(CONS st Pr) /\ (r LEADSTO q)(CONS st Pr))
+  LEADSTO_thm15
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (!r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm16
+    |- !p q Pr.
+        (!r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> (p LEADSTO q)Pr)) =
+        (p LEADSTO q)Pr
+  LEADSTO_thm17
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\
+            ((p LEADSTO r)Pr ==> X p r Pr) /\
+            (r LEADSTO q)Pr /\
+            ((r LEADSTO q)Pr ==> X r q Pr) ==>
+            (p LEADSTO q)Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+            ((LUB P) LEADSTO q)Pr ==>
+            X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm18
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\
+          ((p LEADSTO r)Pr ==> X p r Pr) /\
+          (r LEADSTO q)Pr /\
+          ((r LEADSTO q)Pr ==> X r q Pr) ==>
+          (p LEADSTO q)Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+          ((LUB P) LEADSTO q)Pr ==>
+          X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm19
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\ X p r Pr /\ (r LEADSTO q)Pr /\ X r q Pr ==>
+            (p LEADSTO q)Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            ((LUB P) LEADSTO q)Pr ==>
+            X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm20
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\ X p r Pr /\ (r LEADSTO q)Pr /\ X r q Pr ==>
+          (p LEADSTO q)Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q Pr) ==>
+          ((LUB P) LEADSTO q)Pr ==>
+          X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm21
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r. X p r Pr /\ X r q Pr ==> X p q Pr) /\
+          (!P. (p = LUB P) /\ (!p. p In P ==> X p q Pr) ==> X p q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm22
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr. X p r Pr /\ X r q Pr ==> X p q Pr) /\
+        (!p P q Pr.
+          (p = LUB P) /\ (!p. p In P ==> X p q Pr) ==> X p q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm23
+    |- !X Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (p = LUB P) /\
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            X p q Pr)) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm24
+    |- !X Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p LEADSTO r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            X(LUB P)q Pr)) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm25
+    |- !p q st Pr. (!s. p s ==> q s) ==> (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm26
+    |- !p q q' st Pr.
+        (p LEADSTO q)(CONS st Pr) ==> (p LEADSTO (q \/* q'))(CONS st Pr)
+  LEADSTO_thm27
+    |- !p q p' q' st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (p' LEADSTO q')(CONS st Pr) ==>
+        ((p \/* p') LEADSTO (q \/* q'))(CONS st Pr)
+  LEADSTO_thm28
+    |- !p q b r st Pr.
+        (p LEADSTO (q \/* b))(CONS st Pr) /\ (b LEADSTO r)(CONS st Pr) ==>
+        (p LEADSTO (q \/* r))(CONS st Pr)
+  LEADSTO_thm29
+    |- !p q r b st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (r UNLESS b)(CONS st Pr) ==>
+        ((p /\* r) LEADSTO ((q /\* r) \/* b))(CONS st Pr)
+  LEADSTO_thm30
+    |- !p st Pr. (p LEADSTO FALSE)(CONS st Pr) ==> (!s. ~* p s)
+  LEADSTO_cor1
+    |- !p b q Pr.
+        ((p /\* b) LEADSTO q)Pr /\ ((p /\* (~* b)) LEADSTO q)Pr ==>
+        (p LEADSTO q)Pr
+  LEADSTO_cor2
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ r STABLE (CONS st Pr) ==>
+        ((p /\* r) LEADSTO (q /\* r))(CONS st Pr)
+  LEADSTO_cor3
+    |- !p q st Pr.
+        (p LEADSTO q)(CONS st Pr) =
+        ((p /\* (~* q)) LEADSTO q)(CONS st Pr)
+  LEADSTO_cor4
+    |- !p b q st Pr.
+        ((p /\* b) LEADSTO q)(CONS st Pr) /\
+        ((p /\* (~* b)) LEADSTO ((p /\* b) \/* q))(CONS st Pr) ==>
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_cor5
+    |- !p q r st Pr.
+        ((p /\* q) LEADSTO r)(CONS st Pr) ==>
+        (p LEADSTO ((~* q) \/* r))(CONS st Pr)
+  LEADSTO_cor6
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (r UNLESS (q /\* r))(CONS st Pr) ==>
+        ((p /\* r) LEADSTO (q /\* r))(CONS st Pr)
+  LEADSTO_cor7
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (r /\* (~* q)) STABLE (CONS st Pr) ==>
+        (!s. (p /\* r)s ==> q s)
+  LEADSTO_cor8
+    |- !p r q st Pr.
+        (p LEADSTO r)(CONS st Pr) ==> ((p /\* q) LEADSTO r)(CONS st Pr)
+  LEADSTO_cor9
+    |- !p q r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\ (!s. q s ==> r s) ==>
+        (p LEADSTO r)(CONS st Pr)
+  LEADSTO_cor10
+    |- !P q Pr.
+        (!i. ((P i) LEADSTO q)Pr) ==> (!i. ((\<=/* P i) LEADSTO q)Pr)
+  LEADSTO_cor11  |- !p st Pr. (FALSE LEADSTO p)(CONS st Pr)
+  LEADSTO_cor12
+    |- !P q st Pr.
+        (!i. ((P i) LEADSTO q)(CONS st Pr)) ==>
+        (!i. ((\</* P i) LEADSTO q)(CONS st Pr))
+  LEADSTO2_thm0  |- !p q Pr. (p ENSURES q)Pr ==> LEADSTO2 p q Pr
+  LEADSTO2_thm1
+    |- !p r q Pr. (p ENSURES r)Pr /\ LEADSTO2 r q Pr ==> LEADSTO2 p q Pr
+  LEADSTO2_thm3
+    |- !P q Pr. (!p. p In P ==> LEADSTO2 p q Pr) ==> LEADSTO2(LUB P)q Pr
+  LEADSTO2_thm3a
+    |- !P q Pr.
+        (p = LUB P) /\ (!p. p In P ==> LEADSTO2 p q Pr) ==>
+        LEADSTO2 p q Pr
+  LEADSTO2_thm4
+    |- !p1 p2 q Pr.
+        LEADSTO2 p1 q Pr /\ LEADSTO2 p2 q Pr ==> LEADSTO2(p1 \/* p2)q Pr
+  LEADSTO2_thm8
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r. (p ENSURES r)Pr /\ X r q Pr ==> X p q Pr) /\
+          (!P. (!p. p In P ==> X p q Pr) ==> X(LUB P)q Pr)) ==>
+        LEADSTO2 p q Pr ==>
+        X p q Pr
+  LEADSTO2_thm2
+    |- !p r q Pr. LEADSTO2 p r Pr /\ LEADSTO2 r q Pr ==> LEADSTO2 p q Pr
+  LEADSTO2_thm5
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. LEADSTO2 p r Pr /\ LEADSTO2 r q Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> LEADSTO2 p q Pr)) =
+        LEADSTO2 p q Pr
+  LEADSTO2_thm6
+    |- !p q Pr.
+        (p ENSURES q)Pr \/
+        (?r. (p ENSURES r)Pr /\ LEADSTO2 r q Pr) \/
+        (?P. (p = LUB P) /\ (!p. p In P ==> LEADSTO2 p q Pr)) =
+        LEADSTO2 p q Pr
+  LEADSTO2_thm7
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p ENSURES r)Pr /\
+            LEADSTO2 r q Pr /\
+            (LEADSTO2 r q Pr ==> X r q Pr) ==>
+            LEADSTO2 p q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> LEADSTO2 p q Pr) /\
+            (!p. p In P ==> LEADSTO2 p q Pr ==> X p q Pr) ==>
+            LEADSTO2(LUB P)q Pr ==>
+            X(LUB P)q Pr)) ==>
+        LEADSTO2 p q Pr ==>
+        X p q Pr
+  LEADSTO_EQ_LEADSTO2  |- !p q Pr. (p LEADSTO q)Pr = LEADSTO2 p q Pr
+  LEADSTO_thm31
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r. (p ENSURES r)Pr /\ X r q Pr ==> X p q Pr) /\
+          (!P. (!p. p In P ==> X p q Pr) ==> X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm32
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr. (p ENSURES r)Pr /\ X r q Pr ==> X p q Pr) /\
+        (!P q Pr. (!p. p In P ==> X p q Pr) ==> X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm33
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p ENSURES r)Pr /\
+            (r LEADSTO q)Pr /\
+            ((r LEADSTO q)Pr ==> X r q Pr) ==>
+            (p LEADSTO q)Pr ==>
+            X p q Pr) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+            ((LUB P) LEADSTO q)Pr ==>
+            X(LUB P)q Pr)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q Pr
+  LEADSTO_thm34
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p ENSURES r)Pr /\
+          (r LEADSTO q)Pr /\
+          ((r LEADSTO q)Pr ==> X r q Pr) ==>
+          (p LEADSTO q)Pr ==>
+          X p q Pr) /\
+        (!P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> (p LEADSTO q)Pr ==> X p q Pr) ==>
+          ((LUB P) LEADSTO q)Pr ==>
+          X(LUB P)q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm34a
+    |- !X Pr.
+        (!p q. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q.
+          (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X r q Pr ==> X p q Pr) /\
+        (!P q.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q Pr) ==>
+          X(LUB P)q Pr) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm34b
+    |- !X.
+        (!p q st Pr. (p ENSURES q)(CONS st Pr) ==> X p q(CONS st Pr)) /\
+        (!p r q st Pr.
+          (p ENSURES r)(CONS st Pr) /\
+          (r LEADSTO q)(CONS st Pr) /\
+          X r q(CONS st Pr) ==>
+          X p q(CONS st Pr)) /\
+        (!P q st Pr.
+          (!p. p In P ==> (p LEADSTO q)(CONS st Pr)) /\
+          (!p. p In P ==> X p q(CONS st Pr)) ==>
+          X(LUB P)q(CONS st Pr)) ==>
+        (!p q st Pr. (p LEADSTO q)(CONS st Pr) ==> X p q(CONS st Pr))
+  LEADSTO_thm35
+    |- !p q p' q' r st Pr.
+        (p LEADSTO q)(CONS st Pr) /\
+        (p' LEADSTO q')(CONS st Pr) /\
+        (q UNLESS r)(CONS st Pr) /\
+        (q' UNLESS r)(CONS st Pr) ==>
+        ((p /\* p') LEADSTO ((q /\* q') \/* r))(CONS st Pr)
+  LEADSTO_thm36
+    |- !p q st Pr M.
+        (!m.
+          ((p /\* (M EQmetric m)) LEADSTO
+           ((p /\* (M LESSmetric m)) \/* q))
+          (CONS st Pr)) ==>
+        (p LEADSTO q)(CONS st Pr)
+  LEADSTO_thm37
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q) /\
+          (!r.
+            (p LEADSTO r)Pr /\ X p r /\ (r LEADSTO q)Pr /\ X r q ==>
+            X p q) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+            X(LUB P)q)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q
+  LEADSTO_thm38
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\ X p r /\ (r LEADSTO q)Pr /\ X r q ==> X p q) /\
+        (!P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+          X(LUB P)q) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q)
+  LEADSTO_thm39
+    |- !X p q Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q) /\
+          (!r. (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X r q ==> X p q) /\
+          (!P.
+            (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+            X(LUB P)q)) ==>
+        (p LEADSTO q)Pr ==>
+        X p q
+  LEADSTO_thm40
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q) /\
+        (!p r q Pr.
+          (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X r q ==> X p q) /\
+        (!P q Pr.
+          (!p. p In P ==> (p LEADSTO q)Pr) /\ (!p. p In P ==> X p q) ==>
+          X(LUB P)q) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q)
+  LEADSTO_thm41
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p LEADSTO r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (p = LUB P) /\
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> X p q Pr) ==>
+          X p q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm42
+    |- !X Pr.
+        (!p q.
+          ((p ENSURES q)Pr ==> X p q Pr) /\
+          (!r.
+            (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+            X p q Pr) /\
+          (!P.
+            (p = LUB P) /\
+            (!p. p In P ==> (p LEADSTO q)Pr) /\
+            (!p. p In P ==> X p q Pr) ==>
+            X p q Pr)) ==>
+        (!p q. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_thm43
+    |- !X.
+        (!p q Pr. (p ENSURES q)Pr ==> X p q Pr) /\
+        (!p r q Pr.
+          (p ENSURES r)Pr /\ (r LEADSTO q)Pr /\ X p r Pr /\ X r q Pr ==>
+          X p q Pr) /\
+        (!p P q Pr.
+          (p = LUB P) /\
+          (!p. p In P ==> (p LEADSTO q)Pr) /\
+          (!p. p In P ==> X p q Pr) ==>
+          X p q Pr) ==>
+        (!p q Pr. (p LEADSTO q)Pr ==> X p q Pr)
+  LEADSTO_cor13
+    |- !P Q r st Pr.
+        (!i. ((P i) LEADSTO ((Q i) \/* r))(CONS st Pr)) /\
+        (!i. ((Q i) UNLESS r)(CONS st Pr)) ==>
+        (!i. ((/<=\* P i) LEADSTO ((/<=\* Q i) \/* r))(CONS st Pr))
+  LEADSTO_cor14
+    |- !p q r p' q' st Pr.
+        (p LEADSTO (q \/* r))(CONS st Pr) /\
+        (q UNLESS r)(CONS st Pr) /\
+        (p' LEADSTO (q' \/* r))(CONS st Pr) /\
+        (q' UNLESS r)(CONS st Pr) ==>
+        ((p /\* p') LEADSTO ((q /\* q') \/* r))(CONS st Pr)
+  LEADSTO_cor15
+    |- !p q r b p' q' r' b' st Pr.
+        (p LEADSTO (q \/* r))(CONS st Pr) /\
+        (q UNLESS b)(CONS st Pr) /\
+        (p' LEADSTO (q' \/* r'))(CONS st Pr) /\
+        (q' UNLESS b')(CONS st Pr) ==>
+        ((p /\* p') LEADSTO
+         ((q /\* q') \/* ((r \/* b) \/* (r' \/* b'))))
+        (CONS st Pr)
+  LEADSTO_cor16
+    |- !P Q R B st Pr.
+        (!i. ((P i) LEADSTO ((Q i) \/* (R i)))(CONS st Pr)) /\
+        (!i. ((Q i) UNLESS (B i))(CONS st Pr)) ==>
+        (!i.
+          ((/<=\* P i) LEADSTO
+           ((/<=\* Q i) \/* ((\<=/* R i) \/* (\<=/* B i))))
+          (CONS st Pr))
+  
+******************** leadsto ********************
+\end{verbatim}
+
+\section*{The Theory comp\_unity}
+
+\begin{verbatim}
+Parents --  leadsto     
+Theorems --
+  COMP_UNLESS_thm1
+    |- !p q FPr GPr.
+        (p UNLESS q)(APPEND FPr GPr) =
+        (p UNLESS q)FPr /\ (p UNLESS q)GPr
+  COMP_ENSURES_thm1
+    |- !p q FPr GPr.
+        (p ENSURES q)(APPEND FPr GPr) =
+        (p ENSURES q)FPr /\ (p UNLESS q)GPr \/
+        (p ENSURES q)GPr /\ (p UNLESS q)FPr
+  COMP_ENSURES_cor0
+    |- !p q FPr GPr.
+        (p ENSURES q)FPr /\ (p UNLESS q)GPr ==>
+        (p ENSURES q)(APPEND FPr GPr)
+  COMP_ENSURES_cor1
+    |- !p q FPr GPr.
+        (p ENSURES q)GPr /\ (p UNLESS q)FPr ==>
+        (p ENSURES q)(APPEND FPr GPr)
+  COMP_UNITY_cor0
+    |- !p0 p FPr GPr.
+        p INVARIANT (p0,APPEND FPr GPr) =
+        p INVARIANT (p0,FPr) /\ p INVARIANT (p0,GPr)
+  COMP_UNITY_cor1
+    |- !p FPr GPr.
+        p STABLE (APPEND FPr GPr) = p STABLE FPr /\ p STABLE GPr
+  COMP_UNITY_cor2
+    |- !p q FPr GPr.
+        (p UNLESS q)FPr /\ p STABLE GPr ==> (p UNLESS q)(APPEND FPr GPr)
+  COMP_UNITY_cor3
+    |- !p0 p FPr GPr.
+        p INVARIANT (p0,FPr) /\ p STABLE GPr ==>
+        p INVARIANT (p0,APPEND FPr GPr)
+  COMP_UNITY_cor4
+    |- !p q FPr GPr.
+        (p ENSURES q)FPr /\ p STABLE GPr ==>
+        (p ENSURES q)(APPEND FPr GPr)
+  COMP_UNITY_cor5
+    |- !p q FPr GPr. (p UNLESS q)(APPEND FPr GPr) ==> (p UNLESS q)GPr
+  COMP_UNITY_cor6
+    |- !p q FPr GPr. (p UNLESS q)(APPEND FPr GPr) ==> (p UNLESS q)FPr
+  COMP_UNITY_cor7
+    |- !p q st FPr. (p UNLESS q)(CONS st FPr) ==> (p UNLESS q)FPr
+  COMP_UNITY_cor8
+    |- !p FPr GPr.
+        (p ENSURES (~* p))FPr ==> (p ENSURES (~* p))(APPEND FPr GPr)
+  COMP_UNITY_cor9
+    |- !p q FPr GPr.
+        p STABLE FPr /\ (p UNLESS q)GPr ==> (p UNLESS q)(APPEND FPr GPr)
+  COMP_UNITY_cor10
+    |- !p q FPr GPr.
+        (p UNLESS q)(APPEND FPr GPr) = (p UNLESS q)(APPEND GPr FPr)
+  COMP_UNITY_cor11
+    |- !p q FPr GPr.
+        (p ENSURES q)(APPEND FPr GPr) = (p ENSURES q)(APPEND GPr FPr)
+  COMP_UNITY_cor12
+    |- !p q Pr1 Pr2.
+        (p LEADSTO q)(APPEND Pr1 Pr2) = (p LEADSTO q)(APPEND Pr2 Pr1)
+  COMP_UNITY_cor13
+    |- !p FPr GPr. p STABLE (APPEND FPr GPr) = p STABLE (APPEND GPr FPr)
+  COMP_UNITY_cor14
+    |- !p0 p FPr GPr.
+        p INVARIANT (p0,APPEND FPr GPr) =
+        p INVARIANT (p0,APPEND GPr FPr)
+  
+******************** comp_unity ********************
+\end{verbatim}
+}
+
+\cleardoublepage
+\markboth{Bibliography}{Bibliography}
+\begin{thebibliography}{{Gor}87b}
+
+\bibitem[And92]{FA92}
+Flemming Andersen.
+\newblock {\em {A Theorem Prover for UNITY in Higher Order Logic}}.
+\newblock PhD thesis, Technical University of Denmark, 1992.
+
+\bibitem[AP91]{FAKDP91}
+Flemming Andersen and Kim~Dam Petersen.
+\newblock {Recursive Boolean Functions in HOL}.
+\newblock In {\em {1991 International Workshop on the HOL Theorem Proving
+  System and its Applications}}, pages 367--377. IEEE Computer Society, August
+  1991.
+
+\bibitem[BA90]{BA90}
+R.J.R Back and S.~Agerholm.
+\newblock {Predicate Transformers and typed $\lambda$-calculus}.
+\newblock In {\em {2nd Nordic Workshop on Program Correctness}}, October 1990.
+
+\bibitem[CM88]{CM88}
+K.~Mani Chandy and Jayadev Misra.
+\newblock {\em {Parallel Program Design: A Foundation}}.
+\newblock Addison--Wesley, 1988.
+
+\bibitem[Dij76]{Dijk76}
+Edsger~W. Dijkstra.
+\newblock {\em {A Discipline of Programming}}.
+\newblock Series in Automatic Computation. Prentice--Hall, Inc., 1976.
+
+\bibitem[GGS88]{JST88}
+Stephen Garland, John Guttag, and J{\o}rgen Staunstrup.
+\newblock {Verification of VLSI circuits using LP}.
+\newblock Technical report, DAIMI PB-258, University of {\AA}rhus, Denmark,
+  July 1988.
+
+\bibitem[Gor87a]{Gordon87}
+Michael~J.C. Gordon.
+\newblock {\em {HOL - A Proof Generating System for Higher-Order Logic}}.
+\newblock Cambridge University, Computer Laboratory, 1987.
+
+\bibitem[{Gor}87b]{HOLMAN}
+{Gordon et. al.}
+\newblock {The HOL Manual}.
+\newblock Technical report, Computer Laboratory, Cambridge University, June
+  1987.
+
+\bibitem[GQNL90]{GrHHL90}
+P.~Gr{\o}nning, T.~Quist~Nielsen, and Hans~Henrik L{\o}vengreen.
+\newblock {Refinement and Composition of Transition-based Rely-Guarantee
+  Specifications with Auxiliary Variables}.
+\newblock {\em Submitted for publication}, 1990.
+
+\bibitem[Hoa69]{Hoare69}
+C.A.R. Hoare.
+\newblock {An axiomatic basis for computer programming}.
+\newblock {\em Communications of the ACM}, 12(10):576--580, 1969.
+
+\bibitem[Mel88]{Melham88}
+T.F. Melham.
+\newblock {Automating Recursive Type Definitions in Higher Order Logic}.
+\newblock Technical Report No. 146, Computer Laboratory, University of
+  Cambridge, September 1988.
+
+\bibitem[Mis90]{Mi90}
+Jayadev Misra.
+\newblock {Soundness of the Substitution Axiom}.
+\newblock {Notes on UNITY}, March 1990.
+
+\bibitem[OL82]{OwickiLamport82}
+S.~Owicki and L.~Lamport.
+\newblock {Proving Liveness Properties of Concurrent Programs}.
+\newblock {\em ACM Transactions on Programming Languages and Systems}, 4(3),
+  July 1982.
+
+\bibitem[San91]{BS90a}
+Beverly~A. Sanders.
+\newblock {Eliminating the Substitution Axiom from UNITY Logic}.
+\newblock {\em Formal Aspects of Computing}, 3(2):189--205, April-June 1991.
+
+\bibitem[Sta85]{St85}
+E.W. Stark.
+\newblock {\em {A Proof Technique for Rely/Guarantee Properties}}, pages
+  369--391.
+\newblock LNCS 206. Springer--Verlag, 1985.
+
+\bibitem[Tar55]{Tarski55}
+Alfred Tarski.
+\newblock {A Lattice-Theoretical Fixpoint Theorem and its Applications}.
+\newblock {\em Pacific Journal of Mathematics}, 5:285--309, 1955.
+
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,25 @@
+\DOC is_fun
+
+\TYPE {is_fun : (term -> bool)}
+
+\SYNOPSIS
+Check if a term is a function.
+
+\LIBRARY window
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+   #is_fun "f:*->**";;
+   true : bool
+
+   #is_fun "a:*";;
+   false : bool
+}
+
+\SEEALSO
+dom, ran
+
+\ENDDOC

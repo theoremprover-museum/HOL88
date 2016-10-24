@@ -1,0 +1,26 @@
+\DOC word_separators
+
+\TYPE {word_separators : string list}
+
+\SYNOPSIS
+A list of white-space characters used when splitting a string into words.
+
+\KEYWORDS
+string.
+
+\DESCRIBE
+{word_separators} is a two-element list of single-character strings. The
+two characters are the space character (or blank) and the carriage-return
+character. These are the characters that are considered to be word
+separators by the function {words}.
+
+\EXAMPLE
+{
+#word_separators;;
+[` `; `
+`] : string list
+}
+\SEEALSO
+words.
+
+\ENDDOC

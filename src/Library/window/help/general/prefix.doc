@@ -1,0 +1,26 @@
+\DOC prefix
+
+\TYPE {prefix : (* list -> * list -> bool)}
+
+\SYNOPSIS
+Check is one list is a prefix of another.
+
+\LIBRARY window
+
+\DESCRIBE
+{prefix l1 l2} is true iff {l1} is a prefix of {l2};
+that is, there exists some {l} such that {(l1 @ l) = l2}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+   #prefix [1; 2] [1; 2; 3];;
+   true : bool
+}
+
+\SEEALSO
+before, after, suffix
+
+\ENDDOC

@@ -1,0 +1,23 @@
+\DOC library_search_path
+
+\TYPE {library_search_path : (void -> string list)}
+
+\SYNOPSIS
+Returns the internal search path use by HOL to find libraries.
+
+\DESCRIBE
+Evaluating {library_search_path()} returns a list of strings representing the
+pathnames of the directories that are searched when the {load_library} function
+searches for libraries. Although the library search path can be set to an
+arbitrary list of strings, each string is normally expected to be a pathname
+with `{/}' as its final character.  When {load_library} looks for a library
+load file, the directories in the library search path are searched in the order
+in which they occur in the list returned by {library_search_path}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO 
+library_pathname, load_library, set_library_search_path.
+
+\ENDDOC

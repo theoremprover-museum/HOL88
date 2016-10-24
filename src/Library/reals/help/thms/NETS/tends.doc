@@ -1,0 +1,5 @@
+\THEOREM tends NETS
+|- !s l top g.
+    (s tends l)(top,g) =
+    (!N. neigh top(N,l) ==> (?n. g n n /\ (!m. g m n ==> N(s m))))
+\ENDTHEOREM

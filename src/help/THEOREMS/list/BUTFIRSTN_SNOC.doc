@@ -1,0 +1,5 @@
+\THEOREM BUTFIRSTN_SNOC list
+|- !n l.
+    n <= (LENGTH l) ==>
+    (!x. BUTFIRSTN n(SNOC x l) = SNOC x(BUTFIRSTN n l))
+\ENDTHEOREM

@@ -1,0 +1,161 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:15
+**prettyp.tex
+(prettyp.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+(win-macros.tex)
+\@indexfile=\write3
+
+Writing index file prettyp.idx 
+(prettyp.aux (title.aux) (intro.aux) (language.aux) (functions.aux)
+(datatypes.aux) (link_to_hol.aux) (debugging.aux) (examples.aux) (algorithm.aux
+) (holppspec.aux) (references.aux) (syntax.aux) (types.aux) (entries.aux)
+(index.aux)) (title.tex [1
+
+
+] [2]) (prettyp.toc [3
+
+
+] [4])
+\tf@toc=\write4
+ [5] [6
+
+] (intro.tex
+Chapter 1.
+[1
+
+
+] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17])
+[18] (language.tex
+Chapter 2.
+[19
+
+
+
+] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32] [33]
+[34] [35] [36] [37] [38] [39]) [40] (functions.tex
+Chapter 3.
+[41
+
+
+
+] [42] [43] [44] [45] [46]) [47] (datatypes.tex [48
+
+
+
+]
+Chapter 4.
+[49]) [50] (link_to_hol.tex
+Chapter 5.
+[51
+
+
+
+] [52] [53] [54] [55] [56] [57] [58] [59] [60]) [61] (debugging.tex [62
+
+
+
+]
+Chapter 6.
+[63]) [64] (examples.tex
+Chapter 7.
+[65
+
+
+
+] [66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79]
+[80]) [81] (algorithm.tex [82
+
+
+
+]
+Chapter 8.
+(ppboxmacros.tex) [83] [84] [85] [86] [87] [88] [89] [90]) [91] (holppspec.tex
+[92
+
+
+
+]
+Chapter 9.
+[93] [94] [95] [96] [97] [98] [99] [100] [101] [102]) [103] (references.tex
+[104
+
+
+
+]) [105] (syntax.tex [106
+
+
+
+]
+Appendix A.
+[107] [108] [109] [110]) [111] (types.tex [112
+
+
+
+]
+Appendix B.
+) [113] (entries.tex [114
+
+
+
+]
+Appendix C.
+(entries-intro.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 4.71832
+.\write2{\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberl\
+ETC.}
+.\mark{{{Appendix\ C. \ ML Functions in the prettyp Library}}{}}
+.\write2{\@writefile{lof}{\string\addvspace\space {10\p@ }}}
+.\write2{\@writefile{lot}{\string\addvspace\space {10\p@ }}}
+.\glue(\topskip) 2.00002
+.etc.
+
+ [115]
+[116] [117] [118] [119] [120] [121] [122] [123] [124] [125] [126] [127]
+[128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139]
+[140] [141] [142] [143] [144] [145] [146] [147] [148]) [149] (index.tex
+[150
+
+
+
+] [151
+
+]) (prettyp.aux (title.aux) (intro.aux) (language.aux) (functions.aux) (datatyp
+es.aux) (link_to_hol.aux) (debugging.aux) (examples.aux)
+(algorithm.aux) (holppspec.aux) (references.aux) (syntax.aux) (types.aux)
+(entries.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 691 strings out of 11977
+ 5672 string characters out of 87025
+ 49607 words of memory out of 262141
+ 2360 multiletter control sequences out of 9500
+ 19472 words of font info for 74 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 18i,12n,27p,206b,458s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on prettyp.dvi (157 pages, 363300 bytes).

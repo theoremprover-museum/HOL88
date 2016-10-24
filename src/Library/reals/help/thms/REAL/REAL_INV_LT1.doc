@@ -1,0 +1,3 @@
+\THEOREM REAL_INV_LT1 REAL
+|- !x. (& 0) < x /\ x < (& 1) ==> (& 1) < (inv x)
+\ENDTHEOREM

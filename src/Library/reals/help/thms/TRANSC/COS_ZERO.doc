@@ -1,0 +1,6 @@
+\THEOREM COS_ZERO TRANSC
+|- !x.
+    (cos x = & 0) =
+    (?n. ~EVEN n /\ (x = (& n) * (pi / (& 2)))) \/
+    (?n. ~EVEN n /\ (x = --((& n) * (pi / (& 2)))))
+\ENDTHEOREM

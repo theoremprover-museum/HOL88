@@ -1,0 +1,32 @@
+% A1.6 CONSTANTS %
+
+constdec --> name [=] {MK_two(`constdec`,POP,const)}.
+
+const --> const1 more_consts {MK_one(`const`,POP)}.
+
+more_consts --> [|] {add_to_list(POP,const1)} more_consts
+              | [].
+
+const1 --> [\[] int [\]] {MK_two(`const1`,POP,const1)}
+         | [STRING] [\[] int [\]] {MK_two(`const1_STRING`,POP,const2)}
+           {MK_one(`const1`,POP)}
+         | {MK_one(`const1`,const2)}.
+
+const2 --> [?] {MK_one(`const2_uninit`,const2)} {MK_one(`const2`,POP)}
+         | [(] const more_consts [)] 
+           {MK_one(`const2_tuple`,POP)} {MK_one(`const2`,POP)}
+         | name const2_name_stuff {MK_one(`const2`,POP)}.
+
+const2_name_stuff --> [/] [(] int [..] 
+                      {MK_three(`const2_int_range`,POP,POP,int)} [)]
+                    | [/] {MK_two(`const2_formula2`,POP,formula2)}
+                    | {MK_two(`const2_char`,POP,char)}
+                    | {MK_two(`const2_string`,POP,string)}
+                    | [&] {MK_two(`const2_const2`,POP,const2)}
+                    | [(] char [..] 
+                      {MK_three(`const2_char_range`,POP,POP,char)} [)]
+                    | [].
+
+more_consts --> [,] {add_to_list(POP,const)} more_consts
+              | [].
+

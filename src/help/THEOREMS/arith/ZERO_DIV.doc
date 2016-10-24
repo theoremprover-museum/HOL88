@@ -1,0 +1,3 @@
+\THEOREM ZERO_DIV arithmetic
+|- !n. 0 < n ==> (0 DIV n = 0)
+\ENDTHEOREM

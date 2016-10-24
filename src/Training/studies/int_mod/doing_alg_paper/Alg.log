@@ -1,0 +1,88 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  13 MAR 1991 17:42
+**Alg
+(Alg.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (/usr/lib/tex/macros/fleqn.sty
+\mathindent=\dimen99
+) (alltt.sty)
+(layout.sty
+\@myenumdepth=\count87
+\c@myenumi=\count88
+) (commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count89
+) (pic-macros.tex) (docmacros.tex) (Alg.aux) [1
+
+]
+[2] (mac.tex
+\mycntring=\skip43
+\c@theorem=\count90
+) (Aintro.tex [1]) (A1.tex [2] [3] [4] [5]) (A2.tex [6] [7]
+[8] [9] [10] [11] [12] [13] [14]) (A-rest.tex [15]) (Aref.tex) (ApA.tex
+[16] [17]) (ApB.tex [18] [19] [20]) (ApC.tex [21] [22] [23] [24] [25] [26]
+[27] [28] [29] [30]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 2.66667
+.\hbox(7.33333+1.11383)x455.24408, glue set 374.96904fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\penalty 10000
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 5.05286
+.\hbox(8.33331+2.66666)x455.24408, glue set 47.69388fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 6.175
+..\penalty 10000
+..\glue 6.175
+..etc.
+.etc.
+
+ [31])
+(ApD.tex [32] [33] [34]) (ApE.tex [35]
+Overfull \hbox (6.70528pt too wide) in paragraph at lines 2--2
+[]\svtnbf Appendix: Some Mod-u-lar Arith-metic from Group
+
+\hbox(12.0+3.36)x455.24408, glue set - 1.0
+.\hbox(11.856+0.0)x32.92781
+..\glue 0.0
+..\svtnbf E
+..\glue 19.87189
+.\svtnbf A
+.\svtnbf p
+.\svtnbf p
+.\kern0.55199
+.etc.
+
+[36] [37]) [38] (Alg.aux) ) 
+Here is how much of TeX's memory you used:
+ 385 strings out of 4463
+ 2996 string characters out of 63169
+ 39245 words of memory out of 262141
+ 2300 multiletter control sequences out of 9500
+ 18996 words of font info for 72 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 15i,7n,17p,173b,241s stack positions out of 300i,60n,60p,3000b,4000s
+
+Output written on Alg.dvi (40 pages, 104384 bytes).

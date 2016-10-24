@@ -1,0 +1,17 @@
+\DOC show_step
+
+\TYPE {show_step : (searchstep -> foundthm list)}
+
+\SYNOPSIS
+Function to extract a list of the found theorems from a search step.
+
+\LIBRARY trs
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+find_theorems, FT, continue_search, CS, run_search, full_search,
+search_until_find, search_n_theories, search_n_until_find.
+
+\ENDDOC

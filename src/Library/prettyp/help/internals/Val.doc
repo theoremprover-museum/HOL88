@@ -1,0 +1,10 @@
+\DOC Val
+
+\TYPE {Val : (nat -> loop_limit)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

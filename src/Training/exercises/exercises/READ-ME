@@ -1,0 +1,34 @@
++=====================================================================+
+| EXERCISES FOR THE HOL TRAINING COURSE				      |
++=====================================================================+
+
+
+EXERCISE   FILE		DESCRIPTION
+--------   ----         ----------------------------------------------
+0	   ml.ml	some simple ml exercises
+
+1**        syntax.ml	exercises in the various HOL syntax functions.
+
+2          forward.ml	some simple forward-style proofs.
+
+3	   swap.ml	definition of a simple derived inference rule.
+
+4	   rules.ml	definitions of two derived inference rules.
+
+5          conv.ml	definition of a `conv' derived inference rule.
+
+6	   backward.ml	same proofs as in forward.ml, but done using tactics.
+
+7	   add.ml	a simple proof by induction using tactics.
+
+8	   next.ml	a proof about the predicate NEXT.
+
+9	   da.ml	proof of the division algorithm....
+
+
+------------------------------------------------------------------------
+
+NOTE: exercises marked ** are optional, and may be omitted.
+
+
+

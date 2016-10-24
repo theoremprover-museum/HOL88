@@ -1,0 +1,3 @@
+\THEOREM HEX_EXP_N numeral
+|- !n. HEX(CONS 1(REPLICATE n 0)) = 16 EXP n
+\ENDTHEOREM

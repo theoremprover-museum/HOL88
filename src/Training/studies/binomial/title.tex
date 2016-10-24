@@ -1,0 +1,66 @@
+% title.tex %
+% Author, prerequisites and abstract %
+
+% ---------------------------------------------------------------------
+% Parameters customising the document; set by whoever \input's it
+% ---------------------------------------------------------------------
+% \self{} is one word denoting this document, such as "article" or "chapter"
+% \path{} is the path denoting the case-study directory
+%
+% Typical examples:
+% \def\self{article}
+% \def\path{\verb%Training/studies/binomial%}
+% ---------------------------------------------------------------------
+
+\begin{titlepage}
+
+\begin{center}
+{\Huge\bf HOL CASE STUDY}\\
+\vskip .3in
+{\Large\bf The Binomial Theorem proven in HOL.}\\
+\end{center}
+\vskip .4in
+
+\begin{inset}{Author}
+Andrew Gordon\newline
+Computer Laboratory\newline
+New Museums Site\newline
+Pembroke Street\newline
+Cambridge CB2 3QG, UK.\newline
+{\bf Telephone:} +44 223 334650\newline
+{\bf Email:} {\verb%Andrew.Gordon@cl.cam.ac.uk%}
+\end{inset}
+
+\begin{inset}{Concepts illustrated}
+A simple way to define algebraic structures in \HOL{}.
+Translation of mathematical definitions such as sums of series
+and binomial coefficients into \HOL{}.
+Division of a medium sized proof into manageable lemmas.
+\end{inset}
+
+\begin{inset}{Prerequisites}
+At least as much knowledge of \HOL\  as is
+given in {\sl Getting started with HOL}.
+Basic understanding of how to use the goal stack to do forward proof,
+but not necessarily possession of a large vocabulary of tactics.
+\end{inset}
+
+\begin{inset}{Supporting files}
+In the directory \path{}.
+\end{inset}
+
+\begin{inset}{Abstract}
+The Binomial Theorem in \HOL{} is a medium sized worked example whose subject 
+matter is more widely known than any specific piece of hardware 
+or software. This \self{} introduces the small amount of algebra and 
+mathematical notation needed to state and prove the Binomial Theorem, shows 
+how this is rendered in \HOL{}, and outlines the structure of the proof.
+\end{inset}
+
+\setcounter{page}{1}
+\end{titlepage}
+
+\newpage
+\tableofcontents 
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\newpage

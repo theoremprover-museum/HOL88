@@ -1,0 +1,22 @@
+\DOC set_pretty_mode
+
+\TYPE {set_pretty_mode : (bool -> void)}
+
+\SYNOPSIS
+Initializes the pretty-printer.
+
+\DESCRIBE
+{set_pretty_mode true} causes all remaining text in the print queue to be
+printed, and then the pretty-printer is reinitialized.
+
+\FAILURE
+Never fails.
+
+\COMMENTS
+{set_pretty_mode false} should turn the pretty-printer off after printing all
+text in the queue, but the current implementation does not do this.
+
+\SEEALSO
+print_begin, print_end, print_newline.
+
+\ENDDOC

@@ -1,0 +1,48 @@
+\DOC store_thm
+
+\TYPE {store_thm : (string -> string -> thm)}
+
+\SYNOPSIS
+Stores a theorem under the current theory.
+
+\DESCRIBE
+When a proof named by the first argument is completed, {store_thm}
+applies the resulting tactic on the initial goal and produces a
+theorem, which is then stored in a theory with the name given by the
+second argument. The function prints out the tactic which was applied
+to the goal, and returns the theorem proved, which can then be
+assigned to a variable.
+
+\FAILURE
+Fails if there is no proof tree with the given name, or if the top
+goal of the named proof tree is not proved. It also fails if the
+session is not in draft mode, or if there is already a theorem with
+the name given by the second argument in the current theory.
+
+\USES
+This function accomplishes the same purpose as {save_top_thm} in the
+standard subgoal package.
+
+\EXAMPLE
+{
+# store_thm `myproof` `mythm` ;;
+
+saving theorem mythm
+
+solving tactic:
+(REPEAT STRIP_TAC)
+THEN EQ_TAC
+     THENL
+     [ STRIP_TAC
+       THEN (ASM_REWRITE_TAC []);
+       STRIP_TAC
+       THEN (ASM_REWRITE_TAC []) ]
+
+|- !a b. a /\ b = b /\ a
+}
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

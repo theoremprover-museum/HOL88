@@ -1,0 +1,27 @@
+\DOC bound_number
+
+\TYPE {bound_number : (string -> print_int_exp)}
+
+\SYNOPSIS
+Obtains the value bound to a pretty-printer parameter.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{bound_number} takes the name of a pretty-printer parameter as its first
+argument (a string) and returns a function of type:
+{
+   (string # int) list -> print_binding -> int
+}
+\noindent This function yields the integer value associated with the parameter,
+when it is presented with an environment via its two arguments. The binding is
+not used, but is present for consistency.
+
+\FAILURE
+The function fails if the parameter is not present in the parameter list.
+
+\SEEALSO
+is_a_member_of, bound_name, bound_names, bound_child, bound_children,
+bound_context.
+
+\ENDDOC

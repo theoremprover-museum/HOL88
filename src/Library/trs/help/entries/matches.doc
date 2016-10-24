@@ -1,0 +1,38 @@
+\DOC matches
+
+\TYPE {$matches : (term -> term -> thmpattern)}
+
+\SYNOPSIS
+Side-condition test. Tests the value bound to a pattern variable to see if
+it matches a new pattern.
+
+\LIBRARY trs
+
+\DESCRIBE
+{matches} can be used to test whether part of a hypothesis or conclusion
+is a term that matches a specified pattern. Its first argument is a variable
+used in a pattern for the hypothesis/conclusion. The other argument is the
+pattern to be matched with the term to which the variable has been bound. The
+pattern is only tested directly against the term; no attempt is made to match
+inside the term.
+
+\FAILURE
+Fails if the first argument is not a variable. May also cause a failure to
+match, when used in a search, if the pattern variable does not appear in the
+binding.
+
+\EXAMPLE
+Here is a pattern that matches a theorem if the conclusion is an equality in
+which the right-hand side is a conjunction:
+{
+   (conc "l = (r:bool)") Where ("r:bool" matches "x /\ y")
+}
+\noindent In this simple example, we could equally well have used the following
+pattern:
+{
+   conc "l = (x /\ y)"
+}
+\SEEALSO
+contains, has_body, Where.
+
+\ENDDOC

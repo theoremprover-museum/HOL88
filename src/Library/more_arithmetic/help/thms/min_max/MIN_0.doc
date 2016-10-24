@@ -1,0 +1,3 @@
+\THEOREM MIN_0 min_max
+|- !n. MIN 0 n = 0
+\ENDTHEOREM

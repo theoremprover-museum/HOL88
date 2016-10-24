@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_BOUND REAL
+|- !x y d. (abs(x - y)) < d ==> y < (x + d)
+\ENDTHEOREM

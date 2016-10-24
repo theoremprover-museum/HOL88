@@ -1,0 +1,10 @@
+\DOC subtypes
+
+\TYPE {subtypes : (type -> type list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

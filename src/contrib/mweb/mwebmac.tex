@@ -1,0 +1,61 @@
+%
+% FILE: mwebmac.tex
+% By: Wai Wong 27 April 1992
+%
+% This file defines a paralines enviroment for printing the text lines 
+% from the other-language and native-language parts.
+% The text lines in the environment is specified as arguments to
+% the macro \pline. There can be any number of lines in one environment.
+% The macro \pline takes two arguments: the first is a text line from
+% the other-language part, and the second is from the native-language part.
+% The general form of the environment is as follows:
+%
+% \begin{paralines}[c]
+% \pline{other-language text}{native-language text}
+%  ....
+% \end{paralines}
+%
+% The output is formatted acording to the value of the optional argument
+% which must be one of the following characters:
+%   c ---  the output is formatted in two columns:  the text of the other
+%          language part is typeset on the left hand column in the font
+%          \paraleftfont. The text of the native language part is typeset
+%          on the right hand column in the font \pararightfont.
+%   s ---  (default) the output is typeset in a single column with only the
+%	   native-language text in \pararightfont. The text starts at about
+%          a quarter of the line width from the left margin.
+%   n ---  same as the s option, but the text starts from the left margin.
+%
+
+% check to see if this macro file has already been loaded
+\ifx\undefined\mwebmac\def\mwebmac{}\else\endinput\fi
+
+\makeatletter
+\def\sect{\@startsection {section}{1}{\z@}{-3.5ex plus -1ex minus
+ -.2ex}{1.5ex plus .2ex}{\large\bf}}
+\def\subsect{\@startsection {subsection}{2}{\z@}{-3.5ex plus -1ex minus
+ -.2ex}{-1em}{\normalsize\bf}}
+
+\newdimen\halfwid
+\newdimen\quawid
+
+\def\c@line#1#2{\strut\hbox to\halfwid{\paraleftfont#1\hss}\hskip\columnsep%
+ \hbox to\halfwid{\pararightfont#2\hss}\mycr}
+\def\s@line#1#2{\hbox to\quawid{}\hbox to\halfwid{\strut\pararightfont#2\hss}\mycr}
+\def\n@line#1#2{\hbox to\hsize{\strut\pararightfont#2\hss}\mycr}
+\def\paralines{\@ifnextchar[{\@paralines}{\@paralines[s]}}
+\def\@paralines[#1]{\begingroup%
+  \def\pline{\csname #1@line\endcsname}\@par@lines}
+\def\@par@lines{%
+  \def\mycr{\penalty\@M\hskip\parfillskip\penalty-\@M}
+  \rightskip=0pt plus1fil
+  \halfwid=\textwidth  \divide\halfwid by 2%
+  \advance\halfwid by -\columnsep
+  \quawid=\halfwid  \divide\quawid by 2 \mycr}
+\def\endparalines{\par\endgroup}
+
+\font\paraleftfont=cmtt10 at 8pt %pcrbn at 8pt
+\font\pararightfont=cmtt10 %pcrbn at 10pt
+\makeatother
+
+

@@ -1,0 +1,26 @@
+\DOC last
+
+\TYPE {last : (int -> * list -> * list)}
+
+\SYNOPSIS
+Returns the last n elements of a list.
+
+\LIBRARY window
+
+\DESCRIBE
+{last n l} returns the last {n} elements of the list {l}.
+If {l} is less than {n} long, then the whole of {l} is returned.
+
+\FAILURE
+Fails if given a negative length.
+
+\EXAMPLE
+{
+   #last 5 [1;2;3;4;5;6;7;8;9;10];;
+   [6; 7; 8; 9; 10] : int list
+}
+
+\SEEALSO
+last
+
+\ENDDOC

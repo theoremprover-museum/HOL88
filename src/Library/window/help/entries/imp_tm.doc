@@ -1,0 +1,13 @@
+\DOC imp_tm
+
+\TYPE {imp_tm : term}
+
+\SYNOPSIS
+The boolean constant "==>".
+
+\LIBRARY window
+
+\SEEALSO
+equiv_tm, pmi_tm.
+
+\ENDDOC

@@ -1,0 +1,66 @@
+\DOC do_tac
+
+\TYPE {do_tac : (string -> string -> tactic -> void)}
+
+\SYNOPSIS
+Applies a tactic to a goal using the enhanced subgoal package.
+
+\DESCRIBE
+Used to apply a tactic to the proof named by the first argument, at
+the node pointed to by second argument. Differs from {do_tacf} in that
+a validity check is made before the tactic is applied, thus
+guaranteeing that the corresponding proof corresponds to the original
+goal. The output resulting from this function indicates the node which
+would correspond to the top of stack in the existing package; this is
+usually thought of as the next node to be expanded.
+
+\KEYWORDS
+subgoal.
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails when a proof with the given name does not exist, if it does not
+have a node at the address given, or if the tactic being applied
+fails. Also, if the node to be expanded is already expanded, it may
+not produce any change if the flag {auto_cancel} is not set
+appropriately.
+
+
+\EXAMPLE
+{
+# do_tac `myproof` `1` EQ_TAC ;;
+
+new goals:
+
+"a /\ b ==> b /\ a"
+"b /\ a ==> a /\ b"
+
+() : void
+
+# do_tac `myproof` `1.1` STRIP_TAC ;;
+
+new goals:
+
+"b /\ a"
+      ["b"]
+      ["a"]
+
+() : void
+
+# do_tac `myproof` `1.1.1` (ASM_REWRITE_TAC []) ;;
+
+SUBGOAL PROVED
+next goal:
+
+"a /\ b"
+      ["a"]
+      ["b"]
+
+() : void
+}
+\SEEALSO
+all_subgoals, cancel_tac, compact, complete_proof, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

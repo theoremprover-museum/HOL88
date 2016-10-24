@@ -1,0 +1,8 @@
+\THEOREM PBITOP_DEF word_bitop
+|- !op.
+    PBITOP op =
+    (!n.
+      !w :: PWORDLEN n.
+       PWORDLEN n(op w) /\
+       (!m k. (m + k) <= n ==> (op(WSEG m k w) = WSEG m k(op w))))
+\ENDTHEOREM

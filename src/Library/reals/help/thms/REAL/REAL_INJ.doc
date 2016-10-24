@@ -1,0 +1,3 @@
+\THEOREM REAL_INJ REAL
+|- !m n. (& m = & n) = (m = n)
+\ENDTHEOREM

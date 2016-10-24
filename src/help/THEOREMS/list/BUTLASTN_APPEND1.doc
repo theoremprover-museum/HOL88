@@ -1,0 +1,5 @@
+\THEOREM BUTLASTN_APPEND1 list
+|- !l2 n.
+    (LENGTH l2) <= n ==>
+    (!l1. BUTLASTN n(APPEND l1 l2) = BUTLASTN(n - (LENGTH l2))l1)
+\ENDTHEOREM

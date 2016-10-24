@@ -1,0 +1,3 @@
+\THEOREM TRAT_EQ_AP HRAT
+|- !p q. (p = q) ==> p trat_eq q
+\ENDTHEOREM

@@ -1,0 +1,4 @@
+\THEOREM REAL_SUB_INV2 REAL
+|- !x y.
+    ~(x = & 0) /\ ~(y = & 0) ==> ((inv x) - (inv y) = (y - x) / (x * y))
+\ENDTHEOREM

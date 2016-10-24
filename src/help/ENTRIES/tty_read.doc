@@ -1,0 +1,37 @@
+\DOC tty_read
+
+\TYPE {tty_read : (void -> string)}
+
+\SYNOPSIS
+Reads a single character from the standard input.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+The call {tty_read()} will read a single character from the standard input,
+which in an interactive HOL session will normally be the terminal.
+
+\FAILURE
+Will only fail under obscure system-dependent circumstances.
+
+\EXAMPLE
+The following example shows how a check on the deletion of a file might be
+implemented:
+{
+   #tty_write `Delete GONK.th (y/n)?`;
+   #tty_read()=`y` => unlink `GONK.th` | ();;
+   Delete GONK.th (y/n)?n
+   () : void
+   Run time: 0.0s
+}
+\COMMENTS
+Only one character is read per call of {tty_read()}, and remaining characters
+will be passed to the ML interpreter as usual. It is of course possible to make
+multiple calls to {tty_read()} (e.g. via a {while} loop) to read in a longer
+string.
+
+\SEEALSO
+append_openw, close, openi, openw, read, tty_write, write.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM ISACUT_HRAT HREAL
+|- !h. isacut(cut_of_hrat h)
+\ENDTHEOREM

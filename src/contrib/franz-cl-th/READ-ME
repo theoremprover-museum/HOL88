@@ -1,0 +1,19 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: franx-cl-th						%
+%									%
+% DESCRIPTION: unix script for translating theory files from Franz to 	%
+%	       common lisp.						%
+%									%
+% AUTHOR: John Carroll							%
+%									%
+% ADDRESS: University of Cambridge					%
+%	   Computer Laboratory						%
+%	   New Museums Site						%
+%	   Pembroke Street						%
+%	   Cambridge,  CB2 3QG						%
+%	   England.							%
+%									%
+%	   email: jac@uk.ac.cam.cl					%
+%									%
+% DATE: 90.04.11							%
+% --------------------------------------------------------------------- %

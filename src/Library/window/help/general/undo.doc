@@ -1,0 +1,21 @@
+\DOC undo
+
+\TYPE {undo : (* history -> * history)}
+
+\SYNOPSIS
+Undo the last event in a history.
+
+\LIBRARY window
+
+\DESCRIBE
+
+{undo h} returns a history with with the first event in {h}'s past as
+its present.
+
+\FAILURE
+Fails if no events are stored in the history.
+
+\SEEALSO
+set_max_hist, get_max_hist, present, epoch, dodo, redo
+
+\ENDDOC

@@ -1,0 +1,4 @@
+\THEOREM BUTFIRSTN list
+|- (!l. BUTFIRSTN 0 l = l) /\
+   (!n x l. BUTFIRSTN(SUC n)(CONS x l) = BUTFIRSTN n l)
+\ENDTHEOREM

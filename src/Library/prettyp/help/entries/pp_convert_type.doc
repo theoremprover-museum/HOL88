@@ -1,0 +1,19 @@
+\DOC pp_convert_type
+
+\TYPE {pp_convert_type : (type -> print_tree)}
+
+\SYNOPSIS
+Function for converting a HOL type into a print-tree.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{pp_convert_type} has an identical specification to {type_to_print_tree}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+type_to_print_tree, pp_convert_term, pp_convert_thm, pp_convert_all_thm.
+
+\ENDDOC

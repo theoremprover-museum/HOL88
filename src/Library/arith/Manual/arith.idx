@@ -1,0 +1,50 @@
+\indexentry{linear arithmetic}{1}
+\indexentry{Presburger arithmetic}{1}
+\indexentry{products}{1}
+\indexentry{multiplication}{1}
+\indexentry{prenex normal form}{1}
+\indexentry{quantifiers!universal}{1}
+\indexentry{quantifiers!existential}{1}
+\indexentry{free variables}{1}
+\indexentry{normalisation}{1}
+\indexentry{preprocessors}{1}
+\indexentry{subtraction}{1}
+\indexentry{conditional statements}{1}
+\indexentry{instances}{1}
+\indexentry{substitution instances}{1}
+\indexentry{prenex normal form}{1}
+\indexentry{quantifiers!universal}{1}
+\indexentry{variable elimination}{1}
+\indexentry{Hodes}{1}
+\indexentry{completeness}{1}
+\indexentry{natural numbers}{1}
+\indexentry{integral properties}{1}
+\indexentry{quantifiers!existential}{2}
+\indexentry{Shostak}{2}
+\indexentry{SUP-INF method}{2}
+\indexentry{Bledsoe}{2}
+\indexentry{witnesses}{2}
+\indexentry{satisfaction of formulae}{2}
+\indexentry{completeness}{2}
+\indexentry{efficient proof procedures}{2}
+\indexentry{load\_library@{\ptt load\_library}}{2}
+\indexentry{help!updating search path}{2}
+\indexentry{false!proof of}{3}
+\indexentry{proving false}{3}
+\indexentry{negation}{3}
+\indexentry{goals}{3}
+\indexentry{tactics}{4}
+\indexentry{depth conversion}{4}
+\indexentry{ARITH\_CONV@{\ptt ARITH\_CONV}}{5}
+\indexentry{ARITH\_FORM\_NORM\_CONV@{\ptt ARITH\_FORM\_NORM\_CONV}}{7}
+\indexentry{COND\_ELIM\_CONV@{\ptt COND\_ELIM\_CONV}}{8}
+\indexentry{DISJ\_INEQS\_FALSE\_CONV@{\ptt DISJ\_INEQS\_FALSE\_CONV}}{9}
+\indexentry{EXISTS\_ARITH\_CONV@{\ptt EXISTS\_ARITH\_CONV}}{10}
+\indexentry{FORALL\_ARITH\_CONV@{\ptt FORALL\_ARITH\_CONV}}{11}
+\indexentry{INSTANCE\_T\_CONV@{\ptt INSTANCE\_T\_CONV}}{12}
+\indexentry{is\_prenex@{\ptt is\_prenex}}{13}
+\indexentry{is\_presburger@{\ptt is\_presburger}}{14}
+\indexentry{NEGATE\_CONV@{\ptt NEGATE\_CONV}}{15}
+\indexentry{non\_presburger\_subterms@{\ptt non\_presburger\_subterms}}{15}
+\indexentry{PRENEX\_CONV@{\ptt PRENEX\_CONV}}{16}
+\indexentry{SUB\_AND\_COND\_ELIM\_CONV@{\ptt SUB\_AND\_COND\_ELIM\_CONV}}{17}

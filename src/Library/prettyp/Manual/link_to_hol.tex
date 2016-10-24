@@ -1,0 +1,687 @@
+
+\chapter{Linking pretty-printers to HOL\label{linking}}
+
+There are a number of stages in building a new pretty-printer. Roughly, they
+are:
+
+\begin{itemize}
+\item{Convert datatype to parse-tree}
+\item{Write pretty-printing rules}
+\item{Compile pretty-printer}
+\item{Link type converter and compiled rules into \HOL}
+\item{Debug the pretty-printer}
+\end{itemize}
+
+\noindent
+Converting an \ML\ datatype is described in Chapter~\ref{mldatatypes}. When the
+datatype to be pretty-printed is a \HOL\ type, term, or theorem (\ml{thm}),
+conversion functions are built into the system. The preceding chapters provide
+the information required to write a pretty-printer. Chapter~\ref{debugging}
+gives hints for debugging. The whole development process may have to be
+repeated until the pretty-printer behaves as required.
+
+This chapter is concerned with the built in functions for converting \HOL\
+types, terms and theorems into parse-trees, with the compilation of a
+pretty-printer, and with the process of linking the results into the \HOL\
+system.
+
+
+\section[Converting HOL terms into parse-trees]
+        {Functions for converting HOL types, terms, and theorems into
+         parse-trees\label{convhol}}
+
+\subsection{Converting a HOL type\label{convtype}}
+
+\HOL\ types can be constant types, e.g.~{\small\verb%":bool"%}, variable
+types, e.g.~{\small\verb%":*"%}, or compound types,
+e.g.~{\small\verb%":num -> bool"%}. Constant types are just a special case of
+compound types where the constructor has no arguments.
+
+\index{type\_to\_print\_tree@{\ptt type\_to\_print\_tree}|pin}
+The \ML\ function:
+
+\begin{boxed}\begin{verbatim}
+   type_to_print_tree : type -> print_tree
+\end{verbatim}\end{boxed}
+
+\noindent
+becomes available when the file {\small\verb%PP_hol.ml%} is loaded from the
+library \ml{prettyp}. This is also true for the other conversion functions
+described within this section. \ml{print\_tree} is the \ML\ datatype for
+parse-trees used in the pretty-printer.
+
+\ml{type\_to\_print\_tree} converts {\small\verb%":bool"%} to the tree:
+
+\begin{small}\begin{verbatim}
+                                     type
+                                      |
+                                      OP
+                                      |
+                                     bool
+\end{verbatim}\end{small}
+
+\noindent
+represented textually as {\small\verb%type(OP(bool()))%}.
+
+{\small\verb%":*"%} is converted to:
+
+\begin{small}\begin{verbatim}
+                                     type
+                                      |
+                                     VAR
+                                      |
+                                      *
+\end{verbatim}\end{small}
+
+\noindent
+{\small\verb%":num -> bool"%} is converted to:
+
+\begin{small}\begin{verbatim}
+                                     type
+                                      |
+                                 _____OP____
+                                |     |     |
+                               fun    OP    OP
+                                      |     |
+                                     num   bool
+\end{verbatim}\end{small}
+
+\noindent
+represented textually as:
+
+\begin{small}\begin{verbatim}
+   type(OP(fun(),OP(num()),OP(bool()))))
+\end{verbatim}\end{small}
+
+\noindent
+Note that every tree is labelled with a root node called {\small\verb%type%}.
+Compound types are represented as an {\small\verb%OP%} node with one or more
+children (sub-trees). The first child represents the name of the type
+constructor. There is also one child for every sub-type of the compound type.
+
+The built-in infix type constructors {\small\verb%->%}, {\small\verb%#%}, and
+{\small\verb%+%} have corresponding node-names of {\small\verb%fun%},
+{\small\verb%prod%}, and {\small\verb%sum%} respectively.
+
+
+\subsection{Converting a HOL term\label{convterm}}
+
+\index{term\_to\_print\_tree@{\ptt term\_to\_print\_tree}|pin}
+The function to convert a \HOL\ term into a parse-tree is:
+
+\begin{boxed}\begin{verbatim}
+   term_to_print_tree : bool -> type_selection -> term -> print_tree
+\end{verbatim}\end{boxed}
+
+\noindent
+where the \ML\ datatype \ml{type\_selection} is defined by:
+
+\begin{boxed}\begin{verbatim}
+   type type_selection = No_types
+                       | Hidden_types
+                       | Useful_types
+                       | All_types;;
+\end{verbatim}\end{boxed}
+
+\noindent
+The first argument to \ml{term\_to\_print\_tree} is a flag. If the flag is
+true, the function converts instances of the \HOL\ constant
+{\small\verb%UNCURRY%} in the term into an appropriate use of ordered pairs in
+the parse-tree. If the flag is false, {\small\verb%UNCURRY%} is treated in the
+same way as any other \HOL\ constant. The conversion is necessary because the
+representation of tuples of bound variables in a \HOL\ term is so unlike the
+syntax of the tuples that the pretty-printer cannot handle them. So, normally,
+the flag should be set to true.
+
+When its first argument {\em is\/} true, \ml{term\_to\_print\_tree} repeatedly
+looks for terms of the form:
+
+\begin{small}\begin{verbatim}
+                                     COMB
+                                     /  \
+                               UNCURRY  ABS
+                                        / \
+                                       *1 ABS
+                                          / \
+                                         *2 *3
+\end{verbatim}\end{small}
+
+\noindent
+and converts them to the corresponding tree:
+
+\begin{small}\begin{verbatim}
+                                     ABS
+                                     / \
+                                  COMB *3
+                                  /  \
+                               COMB  *2
+                               /  \
+                              ,   *1
+\end{verbatim}\end{small}
+
+\noindent
+{\small\verb%*1%} and {\small\verb%*2%} are bound variables. {\small\verb%*3%}
+can be any term.
+
+It is unlikely that users of the pretty-printer will ever have to concern
+themselves with the pretty-printing of {\small\verb%UNCURRY%}. However, the
+operations controlled by the second argument to \ml{term\_to\_print\_tree} may
+well be of significance.
+
+The second argument to \ml{term\_to\_print\_tree} controls the amount of type
+information included in the parse-tree of the term. If \ml{No\_types} is given
+as the argument, then the trees for variables and constants are of the form:
+
+\begin{small}\begin{verbatim}
+                         VAR                   CONST
+                          |                      |
+                          x                      2
+\end{verbatim}\end{small}
+
+\noindent
+The examples are specifically for the variable {\small\verb%"x"%} and the
+constant {\small\verb%"2"%}.
+
+If \ml{All\_types} is given as the argument, the trees are of the form:
+
+\begin{small}\begin{verbatim}
+                         VAR                   CONST
+                         / \                   /   \
+                        x  type               2    type
+                            |                       |
+\end{verbatim}\end{small}
+
+\noindent
+where {\small\verb%type(...)%} is the parse-tree for the type of the variable
+or constant.
+
+\ml{Useful\_types} instructs \ml{term\_to\_print\_tree} to attach type
+information to the bound variables of abstractions, and to one occurrence of
+every free variable. Type information is only included for constants if the
+constant is a function and it is not fully applied. So, the
+{`}{\small\verb%=%}{'} in {\small\verb%"1%}~{\small\verb%=%}~{\small\verb%2"%}
+would not be adorned with type information, but the {`}{\small\verb%=%}{'} in
+{\small\verb%"$=%}~{\small\verb%1"%} would be.
+
+Finally, using \ml{Hidden\_types} as the second argument to
+\ml{term\_to\_print\_tree} causes type information to be attached only to
+variables, which although free, without type information appear bound. An
+example of such a variable is {\small\verb%"x:num"%} in the lambda-abstraction
+{\small\verb%"\(x:bool).%}~{\small\verb%(x:num)"%}. Without types, this term
+appears as {\small\verb%"\x.%}~{\small\verb%x"%}. However, the two
+{\small\verb%x%}{'}s are different. Such terms cannot be entered directly into
+the \HOL\ system, but they can be constructed using \ml{mk\_abs}.
+
+Abstractions and combinations (function applications) are converted to trees
+of the form:
+
+\begin{small}\begin{verbatim}
+                          ABS                   COMB
+                          / \                   /  \
+\end{verbatim}\end{small}
+
+\noindent
+When the term has been converted to a parse-tree, it is labelled with a root
+node called {\small\verb%term%}:
+
+\begin{small}\begin{verbatim}
+                                     term
+                                      |
+\end{verbatim}\end{small}
+
+
+\subsection{Converting a HOL theorem\label{convthm}}
+
+\index{thm\_to\_print\_tree@{\ptt thm\_to\_print\_tree}|pin}
+The function to convert a \HOL\ theorem to a parse-tree is:
+
+\begin{boxed}\begin{verbatim}
+   thm_to_print_tree : bool -> bool -> type_selection -> thm -> print_tree
+\end{verbatim}\end{boxed}
+
+\noindent
+The second and third arguments to \ml{thm\_to\_print\_tree} correspond to the
+first and second arguments of \ml{term\_to\_print\_tree} respectively (see
+Section~\ref{convterm}). The first argument to \ml{thm\_to\_print\_tree}
+determines whether or not the hypotheses (assumptions) of the theorem are
+included in the parse-tree in full.
+
+If the first argument to \ml{thm\_to\_print\_tree} is true, the theorem:
+
+\begin{small}\begin{verbatim}
+   T \/ T, T /\ T |- T = T
+\end{verbatim}\end{small}
+
+\noindent
+is converted to the tree:
+
+\begin{small}\begin{verbatim}
+                                _____thm_____
+                               |             |
+                              term          hyp
+                               |            / \
+                            "T = T"      term term
+                                          |     |
+                                     "T \/ T" "T /\ T"
+\end{verbatim}\end{small}
+
+\noindent
+The sub-trees for the terms have been written as the terms for brevity. If the
+argument is false, the tree:
+
+\begin{small}\begin{verbatim}
+                                _____thm_____
+                               |             |
+                              term          dots
+                               |            /  \
+                            "T = T"       dot  dot
+\end{verbatim}\end{small}
+
+\noindent
+is produced.
+
+
+\subsection{Useful additional functions\label{otherconv}}
+
+\index{pp\_convert\_term@{\ptt pp\_convert\_term}|pin}
+The conversion functions described in the previous sections have arguments to
+allow their operation to be controlled. However, for most applications the
+arguments can take default values. Functions have been defined to provide these
+default values. For example, \ml{pp\_convert\_term}:
+
+\begin{boxed}\begin{verbatim}
+   let pp_convert_term t =
+
+      % : (term -> print_tree) %
+
+      term_to_print_tree true (if (get_flag_value `show_types`)
+                               then Useful_types
+                               else Hidden_types) t;;
+\end{verbatim}\end{boxed}
+
+\noindent
+The default arguments are for {\small\verb%UNCURRY%} to be converted, and for
+the type information to be determined from the value of the flag
+\ml{show\_types} (see Section~\ref{convterm}). If \ml{show\_types} is true,
+then `useful' types are included in the parse-tree. Otherwise, only `hidden'
+types are included.
+
+\index{pp\_convert\_type@{\ptt pp\_convert\_type}|pin}
+\index{pp\_convert\_thm@{\ptt pp\_convert\_thm}|pin}
+\index{pp\_convert\_all\_thm@{\ptt pp\_convert\_all\_thm}|pin}
+The other functions are \ml{pp\_convert\_type}, which is only included for
+consistency:
+
+\begin{boxed}\begin{verbatim}
+   let pp_convert_type t =
+
+      % : (type -> print_tree) %
+
+      type_to_print_tree t;;
+\end{verbatim}\end{boxed}
+
+\noindent
+and \ml{pp\_convert\_thm} and \ml{pp\_convert\_all\_thm} which are defined by:
+
+\begin{boxed}\begin{verbatim}
+   let pp_convert_thm t =
+
+      % : (thm -> print_tree) %
+
+      thm_to_print_tree false true (if (get_flag_value `show_types`)
+                                    then Useful_types
+                                    else Hidden_types) t;;
+
+   let pp_convert_all_thm t =
+
+      % : (thm -> print_tree) %
+
+      thm_to_print_tree true true (if (get_flag_value `show_types`)
+                                   then Useful_types
+                                   else Hidden_types) t;;
+\end{verbatim}\end{boxed}
+
+\noindent
+See section~\ref{convthm}.
+
+
+\section{Compiling a pretty-printer\label{compiling}}
+
+\index{PP\_to\_ML@{\ptt PP\_to\_ML}|pin}
+Once a pretty-printer has been written, it can be compiled from within the
+\HOL\ system. The name of the file must be of the form {\small\verb%xxxx.pp%},
+that is it must end in {`}{\small\verb%.pp%}{'}. The function \ml{PP\_to\_ML}
+invokes the parser. Its first argument indicates whether or not the output is
+to be appended to the destination file. If the argument is false and the
+destination file existed previously, the file is overwritten.
+
+\begin{boxed}\begin{verbatim}
+   PP_to_ML : bool -> string -> string -> void
+\end{verbatim}\end{boxed}
+
+\index{filenames}
+\noindent
+The second and third arguments specify the names of the source and destination
+files respectively. For example, the \ML\ function call:
+
+\begin{small}\begin{verbatim}
+   PP_to_ML false `xxxx.pp` ``;;
+\end{verbatim}\end{small}
+
+\noindent
+compiles the file {\small\verb%xxxx.pp%} to a file called
+{\small\verb%xxxx_pp.ml%}, overwriting any previous version.
+
+The {`}{\small\verb%.pp%}{'} extension can be omitted. So, the following has
+precisely the same effect as the previous `command':
+
+\begin{small}\begin{verbatim}
+   PP_to_ML false `xxxx` ``;;
+\end{verbatim}\end{small}
+
+\noindent
+If the last argument is anything other than the empty string, it is used as the
+name of the destination file. So,
+
+\begin{small}\begin{verbatim}
+   PP_to_ML false `xxxx` `test.ml`;;
+\end{verbatim}\end{small}
+
+\noindent
+compiles the file {\small\verb%xxxx.pp%} to the file {\small\verb%test.ml%}.
+
+After compilation, the destination file contains two \ML\ declarations. The
+first declares {\small\verb%yyyy_rules%} to be a list of pretty-printing rules
+as understood by the pretty-printing program. {\small\verb%yyyy%} is the name
+of the pretty-printer as specified in the source file (see
+Section~\ref{naming}). The second declaration declares
+{\small\verb%yyyy_rules_fun%} to be a function which given a parse-tree (\ML\
+datatype \ml{print\_tree}) attempts to match it to the pretty-printing rules.
+If the function succeeds, it returns a binding and other information. The
+details of this are not important. Only the name of the function and how to
+use it are of importance.
+
+The declarations in the destination file can be made use of by loading the
+file into \HOL\ using:
+
+\begin{small}\begin{verbatim}
+   loadf `xxxx_pp`
+\end{verbatim}\end{small}
+
+\noindent
+or:
+
+\begin{small}\begin{verbatim}
+   loadf `test`
+\end{verbatim}\end{small}
+
+\noindent
+as appropriate. Note that the name of the destination file must end with
+{`}{\small\verb%.ml%}{'}.
+
+
+\section{Linking to the HOL system}
+
+There are three functions which can be used to invoke the pretty-printer. The
+first writes directly to the terminal, independently of the standard \HOL\
+printer. If used as the argument to the \HOL\ directive \ml{top\_print}, the
+output will not merge properly with the other output from \HOL. The second
+function overcomes this problem and interacts well (though not perfectly) with
+the standard \HOL\ printer. The third function is for writing to files.
+
+\index{pretty\_print@{\ptt pretty\_print}|pin}
+The first function is \ml{pretty\_print}:
+
+\begin{boxed}\begin{verbatim}
+   pretty_print : int -> int -> print_rule_function -> string ->
+                  (string # int) list -> print_tree -> void
+\end{verbatim}\end{boxed}
+
+\noindent
+The arguments to this function are:
+
+\begin{enumerate}
+\item{maximum width of output permitted}
+\item{initial offset from left margin}
+\item{pretty-printing rules expressed as a function}
+\item{initial context}
+\item{initial parameters}
+\item{tree to be printed}
+\end{enumerate}
+
+\noindent
+For descriptions of context and parameters see Sections~\ref{context}
+and~\ref{envfuns} respectively.
+
+\index{pp@{\ptt pp}|pin}
+The second function is \ml{pp}:
+
+\begin{boxed}\begin{verbatim}
+   pp : print_rule_function -> string ->
+           (string # int) list -> print_tree -> void
+\end{verbatim}\end{boxed}
+
+\noindent
+\ml{pp} takes the same arguments as \ml{pretty\_print}, less the first two.
+In place of the first two arguments, \ml{pp} uses the maximum width for the
+standard \HOL\ printer, as specified by the function \ml{set\_margin}. The
+initial offset from the left margin is taken to be zero.
+
+\index{pp\_write@{\ptt pp\_write}|pin}
+The third function, \ml{pp\_write}, behaves as for \ml{pretty\_print},
+except that the output goes to a file rather than the terminal. There is an
+additional argument to the function (its first argument). This is the file
+handle of the file to be used.
+
+\begin{boxed}\begin{verbatim}
+   pp_write : string -> int -> int -> print_rule_function ->
+                 string -> (string # int) list -> print_tree -> void
+\end{verbatim}\end{boxed}
+
+
+\subsection{Print-rule functions}
+
+\index{hol\_type\_rules\_fun@{\ptt hol\_type\_rules\_fun}|pin}
+\index{hol\_term\_rules\_fun@{\ptt hol\_term\_rules\_fun}|pin}
+\index{hol\_thm\_rules\_fun@{\ptt hol\_thm\_rules\_fun}|pin}
+The print-rule functions for the new pretty-printer can be obtained by
+compiling a pretty-printer specification, as described in
+Section~\ref{compiling}. If the pretty-printer is an extension to the printer
+for \HOL\ types, terms, and theorems, then the print-rule functions which
+simulate the standard \HOL\ pretty-printer will also be required. They are:
+
+\begin{boxed}\begin{verbatim}
+   hol_type_rules_fun : print_rule_function
+   hol_term_rules_fun : print_rule_function
+   hol_thm_rules_fun  : print_rule_function
+\end{verbatim}\end{boxed}
+
+\index{then\_try@{\ptt then\_try}|pin}
+\noindent
+\ml{hol\_term\_rules\_fun} will not work without \ml{hol\_type\_rules\_fun},
+and in a similar way, \ml{hol\_thm\_rules\_fun} will not work without the other
+two. They\index{print-rule functions!composition of} can be composed using the
+\ML\ function \ml{then\_try}, which is declared as an infix. \ml{then\_try}
+forms a new print-rule function from two other print-rule functions, say
+{\it prf}$_1$ and {\it prf}$_2$. When given a tree to match, the new function
+first tries the rules of {\it prf}$_1$. If none of these match, it then tries
+the rules of {\it prf}$_2$.
+
+\begin{boxed}\begin{verbatim}
+   then_try : print_rule_function ->
+              print_rule_function ->
+              print_rule_function
+\end{verbatim}\end{boxed}
+
+\index{hol\_rules\_fun@{\ptt hol\_rules\_fun}|pin}
+\noindent
+The three rules for \HOL\ are also available as one composite function. Use of
+this for types and terms should be avoided as the extra unnecessary rules
+reduce the performance of the pretty-printer. The composite function is
+defined by:
+
+\begin{boxed}\begin{verbatim}
+   let hol_rules_fun = hol_thm_rules_fun then_try
+                       hol_term_rules_fun then_try
+                       hol_type_rules_fun;;
+\end{verbatim}\end{boxed}
+
+\index{print-rules!defaults}
+\index{raw\_tree\_rules\_fun@{\ptt raw\_tree\_rules\_fun}|pin}
+\noindent
+In the event of no print-rules matching the tree to be printed, a default set
+of rules are used. These rules always match, and the output generated is a
+textual representation of the structure of the tree. This output can be quite
+useful in itself. The default rules are available as:
+
+\begin{boxed}\begin{verbatim}
+   raw_tree_rules_fun : print_rule_function
+\end{verbatim}\end{boxed}
+
+
+\subsection{Obtaining a parse-tree}
+
+The parse-tree to be printed can be obtained in one of two ways. If the
+pretty-printer is for an \ML\ datatype, an instance of that type is converted
+to a parse-tree using user-defined functions (see Chapter~\ref{mldatatypes}).
+If the pretty-printer is an extension of the printer for \HOL\ types, terms and
+theorems, the parse-tree can be obtained using the conversion functions
+described in Section~\ref{convhol}.
+
+Most extensions to the printer for \HOL\ will be able to use the conversion
+functions described in Section~\ref{otherconv}. However, these are set up so
+that only limited type information is included in the trees generated from
+terms. There may be situations where type information has to be tested by the
+pattern of a rule. For example, one might want to print an abstraction in a
+special way only if the bound variable is of a particular type.
+
+Here is a function to convert a term to a parse-tree including type
+information on all variables and constants:
+
+\begin{small}\begin{verbatim}
+   let my_term_conversion t =
+
+      % : (term -> print_tree) %
+
+      term_to_print_tree true All_types t;;
+\end{verbatim}\end{small}
+
+\noindent
+With this function, the built-in print-rules for \HOL\ will display type
+information on every variable and constant. So, in addition to the special
+rules of the application, new rules will be required for handling variables
+and constants. The new rules should be given priority over the old ones by
+arranging for the new ones to be tried first. It is up to the user to decide
+what type information is to be displayed, and to provide the new rules to do
+it.
+
+
+\subsection{Installing a new printer}
+
+The preceding sections describe how to obtain the arguments required for the
+printing functions \ml{pretty\_print}, \ml{pp}, and \ml{pp\_write}.
+\ml{pp} is the function to use to install a pretty-printer for a new \ML\
+datatype or for extensions to the printer for \HOL.
+
+
+\subsubsection{Printers for new ML datatypes}
+
+Given a new \ML\ datatype, \ml{my\_type}, and a function, say
+\ml{my\_type\_to\_print\_tree}, to convert instances of it to parse-trees, and
+a print-rule function for the syntax, called say \ml{my\_type\_rules\_fun}, a
+printer for \ml{my\_type} could be written as:
+
+\begin{small}\begin{verbatim}
+   let print_my_type x =
+
+      % : (my_type -> void) %
+
+      pp my_type_rules_fun `my_type` [] (my_type_to_print_tree x);;
+\end{verbatim}\end{small}
+
+\noindent
+where the new print-rules match in the context {\small\verb%'my_type'%}. If
+the rules are set up to match in any context, it does not matter what string
+is used as the argument to \ml{pp}. The parameter list is empty. If any
+parameters are used in the print-rules, they should be initialised in this
+list, or the rules should be set up to initialise the parameters when the
+printer is first called. The latter can be done by use of special contexts, or
+by having a labelling node at the root of the parse-tree. The rule which
+matches the labelling node can then initialise the parameters. If an attempt
+is made to use a parameter before it is initialised, an error is generated.
+
+The new printer can be installed using \ml{top\_print}:
+
+\begin{small}\begin{verbatim}
+   top_print print_my_type;;
+\end{verbatim}\end{small}
+
+\noindent
+Anything of type \ml{my\_type} will now be displayed using
+\ml{print\_my\_type}.
+
+
+\subsubsection{Extensions to the printer for HOL}
+
+Given a print-rule function, \ml{my\_new\_rules\_fun}, for rules which extend
+the printer for \HOL\ types, terms and theorems, a new printer for \HOL\ types
+can be defined as:
+
+\begin{small}\begin{verbatim}
+   let my_new_type_printer t =
+
+      % : (type -> void) %
+
+      pp (my_new_rules_fun then_try
+          hol_type_rules_fun) `type` [] (pp_convert_type t);;
+\end{verbatim}\end{small}
+
+\noindent
+This definition assumes that the new rules for \HOL\ types match in the context
+{\small\verb%'type'%}. The parameter list and conversion function are taken to
+be standard.
+
+New printers for terms and theorems can be defined similarly:
+
+\begin{small}\begin{verbatim}
+   let my_new_term_printer t =
+
+      % : (term -> void) %
+
+      pp (my_new_rules_fun then_try
+          hol_term_rules_fun then_try
+          hol_type_rules_fun) `term` [] (pp_convert_term t);;
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+   let my_new_thm_printer t =
+
+      % : (thm -> void) %
+
+      pp (my_new_rules_fun then_try
+          hol_thm_rules_fun then_try
+          hol_term_rules_fun then_try
+          hol_type_rules_fun) `thm` [] (pp_convert_thm t);;
+\end{verbatim}\end{small}
+
+\noindent
+The printer for theorems does not print the hypotheses of the theorem in full.
+If this is required, \ml{pp\_convert\_thm} should be replaced by
+\ml{pp\_convert\_all\_thm}.
+
+The new printers can be installed using \ml{top\_print}:
+
+\begin{small}\begin{verbatim}
+   top_print my_new_type_printer;;
+   top_print my_new_term_printer;;
+   top_print my_new_thm_printer;;
+\end{verbatim}\end{small}
+
+\index{goals}
+\noindent
+This will not affect the printing of goals. To use the new term printer for
+goals, the assignable variable \ml{assignable\_print\_term} must be changed:
+
+\begin{small}\begin{verbatim}
+   assignable_print_term := my_new_term_printer;;
+\end{verbatim}\end{small}

@@ -1,0 +1,28 @@
+\DOC define_wordn_type
+
+\TYPE {define_wordn_type : string -> int -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC

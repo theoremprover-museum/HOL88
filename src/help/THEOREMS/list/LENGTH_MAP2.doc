@@ -1,0 +1,7 @@
+\THEOREM LENGTH_MAP2 list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (!f.
+      (LENGTH(MAP2 f l1 l2) = LENGTH l1) /\
+      (LENGTH(MAP2 f l1 l2) = LENGTH l2))
+\ENDTHEOREM

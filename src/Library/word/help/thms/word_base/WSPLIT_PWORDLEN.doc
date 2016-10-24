@@ -1,0 +1,7 @@
+\THEOREM WSPLIT_PWORDLEN word_base
+|- !n.
+    !w :: PWORDLEN n.
+     !m.
+      m <= n ==>
+      PWORDLEN(n - m)(FST(WSPLIT m w)) /\ PWORDLEN m(SND(WSPLIT m w))
+\ENDTHEOREM

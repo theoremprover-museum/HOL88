@@ -1,0 +1,3 @@
+\THEOREM ASSOC_MULT arithmetic
+|- ASSOC $*
+\ENDTHEOREM

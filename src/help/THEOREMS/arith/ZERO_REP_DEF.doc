@@ -1,0 +1,3 @@
+\THEOREM ZERO_REP_DEF num
+|- ZERO_REP = (@x. !y. ~(x = SUC_REP y))
+\ENDTHEOREM

@@ -1,0 +1,4 @@
+\THEOREM VAL wordn_num
+|- (VAL[] = 0) /\
+   (!b bs. VAL(CONS b bs) = ((BV b) * (2 EXP (LENGTH bs))) + (VAL bs))
+\ENDTHEOREM

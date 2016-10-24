@@ -1,0 +1,3 @@
+\THEOREM TOPOLOGY_UNION TOPOLOGY
+|- !L P. P subset (open L) ==> open L(Union P)
+\ENDTHEOREM

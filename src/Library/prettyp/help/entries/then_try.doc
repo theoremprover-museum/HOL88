@@ -1,0 +1,29 @@
+\DOC then_try
+
+\BLTYPE
+$then_try : (print_rule_function ->
+             print_rule_function ->
+             print_rule_function)
+\ELTYPE
+
+\SYNOPSIS
+Function for composing print-rule functions.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{then_try} is an infix function which forms the composite of two print-rule
+functions, say {prf1} and {prf2}. The result is a new print-rule function
+which, when given a tree to match, first tries the rules of {prf1}; if none of
+these match, it then tries the rules of {prf2}.
+
+\FAILURE
+Cannot fail when given two print-rule functions as arguments. However, the
+resulting function may fail when used, with this depending on the failure
+properties of the two argument functions.
+
+\SEEALSO
+hol_type_rules_fun, hol_term_rules_fun, hol_thm_rules_fun, hol_rules_fun,
+raw_tree_rules_fun, pretty_print, pp, pp_write.
+
+\ENDDOC

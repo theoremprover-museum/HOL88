@@ -1,0 +1,10 @@
+\DOC side
+
+\TYPE {side : (side_condition -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

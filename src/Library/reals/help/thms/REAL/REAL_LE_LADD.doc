@@ -1,0 +1,3 @@
+\THEOREM REAL_LE_LADD REAL
+|- !x y z. (x + y) <= (x + z) = y <= z
+\ENDTHEOREM

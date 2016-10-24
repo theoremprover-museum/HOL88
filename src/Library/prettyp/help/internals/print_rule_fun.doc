@@ -1,0 +1,10 @@
+\DOC print_rule_fun
+
+\TYPE {print_rule_fun : (print_rule list -> print_rule_function)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

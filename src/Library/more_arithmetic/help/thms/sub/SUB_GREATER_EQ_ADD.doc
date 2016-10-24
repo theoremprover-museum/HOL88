@@ -1,0 +1,3 @@
+\THEOREM SUB_GREATER_EQ_ADD sub
+|- !n m p. p >= n ==> ((p - n) >= m = p >= (n + m))
+\ENDTHEOREM

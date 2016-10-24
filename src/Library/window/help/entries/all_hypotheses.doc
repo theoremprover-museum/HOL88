@@ -1,0 +1,38 @@
+\DOC disp_hypotheses
+
+\TYPE {disp_hypotheses : (window -> term list)}
+
+\SYNOPSIS
+The hypotheses of a window - as displayed interactively.
+
+\LIBRARY window
+
+\DESCRIBE
+This is the list of things that may be assumed in the context of a window.
+{disp_hypotheses} returns the hypotheses in the form that they will
+be printed when the window library is used interactively.
+
+\EXAMPLE
+{
+   #BEGIN_STACK `hyp-ex` "= ((A /\ B) /\ C)" [] [];;
+   = * (A /\ B) /\ C
+   () : void
+
+   #OPEN_WIN [RAND];;
+     ! B
+     ! A
+   = * C
+   () : void
+   
+  #disp_hypotheses (TOP_WIN ());;
+  ["A"; "B"] : term list
+
+}
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+hyp_thms, hypotheses, all_hypotheses, context
+
+\ENDDOC

@@ -1,0 +1,10 @@
+\DOC thm_subset
+
+\TYPE {thm_subset : (thm list -> thm list -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

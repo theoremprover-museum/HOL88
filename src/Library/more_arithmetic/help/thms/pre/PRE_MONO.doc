@@ -1,0 +1,3 @@
+\THEOREM PRE_MONO pre
+|- !m n. (PRE m) < (PRE n) ==> m < n
+\ENDTHEOREM

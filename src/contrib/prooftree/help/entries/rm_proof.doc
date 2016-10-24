@@ -1,0 +1,29 @@
+\DOC rm_proof
+
+\TYPE {rm_proof : (void -> void)}
+
+\SYNOPSIS
+Removes the last proof tree manipulated and releases the space
+occupied by it.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Proof trees can occupy a large amount of computer
+space, thus this function may be used to reduce the space overhead.
+Once a goal has been proved, or when one decides not to work on it
+further, it can be removed from the set of proof trees. It removes the
+default proof tree.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails when there is no default proof.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

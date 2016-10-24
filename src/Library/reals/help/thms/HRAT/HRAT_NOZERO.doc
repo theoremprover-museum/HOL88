@@ -1,0 +1,3 @@
+\THEOREM HRAT_NOZERO HRAT
+|- !h i. ~(h hrat_add i = h)
+\ENDTHEOREM

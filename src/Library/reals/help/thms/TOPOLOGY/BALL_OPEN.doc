@@ -1,0 +1,3 @@
+\THEOREM BALL_OPEN TOPOLOGY
+|- !m x e. (& 0) < e ==> open(mtop m)(B m(x,e))
+\ENDTHEOREM

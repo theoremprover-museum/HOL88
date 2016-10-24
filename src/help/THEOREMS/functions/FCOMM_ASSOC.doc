@@ -1,0 +1,3 @@
+\THEOREM FCOMM_ASSOC fun
+|- !f. FCOMM f f = ASSOC f
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM LESS_ADD1 add
+|- !a. a < (a + 1)
+\ENDTHEOREM

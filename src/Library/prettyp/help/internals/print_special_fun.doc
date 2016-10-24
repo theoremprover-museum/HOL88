@@ -1,0 +1,16 @@
+\DOC print_special_fun
+
+\BLTYPE
+print_special_fun : (string ->
+                     (string # int) list ->
+                     print_binding ->
+                     print_special list ->
+                     print_binding)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

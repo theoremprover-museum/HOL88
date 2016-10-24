@@ -1,0 +1,3 @@
+\THEOREM pow REAL
+|- (!x. x pow 0 = & 1) /\ (!x n. x pow (SUC n) = x * (x pow n))
+\ENDTHEOREM

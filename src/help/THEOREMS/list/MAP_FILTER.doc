@@ -1,0 +1,4 @@
+\THEOREM MAP_FILTER list
+|- !f P l.
+    (!x. P(f x) = P x) ==> (MAP f(FILTER P l) = FILTER P(MAP f l))
+\ENDTHEOREM

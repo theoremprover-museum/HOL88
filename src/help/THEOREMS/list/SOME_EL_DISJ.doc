@@ -1,0 +1,3 @@
+\THEOREM SOME_EL_DISJ list
+|- !P Q l. SOME_EL(\x. P x \/ Q x)l = SOME_EL P l \/ SOME_EL Q l
+\ENDTHEOREM

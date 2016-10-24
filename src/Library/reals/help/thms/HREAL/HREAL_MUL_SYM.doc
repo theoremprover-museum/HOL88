@@ -1,0 +1,3 @@
+\THEOREM HREAL_MUL_SYM HREAL
+|- !X Y. X hreal_mul Y = Y hreal_mul X
+\ENDTHEOREM

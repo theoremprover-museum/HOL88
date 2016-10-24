@@ -1,0 +1,12 @@
+\DOC PF_branch
+
+\BLTYPE
+PF_branch : ((print_test # print_format # print_format) -> print_format)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

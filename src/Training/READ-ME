@@ -1,0 +1,35 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: Training					|
++ ===================================================================== +
+
+This directory contains training material for the HOL system. The contents
+of the subdirectories are:
+
+1) Directory: course
+
+   This directory contains the LaTeX sources for the overhead slides used
+   in Tom Melham's introductory course on theorem proving using the HOL
+   system.  The contents are copyright, but the slides may be used to
+   conduct training courses subject to the condition that the LaTeX
+   sources in this directory and slides produced using them may not, in
+   part or as a whole, be sold or otherwise distributed for commercial gain.
+
+2) Directory: exercises
+
+   This directory contains online exercises and solutions, which have
+   in the past been used in conjunction with the HOL training course.
+
+3) Directory: studies
+
+   This directory contains LaTeX source and supporting materials for
+   reports on case studies using HOL.
+
+4) Directory: parity
+
+   Solutions to the exercises in the parity-checking chapter
+   in the HOL tutorial.
+
+
+
+
+

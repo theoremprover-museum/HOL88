@@ -1,0 +1,50 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: convert						|
+|									|
+| DESCRIPTION   : various conversion orientated stuff			|
+|		  includes tidied (?) versions of unwinding stuff for   |
+| 	          hardware structural specifications.			|
+|									|
+| WARNING	: uses mk_thm but "sound" versions of all "unsound"	|
+|		  exists but are commented out at present		|
+|									|
+| this version put together by David Shepherd, INMOS Ltd. Much of the	|
+| source code was already in existence in earlier versions of HOL.	|
+|									|
+| 	<des@inmos.co.uk>						|
++ =====================================================================	+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+   		conv_package.ml:	conversion package
+   		unfold.ml:		unfolding rules
+   		unwind.ml:		unwinding rules
+   		prune.ml:		pruning rules
+   		more_conv.ml:		some extra conversions
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `convert`;;
+   

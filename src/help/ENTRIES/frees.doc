@@ -1,0 +1,25 @@
+\DOC frees
+
+\TYPE {frees : (term -> term list)}
+
+\SYNOPSIS
+Returns a list of the variables which are free in a term.
+
+\DESCRIBE
+When applied to a term, {frees} returns a list of the free variables in
+that term. There are no repetitions in the list produced even if there are
+multiple free instances of some variables.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+Clearly in the following term, {x} and {y} are free, whereas {z} is bound:
+{
+   #frees "(x=1) /\ (y=2) /\ (!z. z >= 0)";;
+   ["x"; "y"] : term list
+}
+\SEEALSO
+freesl, free_in, thm_frees.
+
+\ENDDOC

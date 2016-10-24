@@ -1,0 +1,3 @@
+\THEOREM LENGTH_SEG list
+|- !n k l. (n + k) <= (LENGTH l) ==> (LENGTH(SEG n k l) = n)
+\ENDTHEOREM

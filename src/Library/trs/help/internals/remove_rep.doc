@@ -1,0 +1,10 @@
+\DOC remove_rep
+
+\TYPE {remove_rep : (* list -> * list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

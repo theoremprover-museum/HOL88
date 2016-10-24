@@ -1,0 +1,7 @@
+\THEOREM OR_CLAUSES \none
+|- !t. (T \/ t) = T /\
+       (t \/ T) = T /\
+       (F \/ t) = t /\
+       (t \/ F) = t /\
+       (t \/ t) = t
+\ENDTHEOREM

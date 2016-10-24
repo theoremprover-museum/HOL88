@@ -1,0 +1,26 @@
+\DOC search_until_find
+
+\TYPE {search_until_find : (searchstep -> searchstep)}
+
+\SYNOPSIS
+Function to continue a search until a matching theorem is found.
+
+\LIBRARY trs
+
+\DESCRIBE
+{search_until_find} continues a search until a matching theorem is found. If
+the list of theorems already found is non-empty the function does nothing.
+{search_until_find} takes a step of a search as argument and returns a new
+step.
+
+\FAILURE
+Fails if the steps are exhausted before a theorem is found. The function may
+fail for other reasons. Since the user may supply his/her own side-condition
+functions at the beginning of the search, an exhaustive list of possible
+failures cannot be given.
+
+\SEEALSO
+continue_search, CS, search_n_theories, search_n_until_find, find_theorems,
+FT, show_step, run_search, full_search.
+
+\ENDDOC

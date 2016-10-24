@@ -1,0 +1,17 @@
+\DOC BigOr
+
+\TYPE {BigOr : (thmpattern list -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern that matches if and only if one or more of the argument
+patterns match.
+
+\LIBRARY trs
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+BigAnd, Andalso, Orelse, Not, Where, kind, thryname, thmname, conc, hypP, hypF.
+
+\ENDDOC

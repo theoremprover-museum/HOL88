@@ -1,0 +1,23 @@
+\DOC kind
+
+\TYPE {kind : (thmkind -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern from a `kind of theorem'.
+
+\LIBRARY trs
+
+\DESCRIBE
+{kind x} where {x} is one of {Axiom}, {Definition}, {Theorem}, returns a
+pattern which matches a theorem if and only if it is an axiom, a definition,
+or a derived theorem respectively. The pattern can be used in a search for
+theorems.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+Axiom, Definition, Theorem, thryname, thmname, conc, hypP, hypF, Andalso,
+Orelse, Not, Where, BigAnd, BigOr.
+
+\ENDDOC

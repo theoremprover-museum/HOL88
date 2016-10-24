@@ -1,0 +1,3 @@
+\THEOREM BALL_NEIGH TOPOLOGY
+|- !m x e. (& 0) < e ==> neigh(mtop m)(B m(x,e),x)
+\ENDTHEOREM

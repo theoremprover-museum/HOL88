@@ -1,0 +1,3 @@
+\THEOREM REAL_DIV_RMUL REAL
+|- !x y. ~(y = & 0) ==> ((x / y) * y = x)
+\ENDTHEOREM

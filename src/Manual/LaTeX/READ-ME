@@ -1,0 +1,17 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: Manual/LaTeX				|
++ ===================================================================== +
+
+This directory contains the LaTeX style file and macro definitions for the
+HOL manual.  The contents are:
+
+  * ack.tex           : Acknowledgements chapter for all three manual volumes
+  * alltt.sty         : Macro definitions for the alltt environment
+  * commands.tex      : General macro definitions for the manual
+docm.tex
+docmacros.tex
+  * layout.tex        : Test file for manual page layout
+  * makeindex         : The index-making program
+pic-macros.tex
+ref-macros.tex
+

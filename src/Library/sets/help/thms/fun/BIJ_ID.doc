@@ -1,0 +1,3 @@
+\THEOREM BIJ_ID sets
+|- !s. BIJ(\x. x)s s
+\ENDTHEOREM

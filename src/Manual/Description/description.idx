@@ -1,0 +1,2661 @@
+\indexentry{ML@\ML!versions of}{3}
+\indexentry{Milner, R.}{3}
+\indexentry{Morris, L.}{3}
+\indexentry{Wadsworth, C.}{3}
+\indexentry{LCF@\LCF!Edinburgh}{3}
+\indexentry{ML@\ML!original version of}{3}
+\indexentry{ML@\ML!Standard}{3}
+\indexentry{Huet, G.}{3}
+\indexentry{Paulson, L.}{3}
+\indexentry{ML@\ML!CAML version of@\verb+CAML+ version of}{3}
+\indexentry{LCF@\LCF!Cambridge}{3}
+\indexentry{ML@\ML!HOL version of@\HOL\ version of}{3}
+\indexentry{Franz Lisp HOL@Franz Lisp \HOL}{3}
+\indexentry{Common Lisp HOL@Common Lisp \HOL}{3}
+\indexentry{Carroll, J.}{3}
+\indexentry{Gordon, M.}{3}
+\indexentry{Melham, T.}{3}
+\indexentry{Dhingra, I.}{3}
+\indexentry{Van Tassel, J.}{3}
+\indexentry{ML@\ML!top level of}{7}
+\indexentry{top level, of ML@top level, of \ML}{7}
+\indexentry{prompt, in ML@prompt, in \ML}{7}
+\indexentry{ML@\ML!prompt character of}{7}
+\indexentry{ prompt, in ML@{\small\verb+#+} (prompt, in \ML)}{7}
+\indexentry{int@\ml{int}}{7}
+\indexentry{type constraint!in ML@in \ML}{7}
+\indexentry{terminator, of ML expressions@terminator, of \ML\ expressions}{7}
+\indexentry{ terminator, of ML expressions@{\small\verb+;;+} (terminator, of \ML\ expressions)}{7}
+\indexentry{expressions, in ML@expressions, in \ML!terminator for}{7}
+\indexentry{top level terminator, in ML@top level terminator, in \ML}{7}
+\indexentry{ML@\ML!top level expression terminator in}{7}
+\indexentry{carriage return!after ML expressions@after \ML\ expressions}{7}
+\indexentry{expressions, in ML@expressions, in \ML!carriage return after}{7}
+\indexentry{it@\ml{it}}{7}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$|(}{7}
+\indexentry{let, in ML@\ml{let}, in \ML}{7}
+\indexentry{bindings, in ML@bindings, in \ML!in declarations|(}{7}
+\indexentry{declarations, in ML@declarations, in \ML!effect on it@effect on \ml{it}}{8}
+\indexentry{it@\ml{it}}{8}
+\indexentry{bindings, in ML@bindings, in \ML!simultaneous}{8}
+\indexentry{declarations, in ML@declarations, in \ML!local}{8}
+\indexentry{where@{\small\verb+where+}}{8}
+\indexentry{bindings, in ML@bindings, in \ML!in declarations|)}{8}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$|)}{8}
+\indexentry{variables, in ML@variables, in \ML!assignable}{8}
+\indexentry{assignable variables, in ML@assignable variables, in \ML}{8}
+\indexentry{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$}{8}
+\indexentry{ assignment, in ML@{\small\verb+:=+} (assignment, in \ML)}{8}
+\indexentry{assignments, in ML@assignments, in \ML!simultaneous}{9}
+\indexentry{ product type operator, in ML@{\small\verb+#+} (product type operator, in \ML)}{9}
+\indexentry{pairs, in ML@pairs, in \ML}{9}
+\indexentry{function application, in ML@function application, in \ML}{9}
+\indexentry{non-printable values in ML@non-printable values in \ML}{9}
+\indexentry{printing, of ML@printing, of \ML!of functions}{9}
+\indexentry{functions in ML, printing of@functions in \ML, printing of}{9}
+\indexentry{ non-printable symbol, in ML@{\small\verb+-+} (`non-printable' symbol, in \ML)}{9}
+\indexentry{function application, in ML@function application, in \ML!precedence of}{9}
+\indexentry{precedence, in ML@precedence, in \ML!of function application in ML@of function application in \ML}{9}
+\indexentry{function application, in ML@function application, in \ML!associativity of}{10}
+\indexentry{associativity, of constructs in ML@associativity, of constructs in \ML}{10}
+\indexentry{function application, in ML@function application, in \ML!partial}{10}
+\indexentry{partial function application, in ML@partial function application, in \ML}{10}
+\indexentry{free variables, in ML@free variables, in \ML!in function definitions}{11}
+\indexentry{bindings, in ML@bindings, in \ML!in function definitions}{11}
+\indexentry{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$}{11}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML|(}{11}
+\indexentry{assignable variables, in ML@assignable variables, in \ML}{11}
+\indexentry{sequencing!of ML expressions@of \ML\ expressions}{11}
+\indexentry{ sequencing, in ML@{\small\verb+;+} (sequencing, in \ML)}{11}
+\indexentry{precedence, in ML@precedence, in \ML!of while construct, in ML@of while construct, in \ML}{11}
+\indexentry{if then loop@{\small if $\cdots$ then $\cdots$ loop $\cdots$}|(}{11}
+\indexentry{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}|(}{11}
+\indexentry{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}}{12}
+\indexentry{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}}{12}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML|)}{12}
+\indexentry{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}|)}{12}
+\indexentry{if then loop@{\small if $\cdots$ then $\cdots$ loop $\cdots$}|)}{12}
+\indexentry{ lists, in ML@{\small\ml{[} $\cdots$ \ml{;} $\cdots$ \ml{]}} (lists, in \ML)}{12}
+\indexentry{hd@\ml{hd}}{12}
+\indexentry{tl@\ml{tl}}{12}
+\indexentry{null@\ml{null}}{12}
+\indexentry{list constructor, in ML@list constructor, in \ML}{12}
+\indexentry{list concatenation, in ML@list concatenation, in \ML}{12}
+\indexentry{ string markers@{\small\verb+`+ $\cdots$ \verb+`+} (string markers, in \ML)}{13}
+\indexentry{polymorphism, in ML@polymorphism, in \ML|(}{13}
+\indexentry{hd@\ml{hd}}{13}
+\indexentry{tl@\ml{tl}}{13}
+\indexentry{type variables, in ML@type variables, in \ML}{14}
+\indexentry{ type variables, in ML@{\small\verb+*+, \verb+**+,$\ldots$} (type variables, in \ML)}{14}
+\indexentry{map@\ml{map}}{14}
+\indexentry{type checking, in ML@type checking, in \ML!inference involved in}{14}
+\indexentry{polymorphism, in ML@polymorphism, in \ML|)}{14}
+\indexentry{lambda expressions, in ML@lambda expressions, in \ML|(}{14}
+\indexentry{ function abstraction binder, in ML@{\small\verb+\+} (function abstraction binder, in \ML)}{14}
+\indexentry{declarations, in ML@declarations, in \ML!relation to function abstraction}{14}
+\indexentry{function abstraction, in ML@function abstraction, in \ML!relation to declarations}{14}
+\indexentry{lambda expressions, in ML@lambda expressions, in \ML|)}{15}
+\indexentry{failure, in ML@failure, in \ML|(}{15}
+\indexentry{strings, in ML@strings, in \ML!to identify failures}{15}
+\indexentry{failure strings, in ML@failure strings, in \ML|(}{15}
+\indexentry{failwith@\ml{failwith}}{15}
+\indexentry{failure, in ML@failure, in \ML!trapping of}{15}
+\indexentry{failure, in ML@failure, in \ML}{15}
+\indexentry{ failure trap, in ML@{\small\verb+?+} (failure trap, in \ML)}{15}
+\indexentry{failure, in ML@failure, in \ML!selective trapping of}{16}
+\indexentry{ failure trap, selective, in ML@{\small\verb+??+} (failure trap, selective, in \ML)}{16}
+\indexentry{failure, in ML@failure, in \ML!catch-all trap for}{16}
+\indexentry{ failure trap, iterative, in ML@{\small\verb+"!+} (failure trap, iterative, in \ML)}{17}
+\indexentry{failure, in ML@failure, in \ML!iterative trapping of}{17}
+\indexentry{ failure trap, iterative selective, in ML@{\small\verb+"!"!+} (failure trap, iterative selective, in \ML)}{17}
+\indexentry{failure, in ML@failure, in \ML!iterative selective trapping of}{17}
+\indexentry{failure strings, in ML@failure strings, in \ML|)}{17}
+\indexentry{failure, in ML@failure, in \ML|)}{17}
+\indexentry{lettype@{\small\verb+lettype+}}{17}
+\indexentry{type abbreviations!in ML@in \ML}{17}
+\indexentry{types, in ML@types, in \ML!abbreviation of}{17}
+\indexentry{abbreviation of types, in ML@abbreviation of types, in \ML}{17}
+\indexentry{type@\ml{type}|(}{17}
+\indexentry{bindings, in ML@bindings, in \ML!concrete type|(}{17}
+\indexentry{concrete types, in ML@concrete types, in \ML}{17}
+\indexentry{types, in ML@types, in \ML!concrete|(}{17}
+\indexentry{lambda expressions, in ML@lambda expressions, in \ML!extended form of}{18}
+\indexentry{fun@{\ml{fun$\cdots$}\ml{"|}\ml{$\cdots$}}}{18}
+\indexentry{function (pattern) selection abstraction, in ML@function (pattern) selection abstraction, in \ML}{18}
+\indexentry{rectype@\ml{rectype}}{19}
+\indexentry{patterns, in ML@patterns, in \ML}{19}
+\indexentry{case of@{\small\ml{case} $\cdots$ \ml{of} $\cdots$ \ml{"|} $\cdots$}!relation to abstraction}{19}
+\indexentry{bindings, in ML@bindings, in \ML!concrete type|)}{19}
+\indexentry{type@\ml{type}|)}{19}
+\indexentry{types, in ML@types, in \ML!concrete|)}{19}
+\indexentry{types, in ML@types, in \ML!abstract|(}{19}
+\indexentry{bindings, in ML@bindings, in \ML!abstract type|(}{19}
+\indexentry{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|(}{19}
+\indexentry{abstract types, in ML@abstract types, in \ML|(}{19}
+\indexentry{abs_@{\small\verb+abs_+$\ldots$}}{20}
+\indexentry{rep_@{\small\verb+rep_+$\ldots$}}{20}
+\indexentry{non-printable values in ML@non-printable values in \ML}{20}
+\indexentry{ non-printable symbol, in ML@{\small\verb+-+} (`non-printable' symbol, in \ML)}{20}
+\indexentry{printing, of ML@printing, of \ML!of abstract-typed values}{20}
+\indexentry{abstract-typed values, in ML@abstract-typed values, in \ML!printing of}{20}
+\indexentry{abstract types, in ML@abstract types, in \ML|)}{20}
+\indexentry{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|)}{20}
+\indexentry{bindings, in ML@bindings, in \ML!abstract type|)}{20}
+\indexentry{types, in ML@types, in \ML!abstract|)}{20}
+\indexentry{type constructors!in ML@in \ML|(}{20}
+\indexentry{ disjoint union type operator, in ML@{\small\verb:+:} (disjoint union type operator, in \ML)}{21}
+\indexentry{disjoint union, in ML@disjoint union, in \ML}{21}
+\indexentry{isl@\ml{isl}}{21}
+\indexentry{inl@\ml{inl}}{21}
+\indexentry{isr@\ml{isr}}{21}
+\indexentry{inr@\ml{inr}}{21}
+\indexentry{outl@\ml{outl}}{21}
+\indexentry{outr@\ml{outr}}{21}
+\indexentry{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}{22}
+\indexentry{wildcard, in ML@wildcard, in \ML}{22}
+\indexentry{type constructors!in ML@in \ML|)}{22}
+\indexentry{BNF syntax, explanation of}{23}
+\indexentry{syntax of ML@syntax of \ML!explanation of}{23}
+\indexentry{precedence, in ML@precedence, in \ML}{23}
+\indexentry{associativity, of constructs in ML@associativity, of constructs in \ML}{23}
+\indexentry{equiv.}{23}
+\indexentry{type variables, in ML@type variables, in \ML|(}{24}
+\indexentry{variables, in ML@variables, in \ML!syntax of|(}{24}
+\indexentry{ML@\ML!syntax of declarations in}{24}
+\indexentry{declarations, in ML@declarations, in \ML!syntax of}{24}
+\indexentry{type constraint!in ML@in \ML}{24}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!syntax of}{24}
+\indexentry{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!syntax of}{24}
+\indexentry{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!syntax of}{24}
+\indexentry{abbreviation of types, in ML@abbreviation of types, in \ML}{24}
+\indexentry{types, in ML@types, in \ML!abbreviation of}{24}
+\indexentry{lettype@{\small\verb+lettype+}}{24}
+\indexentry{type@\ml{type}}{24}
+\indexentry{rectype@\ml{rectype}}{24}
+\indexentry{types, in ML@types, in \ML!concrete}{24}
+\indexentry{types, in ML@types, in \ML!abstract}{24}
+\indexentry{absrectype@{\small\verb+absrectype+}$\ldots${\small\verb+with+}$\ldots$}{24}
+\indexentry{ML@\ML!syntax of bindings in}{24}
+\indexentry{bindings, in ML@bindings, in \ML!syntax of}{24}
+\indexentry{ binding operator, in ML@{\small\verb+=+} (binding operator, in \ML)}{24}
+\indexentry{and@{\small\verb+and+}}{24}
+\indexentry{ML@\ML!syntax of patterns in}{24}
+\indexentry{patterns, in ML@patterns, in \ML!syntax of}{24}
+\indexentry{wildcard, in ML@wildcard, in \ML}{24}
+\indexentry{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}{24}
+\indexentry{constructions, in ML@constructions, in \ML}{24}
+\indexentry{type constraint!in ML@in \ML}{24}
+\indexentry{ type constraint, in ML@{\small\verb+:+} (type constraint, in \ML)}{24}
+\indexentry{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)}{24}
+\indexentry{ pair constructor, in ML@{\small\verb+,+} (pair constructor, in \ML)}{24}
+\indexentry{pairs, in ML@pairs, in \ML!syntax of}{24}
+\indexentry{list constructor, in ML@list constructor, in \ML!syntax of}{24}
+\indexentry{lists, in ML@lists, in \ML!syntax of}{24}
+\indexentry{ brackets, in ML@{\small\verb+(+$\cdots$\verb+)+} (brackets, in \ML)}{24}
+\indexentry{ML@\ML!syntax of expressions in|(}{25}
+\indexentry{expressions, in ML@expressions, in \ML!syntax of}{25}
+\indexentry{type variables, in ML@type variables, in \ML|)}{25}
+\indexentry{variables, in ML@variables, in \ML!syntax of|)}{25}
+\indexentry{constructors, in ML@constructors, in \ML}{25}
+\indexentry{function application, in ML@function application, in \ML!syntax of}{25}
+\indexentry{type constraint!in ML@in \ML}{25}
+\indexentry{ type constraint, in ML@{\small\verb+:+} (type constraint, in \ML)}{25}
+\indexentry{ minus, in ML@{\small\verb+-+} (minus, in \ML)}{25}
+\indexentry{ multiplication, in ML@{\small\verb+*+} (multiplication, in \ML)}{25}
+\indexentry{ division, in ML@{\small\verb+/+} (division, in \ML)}{25}
+\indexentry{ addition, in ML@{\small\verb7+7} (addition, in \ML)}{25}
+\indexentry{ subtraction, in ML@{\small\verb+-+} (subtraction, in \ML)}{25}
+\indexentry{ less than, in ML@{\small\verb+<+} (less than, in \ML)}{25}
+\indexentry{ greater than, in ML@{\small\verb+>+} (greater than, in \ML)}{25}
+\indexentry{list constructor, in ML@list constructor, in \ML!syntax of}{25}
+\indexentry{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)}{25}
+\indexentry{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)}{25}
+\indexentry{concatenation, of lists!in ML@in \ML}{25}
+\indexentry{ equality, in ML@{\small\verb+=+} (equality, in \ML)}{25}
+\indexentry{equality, in ML@equality, in \ML!syntax of}{25}
+\indexentry{not@\ml{not}}{25}
+\indexentry{conjunction, in ML@conjunction, in \ML}{25}
+\indexentry{ conjunction, in ML@{\small\verb+&+} (conjunction, in \ML)}{25}
+\indexentry{or@\ml{or}}{25}
+\indexentry{disjunction, in ML@disjunction, in \ML}{25}
+\indexentry{do@\ml{do}}{25}
+\indexentry{ pair constructor, in ML@{\small\verb+,+} (pair constructor, in \ML)}{25}
+\indexentry{pairs, in ML@pairs, in \ML!syntax of}{25}
+\indexentry{ assignment, in ML@{\small\verb+:=+} (assignment, in \ML)}{25}
+\indexentry{assignments, in ML@assignments, in \ML!syntax of}{25}
+\indexentry{fail@{\small\verb+fail+}}{25}
+\indexentry{failwith@\ml{failwith}}{25}
+\indexentry{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}}{25}
+\indexentry{if loop loop@{\small if $\cdots$ loop $\cdots$ loop $\cdots$}}{25}
+\indexentry{if then loop@{\small if $\cdots$ then $\cdots$ loop $\cdots$}}{25}
+\indexentry{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}!syntax of}{25}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML!syntax of}{25}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML}{25}
+\indexentry{failure, in ML@failure, in \ML!iterative selective trapping of}{26}
+\indexentry{failure, in ML@failure, in \ML!iterative trapping of}{26}
+\indexentry{failure, in ML@failure, in \ML!selective trapping of}{26}
+\indexentry{failure, in ML@failure, in \ML!trapping of}{26}
+\indexentry{ failure trap, selective, in ML@{\small\verb+??+} (failure trap, selective, in \ML)}{26}
+\indexentry{ failure trap, iterative selective, in ML@{\small\verb+"!"!+} (failure trap, iterative selective, in \ML)}{26}
+\indexentry{ failure trap, in ML@{\small\verb+?+} (failure trap, in \ML)}{26}
+\indexentry{ failure trap, iterative, in ML@{\small\verb+"!+} (failure trap, iterative, in \ML)}{26}
+\indexentry{while do@{\small\ml{while}$\cdots$\ml{do}$\cdots$}!syntax of}{26}
+\indexentry{while construct, in ML@while construct, in \ML}{26}
+\indexentry{ sequencing, in ML@{\small\verb+;+} (sequencing, in \ML)}{26}
+\indexentry{sequencing!of ML expressions@of \ML\ expressions}{26}
+\indexentry{ lists, in ML@{\small\ml{[} $\cdots$ \ml{;} $\cdots$ \ml{]}} (lists, in \ML)}{26}
+\indexentry{lists, in ML@lists, in \ML!syntax of}{26}
+\indexentry{where@{\small\verb+where+}}{26}
+\indexentry{whereref@{\small\verb+whereref+}}{26}
+\indexentry{whererec@{\small\verb+whererec+}}{26}
+\indexentry{wheretype@{\small\verb+wheretype+}}{26}
+\indexentry{whereabstype@{\small\verb+whereabstype+}}{26}
+\indexentry{whereabsrectype@{\small\verb+whereabsrectype+}}{26}
+\indexentry{in@{\small\verb+in+}}{26}
+\indexentry{declarations, in ML@declarations, in \ML!local}{26}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!syntax of}{26}
+\indexentry{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!syntax of}{26}
+\indexentry{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!syntax of}{26}
+\indexentry{case of@{\small\ml{case} $\cdots$ \ml{of} $\cdots$ \ml{"|} $\cdots$}}{26}
+\indexentry{ function abstraction binder, in ML@{\small\verb+\+} (function abstraction binder, in \ML)}{26}
+\indexentry{function abstraction, in ML@function abstraction, in \ML!syntax of}{26}
+\indexentry{function (pattern) selection abstraction, in ML@function (pattern) selection abstraction, in \ML}{26}
+\indexentry{fun@{\ml{fun$\cdots$}\ml{"|}\ml{$\cdots$}}!syntax of}{26}
+\indexentry{ brackets, in ML@{\small\verb+(+$\cdots$\verb+)+} (brackets, in \ML)}{26}
+\indexentry{ML@\ML!syntax of expressions in|)}{26}
+\indexentry{binding power, in ML@binding power, in \ML}{26}
+\indexentry{associativity, of constructs in ML@associativity, of constructs in \ML}{26}
+\indexentry{case of@{\small\ml{case} $\cdots$ \ml{of} $\cdots$ \ml{"|} $\cdots$}!relation to abstraction}{26}
+\indexentry{wildcard, in ML@wildcard, in \ML}{26}
+\indexentry{spaces!in ML expressions@in \ML\ expressions}{26}
+\indexentry{ASCII@{\small ASCII}}{26}
+\indexentry{carriage return!in ML expressions@in \ML\ expressions}{26}
+\indexentry{line feed!in ML expressions@in \ML\ expressions}{26}
+\indexentry{form feed!in ML expressions@in \ML\ expressions}{26}
+\indexentry{tab!in ML expressions@in \ML\ expressions}{27}
+\indexentry{comments, in ML@comments, in \ML}{27}
+\indexentry{ comment markers, in ML@\per $\cdots$ \per\ (comment markers, in \ML)}{27}
+\indexentry{ comment markers, nested, in ML@\pes $\cdots$ \pee\ (comment markers, nested, in \ML)}{27}
+\indexentry{identifiers, in ML@identifiers, in \ML!lexical aspects of|(}{27}
+\indexentry{ML@\ML!identifiers in|(}{27}
+\indexentry{alphanumerics, in ML@alphanumerics, in \ML|(}{27}
+\indexentry{special symbols, in ML@special symbols, in \ML|(}{27}
+\indexentry{ML@\ML!special symbols of|(}{27}
+\indexentry{letters, in ML@letters, in \ML}{27}
+\indexentry{new_letter@\ml{new\_letter}|pin}{28}
+\indexentry{is_letter@\ml{is\_letter}|pin}{28}
+\indexentry{new_alphanum@\ml{new\_alphanum}|pin}{28}
+\indexentry{is_alphanum@\ml{is\_alphanum}|pin}{28}
+\indexentry{new_special_symbol@\ml{new\_special\_symbol}|pin}{28}
+\indexentry{alphanumerics, in ML@alphanumerics, in \ML|)}{28}
+\indexentry{special_symbols@\ml{special\_symbols}|pin}{28}
+\indexentry{identifiers, in ML@identifiers, in \ML!lexical aspects of|)}{28}
+\indexentry{special symbols, in ML@special symbols, in \ML|)}{28}
+\indexentry{ML@\ML!special symbols of|)}{28}
+\indexentry{constant expressions, in ML@constant expressions, in \ML}{29}
+\indexentry{ML@\ML!constant expressions in}{29}
+\indexentry{integers, in ML@integers, in \ML}{29}
+\indexentry{true in ML@\ml{true} in \ML}{29}
+\indexentry{false@\ml{false}}{29}
+\indexentry{truth values, in ML@truth values, in \ML}{29}
+\indexentry{strings, in ML@strings, in \ML}{29}
+\indexentry{ string markers@{\small\verb+`+ $\cdots$ \verb+`+} (string markers, in \ML)}{29}
+\indexentry{ escape, in ML strings@{\small\verb+\+} (escape, in \ML\ strings)}{29}
+\indexentry{spaces!in ML strings@in \ML\ strings}{29}
+\indexentry{carriage return!in ML strings@in \ML\ strings}{29}
+\indexentry{line feed!in ML strings@in \ML\ strings}{29}
+\indexentry{tab!in ML strings@in \ML\ strings}{29}
+\indexentry{form feed!in ML strings@in \ML\ strings}{29}
+\indexentry{constructors, in ML@constructors, in \ML}{29}
+\indexentry{strings, in ML@strings, in \ML!changing the escape}{29}
+\indexentry{set_string_escape@\ml{set\_string\_escape}|pin}{29}
+\indexentry{prefixes, in ML@prefixes, in \ML|(}{29}
+\indexentry{prefixes, in ML@prefixes, in \ML}{29}
+\indexentry{infixes, in ML@infixes, in \ML}{29}
+\indexentry{list constructor, in ML@list constructor, in \ML}{29}
+\indexentry{not@\ml{not}}{29}
+\indexentry{do@\ml{do}}{29}
+\indexentry{or@\ml{or}!not a dollared infix}{29}
+\indexentry{ minus, in ML@{\small\verb+-+} (minus, in \ML)}{29}
+\indexentry{ conjunction, in ML@{\small\verb+&+} (conjunction, in \ML)}{29}
+\indexentry{ multiplication, in ML@{\small\verb+*+} (multiplication, in \ML)}{29}
+\indexentry{ division, in ML@{\small\verb+/+} (division, in \ML)}{29}
+\indexentry{ addition, in ML@{\small\verb7+7} (addition, in \ML)}{29}
+\indexentry{ subtraction, in ML@{\small\verb+-+} (subtraction, in \ML)}{29}
+\indexentry{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)|(}{29}
+\indexentry{concatenation, of lists!in ML@in \ML}{29}
+\indexentry{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)}{29}
+\indexentry{ equality, in ML@{\small\verb+=+} (equality, in \ML)}{29}
+\indexentry{ less than, in ML@{\small\verb+<+} (less than, in \ML)}{29}
+\indexentry{ greater than, in ML@{\small\verb+>+} (greater than, in \ML)}{29}
+\indexentry{ pair constructor, in ML@{\small\verb+,+} (pair constructor, in \ML)}{29}
+\indexentry{precedence, in ML@precedence, in \ML!of infixes, in ML@of infixes, in \ML}{29}
+\indexentry{precedence, in ML@precedence, in \ML!of prefixes, in ML@of prefixes, in \ML}{29}
+\indexentry{associativity, of constructs in ML@associativity, of constructs in \ML!of infixes}{29}
+\indexentry{concatenation, of lists!in ML@in \ML}{30}
+\indexentry{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)|)}{30}
+\indexentry{ML@\ML!identifiers in|)}{30}
+\indexentry{prefixes, in ML@prefixes, in \ML|)}{30}
+\indexentry{evaluation, of ML constructs@evaluation, of \ML\ constructs}{31}
+\indexentry{environments, in ML evaluations@environments, in \ML\ evaluations}{31}
+\indexentry{stores}{31}
+\indexentry{variables, in ML@variables, in \ML}{31}
+\indexentry{values, of ML variables@values, of \ML\ variables}{31}
+\indexentry{locations}{31}
+\indexentry{assignable variables, in ML@assignable variables, in \ML}{31}
+\indexentry{variables, in ML@variables, in \ML!assignable}{31}
+\indexentry{scope!of bindings}{31}
+\indexentry{bindings, in ML@bindings, in \ML!effect of declarations on}{31}
+\indexentry{declarations, in ML@declarations, in \ML!at top level}{31}
+\indexentry{top level, of ML@top level, of \ML!declarations at}{31}
+\indexentry{ML@\ML!top level of}{31}
+\indexentry{bindings, in ML@bindings, in \ML!scope of}{31}
+\indexentry{side effects, in ML@side effects, in \ML}{31}
+\indexentry{failure, in ML@failure, in \ML|(}{31}
+\indexentry{failure, in ML@failure, in \ML!implicit}{31}
+\indexentry{failure, in ML@failure, in \ML!explicit}{31}
+\indexentry{failwith@\ml{failwith}}{31}
+\indexentry{failure, in ML@failure, in \ML!similar}{31}
+\indexentry{failure, in ML@failure, in \ML|)}{32}
+\indexentry{evaluation, of ML constructs@evaluation, of \ML\ constructs!control flow in}{32}
+\indexentry{ type constraint, in ML@{\small\verb+:+} (type constraint, in \ML)}{32}
+\indexentry{type checking, in ML@type checking, in \ML}{32}
+\indexentry{ML@\ML!type checking of}{32}
+\indexentry{syntax of ML@syntax of \ML!short form}{32}
+\indexentry{ML@\ML!short form of syntax of}{32}
+\indexentry{wildcard, in ML@wildcard, in \ML}{32}
+\indexentry{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}{32}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!evaluation of}{33}
+\indexentry{ordinary variables, in ML@ordinary variables, in \ML}{33}
+\indexentry{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!evaluation of}{33}
+\indexentry{assignable variables, in ML@assignable variables, in \ML}{33}
+\indexentry{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!evaluation of}{33}
+\indexentry{bindings, in ML@bindings, in \ML!in function definitions|(}{33}
+\indexentry{bindings, in ML@bindings, in \ML!evaluation of|(}{33}
+\indexentry{bindings, in ML@bindings, in \ML!kinds of|(}{33}
+\indexentry{bindings, in ML@bindings, in \ML!simple}{33}
+\indexentry{simple bindings, in ML@simple bindings, in \ML}{33}
+\indexentry{constant expressions, in ML@constant expressions, in \ML}{33}
+\indexentry{bindings, in ML@bindings, in \ML!multiple}{34}
+\indexentry{multiple bindings, in ML@multiple bindings, in \ML}{34}
+\indexentry{bindings, in ML@bindings, in \ML!kinds of|)}{34}
+\indexentry{bindings, in ML@bindings, in \ML!evaluation of}{34}
+\indexentry{matching, of patterns, in ML@matching, of patterns, in \ML|(}{34}
+\indexentry{variables, in ML@variables, in \ML!in expression evaluation}{34}
+\indexentry{bindings, in ML@bindings, in \ML!in function definitions|)}{34}
+\indexentry{bindings, in ML@bindings, in \ML!evaluation of|)}{34}
+\indexentry{patterns, in ML@patterns, in \ML!matching with values|(}{34}
+\indexentry{pattern matching, in ML evaluations@pattern matching, in \ML\ evaluations|(}{34}
+\indexentry{wildcard, in ML@wildcard, in \ML}{34}
+\indexentry{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}{34}
+\indexentry{identifiers, in ML@identifiers, in \ML!in expression evaluation}{34}
+\indexentry{type variables, in ML@type variables, in \ML}{34}
+\indexentry{constructions, in ML@constructions, in \ML}{34}
+\indexentry{pairs, in ML@pairs, in \ML!in expression evaluation}{35}
+\indexentry{lists, in ML@lists, in \ML!in expression evaluation}{35}
+\indexentry{list constructor, in ML@list constructor, in \ML!in expression evaluation}{35}
+\indexentry{matching, of patterns, in ML@matching, of patterns, in \ML|)}{35}
+\indexentry{pattern matching, in ML evaluations@pattern matching, in \ML\ evaluations|)}{35}
+\indexentry{patterns, in ML@patterns, in \ML!matching with values|)}{35}
+\indexentry{expressions, in ML@expressions, in \ML!evaluation of|(}{35}
+\indexentry{evaluation, of ML constructs@evaluation, of \ML\ constructs!termination of}{35}
+\indexentry{failure, in ML@failure, in \ML}{35}
+\indexentry{failure, in ML@failure, in \ML!side effects of}{35}
+\indexentry{side effects, in ML@side effects, in \ML}{35}
+\indexentry{constant expressions, in ML@constant expressions, in \ML}{35}
+\indexentry{identifiers, in ML@identifiers, in \ML!evaluation of}{35}
+\indexentry{type variables, in ML@type variables, in \ML}{35}
+\indexentry{variables, in ML@variables, in \ML!evaluation of}{35}
+\indexentry{variables, in ML@variables, in \ML!ordinary}{35}
+\indexentry{ordinary variables, in ML@ordinary variables, in \ML}{35}
+\indexentry{environments, in ML evaluations@environments, in \ML\ evaluations|(}{35}
+\indexentry{constructions, in ML@constructions, in \ML}{36}
+\indexentry{combinations, in ML@combinations, in \ML}{36}
+\indexentry{function application, in ML@function application, in \ML!evaluation of}{36}
+\indexentry{prefixes, in ML@prefixes, in \ML}{36}
+\indexentry{side effects, in ML@side effects, in \ML}{36}
+\indexentry{infixes, in ML@infixes, in \ML}{36}
+\indexentry{conjunction, in ML@conjunction, in \ML}{36}
+\indexentry{ conjunction, in ML@{\small\verb+&+} (conjunction, in \ML)}{36}
+\indexentry{disjunction, in ML@disjunction, in \ML}{36}
+\indexentry{or@\ml{or}}{36}
+\indexentry{pairs, in ML@pairs, in \ML!evaluation of}{36}
+\indexentry{ pair constructor, in ML@{\small\verb+,+} (pair constructor, in \ML)}{36}
+\indexentry{assignments, in ML@assignments, in \ML!evaluation of}{36}
+\indexentry{ assignment, in ML@{\small\verb+:=+} (assignment, in \ML)}{36}
+\indexentry{assignable variables, in ML@assignable variables, in \ML}{36}
+\indexentry{variables, in ML@variables, in \ML!assignable}{36}
+\indexentry{locations}{36}
+\indexentry{stores}{36}
+\indexentry{failure, in ML@failure, in \ML|(}{36}
+\indexentry{failure, in ML@failure, in \ML!constructs for|(}{36}
+\indexentry{failwith@\ml{failwith}}{36}
+\indexentry{evaluation, of ML constructs@evaluation, of \ML\ constructs!control flow in|(}{36}
+\indexentry{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}!evaluation of|(}{36}
+\indexentry{if loop loop@{\small if $\cdots$ loop $\cdots$ loop $\cdots$}|(}{36}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML!evaluation of}{36}
+\indexentry{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}}{36}
+\indexentry{if then loop@{\small if $\cdots$ then $\cdots$ loop $\cdots$}}{36}
+\indexentry{void@\ml{void}}{37}
+\indexentry{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}!evaluation of|)}{37}
+\indexentry{if loop loop@{\small if $\cdots$ loop $\cdots$ loop $\cdots$}|)}{37}
+\indexentry{strings, in ML@strings, in \ML!to identify failures}{37}
+\indexentry{failure, in ML@failure, in \ML!iterative selective trapping of}{37}
+\indexentry{failure, in ML@failure, in \ML!iterative trapping of}{37}
+\indexentry{failure, in ML@failure, in \ML!selective trapping of}{37}
+\indexentry{failure, in ML@failure, in \ML!trapping of}{37}
+\indexentry{evaluation, of ML constructs@evaluation, of \ML\ constructs!control flow in|)}{37}
+\indexentry{failure, in ML@failure, in \ML!constructs for|)}{37}
+\indexentry{failure, in ML@failure, in \ML|)}{37}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML!evaluation of|(}{37}
+\indexentry{while construct, in ML@while construct, in \ML|(}{37}
+\indexentry{while do@{\small\ml{while}$\cdots$\ml{do}$\cdots$}!evaluation of|(}{37}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML!evaluation of|)}{37}
+\indexentry{while construct, in ML@while construct, in \ML|)}{37}
+\indexentry{while do@{\small\ml{while}$\cdots$\ml{do}$\cdots$}!evaluation of|)}{37}
+\indexentry{sequences, in ML@sequences, in \ML}{38}
+\indexentry{sequencing!of ML expressions@of \ML\ expressions}{38}
+\indexentry{lists, in ML@lists, in \ML!evaluation of}{38}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!evaluation of}{38}
+\indexentry{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!evaluation of}{38}
+\indexentry{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!evaluation of}{38}
+\indexentry{declarations, in ML@declarations, in \ML!evaluation of}{38}
+\indexentry{declarations, in ML@declarations, in \ML!local}{38}
+\indexentry{function abstraction, in ML@function abstraction, in \ML!evaluation of}{38}
+\indexentry{ function abstraction binder, in ML@{\small\verb+\+} (function abstraction binder, in \ML)}{38}
+\indexentry{currying, in ML@currying, in \ML}{38}
+\indexentry{free variables, in ML@free variables, in \ML!binding of}{38}
+\indexentry{function (pattern) selection abstraction, in ML@function (pattern) selection abstraction, in \ML}{38}
+\indexentry{fun@{\ml{fun$\cdots$}\ml{"|}\ml{$\cdots$}}!evaluation of}{38}
+\indexentry{expressions, in ML@expressions, in \ML!evaluation of|)}{38}
+\indexentry{environments, in ML evaluations@environments, in \ML\ evaluations|)}{38}
+\indexentry{type checking, in ML@type checking, in \ML!reasons for}{39}
+\indexentry{polymorphism, in ML@polymorphism, in \ML}{39}
+\indexentry{type constructors!in ML@in \ML|(}{40}
+\indexentry{abbreviation of types, in ML@abbreviation of types, in \ML}{40}
+\indexentry{ product type operator, in ML@{\small\verb+#+} (product type operator, in \ML)}{40}
+\indexentry{product types!in ML@in \ML}{40}
+\indexentry{disjoint union, in ML@disjoint union, in \ML}{40}
+\indexentry{ disjoint union type operator, in ML@{\small\verb:+:} (disjoint union type operator, in \ML)}{40}
+\indexentry{ function type operator, in ML@{\small\verb+->+} (function type operator, in \ML)}{40}
+\indexentry{function types, in ML@function types, in \ML}{40}
+\indexentry{void@\ml{void}}{40}
+\indexentry{int@\ml{int}}{40}
+\indexentry{bool, the type in ML@\ml{bool}, the type in \ML}{40}
+\indexentry{string@\ml{string}}{40}
+\indexentry{types, in ML@types, in \ML!concrete}{40}
+\indexentry{ type variables, in ML@{\small\verb+*+, \verb+**+,$\ldots$} (type variables, in \ML)}{40}
+\indexentry{type abbreviations!in ML@in \ML}{40}
+\indexentry{types, in ML@types, in \ML!abbreviation of}{40}
+\indexentry{lettype@{\small\verb+lettype+}}{40}
+\indexentry{concrete types, in ML@concrete types, in \ML}{40}
+\indexentry{types, in ML@types, in \ML!abstract}{40}
+\indexentry{abstract types, in ML@abstract types, in \ML}{40}
+\indexentry{types, in ML@types, in \ML!concrete}{40}
+\indexentry{list, the type operator in ML@\ml{list}, the type operator in \ML}{40}
+\indexentry{bool, the type in ML@\ml{bool}, the type in \ML}{41}
+\indexentry{void@\ml{void}}{41}
+\indexentry{compound monotypes, in ML@compound monotypes, in \ML}{41}
+\indexentry{type constructors!in ML@in \ML|)}{41}
+\indexentry{type checking, in ML@type checking, in \ML!inference involved in|(}{41}
+\indexentry{type checking, in ML@type checking, in \ML|(}{41}
+\indexentry{has type vs possesses type@has type {\it vs} possesses type|(}{41}
+\indexentry{type constraint!in ML@in \ML}{42}
+\indexentry{has type vs possesses type@has type {\it vs} possesses type|)}{42}
+\indexentry{ML@\ML!type checking of|(}{42}
+\indexentry{ML@\ML!top level of}{42}
+\indexentry{top level, of ML@top level, of \ML!declarations at}{42}
+\indexentry{top level, of ML@top level, of \ML!expressions at}{42}
+\indexentry{generic types, in ML@generic types, in \ML}{42}
+\indexentry{type checking, in ML@type checking, in \ML!inference involved in|)}{43}
+\indexentry{constant expressions, in ML@constant expressions, in \ML}{43}
+\indexentry{void@\ml{void}}{43}
+\indexentry{integers, in ML@integers, in \ML}{43}
+\indexentry{true in ML@\ml{true} in \ML}{43}
+\indexentry{false@\ml{false}}{43}
+\indexentry{type variables, in ML@type variables, in \ML}{43}
+\indexentry{identifiers, in ML@identifiers, in \ML!type checking of}{43}
+\indexentry{variables, in ML@variables, in \ML!type checking of}{43}
+\indexentry{constructors, in ML@constructors, in \ML!type checking of}{43}
+\indexentry{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!type checking of}{43}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!type checking of}{43}
+\indexentry{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!type checking of}{43}
+\indexentry{patterns, in ML@patterns, in \ML!type checking of|(}{43}
+\indexentry{wildcard, in ML@wildcard, in \ML}{43}
+\indexentry{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}{43}
+\indexentry{type constraint!in ML@in \ML}{44}
+\indexentry{list constructor, in ML@list constructor, in \ML!type checking of}{44}
+\indexentry{patterns, in ML@patterns, in \ML!type checking of|)}{44}
+\indexentry{expressions, in ML@expressions, in \ML!type checking of}{44}
+\indexentry{combinations, in ML@combinations, in \ML}{44}
+\indexentry{function application, in ML@function application, in \ML!type checking of}{44}
+\indexentry{function types, in ML@function types, in \ML}{44}
+\indexentry{prefixes, in ML@prefixes, in \ML}{44}
+\indexentry{pairs, in ML@pairs, in \ML!type checking of}{44}
+\indexentry{assignments, in ML@assignments, in \ML!type checking of}{44}
+\indexentry{failwith@\ml{failwith}}{44}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML!type checking of}{44}
+\indexentry{conditional loop construct, in ML@conditional/loop construct, in \ML}{44}
+\indexentry{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}!type checking of}{44}
+\indexentry{failure, in ML@failure, in \ML!iterative selective trapping of}{45}
+\indexentry{failure, in ML@failure, in \ML!trapping of}{45}
+\indexentry{failure, in ML@failure, in \ML!selective trapping of}{45}
+\indexentry{failure, in ML@failure, in \ML!iterative trapping of}{45}
+\indexentry{while construct, in ML@while construct, in \ML}{45}
+\indexentry{while do@{\small\ml{while}$\cdots$\ml{do}$\cdots$}!type checking of}{45}
+\indexentry{sequencing!of ML expressions@of \ML\ expressions}{45}
+\indexentry{lists, in ML@lists, in \ML!type checking of}{45}
+\indexentry{function abstraction, in ML@function abstraction, in \ML!type checking of}{45}
+\indexentry{function (pattern) selection abstraction, in ML@function (pattern) selection abstraction, in \ML}{45}
+\indexentry{fun@{\ml{fun$\cdots$}\ml{"|}\ml{$\cdots$}}!type checking of}{45}
+\indexentry{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!type checking of}{45}
+\indexentry{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!type checking of}{45}
+\indexentry{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!type checking of}{45}
+\indexentry{declarations, in ML@declarations, in \ML!type checking of}{45}
+\indexentry{ML@\ML!type checking of|)}{45}
+\indexentry{type checking, in ML@type checking, in \ML|)}{45}
+\indexentry{type checking, in ML@type checking, in \ML!reasons behind algorithm for|(}{45}
+\indexentry{Morris, L.}{47}
+\indexentry{assignable variables, in ML@assignable variables, in \ML}{47}
+\indexentry{assignable variables, in ML@assignable variables, in \ML}{47}
+\indexentry{variables, in ML@variables, in \ML!assignable}{47}
+\indexentry{type checking, in ML@type checking, in \ML!reasons behind algorithm for|)}{47}
+\indexentry{abbreviation of types, in ML@abbreviation of types, in \ML}{47}
+\indexentry{type abbreviations!in ML@in \ML}{47}
+\indexentry{types, in ML@types, in \ML!abbreviation of}{47}
+\indexentry{lettype@{\small\verb+lettype+}|(}{47}
+\indexentry{abstract types, in ML@abstract types, in \ML!reasons for}{48}
+\indexentry{lettype@{\small\verb+lettype+}|)}{48}
+\indexentry{type constructors!in ML@in \ML|(}{48}
+\indexentry{types, in ML@types, in \ML!concrete}{48}
+\indexentry{concrete types, in ML@concrete types, in \ML}{48}
+\indexentry{bindings, in ML@bindings, in \ML!concrete type}{48}
+\indexentry{rectype@\ml{rectype}}{48}
+\indexentry{type@\ml{type}}{48}
+\indexentry{constructions, in ML@constructions, in \ML}{48}
+\indexentry{types, in ML@types, in \ML!abstract|(}{49}
+\indexentry{abstract types, in ML@abstract types, in \ML|(}{49}
+\indexentry{absrectype@{\small\verb+absrectype+}$\ldots${\small\verb+with+}$\ldots$|(}{49}
+\indexentry{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|(}{49}
+\indexentry{bindings, in ML@bindings, in \ML!abstract type}{49}
+\indexentry{abs_@{\small\verb+abs_+$\ldots$}}{49}
+\indexentry{rep_@{\small\verb+rep_+$\ldots$}}{49}
+\indexentry{scope!in ML abstract types@in \ML\ abstract types}{49}
+\indexentry{ML@\ML!top level of}{50}
+\indexentry{top level, of ML@top level, of \ML!abstract type expressions at}{50}
+\indexentry{non-printable values in ML@non-printable values in \ML}{50}
+\indexentry{ non-printable symbol, in ML@{\small\verb+-+} (`non-printable' symbol, in \ML)}{50}
+\indexentry{printing, of ML@printing, of \ML!of abstract-typed values}{50}
+\indexentry{abstract-typed values, in ML@abstract-typed values, in \ML!printing of}{50}
+\indexentry{absrectype@{\small\verb+absrectype+}$\ldots${\small\verb+with+}$\ldots$|)}{50}
+\indexentry{abstract types, in ML@abstract types, in \ML|)}{50}
+\indexentry{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|)}{50}
+\indexentry{type constructors!in ML@in \ML|)}{50}
+\indexentry{types, in ML@types, in \ML!abstract|)}{50}
+\indexentry{identifiers, in ML@identifiers, in \ML!binding of|(}{51}
+\indexentry{failure strings, in ML@failure strings, in \ML!of primitive identifiers}{51}
+\indexentry{predeclared bindings, in ML@predeclared bindings, in \ML|(}{51}
+\indexentry{identifiers, in ML@identifiers, in \ML!predeclared|(}{51}
+\indexentry{bindings, in ML@bindings, in \ML!predeclared|(}{51}
+\indexentry{fst@\ml{fst}|pin}{51}
+\indexentry{snd@\ml{snd}|pin}{51}
+\indexentry{null@\ml{null}|pin}{51}
+\indexentry{hd@\ml{hd}|pin}{51}
+\indexentry{tl@\ml{tl}|pin}{51}
+\indexentry{inl@\ml{inl}|pin}{51}
+\indexentry{inr@\ml{inr}|pin}{51}
+\indexentry{outr@\ml{outr}|pin}{51}
+\indexentry{outl@\ml{outl}|pin}{51}
+\indexentry{isl@\ml{isl}|pin}{51}
+\indexentry{explode@\ml{explode}|pin}{52}
+\indexentry{implode@\ml{implode}|pin}{52}
+\indexentry{ascii@\ml{ascii}|pin}{52}
+\indexentry{ascii_code@\ml{ascii\_code}|pin}{52}
+\indexentry{string_of_int@\ml{string\_of\_int}|pin}{52}
+\indexentry{int_of_string@\ml{int\_of\_string}|pin}{52}
+\indexentry{ml_curried_infix@\ml{ml\_curried\_infix}|pin}{52}
+\indexentry{ml_paired_infix@\ml{ml\_paired\_infix}|pin}{52}
+\indexentry{infixes, in ML@infixes, in \ML!currying of}{52}
+\indexentry{currying, in ML@currying, in \ML}{52}
+\indexentry{bindings, in ML@bindings, in \ML!predeclared|)}{52}
+\indexentry{prefixes, in ML@prefixes, in \ML|(}{53}
+\indexentry{identifiers, in ML@identifiers, in \ML!dollared|(}{53}
+\indexentry{prefixes, in ML@prefixes, in \ML}{53}
+\indexentry{infixes, in ML@infixes, in \ML}{53}
+\indexentry{dollared infixes, in ML@dollared infixes, in \ML}{53}
+\indexentry{list constructor, in ML@list constructor, in \ML}{53}
+\indexentry{do@\ml{do}|pin}{53}
+\indexentry{not@\ml{not}|pin}{53}
+\indexentry{ multiplication, in ML@{\small\verb+*+} (multiplication, in \ML)|pin}{53}
+\indexentry{ division, in ML@{\small\verb+/+} (division, in \ML)|pin}{53}
+\indexentry{ addition, in ML@{\small\verb7+7} (addition, in \ML)|pin}{53}
+\indexentry{ subtraction, in ML@{\small\verb+-+} (subtraction, in \ML)|pin}{53}
+\indexentry{ greater than, in ML@{\small\verb+>+} (greater than, in \ML)|pin}{53}
+\indexentry{ less than, in ML@{\small\verb+<+} (less than, in \ML)|pin}{53}
+\indexentry{ equality, in ML@{\small\verb+=+} (equality, in \ML)|pin}{53}
+\indexentry{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)|pin}{53}
+\indexentry{concatenation, of lists!in ML@in \ML}{53}
+\indexentry{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)|pin}{53}
+\indexentry{failure strings, in ML@failure strings, in \ML!for division by zero}{53}
+\indexentry{equality, in ML@equality, in \ML!weakness of}{53}
+\indexentry{equality, in ML@equality, in \ML!at function types}{53}
+\indexentry{list concatenation, in ML@list concatenation, in \ML!parser status of}{54}
+\indexentry{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)}{54}
+\indexentry{concatenation, of lists!in ML@in \ML}{54}
+\indexentry{identifiers, in ML@identifiers, in \ML!binding of|)}{54}
+\indexentry{identifiers, in ML@identifiers, in \ML!dollared|)}{54}
+\indexentry{identifiers, in ML@identifiers, in \ML!predeclared|)}{54}
+\indexentry{predeclared bindings, in ML@predeclared bindings, in \ML|)}{54}
+\indexentry{prefixes, in ML@prefixes, in \ML|)}{54}
+\indexentry{ escape, in ML parser@{\small\verb+$+} (escape, in \ML\ parser)}{55}
+\indexentry{infixes, in ML@infixes, in \ML}{55}
+\indexentry{dollared infixes, in ML@dollared infixes, in \ML}{55}
+\indexentry{failure strings, in ML@failure strings, in \ML!of general purpose functions}{55}
+\indexentry{combinators, in ML@combinators, in \ML|(}{55}
+\indexentry{I, the constant in ML@\ml{I}, the constant in \ML|pin}{55}
+\indexentry{K, the constant in ML@\ml{K}, the constant in \ML|pin}{55}
+\indexentry{S, the constant in ML@\ml{S}, the constant in \ML|pin}{55}
+\indexentry{KI@\ml{KI}|pin}{56}
+\indexentry{C@\ml{C}|pin}{56}
+\indexentry{W@\ml{W}|pin}{56}
+\indexentry{B@\ml{B}|pin}{56}
+\indexentry{CB@\ml{CB}|pin}{56}
+\indexentry{function composition, in ML@function composition, in \ML}{56}
+\indexentry{ function composition operator, in ML@{\small\verb+o+} (function composition operator, in \ML)|pin}{56}
+\indexentry{ product function operator, in ML@{\small\verb+#+} (product function operator, in \ML)|pin}{56}
+\indexentry{product function operator, in ML@product function operator, in \ML}{56}
+\indexentry{Co@\ml{Co}|pin}{56}
+\indexentry{combinators, in ML@combinators, in \ML|)}{56}
+\indexentry{curry@\ml{curry}|pin}{57}
+\indexentry{uncurry@\ml{uncurry}|pin}{57}
+\indexentry{failure, in ML@failure, in \ML!test for}{57}
+\indexentry{can@\ml{can}|pin}{57}
+\indexentry{function application, in ML@function application, in \ML!iteration of}{57}
+\indexentry{iterated function application, in ML@iterated function application, in \ML}{57}
+\indexentry{funpow@\ml{funpow}|pin}{57}
+\indexentry{length@\ml{length}|pin}{58}
+\indexentry{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)}{58}
+\indexentry{concatenation, of lists!in ML@in \ML}{58}
+\indexentry{append@\ml{append}|pin}{58}
+\indexentry{el@\ml{el}|pin}{58}
+\indexentry{last@\ml{last}|pin}{59}
+\indexentry{butlast@\ml{butlast}|pin}{59}
+\indexentry{replicate@\ml{replicate}|pin}{59}
+\indexentry{map@\ml{map}|pin}{59}
+\indexentry{reduce}{60}
+\indexentry{itlist@\ml{itlist}|pin}{60}
+\indexentry{rev_itlist@\ml{rev\_itlist}|pin}{60}
+\indexentry{find@\ml{find}|pin}{61}
+\indexentry{tryfind@\ml{tryfind}|pin}{61}
+\indexentry{forall@\ml{forall}|pin}{61}
+\indexentry{exists@\ml{exists}|pin}{61}
+\indexentry{mem@\ml{mem}|pin}{61}
+\indexentry{assoc@\ml{assoc}|pin}{62}
+\indexentry{rev_assoc@\ml{rev\_assoc}|pin}{62}
+\indexentry{rev@\ml{rev}|pin}{62}
+\indexentry{filter@\ml{filter}|pin}{62}
+\indexentry{mapfilter@\ml{mapfilter}|pin}{62}
+\indexentry{remove@\ml{remove}|pin}{63}
+\indexentry{chop_list@\ml{chop\_list}|pin}{63}
+\indexentry{partition@\ml{partition}|pin}{63}
+\indexentry{flat@\ml{flat}|pin}{63}
+\indexentry{combine@\ml{combine}|pin}{64}
+\indexentry{split@\ml{split}|pin}{64}
+\indexentry{sets, as ML lists@sets, as \ML\ lists}{64}
+\indexentry{intersect@\ml{intersect}|pin}{64}
+\indexentry{subtract@\ml{subtract}|pin}{64}
+\indexentry{union@\ml{union}|pin}{64}
+\indexentry{distinct@\ml{distinct}|pin}{65}
+\indexentry{setify@\ml{setify}|pin}{65}
+\indexentry{set_equal@\ml{set\_equal}|pin}{65}
+\indexentry{strings, in ML@strings, in \ML!processing functions for|(}{65}
+\indexentry{words2@\ml{words2}|pin}{65}
+\indexentry{words@\ml{words}|pin}{65}
+\indexentry{concat@\ml{concat}|pin}{66}
+\indexentry{concatl@\ml{concatl}|pin}{66}
+\indexentry{ string concatenation, in ML@{\small\verb+^+} (string concatenation, in \ML)|pin}{66}
+\indexentry{concatenation, of ML strings@concatenation, of \ML\ strings}{66}
+\indexentry{strings, in ML@strings, in \ML!processing functions for|)}{66}
+\indexentry{failure, in ML@failure, in \ML!backtrace functions for}{67}
+\indexentry{backtrace}{67}
+\indexentry{set_fail@\ml{set\_fail}|pin}{67}
+\indexentry{set_fail_prefix@\ml{set\_fail\_prefix}|pin}{67}
+\indexentry{ports, in ML input-output@ports, in \ML\ input-output}{69}
+\indexentry{strings, in ML@strings, in \ML!for input-output}{69}
+\indexentry{openi@\ml{openi}|pin}{69}
+\indexentry{read@\ml{read}|pin}{69}
+\indexentry{append_openw@\ml{append\_openw}|pin}{69}
+\indexentry{openw@\ml{openw}|pin}{69}
+\indexentry{write@\ml{write}|pin}{69}
+\indexentry{close@\ml{close}|pin}{70}
+\indexentry{tty_read@\ml{tty\_read}|pin}{70}
+\indexentry{tty_write@\ml{tty\_write}|pin}{70}
+\indexentry{search path!for \HOL\ system|(}{70}
+\indexentry{HOL system@\HOL\ system!search path for|(}{70}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!directory of built-in}{70}
+\indexentry{search_path@\ml{search\_path}|pin}{70}
+\indexentry{set_search_path@\ml{set\_search\_path}|pin}{70}
+\indexentry{find_file@\ml{find\_file}|pin}{70}
+\indexentry{find_theory@\ml{find\_theory}|pin}{71}
+\indexentry{find_ml_file@\ml{find\_ml\_file}|pin}{71}
+\indexentry{load@\ml{load}|pin}{71}
+\indexentry{search path!for \HOL\ system|)}{71}
+\indexentry{HOL system@\HOL\ system!search path for|)}{71}
+\indexentry{loadt@\ml{loadt}|pin}{71}
+\indexentry{loadf@\ml{loadf}|pin}{71}
+\indexentry{Common Lisp HOL@Common Lisp \HOL}{72}
+\indexentry{compile_on_the_fly@\ml{compile\_on\_the\_fly}}{72}
+\indexentry{Franz Lisp HOL@Franz Lisp \HOL}{72}
+\indexentry{compile@\ml{compile}|pin}{72}
+\indexentry{compilet@\ml{compilet}|pin}{72}
+\indexentry{compilef@\ml{compilef}|pin}{72}
+\indexentry{pretty printing!of ML@of \ML|(}{72}
+\indexentry{ML@\ML!pretty printer for|(}{72}
+\indexentry{printing, of ML@printing, of \ML!of string quotes}{72}
+\indexentry{theorems, printing of}{72}
+\indexentry{print_void@\ml{print\_void}|pin}{73}
+\indexentry{print_bool@\ml{print\_bool}|pin}{73}
+\indexentry{print_int@\ml{print\_int}|pin}{73}
+\indexentry{print_string@\ml{print\_string}|pin}{73}
+\indexentry{print_tok@\ml{print\_tok}|pin}{73}
+\indexentry{print_term@\ml{print\_term}|pin}{73}
+\indexentry{print_type@\ml{print\_type}|pin}{73}
+\indexentry{print_thm@\ml{print\_thm}|pin}{73}
+\indexentry{print_all_thm@\ml{print\_all\_thm}|pin}{73}
+\indexentry{print_begin@\ml{print\_begin}|pin}{73}
+\indexentry{print_ibegin@\ml{print\_ibegin}|pin}{73}
+\indexentry{breaks, in ML pretty printing@breaks, in \ML\ pretty printing}{73}
+\indexentry{print_end@\ml{print\_end}|pin}{73}
+\indexentry{print_newline@\ml{print\_newline}|pin}{74}
+\indexentry{print_break@\ml{print\_break}|pin}{74}
+\indexentry{set_margin@\ml{set\_margin}|pin}{74}
+\indexentry{print_list@\ml{print\_list}|pin}{74}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!structural depth adjustment in}{75}
+\indexentry{max_print_depth@\ml{max\_print\_depth}|pin}{75}
+\indexentry{set_pretty_mode@\ml{set\_pretty\_mode}|pin}{75}
+\indexentry{ML@\ML!pretty printer for|)}{75}
+\indexentry{pretty printing!of ML@of \ML|)}{75}
+\indexentry{Lisp!core images}{76}
+\indexentry{core images, saving of}{76}
+\indexentry{save@\ml{save}|pin}{76}
+\indexentry{Franz Lisp HOL@Franz Lisp \HOL}{76}
+\indexentry{Common Lisp HOL@Common Lisp \HOL}{76}
+\indexentry{termination, of HOL sessions@termination, of \HOL\ sessions}{76}
+\indexentry{quit@\ml{quit}|pin}{76}
+\indexentry{autoload@\ml{autoload}|pin}{76}
+\indexentry{undo_autoload@\ml{undo\_autoload}|pin}{77}
+\indexentry{variables, in ML@variables, in \ML!loading of predefined}{77}
+\indexentry{let_before@\ml{let\_before}|pin}{77}
+\indexentry{let_after@\ml{let\_after}|pin}{77}
+\indexentry{autoload_theory@\ml{autoload\_theory}|pin}{79}
+\indexentry{inject_input@\ml{inject\_input}|pin}{79}
+\indexentry{ML_eval@\ML\ml{\_eval}|pin}{79}
+\indexentry{initialization of HOL@initialization of \HOL}{80}
+\indexentry{hol-init.ml@\ml{hol-init.ml}}{80}
+\indexentry{operating systems functions, from HOL@operating systems functions, from \HOL|(}{80}
+\indexentry{HOL system@\HOL\ system!non-Unix versions of}{80}
+\indexentry{system@\ml{system}|pin}{80}
+\indexentry{host_name@\ml{host\_name}|pin}{81}
+\indexentry{link@\ml{link}|pin}{81}
+\indexentry{unlink@\ml{unlink}|pin}{81}
+\indexentry{operating systems functions, from HOL@operating systems functions, from \HOL|)}{81}
+\indexentry{HOL system@\HOL\ system!version number of}{81}
+\indexentry{version@\ml{version}|pin}{81}
+\indexentry{version number, of HOL system@version number, of \HOL\ system}{81}
+\indexentry{ value comparison, in ML@{\small\verb+<<+} (value comparison, in \ML)|pin}{81}
+\indexentry{defined types in ML@defined types in \ML!printing of}{82}
+\indexentry{print_defined_types@\ml{print\_defined\_types}|pin}{82}
+\indexentry{types, in ML@types, in \ML!printing of currently defined}{82}
+\indexentry{abstract types, in ML@abstract types, in \ML!listing current}{82}
+\indexentry{print_lettypes@\ml{print\_lettypes}}{82}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of proofs@of \ml{proof}s}{82}
+\indexentry{Lisp!accessing of, from HOL system@accessing of, from \HOL\ system}{82}
+\indexentry{lisp@\ml{lisp}|pin}{82}
+\indexentry{precision, in ML arithmetic@precision, in \ML\ arithmetic|(}{82}
+\indexentry{ML@\ML!arithmetic in}{82}
+\indexentry{arithmetic, in ML@arithmetic, in \ML}{82}
+\indexentry{fast_arith@\ml{fast\_arith}|pin}{82}
+\indexentry{precision, in ML arithmetic@precision, in \ML\ arithmetic|)}{83}
+\indexentry{customization of HOL system@customization of \HOL\ system}{83}
+\indexentry{print_let@\ml{print\_let}}{83}
+\indexentry{Centaur}{83}
+\indexentry{timing@\ml{timing}|pin}{84}
+\indexentry{show_types@\ml{show\_types}|pin}{84}
+\indexentry{sticky@\ml{sticky}|pin}{84}
+\indexentry{prompt@\ml{prompt}|pin}{84}
+\indexentry{preterm@\ml{preterm}!the flag|pin}{84}
+\indexentry{theory_pp@\ml{theory\_pp}|pin}{84}
+\indexentry{type_error@\ml{type\_error}|pin}{84}
+\indexentry{interface_print@\ml{interface\_print}|pin}{84}
+\indexentry{abort_when_fail@\ml{abort\_when\_fail}|pin}{84}
+\indexentry{print_top_types@\ml{print\_top\_types}|pin}{84}
+\indexentry{print_top_val@\ml{print\_top\_val}|pin}{84}
+\indexentry{print_all_subgoals@\ml{print\_all\_subgoals}|pin}{84}
+\indexentry{print_cond@\ml{print\_cond}|pin}{84}
+\indexentry{print_quant@\ml{print\_quant}|pin}{84}
+\indexentry{print_let@\ml{print\_let}|pin}{84}
+\indexentry{print_restrict@\ml{print\_restrict}|pin}{84}
+\indexentry{print_list@\ml{print\_list}}{84}
+\indexentry{print_set@\ml{print\_set}}{84}
+\indexentry{print_uncurry@\ml{print\_uncurry}|pin}{84}
+\indexentry{print_infix@\ml{print\_infix}|pin}{84}
+\indexentry{print_lettypes@\ml{print\_lettypes}|pin}{84}
+\indexentry{print_load@\ml{print\_load}|pin}{84}
+\indexentry{print_fasl@\ml{print\_fasl}|pin}{84}
+\indexentry{file_load_msg@\ml{file\_load\_msg}|pin}{84}
+\indexentry{print_lib@\ml{print\_lib}|pin}{84}
+\indexentry{compile_on_the_fly@\ml{compile\_on\_the\_fly}|pin}{84}
+\indexentry{ML@\ML!prompt character of}{84}
+\indexentry{evaluation, of ML constructs@evaluation, of \ML\ constructs!timing of}{84}
+\indexentry{evaluation, of ML constructs@evaluation, of \ML\ constructs!counting inference invoked by}{84}
+\indexentry{types, in ML@types, in \ML!printing of}{84}
+\indexentry{prompt, in ML@prompt, in \ML!printing of}{84}
+\indexentry{theory files!pretty printing of}{84}
+\indexentry{failure, in ML@failure, in \ML!to cause exit from HOL@to cause exit from \HOL}{84}
+\indexentry{top level, of ML@top level, of \ML!printing at}{84}
+\indexentry{types, in ML@types, in \ML!printing of}{84}
+\indexentry{flags, in ML@flags, in \ML}{84}
+\indexentry{compilation, in ML@compilation, in \ML}{84}
+\indexentry{libraries!loading of}{84}
+\indexentry{types, in ML@types, in \ML!printing of}{84}
+\indexentry{sticky types, in HOL logic@sticky types, in \HOL\ logic}{84}
+\indexentry{interface maps!in printing}{84}
+\indexentry{pretty printing!flags for, in HOL system@flags for, in \HOL\ system}{84}
+\indexentry{Common Lisp HOL@Common Lisp \HOL}{84}
+\indexentry{Franz Lisp HOL@Franz Lisp \HOL}{84}
+\indexentry{ML@\ML!top level of}{84}
+\indexentry{defined types in ML@defined types in \ML!flag for printing}{84}
+\indexentry{HOL system@\HOL\ system!flags in}{84}
+\indexentry{set_flag@\ml{set\_flag}|pin}{85}
+\indexentry{get_flag_value@\ml{get\_flag\_value}|pin}{85}
+\indexentry{new_flag@\ml{new\_flag}|pin}{85}
+\indexentry{top level, of ML@top level, of \ML!customization of}{85}
+\indexentry{ML@\ML!top level of}{85}
+\indexentry{HOL system@\HOL\ system!customization of|(}{85}
+\indexentry{customization of HOL system@customization of \HOL\ system}{85}
+\indexentry{ML@\ML!prompt character of}{85}
+\indexentry{prompt, in ML@prompt, in \ML!changing of}{85}
+\indexentry{ prompt, in ML@{\small\verb+#+} (prompt, in \ML)}{85}
+\indexentry{set_prompt@\ml{set\_prompt}|pin}{85}
+\indexentry{emacs}{85}
+\indexentry{abstract types, in ML@abstract types, in \ML!printing of|(}{86}
+\indexentry{printing, of ML@printing, of \ML!user-modified}{86}
+\indexentry{abstract types, in ML@abstract types, in \ML!printing of}{86}
+\indexentry{top_print@\ml{top\_print}}{86}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of hypotheses of theorems}{86}
+\indexentry{abstract types, in ML@abstract types, in \ML!printing of|)}{87}
+\indexentry{print_top_types@\ml{print\_top\_types}}{87}
+\indexentry{types, in ML@types, in \ML!printing of}{87}
+\indexentry{HOL system@\HOL\ system!customization of|)}{87}
+\indexentry{help@\ml{help}|pin}{87}
+\indexentry{help system|(}{87}
+\indexentry{help@\ml{help}|pin}{87}
+\indexentry{set_help@\ml{set\_help}|pin}{88}
+\indexentry{set_help_search_path@\ml{set\_help\_search\_path}|pin}{88}
+\indexentry{help_search_path@\ml{help\_search\_path}|pin}{88}
+\indexentry{help system|)}{88}
+\indexentry{search path!for help system}{88}
+\indexentry{HOL system@\HOL\ system!help search path for}{88}
+\indexentry{syntax blocks|(}{88}
+\indexentry{new_syntax_block@\ml{new\_syntax\_block}|pin}{89}
+\indexentry{syntax blocks|)}{89}
+\indexentry{install@\ml{install}|pin}{89}
+\indexentry{HOL system@\HOL\ system!root directory of}{89}
+\indexentry{root directory, of HOL system@root directory, of \HOL\ system}{89}
+\indexentry{search path!for \HOL\ system}{89}
+\indexentry{HOL system@\HOL\ system!search path for}{89}
+\indexentry{load_library@\ml{load\_library}|pin}{90}
+\indexentry{libraries!load files for}{90}
+\indexentry{search path!for libraries|(}{90}
+\indexentry{HOL system@\HOL\ system!library search path for|(}{90}
+\indexentry{set_library_search_path@\ml{set\_library\_search\_path}|pin}{90}
+\indexentry{library_search_path@\ml{library\_search\_path}|pin}{90}
+\indexentry{search path!for libraries|)}{90}
+\indexentry{HOL system@\HOL\ system!library search path for|)}{90}
+\indexentry{print_lib@\ml{print\_lib}}{90}
+\indexentry{load@\ml{load}}{90}
+\indexentry{libraries@\ml{libraries}|pin}{90}
+\indexentry{libraries!load files for|(}{91}
+\indexentry{libraries!load files for|)}{91}
+\indexentry{string library@\ml{string} library}{92}
+\indexentry{eval library@\ml{eval} library}{92}
+\indexentry{unwind library@\ml{unwind} library}{92}
+\indexentry{taut library@\ml{taut} library}{92}
+\indexentry{fixpoints library@\ml{fixpoints} library}{92}
+\indexentry{prog_logic88 library@\ml{prog\_logic88} library}{92}
+\indexentry{group library@\ml{group} library}{92}
+\indexentry{integer library@\ml{integer} library}{92}
+\indexentry{sets library@\ml{sets} library}{92}
+\indexentry{pred_sets library@\ml{pred\_sets} library}{92}
+\indexentry{finite_sets library@\ml{finite\_sets} library}{92}
+\indexentry{bags library@\ml{bags} library}{92}
+\indexentry{convert library@\ml{convert} library}{92}
+\indexentry{auxiliary library@\ml{auxiliary} library}{92}
+\indexentry{quotient library@\ml{quotient} library}{92}
+\indexentry{parser library@\ml{parser} library}{92}
+\indexentry{prettyp library@\ml{prettyp} library}{92}
+\indexentry{trs library@\ml{trs} library}{92}
+\indexentry{Hoare logic library}{92}
+\indexentry{group theory library}{92}
+\indexentry{integers (from groups) library}{92}
+\indexentry{set theory libraries}{92}
+\indexentry{conversion and unwinding library}{92}
+\indexentry{set theory (of predicates) library}{92}
+\indexentry{quotient types library}{92}
+\indexentry{well-ordering library}{92}
+\indexentry{cardinals library}{92}
+\indexentry{integers (as quotient types) library}{92}
+\indexentry{fixed point theory library}{92}
+\indexentry{tautology checker library}{92}
+\indexentry{unwinding rule library}{92}
+\indexentry{wordn library@word$n$ library}{92}
+\indexentry{ASCII@{\small ASCII}}{92}
+\indexentry{library_pathname@\ml{library\_pathname}|pin}{92}
+\indexentry{libraries!load files for}{93}
+\indexentry{libraries!directory of}{93}
+\indexentry{libraries!load files for}{93}
+\indexentry{libraries!installation of}{94}
+\indexentry{interface, new|(}{94}
+\indexentry{HOL system@\HOL\ system!new interface for|(}{94}
+\indexentry{Centaur}{94}
+\indexentry{interface, new|)}{97}
+\indexentry{HOL system@\HOL\ system!new interface for|)}{97}
+\indexentry{Church, A.}{101}
+\indexentry{universe, in semantics of HOL logic@universe, in semantics of \HOL\ logic}{101}
+\indexentry{Zermelo-Fraenkel set theory}{102}
+\indexentry{axiom of choice}{102}
+\indexentry{ZFC@\ml{ZFC}}{102}
+\indexentry{axiom of replacement}{102}
+\indexentry{type constraint!in HOL logic@in \HOL\ logic}{102}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic!abstract form of}{103}
+\indexentry{atomic types, in HOL logic@atomic types, in \HOL\ logic}{103}
+\indexentry{compound types, in HOL logic@compound types, in \HOL\ logic!abstract form of}{103}
+\indexentry{function types, in HOL logic@function types, in \HOL\ logic!abstract form of}{103}
+\indexentry{type structure, in HOL logic@type structure, in \HOL\ logic}{104}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic}{104}
+\indexentry{type constants, in HOL logic@type constants, in \HOL\ logic}{104}
+\indexentry{type operators, in HOL logic@type operators, in \HOL\ logic!associativity of}{104}
+\indexentry{polymorphic types, in HOL logic@polymorphic types, in \HOL\ logic}{105}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!polymorphic}{105}
+\indexentry{type context}{105}
+\indexentry{type-in-context}{105}
+\indexentry{canonical contexts, in HOL logic@canonical contexts, in \HOL\ logic!of types}{105}
+\indexentry{function types, in HOL logic@function types, in \HOL\ logic!formal semantics of}{105}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!polymorphic}{106}
+\indexentry{polymorphic types, in HOL logic@polymorphic types, in \HOL\ logic!formal semantics of}{106}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!instantiation of}{106}
+\indexentry{combinations, in HOL logic@combinations, in \HOL\ logic!abstract form of}{107}
+\indexentry{lambda terms, in HOL logic@lambda terms, in \HOL\ logic}{107}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!abstract form of}{107}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!abstract form of}{107}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!abstract form of}{107}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!abstract form of}{107}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!abstract form of}{107}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!with same names}{108}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!associativity of}{108}
+\indexentry{polymorphic terms, in HOL logic@polymorphic terms, in \HOL\ logic}{108}
+\indexentry{bound variables, in HOL logic@bound variables, in \HOL\ logic}{108}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!abstract form of}{108}
+\indexentry{free variables, in HOL logic@free variables, in \HOL\ logic!abstract form of}{108}
+\indexentry{contexts, in semantics of HOL logic@contexts, in semantics of \HOL\ logic}{108}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!with same names}{108}
+\indexentry{term-in-context}{108}
+\indexentry{canonical contexts, in HOL logic@canonical contexts, in \HOL\ logic!of terms}{109}
+\indexentry{signatures, of HOL logic@signatures, of \HOL\ logic!formal semantics of}{109}
+\indexentry{primitive constants, of HOL logic@primitive constants, of \HOL\ logic}{109}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!formal semantics of}{110}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!formal semantics of}{110}
+\indexentry{combinations, in HOL logic@combinations, in \HOL\ logic!formal semantics of}{110}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!formal semantics of}{110}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!formal semantics of}{111}
+\indexentry{substitution rule, in HOL logic@substitution rule, in \HOL\ logic!formal semantics of}{111}
+\indexentry{type substitution, in HOL logic@type substitution, in \HOL\ logic!formal semantics of}{111}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!instantiation of}{112}
+\indexentry{substitution rule, in HOL logic@substitution rule, in \HOL\ logic!formal semantics of}{112}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic!abstract form of}{113}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!as logical formulas}{113}
+\indexentry{signatures, of HOL logic@signatures, of \HOL\ logic!standard}{113}
+\indexentry{standard signatures, of HOL logic@standard signatures, of \HOL\ logic}{113}
+\indexentry{primitive constants, of HOL logic@primitive constants, of \HOL\ logic}{113}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!primitive, abstract form of}{113}
+\indexentry{standard models, of HOL logic@standard models, of \HOL\ logic}{113}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!formal semantics of}{113}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!formal semantics of}{113}
+\indexentry{epsilon operator}{114}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic!formal semantics of}{114}
+\indexentry{truth values, in HOL logic@truth values, in \HOL\ logic!abstract form of}{114}
+\indexentry{formulas as terms, in HOL logic@formulas as terms, in \HOL\ logic}{114}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!abstract form of}{114}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!abstract form of}{114}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic!abstract form of}{114}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!abstract form of}{114}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!abstract form of}{114}
+\indexentry{epsilon operator}{114}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!abstract form of}{115}
+\indexentry{sequents!in natural deduction}{116}
+\indexentry{assumptions!of sequents}{116}
+\indexentry{conclusions!of sequents}{116}
+\indexentry{satisfaction of sequents, by model}{116}
+\indexentry{deductive systems}{117}
+\indexentry{follows from, in natural deduction}{117}
+\indexentry{proof!in natural deduction}{117}
+\indexentry{monotonicity, in deductive systems}{117}
+\indexentry{turnstile notation}{117}
+\indexentry{hypotheses!of sequents}{117}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!abstract form of primitive}{117}
+\indexentry{hypotheses!of inference rules}{117}
+\indexentry{conclusions!of inference rules}{117}
+\indexentry{assumption introduction, in HOL logic@assumption introduction, in \HOL\ logic!abstract form of}{118}
+\indexentry{REFL@\ml{REFL}}{118}
+\indexentry{reflexivity, in HOL logic@reflexivity, in \HOL\ logic!abstract form of}{118}
+\indexentry{beta-conversion, in HOL logic@beta-conversion, in \HOL\ logic!abstract form of}{118}
+\indexentry{BETA_CONV@\ml{BETA\_CONV}}{118}
+\indexentry{SUBST@\ml{SUBST}}{118}
+\indexentry{substitution rule, in HOL logic@substitution rule, in \HOL\ logic!abstract form of}{118}
+\indexentry{ABS@\ml{ABS}}{118}
+\indexentry{abstraction rule, in HOL logic@abstraction rule, in \HOL\ logic!abstract form of}{118}
+\indexentry{type instantiation, in HOL logic@type instantiation, in \HOL\ logic!abstract form of}{118}
+\indexentry{discharging assumptions, in HOL logic@discharging assumptions, in \HOL\ logic!abstract form of}{119}
+\indexentry{DISCH@\ml{DISCH}}{119}
+\indexentry{MP@\ml{MP}}{119}
+\indexentry{Modus Ponens, in HOL logic@Modus Ponens, in \HOL\ logic!abstract form of}{119}
+\indexentry{axioms!as inference rules}{119}
+\indexentry{LCF@\LCF}{119}
+\indexentry{PPlambda (same as PPLAMBDA), of LCF system@\ml{PP}$\lambda$ (same as \ml{PPLAMBDA}), of \ml{LCF} system}{119}
+\indexentry{substitution rule, in HOL logic@substitution rule, in \HOL\ logic!implementation of}{119}
+\indexentry{soundness!of HOL deductive system@of \HOL\ deductive system}{119}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!formal semantics of}{119}
+\indexentry{INST_TYPE@\ml{INST\_TYPE}}{119}
+\indexentry{REFL@\ml{REFL}}{119}
+\indexentry{BETA_CONV@\ml{BETA\_CONV}}{119}
+\indexentry{SUBST@\ml{SUBST}}{119}
+\indexentry{ABS@\ml{ABS}}{119}
+\indexentry{DISCH@\ml{DISCH}}{119}
+\indexentry{MP@\ml{MP}}{119}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!abstract form of}{120}
+\indexentry{type structures, of HOL theories@type structures, of \HOL\ theories}{120}
+\indexentry{signatures, of HOL logic@signatures, of \HOL\ logic!of HOL theories@of \HOL\ theories}{120}
+\indexentry{axioms, in a HOL theory@axioms, in a \HOL\ theory}{120}
+\indexentry{theorems, in a HOL theory@theorems, in \HOL\ logic!abstract form of}{120}
+\indexentry{MIN@\ml{MIN}}{120}
+\indexentry{minimal theory, of HOL logic@minimal theory, of \HOL\ logic}{120}
+\indexentry{LOG@\ml{LOG}}{121}
+\indexentry{T@\ml{T}!abstract form of}{121}
+\indexentry{truth values, in HOL logic@truth values, in \HOL\ logic!abstract form of}{121}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!abstract form of}{121}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!abstract form of}{121}
+\indexentry{F@\ml{F}!abstract form of}{121}
+\indexentry{negation, in HOL logic@negation, in \HOL\ logic!abstract form of}{121}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!abstract form of}{121}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!abstract form of}{121}
+\indexentry{one-to-one predicate, in HOL logic@one-to-one predicate, in \HOL\ logic!abstract form of}{121}
+\indexentry{onto predicate, in HOL logic@onto predicate, in \HOL\ logic!abstract form of}{121}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!abbreviation for multiple}{121}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!abbreviation for multiple}{121}
+\indexentry{LOG@\ml{LOG}!formal semantics of}{122}
+\indexentry{axioms!formal semantics of HOL logic's@formal semantics of \HOL\ logic's|(}{122}
+\indexentry{T@\ml{T}!formal semantics of}{122}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!formal semantics of}{122}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!formal semantics of}{122}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!formal semantics of}{122}
+\indexentry{F@\ml{F}!formal semantics of}{122}
+\indexentry{negation, in HOL logic@negation, in \HOL\ logic!formal semantics of}{122}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!formal semantics of}{122}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!formal semantics of}{122}
+\indexentry{one-to-one predicate, in HOL logic@one-to-one predicate, in \HOL\ logic!formal semantics of}{123}
+\indexentry{onto predicate, in HOL logic@onto predicate, in \HOL\ logic!formal semantics of}{123}
+\indexentry{axioms!formal semantics of HOL logic's@formal semantics of \HOL\ logic's|)}{123}
+\indexentry{INIT@\ml{INIT}!abstract form of}{123}
+\indexentry{axioms!abstract form of HOL logic's@abstract form of \HOL\ logic's}{123}
+\indexentry{BOOL_CASES_AX@\ml{BOOL\_CASES\_AX}!abstract form of}{123}
+\indexentry{IMP_ANTISYM_AX@\ml{IMP\_ANTISYM\_AX}!abstract form of}{123}
+\indexentry{ETA_AX@\ml{ETA\_AX}!abstract form of}{123}
+\indexentry{SELECT_AX@\ml{SELECT\_AX}!abstract form of}{123}
+\indexentry{INFINITY_AX@\ml{INFINITY\_AX}!abstract form of}{123}
+\indexentry{choice axiom!abstract form of}{123}
+\indexentry{axiom of infinity!abstract form of}{123}
+\indexentry{INIT@\ml{INIT}!formal semantics of}{123}
+\indexentry{initial theory, of HOL logic@initial theory, of \HOL\ logic!abstract form of}{123}
+\indexentry{standard theory}{123}
+\indexentry{consistent theory}{124}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!abstract form of}{124}
+\indexentry{extension, of theory}{124}
+\indexentry{restrictions, of models}{124}
+\indexentry{Z notation@\ml{Z} notation}{125}
+\indexentry{axioms!dispensibility of adding}{125}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by constant definition|(}{125}
+\indexentry{constant definition}{125}
+\indexentry{constant definition extension, of HOL logic@constant definition extension, of \HOL\ logic!abstract form of}{125}
+\indexentry{T@\ml{T}!abstract form of}{126}
+\indexentry{truth values, in HOL logic@truth values, in \HOL\ logic!abstract form of}{126}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!abstract form of}{126}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!abstract form of}{126}
+\indexentry{F@\ml{F}!abstract form of}{126}
+\indexentry{negation, in HOL logic@negation, in \HOL\ logic!abstract form of}{126}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!abstract form of}{126}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!abstract form of}{126}
+\indexentry{one-to-one predicate, in HOL logic@one-to-one predicate, in \HOL\ logic!abstract form of}{126}
+\indexentry{onto predicate, in HOL logic@onto predicate, in \HOL\ logic!abstract form of}{126}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by constant definition|)}{126}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by constant specification|(}{127}
+\indexentry{constant specification extension, of HOL logic@constant specification extension, of \HOL\ logic!abstract form of}{127}
+\indexentry{consistency, of HOL logic@consistency, of \HOL\ logic!under constant specification}{127}
+\indexentry{constant specification}{127}
+\indexentry{consistency, of HOL logic@consistency, of \HOL\ logic!under constant specification}{128}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by constant specification|)}{129}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type definition|(}{130}
+\indexentry{representing types, in HOL logic@representing types, in \HOL\ logic!abstract form of|(}{130}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type definition}{130}
+\indexentry{consistency, of HOL logic@consistency, of \HOL\ logic!under type definition}{130}
+\indexentry{characteristic function, of type definitions}{131}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!abstract structure of}{131}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type definition|)}{132}
+\indexentry{representing types, in HOL logic@representing types, in \HOL\ logic!abstract form of|)}{132}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type specification|(}{132}
+\indexentry{type specification}{133}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type specification|)}{136}
+\indexentry{Milner, R.}{139}
+\indexentry{identifiers, in HOL logic@identifiers, in \HOL\ logic|(}{139}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!names of|(}{139}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic!names of}{140}
+\indexentry{identifiers, in HOL logic@identifiers, in \HOL\ logic|)}{140}
+\indexentry{new_letter@\ml{new\_letter}|pin}{140}
+\indexentry{is_letter@\ml{is\_letter}|pin}{140}
+\indexentry{new_alphanum@\ml{new\_alphanum}|pin}{141}
+\indexentry{is_alphanum@\ml{is\_alphanum}|pin}{141}
+\indexentry{new_special_symbol@\ml{new\_special\_symbol}|pin}{141}
+\indexentry{special_symbols@\ml{special\_symbols}|pin}{141}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!names of|)}{141}
+\indexentry{types, in HOL logic@types, in \HOL\ logic}{142}
+\indexentry{type constraint!in HOL logic@in \HOL\ logic}{142}
+\indexentry{type constants, in HOL logic@type constants, in \HOL\ logic}{142}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!constructors for}{142}
+\indexentry{type constructors!in HOL logic@in \HOL\ logic}{142}
+\indexentry{function types, in HOL logic@function types, in \HOL\ logic!constructors for}{142}
+\indexentry{mk_vartype@\ml{mk\_vartype}|pin}{142}
+\indexentry{mk_type@\ml{mk\_type}|pin}{142}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic!constructor for}{142}
+\indexentry{compound types, in HOL logic@compound types, in \HOL\ logic!constructors for}{142}
+\indexentry{truth values, in HOL logic@truth values, in \HOL\ logic}{142}
+\indexentry{bool, the type in HOL logic@\ml{bool}, the type in \HOL\ logic}{142}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!destructors for}{142}
+\indexentry{type destructors, in HOL logic@type destructors, in \HOL\ logic}{142}
+\indexentry{function types, in HOL logic@function types, in \HOL\ logic!destructors for}{142}
+\indexentry{dest_vartype@\ml{dest\_vartype}|pin}{142}
+\indexentry{dest_type@\ml{dest\_type}|pin}{142}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic!destructors for}{142}
+\indexentry{compound types, in HOL logic@compound types, in \HOL\ logic!destructors for}{142}
+\indexentry{ type constraint, in HOL logic@\ml{:} (type constraint, in \HOL\ logic)}{143}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of types}{143}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!constructor for}{143}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!constructors for}{143}
+\indexentry{term constructors, in HOL logic@term constructors, in \HOL\ logic}{143}
+\indexentry{mk_var@\ml{mk\_var}|pin}{143}
+\indexentry{mk_const@\ml{mk\_const}|pin}{143}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!constructor for}{143}
+\indexentry{mk_comb@\ml{mk\_comb}|pin}{143}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!constructor for}{143}
+\indexentry{combinations, in HOL logic@combinations, in \HOL\ logic!constructor for}{143}
+\indexentry{mk_abs@\ml{mk\_abs}|pin}{143}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!constructor for}{143}
+\indexentry{term destructors, in HOL logic@term destructors, in \HOL\ logic}{143}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!destructor for}{143}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!destructor for}{143}
+\indexentry{combinations, in HOL logic@combinations, in \HOL\ logic!destructor for}{143}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!destructor for}{143}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!destructor for}{143}
+\indexentry{dest_var@\ml{dest\_var}|pin }{144}
+\indexentry{dest_const@\ml{dest\_const}|pin}{144}
+\indexentry{dest_comb@\ml{dest\_comb}|pin}{144}
+\indexentry{dest_abs@\ml{dest\_abs}|pin}{144}
+\indexentry{rator@\ml{rator}}{144}
+\indexentry{rand@\ml{rand}}{144}
+\indexentry{bndvar@\ml{bndvar}}{144}
+\indexentry{body@\ml{body}}{144}
+\indexentry{lhs@\ml{lhs}}{144}
+\indexentry{rhs@\ml{rhs}}{144}
+\indexentry{type_of@\ml{type\_of}|pin}{144}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!determination of}{144}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic}{144}
+\indexentry{ type constraint, in HOL logic@\ml{:} (type constraint, in \HOL\ logic)}{144}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!of quotation syntax|(}{144}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic|(}{144}
+\indexentry{ type quotes, in ML@\ml{"":$\cdots$""} (type quotes, in \ML)|(}{144}
+\indexentry{ term quotes, in ML@\ml{""$\cdots$""} (term quotes, in \ML)|(}{144}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!input of}{144}
+\indexentry{LCF@\LCF}{144}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!parser for}{144}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of quotation syntax}{144}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of quotation syntax}{144}
+\indexentry{bool, the type in HOL logic@\ml{bool}, the type in \HOL\ logic}{144}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic}{144}
+\indexentry{type constraint!in HOL logic@in \HOL\ logic|(}{145}
+\indexentry{Milner, R.}{145}
+\indexentry{type checker, for HOL logic vs ML@type checker, for \HOL\ logic {\it vs} \ML}{146}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!function abstraction}{146}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!type checking of}{146}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!syntax of}{146}
+\indexentry{LCF@\LCF}{146}
+\indexentry{type constraint!in HOL logic@in \HOL\ logic|)}{146}
+\indexentry{ term quotes, in ML@\ml{""$\cdots$""} (term quotes, in \ML)|)}{146}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic!constructor for}{146}
+\indexentry{type constructors!in HOL logic@in \HOL\ logic}{146}
+\indexentry{term constructors, in HOL logic@term constructors, in \HOL\ logic|(}{146}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!constructors for|(}{146}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!of types}{146}
+\indexentry{compound types, in HOL logic@compound types, in \HOL\ logic!constructors for}{146}
+\indexentry{ type variables, in HOL logic@\ml{*,\,**,\,}$\ldots$ (type variables, in \HOL\ logic)}{146}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!constructors for}{146}
+\indexentry{ function type operator, in HOL logic@\ml{->} (function type operator, in \HOL\ logic)}{146}
+\indexentry{mk_vartype@\ml{mk\_vartype}}{146}
+\indexentry{mk_type@\ml{mk\_type}}{146}
+\indexentry{ type quotes, in ML@\ml{"":$\cdots$""} (type quotes, in \ML)|)}{146}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!syntax of|(}{146}
+\indexentry{combinations, in HOL logic@combinations, in \HOL\ logic!quotation of}{146}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!primitive}{146}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!constructors for}{146}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!of primitive terms}{146}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!symbol for}{146}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!constructor for}{146}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!syntax of}{146}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!constructor for}{146}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!syntax of}{146}
+\indexentry{mk_var@\ml{mk\_var}}{146}
+\indexentry{mk_const@\ml{mk\_const}}{146}
+\indexentry{mk_comb@\ml{mk\_comb}}{146}
+\indexentry{mk_abs@\ml{mk\_abs}}{146}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!of quotation syntax|)}{147}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!special forms in|(}{147}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!of non-primitive terms|(}{147}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!parser for}{147}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of standard notations}{147}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic}{147}
+\indexentry{ escape, in HOL logic parser@{\small\verb+$+} (escape, in \HOL\ logic parser)}{147}
+\indexentry{declared constants, in HOL logic@declared constants, in \HOL\ logic}{147}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic}{147}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!supressing parsing behaviour of}{147}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic!syntax of}{147}
+\indexentry{ negation, in HOL logic@{\small\verb+~+} (negation, in \HOL\ logic)}{147}
+\indexentry{ disjunction, in HOL logic@{\small\verb+\/+} (disjunction, in \HOL\ logic)}{147}
+\indexentry{ conjunction, in HOL logic@{\small\verb+/\+} (conjunction, in \HOL\ logic)}{147}
+\indexentry{ implication, in HOL logic@{\small\verb+==>+} (implication, in \HOL\ logic)}{147}
+\indexentry{ equality, in HOL logic@\ml{=} (equality, in \HOL\ logic)}{147}
+\indexentry{ universal quantifier, in HOL logic@{\small\verb+"!+} (universal quantifier, in \HOL\ logic)}{147}
+\indexentry{ existential quantifier, in HOL logic@{\small\verb+?+} (existential quantifier, in \HOL\ logic)}{147}
+\indexentry{ choice function, in HOL logic@{\small\verb+"@+} (choice function, in \HOL\ logic)}{147}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!non-primitive}{147}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!constructors for}{147}
+\indexentry{conditional predicate, in HOL logic@conditional predicate, in \HOL\ logic}{147}
+\indexentry{conditionals, in HOL logic@conditionals, in \HOL\ logic}{147}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!constructor for}{147}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!constructor for}{147}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!syntax of}{147}
+\indexentry{negation, in HOL logic@negation, in \HOL\ logic!syntax of}{147}
+\indexentry{negation, in HOL logic@negation, in \HOL\ logic!constructor for}{147}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!syntax of}{147}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!syntax of}{147}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!syntax of}{147}
+\indexentry{mk_neg@\ml{mk\_neg}}{147}
+\indexentry{mk_disj@\ml{mk\_disj}}{147}
+\indexentry{mk_conj@\ml{mk\_conj}}{147}
+\indexentry{mk_imp@\ml{mk\_imp}}{147}
+\indexentry{mk_eq@\ml{mk\_eq}}{147}
+\indexentry{mk_forall@\ml{mk\_forall}}{147}
+\indexentry{mk_exists@\ml{mk\_exists}}{147}
+\indexentry{mk_select@\ml{mk\_select}}{147}
+\indexentry{mk_cond@\ml{mk\_cond}}{147}
+\indexentry{mk_let@\ml{mk\_let}}{147}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!syntax of}{147}
+\indexentry{COND@\ml{COND}}{147}
+\indexentry{mk_pair@\ml{mk\_pair}}{148}
+\indexentry{mk_cons@\ml{mk\_cons}}{148}
+\indexentry{mk_list@\ml{mk\_list}}{148}
+\indexentry{COND@\ml{COND}}{148}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!syntax of}{148}
+\indexentry{binders, in HOL logic@binders, in \HOL\ logic}{148}
+\indexentry{ function abstraction binder, in HOL logic@{\small\verb+\+} (function abstraction binder, in \HOL\ logic)}{148}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!multiple bound}{148}
+\indexentry{list_mk_comb@\ml{list\_mk\_comb}|pin}{148}
+\indexentry{list_mk_abs@\ml{list\_mk\_abs}|pin}{148}
+\indexentry{list_mk_forall@\ml{list\_mk\_forall}|pin}{148}
+\indexentry{list_mk_exists@\ml{list\_mk\_exists}|pin}{148}
+\indexentry{combinations, in HOL logic@combinations, in \HOL\ logic!abbreviation for multiple}{148}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!abbreviation for multiple}{148}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!abbreviation for multiple}{148}
+\indexentry{list_mk_conj@\ml{list\_mk\_conj}}{148}
+\indexentry{list_mk_disj@\ml{list\_mk\_disj}}{148}
+\indexentry{list_mk_imp@\ml{list\_mk\_imp}}{148}
+\indexentry{list_mk_pair@\ml{list\_mk\_pair}}{148}
+\indexentry{term constructors, in HOL logic@term constructors, in \HOL\ logic|)}{148}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!constructors for|)}{148}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!dependent}{148}
+\indexentry{dependent types in HOL logic@dependent types in \HOL\ logic}{148}
+\indexentry{quantifiers!restricted}{148}
+\indexentry{RES_FORALL@\ml{RES\_FORALL}}{149}
+\indexentry{RES_EXISTS@\ml{RES\_EXISTS}}{149}
+\indexentry{RES_SELECT@\ml{RES\_SELECT}}{149}
+\indexentry{RES_ABSTRACT@\ml{RES\_ABSTRACT}}{149}
+\indexentry{ARB@\ml{ARB}}{149}
+\indexentry{associate_restriction@\ml{associate\_restriction}|pin}{149}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!conditional}{151}
+\indexentry{conditional predicate, in HOL logic@conditional predicate, in \HOL\ logic}{151}
+\indexentry{conditionals, in HOL logic@conditionals, in \HOL\ logic}{151}
+\indexentry{COND@\ml{COND}}{151}
+\indexentry{conditionals, in HOL logic@conditionals, in \HOL\ logic}{151}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of conditionals}{151}
+\indexentry{pairs, in HOL logic@pairs, in \HOL\ logic!in abstractions|(}{152}
+\indexentry{UNCURRY@\ml{UNCURRY}|(}{152}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!pair|(}{152}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of quotation syntax|(}{152}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!paired|(}{152}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!uncurrying, in paired|(}{152}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of function abstractions}{152}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!abbreviation for multiple}{152}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!function abstraction}{152}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of quotation syntax|)}{152}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of function abstractions}{152}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!subterms of}{152}
+\indexentry{binders, in HOL logic@binders, in \HOL\ logic!parsing of}{152}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of binders}{152}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!paired|)}{153}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!uncurrying, in paired|)}{153}
+\indexentry{pairs, in HOL logic@pairs, in \HOL\ logic!in abstractions|)}{153}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!pair|)}{153}
+\indexentry{UNCURRY@\ml{UNCURRY}|)}{153}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of let-terms@of \ml{let}-terms}{153}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!let-@\ml{let}-}{153}
+\indexentry{let-terms, in HOL logic@\ml{let}-terms, in \HOL\ logic!as abbreviations}{153}
+\indexentry{LET@\ml{LET}}{153}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!relation to let-terms@relation to \ml{let}-terms}{153}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of let-terms@of \ml{let}-terms}{153}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic|)}{154}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!of non-primitive terms|)}{154}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!syntax of|)}{154}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!special forms in|)}{154}
+\indexentry{set theory notation}{154}
+\indexentry{define_finite_set_syntax@\ml{define\_finite\_set\_syntax}|pin}{154}
+\indexentry{define_set_abstraction_syntax@\ml{define\_set\_abstraction\_syntax}|pin}{154}
+\indexentry{ antiquotation, in HOL logic@{\small\verb+^+} (antiquotation, in \HOL\ logic)}{156}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!antiquotation in}{156}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!antiquotation}{156}
+\indexentry{antiquotation, in HOL logic terms@antiquotation, in \HOL\ logic terms}{156}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!typechecker for|(}{156}
+\indexentry{preterms|(}{156}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!user programmed}{157}
+\indexentry{preterm@\ml{preterm}!the type}{157}
+\indexentry{preterm_to_term@\ml{preterm\_to\_term}|pin}{157}
+\indexentry{preterms|)}{157}
+\indexentry{preterm_handler@\ml{preterm\_handler}|pin}{157}
+\indexentry{quotation, in HOL logic@quotation, in \HOL\ logic!typechecker for|)}{157}
+\indexentry{sequents!in natural deduction}{158}
+\indexentry{conclusions!of sequents}{158}
+\indexentry{hypotheses!of sequents}{158}
+\indexentry{natural deduction}{158}
+\indexentry{deductive systems}{158}
+\indexentry{follows from, in natural deduction}{158}
+\indexentry{turnstile notation|(}{158}
+\indexentry{theorems, in natural deduction}{158}
+\indexentry{proof!in natural deduction}{158}
+\indexentry{axioms!in natural deduction}{158}
+\indexentry{inference, in natural deduction}{158}
+\indexentry{primitive inference, in natural deduction}{158}
+\indexentry{formulas as terms, in HOL logic@formulas as terms, in \HOL\ logic}{158}
+\indexentry{terms, in HOL logic@terms, in \HOL\ logic!as logical formulas}{158}
+\indexentry{sequents!representation of, in HOL logic@representation of, in \HOL\ logic}{158}
+\indexentry{thm@\ml{thm}}{158}
+\indexentry{dest_thm@\ml{dest\_thm}|pin}{158}
+\indexentry{hypotheses!of theorems}{158}
+\indexentry{conclusions!of theorems}{158}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!destructors for}{158}
+\indexentry{hyp@\ml{hyp}|pin}{158}
+\indexentry{concl@\ml{concl}|pin}{158}
+\indexentry{consistency, of HOL logic@consistency, of \HOL\ logic}{159}
+\indexentry{F@\ml{F}!axiom for}{159}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of theorems}{159}
+\indexentry{theorem notation, in HOL logic@theorem notation, in \HOL\ logic|(}{159}
+\indexentry{ theorem marker, in HOL logic@\ml{"|-} (theorem marker, in \HOL\ logic)}{159}
+\indexentry{turnstile notation|)}{159}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of hypotheses of theorems}{159}
+\indexentry{print_all_thm@\ml{print\_all\_thm}}{159}
+\indexentry{theorem notation, in HOL logic@theorem notation, in \HOL\ logic|)}{159}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!representation of|(}{160}
+\indexentry{theory files|(}{160}
+\indexentry{HOL@\ml{HOL}}{160}
+\indexentry{parents, of HOL theories@parents, of \HOL\ theories}{160}
+\indexentry{ancestry, of HOL system theories@ancestry, of \HOL\ system theories}{160}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!hierarchies of}{160}
+\indexentry{theory files|)}{160}
+\indexentry{theory segments}{160}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!naming of}{160}
+\indexentry{HOL system@\HOL\ system!typical work in}{160}
+\indexentry{sessions with HOL system@sessions, with \HOL\ system}{160}
+\indexentry{draft mode, in HOL system@draft mode, in \HOL\ system}{161}
+\indexentry{proof mode, in HOL system@proof mode, in \HOL\ system}{161}
+\indexentry{current_theory@\ml{current\_theory}|pin}{161}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!representation of|)}{161}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!creation of|(}{161}
+\indexentry{new_theory@\ml{new\_theory}|pin}{161}
+\indexentry{proof mode, in HOL system@proof mode, in \HOL\ system}{161}
+\indexentry{draft mode, in HOL system@draft mode, in \HOL\ system}{161}
+\indexentry{new_parent@\ml{new\_parent}|pin}{161}
+\indexentry{new_type@\ml{new\_type}|pin}{162}
+\indexentry{type operators, in HOL logic@type operators, in \HOL\ logic!declaration}{162}
+\indexentry{new_constant@\ml{new\_constant}|pin}{162}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!declaration of}{162}
+\indexentry{generic types, in HOL logic@generic types, in \HOL\ logic}{162}
+\indexentry{new_infix@\ml{new\_infix}|pin}{162}
+\indexentry{new_binder@\ml{new\_binder}|pin}{162}
+\indexentry{binders, in HOL logic@binders, in \HOL\ logic!declaration of}{162}
+\indexentry{new_axiom@\ml{new\_axiom}|pin}{162}
+\indexentry{axioms!declaration of, in HOL logic@declaration of, in \HOL\ logic}{162}
+\indexentry{save_thm@\ml{save\_thm}|pin}{163}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!saving of}{163}
+\indexentry{saving theorems}{163}
+\indexentry{draft mode, in HOL system@draft mode, in \HOL\ system}{163}
+\indexentry{close_theory@\ml{close\_theory}|pin}{163}
+\indexentry{exiting of HOL system@exiting of \HOL\ system}{163}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!creation of|)}{163}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!definitional}{163}
+\indexentry{definitional extension, of HOL logic@definitional extension, of \HOL\ logic}{163}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!extension of|(}{163}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by constant definition}{163}
+\indexentry{constant definition extension, of HOL logic@constant definition extension, of \HOL\ logic!ML function for@\ML\ function for|(}{163}
+\indexentry{defining mechanisms, for HOL logic@defining mechanisms, for \HOL\ logic}{163}
+\indexentry{new_definition@\ml{new\_definition}|pin}{164}
+\indexentry{definitions, adding to HOL logic@definitions, adding to \HOL\ logic}{164}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic!declaration of}{164}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic}{164}
+\indexentry{new_infix_definition@\ml{new\_infix\_definition}|pin}{164}
+\indexentry{new_binder_definition@\ml{new\_binder\_definition}|pin}{164}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of constants, before definition}{164}
+\indexentry{defining mechanisms, for HOL logic@defining mechanisms, for \HOL\ logic}{164}
+\indexentry{ escape, in HOL logic parser@{\small\verb+$+} (escape, in \HOL\ logic parser)}{164}
+\indexentry{declared constants, in HOL logic@declared constants, in \HOL\ logic}{164}
+\indexentry{constant definition extension, of HOL logic@constant definition extension, of \HOL\ logic!ML function for@\ML\ function for|)}{164}
+\indexentry{specification of constants, in HOL logic@specification of constants, in \HOL\ logic|(}{165}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by constant specification}{165}
+\indexentry{constant specification extension, of HOL logic@constant specification extension, of \HOL\ logic!ML function for@\ML\ function for}{165}
+\indexentry{new_specification@\ml{new\_specification}|pin}{165}
+\indexentry{binders, in HOL logic@binders, in \HOL\ logic}{165}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type definition|(}{166}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic|(}{166}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!introduction of}{166}
+\indexentry{type definition extension, in HOL logic@type definition extension, in \HOL\ logic!ML function for@\ML\ function for|(}{166}
+\indexentry{characteristic predicate, of type definitions}{166}
+\indexentry{new_type_definition@\ml{new\_type\_definition}|pin}{166}
+\indexentry{definitional axioms}{166}
+\indexentry{type operators, in HOL logic@type operators, in \HOL\ logic!definitional axioms for}{166}
+\indexentry{TY_DEF@$\ldots$\ml{\_TY\_DEF}}{167}
+\indexentry{TYPE_DEFINITION@\ml{TYPE\_DEFINITION}}{167}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type definition|)}{167}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!extension of|)}{167}
+\indexentry{type definition extension, in HOL logic@type definition extension, in \HOL\ logic!ML function for@\ML\ function for|)}{167}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic|)}{167}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!defining bijections for|(}{167}
+\indexentry{bijection of types, in HOL logic@bijection of types, in \HOL\ logic}{167}
+\indexentry{define_new_type_bijections@\ml{define\_new\_type\_bijections}|pin}{167}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!defining bijections for|)}{168}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!properties of bijections for|(}{168}
+\indexentry{prove_rep_fn_one_one@\ml{prove\_rep\_fn\_one\_one}|pin}{168}
+\indexentry{prove_rep_fn_onto@\ml{prove\_rep\_fn\_onto}|pin}{168}
+\indexentry{prove_abs_fn_one_one@\ml{prove\_abs\_fn\_one\_one}|pin}{168}
+\indexentry{prove_abs_fn_onto@\ml{prove\_abs\_fn\_onto}|pin}{168}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!properties of bijections for|)}{169}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!functions for accessing|(}{169}
+\indexentry{axioms!retrieval of, in HOL system@retrieval of, in \HOL\ system|(}{169}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!hierarchies of}{169}
+\indexentry{draft mode, in HOL system@draft mode, in \HOL\ system}{169}
+\indexentry{proof mode, in HOL system@proof mode, in \HOL\ system}{169}
+\indexentry{new_@\ml{new\_}$\ldots$}{169}
+\indexentry{extend_theory@\ml{extend\_theory}|pin}{169}
+\indexentry{load_theory@\ml{load\_theory}|pin}{169}
+\indexentry{close_theory@\ml{close\_theory}}{169}
+\indexentry{parents@\ml{parents}|pin}{169}
+\indexentry{types@\ml{types}|pin}{169}
+\indexentry{constants@\ml{constants}|pin}{169}
+\indexentry{infixes@\ml{infixes}|pin}{169}
+\indexentry{binders@\ml{binders}|pin}{169}
+\indexentry{axioms@\ml{axioms}|pin}{169}
+\indexentry{definitions@\ml{definitions}|pin}{169}
+\indexentry{theorems@\ml{theorems}|pin}{169}
+\indexentry{ abbreviation, of HOL theory part names@\ml{-} (abbreviation, of \HOL\ theory part names)}{170}
+\indexentry{axiom@\ml{axiom}|pin}{170}
+\indexentry{definition@\ml{definition}|pin}{170}
+\indexentry{theorem@\ml{theorem}|pin}{170}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of theories}{170}
+\indexentry{print_theory@\ml{print\_theory}}{170}
+\indexentry{axioms!retrieval of, in HOL system@retrieval of, in \HOL\ system|)}{170}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!functions for accessing|)}{170}
+\indexentry{axioms!primitive, of HOL logic@primitive, of \HOL\ logic|(}{170}
+\indexentry{HOL@\ml{HOL}}{170}
+\indexentry{LCF@\LCF}{170}
+\indexentry{bool, the HOL theory@\ml{bool}, the \HOL\ theory}{170}
+\indexentry{axioms!in bool theory@in \ml{bool} theory}{170}
+\indexentry{LCF@\LCF}{170}
+\indexentry{axioms!non-primitive, of HOL logic@non-primitive, of \HOL\ logic}{170}
+\indexentry{Church, A.}{170}
+\indexentry{type variables, in HOL logic@type variables, in \HOL\ logic!differences from classical}{170}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!primitive logical}{170}
+\indexentry{primitive constants, of HOL logic@primitive constants, of \HOL\ logic}{170}
+\indexentry{bool, the type in HOL logic@\ml{bool}, the type in \HOL\ logic}{170}
+\indexentry{ equality, in HOL logic@\ml{=} (equality, in \HOL\ logic)}{170}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic}{170}
+\indexentry{ implication, in HOL logic@{\small\verb+==>+} (implication, in \HOL\ logic)}{170}
+\indexentry{ choice function, in HOL logic@{\small\verb+"@+} (choice function, in \HOL\ logic)}{170}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic}{170}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic}{170}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic}{170}
+\indexentry{characteristic predicate, of type definitions}{171}
+\indexentry{Hilbert, D.}{171}
+\indexentry{epsilon operator}{171}
+\indexentry{Church, A.}{171}
+\indexentry{Leisenring, A.}{171}
+\indexentry{logical constants, in HOL logic@logical constants, in \HOL\ logic}{171}
+\indexentry{truth values, in HOL logic@truth values, in \HOL\ logic!constants for}{171}
+\indexentry{T@\ml{T}!defined in terms of primitives}{171}
+\indexentry{F@\ml{F}!defined in terms of primitives}{171}
+\indexentry{ negation, in HOL logic@{\small\verb+~+} (negation, in \HOL\ logic)}{171}
+\indexentry{ conjunction, in HOL logic@{\small\verb+/\+} (conjunction, in \HOL\ logic)}{171}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!defined in terms of primitives}{171}
+\indexentry{ disjunction, in HOL logic@{\small\verb+\/+} (disjunction, in \HOL\ logic)}{171}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!defined in terms of primitives}{171}
+\indexentry{ universal quantifier, in HOL logic@{\small\verb+"!+} (universal quantifier, in \HOL\ logic)}{171}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!defined in terms of primitives}{171}
+\indexentry{ existential quantifier, in HOL logic@{\small\verb+?+} (existential quantifier, in \HOL\ logic)}{171}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!defined in terms of primitives}{171}
+\indexentry{ exists unique, in HOL logic@{\small\verb+?"!+} (exists unique, in \HOL\ logic)}{171}
+\indexentry{exists unique, in HOL logic@exists unique, in \HOL\ logic!defined in terms of primitives}{171}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic}{171}
+\indexentry{truth values, in HOL logic@truth values, in \HOL\ logic!definition of}{171}
+\indexentry{T_DEF@\ml{T\_DEF}}{171}
+\indexentry{T@\ml{T}!definitional axiom for}{171}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{iff, in HOL logic@iff, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{negation, in HOL logic@negation, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{exists unique, in HOL logic@exists unique, in \HOL\ logic}{171}
+\indexentry{F@\ml{F}!axiom for}{171}
+\indexentry{F@\ml{F}!definitional axiom for}{171}
+\indexentry{ exists unique, in HOL logic@{\small\verb+?"!+} (exists unique, in \HOL\ logic)}{171}
+\indexentry{T_DEF@\ml{T\_DEF}}{171}
+\indexentry{FORALL_DEF@\ml{FORALL\_DEF}}{171}
+\indexentry{EXISTS_DEF@\ml{EXISTS\_DEF}}{171}
+\indexentry{AND_DEF@\ml{AND\_DEF}}{171}
+\indexentry{OR_DEF@\ml{OR\_DEF}}{171}
+\indexentry{F_DEF@\ml{F\_DEF}}{171}
+\indexentry{NOT_DEF@\ml{NOT\_DEF}}{171}
+\indexentry{EXISTS_UNIQUE_DEF@\ml{EXISTS\_UNIQUE\_DEF}}{171}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!primitive axiom for}{171}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{exists unique, in HOL logic@exists unique, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!in four primitive axioms}{171}
+\indexentry{bool, the HOL theory@\ml{bool}, the \HOL\ theory}{171}
+\indexentry{BOOL_CASES_AX@\ml{BOOL\_CASES\_AX}}{171}
+\indexentry{IMP_ANTISYM_AX@\ml{IMP\_ANTISYM\_AX}}{171}
+\indexentry{ETA_AX@\ml{ETA\_AX}}{171}
+\indexentry{SELECT_AX@\ml{SELECT\_AX}}{171}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!primitive axiom for}{171}
+\indexentry{ choice function, in HOL logic@{\small\verb+"@+} (choice function, in \HOL\ logic)}{171}
+\indexentry{choice axiom}{171}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic!primitive axiom for}{171}
+\indexentry{axiom of infinity}{171}
+\indexentry{let-terms, in HOL logic@\ml{let}-terms, in \HOL\ logic!constant for}{171}
+\indexentry{let-terms, in HOL logic@\ml{let}-terms, in \HOL\ logic!definitional axiom for}{171}
+\indexentry{LET_DEF@\ml{LET\_DEF}}{172}
+\indexentry{COND_DEF@\ml{COND\_DEF}}{172}
+\indexentry{COND@\ml{COND}}{172}
+\indexentry{LET@\ml{LET}}{172}
+\indexentry{conditional predicate, in HOL logic@conditional predicate, in \HOL\ logic!definitional axiom for}{172}
+\indexentry{conditionals, in HOL logic@conditionals, in \HOL\ logic}{172}
+\indexentry{quantifiers!restricted}{172}
+\indexentry{RES_FORALL@\ml{RES\_FORALL}}{172}
+\indexentry{RES_EXISTS@\ml{RES\_EXISTS}}{172}
+\indexentry{RES_SELECT@\ml{RES\_SELECT}}{172}
+\indexentry{RES_ABSTRACT@\ml{RES\_ABSTRACT}}{172}
+\indexentry{ARB@\ml{ARB}}{172}
+\indexentry{axioms!non-primitive, of HOL logic@non-primitive, of \HOL\ logic}{172}
+\indexentry{axiom of infinity}{172}
+\indexentry{specification of constants, in HOL logic@specification of constants, in \HOL\ logic|)}{172}
+\indexentry{ONE_ONE_DEF@\ml{ONE\_ONE\_DEF}}{172}
+\indexentry{ONTO_DEF@\ml{ONTO\_DEF}}{172}
+\indexentry{one-to-one predicate, in HOL logic@one-to-one predicate, in \HOL\ logic!definitional axiom for}{172}
+\indexentry{onto predicate, in HOL logic@onto predicate, in \HOL\ logic!definitional axiom for}{172}
+\indexentry{ind, the theory@\ml{ind}, the theory}{172}
+\indexentry{ind, the type@\ml{ind}, the type}{172}
+\indexentry{individuals}{172}
+\indexentry{axiom of infinity}{172}
+\indexentry{axioms!dispensibility of adding}{172}
+\indexentry{definitional theories}{172}
+\indexentry{axioms!in ind theory@in \ml{ind} theory}{172}
+\indexentry{INFINITY_AX@\ml{INFINITY\_AX}}{172}
+\indexentry{axiom of infinity}{172}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!in infinity axiom}{172}
+\indexentry{axioms!primitive, of HOL logic@primitive, of \HOL\ logic|)}{172}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!primitive|(}{173}
+\indexentry{families of inferences, in HOL logic@families of inferences, in \HOL\ logic}{173}
+\indexentry{thm@\ml{thm}}{173}
+\indexentry{inference schemes, in HOL logic@inference schemes, in \HOL\ logic}{173}
+\indexentry{notation!for specification of rules}{173}
+\indexentry{inferences, in HOL logic@inferences, in \HOL\ logic!notation for}{173}
+\indexentry{conclusions!of inference rules}{173}
+\indexentry{assumption introduction, in HOL logic@assumption introduction, in \HOL\ logic!ML function for@\ML\ function for}{173}
+\indexentry{ASSUME@\ml{ASSUME}|pin}{173}
+\indexentry{reflexivity, in HOL logic@reflexivity, in \HOL\ logic!ML function for@\ML\ function for}{173}
+\indexentry{REFL@\ml{REFL}|pin}{173}
+\indexentry{beta-conversion, in HOL logic@beta-conversion, in \HOL\ logic!ML function for@\ML\ function for}{173}
+\indexentry{BETA_CONV@\ml{BETA\_CONV}|pin}{173}
+\indexentry{substitution rule, in HOL logic@substitution rule, in \HOL\ logic!ML function for@\ML\ function for|(}{174}
+\indexentry{SUBST@\ml{SUBST}|(}{174}
+\indexentry{SUBST@\ml{SUBST}|)}{174}
+\indexentry{substitution rule, in HOL logic@substitution rule, in \HOL\ logic!ML function for@\ML\ function for|)}{174}
+\indexentry{abstraction rule, in HOL logic@abstraction rule, in \HOL\ logic!ML function for@\ML\ function for}{174}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!inference rules for}{174}
+\indexentry{ABS@\ml{ABS}|pin}{174}
+\indexentry{type instantiation, in HOL logic@type instantiation, in \HOL\ logic!ML function for@\ML\ function for}{175}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!instantiation of}{175}
+\indexentry{INST_TYPE@\ml{INST\_TYPE}|pin}{175}
+\indexentry{discharging assumptions, in HOL logic@discharging assumptions, in \HOL\ logic!ML function for@\ML\ function for}{175}
+\indexentry{DISCH@\ml{DISCH}|pin}{175}
+\indexentry{Modus Ponens, in HOL logic@Modus Ponens, in \HOL\ logic!ML function for@\ML\ function for}{175}
+\indexentry{MP@\ml{MP}|pin}{175}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!primitive|)}{175}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!abbreviation of}{176}
+\indexentry{type abbreviations!in HOL logic@in \HOL\ logic}{176}
+\indexentry{abbreviation of types, in HOL logic@abbreviation of types, in \HOL\ logic|(}{176}
+\indexentry{new_type_abbrev@\ml{new\_type\_abbrev}|pin}{176}
+\indexentry{type_abbrevs@\ml{type\_abbrevs}|pin}{176}
+\indexentry{antiquotation, in HOL logic terms@antiquotation, in \HOL\ logic terms}{176}
+\indexentry{abbreviation of types, in HOL logic@abbreviation of types, in \HOL\ logic|)}{176}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!hierarchies of}{177}
+\indexentry{ancestry, of HOL system theories@ancestry, of \HOL\ system theories}{177}
+\indexentry{HOL@\ml{HOL}}{177}
+\indexentry{BASIC-HOL@\ml{BASIC-HOL}}{177}
+\indexentry{bool, the HOL theory@\ml{bool}, the \HOL\ theory}{177}
+\indexentry{ind, the theory@\ml{ind}, the theory}{177}
+\indexentry{PPLAMB@\ml{PPLAMB}}{178}
+\indexentry{LCF@\LCF}{178}
+\indexentry{ function type operator, in HOL logic@\ml{->} (function type operator, in \HOL\ logic)}{178}
+\indexentry{Huet, G.}{178}
+\indexentry{Paulson, L.}{178}
+\indexentry{bool, the HOL theory@\ml{bool}, the \HOL\ theory|(}{178}
+\indexentry{primitive constants, of HOL logic@primitive constants, of \HOL\ logic}{178}
+\indexentry{truth values, in HOL logic@truth values, in \HOL\ logic}{178}
+\indexentry{logical constants, in HOL logic@logical constants, in \HOL\ logic}{178}
+\indexentry{ implication, in HOL logic@{\small\verb+==>+} (implication, in \HOL\ logic)}{178}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic}{178}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic}{178}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!logical}{178}
+\indexentry{ universal quantifier, in HOL logic@{\small\verb+"!+} (universal quantifier, in \HOL\ logic)}{178}
+\indexentry{ existential quantifier, in HOL logic@{\small\verb+?+} (existential quantifier, in \HOL\ logic)}{178}
+\indexentry{ conjunction, in HOL logic@{\small\verb+/\+} (conjunction, in \HOL\ logic)}{178}
+\indexentry{ disjunction, in HOL logic@{\small\verb+\/+} (disjunction, in \HOL\ logic)}{178}
+\indexentry{F@\ml{F}}{178}
+\indexentry{T@\ml{T}}{178}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic}{178}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic}{178}
+\indexentry{ negation, in HOL logic@{\small\verb+~+} (negation, in \HOL\ logic)}{178}
+\indexentry{ exists unique, in HOL logic@{\small\verb+?"!+} (exists unique, in \HOL\ logic)}{178}
+\indexentry{ choice function, in HOL logic@{\small\verb+"@+} (choice function, in \HOL\ logic)}{178}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic}{178}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic}{178}
+\indexentry{iff, in HOL logic@iff, in \HOL\ logic}{178}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic}{178}
+\indexentry{one-to-one predicate, in HOL logic@one-to-one predicate, in \HOL\ logic!in bool theory@in \ml{bool} theory}{178}
+\indexentry{onto predicate, in HOL logic@onto predicate, in \HOL\ logic!in bool theory@in \ml{bool} theory}{178}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!system}{179}
+\indexentry{LCF@\LCF}{179}
+\indexentry{HOL_DEFINITION@\ml{HOL\_DEFINITION}}{179}
+\indexentry{BINDERS@\ml{BINDERS}}{179}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!abbreviational}{179}
+\indexentry{COND@\ml{COND}}{179}
+\indexentry{FCOND@\ml{FCOND}}{179}
+\indexentry{LET@\ml{LET}}{179}
+\indexentry{CURRY@\ml{CURRY}}{179}
+\indexentry{UNCURRY@\ml{UNCURRY}}{179}
+\indexentry{RES_FORALL@\ml{RES\_FORALL}}{179}
+\indexentry{RES_EXISTS@\ml{RES\_EXISTS}}{179}
+\indexentry{RES_SELECT@\ml{RES\_SELECT}}{179}
+\indexentry{RES_ABSTRACT@\ml{RES\_ABSTRACT}}{179}
+\indexentry{ARB@\ml{ARB}}{179}
+\indexentry{let-terms, in HOL logic@\ml{let}-terms, in \HOL\ logic!constant for}{179}
+\indexentry{TYPE_DEFINITION@\ml{TYPE\_DEFINITION}}{179}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!for type definitions}{179}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!for pairs}{179}
+\indexentry{MK_PAIR@\ml{MK\_PAIR}}{179}
+\indexentry{IS_PAIR@\ml{IS\_PAIR}}{179}
+\indexentry{representing types, in HOL logic@representing types, in \HOL\ logic!pair example of|(}{179}
+\indexentry{pairs, in HOL logic@pairs, in \HOL\ logic|(}{179}
+\indexentry{product types!in HOL logic@in \HOL\ logic|(}{179}
+\indexentry{type operators, in HOL logic@type operators, in \HOL\ logic!for pairs}{179}
+\indexentry{prod@\ml{prod}}{179}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of pairs}{179}
+\indexentry{ product type operator, in HOL logic@{\small\verb+#+} (product type operator, in \HOL\ logic)}{179}
+\indexentry{ pair constructor, in HOL logic@\ml{,} (pair constructor, in \HOL\ logic)}{179}
+\indexentry{pairing constructor, in HOL logic@pairing constructor, in \HOL\ logic}{179}
+\indexentry{pairing constructor, in HOL logic@pairing constructor, in \HOL\ logic!associativity of}{179}
+\indexentry{FST, the constant in HOL logic@\ml{FST}, the constant in \HOL\ logic}{179}
+\indexentry{SND, the constant in HOL logic@\ml{SND}, the constant in \HOL\ logic}{179}
+\indexentry{IS_PAIR@\ml{IS\_PAIR}}{179}
+\indexentry{MK_PAIR_DEF@\ml{MK\_PAIR\_DEF}}{180}
+\indexentry{IS_PAIR_DEF@\ml{IS\_PAIR\_DEF}}{180}
+\indexentry{PAIR_EXISTS@\ml{PAIR\_EXISTS}}{180}
+\indexentry{axioms!non-primitive, of HOL logic@non-primitive, of \HOL\ logic}{180}
+\indexentry{axioms!in bool theory@in \ml{bool} theory}{180}
+\indexentry{REP_prod@\ml{REP\_prod}}{180}
+\indexentry{COMMA_DEF@\ml{COMMA\_DEF}}{180}
+\indexentry{FST_DEF@\ml{FST\_DEF}}{180}
+\indexentry{SND_DEF@\ml{SND\_DEF}}{180}
+\indexentry{pairing constructor, in HOL logic@pairing constructor, in \HOL\ logic!definition of}{180}
+\indexentry{FST, the constant in HOL logic@\ml{FST}, the constant in \HOL\ logic!definition of}{180}
+\indexentry{selectors, in HOL logic@selectors, in \HOL\ logic}{180}
+\indexentry{PAIR@\ml{PAIR}}{180}
+\indexentry{FST, the axiom in HOL logic@\ml{FST}, the axiom in \HOL\ logic}{180}
+\indexentry{SND, the axiom in HOL logic@\ml{SND}, the axiom in \HOL\ logic}{180}
+\indexentry{PAIR_EQ@\ml{PAIR\_EQ}}{180}
+\indexentry{pairs, in HOL logic@pairs, in \HOL\ logic|)}{180}
+\indexentry{product types!in HOL logic@in \HOL\ logic|)}{180}
+\indexentry{representing types, in HOL logic@representing types, in \HOL\ logic!pair example of|)}{180}
+\indexentry{bool, the HOL theory@\ml{bool}, the \HOL\ theory|)}{180}
+\indexentry{BASIC-HOL@\ml{BASIC-HOL}}{181}
+\indexentry{initial theory, of HOL logic@initial theory, of \HOL\ logic}{181}
+\indexentry{INIT@\ml{INIT}!as BASIC_HOL@as \ml{BASIC\_HOL}}{181}
+\indexentry{ABS_REP_THM@\ml{ABS\_REP\_THM}}{181}
+\indexentry{isomorphism of types, in HOL logic@isomorphism of types, in \HOL\ logic}{181}
+\indexentry{num, the theory in HOL logic@\ml{num}, the theory in \HOL\ logic}{181}
+\indexentry{ zero, in HOL logic@\ml{0} ( zero, in \HOL\ logic)}{181}
+\indexentry{axioms!in num theory@in \ml{num} theory}{181}
+\indexentry{Peano's axioms}{181}
+\indexentry{axioms!non-primitive, of HOL logic@non-primitive, of \HOL\ logic}{181}
+\indexentry{NOT_SUC@\ml{NOT\_SUC}}{181}
+\indexentry{INV_SUC@\ml{INV\_SUC}}{181}
+\indexentry{INDUCTION@\ml{INDUCTION}}{181}
+\indexentry{induction rule!for numbers, in HOL logic@for numbers, in \HOL\ logic}{181}
+\indexentry{INDUCT@\ml{INDUCT}}{181}
+\indexentry{INDUCT_TAC@\ml{INDUCT\_TAC}}{181}
+\indexentry{num, the type in HOL logic@\ml{num}, the type in \HOL\ logic}{181}
+\indexentry{num_CONV@\ml{num\_CONV}|pin}{181}
+\indexentry{primitive recursive definitions, in HOL logic@primitive recursive definitions, in \HOL\ logic!automated|(}{182}
+\indexentry{primitive recursion theorem!for numbers|(}{182}
+\indexentry{prim_rec@\ml{prim\_rec}|(}{182}
+\indexentry{PPlambda (same as PPLAMBDA), of LCF system@\ml{PP}$\lambda$ (same as \ml{PPLAMBDA}), of \ml{LCF} system}{182}
+\indexentry{recursive definitions, in classical logics}{182}
+\indexentry{primitive recursive functions}{182}
+\indexentry{Peano's axioms}{182}
+\indexentry{num_Axiom@\ml{num\_Axiom}}{182}
+\indexentry{characterizing theorem!for numbers}{182}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!primitive recursive|(}{182}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated, for numbers|(}{182}
+\indexentry{primitive recursion theorem!automated use of, in HOL system@automated use of, in \HOL\ system|(}{182}
+\indexentry{primitive recursive definitions, in HOL logic@primitive recursive definitions, in \HOL\ logic!justification of}{182}
+\indexentry{new_prim_rec_definition@\ml{new\_prim\_rec\_definition}|pin}{183}
+\indexentry{new_infix_prim_rec_definition@\ml{new\_infix\_prim\_rec\_definition}|pin}{183}
+\indexentry{DEF@$\ldots$\ml{\_DEF}}{184}
+\indexentry{currying, in ML@currying, in \ML!in primitive recursive definitions}{184}
+\indexentry{new_infix_prim_rec_definition@\ml{new\_infix\_prim\_rec\_definition}}{185}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic!primitive recursive definitions}{185}
+\indexentry{ addition, in HOL logic@\ml{+} (addition, in \HOL\ logic)}{185}
+\indexentry{ADD@\ml{ADD}}{185}
+\indexentry{prim_rec@\ml{prim\_rec}|)}{185}
+\indexentry{primitive recursion theorem!automated use of, in HOL system@automated use of, in \HOL\ system|)}{185}
+\indexentry{primitive recursion theorem!for numbers|)}{185}
+\indexentry{primitive recursive definitions, in HOL logic@primitive recursive definitions, in \HOL\ logic!automated|)}{185}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated, for numbers|)}{185}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!primitive recursive|)}{185}
+\indexentry{ less than, in HOL logic@\ml{<} (less than, in \HOL\ logic)}{185}
+\indexentry{less than, in HOL logic@less than, in \HOL\ logic}{185}
+\indexentry{LESS@\ml{LESS}}{185}
+\indexentry{number theory, in HOL logic@number theory, in \HOL\ logic}{186}
+\indexentry{arithmetic@\ml{arithmetic}}{186}
+\indexentry{ADD@\ml{ADD}}{186}
+\indexentry{SUB@\ml{SUB}}{186}
+\indexentry{MULT@\ml{MULT}}{186}
+\indexentry{EXP@\ml{EXP}}{186}
+\indexentry{ subtraction, in HOL logic@\ml{-} (subtraction, in \HOL\ logic)}{186}
+\indexentry{ multiplication, in HOL logic@\ml{*} (multiplication, in \HOL\ logic)}{186}
+\indexentry{arithmetic, in HOL logic@arithmetic, in \HOL\ logic}{186}
+\indexentry{ greater than, in HOL logic@\ml{>} (greater than, in \HOL\ logic)}{186}
+\indexentry{ less or equal, in HOL logic@\ml{<=} (less or equal, in \HOL\ logic)}{186}
+\indexentry{ greater or equal, in HOL logic@\ml{>=} (greater or equal, in \HOL\ logic)}{186}
+\indexentry{MOD@\ml{MOD}}{186}
+\indexentry{DIV@\ml{DIV}}{186}
+\indexentry{list, the type operator in HOL logic@\ml{list}, the type operator in \HOL\ logic}{186}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated for lists|(}{186}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!tools for construction of}{186}
+\indexentry{lists, in HOL logic@lists, in \HOL\ logic|(}{186}
+\indexentry{list theory, in HOL logic@\ml{list} theory, in \HOL\ logic|(}{186}
+\indexentry{ lists, in HOL logic@\ml{[} $\cdots$ \ml{;} $\cdots$ \ml{]} (lists, in \HOL\ logic)|(}{186}
+\indexentry{NIL@\ml{NIL}}{186}
+\indexentry{CONS@\ml{CONS}}{186}
+\indexentry{HD, the constant in HOL logic@\ml{HD}, the constant in \HOL\ logic}{186}
+\indexentry{TL, the constant in HOL logic@\ml{TL}, the constant in \HOL\ logic}{186}
+\indexentry{NULL, the constant in HOL logic@\ml{NULL}, the constant in \HOL\ logic}{186}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of list expressions}{187}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of list expressions}{187}
+\indexentry{list theorems, in HOL logic@list theorems, in \HOL\ logic|(}{187}
+\indexentry{list_Axiom@\ml{list\_Axiom}}{187}
+\indexentry{axioms!non-primitive, of HOL logic@non-primitive, of \HOL\ logic}{187}
+\indexentry{axioms!in list theory@in \ml{list} theory}{187}
+\indexentry{list_INDUCT@\ml{list\_INDUCT}}{187}
+\indexentry{list_CASES@\ml{list\_CASES}}{187}
+\indexentry{CONS_11@\ml{CONS\_{11}}}{187}
+\indexentry{NOT_NIL_CONS@\ml{NOT\_NIL\_CONS}}{187}
+\indexentry{NOT_CONS_NIL@\ml{NOT\_CONS\_NIL}}{187}
+\indexentry{characterizing theorem!for lists}{187}
+\indexentry{induction rule!for lists, in HOL logic@for lists, in \HOL\ logic}{187}
+\indexentry{LIST_INDUCT@\ml{LIST\_INDUCT}}{187}
+\indexentry{LIST_INDUCT_TAC@\ml{LIST\_INDUCT\_TAC}}{187}
+\indexentry{primitive recursion theorem!for lists}{187}
+\indexentry{new_list_rec_definition@\ml{new\_list\_rec\_definition}|pin}{187}
+\indexentry{new_infix_list_rec_definition@\ml{new\_infix\_list\_rec\_definition}}{187}
+\indexentry{primitive recursion theorem!automated use of, in HOL system@automated use of, in \HOL\ system}{187}
+\indexentry{list definitions, in HOL logic@list definitions, in \HOL\ logic}{188}
+\indexentry{NULL, the definition in HOL logic@\ml{NULL}, the definition in \HOL\ logic}{188}
+\indexentry{HD, the definition in HOL logic@\ml{HD}, the definition in \HOL\ logic}{188}
+\indexentry{TL, the definition in HOL logic@\ml{TL}, the definition in \HOL\ logic}{188}
+\indexentry{SUM, the theorem in HOL logic@\ml{SUM}, the theorem in \HOL\ logic}{188}
+\indexentry{APPEND, the theorem in HOL logic@\ml{APPEND}, the theorem in \HOL\ logic}{188}
+\indexentry{concatenation, of lists!in HOL logic@in \HOL\ logic}{188}
+\indexentry{FLAT, the theorem in HOL logic@\ml{FLAT}, the theorem in \HOL\ logic}{188}
+\indexentry{LENGTH, the theorem in HOL logic@\ml{LENGTH}, the theorem in \HOL\ logic}{188}
+\indexentry{MAP, the theorem in HOL logic@\ml{MAP}, the theorem in \HOL\ logic}{188}
+\indexentry{EL, the theorem in HOL logic@\ml{EL}, the theorem in \HOL\ logic}{188}
+\indexentry{SUM, the constant in HOL logic@\ml{SUM}, the constant in \HOL\ logic}{188}
+\indexentry{APPEND, the constant in HOL logic@\ml{APPEND}, the constant in \HOL\ logic}{188}
+\indexentry{FLAT, the constant in HOL logic@\ml{FLAT}, the constant in \HOL\ logic}{188}
+\indexentry{LENGTH, the constant in HOL logic@\ml{LENGTH}, the constant in \HOL\ logic}{188}
+\indexentry{MAP, the constant in HOL logic@\ml{MAP}, the constant in \HOL\ logic}{188}
+\indexentry{EL, the constant in HOL logic@\ml{EL}, the constant in \HOL\ logic}{188}
+\indexentry{EVERY, the HOL constant@\ml{EVERY}, the \HOL\ constant}{188}
+\indexentry{EVERY_DEF@\ml{EVERY\_DEF}}{188}
+\indexentry{list theorems, in HOL logic@list theorems, in \HOL\ logic|)}{188}
+\indexentry{ lists, in HOL logic@\ml{[} $\cdots$ \ml{;} $\cdots$ \ml{]} (lists, in \HOL\ logic)|)}{188}
+\indexentry{list theory, in HOL logic@\ml{list} theory, in \HOL\ logic|)}{188}
+\indexentry{lists, in HOL logic@lists, in \HOL\ logic|)}{188}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated for lists|)}{188}
+\indexentry{function composition, in HOL logic@function composition, in \HOL\ logic|(}{188}
+\indexentry{combin@\ml{combin}}{188}
+\indexentry{combinators, in HOL logic@combinators, in \HOL\ logic}{188}
+\indexentry{ function composition operator, in HOL logic@\ml{o} (function composition operator, in \HOL\ logic)|(}{188}
+\indexentry{S, constant in HOL logic@\ml{S}, constant in \HOL\ logic}{188}
+\indexentry{K, the constant in HOL logic@\ml{K}, the constant in \HOL\ logic}{188}
+\indexentry{I, constant in HOL logic@\ml{I}, constant in \HOL\ logic}{188}
+\indexentry{K_DEF@\ml{K\_DEF}}{188}
+\indexentry{S_DEF@\ml{S\_DEF}}{188}
+\indexentry{I_DEF@\ml{I\_DEF}}{188}
+\indexentry{K_THM@\ml{K\_THM}}{189}
+\indexentry{S_THM@\ml{S\_THM}}{189}
+\indexentry{I_THM@\ml{I\_THM}}{189}
+\indexentry{I_o_ID@\ml{I\_o\_ID}}{189}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!with constant names}{189}
+\indexentry{ function composition operator, in HOL logic@\ml{o} (function composition operator, in \HOL\ logic)|)}{189}
+\indexentry{function composition, in HOL logic@function composition, in \HOL\ logic|)}{189}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated, for trees|(}{189}
+\indexentry{labelled tree theory, in HOL logic@labelled \ml{tree} theory, in \HOL\ logic|(}{189}
+\indexentry{tree, the HOL theory@\ml{tree}, the \HOL\ theory}{189}
+\indexentry{ltree, the HOL theory@\ml{ltree}, the \HOL\ theory|(}{189}
+\indexentry{Melham, T.}{189}
+\indexentry{tree, the HOL type@\ml{tree}, the \HOL\ type}{189}
+\indexentry{node@\ml{node}}{189}
+\indexentry{node_11@\ml{node\_{11}}}{190}
+\indexentry{tree_Induct@\ml{tree\_Induct}}{190}
+\indexentry{induction rule!for trees, in HOL logic@for \ml{trees}, in \HOL\ logic}{190}
+\indexentry{Peano's axioms}{190}
+\indexentry{tree_Axiom@\ml{tree\_Axiom}}{190}
+\indexentry{characterizing theorem!for finitely-branching ordered trees}{190}
+\indexentry{ltree@$\ldots$\ml{ltree}}{190}
+\indexentry{Node@\ml{Node}}{190}
+\indexentry{Node_11@\ml{Node\_{11}}}{190}
+\indexentry{ltree_Induct@\ml{ltree\_Induct}}{190}
+\indexentry{ltree_Axiom@\ml{ltree\_Axiom}}{190}
+\indexentry{labelled tree theory, in HOL logic@labelled \ml{tree} theory, in \HOL\ logic|)}{190}
+\indexentry{ltree, the HOL theory@\ml{ltree}, the \HOL\ theory|)}{190}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated, for trees|)}{190}
+\indexentry{tydefs@\ml{tydefs}}{191}
+\indexentry{TY_DEF_THM@\ml{TY\_DEF\_THM}}{191}
+\indexentry{sum@\ml{sum}}{191}
+\indexentry{disjoint union theory, in HOL logic@disjoint union theory, in \HOL\ logic|(}{191}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!of sum types}{191}
+\indexentry{ disjoint union type operator, in HOL logic@\ml{+} (disjoint union type operator, in HOL logic)}{191}
+\indexentry{disjoint union theory, in HOL logic@disjoint union theory, in \HOL\ logic|)}{191}
+\indexentry{INL, the constant in HOL logic@\ml{INL}, the constant in \HOL\ logic}{191}
+\indexentry{INR, the constant in HOL logic@\ml{INR}, the constant in \HOL\ logic}{191}
+\indexentry{ISL, the constant in HOL logic@\ml{ISL}, the constant in \HOL\ logic}{191}
+\indexentry{ISR, the constant in HOL logic@\ml{ISR}, the constant in \HOL\ logic}{191}
+\indexentry{OUTL, the constant in HOL logic@\ml{OUTL}, the constant in \HOL\ logic}{191}
+\indexentry{OUTR, the constant in HOL logic@\ml{OUTR}, the constant in \HOL\ logic}{191}
+\indexentry{sum_Axiom@\ml{sum\_Axiom}}{191}
+\indexentry{sum_axiom@\ml{sum\_axiom}}{191}
+\indexentry{ISL, the theorem in HOL logic@\ml{ISL}, the theorem in \HOL\ logic}{191}
+\indexentry{ISR, the theorem in HOL logic@\ml{ISR}, the theorem in \HOL\ logic}{191}
+\indexentry{ISL_OR_ISR@\ml{ISL\_OR\_ISR}}{191}
+\indexentry{OUTL, the theorem in HOL logic@\ml{OUTL}, the theorem in \HOL\ logic}{192}
+\indexentry{OUTR, the theorem in HOL logic@\ml{OUTR}, the theorem in \HOL\ logic}{192}
+\indexentry{INL, the theorem in HOL logic@\ml{INL}, the theorem in \HOL\ logic}{192}
+\indexentry{INR, the theorem in HOL logic@\ml{INR}, the theorem in \HOL\ logic}{192}
+\indexentry{one, the HOL theory@\ml{one}, the \HOL\ theory}{192}
+\indexentry{one, the HOL type@\ml{one}, the \HOL\ type}{192}
+\indexentry{one_axiom@\ml{one\_axiom}}{192}
+\indexentry{one, the HOL theorem@\ml{one}, the \HOL\ theorem}{192}
+\indexentry{one_Axiom@\ml{one\_Axiom}}{192}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type definition|(}{192}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system|(}{192}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic}{192}
+\indexentry{type definition extension, in HOL logic@type definition extension, in \HOL\ logic|(}{192}
+\indexentry{new_type_definition@\ml{new\_type\_definition}}{192}
+\indexentry{isomorphism of types, in HOL logic@isomorphism of types, in \HOL\ logic}{192}
+\indexentry{definitional axioms}{192}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!tools for construction of}{193}
+\indexentry{concrete recursive types, in HOL logic@concrete recursive types, in \HOL\ logic}{193}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in recursive type definition|(}{193}
+\indexentry{recursive types, in HOL logic@recursive types, in \HOL\ logic!tools for construction of|(}{193}
+\indexentry{define_type@\ml{define\_type}|pin}{193}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!input to|(}{194}
+\indexentry{strings, in ML@strings, in \ML!as input to HOL type definition package@as input to \HOL\ type definition package}{194}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!input to|)}{194}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!output of|(}{194}
+\indexentry{define_type@\ml{define\_type}}{194}
+\indexentry{characterizing theorem!for defined types}{195}
+\indexentry{automated derivation!of characterizing theorems for recursive types}{195}
+\indexentry{initiality}{195}
+\indexentry{draft mode, in HOL system@draft mode, in \HOL\ system}{195}
+\indexentry{ABS_@\ml{ABS\_}$\ldots$}{195}
+\indexentry{REP_@\ml{REP\_}$\ldots$}{195}
+\indexentry{TY_DEF@$\ldots$\ml{\_TY\_DEF}}{195}
+\indexentry{recursive types, in HOL logic@recursive types, in \HOL\ logic!tools for construction of|)}{195}
+\indexentry{type definition extension, in HOL logic@type definition extension, in \HOL\ logic|)}{195}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!output of|)}{195}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in recursive type definition|)}{195}
+\indexentry{primitive recursion theorem!a degenerate case|(}{196}
+\indexentry{primitive recursion theorem!a degenerate case|)}{196}
+\indexentry{number theory, in HOL logic@number theory, in \HOL\ logic!type definition package version of}{196}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, to build number theory}{196}
+\indexentry{binary tree theory, in HOL logic@binary tree theory, in \HOL\ logic|(}{197}
+\indexentry{binary tree theory, in HOL logic@binary tree theory, in \HOL\ logic|)}{197}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in recursive function definition|(}{197}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated, for recursive types|(}{197}
+\indexentry{primitive recursion theorem!for binary trees|(}{197}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!tools for construction of}{197}
+\indexentry{new_prim_rec_definition@\ml{new\_prim\_rec\_definition}}{197}
+\indexentry{num_Axiom@\ml{num\_Axiom}}{197}
+\indexentry{prim_rec@\ml{prim\_rec}}{197}
+\indexentry{primitive recursion theorem!automated use of, in HOL system@automated use of, in \HOL\ system|(}{197}
+\indexentry{new_recursive_definition@\ml{new\_recursive\_definition}|pin}{198}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic!in recursive type definitions}{198}
+\indexentry{define_type@\ml{define\_type}}{198}
+\indexentry{automated derivation!of recursive definitions}{198}
+\indexentry{currying, in ML@currying, in \ML!in recursive definitions}{198}
+\indexentry{prove_rec_fn_exists@\ml{prove\_rec\_fn\_exists}|pin}{198}
+\indexentry{recursive definitions, in HOL logic@recursive definitions, in \HOL\ logic!automated, for recursive types|)}{198}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in recursive function definition|)}{198}
+\indexentry{primitive recursion theorem!automated use of, in HOL system@automated use of, in \HOL\ system|)}{198}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in case definition}{199}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in partial definition}{199}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in curried infix definition|(}{200}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, in curried infix definition|)}{200}
+\indexentry{primitive recursion theorem!for binary trees|)}{200}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, to build induction tools|(}{200}
+\indexentry{induction rule!structural, derivation of|(}{200}
+\indexentry{prove_induction_thm@\ml{prove\_induction\_thm}|pin}{200}
+\indexentry{automated derivation!of structural induction theorems}{201}
+\indexentry{induction rule!for concrete recursive types}{201}
+\indexentry{case analysis, in HOL logic@case analysis, in \HOL\ logic!as instance  of induction}{201}
+\indexentry{induction rule!structural, derivation of|)}{201}
+\indexentry{theorem continuations!use of, in derivation of induction tactics|(}{201}
+\indexentry{INDUCT_THEN@\ml{INDUCT\_THEN}|pin}{202}
+\indexentry{induction tactics!derivation of|(}{202}
+\indexentry{automated derivation!of structural induction tactics}{202}
+\indexentry{define_type@\ml{define\_type}}{202}
+\indexentry{prove_induction_thm@\ml{prove\_induction\_thm}}{202}
+\indexentry{characterizing theorem!use of, in deriving induction}{202}
+\indexentry{MAP_EVERY@\ml{MAP\_EVERY}}{202}
+\indexentry{INDUCT_TAC@\ml{INDUCT\_TAC}}{202}
+\indexentry{theorem continuations!use of, in derivation of induction tactics|)}{203}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system!use of, to build induction tools|)}{203}
+\indexentry{induction tactics!derivation of|)}{203}
+\indexentry{prove_constructors_one_one@\ml{prove\_constructors\_one\_one}|pin}{203}
+\indexentry{constructors, of concrete types in HOL logic@constructors, of concrete types in \HOL\ logic!proving one-to-one}{203}
+\indexentry{automated derivation!of one-to-one theorems}{203}
+\indexentry{prove_constructors_distinct@\ml{prove\_constructors\_distinct}|pin}{203}
+\indexentry{constructors, of concrete types in HOL logic@constructors, of concrete types in \HOL\ logic!proving distinct}{203}
+\indexentry{automated derivation!of distinctness theorems}{203}
+\indexentry{prove_cases_thm@\ml{prove\_cases\_thm}|pin}{203}
+\indexentry{automated derivation!of case analysis theorems}{203}
+\indexentry{case analysis, in HOL logic@case analysis, in \HOL\ logic!theorems for}{203}
+\indexentry{prove_induction_thm@\ml{prove\_induction\_thm}}{203}
+\indexentry{case analysis, in HOL logic@case analysis, in \HOL\ logic!as instance  of induction}{204}
+\indexentry{extension, of HOL logic@extension, of \HOL\ logic!by type definition|)}{204}
+\indexentry{type definition package, in HOL system@type definition package, in \HOL\ system|)}{204}
+\indexentry{HOL system@\HOL\ system!adjustment of user interface of}{204}
+\indexentry{HOL system@\HOL\ system!adjustment of user interface of|(}{205}
+\indexentry{HOL system@\HOL\ system!flags in}{205}
+\indexentry{flags, in ML@flags, in \ML}{205}
+\indexentry{counting inferences, in HOL proofs@counting inferences, in \HOL\ proofs}{205}
+\indexentry{inferences, in HOL logic@inferences, in \HOL\ logic!counting of}{205}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of types}{205}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!printing of}{205}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!default}{205}
+\indexentry{theory files!pretty printing of}{205}
+\indexentry{pretty printing!flags for, in HOL system@flags for, in \HOL\ system}{205}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!verbose errors in}{205}
+\indexentry{interface maps}{205}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!of quantification}{205}
+\indexentry{let-terms, in HOL logic@\ml{let}-terms, in \HOL\ logic!pretty printing of}{205}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic!pretty printing of}{205}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!pretty printing}{205}
+\indexentry{timing@\ml{timing}}{205}
+\indexentry{show_types@\ml{show\_types}}{205}
+\indexentry{sticky@\ml{sticky}}{205}
+\indexentry{theory_pp@\ml{theory\_pp}}{205}
+\indexentry{type_error@\ml{type\_error}}{205}
+\indexentry{interface_print@\ml{interface\_print}}{205}
+\indexentry{print_cond@\ml{print\_cond}}{205}
+\indexentry{print_quant@\ml{print\_quant}}{205}
+\indexentry{print_let@\ml{print\_let}}{205}
+\indexentry{print_list@\ml{print\_list}}{205}
+\indexentry{print_uncurry@\ml{print\_uncurry}}{205}
+\indexentry{print_infix@\ml{print\_infix}}{205}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!paired}{205}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!pretty printing, of paired}{205}
+\indexentry{sticky types, in HOL logic@sticky types, in \HOL\ logic|(}{206}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!default|(}{206}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!sticky|(}{206}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!sticky types in|(}{206}
+\indexentry{HOL system@\HOL\ system!sticky types in|(}{206}
+\indexentry{default types, in HOL logic@default types, in \HOL\ logic|(}{206}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!generic}{206}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!explicit printing of}{206}
+\indexentry{set_sticky_type@\ml{set\_sticky\_type}|pin}{206}
+\indexentry{remove_sticky_type@\ml{remove\_sticky\_type}|pin}{206}
+\indexentry{sticky_list@\ml{sticky\_list}|pin}{207}
+\indexentry{default types, in HOL logic@default types, in \HOL\ logic|)}{207}
+\indexentry{HOL system@\HOL\ system!sticky types in|)}{207}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!sticky types in|)}{207}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!sticky|)}{207}
+\indexentry{types, in HOL logic@types, in \HOL\ logic!default|)}{207}
+\indexentry{sticky types, in HOL logic@sticky types, in \HOL\ logic|)}{207}
+\indexentry{interface maps|(}{207}
+\indexentry{HOL system@\HOL\ system!interface maps in|(}{207}
+\indexentry{set_interface_map@\ml{set\_interface\_map}|pin}{207}
+\indexentry{binders, in HOL logic@binders, in \HOL\ logic!under interface maps}{207}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic!under interface maps}{207}
+\indexentry{precedence, in HOL logic@precedence, in \HOL\ logic!under interface maps}{207}
+\indexentry{interface_map@\ml{interface\_map}|pin}{208}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!under interface maps|(}{208}
+\indexentry{interface_print@\ml{interface\_print}}{208}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!under interface maps|)}{208}
+\indexentry{is_constant@\ml{is\_constant}|pin}{208}
+\indexentry{is_infix@\ml{is\_infix}|pin}{208}
+\indexentry{is_binder@\ml{is\_binder}|pin}{208}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!indicator function for}{208}
+\indexentry{infixes, in HOL logic@infixes, in \HOL\ logic!indicator functions for}{208}
+\indexentry{binders, in HOL logic@binders, in \HOL\ logic!indicator functions for}{208}
+\indexentry{allowed_constant@\ml{allowed\_constant}|pin}{208}
+\indexentry{draft_mode@\ml{draft\_mode}|pin}{208}
+\indexentry{draft mode, in HOL system@draft mode, in \HOL\ system}{208}
+\indexentry{HOL system@\HOL\ system!interface maps in|)}{211}
+\indexentry{interface maps|)}{211}
+\indexentry{lambda symbol in HOL logic, resetting@lambda symbol, in \HOL\ logic, resetting|(}{211}
+\indexentry{customization of HOL system@customization of \HOL\ system|(}{211}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!changing symbol for|(}{211}
+\indexentry{HOL system@\HOL\ system!changeable symbols of|(}{211}
+\indexentry{symbols in HOL logic, changeable@symbols in \HOL\ logic, changeable|(}{211}
+\indexentry{set_lambda@\ml{set\_lambda}|pin}{211}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!changing symbol for}{211}
+\indexentry{ function abstraction binder, in HOL logic@{\small\verb+\+} (function abstraction binder, in \HOL\ logic)}{211}
+\indexentry{ escape, in ML strings@{\small\verb+\+} (escape, in \ML\ strings)}{211}
+\indexentry{lambda symbol in HOL logic, resetting@lambda symbol, in \HOL\ logic, resetting|)}{211}
+\indexentry{set_turnstile@\ml{set\_turnstile}|pin}{211}
+\indexentry{customization of HOL system@customization of \HOL\ system|)}{212}
+\indexentry{function abstraction, in HOL logic@function abstraction, in \HOL\ logic!changing symbol for|)}{212}
+\indexentry{HOL system@\HOL\ system!changeable symbols of|)}{212}
+\indexentry{symbols in HOL logic, changeable@symbols in \HOL\ logic, changeable|)}{212}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!hiding constant status in|(}{212}
+\indexentry{HOL system@\HOL\ system!hiding constants in|(}{212}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!hiding status of|(}{212}
+\indexentry{hide_constant@\ml{hide\_constant}|pin}{212}
+\indexentry{variables, in HOL logic@variables, in \HOL\ logic!with constant names}{212}
+\indexentry{soundness!of HOL logic@of \HOL\ logic}{212}
+\indexentry{constants, in HOL logic@constants, in \HOL\ logic!hiding status of|)}{212}
+\indexentry{unhide_constant@\ml{unhide\_constant}|pin}{212}
+\indexentry{is_hidden@\ml{is\_hidden}|pin}{212}
+\indexentry{HOL system@\HOL\ system!adjustment of user interface of|)}{212}
+\indexentry{HOL system@\HOL\ system!hiding constants in|)}{212}
+\indexentry{parsing, of HOL logic@parsing, of \HOL\ logic!hiding constant status in|)}{212}
+\indexentry{axioms!autoloading of, in HOL system@autoloading of, in \HOL\ system}{213}
+\indexentry{loading, of HOL theories@loading, of \HOL\ theories}{213}
+\indexentry{automatic loading, of HOL theory components@automatic loading, of \HOL\ theory components}{213}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!paging of}{213}
+\indexentry{autoload_theory@\ml{autoload\_theory}|pin}{213}
+\indexentry{constant specifications, in HOL logic@constant specifications, in \HOL\ logic!autoloading of}{213}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!autoloading of}{213}
+\indexentry{undo_autoload@\ml{undo\_autoload}|pin}{213}
+\indexentry{theories, in HOL logic@theories, in \HOL\ logic!caching of}{213}
+\indexentry{caching}{213}
+\indexentry{theory caching}{213}
+\indexentry{HOL system@\HOL\ system!caching theories in}{213}
+\indexentry{delete_cache@\ml{delete\_cache}|pin}{213}
+\indexentry{cached_theories@\ml{cached\_theories}|pin}{214}
+\indexentry{ML@\ML!pretty printer for|(}{214}
+\indexentry{printing, in HOL logic@printing, in \HOL\ logic!structural depth adjustment in}{214}
+\indexentry{max_print_depth@\ml{max\_print\_depth}|pin}{214}
+\indexentry{default print depth, for HOL logic@default print depth, for \HOL\ logic|(}{214}
+\indexentry{default print depth, for HOL logic@default print depth, for \HOL\ logic|)}{214}
+\indexentry{ML@\ML!pretty printer for|)}{214}
+\indexentry{inferences, in HOL logic@inferences, in \HOL\ logic!counting of}{215}
+\indexentry{timing of HOL evaluations@timing of \HOL\ evaluations}{215}
+\indexentry{HOL system@\HOL\ system!timing and counting inferences in}{215}
+\indexentry{thm_count@\ml{thm\_count}|pin}{215}
+\indexentry{counting inferences, in HOL proofs@counting inferences, in \HOL\ proofs}{215}
+\indexentry{set_thm_count@\ml{set\_thm\_count}|pin}{215}
+\indexentry{timer@\ml{timer}|pin}{215}
+\indexentry{thm@\ml{thm}}{219}
+\indexentry{ASSUME@\ml{ASSUME}}{220}
+\indexentry{counting inferences, in HOL proofs@counting inferences, in \HOL\ proofs}{220}
+\indexentry{inferences, in HOL logic@inferences, in \HOL\ logic!as ML function applications@as \ML\ function applications}{220}
+\indexentry{proof steps, as ML function applications@proof steps, as \ML\ function applications}{220}
+\indexentry{proof!the notion of, in HOL system@the notion of, in \HOL\ system}{220}
+\indexentry{inferences, in HOL logic@inferences, in \HOL\ logic!in derived rules}{220}
+\indexentry{proofs, in HOL logic@proofs, in \HOL\ logic!as ML function applications@as \ML\ function applications}{220}
+\indexentry{proofs, in HOL logic@proofs, in \HOL\ logic!as generated by derived rules}{220}
+\indexentry{derived rules, in HOL logic@derived rules, in \HOL\ logic!importance of}{220}
+\indexentry{derived rules, in HOL logic@derived rules, in \HOL\ logic!justification of}{221}
+\indexentry{UNDISCH@\ml{UNDISCH}}{221}
+\indexentry{counting inferences, in HOL proofs@counting inferences, in \HOL\ proofs}{221}
+\indexentry{rewriting!rules for|(}{222}
+\indexentry{REWRITE_RULE@\ml{REWRITE\_RULE}|(}{222}
+\indexentry{Milner, R.}{222}
+\indexentry{Wadsworth, C.}{222}
+\indexentry{LCF@\LCF!Edinburgh}{222}
+\indexentry{Paulson, L.}{222}
+\indexentry{Huet, G.}{222}
+\indexentry{LCF@\LCF!Cambridge}{222}
+\indexentry{equational theorems, in HOL logic@equational theorems, in \HOL\ logic!use of in rewriting}{222}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!equational}{222}
+\indexentry{type instantiation, in HOL logic@type instantiation, in \HOL\ logic!in rewriting rule}{222}
+\indexentry{INST_TYPE@\ml{INST\_TYPE}}{222}
+\indexentry{counting inferences, in HOL proofs@counting inferences, in \HOL\ proofs}{223}
+\indexentry{REWRITE_RULE@\ml{REWRITE\_RULE}|)}{223}
+\indexentry{rewriting!rules for|)}{223}
+\indexentry{derived rules, in HOL logic@derived rules, in \HOL\ logic!pre-defined|(}{223}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!as inference rules}{224}
+\indexentry{families of inferences, in HOL logic@families of inferences, in \HOL\ logic}{224}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!rules inexpressible as}{224}
+\indexentry{beta-conversion, in HOL logic@beta-conversion, in \HOL\ logic!not expressible as a theorem}{224}
+\indexentry{derived rules, in HOL logic@derived rules, in \HOL\ logic!pre-defined|)}{224}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!some not properly derived|(}{224}
+\indexentry{rules in HOL logic, some not properly derived@rules in \HOL\ logic, some not properly derived|(}{224}
+\indexentry{derived rules, in HOL logic@derived rules, in \HOL\ logic!list of axiomatic}{225}
+\indexentry{AP_TERM@\ml{AP\_TERM}}{225}
+\indexentry{AP_THM@\ml{AP\_THM}}{225}
+\indexentry{CCONTR@\ml{CCONTR}}{225}
+\indexentry{CHOOSE@\ml{CHOOSE}}{225}
+\indexentry{CONJ@\ml{CONJ}}{225}
+\indexentry{CONJUNCT1@\ml{CONJUNCT1}}{225}
+\indexentry{CONJUNCT2@\ml{CONJUNCT2}}{225}
+\indexentry{DISJ_CASES@\ml{DISJ\_CASES}}{225}
+\indexentry{DISJ1@\ml{DISJ1}}{225}
+\indexentry{DISJ2@\ml{DISJ2}}{225}
+\indexentry{EQ_IMP_RULE@\ml{EQ\_IMP\_RULE}}{225}
+\indexentry{EQ_MP@\ml{EQ\_MP}}{225}
+\indexentry{EQT_INTRO@\ml{EQT\_INTRO}}{225}
+\indexentry{ETA_CONV@\ml{ETA\_CONV}}{225}
+\indexentry{EXISTS@\ml{EXISTS}}{225}
+\indexentry{EXT@\ml{EXT}}{225}
+\indexentry{GEN@\ml{GEN}}{225}
+\indexentry{MK_ABS@\ml{MK\_ABS}}{225}
+\indexentry{MK_COMB@\ml{MK\_COMB}}{225}
+\indexentry{num_CONV@\ml{num\_CONV}}{225}
+\indexentry{SPEC@\ml{SPEC}}{225}
+\indexentry{SUBS@\ml{SUBS}}{225}
+\indexentry{SUBS_OCCS@\ml{SUBS\_OCCS}}{225}
+\indexentry{SUBST_CONV@\ml{SUBST\_CONV}}{225}
+\indexentry{SYM@\ml{SYM}}{225}
+\indexentry{TRANS@\ml{TRANS}}{225}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!some not properly derived|)}{225}
+\indexentry{rules in HOL logic, some not properly derived@rules in \HOL\ logic, some not properly derived|)}{225}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!derived|(}{225}
+\indexentry{derived rules, in HOL logic@derived rules, in \HOL\ logic!list and derivations of some|(}{225}
+\indexentry{ADD_ASSUM@\ml{ADD\_ASSUM}|pin}{225}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!inference rules for}{226}
+\indexentry{UNDISCH@\ml{UNDISCH}|pin}{226}
+\indexentry{SYM@\ml{SYM}|pin}{226}
+\indexentry{symmetry of equality rule, in HOL logic@symmetry of equality rule, in \HOL\ logic}{226}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!symmetry rule for}{226}
+\indexentry{transitivity of equality rule, in HOL logic@transitivity of equality rule, in \HOL\ logic}{226}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!transitivity rule for}{226}
+\indexentry{TRANS@\ml{TRANS}|pin}{226}
+\indexentry{function application, in HOL logic@function application, in \HOL\ logic!inference rules for}{227}
+\indexentry{AP_TERM@\ml{AP\_TERM}|pin}{227}
+\indexentry{AP_THM@\ml{AP\_THM}|pin}{227}
+\indexentry{EQ_MP@\ml{EQ\_MP}|pin}{227}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!MP rule for@\ml{MP} rule for}{227}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!other rules for|(}{228}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!inference rules for}{228}
+\indexentry{EQ_IMP_RULE@\ml{EQ\_IMP\_RULE}|pin}{228}
+\indexentry{T@\ml{T}!rules of inference for|(}{228}
+\indexentry{EQT_ELIM@\ml{EQT\_ELIM}|pin}{228}
+\indexentry{SPEC@\ml{SPEC}|pin}{229}
+\indexentry{specialization rule, in HOL logic@specialization rule, in \HOL\ logic}{229}
+\indexentry{free variables, in HOL logic@free variables, in \HOL\ logic}{229}
+\indexentry{EQT_INTRO@\ml{EQT\_INTRO}|pin}{229}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!other rules for|)}{230}
+\indexentry{T@\ml{T}!rules of inference for|)}{230}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!inference rules for}{230}
+\indexentry{GEN@\ml{GEN}|pin}{230}
+\indexentry{generalization rule, in HOL logic@generalization rule, in \HOL\ logic}{230}
+\indexentry{ETA_CONV@\ml{ETA\_CONV}|pin}{231}
+\indexentry{free variables, in HOL logic@free variables, in \HOL\ logic}{231}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!inference rules for}{232}
+\indexentry{EXT@\ml{EXT}|pin}{232}
+\indexentry{extensionality rule, in HOL logic@extensionality rule, in \HOL\ logic}{232}
+\indexentry{free variables, in HOL logic@free variables, in \HOL\ logic}{232}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic!inference rules for}{232}
+\indexentry{SELECT_INTRO@\ml{SELECT\_INTRO}|pin}{232}
+\indexentry{choice operator, in HOL logic@choice operator, in \HOL\ logic!inference rules for}{233}
+\indexentry{SELECT_ELIM@\ml{SELECT\_ELIM}|pin}{233}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!inference rules for|(}{233}
+\indexentry{EXISTS@\ml{EXISTS}|pin}{233}
+\indexentry{free variables, in HOL logic@free variables, in \HOL\ logic}{233}
+\indexentry{CHOOSE@\ml{CHOOSE}|pin}{234}
+\indexentry{free variables, in HOL logic@free variables, in \HOL\ logic}{234}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!inference rules for|)}{234}
+\indexentry{RIGHT_BETA@\ml{RIGHT\_BETA}|pin}{234}
+\indexentry{RIGHT_LIST_BETA@\ml{RIGHT\_LIST\_BETA}|pin}{235}
+\indexentry{CONJ@\ml{CONJ}|pin}{235}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!inference rule for}{235}
+\indexentry{CONJUNCT1@\ml{CONJUNCT1}|pin}{236}
+\indexentry{CONJUNCT2@\ml{CONJUNCT2}|pin}{236}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!inference rule for|(}{236}
+\indexentry{DISJ1@\ml{DISJ1}|pin}{236}
+\indexentry{DISJ2@\ml{DISJ2}|pin}{237}
+\indexentry{DISJ_CASES@\ml{DISJ\_CASES}|pin}{237}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!inference rule for|)}{238}
+\indexentry{F@\ml{F}!rules of inference for}{238}
+\indexentry{CCONTR@\ml{CCONTR}|pin}{238}
+\indexentry{contradiction rule, in HOL logic@contradiction rule, in \HOL\ logic}{238}
+\indexentry{derived rules, in HOL logic@derived rules, in \HOL\ logic!list and derivations of some|)}{238}
+\indexentry{inference rules, of HOL logic@inference rules, of \HOL\ logic!derived|)}{238}
+\indexentry{equational theorems, in HOL logic@equational theorems, in \HOL\ logic!produced by conversions}{239}
+\indexentry{conversions!purpose of}{239}
+\indexentry{BETA_CONV@\ml{BETA\_CONV}}{239}
+\indexentry{conversions!application specific}{239}
+\indexentry{LCF@\LCF!Cambridge}{240}
+\indexentry{beta-conversion, in HOL logic@beta-conversion, in \HOL\ logic!not expressible as a theorem}{240}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!rules inexpressible as}{240}
+\indexentry{conversions!as families of equations}{240}
+\indexentry{families of inferences, in HOL logic@families of inferences, in \HOL\ logic}{240}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!equational}{240}
+\indexentry{equational theorems, in HOL logic@equational theorems, in \HOL\ logic!produced by conversions}{240}
+\indexentry{reduction, by conversions}{241}
+\indexentry{conversions!reduction by}{241}
+\indexentry{sequencing!of conversions}{241}
+\indexentry{alternation!of conversions|(}{241}
+\indexentry{conversions!operators on|(}{241}
+\indexentry{THENC@\ml{THENC}|pin}{241}
+\indexentry{ORELSEC@\ml{ORELSEC}|pin}{241}
+\indexentry{repetition!of conversions}{242}
+\indexentry{successive application!conversion operator for}{242}
+\indexentry{REPEATC@\ml{REPEATC}|pin}{242}
+\indexentry{alternation!of conversions|)}{242}
+\indexentry{DEPTH_CONV@\ml{DEPTH\_CONV}|pin}{243}
+\indexentry{DEPTH_CONV@\ml{DEPTH\_CONV}!search strategy of}{243}
+\indexentry{TOP_DEPTH_CONV@\ml{TOP\_DEPTH\_CONV}|pin}{244}
+\indexentry{ONCE_DEPTH_CONV@\ml{ONCE\_DEPTH\_CONV}|pin}{244}
+\indexentry{CONV_RULE@\ml{CONV\_RULE}|pin}{244}
+\indexentry{CONV_TAC@\ml{CONV\_TAC}|pin}{244}
+\indexentry{BETA_RULE@\ml{BETA\_RULE}|pin}{244}
+\indexentry{conversions!operators on|)}{245}
+\indexentry{conversions!functions for building|(}{245}
+\indexentry{ORELSEC@\ml{ORELSEC}}{245}
+\indexentry{NO_CONV@\ml{NO\_CONV}|pin}{245}
+\indexentry{FIRST_CONV@\ml{FIRST\_CONV}|pin}{245}
+\indexentry{ORELSEC@\ml{ORELSEC}}{245}
+\indexentry{THENC@\ml{THENC}}{246}
+\indexentry{ALL_CONV@\ml{ALL\_CONV}|pin}{246}
+\indexentry{REFL@\ml{REFL}}{246}
+\indexentry{EVERY_CONV@\ml{EVERY\_CONV}|pin}{246}
+\indexentry{THENC@\ml{THENC}}{246}
+\indexentry{CHANGED_CONV@\ml{CHANGED\_CONV}|pin}{246}
+\indexentry{TRY_CONV@\ml{TRY\_CONV}|pin}{246}
+\indexentry{MK_COMB@\ml{MK\_COMB}|pin}{247}
+\indexentry{MK_ABS@\ml{MK\_ABS}|pin}{247}
+\indexentry{SUB_CONV@\ml{SUB\_CONV}|pin}{247}
+\indexentry{conversions!implementation of, in ML@implementation of, in \ML|(}{247}
+\indexentry{RATOR_CONV@\ml{RATOR\_CONV}|pin}{247}
+\indexentry{RAND_CONV@\ml{RAND\_CONV}|pin}{247}
+\indexentry{ABS_CONV@\ml{ABS\_CONV}|pin}{247}
+\indexentry{DEPTH_CONV@\ml{DEPTH\_CONV}}{248}
+\indexentry{TOP_DEPTH_CONV@\ml{TOP\_DEPTH\_CONV}}{248}
+\indexentry{conversions!functions for building|)}{248}
+\indexentry{conversions!implementation of, in ML@implementation of, in \ML|)}{248}
+\indexentry{PAIRED_BETA_CONV@\ml{PAIRED\_BETA\_CONV}|pin}{249}
+\indexentry{ADD_CONV@\ml{ADD\_CONV}|pin}{249}
+\indexentry{num_EQ_CONV@\ml{num\_EQ\_CONV}|pin}{249}
+\indexentry{LENGTH_CONV@\ml{LENGTH\_CONV}|pin}{250}
+\indexentry{list_EQ_CONV@\ml{list\_EQ\_CONV}|pin}{250}
+\indexentry{let-terms, in HOL logic@\ml{let}-terms, in \HOL\ logic!simplification of}{250}
+\indexentry{let_CONV@\ml{let\_CONV}|pin}{250}
+\indexentry{Skolemization}{251}
+\indexentry{X_SKOLEM_CONV@\ml{X\_SKOLEM\_CONV}|pin}{251}
+\indexentry{quantifiers!conversions for}{252}
+\indexentry{conversions!quantifier movement}{252}
+\indexentry{rewriting!as based on conversions|(}{254}
+\indexentry{REWR_CONV@\ml{REWR\_CONV}|pin}{254}
+\indexentry{rewriting!use of DEPTH_CONV in@use of \ml{DEPTH\_CONV} in}{254}
+\indexentry{DEPTH_CONV@\ml{DEPTH\_CONV}!use of, in rewriting tools}{254}
+\indexentry{theorems, in HOL logic@theorems, in \HOL\ logic!as rewrite rules}{254}
+\indexentry{basic-rewrites@\ml{basic-rewrites}}{254}
+\indexentry{rewriting!list of tactics for|(}{255}
+\indexentry{ASM_REWRITE_TAC@\ml{ASM\_REWRITE\_TAC}}{255}
+\indexentry{rewriting!as based on conversions|)}{255}
+\indexentry{rewriting!list of tactics for|)}{255}
+\indexentry{tactics!purpose of|(}{257}
+\indexentry{Milner, R.}{257}
+\indexentry{LCF@\LCF!Edinburgh}{257}
+\indexentry{lemmas}{257}
+\indexentry{forward proof!compared to goal directed}{257}
+\indexentry{tactics!as documentation of proofs}{257}
+\indexentry{goal directed proof search!reason for}{257}
+\indexentry{proof construction!as tree search}{257}
+\indexentry{strategies, for proof}{257}
+\indexentry{goal directed proof search!concepts of|(}{258}
+\indexentry{proof steps, as ML function applications@proof steps, as \ML\ function applications}{258}
+\indexentry{goals, in HOL system@goals, in \HOL\ system}{258}
+\indexentry{justifications, in goal-directed proof search}{258}
+\indexentry{assumption list, of goal}{258}
+\indexentry{term component, of goal}{258}
+\indexentry{achievement, of goals}{258}
+\indexentry{proofs, in HOL logic@proofs, in \HOL\ logic!as ML function applications@as \ML\ function applications}{258}
+\indexentry{proof functions (same as justifications, validations)}{258}
+\indexentry{proofs, in HOL logic@proofs, in \HOL\ logic!as generated by tactics}{258}
+\indexentry{inferences, in HOL logic@inferences, in \HOL\ logic!in goal-directed proof search}{258}
+\indexentry{validations}{258}
+\indexentry{solving, of goals}{258}
+\indexentry{ACCEPT_TAC@\ml{ACCEPT\_TAC}}{258}
+\indexentry{tactics!purpose of|)}{258}
+\indexentry{goal@\ml{goal}}{259}
+\indexentry{tactic@\ml{tactic}}{259}
+\indexentry{proof@\ml{proof}}{259}
+\indexentry{tactics!ML type of@\ML\ type of}{259}
+\indexentry{subgoals@\ml{subgoals}}{259}
+\indexentry{validity, of tactics|(}{259}
+\indexentry{strong validity, of tactics}{259}
+\indexentry{consistency, of HOL logic@consistency, of \HOL\ logic|(}{259}
+\indexentry{security, in goal directed proof|(}{259}
+\indexentry{failure, of tactics|(}{259}
+\indexentry{consistency, of HOL logic@consistency, of \HOL\ logic|)}{260}
+\indexentry{security, in goal directed proof|)}{260}
+\indexentry{validity, of tactics|)}{260}
+\indexentry{notation!for specification of tactics}{260}
+\indexentry{CONJ_TAC@\ml{CONJ\_TAC}}{260}
+\indexentry{INDUCT_TAC@\ml{INDUCT\_TAC}}{260}
+\indexentry{induction tactics}{260}
+\indexentry{failure, of tactics|)}{260}
+\indexentry{ALL_TAC@\ml{ALL\_TAC}}{260}
+\indexentry{identity tactic}{260}
+\indexentry{REWRITE_TAC@\ml{REWRITE\_TAC}|(}{260}
+\indexentry{rewriting!main tactic for|(}{260}
+\indexentry{rewriting!importance of, in goal directed proof|(}{260}
+\indexentry{tautologies, in rewriting tactic}{261}
+\indexentry{goal directed proof search!concepts of|)}{261}
+\indexentry{REWRITE_TAC@\ml{REWRITE\_TAC}|)}{261}
+\indexentry{rewriting!importance of, in goal directed proof|)}{261}
+\indexentry{rewriting!main tactic for|)}{261}
+\indexentry{goal directed proof search!generation of proofs by}{262}
+\indexentry{proofs, in HOL logic@proofs, in \HOL\ logic!as generated by tactics}{262}
+\indexentry{tactics!definition of new}{262}
+\indexentry{proof steps, as ML function applications@proof steps, as \ML\ function applications}{262}
+\indexentry{proofs, in HOL logic@proofs, in \HOL\ logic!as ML function applications@as \ML\ function applications}{262}
+\indexentry{CONJ_TAC@\ml{CONJ\_TAC}!ML implementation of@\ML\ implementation of}{262}
+\indexentry{tactics!indirect implementation of}{262}
+\indexentry{tactics!compound}{262}
+\indexentry{proof construction}{262}
+\indexentry{tacticals}{262}
+\indexentry{sequencing!of tactics}{262}
+\indexentry{tactics!sequencing of}{262}
+\indexentry{THEN@\ml{THEN}}{262}
+\indexentry{validity, of tactics}{263}
+\indexentry{failure, of tactics!debugging}{263}
+\indexentry{failure, of tactics|(}{263}
+\indexentry{debugging, of tactics}{263}
+\indexentry{tactics!debugging of}{263}
+\indexentry{TAC_PROOF@\ml{TAC\_PROOF}|pin}{263}
+\indexentry{prove_thm@\ml{prove\_thm}|pin}{263}
+\indexentry{PROVE@\ml{PROVE}|pin}{263}
+\indexentry{subgoal tree!in proof construction}{264}
+\indexentry{tree of subgoals, in proof construction}{264}
+\indexentry{goal directed proof search!decomposition phase of}{264}
+\indexentry{decomposition phase, of proof search}{264}
+\indexentry{goal directed proof search!composition phase of}{264}
+\indexentry{computation phase, of proof search}{264}
+\indexentry{LCF@\LCF!Cambridge}{264}
+\indexentry{Paulson, L.}{264}
+\indexentry{inferences, in HOL logic@inferences, in \HOL\ logic!in goal-directed proof search}{264}
+\indexentry{stacks, in subgoal package}{264}
+\indexentry{rotation, in subgoal package}{264}
+\indexentry{subgoal package!as HOL interface@as \HOL\ interface}{264}
+\indexentry{subgoal tree!in subgoal package}{264}
+\indexentry{debugging, of tactics}{265}
+\indexentry{failure, of tactics|)}{265}
+\indexentry{side effects, in subgoal package}{265}
+\indexentry{subgoal package!functions of|(}{265}
+\indexentry{set_goal@\ml{set\_goal}|pin}{265}
+\indexentry{expand@\ml{expand}|pin}{266}
+\indexentry{backup@\ml{backup}|pin}{266}
+\indexentry{backup_limit@\ml{backup\_limit}}{266}
+\indexentry{rotate@\ml{rotate}|pin}{266}
+\indexentry{rotation, in subgoal package}{266}
+\indexentry{top_goal@\ml{top\_goal}|pin}{266}
+\indexentry{top_thm@\ml{top\_thm}|pin}{266}
+\indexentry{save_top_thm@\ml{save\_top\_thm}|pin}{266}
+\indexentry{get_state@\ml{get\_state}|pin}{266}
+\indexentry{set_state@\ml{set\_state}|pin}{267}
+\indexentry{print_state@\ml{print\_state}|pin}{267}
+\indexentry{g, the subgoal package function@\ml{g}, the subgoal package function}{267}
+\indexentry{e, the subgoal package function@\ml{e}, the subgoal package function}{267}
+\indexentry{p, the subgoal package function@\ml{p}, the subgoal package function}{267}
+\indexentry{b, the subgoal package function@\ml{b}, the subgoal package function}{267}
+\indexentry{r, the subgoal package function@\ml{r}, the subgoal package function}{267}
+\indexentry{flags, for subgoal package}{267}
+\indexentry{subgoal package!flags for}{267}
+\indexentry{subgoal package!functions of|)}{267}
+\indexentry{tactics!list of some|(}{267}
+\indexentry{ACCEPT_TAC@\ml{ACCEPT\_TAC}|pin}{267}
+\indexentry{forward proof!interfacing to goal directed}{267}
+\indexentry{THENL@\ml{THENL}}{268}
+\indexentry{ASSUME_TAC@\ml{ASSUME\_TAC}|pin}{268}
+\indexentry{assumptions!tactic for adding}{268}
+\indexentry{universal quantifier, in HOL logic@universal quantifier, in \HOL\ logic!tactics for}{268}
+\indexentry{GEN_TAC@\ml{GEN\_TAC}|pin}{268}
+\indexentry{specialization tactic}{268}
+\indexentry{CONJ_TAC@\ml{CONJ\_TAC}|pin}{269}
+\indexentry{conjunction, in HOL logic@conjunction, in \HOL\ logic!tactic for splitting of}{269}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!tactics for}{269}
+\indexentry{DISCH_TAC@\ml{DISCH\_TAC}|pin}{269}
+\indexentry{STRIP_TAC@\ml{STRIP\_TAC}|pin}{269}
+\indexentry{SUBST_TAC@\ml{SUBST\_TAC}|pin}{269}
+\indexentry{substitution, tactic for}{269}
+\indexentry{REWRITE_TAC@\ml{REWRITE\_TAC}}{269}
+\indexentry{case analysis, in HOL logic@case analysis, in \HOL\ logic!tactics for|(}{270}
+\indexentry{ASM_CASES_TAC@\ml{ASM\_CASES\_TAC}|(}{270}
+\indexentry{ASM_CASES_TAC@\ml{ASM\_CASES\_TAC}|)}{270}
+\indexentry{DISJ_CASES_TAC@\ml{DISJ\_CASES\_TAC}|pin}{270}
+\indexentry{disjunction, in HOL logic@disjunction, in \HOL\ logic!tactic for case splits on}{270}
+\indexentry{case analysis, in HOL logic@case analysis, in \HOL\ logic!tactics for|)}{270}
+\indexentry{rewriting!main tactic for|(}{270}
+\indexentry{REWRITE_TAC@\ml{REWRITE\_TAC}|pin}{270}
+\indexentry{tautologies, in rewriting tactic}{270}
+\indexentry{lemmas}{271}
+\indexentry{ASM_REWRITE_TAC@\ml{ASM\_REWRITE\_TAC}}{271}
+\indexentry{PURE_ASM_REWRITE_TAC@\ml{PURE\_ASM\_REWRITE\_TAC}}{271}
+\indexentry{PURE_REWRITE_TAC@\ml{PURE\_REWRITE\_TAC}}{271}
+\indexentry{FILTER_ASM_REWRITE_TAC@\ml{FILTER\_ASM\_REWRITE\_TAC}}{271}
+\indexentry{rewriting!main tactic for|)}{271}
+\indexentry{implication, in HOL logic@implication, in \HOL\ logic!tactics for}{271}
+\indexentry{IMP_RES_TAC@\ml{IMP\_RES\_TAC}|pin}{271}
+\indexentry{resolution tactics}{271}
+\indexentry{ALL_TAC@\ml{ALL\_TAC}|pin}{272}
+\indexentry{identity tactic}{272}
+\indexentry{tactics!identity for}{272}
+\indexentry{THEN@\ml{THEN}}{272}
+\indexentry{REPEAT@\ml{REPEAT}}{272}
+\indexentry{THENL@\ml{THENL}}{272}
+\indexentry{NO_TAC@\ml{NO\_TAC}|pin}{272}
+\indexentry{EQ_TAC@\ml{EQ\_TAC}|pin}{272}
+\indexentry{equality, in HOL logic@equality, in \HOL\ logic!tactic for splitting}{272}
+\indexentry{EXISTS_TAC@\ml{EXISTS\_TAC}|pin}{273}
+\indexentry{existential quantifier, in HOL logic@existential quantifier, in \HOL\ logic!tactic for}{273}
+\indexentry{tactics!list of some|)}{273}
+\indexentry{tactics!tacticals for|(}{273}
+\indexentry{tacticals|(}{273}
+\indexentry{tacticals!list of some|(}{273}
+\indexentry{tacticals!purpose of}{273}
+\indexentry{compound tactics, in HOL system@compound tactics, in \HOL\ system}{273}
+\indexentry{tactics!compound}{273}
+\indexentry{alternation!of tactics|(}{273}
+\indexentry{tactics!alternation of}{273}
+\indexentry{ORELSE@\ml{ORELSE}|pin}{273}
+\indexentry{tacticals!for alternation}{273}
+\indexentry{alternation!of tactics|)}{273}
+\indexentry{FIRST@\ml{FIRST}|pin}{274}
+\indexentry{CHANGED_TAC@\ml{CHANGED\_TAC}|pin}{274}
+\indexentry{sequencing!of tactics|(}{274}
+\indexentry{tacticals!for sequencing|(}{274}
+\indexentry{tactics!sequencing of|(}{274}
+\indexentry{THEN@\ml{THEN}!ML implementation of@\ML\ implementation of|(}{274}
+\indexentry{THEN@\ml{THEN}|pin}{274}
+\indexentry{Milner, R.}{274}
+\indexentry{map@\ml{map}}{274}
+\indexentry{split@\ml{split}}{274}
+\indexentry{function composition, in ML@function composition, in \ML}{275}
+\indexentry{ function composition operator, in ML@{\small\verb+o+} (function composition operator, in \ML)}{275}
+\indexentry{length@\ml{length}}{275}
+\indexentry{flat@\ml{flat}}{275}
+\indexentry{mapshape@\ml{mapshape}}{275}
+\indexentry{justifications, in goal-directed proof search!THEN example of@\ml{THEN} example of}{276}
+\indexentry{proof functions (same as justifications, validations)!THEN example of@\ml{THEN} example of}{276}
+\indexentry{sequencing!of tactics|)}{276}
+\indexentry{tacticals!for sequencing|)}{276}
+\indexentry{THEN@\ml{THEN}!ML implementation of@\ML\ implementation of|)}{276}
+\indexentry{THENL@\ml{THENL}}{276}
+\indexentry{selective sequencing tactical}{276}
+\indexentry{tactics!sequencing of|)}{276}
+\indexentry{EVERY, the ML function@\ml{EVERY}, the \ML\ function|pin}{276}
+\indexentry{tacticals!for successive application}{276}
+\indexentry{successive application!tactical for}{276}
+\indexentry{REPEAT@\ml{REPEAT}|pin}{277}
+\indexentry{tactics!repetition of}{277}
+\indexentry{tacticals!for repetition}{277}
+\indexentry{repetition!of tactics}{277}
+\indexentry{tacticals|)}{277}
+\indexentry{tacticals!list of some|)}{277}
+\indexentry{tactics!tacticals for|)}{277}
+\indexentry{tactics!for manipulating assumptions|(}{277}
+\indexentry{tactics!term transforming}{277}
+\indexentry{tactics!assumption transforming}{277}
+\indexentry{rewriting!main tactic for}{277}
+\indexentry{resolution tactics}{277}
+\indexentry{subgoal tree!in proof construction}{277}
+\indexentry{tree of subgoals, in proof construction}{277}
+\indexentry{assumptions!role of, in goal directed proof}{277}
+\indexentry{discarding assumptions}{277}
+\indexentry{assumptions!discarding of, in proofs}{277}
+\indexentry{assumptions!denoting of, in proofs}{277}
+\indexentry{denoting assumptions}{277}
+\indexentry{LCF@\LCF!Edinburgh}{278}
+\indexentry{ML@\ML!purpose of, in HOL system@purpose of, in \HOL\ system}{278}
+\indexentry{tacticals!purpose of}{278}
+\indexentry{popping, of assumptions}{278}
+\indexentry{assumptions!as stack}{278}
+\indexentry{stack, of assumptions}{278}
+\indexentry{POP_ASSUM@\ml{POP\_ASSUM}|pin}{278}
+\indexentry{thm_tactic@\ml{thm\_tactic}}{278}
+\indexentry{theorem continuations}{278}
+\indexentry{DISCH_TAC@\ml{DISCH\_TAC}}{278}
+\indexentry{SUBST1_TAC@\ml{SUBST1\_TAC}|pin}{279}
+\indexentry{discarding assumptions}{279}
+\indexentry{assumptions!discarding of, in proofs}{279}
+\indexentry{THEN@\ml{THEN}}{279}
+\indexentry{assumptions!denoting of, in proofs}{280}
+\indexentry{denoting assumptions}{280}
+\indexentry{assumptions!explicit}{280}
+\indexentry{discarding assumptions}{281}
+\indexentry{assumptions!discarding of, in proofs}{281}
+\indexentry{assumptions!as array}{282}
+\indexentry{array, of assumptions}{282}
+\indexentry{ASSUM_LIST@\ml{ASSUM\_LIST}|(}{282}
+\indexentry{ASSUM_LIST@\ml{ASSUM\_LIST}|)}{282}
+\indexentry{denoting assumptions}{283}
+\indexentry{assumptions!denoting of, in proofs}{283}
+\indexentry{POP_ASSUM_LIST@\ml{POP\_ASSUM\_LIST}}{284}
+\indexentry{assumptions!importance of ordering of}{285}
+\indexentry{tactics!as documentation of proofs}{285}
+\indexentry{FIRST_ASSUM@\ml{FIRST\_ASSUM}}{285}
+\indexentry{EVERY_ASSUM@\ml{EVERY\_ASSUM}}{285}
+\indexentry{tacticals!purpose of}{285}
+\indexentry{assumptions!internal|(}{286}
+\indexentry{assumptions!internal|)}{286}
+\indexentry{assumptions!compared methods of handling}{287}
+\indexentry{ASSUM_LIST@\ml{ASSUM\_LIST}}{287}
+\indexentry{LCF@\LCF}{288}
+\indexentry{CHOOSE_THEN@\ml{CHOOSE\_THEN}|pin}{288}
+\indexentry{tactics!indirect implementation of}{288}
+\indexentry{failure, of tactics}{288}
+\indexentry{tactics!for manipulating assumptions|)}{288}
+\indexentry{boolean values|see{truth values}}{289}
+\indexentry{ void@\verb+()+|see{\ml{void}}}{289}
+\indexentry{empty|see{\ml{void}}}{289}
+\indexentry{application|see{function application}}{289}
+\indexentry{type operators, in ML@type operators, in \ML|see{type constructors}}{289}
+\indexentry{assumptions!of theorems|see{hypothesis}}{289}
+\indexentry{rules of inference|see{inference rules}}{289}
+\indexentry{Cartesian products|see{product types}}{289}
+\indexentry{autoloading|see{automatic loading}}{289}
+\indexentry{natural numbers|see{number theory}}{289}
+\indexentry{falsity, in HOL logic@falsity, in \HOL\ logic|see{\ml{F}}}{289}
+\indexentry{pattern selection abstraction|see{function selection abstraction}}{289}
+\indexentry{primitive inferences, of HOL logic@primitive inferences, of \HOL\ logic|see{inference rules}}{289}
+\indexentry{structural induction, in HOL logic@structural induction, in \HOL\ logic|see{induction rule}}{289}
+\indexentry{term substitution, in HOL logic@term substitution, in \HOL\ logic|see{substitution rule}}{289}
+\indexentry{truth, in HOL logic@truth, in \HOL\ logic|see{\ml{T}}}{289}
+\indexentry{type definitions, in HOL logic@type definitions, in \HOL\ logic!automated|see{type definition package}}{289}
+\indexentry{library_pathname@\ml{library\_pathname}}{293}
+\indexentry{help@\ml{help}}{294}
+\indexentry{help system|(}{294}
+\indexentry{set_help@\ml{set\_help}}{294}
+\indexentry{set_help_search_path@\ml{set\_help\_search\_path}}{294}
+\indexentry{help_search_path@\ml{help\_search\_path}}{294}
+\indexentry{help system|)}{294}
+\indexentry{types, in HOL logic@types, in \HOL\ logic! dependent}{295}
+\indexentry{dependent types in HOL logic@dependent types in \HOL\ logic}{295}
+\indexentry{associate_restriction@\ml{associate\_restriction}}{295}
+\indexentry{set theory notation}{297}
+\indexentry{define_finite_set_syntax@\ml{define\_finite\_set\_syntax}}{297}
+\indexentry{define_set_abstraction_syntax@\ml{define\_set\_abstraction\_syntax}}{297}
+\indexentry{set theory libraries}{299}
+\indexentry{SET_SPEC_CONV@\ml{SET\_SPEC\_CONV}}{300}
+\indexentry{SET_INDUCT_TAC@\ml{SET\_INDUCT\_TAC}}{300}
+\indexentry{syntax blocks|(}{301}
+\indexentry{new_syntax_block@\ml{new\_syntax\_block}}{301}
+\indexentry{set_string_escape@\ml{set\_string\_escape}}{302}
+\indexentry{syntax blocks|)}{302}
+\indexentry{preterms|(}{302}
+\indexentry{type checking, in HOL logic@type checking, in \HOL\ logic!user programmed}{302}
+\indexentry{preterm@\ml{preterm}}{302}
+\indexentry{preterm_to_term@\ml{preterm\_to\_term}}{302}
+\indexentry{preterms|)}{302}
+\indexentry{preterm_handler@\ml{preterm\_handler}}{303}
+\indexentry{PAIRED_BETA_CONV@\ml{PAIRED\_BETA\_CONV}}{303}
+\indexentry{ADD_CONV@\ml{ADD\_CONV}}{304}
+\indexentry{num_EQ_CONV@\ml{num\_EQ\_CONV}}{304}
+\indexentry{LENGTH_CONV@\ml{LENGTH\_CONV}}{304}
+\indexentry{list_EQ_CONV@\ml{list\_EQ\_CONV}}{304}
+\indexentry{let-terms, in HOL logic@\ml{let}-terms, in \HOL\ logic!simplification of}{305}
+\indexentry{let_CONV@\ml{let\_CONV}}{305}
+\indexentry{Skolemization}{306}
+\indexentry{X_SKOLEM_CONV@\ml{X\_SKOLEM\_CONV}}{306}
+\indexentry{quantifiers!conversions for}{307}
+\indexentry{conversions!quantifier movement}{307}

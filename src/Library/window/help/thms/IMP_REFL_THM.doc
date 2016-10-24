@@ -1,0 +1,3 @@
+\THEOREM IMP_REFL_THM win
+|- !x. x ==> x
+\ENDTHEOREM

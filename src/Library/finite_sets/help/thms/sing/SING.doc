@@ -1,0 +1,3 @@
+\THEOREM SING finite_sets
+|- !x. SING{{x}}
+\ENDTHEOREM

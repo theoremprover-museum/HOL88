@@ -1,0 +1,3 @@
+\THEOREM REAL_POS_NZ REAL
+|- !x. (& 0) < x ==> ~(x = & 0)
+\ENDTHEOREM

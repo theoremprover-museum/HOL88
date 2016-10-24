@@ -1,0 +1,3 @@
+\THEOREM tree_Induct tree
+|- !P. (!tl. ALL_EL P tl ==> P(node tl)) ==> (!t. P t)
+\ENDTHEOREM

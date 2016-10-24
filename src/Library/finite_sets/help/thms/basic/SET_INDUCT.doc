@@ -1,0 +1,4 @@
+\THEOREM SET_INDUCT finite_sets
+|- !P.
+    P{{}} /\ (!s. P s ==> (!e. ~e IN s ==> P(e INSERT s))) ==> (!s. P s)
+\ENDTHEOREM

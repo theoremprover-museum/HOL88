@@ -1,0 +1,7 @@
+USEFUL [(`'`,`'`)].
+
+IGNORE [(`"`,`"`)].
+
+MAIN_LOOP --> foo [EOF].
+
+foo --> ['] {print_string(WORD)} ['] foo | [].

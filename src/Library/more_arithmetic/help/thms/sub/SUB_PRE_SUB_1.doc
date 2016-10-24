@@ -1,0 +1,3 @@
+\THEOREM SUB_PRE_SUB_1 sub
+|- !a b. 0 < b ==> ((a - (PRE b)) - 1 = a - b)
+\ENDTHEOREM

@@ -1,0 +1,727 @@
+\DOC{all\_subgoals}
+
+\TYPE {\small\verb%all_subgoals : (void -> void)%}\egroup
+
+\SYNOPSIS
+Prints all the remaining subgoals of the current default proof.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Displays all the remaining subgoals (unexpanded
+nodes) of the prooftree being manipulated.
+
+\FAILURE
+Fails when the set of proofs is empty.
+
+
+\SEEALSO
+do_tac, cancel_tac, current_goal, current_proof, move_to_proof,
+new_goal, remove_proof, show all_proofs, show_all_subgoals, show_tac,
+show_the_tactic, subgoal_tac.
+
+\ENDDOC
+\DOC{auto\_cancel}
+
+\TYPE {\small\verb%auto_cancel : (void -> bool)%}\egroup
+
+\SYNOPSIS
+Allows writing over a previously expanded node in a {\small\verb%prooftree%}.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. By default, tactics can only be applied to nodes
+marked as unexpanded. To apply a different tactic at a node already
+expanded (and maybe already proved) one must first cancel the effect
+of the previous tactic. Using {\small\verb%auto_cancel%} allows a node to be
+re-expanded, at which time the previous proof of the node in question
+is discarded.
+
+\SEEALSO
+cancel_tac, do_tac, new_goal.
+
+\ENDDOC
+\DOC{cancel\_tac}
+
+\TYPE {\small\verb%cancel_tac : (string -> string -> void)%}\egroup
+
+\SYNOPSIS
+Marks a node in a {\small\verb%prooftree%} as unexplored, and discards the subtree
+of the proof under the node.
+
+\DESCRIBE
+Facilitates backtracking over a proof tree: marks the indicated node
+as unexplored and throws away the subtrees rooted at the node. Unlike
+the previous \verb|backup| command, it does not act only on the last
+node which was expanded; a tactic at any node can be cancelled. The
+first argument indicates the proof tree, the second argument
+indicates the node in the proof.
+
+\FAILURE
+This function fails when there is no proof tree of the given name or
+when the node adressed by the second argument does not exist.
+
+\USES
+Allows the user to backtrack over tactics used in a proof. Provides
+distinctly more generality than the previous {\small\verb%backup%} command.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# do_tac `biggie` `1` (EQ_TAC) ;;
+
+new goals:
+
+"a /\ b ==> b /\ a"
+"b /\ a ==> a /\ b"
+
+() : void
+
+
+# e STRIP_TAC ;;
+
+new goals:
+
+"b /\ a"
+      ["b"]
+      ["a"]
+
+() : void
+
+# cancel_tac `biggie` `1` ;;
+
+"a /\ b = b /\ a"
+
+() : void
+\end{verbatim}}
+\SEEALSO
+all_subgoals, compact, complete_proof, current_proof, do_tac,
+move_to_proof, new_goal, proven, remove_proof, show_all_proofs,
+show_tac, store_thm, subgoal_tag.
+
+\ENDDOC
+\DOC{compact}
+
+\TYPE {\small\verb%compact : (string -> void)%}\egroup
+
+\SYNOPSIS
+Compacts the sequence of tactics in a proof tree, thus reducing the
+size of a proof in development.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. At intermediate stages a proof tree may be very
+long and difficult to observe (specially when the terms present at
+nodes are large) it is useful to concatenate the different tactics
+applied into a single (albeit more complex) tactic using {\small\verb%THEN%}s and
+{\small\verb%THENL%}s. That is what is accomplished by the use of {\small\verb%compact%}. The
+remaining subgoals remain the same, however the body of the proof is
+restructured, with many of the intermediate nodes being eliminated.
+The argument should be the name of the proof to be compacted.
+
+\FAILURE
+The function {\small\verb%compact%} fails when a {\small\verb%prooftree%} of the given name does
+not exist.
+
+\EXAMPLE
+
+{\par\samepage\setseps\small\begin{verbatim}
+#current_proof () ;;
+"!enable in out.
+    store enable in out ==>
+       (!t1 t2. 0 <= t1 /\
+                t1 < t2 /\
+                (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+                   (out t2 = out t1))"
+   ((REWRITE_TAC [store])  THEN ((REPEAT GEN_TAC)  THEN STRIP_TAC ))
+   "!t1 t2. 0 <= t1 /\
+            t1 < t2 /\
+            (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+               (out t2 = out t1)"
+         [..]
+      GEN_TAC
+      "!t2. 0 <= t1 /\
+            t1 < t2 /\
+            (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+               (out t2 = out t1)"
+            [..]
+         (INDUCT_TAC THEN (REPEAT STRIP_TAC))
+         "out 0 = out t1"
+               [.....]
+         "out (SUC t2) = out t1"
+               [......]
+() : void
+
+#compact contextname ;;
+"!enable in out.
+    store enable in out ==>
+       (!t1 t2. 0 <= t1 /\
+                t1 < t2 /\
+                (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+                   (out t2 = out t1))"
+   ((REWRITE_TAC [store])  THEN ((REPEAT GEN_TAC)  THEN STRIP_TAC ) THEN
+    (GEN_TAC  THEN (INDUCT_TAC THEN (REPEAT STRIP_TAC)) ))
+   "out 0 = out t1"
+         [.....]
+   "out (SUC t2) = out t1"
+         [......]
+() : void
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{complete\_proof}
+
+\TYPE {\small\verb%complete_proof : (string -> void)%}\egroup
+
+\SYNOPSIS
+Pretty-prints a proof, showing the goals at each node and the tactics
+applied.
+
+\DESCRIBE
+Displays the whole proof tree, including proved, expanded, and
+unexpanded nodes. The current focus node (top of stack) is indicated,
+as well as the tactic applied at each node. The argument to the
+function is the name assigned to the proof.
+
+\FAILURE
+Fails when there is no proof tree of the given name.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# complete_proof `another` ;;
+
+"!a b c. (a = b) /\ (b = c) ==> (a = c)"
+   (REPEAT STRIP_TAC)
+   "a = c"
+         ["b = c"]
+         ["a = b"]
+
+() : void
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, cancel_tac, compact, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+
+\ENDDOC
+\DOC{current\_goal}
+
+\TYPE {\small\verb%current_goal : (string -> void)%}\egroup
+
+\SYNOPSIS
+Shows the node corresponding to the top of stack of the proof named by
+the argument.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Many unfinished proofs may exist concurrently;
+{\small\verb%current_goal%} returns the top goal of the proof named by the argument
+given to {\small\verb%current_goal%}
+
+\FAILURE
+The function {\small\verb%current_goal%} fails when its argument does not denote a
+proof tree.
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show all_proofs,
+show_all_subgoals, show_tac, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC
+\DOC{current\_proof}
+
+\TYPE {\small\verb%current_proof : (void -> void)%}\egroup
+
+\SYNOPSIS
+Displays the proof currently being manipulated.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {\small\verb%current_proof%} has the
+functionality supplied by the function {\small\verb%print_state%} in the inbuilt
+subgoal package. The difference is that the proof is pretty-printed,
+with goals and tactics displayed in a logical fashion.
+
+\FAILURE
+Fails when the set of proof trees is empty.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+#current_proof () ;;
+
+"!a b. a /\ b = b /\ a"
+   (STRIP_TAC THEN (STRIP_TAC THEN EQ_TAC))
+   "a /\ b ==> b /\ a"
+      STRIP_TAC
+      "b /\ a"
+            [..]
+         (REWRITE_TAC [])
+         "b /\ a"
+               [..]
+   "b /\ a ==> a /\ b"
+() : void
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_goal,
+move_to_proof, new_goal, remove_proof, show all_proofs,
+show_all_subgoals, show_tac, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC
+\DOC{do\_tac}
+
+\TYPE {\small\verb%do_tac : (string -> string -> tactic -> void)%}\egroup
+
+\SYNOPSIS
+Applies a tactic to a goal using the enhanced subgoal package.
+
+\DESCRIBE
+Used to apply a tactic to the proof named by the first argument, at
+the node pointed to by second argument. Differs from {\small\verb%do_tacf%} in that
+a validity check is made before the tactic is applied, thus
+guaranteeing that the corresponding proof corresponds to the original
+goal. The output resulting from this function indicates the node which
+would correspond to the top of stack in the existing package; this is
+usually thought of as the next node to be expanded.
+
+\FAILURE
+Fails when a proof with the given name does not exist, if it does not
+have a node at the address given, or if the tactic being applied
+fails. Also, if the node to be expanded is already expanded, it may
+not produce any change if the flag {\small\verb%auto_cancel%} is not set
+appropriately.
+
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# do_tac `myproof` `1` EQ_TAC ;;
+
+new goals:
+
+"a /\ b ==> b /\ a"
+"b /\ a ==> a /\ b"
+
+() : void
+
+# do_tac `myproof` `1.1` STRIP_TAC ;;
+
+new goals:
+
+"b /\ a"
+      ["b"]
+      ["a"]
+
+() : void
+
+# do_tac `myproof` `1.1.1` (ASM_REWRITE_TAC []) ;;
+
+SUBGOAL PROVED
+next goal:
+
+"a /\ b"
+      ["a"]
+      ["b"]
+
+() : void
+\end{verbatim}}
+\SEEALSO
+all_subgoals, cancel_tac, compact, complete_proof, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{do\_tacf}
+
+\TYPE {\small\verb%do_tacf : (string -> string -> tactic -> void)%}\egroup
+
+\SYNOPSIS
+Applies a tactic under the enhanced subgoal package.
+
+\DESCRIBE
+Used to apply a tactic the proof pointed by the first argument, at the
+node pointed to by the second argument.
+
+\FAILURE
+See under {\small\verb%do_tac%}.
+
+\USES
+In practice this function is not very useful in exploring a goal, as
+it does not perform a validity check and thus the resulting proof may
+not correspond to the original goal. Nevertheless, once a proof is
+being re-run it may be faster to use this function.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac, VALID.
+
+\ENDDOC
+\DOC{move\_to\_proof}
+
+\TYPE {\small\verb%move_to_proof : (string -> void)%}\egroup
+
+\SYNOPSIS
+Facilitates the transition from one proof to another.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Multiple incomplete proofs can exist at the same
+time, each linked to a different name. The function {\small\verb%move_to_proof%} is
+used to change the focus of functions such as {\small\verb%current_proof%},
+{\small\verb%expand%}, etc. use the proof pointed at by its argument as the default
+one. Usually the default proof is the one which is manipulated last.
+
+\FAILURE
+Fails when its argument does not name a proof tree.
+
+\SEEALSO
+cancel_tac, do_tac, new_goal.
+
+\ENDDOC
+\DOC{name\_current\_proof}
+
+\TYPE {\small\verb%name_current_proof : (string -> void)%}\egroup
+
+\SYNOPSIS
+Changes the name of the current default proof.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Multiple incomplete proofs may exist
+concurrently, each accessed by a different name. The function
+{\small\verb%name_current_proof%} may be used to change the name of a proof.
+
+\FAILURE
+Fails if there is no current proof.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{new\_goal}
+
+\TYPE {\small\verb%new_goal : (string -> goal -> void)%}\egroup
+
+\SYNOPSIS
+Starts a new named proof tree with a goal.
+
+\DESCRIBE
+This is analogous to the previous {\small\verb%set_goal%} function, to start a
+new proof effort. Here there is a new argument, which gives a name to
+the proof being constructed.
+When a goal is started with a certain name, previous proof attempts
+with that name are removed.
+
+\USES
+To set up a new proof tree.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# new_goal `myproof` ([], "! a b . ( a /\ b) = ( b /\ a)") ;;
+
+"!a b. a /\ b = b /\ a"
+
+() : void
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{proven}
+
+\TYPE {\small\verb%proven : (string -> thm)%}\egroup
+
+\SYNOPSIS
+Returns the theorem proved at a proof tree.
+
+\DESCRIBE
+Returns the theorem obtained by applying the solving tactic to the
+goal of the given proof tree, usually so that it can be assigned to a
+variable. This function does not remove the proof tree from the set of
+all proofs. The theorem returned can be used to rewrite other goals or
+it can be stored in a theory.
+
+\FAILURE
+Fails if there is no proof named by the argument to the function. Also
+fails if the top goal of the proof is not yet proved.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{remove\_proof}
+
+\TYPE {\small\verb%remove_proof : (string -> void)%}\egroup
+
+\SYNOPSIS
+Removes a proof tree from the set of proof trees.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Removes a proof tree from the set of proofs being
+manipulated, whether it has been completed or not. Used to help
+control space used by the set of proof trees. The argument is the name
+of the proof tree to be removed.
+
+\FAILURE
+Fails if there is no proof tree named by the argument to the function.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{rm\_proof}
+
+\TYPE {\small\verb%rm_proof : (void -> void)%}\egroup
+
+\SYNOPSIS
+Removes the last proof tree manipulated and releases the space
+occupied by it.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Proof trees can occupy a large amount of computer
+space, thus this function may be used to reduce the space overhead.
+Once a goal has been proved, or when one decides not to work on it
+further, it can be removed from the set of proof trees. It removes the
+default proof tree.
+
+\FAILURE
+Fails when there is no default proof.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{show\_all\_proofs}
+
+\TYPE {\small\verb%show_all_proofs : (void -> void)%}\egroup
+
+\SYNOPSIS
+Prints the names of all proof efforts currently in progress.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Multiple incomplete proofs are supported. The
+function {\small\verb%show_all_proofs%} displays the names of all current proofs,
+as well as the goal with which each of them was started,
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# show_all_proofs () ;;
+
+another
+"!a b c. (a = b) /\ (b = c) ==> (a = c)"
+myproof
+"!a b. a /\ b = b /\ a"
+() : void
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_goal,
+current_proof, move_to_proof, new_goal, remove_proof,
+show_all_subgoals, show_tac, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC
+\DOC{show\_all\_subgoals}
+
+\TYPE {\small\verb%show_all_subgoals : (string -> void)%}\egroup
+
+\SYNOPSIS
+Shows the goals of all unexplored nodes in a proof tree.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {\small\verb%show_all_subgoals%} lists all the
+subgoals which still remain to be proved in the current default proof,
+from the  bottom of the stack to the top. Also gives their access
+path, which can be used in other function calls such as {\small\verb%do_tac%}.
+
+\FAILURE
+Fails if the given name does not denote a proof tree.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# show_all_subgoals `myproof` ;;
+
+1.1.1
+"b /\ a"
+      ["b"]
+      ["a"]
+
+1.2.1
+"a /\ b"
+      ["a"]
+      ["b"]
+
+() : void
+\end{verbatim}}
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs, show_tac,
+show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC
+\DOC{show\_tac}
+
+\TYPE {\small\verb%show_tac : (void -> void)%}\egroup
+
+\SYNOPSIS
+Shows the composed tactic used to expand the current proof tree.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {\small\verb%show_tac%} corresponds to the
+application of {\small\verb%show_the_tactic%} to the current default proof tree.
+
+\FAILURE
+Fails if there is no current proof tree.
+
+\EXAMPLE
+See the example for {\small\verb%show_the_tactic%}.
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs,
+show_all_subgoals, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC
+\DOC{show\_the\_tactic}
+
+\TYPE {\small\verb%show_the_tactic : (string -> void)%}\egroup
+
+\SYNOPSIS
+
+\DESCRIBE
+Prints out the tactic-tree currently attached to the proof named by
+the argument. The tactics at nodes which still haven't been explored
+are indicated by {\small\verb%----%}.
+
+\FAILURE
+Fails if there is no proof tree with the given name.
+
+\USES
+After a proof is completed, {\small\verb%show_the_tactic%} can be run to obtain the
+complete tactic which can then be stored in a log file for later
+re-runs.
+
+\EXAMPLE
+
+{\par\samepage\setseps\small\begin{verbatim}
+
+# show_the_tactic `myproof` ;;
+
+(REPEAT STRIP_TAC)
+THEN EQ_TAC
+     THENL
+     [ STRIP_TAC
+       THEN (ASM_REWRITE_TAC []);
+       STRIP_TAC
+       THEN (ASM_REWRITE_TAC []) ]
+
+() : void
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs,
+show_all_subgoals, show_tac, subgoal_tac, top_goal.
+
+\ENDDOC
+\DOC{store\_thm}
+
+\TYPE {\small\verb%store_thm : (string -> string -> thm)%}\egroup
+
+\SYNOPSIS
+Stores a theorem under the current theory.
+
+\DESCRIBE
+When a proof named by the first argument is completed, {\small\verb%store_thm%}
+applies the resulting tactic on the initial goal and produces a
+theorem, which is then stored in a theory with the name given by the
+second argument. The function prints out the tactic which was applied
+to the goal, and returns the theorem proved, which can then be
+assigned to a variable.
+
+\FAILURE
+Fails if there is no proof tree with the given name, or if the top
+goal of the named proof tree is not proved. It also fails if the
+session is not in draft mode, or if there is already a theorem with
+the name given by the second argument in the current theory.
+
+\USES
+This function accomplishes the same purpose as {\small\verb%save_top_thm%} in the
+standard subgoal package.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# store_thm `myproof` `mythm` ;;
+
+saving theorem mythm
+
+solving tactic:
+(REPEAT STRIP_TAC)
+THEN EQ_TAC
+     THENL
+     [ STRIP_TAC
+       THEN (ASM_REWRITE_TAC []);
+       STRIP_TAC
+       THEN (ASM_REWRITE_TAC []) ]
+
+|- !a b. a /\ b = b /\ a
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC
+\DOC{subgoal\_tac}
+
+\TYPE {\small\verb%subgoal_tac : (string -> string -> void)%}\egroup
+
+\SYNOPSIS
+Prints the tactic used in solving the subgoal at the given location.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {\small\verb%show_the_tactic%} displays the
+whole tactic associated with the proof tree; the function
+{\small\verb%subgoal_tac%} is more specific in displaying the tactic applied at any
+one subtree of the proof tree indicated by the first argument. The
+second argument is the path to the root of the subtree for which the
+tactic should be printed. Nodes in the subtree in question may be
+either proved or unproved.
+
+\FAILURE
+This function fails if there is no proof tree by the given name or if
+the tree does not have a node at the position specified by the second
+argument.
+
+\USES
+This function is often useful when attempting to solve a similar
+subgoal in another part of the proof tree, or even in another proof.
+
+\EXAMPLE
+{\par\samepage\setseps\small\begin{verbatim}
+# subgoal_tac `myproof` `1.1` ;;
+
+STRIP_TAC
+THEN (ASM_REWRITE_TAC [])
+
+() : void
+\end{verbatim}}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs,
+show_all_subgoals, show_tac, top_goal.
+
+\ENDDOC

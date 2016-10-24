@@ -1,0 +1,41 @@
+\DOC inst_rename_list
+
+\TYPE {inst_rename_list : (term -> term list)}
+
+\SYNOPSIS
+Looks for variables which could become bound after type instantiation.
+
+\DESCRIBE
+The call
+{
+  inst_rename_list tm
+}
+\noindent will return a list of those variables in {tm} which are in the scope
+of a binding of a variable with the same name but a different type. This means
+that instantiating the type of a variable of that name could lead to free
+variable capture.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The examples needed to exercise this routine cannot be created using a single
+quoted term, since the quotation parser assumes that all variables with the
+same name are identical.
+{
+   #let tm = mk_abs("x:num","~x");;
+   tm = "\x. ~x" : term
+
+   #inst_rename_list tm;;
+   ["x"] : term list
+
+   #type_of (hd it);;
+   ":bool" : type
+}
+\USES
+Checking the validity of type instantiations.
+
+\SEEALSO
+inst, inst_check, inst_type, INST_TYPE.
+
+\ENDDOC

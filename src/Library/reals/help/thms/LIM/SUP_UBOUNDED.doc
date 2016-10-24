@@ -1,0 +1,3 @@
+\THEOREM SUP_UBOUNDED LIM
+|- !P b. (?x. P x) /\ (!x. P x ==> x <= b) ==> (sup P) <= b
+\ENDTHEOREM

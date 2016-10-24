@@ -1,0 +1,21 @@
+\DOC getenv
+
+\TYPE {getenv : (string -> string)}
+
+\SYNOPSIS
+Returns the value of a Unix environment variable.
+
+\DESCRIBE
+{getenv x} returns the value of {x} from the current environment list; this
+will include shell environment variables set before {HOL} is run.
+
+\FAILURE
+If in a Unix environment, fails with {getenv} if the variable is undefined,
+or has an empty value. In other environments, it will normally fail anyway.
+
+\EXAMPLE
+{
+#getenv `SHELL`;;
+`/bin/csh` : string
+}
+\ENDDOC

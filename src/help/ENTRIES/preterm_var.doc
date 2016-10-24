@@ -1,0 +1,38 @@
+\DOC preterm_var
+
+\TYPE {preterm_var : (string -> preterm)}
+
+\SYNOPSIS
+Constructs variable preterm.
+
+\DESCRIBE
+{preterm_var} is analogous to the oft-used ML function {mk_var}.  Since,
+however, preterms are untypechecked terms, the restrictions imposed when
+using {mk_var} (i.e. that the variable must be either implicitly or
+explicitly associated with a specific type) are not encountered until
+the preterm is typechecked.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#preterm_var `x`;;
+preterm_var `x` : preterm
+
+#preterm_to_term it;;
+Indeterminate types:  "x:?"
+
+evaluation failed     types indeterminate
+
+#preterm_typed(preterm_var `x`,":bool");;
+preterm_typed((preterm_var `x`), ":bool") : preterm
+
+#preterm_to_term it;;
+"x" : term
+}
+\SEEALSO
+mk_var, preterm_abs, preterm_antiquot, preterm_comb, preterm_const,
+preterm_typed, preterm_to_term.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM SUB_GREATER_0 sub
+|- !a b. a < b ==> (b - a) > 0
+\ENDTHEOREM

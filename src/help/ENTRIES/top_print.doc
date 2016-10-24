@@ -1,0 +1,56 @@
+\DOC top_print
+
+\TYPE {top_print : ((* -> **) -> (* -> **))}
+
+\SYNOPSIS
+Allows user-supplied functions to be used for printing ML datatypes
+(including types, terms and theorems).
+
+\DESCRIBE
+{top_print} is not a proper ML function, but an ML construct. It can only
+be used at top-level; otherwise an error will result. The type given above for
+it is therefore somewhat bogus. Its argument should normally be a printing
+function {f:ty->void}. {top_print f} then instructs the system to use the
+function {f} whenever it has a value of type {ty} to print. The `call' to
+{top_print} returns {f} as its result.
+
+\FAILURE
+Fails if used anywhere other than at top-level.
+
+\EXAMPLE
+The following example illustrates how values of an abstract type can be made
+to print nicely using {top_print}. For brevity, most of the functions that
+would really be defined in the abstract type have been omitted.
+{
+   #abstype rat = int # int
+   #with mk_rat (n,d) = abs_rat (n,d)
+   #and print_rat r =
+   #       let (n,d) = rep_rat r
+   #       in  if (d = 1)
+   #           then print_int n
+   #           else do (print_int n; print_string `/`; print_int d);;
+   mk_rat = - : ((int # int) -> rat)
+   print_rat = - : (rat -> void)
+
+   #mk_rat (2,3);;
+   - : rat
+
+   #top_print print_rat;;
+   - : (rat -> void)
+
+   #mk_rat (2,3);;
+   2/3 : rat
+
+   #mk_rat (3,1);;
+   3 : rat
+}
+\USES
+Useful for defining the printing of abstract types, including terms, theorems
+and types. In particular, calling {top_print} with {print_all_thm} as argument
+will cause the hypotheses of theorems to be printed in full, rather than
+simply as a period (dot, full-stop).
+
+\SEEALSO
+assignable_print_term, new_syntax_block.
+
+\ENDDOC

@@ -1,0 +1,26 @@
+\section{The Theory {\tt div\_mod}}
+
+The theory \ml{div\_mod}\index{div_mod, theory@{\ptt div\_mod}, theory}
+contains an \adhoc\ collection of 
+theorems about the division operators \ml{DIV}\index{DIV@{\ptt DIV}} and
+\ml{MOD}\index{MOD@{\ptt MOD}}. It contains no new definitions. 
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+
+
+\begin{hol}
+\index{SUC\_MOD\_SELF@{\ptt SUC\_MOD\_SELF}}
+\index{SUC\_DIV\_SELF@{\ptt SUC\_DIV\_SELF}}
+\index{ADD\_DIV\_ADD\_DIV@{\ptt ADD\_DIV\_ADD\_DIV}}
+\index{MOD\_MULT\_MOD@{\ptt MOD\_MULT\_MOD}}
+\begin{verbatim}
+  SUC_MOD_SELF    |- !n. (SUC n) MOD (SUC n) = 0
+
+  SUC_DIV_SELF    |- !n. (SUC n) DIV (SUC n) = 1
+
+  ADD_DIV_ADD_DIV
+    |- !n. 0 < n ==> (!x r. ((x * n) + r) DIV n = x + (r DIV n))
+
+  MOD_MULT_MOD
+    |- !m n. 0 < n /\ 0 < m ==> (!x. (x MOD (n * m)) MOD n = x MOD n)
+\end{verbatim}\end{hol}

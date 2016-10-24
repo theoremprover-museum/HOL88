@@ -1,0 +1,3 @@
+\THEOREM DIFF_CONT LIM
+|- !f l x. (f diffl l)x ==> f contl x
+\ENDTHEOREM

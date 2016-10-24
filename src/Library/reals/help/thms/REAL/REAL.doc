@@ -1,0 +1,3 @@
+\THEOREM REAL REAL
+|- !n. &(SUC n) = (& n) + (& 1)
+\ENDTHEOREM

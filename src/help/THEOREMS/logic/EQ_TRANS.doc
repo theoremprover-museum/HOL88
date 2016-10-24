@@ -1,0 +1,3 @@
+\THEOREM EQ_TRANS \none
+|- !x:* y:* z:*. (x = y) /\ (y = z) ==> (x = z)
+\ENDTHEOREM

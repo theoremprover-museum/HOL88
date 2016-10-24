@@ -1,0 +1,54 @@
+\DOC new_wordn_definition
+
+\TYPE {new_wordn_definition : (bool -> thm -> string -> conv)}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Defines a function over the types of n-bit words.
+
+\DESCRIBE
+The function {new_wordn_definition} provides a facility for defining
+functions on the types of n-bit words. It takes four arguments. The
+first is a boolean flag which indicates if the function being
+defined will be an infix or not. The second is a theorem stating the
+existence of functions on the type of n-bit words; this must be a
+theorem returned by {prove_function_defn_thm}. The third argument is a
+name under which the resulting definition will be saved in the current
+theory segment. And the fourth argument is a term giving the desired
+function definition. The value returned by {new_wordn_definiton} is a
+theorem stating the definition requested by the user. This theorem is
+derived by formal proof from an instance of the theorem given as the
+second argument.
+
+\FAILURE
+Failure occurs if HOL cannot prove there is a function satisfying the
+specification supplied as the last argument, or if any other condition
+for making constant specification (ie, the failure conditions of
+{new_specification}) is violated.
+
+\EXAMPLE
+Suppose that the type of 3-bit word has been defined by calling
+{define_wordn_type 3}, and the theorem returned by this type
+definition is bound to the name {word3}. Then, a call to the function
+{prove_function_defn_thm} with the theorem {word3}
+will result in the following theorem:
+{
+   word3_FNDEF |- !f. ?! fn. !b0 b1 b2. fn(WORD3[b0;b1;b2]) = f b0 b1 b2
+}
+\noindent which is in the form expected by the function {new_wordn_definition}.
+The following definition will define a new constant on the type
+{:word3}:
+{
+   #let BIT1 = new_wordn_definition false word3_FNDEF `BIT1`
+   #    "BIT1(WORD3[b0;b1;b2]) = b1";;
+   BIT1 =
+   |- !b0 b1 b2. BIT1(WORD3[b0;b1;b2]) = b1
+}
+
+
+\SEEALSO
+{define_wordn_type}, {new_specification}, {new_recursive_definition},
+{prove_function_defn_thm}, {use_wordn}.
+
+\ENDDOC

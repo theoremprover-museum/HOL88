@@ -1,0 +1,164 @@
+
+
+\input{holmacs}
+\input{tokmac}
+
+\newtokmac{mlname}{\tt}
+\newtokmac{CONST}{\constfont}
+\newtokmac{KEYWD}{\keyfont}
+\newtokmac{para}{\tt}
+\newtokmac{cmd}{\constfont}
+
+\makeatletter
+
+% BOXED MINIPAGE
+% START  _______________________________________________________
+
+\def\boxedminipage{\@ifnextchar [{\@iboxedminipage}{\@iboxedminipage[c]}}
+
+\def\@iboxedminipage[#1]#2{\leavevmode \@pboxswfalse
+  \if #1b\vbox
+    \else \if #1t\vtop
+	     \else \ifmmode \vcenter
+		       \else \@pboxswtrue $\vcenter
+		    \fi
+	  \fi
+  \fi\bgroup % start of outermost vbox/vtop/vcenter
+    \hsize #2
+    \hrule\@height\fboxrule
+    \hbox\bgroup % inner hbox
+      \vrule\@width\fboxrule \hskip\fboxsep \vbox\bgroup % innermost vbox
+	\advance\hsize -2\fboxrule \advance\hsize-2\fboxsep
+	\textwidth\hsize \columnwidth\hsize
+	\@parboxrestore
+	\def\@mpfn{mpfootnote}\def\thempfn{\thempfootnote}\c@mpfootnote\z@
+	\let\@footnotetext\@mpfootnotetext
+	\let\@listdepth\@mplistdepth \@mplistdepth\z@
+	\@minipagerestore\@minipagetrue
+	\everypar{\global\@minipagefalse\everypar{}}}
+
+\def\endboxedminipage{%
+	\par\vskip-\lastskip
+	\ifvoid\@mpfootins\else
+	  \vskip\skip\@mpfootins\footnoterule\unvbox\@mpfootins\fi
+      \egroup % ends the innermost \vbox
+      \hskip\fboxsep \vrule\@width\fboxrule
+    \egroup % ends the \hbox
+    \hrule\@height\fboxrule
+  \egroup% ends the vbox/vtop/vcenter
+  \if@pboxsw $\fi}
+
+% END _______________________________________________________________________
+
+%% macro for formatting parameter description
+%%
+\def\describepara{\begingroup\makeulother\describ@para}
+\def\describ@para#1{\endgroup
+ \vspace*{5pt}\noindent
+ \begin{minipage}{\textwidth}
+ \noindent\index{#1@\string\idxname{\tt }{#1}|ul}%
+ \begin{tabular}{>{\bf}ll>{\bf}ll}
+ {NAME:} & \hbox to 10pc{\tt#1\hss} &
+  {DEFAULT:}&\relax }
+\def\enddescribepara{\par\cmdrule
+ \end{minipage}
+ \par\penalty-500}
+
+%% macro for formatting command description
+%%
+\def\describecmd{\begingroup\makeulother\describ@cmd}
+\def\describ@cmd#1#2#3{\endgroup
+ \vspace*{5pt}\noindent
+ \begin{minipage}{\textwidth}
+ \noindent\index{#1@\string\idxname{\sfc }{#1}|ul}%
+ \begin{tabular}{>{\bf}ll>{\bf}ll}
+ {\hbox to 6pc{NAME:\hss}} & \hbox to 10pc{\constfont#1\hss} &
+  {\hbox to 6pc{ARG:\hss}} & \hbox to 6pc{#3\hss} \\ 
+ {\hbox to 6pc{PARMETER:\hss}} & \hbox to 10pc{\tt#2\hss} &
+  {\hbox to 6pc{DEFAULT:\hss}}&\relax }
+\def\describe{
+ \end{tabular} \smallskip\par }
+\def\enddescribecmd{\par\cmdrule
+ \end{minipage}
+ \par\penalty-500}
+\def\cmdrule{\rule{\textwidth}{1pt}}
+\def\@action#1{\par \hangafter 1\relax \hangindent 2em%
+ \noindent\hbox to 9em{#1\ {\sc ACTION}:\hss}}
+\def\tangleaction:{\@action{{\tt mtangle}}}
+\def\weaveaction:{\@action{{\tt mweave}}}
+\def\winnowaction:{\@action{{\tt winnow}}}
+\def\opt{Optional}
+\def\man{Mandatory}
+\def\none{None}
+
+%% \verbatimnumbered{<file>}
+%% read a file and format the contains in a verbatim environment with
+%% line number.
+\newcounter{VerbatimLineNo}
+\def\verbatimnumbered#1{\begingroup
+  \setcounter{VerbatimLineNo}{0}%
+  \def\verbatim@processline{%
+    \addtocounter{VerbatimLineNo}{1}%
+    \leavevmode
+    \llap{\theVerbatimLineNo
+          \ \hskip\@totalleftmargin}%
+    \the\verbatim@line\par}%
+  \verbatiminput{#1}\endgroup}
+
+%% Redefine the theindex environment
+%%
+\renewenvironment{theindex}{\begin{multicols}{2}[\section*{\indexname}]%
+ \columnseprule \z@ \columnsep 35\p@
+ \parindent\z@ \parskip\z@ plus.3\p@\relax\let\item\@idxitem}{\end{multicols}}
+
+\def\@idxitem{\par\hangindent 40\p@}
+
+\def\subitem{\par\hangindent 40\p@ \hspace*{20\p@}}
+
+\def\subsubitem{\par\hangindent 40\p@ \hspace*{30\p@}}
+
+\def\indexspace{\par \vskip 10\p@ plus5\p@ minus3\p@\relax}
+
+\makeatother
+
+%% macros for special words
+%%
+\def\HOL{{\sc HOL}}
+\def\mweb{{\tt mweb}}
+\def\tangle{{\tt mtangle}}
+\def\weave{{\tt mweave}}
+\def\winnow{{\tt winnow}}
+\def\merge{{\tt mmerge}}
+
+%% Page layout parameters
+%%
+\setlength{\textwidth}{5.7in}
+\setlength{\textheight}{8.5in}
+%\setlength{\topmargin}{-0.125in}
+\setlength{\oddsidemargin}{18pt}
+\setlength{\evensidemargin}{18pt}
+%\setlength{\columnseprule}{.4pt}
+\setlength{\headheight}{19pt}
+\setlength{\headsep}{18pt}
+%\setlength{\footheight}{16pt}
+%\setlength{\footskip}{34pt}
+%\setlength{\headrulewidth}{2pt}
+%\setlength{\footrulewidth}{0pt}
+
+%% Fancy header and footer
+%%
+\def\HDRULE{\rule[-.6\baselineskip]{\textwidth}{1pt}}
+\newsavebox{\HDRULEBOX}
+\savebox{\HDRULEBOX}[0pt]{\HDRULE}
+
+\lhead[]{{\sc\mweb\ utility}}
+\chead[]{\usebox{\HDRULEBOX}}
+\rhead[]{{\sl\thepage\hspace{.5em}}}
+\cfoot[]{}
+
+%% Redfine constfont. The font cmssc12 is a vertual font based on
+%% cmss12. The only difference is that the character at '137 becomes
+%% an underline in cmssc12.
+\font\sfc=cmssc12 \def\constfont{\sfc}
+\def\ul#1{$\underline{#1}$}
+

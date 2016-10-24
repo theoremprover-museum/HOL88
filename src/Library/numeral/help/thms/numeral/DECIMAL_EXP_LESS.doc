@@ -1,0 +1,7 @@
+\THEOREM DECIMAL_EXP_LESS numeral
+|- !l.
+    IS_DECIMAL l ==>
+    IS_NORMALIZED l ==>
+    ~NULL l ==>
+    ((10 EXP ((LENGTH l) - 1)) - 1) < (DECIMAL l)
+\ENDTHEOREM

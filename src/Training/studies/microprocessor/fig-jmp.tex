@@ -1,0 +1,29 @@
+% ===== JMP Instruction Timing ========================================
+% ======================================================================
+\setlength{\unitlength}{1mm}
+\begin{picture}(135,38)(0,0)
+  \put(63,33){\vector(-1,0){11}}
+  \put(75,33){\vector(1,0){10}}
+  \put(69,33){\makebox(0,0)[c]{JMP}}
+  \put(50,33){\makebox(0,0)[c]{\verb"u"}}
+  \put(90,33){\makebox(0,0)[c]{\verb"u"$+$\verb"1"}}
+  \put(40,28){\makebox(0,0)[r]{programming level:}}
+  \put(40,19){\makebox(0,0)[r]{\verb"f":}}
+  \put(45,28){\line(1,0){50}}
+  \put(50,28){\makebox(0,0)[c]{$\bullet$}}
+  \put(50,26){\thicklines {\vector(0,-1){14}}}
+  \put(90,28){\makebox(0,0)[c]{$\bullet$}}
+  \put(90,26){\thicklines {\vector(0,-1){14}}}
+  \put(40,10){\makebox(0,0)[r]{microprogramming level:}}
+  \put(45,10){\line(1,0){50}}
+  \multiput(50,10)(10,0){5}{\makebox(0,0)[c]{$\bullet$}}
+  \put(50,5){\makebox(0,0)[c]{\verb"t"}}
+  \put(90,5){\makebox(0,0)[c]{\verb"t"$+$\verb"4"}}
+  \put(40,0){\makebox(0,0)[r]{\verb"mpc":}}
+  \put(50,0){\makebox(0,0)[c]{\verb"0"}}
+  \put(60,0){\makebox(0,0)[c]{\verb"2"}}
+  \put(70,0){\makebox(0,0)[c]{\verb"3"}}
+  \put(80,0){\makebox(0,0)[c]{\verb"5"}}
+  \put(90,0){\makebox(0,0)[c]{\verb"0"}}
+
+\end{picture}

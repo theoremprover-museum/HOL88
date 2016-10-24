@@ -1,0 +1,7 @@
+\THEOREM NET_NEG NETS
+|- !g.
+    dorder g ==>
+    (!x x0.
+      (x tends x0)(mtop mr1,g) =
+      ((\n. real_neg(x n)) tends (real_neg x0))(mtop mr1,g))
+\ENDTHEOREM

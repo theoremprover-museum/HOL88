@@ -1,0 +1,3 @@
+\THEOREM T_DEF bool
+|- T = ((\x. x) = (\x. x))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_ADDNEG REAL
+|- !x y z. y < (x + (-- z)) = (y + z) < x
+\ENDTHEOREM

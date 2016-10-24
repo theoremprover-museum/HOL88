@@ -1,0 +1,3 @@
+\THEOREM IS_EL_REPLICATE list
+|- !n. 0 < n ==> (!x. IS_EL x(REPLICATE n x))
+\ENDTHEOREM

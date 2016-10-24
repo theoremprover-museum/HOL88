@@ -1,0 +1,3 @@
+\THEOREM CUT_ISACUT HREAL
+|- !X. isacut(cut X)
+\ENDTHEOREM

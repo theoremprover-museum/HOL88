@@ -1,0 +1,35 @@
+\DOC has_body
+
+\TYPE {$has_body : (term -> term -> thmpattern)}
+
+\SYNOPSIS
+Side-condition test. Tests the value bound to a pattern variable to see if
+its body matches a new pattern.
+
+\LIBRARY trs
+
+\DESCRIBE
+{has_body} can be used to test whether part of a hypothesis or conclusion
+has, as its body, a term that matches a specified pattern. The first argument
+is a variable used in a pattern for the hypothesis/conclusion. Let {t} be the
+term to which this variable has been bound. The second argument is the pattern
+to be matched with the body of {t}. The body of a term, in this context, is
+the result of stripping any binders from the front of the term.
+
+\FAILURE
+Fails if the first argument is not a variable. May also cause a failure to
+match, when used in a search, if the pattern variable does not appear in the
+binding.
+
+\EXAMPLE
+Here is a pattern that matches a theorem if the conclusion is an implication
+in which the consequent has a conjunction as its body:
+{
+   (conc "p ==> q") Where ("q:bool" has_body "x /\ y")
+}
+\noindent Such a consequent is {"!a b c. a /\ (b \/ c)"}.
+
+\SEEALSO
+contains, matches, Where.
+
+\ENDDOC

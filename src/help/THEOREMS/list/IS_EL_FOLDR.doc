@@ -1,0 +1,3 @@
+\THEOREM IS_EL_FOLDR list
+|- !y l. IS_EL y l = FOLDR(\x l'. (y = x) \/ l')F l
+\ENDTHEOREM

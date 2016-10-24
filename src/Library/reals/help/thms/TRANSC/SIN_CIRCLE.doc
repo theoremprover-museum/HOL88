@@ -1,0 +1,3 @@
+\THEOREM SIN_CIRCLE TRANSC
+|- !x. ((sin x) pow 2) + ((cos x) pow 2) = & 1
+\ENDTHEOREM

@@ -1,0 +1,6 @@
+\THEOREM TERMDIFF_LEMMA4 POWSER
+|- !f K k.
+    (& 0) < k /\
+    (!h. (& 0) < (abs h) /\ (abs h) < k ==> (abs(f h)) <= (K * (abs h))) ==>
+    (f tends_real_real (& 0))(& 0)
+\ENDTHEOREM

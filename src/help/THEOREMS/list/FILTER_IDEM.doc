@@ -1,0 +1,3 @@
+\THEOREM FILTER_IDEM list
+|- !f l. FILTER f(FILTER f l) = FILTER f l
+\ENDTHEOREM

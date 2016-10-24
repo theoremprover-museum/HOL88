@@ -1,0 +1,33 @@
+application "queue"
+   open send "b\n";
+   close send "e\n";
+   size 8 by 80 characters
+   icon "laserwriter.icon"
+   label "<< Print Queue Monitor >>"
+gadgets
+   font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+   align middle
+   button
+      normal	"Close"		close;
+      shift	"Exit"		send "q\n";
+   end_button
+   button
+      normal	"Start Polling"	send "b\n";
+   end_button
+   button
+      normal	"Stop Polling"	send "e\n";
+   end_button
+   slider interval
+      label "Interval:"
+      minimum 5
+      maximum 120
+      width 75
+      initial 10
+      range off
+      action send format("i%d\n", interval);
+   end_slider
+end_gadgets
+keys
+   disable normal_keys
+   disable function_keys
+end_keys

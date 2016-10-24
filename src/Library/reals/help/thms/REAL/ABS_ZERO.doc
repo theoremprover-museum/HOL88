@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_ZERO REAL
+|- !x. (abs x = & 0) = (x = & 0)
+\ENDTHEOREM

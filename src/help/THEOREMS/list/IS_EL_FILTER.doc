@@ -1,0 +1,3 @@
+\THEOREM IS_EL_FILTER list
+|- !P x. P x ==> (!l. IS_EL x(FILTER P l) = IS_EL x l)
+\ENDTHEOREM

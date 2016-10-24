@@ -1,0 +1,5 @@
+\THEOREM BUTFIRSTN_BUTFIRSTN list
+|- !n m l.
+    (n + m) <= (LENGTH l) ==>
+    (BUTFIRSTN n(BUTFIRSTN m l) = BUTFIRSTN(n + m)l)
+\ENDTHEOREM

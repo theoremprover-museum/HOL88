@@ -1,0 +1,30 @@
+\DOC EXISTS_GREATEST_CONV
+
+\TYPE {EXISTS_GREATEST_CONV : conv}
+
+\SYNOPSIS
+Proves that a nonempty bounded set of natural numbers has a greatest element.
+
+\KEYWORDS
+conversion, number.
+
+\DESCRIBE
+The call
+{
+   EXISTS_GREATEST_CONV "(?x. P[x]) /\ (?y. !z. z > y ==> ~P[z])"
+}
+\noindent returns the theorem
+{
+   (?x. P[x]) /\ (?y. !z. z > y ==> ~P[z]) = ?x. P[x] /\ !z. z > x ==> ~P[z]
+}
+\noindent This expresses the equivalence of the statements `a property {P}
+is true for some number {x}, and there is a limit {y} beyond which {P} is not
+true' and `there is a greatest number such that {P} is true'.
+
+\FAILURE
+{EXISTS_GREATEST_CONV tm} fails unless {tm} has the form specified above.
+
+\SEEALSO
+EXISTS_LEAST_CONV.
+
+\ENDDOC

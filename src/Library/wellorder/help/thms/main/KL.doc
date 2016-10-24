@@ -1,0 +1,9 @@
+\THEOREM KL WELLORDER
+|- !l.
+    poset l ==>
+    (!Q.
+      chain l Q ==>
+      (?P.
+        (chain l P /\ Q subset P) /\
+        (!R. chain l R /\ P subset R ==> (R = P))))
+\ENDTHEOREM

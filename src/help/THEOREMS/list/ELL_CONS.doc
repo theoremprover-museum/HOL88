@@ -1,0 +1,3 @@
+\THEOREM ELL_CONS list
+|- !n l. n < (LENGTH l) ==> (!x. ELL n(CONS x l) = ELL n l)
+\ENDTHEOREM

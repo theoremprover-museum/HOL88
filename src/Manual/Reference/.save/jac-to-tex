@@ -1,0 +1,18 @@
+#! /bin/sh
+#
+# Shell script to find, sort and translate all .jac files in a given 
+# directory for which there are no corresponding .doc files into LaTeX
+# sources.  Executing:
+#
+#	/bin/sh jac-to-tex <dir> <file>
+#
+# Will translate all appropriate .jac files in the directory <dir> 
+# into LaTeX source. The results of the translation are appended onto 
+# the end of <file>
+
+for file in `cd $1; ls -1 *.jac | sed -e 's/.jac$//g' | sort -f` 
+    do 
+      if [ ! -r $1/$file.doc ]
+         then sed -f jac-to-tex.sed $1/$file.jac >> $2
+      fi
+    done

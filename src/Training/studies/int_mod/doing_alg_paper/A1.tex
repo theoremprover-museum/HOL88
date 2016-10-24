@@ -1,0 +1,257 @@
+\section{Overview of Simple Type Theory and HOL}
+
+By simple type theory, we are referring in general to a collection of
+languages and logics which are all minor variations of the simply
+typed $\lambda$-calculus as originally developed by Church as a
+foundation for classical mathematics in \cite{Church40}.  We shall use
+the term `simple type theory' to refer particularly to the variation
+of the simply typed $\lambda$-calculus implemented in the automated
+theorem proving system HOL developed by Mike Gordon.  We shall briefly
+describe this variation here, since we shall use it throughout the
+remainder of this paper as language of the examples given.  For a more
+in-depth discussion of the HOL system, see \cite{Gordon87}.
+
+The HOL system embodies a meta-language ML, and an object language,
+the language of simple type theory.  The language ML is a general
+purpose functional programming language which was first designed for
+use as the meta-language of the Robin Milner's theorem proving system
+LCF.  HOL is a descendant of LCF and it has inherited not only the
+meta-language, but also much of the theorem proving style of LCF.  For
+a complete description of the version of ML found in HOL, see \cite{ML}.
+An in-depth discussion of LCF can be found in \cite{Paulson87}
+
+Simple type theory, as implemented in HOL, may be organized into a
+hierarchy of types, terms, sequents, inference rules and theorems, and
+theories.
+
+
+\subsection{Types}
+
+Types are built up from type variables and type constructors.  The
+collection of type variables is a countable collection, represented in
+HOL by the set of tokens of the form a positive number of asterisks,
+optionally followed by a sequence of digits; {\it e.g.}~ {\tt *},
+{\tt ***}, and {\tt **24} are all type variables.  Every type variable is
+a type.  In addition to the countable collection of type variables, for
+each natural number $n$, there exists a finite number of type
+constructors of arity $n$.  If $\sigma_1$, \ldots, $\sigma_n$ are
+types and ${\it con}_n$ is a type constructor of arity $n$, then
+\mbox{\tt ($\sigma_1$,{\rm\ldots},$\sigma_n$)${\it con}_n$} is a type.
+Thus a type is either a type variable, or an $n$-ary type constructor
+applied (postfix) to $n$ previously constructed types.  We shall refer
+to type constructors of arity $0$ as type constants.  There are two
+primitive type constants, {\tt bool} and {\tt ind}, and one primitive
+binary type constructor, {\tt fun}.  There is also a collection of
+defined type constructors, including the type constant {\tt num}, the
+unary constructor {\tt list}, and the binary constructors {\tt prod} and
+{\tt sum}.  There is special syntax in HOL which allows us to write
+\mbox{\tt $\sigma$ -> $\tau$} for
+\mbox{\tt ($\sigma$,$\tau$)fun}, \mbox{\tt $\sigma$ \# $\tau$} for
+\mbox{\tt ($\sigma$,$\tau$)prod}, and \mbox{\tt $\sigma$ + $\tau$} for
+\mbox{\tt ($\sigma$,$\tau$)sum}; either form will be understood.
+
+Any type which contains a type variable shall be called {\it
+polymorphic}; all other types are {\it monomorphic}.  If the type
+$\tau$ is the result of simultaneously replacing all occurrences of
+some set of type variables $\alpha_1,\ldots,\alpha_n$ by some
+corresponding set of types $\nu_1,\ldots,\nu_n$ in the type $\sigma$,
+then $\tau$ is said to be an {\it instance\/} of $\sigma$.  Every type
+is an instance of itself, and the only instance of a monomorphic type
+is itself.
+
+
+\subsection{Terms}
+
+Every term in simple type theory has an associated type.  Terms are
+built up from constants, variables, application, and
+$\lambda$-abstraction.  There exists (relative to the theory one is
+in) a finite set {\sf Const} of specified constants.  The set of
+legitimate terms is determined by the set {\sf Const}.  Each constant
+in {\sf Const} is of the form {\tt $c$:$\tau$} where $c$ is the name
+of the constant and $\tau$ is the {\it generic type} of the constant.
+All the names occurring in {\sf Const} must be distinct.  If
+{\tt $c$:$\tau$} is in {\sf Const} and $\sigma$ is an instance of
+$\tau$, then {\tt $c$:$\sigma$} is a constant.  Moreover, every
+constant is of the form {\tt $c$:$\sigma$} where there exists a
+constant {\tt $c$:$\tau$} in {\sf Const} and $\sigma$ is an instance
+of the generic type $\tau$.  A constant is a term.  A variable is
+anything of the form {\tt $x$:$\sigma$} where $x$ is a name and
+$\sigma$ is a type, provided that $x$ is not a name occurring in
+{\sf Const}.  Variables of distinct type are distinct, even if they
+have the same name.  A variable is a term.  If $f$ is a term of type
+{\tt $\sigma$ -> $\tau$}, and $t$ is a term of type $\sigma$, then we
+may form the application of $f$ to $t$, which is a term of type $\tau$,
+and is written \mbox{\tt ($ft$):$\tau$}.  Lastly, if {\tt$x$:$\sigma$}
+is a variable, and $t$ is a term of type $\tau$, then we may form the
+abstraction of \mbox{\tt $x$:$\sigma$} from $t$, which is a term of
+type \mbox{\tt $\sigma$ -> $\tau$} and is written
+\mbox{\tt (\l$x$:$\sigma$.$t$):$\sigma$ -> $\tau$}.  (The {\tt \l} is
+the way a $\lambda$ is represented in ASCII in HOL.)  In general, you
+should think of a term of type \mbox{\tt $\sigma$ -> $\tau$} as a
+function from $\sigma$ to $\tau$.  The idea of the lambda term
+\mbox{\tt (\l$x$:$\sigma$.$t$):$\sigma$ -> $\tau$} is that it is the
+function which, when given a value for \mbox{$x$:$\sigma$}, returns
+the result of substituting the value for all free occurrences of
+\mbox{$x$:$\sigma$} in $t$.   Every term is either a constant, a
+variable, an application of two terms, or an abstraction of a variable
+from a term.  Although every term in HOL (and hence every subterm) has
+an associated type, most type information may be omitted by the user,
+since it can be inferred from context.  HOL does require the user to
+specify enough type information so that all type variable names are
+user specified.
+
+In logics such as first order predicate calculus, in addition to terms
+one has logical connectives and formulae, which are distinct from
+terms.  However, owing to the higher-order nature of simple type
+theory, in HOL there is no need for this class distinction.  Formulae
+are just terms of type {\tt bool}, and the logical connectives are
+terms of various function types.  HOL allows infix notation, as is
+traditional.  Conjunction, disjunction, implication, and equality are
+all infix constants in HOL.  They are written as
+{\tt $t_1$ {\land} $t_2$} for the conjunction of $t_1$ and $t_2$,
+{\tt $t_1$ {\lor} $t_2$} for the disjunction of $t_1$ and $t_2$,
+{\tt $t_1$ ==> $t_2$} for $t_1$ implies $t_2$, and 
+{\tt $t_1$ = $t_2$} for $t_1$ equals $t_2$. 
+The constant {\tt \lnot} is the prefixed function, negation.
+In addition to infix constants
+HOL allows constants to act as binders.  Universal and existential
+quantification are examples of constants used as binders.  That is,
+we write 
+{\tt !$x$:*.$t$} for the universal quantification of the variable $x$ in the
+term $t$, and
+{\tt ?$x$:*.$t$} for the universal quantification of the variable $x$ in the
+term $t$.  If the constants {\tt !}\ and {\tt ?}\ were not treated as binders
+we would instead need to write {\tt !({\l}$x$:*.$t$)} and
+{\tt ?({\l}$x$:*.$t$)}.  This is because each of {\tt !}\ and {\tt ?}\ have
+type {\tt (* -> bool) -> bool}.  The first table in Appendix A contains a
+summary of the logical constants, their types and definitions, which we
+shall use throughout the remainder of this paper.
+
+Essential to simple type theory is the notion of free verses bound
+occurrences of variables.  A variable occurs free in itself.  A free
+occurrence of a variable in a term $f$ or a term $g$ is still free in
+\mbox{\tt ($fg$)}.  If {\tt $x$:$\sigma$} is a variable, then all
+free occurrences of {\tt $x$:$\sigma$} in a term $t$ are bound by the
+abstraction in {\tt {\l}$x$:$\sigma$.$t$}.  All free occurrences of all
+variables different from {\tt $x$:$\sigma$} remain free in
+{\tt{\l}$x$:$\sigma$.$t$}.  A bound occurrence of a variable in a subterm
+remains bound in all terms containing the subterm.  In inferring types
+for terms, HOL makes the assumption that all free occurrences of
+variables of the same name have the same type, and hence are the same
+variable.  It is possible to force HOL to override this, but in
+practice it is not a useful thing to do.
+
+A comment about one of the constants of HOL, the Hilbert
+$\varepsilon$-operator {\tt @} (also called {\it choice} here).  The
+term {\tt @$x$:$\sigma$.$P x$} (read ``choose an $x$ such that $Px$'')
+is a term of type $\sigma$ which satisfies the predicate $P$ if there exists
+any term of type $\sigma$ which does, and otherwise
+is a totally indeterminate term of type $\sigma$.  This is
+encapsulated in the selection axiom {\tt |- !P x.~P x ==> P (@y.~P y)}.
+One consequence of the existence of the Hilbert
+$\varepsilon$-operator is that every type must be inhabited.  To see
+this, for each type $\sigma$, consider the always-true predicate
+\mbox{\tt ({\l}x:$\sigma$.~T):$\sigma$ -> bool}.  By applying
+\mbox{\tt @} to this predicate we are
+guaranteed to get a term of type $\sigma$, namely {\tt @x:$\sigma$.~T}.
+
+
+\subsection{Sequents, Theorems, and Inference Rules}
+
+HOL is a natural deduction style theorem prover.  Traditionally,
+assumptions in natural deduction proofs have been represented as
+leaves of the proof tree, and when an assumption is discharged, the
+leaf is crossed out.  In HOL, natural deduction proofs are implemented
+using a form of sequent calculus in which the right hand side always
+consists of exactly one term.  A sequent in HOL is represented by a
+list of assumptions (terms of type {\tt bool}) and an assertion or
+conclusion (term of type {\tt bool}).  When an assumption is
+discharged, it is removed from the list.
+
+A theorem is the outcome of a proof.  The statement of a theorem is a
+sequent.  To indicate that a sequent {\tt ([$t_1$, $\ldots$, $t_n$],
+$t$)} is the statement of a theorem, we shall write {\tt [$t_1$,
+$\ldots$, $t_n$] |- $t$}.  When the list of assumptions is empty, we
+shall write {\tt |- $t$} instead of {\tt [] |- $t$}.  A proof is
+either a declaration that a sequent is the statement of an axiom, and
+hence a theorem, or it is a function which takes a list of theorems
+and returns a theorem.  All such functions are composed from basic
+inference rules.  HOL has eight basic inference rules and five basic
+axioms.  In addition, every definition is an axiom, and every type
+definition gives rise to an axiom (see \cite{Melham88}).  The axioms
+which arise from constant definitions and type definitions when added
+to the basic logic form a conservative extension.  In particular,
+{\tt |- F} is a theorem in the extended logic if and only if it is a
+theorem of the basic logic.  That every theorem has a proof which is
+built from axioms and these eight primitive inference rules is
+enforced by the typing mechanism of the meta-language.  The primitive
+inference rules and basic axioms of HOL can be found listed in
+Appendix A.  It should be noted that the logic of HOL is a classical
+logic.  While we have taken advantage of the classical aspects in the
+definitions and proofs that were implemented, with some modification
+much the same task could be carried out in an intuitionistic setting.
+
+While theorems are ultimately the outcome of the primitive inference
+rules, it would be far too tedious to attempt to prove theorems of any
+complexity by specifying one at a time each of the inference rules to
+be applied.  Therefore, there are a number of aspects of HOL which are
+designed to help the user to reason at a higher level.  The first of
+these is the ability to store proven theorems and later to be able to
+recall them for use in another proof, thereby relieving the need to
+reprove them.  This ability is of all the greater value since the
+higher order nature of the language allows one to prove general
+lemmas, and then with little extra work deduce special instances of
+these general lemmas.  In fact, one of the points of this paper is
+that this combination should be exploited on a much grander scale than
+currently is being done.  Just as it is useful to prove generalized
+lemmas and then specialize them to particular situations, so too is it
+useful to develop generalized theories and then specialize them to
+particular concrete instances.
+
+Another aspect of HOL which helps the user in proof development is the
+ability to create and save compound, or derived, inference rules.  A
+derived inference rule is an ML function which composes sequences of
+primitive rules.  There is a fairly substantial collection of derived
+inference rules built into the system and the user can create new
+ones; the type security assures that all derived inference rules will
+only generate valid proofs, if anything at all.  In particular, the
+user may create a collection of specialized inference rules for
+dealing with specialized situations.
+
+Finally, the tool which is most commonly used for proving theorems is
+that of goals and tactics.  A goal is a sequent which we wish to
+prove.  A tactic is a function for reducing a goal to a list of
+(hopefully simpler) sub-goals and a justification for the reduction.
+The justification is an inference rule which when applied to a list of
+theorems whose statements are the sub-goals, returns the theorem whose
+statement will be the desired goal.  The idea of how one proves a
+theorem with tactics is this.  One repeatedly applies tactics until
+all the existing subgoals are trivial ({\it e.g.}~they are statements
+of axioms or previously proven theorems).  The resulting composite
+justification is an inference rule which will then prove the desired
+theorem.  Goal-directed theorem proving using tactics is an important
+feature of all LCF-style theorem provers.
+
+\subsection{Theories}
+
+The types, constants, and axioms of HOL are organized into theories.
+One is always working within a theory in HOL.  A theory stores the
+following information: a list of parent theories, a list of type
+constructors defined in this theory, a list of constants defined in
+this theory together with their generic types, a list of infixes (for
+special syntax), a list of binders (also for special syntax), a list
+of axioms declared in this theory, a list of definitions made in this
+theory, and a list of theorems proven and stored in this theory.  When
+one first comes to HOL the theory one finds oneself in is called, not
+surprisingly, {\tt HOL}.  The parent theories of a theory are ancestor
+theories, and any ancestor theory of an ancestor theory is an ancestor
+theory.  One can use any axiom, definition, theorem, {\it etc.} from
+any ancestor theory that one is currently in.  One can create and
+enter new theories, and one can add new parents, axioms, theorems,
+{\it etc.}~to the theory that one is in.  Also, there exist functions
+for accessing the theorems (definitions, axioms, {\it etc.}) of an
+ancestor theory, individually and all in a list.  There are already a
+fair number of theories built into HOL, and a growing library of other
+theories which can be loaded at the users request.
+
+

@@ -1,0 +1,3 @@
+\THEOREM REAL_ADD_LINV REALAX
+|- !x. (-- x) + x = r0
+\ENDTHEOREM

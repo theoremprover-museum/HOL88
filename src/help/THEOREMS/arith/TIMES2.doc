@@ -1,0 +1,3 @@
+\THEOREM TIMES2 arithmetic
+|- !n. 2 * n = n + n
+\ENDTHEOREM

@@ -1,0 +1,5 @@
+\THEOREM SUM_ZERO REAL
+|- !f N.
+    (!n. n num_ge N ==> (f n = & 0)) ==>
+    (!m n. m num_ge N ==> (Sum(m,n)f = & 0))
+\ENDTHEOREM

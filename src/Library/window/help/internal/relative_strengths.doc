@@ -1,0 +1,10 @@
+\DOC relative_strengths
+
+\TYPE {relative_strengths :  (term -> term list)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

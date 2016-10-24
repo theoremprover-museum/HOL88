@@ -1,0 +1,46 @@
+\contentsline {chapter}{\numberline {1}The sets Library}{1}
+\contentsline {section}{\numberline {1.1}The type definition}{1}
+\contentsline {section}{\numberline {1.2}Membership and the axioms of set theory}{2}
+\contentsline {section}{\numberline {1.3}Generalized set specifications}{3}
+\contentsline {subsection}{\numberline {1.3.1}Parser and pretty-printer support}{3}
+\contentsline {subsection}{\numberline {1.3.2}Theorem-proving support}{5}
+\contentsline {section}{\numberline {1.4}The empty and universal sets}{6}
+\contentsline {section}{\numberline {1.5}Set inclusion}{7}
+\contentsline {section}{\numberline {1.6}Union, intersection, and set difference}{7}
+\contentsline {section}{\numberline {1.7}Disjoint sets}{8}
+\contentsline {section}{\numberline {1.8}Insertion and deletion of an element}{8}
+\contentsline {subsection}{\numberline {1.8.1}Parser and pretty-printer support}{9}
+\contentsline {subsection}{\numberline {1.8.2}Conversions for enumerated finite sets}{10}
+\contentsline {subsubsection}{\numberline {1.8.2.1}Membership}{10}
+\contentsline {subsubsection}{\numberline {1.8.2.2}Union}{11}
+\contentsline {subsubsection}{\numberline {1.8.2.3}Insertion}{12}
+\contentsline {subsubsection}{\numberline {1.8.2.4}Deletion}{13}
+\contentsline {section}{\numberline {1.9}Singleton sets}{14}
+\contentsline {section}{\numberline {1.10}The {\ptt CHOICE} and {\ptt REST} functions}{14}
+\contentsline {section}{\numberline {1.11}Image of a function on a set}{15}
+\contentsline {subsection}{\numberline {1.11.1}Theorem-proving support}{15}
+\contentsline {section}{\numberline {1.12}Mappings between sets}{16}
+\contentsline {section}{\numberline {1.13}Finite and infinite sets}{17}
+\contentsline {subsection}{\numberline {1.13.1}Theorem-proving support}{18}
+\contentsline {section}{\numberline {1.14}Cardinality of finite sets}{19}
+\contentsline {section}{\numberline {1.15}Using the library}{19}
+\contentsline {subsection}{\numberline {1.15.1}Example session}{20}
+\contentsline {subsection}{\numberline {1.15.2}The {\ptt load\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}sets} function}{21}
+\contentsline {chapter}{\numberline {2}ML Functions in the sets Library}{23}
+\contentsline {chapter}{\numberline {3}Pre-proved Theorems}{33}
+\contentsline {section}{\numberline {3.1}The type definition}{33}
+\contentsline {section}{\numberline {3.2}Membership, equality, and set specifications}{33}
+\contentsline {section}{\numberline {3.3}The empty and universal sets}{34}
+\contentsline {section}{\numberline {3.4}Set inclusion}{34}
+\contentsline {section}{\numberline {3.5}Intersection and union}{35}
+\contentsline {section}{\numberline {3.6}Set difference}{37}
+\contentsline {section}{\numberline {3.7}Disjoint sets}{37}
+\contentsline {section}{\numberline {3.8}Insertion and deletion of an element}{38}
+\contentsline {section}{\numberline {3.9}The {\ptt CHOICE} and {\ptt REST} functions}{40}
+\contentsline {section}{\numberline {3.10}Image of a function on a set}{41}
+\contentsline {section}{\numberline {3.11}Mappings between sets}{42}
+\contentsline {section}{\numberline {3.12}Singleton sets}{43}
+\contentsline {section}{\numberline {3.13}Finite and infinite sets}{44}
+\contentsline {section}{\numberline {3.14}Cardinality of sets}{46}
+\contentsline {chapter}{References}{49}
+\contentsline {chapter}{Index}{50}

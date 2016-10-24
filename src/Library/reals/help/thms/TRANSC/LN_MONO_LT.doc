@@ -1,0 +1,3 @@
+\THEOREM LN_MONO_LT TRANSC
+|- !x y. (& 0) < x /\ (& 0) < y ==> ((ln x) < (ln y) = x < y)
+\ENDTHEOREM

@@ -1,0 +1,29 @@
+\DOC ABS
+
+\TYPE {ABS : (term -> thm -> thm)}
+
+\SYNOPSIS
+Abstracts both sides of an equation.
+
+\KEYWORDS
+rule, abstraction.
+
+\DESCRIBE
+{
+         A |- t1 = t2
+   ------------------------  ABS "x"            [Where x is not free in A]
+    A |- (\x.t1) = (\x.t2)
+}
+\FAILURE
+If the theorem is not an equation, or if the variable {x} is free in the
+assumptions {A}.
+
+\EXAMPLE
+{
+#ABS "m:num" (REFL "m:num");;
+|- (\m. m) = (\m. m)
+}
+\SEEALSO
+ETA_CONV, EXT, MK_ABS.
+
+\ENDDOC

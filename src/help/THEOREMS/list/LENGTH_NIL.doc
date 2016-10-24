@@ -1,0 +1,3 @@
+\THEOREM LENGTH_NIL list
+|- !l. (LENGTH l = 0) = (l = [])
+\ENDTHEOREM

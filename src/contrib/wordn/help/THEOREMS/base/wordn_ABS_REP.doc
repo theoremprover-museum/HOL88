@@ -1,0 +1,6 @@
+\THEOREM wordn_ABS_REP wordn_base
+|- !n.
+    (?rep. TYPE_DEFINITION(\l'. LENGTH l' = n)rep) ==>
+    (?REP ABS.
+      (!w. ABS(REP w) = w) /\ (!l. (LENGTH l = n) = (REP(ABS l) = l)))
+\ENDTHEOREM

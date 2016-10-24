@@ -1,0 +1,5 @@
+\THEOREM EQ_CLAUSES \none
+|- !t.
+    ((T = t) = t) /\ ((t = T) = t) /\ ((F = t) = ~t) /\ ((t = F) = ~t)
+\ENDTHEOREM
+

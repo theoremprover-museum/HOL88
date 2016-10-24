@@ -1,0 +1,24 @@
+\DOC set_help_search_path
+
+\TYPE {set_help_search_path : (string list -> void)}
+
+\SYNOPSIS
+Sets the internal search path use by HOL to find files.
+
+\DESCRIBE
+When applied to a list of strings {l}, each of which represents the pathname
+to a directory, {set_help_search_path} sets the internal search path used when
+the {help} function searches for online help files to the list {l}. Although
+the help search path can be set to an arbitrary list of strings, each string is
+normally expected to be either empty ({``}) or a pathname with `{/}' as its
+final character.  When {help} looks for a help file, the directories in the
+search path are searched in the order in which they occur in the list supplied
+to {set_help_search_path}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+help_search_path, install, search_path, set_search_path.
+
+\ENDDOC

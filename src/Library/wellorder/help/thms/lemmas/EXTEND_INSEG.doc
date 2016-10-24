@@ -1,0 +1,3 @@
+\THEOREM EXTEND_INSEG WELLORDER
+|- !l a. woset l /\ fl l a ==> (\(x,y). l(x,y) /\ l(y,a)) inseg l
+\ENDTHEOREM

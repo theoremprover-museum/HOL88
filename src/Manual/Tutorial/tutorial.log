@@ -1,0 +1,263 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 09:40
+**tutorial.tex
+(tutorial.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../LaTeX/alltt.sty) (../LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+) (../LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+)
+(../LaTeX/pic-macros.tex) (../LaTeX/docmacros.tex)
+\c@Peano=\count91
+ (tutorial.aux (title.aux)
+(preface.aux) (../LaTeX/ack.aux) (contents.aux) (intro.aux) (ml.aux) (logic.aux
+) (proof.aux) (parity.aux) (tool.aux) (binomial.aux) (references.aux))
+(title.tex (../LaTeX/cover_info.tex
+
+     The title page being created is a LaTeX approximation of a fancy
+     PostScript cover page. All the fancy cover pages for the HOL
+     Manual may be generated if you have (1) a PostScript printer,
+     (2) the "psfig" TeX macros, and (3) a DVI to PostScript converter
+     that understands these macros. The cover pages may be found in
+     ../LaTeX/Covers, and shoud be made pursuant to the instructions
+     given in ../LaTeX/Covers/READ-ME.
+
+) [1
+
+
+] [2]) (preface.tex [3
+
+
+
+] [4]) [5] (../LaTeX/ack.tex [6
+
+
+
+]) [7] (contents.tex
+[8
+
+
+
+] (tutorial.toc [9] [10])
+\tf@toc=\write3
+) [11] (intro.tex
+Chapter 1.
+[1
+
+
+
+] [2] [3] [4] [5] [6] [7] [8]) [9] (ml.tex [10
+
+
+
+]
+Chapter 2.
+
+Underfull \vbox (badness 1968) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.7021
+.\write2{\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberl\
+ETC.}
+.\mark{{{Chapter\ 2. \ Introduction to ML}}{}}
+.\write2{\@writefile{lof}{\string\addvspace\space {10\p@ }}}
+.\write2{\@writefile{lot}{\string\addvspace\space {10\p@ }}}
+.\glue(\topskip) 2.00002
+.etc.
+
+ [11]
+[12] [13]) [14] (logic.tex
+Chapter 3.
+[15
+
+
+
+] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25]) [26] (proof.tex
+Chapter 4.
+[27
+
+
+
+] [28] [29] [30] [31] [32] [33] [34] [35] [36
+
+]
+Chapter 5.
+[37] [38] [39] [40] [41] [42] [43] [44] [45] [46] [47] [48] [49]) [50]
+(parity.tex
+Chapter 6.
+[51
+
+
+
+] [52] [53] [54]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 6.59955
+.\glue(\topskip) 5.30833
+.\hbox(6.69167+2.43333)x455.24408, glue set 277.03476fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\penalty 10000
+..etc.
+.\penalty 0
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.etc.
+
+ [55]
+[56] [57] [58] [59] [60] [61] [62] [63]) [64] (tool.tex
+Chapter 7.
+[65
+
+
+
+] [66]
+Overfull \hbox (6.5514pt too wide) in paragraph at lines 143--149
+\elvrm This takes an equa-tion []\elvtt |- $\elvmi t[]$[] \elvtt = $\elvmi t[]$
+ \elvrm and gen-er-ates a con-ver-sion ([] ML func-tion of type []\elvtt term->
+thm\elvrm )
+
+\hbox(8.2125+2.73749)x455.24408, glue set - 1.0
+.\elvrm T
+.\elvrm h
+.\elvrm i
+.\elvrm s
+.\glue 3.65 plus 1.825 minus 1.21666
+.etc.
+
+[67] [68] [69] [70] [71] [72] [73] [74]
+Underfull \vbox (badness 2005) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.71977
+.\glue(\topskip) 0.0
+.\hbox(49.4294+43.95442)x455.24408, glue set 0.1fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(49.4294+43.95442)x455.04408
+...\mathon
+...\vbox(49.4294+43.95442)x455.04408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [75]
+Overfull \hbox (13.11166pt too wide) in paragraph at lines 738--743
+\elvrm Among the in-di-vid-ual con-juncts is the goal, which can thus be solved
+ im-me-di-ately us-ing []
+
+\hbox(7.60416+2.12917)x455.24408, glue set - 1.0
+.\elvrm A
+.\elvrm m
+.\elvrm o
+.\elvrm n
+.\elvrm g
+.etc.
+
+[76] [77] [78] [79]
+Underfull \vbox (badness 2790) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.03445
+.\glue(\topskip) 0.0
+.\hbox(31.00801+25.53304)x455.24408, glue set 0.2fil
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(31.00801+25.53304)x454.84409
+...\mathon
+...\vbox(31.00801+25.53304)x454.84409 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [80]
+[81] [82] [83] [84] [85]) [86] (binomial.tex
+Chapter 8.
+(binomial/binomial.tex [87
+
+
+
+] [88] [89]
+Overfull \hbox (10.21169pt too wide) in paragraph at lines 215--220
+\elvrm tional op-er-a-tor, which makes rewrit-ing dif-fi-cult. But hav-ing ob-t
+ained the the-o-rem []\elvtt RAW_CHOOSE_DEF
+
+\hbox(7.60416+2.12917)x455.24408, glue set - 1.0
+.\elvrm t
+.\elvrm i
+.\elvrm o
+.\elvrm n
+.\elvrm a
+.etc.
+
+[90] [91] [92] [93] [94] [95] [96] [97] [98] [99]) (binomial/appendix.tex
+Overfull \hbox (41.94073pt too wide) in paragraph at lines 967--3
+[]\elvrm To see how to do so for Elsa Gunter's the-ory of in-te-gers, take a lo
+ok at the file \elvtt mk[]BINOMIAL[]integer.ml\elvrm ,
+
+\hbox(7.60416+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\elvrm T
+.\kern-0.91252
+.\elvrm o
+.\glue 3.65 plus 1.825 minus 1.21666
+.etc.
+
+[100] [101] [102])) [103] (references.tex [104
+
+
+
+]) [105] (tutorial.aux (title.aux) (preface.aux) (../LaTeX/ack.aux) (contents.a
+ux) (intro.aux) (ml.aux)
+(logic.aux) (proof.aux) (parity.aux) (tool.aux) (binomial.aux) (references.aux)
+) )
+(\end occurred inside a group at level 1) 
+Here is how much of TeX's memory you used:
+ 641 strings out of 11977
+ 5068 string characters out of 87025
+ 44449 words of memory out of 262141
+ 2349 multiletter control sequences out of 9500
+ 20550 words of font info for 78 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 22i,13n,19p,293b,703s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on tutorial.dvi (116 pages, 327512 bytes).

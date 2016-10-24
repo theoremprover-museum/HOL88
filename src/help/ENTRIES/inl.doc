@@ -1,0 +1,27 @@
+\DOC inl
+
+\TYPE {inl : (* -> (* + **))}
+
+\SYNOPSIS
+Injects into left of disjoint union type.
+
+\DESCRIBE
+The function {inl} is a constructor function for disjoint union (sum) types,
+which takes an element of an arbitrary type {*} and creates an element of type
+{* # **} which holds the same data.
+
+\FAILURE
+Never fails
+
+\EXAMPLE
+{
+#let x = inl 1;;
+x = inl 1 : (int + *)
+
+#let y = inl `hello` : string + int;;
+y = inl `hello` : (string + int)
+}
+\SEEALSO
+inr, isl, outl, outr.
+
+\ENDDOC

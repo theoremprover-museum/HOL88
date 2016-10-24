@@ -1,0 +1,31 @@
+\DOC set_lambda
+
+\TYPE {set_lambda : (string -> string)}
+
+\SYNOPSIS
+Sets the `lambda' symbol used in printing terms.
+
+\DESCRIBE
+If {s} is a string, then {set_lambda s} sets to {s} the `lambda' symbol (by
+default `{\}') which is used to represent lambda-abstraction in terms.
+The call returns the previous string used for this purpose. The call affects
+the printing of terms, but the original symbol is still expected by the
+quotation parser.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+In the following, the lambda symbol is set to `{fn}', and the effect on the
+printing of a typical term is illustrated.
+{
+   #set_lambda `fn`;;
+   `\` : string
+
+   #"\x. SUC x";;
+   "fn x. SUC x" : term
+}
+\SEEALSO
+set_prompt, set_turnstile.
+
+\ENDDOC

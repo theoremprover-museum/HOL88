@@ -1,0 +1,944 @@
+
+\chapter{Introduction\label{intro}}
+
+This document describes the facilities provided by the \ml{prettyp} library
+for the \HOL\ system~\cite{description}. The library is a pretty-printer based
+on the Pretty-Printing Meta-Language (\PPML) for the \CENTAUR\
+system~\cite{PPML}. It is intended as a tool for embedding languages within
+the \HOL\ logic. To be truly useful it should be used along with a special
+parser for the embedded language. Although such applications only require
+\HOL\ terms to be pretty-printed, the system described here can be used to
+pretty-print any tree structure (after undergoing translation).
+
+The pretty-printing program converts a tree represented as a particular \ML\
+datatype to text, using a set of rules. The user must provide these rules. A
+parser for a special-purpose language is provided to facilitate this. The
+parser generates a file which can be read into the \HOL\ system. The file
+contains declarations of \ML\ values. These values are the rules used by the
+pretty-printer.
+
+To pretty-print a tree structure, the tree must be converted (usually by an
+\ML\ function) to the particular datatype used by the pretty-printer. Functions
+are provided with the system for converting \HOL\ types and terms.
+
+Chapter~\ref{language} describes the pretty-printing language in detail.
+Chapter~\ref{mldatatypes} describes the techniques required to convert an
+arbitrary tree structure to the datatype used by the pretty-printer.
+Linking specialised pretty-printers into the standard \HOL\ pretty-printer is
+discussed in Chapter~\ref{linking}, including the functions to convert \HOL\
+types and terms to trees which the pretty-printer can use.
+Chapter~\ref{examples} gives examples of defining rules for a variety of
+languages. 
+
+The remainder of this chapter illustrates the process of building a new
+pretty-printer. Some notation of set theory is added to the standard \HOL\
+pretty-printer. First, though, the loading of the library is described.
+
+
+\section{Loading the library}
+
+The \ml{prettyp} library can be loaded into a \HOL\ session using the
+function \ml{load\_library}\index{load\_library@{\ptt load\_library}} (see the
+\HOL\ manual for a general description of library loading). The first action
+in the load sequence initiated by \ml{load\_library} is to update the \HOL\
+help\index{help!updating search path} search path. The help search path is
+updated with pathnames to online help files for the \ML\ functions in the
+library. After updating the help search path, the \ML\ functions in the
+library are loaded into \HOL.
+
+There are three code files in the library of importance to the user. The first
+is called {\small\verb%PP_printer.ml%}. This file must be loaded in order to do
+anything with the pretty-printer. It is the main pretty-printing program.
+
+The file {\small\verb%PP_parser.ml%} can be loaded after
+{\small\verb%PP_printer.ml%}. It is the compiler for the pretty-printing
+language. It also contains a pretty-printer for the pretty-printing language!
+
+The file {\small\verb%PP_hol.ml%} can also be loaded after
+{\small\verb%PP_printer.ml%}. It contains functions for converting \HOL\
+types, terms and theorems into parse-trees. It also contains a complete
+pretty-printer for the \HOL\ logic. When loaded, the standard \HOL\
+pretty-printer is replaced by these new printers. {\small\verb%PP_hol.ml%} is
+required for any extension to the pretty-printing of \HOL\ types, terms or
+theorems.
+
+Note that {\small\verb%PP_parser.ml%} and {\small\verb%PP_hol.ml%} do not
+require each other to be resident to work. They can however be resident
+together.
+
+Use of \ml{load\_library} loads all three of the files. The following session
+shows how the entire \ml{prettyp} library can be loaded:
+
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+#load_library `prettyp`;;
+Loading library `prettyp` ...
+Updating help search path
+.............................................................................
+.............................................................................
+.............................................................................
+.............................................................
+Library `prettyp` loaded.
+() : void
+
+#
+\end{verbatim}\end{session}
+
+If the user wants to load only one or two of the three files, they can be
+loaded separately. As an example of this, {\small\verb%PP_printer.ml%} can be
+loaded using one of the following \ML\ function calls:
+
+\begin{small}\begin{verbatim}
+   loadf (library_pathname() ^ `/prettyp/PP_printer`);;
+   loadt (library_pathname() ^ `/prettyp/PP_printer`);;
+\end{verbatim}\end{small}
+
+\noindent
+where the former loads `quietly' and the latter displays details of the
+declarations made within the file.
+
+
+\section{Example: a pretty-printer for set theory in HOL}
+
+\setcounter{sessioncount}{1}
+\newwindow{{\small\tt sets.pp}}
+
+This section illustrates the development process for an extension to the \HOL\
+pretty-printer. Throughout the example we assume the user has two windows.
+A \HOL\ session is running within the first window, which is represented by a
+box of the following form:
+
+\begin{session}\begin{verbatim}
+...
+\end{verbatim}\end{session}
+
+\noindent
+The other window is an editor in which a file named {\small\verb%sets.pp%} is
+being edited. The editor is represented by:
+
+\begin{window}\begin{verbatim}
+...
+\end{verbatim}\end{window}
+
+\setcounter{sessioncount}{1}
+
+\noindent
+We begin by running \HOL\ and loading three files from the library
+\ml{prettyp}.
+
+\begin{session}\begin{verbatim}
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 2
+
+#loadf (library_pathname() ^ `/prettyp/PP_printer`);;
+Updating help search path
+.............................................................................
+.......................................() : void
+
+#loadf (library_pathname() ^ `/prettyp/PP_parser`);;
+Updating help search path
+.............................................................................
+......................................................................
+() : void
+
+#loadf (library_pathname() ^ `/prettyp/PP_hol`);;
+Updating help search path
+.................................() : void
+\end{verbatim}\end{session}
+
+\noindent
+The first file is the main pretty-printing program. It must always be loaded
+when the pretty-printer is being used. The second file is a parser for the
+pretty-printing language. The first file must always be loaded before the
+second. The parser generates a file of \ML\ declarations. The third file is
+a replacement for the standard \HOL\ pretty-printer. It has been written using
+the pretty-printer described here. This allows it to be extended with the
+special-purpose syntax.
+
+The next thing to do is to load the library whose syntax we wish to extend:
+
+\begin{session}\begin{verbatim}
+#load_library `sets`;;
+Loading library `sets` ...
+Updating search path
+.Theory sets loaded
+.....................
+Library `sets` loaded.
+() : void
+\end{verbatim}\end{session}
+
+\noindent
+The constant {\small\verb%EMPTY%} is now defined within the \HOL\ system. It represents
+an empty set. Observe that no special syntax is attached to the constant.
+
+\begin{session}\begin{verbatim}
+#"EMPTY:(*)set";;
+"EMPTY" : term
+\end{verbatim}\end{session}
+
+\noindent
+Now we enter a small pretty-printer specification into the editor window.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\noindent
+The name of the pretty-printer is specified as {\small\verb%sets%}. There is
+one rule. The rule instructs \HOL\ to print {\small\verb%{}%} whenever it
+encounters the constant {\small\verb%EMPTY%}.
+
+There are two parts to the rule: a {\it pattern\/} and a {\it format}. These
+are separated by {\small\verb%->%}. When printing, the system compares the
+pattern to the term which is to be printed. In the example, the pattern
+matches the term only if the current {\it context\/} is {\small\verb%'term'%}.
+The context is a string of characters which is specified when the
+pretty-printer is called. It may also be modified by a rule during the
+printing process.
+
+The rest of the pattern represents the tree structure of a \HOL\ term. So, for
+the pattern to match a term, the term must represent the constant
+{\small\verb%EMPTY%}. The {\small\verb%**%} in the pattern is used to match
+optional type information. We shall not concern ourselves with this notation
+at the moment.
+
+The format consists of a {\it box}, the components of which are to be composed
+horizontally with no space between them. In the example, the box has only one
+component, so the composition information is not required. The format instructs
+the printer to display {\small\verb%{}%}. The double quotation-marks are used
+to delimit a string which is to be displayed verbatim.
+
+So, whenever the pattern matches, the format is used to determine what to
+display. Let's see this in action. First the file must be saved. Then we
+instruct \HOL\ to convert the pretty-printer specification into a file of \ML\
+declarations.
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+\end{verbatim}\end{session}
+
+\noindent
+There should now be a file called {\small\verb%sets_pp.ml%}. This contains two
+\ML\ declarations. The first declares \ml{sets\_rules} to be a list of
+pretty-printing rules as understood by the pretty-printing program. The
+second declares \ml{sets\_rules\_fun} to be a function which embodies the
+properties of the rules. The names of the identifiers are derived from the
+name of the pretty-printer specification given in the file.
+
+The function \ml{PP\_to\_ML} invokes the parser. Its first argument indicates
+whether the output is to be appended to the specified file. In the example
+the output is not appended, i.e.~if the destination file existed previously it
+will be overwritten. The second argument is the name of the source file. The
+name of the source file must end in {`}{\small\verb%.pp%}{'}. The
+{`}{\small\verb%.pp%}{'} may be omitted from the name given as the second
+argument. The third argument is the name of the destination file. This should
+either be given in full, or if, as in the example, a null string is given, the
+parser will replace the {`}{\small\verb%.pp%}{'} of the source file name with
+{`}{\small\verb%_pp.ml%}{'}.
+
+We can now load the file of \ML\ declarations, and instruct \HOL\ to add them
+to its existing pretty-printing rules.
+
+\begin{session}\begin{verbatim}
+#loadt `sets_pp`;;
+
+sets_rules = 
+[((`term`,
+   (Const_name(`CONST`,
+               [Patt_child(Const_name(`EMPTY`, [])); Wild_children])),
+   -),
+  [],
+  PF(H_box[(0, PO_constant `{}`)]))]
+: print_rule list
+
+sets_rules_fun = - : print_rule_function
+
+
+File sets_pp loaded
+() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\noindent
+\ml{top\_print} is an \ML\ directive which given a function of type
+{\small\verb%(%}{\it type\/} {\small\verb%->%} {\small\verb%void)%} installs
+that function as a printer for any object of type {\it type}. \ml{pp} is an
+\ML\ function which pretty-prints in a way (almost) compatible with the
+standard \HOL\ pretty-printer. That is, when used with \ml{top\_print}, the
+text it produces merges properly with the surrounding text produced by other
+means. The first argument to \ml{pp} is a `rule function'. In the example this
+is made by composing three `rule functions' together using \ml{then\_try}. The
+rules of \ml{sets\_rules\_fun} are tried first. If none of these match, the
+standard \HOL\ rules are tried, first those for terms, then those for
+types\footnote{If no rules match, default rules will be used which print the
+object as a tree structure.}. The second argument is the {\it context\/}
+mentioned above. The third is a list of parameters, which is empty in the
+example. The fourth argument is an object of a type defined within the
+pretty-printer. The type represents a parse-tree. In the example, the term to
+be pretty-printed is converted into a parse-tree using the function
+\ml{pp\_convert\_term}. This function is defined within the pretty-printer,
+specifically the part of it concerned with printing \HOL\ terms.
+
+{\small\verb%EMPTY%} is now printed as {\small\verb%{}%}.
+
+\begin{session}\begin{verbatim}
+#"EMPTY:(*)set";;
+"{}" : term
+\end{verbatim}\end{session}
+
+\noindent
+We have not yet attached special syntax to non-empty sets.
+
+\begin{session}\begin{verbatim}
+#"INSERT 1 (EMPTY:(num)set)";;
+"1 INSERT {}" : term
+\end{verbatim}\end{session}
+
+\noindent
+The constant {\small\verb%INSERT%} is an infix. It is used to form a new set
+from a set and the element to be added. We can add a rule to pretty-print this.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term'::COMB(COMB(CONST(INSERT(),**),*elem),CONST(EMPTY(),**)) ->
+           [<h 0> "{" *elem "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\noindent
+The new rule matches something of the form:
+
+\begin{small}\begin{verbatim}
+   (INSERT *elem) EMPTY
+\end{verbatim}\end{small}
+
+\noindent
+The {\it metavariable\/} {\small\verb%*elem%} matches any tree, and becomes
+bound to that tree. When {\small\verb%*elem%} is used within the format, the
+pretty-printer is called recursively on the tree it is bound to. In the
+example, if the new rule matches the tree to be printed, the sub-tree bound to
+{\small\verb%*elem%} is printed enclosed within braces.
+
+To print the sub-tree, the system tries to match rules to it, beginning from
+the first rule, {\em not\/} the rule following the one just used. If neither
+of our new rules match the sub-tree, the rules for standard \HOL\ will be
+tried.
+
+So, let's save the file, recompile it, load the generated code and link the
+new rules into the pretty-printer.
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+
+#loadf `sets_pp`;;
+..() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\noindent
+Now we try the example again.
+
+\begin{session}\begin{verbatim}
+#"INSERT 1 (EMPTY:(num)set)";;
+"{1}" : term
+\end{verbatim}\end{session}
+
+\noindent
+Unfortunately our rules do not work for sets of two or more elements.
+
+\begin{session}\begin{verbatim}
+#"INSERT 1 (INSERT 2 (EMPTY:(num)set))";;
+"1 INSERT {2}" : term
+
+#"INSERT 1 (INSERT 2 (INSERT 3 (EMPTY:(num)set)))";;
+"1 INSERT (2 INSERT {3})" : term
+\end{verbatim}\end{session}
+
+\noindent
+The problem is that the second rule only matches when the set into which the
+new element is being `inserted' is the empty set. We can make the pattern more
+general by replacing the part of it which matches {\small\verb%EMPTY%} with a
+metavariable.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term'::COMB(COMB(CONST(INSERT(),**),*elem),*elems) ->
+           [<h 0> "{" *elem "," *elems "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\noindent
+We process the file again.
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+
+#loadf `sets_pp`;;
+..() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\noindent
+Try the examples.
+
+\begin{session}\begin{verbatim}
+#"INSERT 1 (EMPTY:(num)set)";;
+"{1,{}}" : term
+
+#"INSERT 1 (INSERT 2 (EMPTY:(num)set))";;
+"{1,{2,{}}}" : term
+\end{verbatim}\end{session}
+
+\noindent
+Not quite what we wanted. Once we have matched the second rule, and sent out
+the braces, we want to treat an {\small\verb%INSERT%} in a different way. We
+can do this by adding an extra rule which matches in a different context to
+the others.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term_set'::COMB(COMB(CONST(INSERT(),**),*elem),*elems) ->
+               [<h 0> 'term'::*elem "," *elems];
+
+   'term'::COMB(COMB(CONST(INSERT(),**),*elem),*elems) ->
+           [<h 0> "{" *elem "," 'term_set'::*elems "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\noindent
+We also change the last rule so that the recursive call it makes to process
+the remainder of the set is made in the context {\small\verb%'term_set'%}.
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+
+#loadf `sets_pp`;;
+..() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\begin{session}\begin{verbatim}
+#"INSERT 1 (EMPTY:(num)set)";;
+"{1,CONST(EMPTY)}" : term
+
+#"INSERT 1 (INSERT 2 (EMPTY:(num)set))";;
+"{1,2,CONST(EMPTY)}" : term
+\end{verbatim}\end{session}
+
+\noindent
+We now have no rule to match {\small\verb%EMPTY%} when it appears as an
+argument to {\small\verb%INSERT%}. Since we have also changed context, the
+\HOL\ rules no longer apply either. So, {\small\verb%EMPTY%} is displayed as
+its tree representation.
+
+We could easily add a rule to match {\small\verb%EMPTY%}, so that the
+{\small\verb%EMPTY%} is just thrown away. However, observe that we would still
+have a trailing comma before the right-hand brace. Instead, we can add a rule
+to deal with the last element of the set in a special way. Note that the new
+rule must come before the other rule which applies in the context
+{\small\verb%'term_set'%}, so that it takes priority over that rule.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term_set'::COMB(COMB(CONST(INSERT(),**),*elem),CONST(EMPTY(),**)) ->
+               [<h 0> 'term'::*elem];
+
+   'term_set'::COMB(COMB(CONST(INSERT(),**),*elem),*elems) ->
+               [<h 0> 'term'::*elem "," *elems];
+
+   'term'::COMB(COMB(CONST(INSERT(),**),*elem),*elems) ->
+           [<h 0> "{" *elem "," 'term_set'::*elems "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+
+#loadf `sets_pp`;;
+..() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\begin{session}\begin{verbatim}
+#"INSERT 1 (EMPTY:(num)set)";;
+"{1,CONST(EMPTY)}" : term
+
+#"INSERT 1 (INSERT 2 (EMPTY:(num)set))";;
+"{1,2}" : term
+\end{verbatim}\end{session}
+
+\noindent
+Our rules now work for sets of two or more elements, but not for sets of only
+one element. This is because the last rule consumes the first
+{\small\verb%INSERT%}, leaving just {\small\verb%EMPTY%} for a one element
+set, and there is no rule to match {\small\verb%EMPTY%} in the context
+{\small\verb%'term_set'%}. We need to change the last rule so that it matches
+in the same situations, and displays the braces, but the tree it passes on in
+the changed context is the tree it was given, not some sub-tree of it. We do
+this by labelling a node of the tree with a metavariable. This is denoted by
+{\small\verb%|*elems|%}. The sub-trees that were being bound to metavariables
+no longer need to be. We can therefore use {\small\verb%*%} without a name to
+mean `match any sub-tree'.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term_set'::COMB(COMB(CONST(INSERT(),**),*elem),CONST(EMPTY(),**)) ->
+               [<h 0> 'term'::*elem];
+
+   'term_set'::COMB(COMB(CONST(INSERT(),**),*elem),*elems) ->
+               [<h 0> 'term'::*elem "," *elems];
+
+   'term'::|*elems|COMB(COMB(CONST(INSERT(),**),*),*) ->
+           [<h 0> "{" 'term_set'::*elems "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+
+#loadf `sets_pp`;;
+..() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\begin{session}\begin{verbatim}
+#"INSERT 1 (EMPTY:(num)set)";;
+"{1}" : term
+
+#"INSERT 1 (INSERT 2 (EMPTY:(num)set))";;
+"{1,2}" : term
+\end{verbatim}\end{session}
+
+\noindent
+Having worked hard to get here, our rules are still not quite right. In all the
+formats the objects displayed are composed horizontally. This means that all
+the text must appear on the same line. If the textual representation of the
+set is longer than the length of one line it will overflow. We need to specify
+where the set can be broken between lines.
+
+The obvious place to break the set is after a comma. So if the line length was
+very small, we might get output of the form:
+
+\begin{small}\begin{verbatim}
+   {1,2,3,4,
+    5,6}
+\end{verbatim}\end{small}
+
+\noindent
+We can achieve this form of {\it inconsistent\/} breaking by some simple
+changes to our rules.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term_set'::COMB(COMB(CONST(INSERT(),**),*elem),CONST(EMPTY(),**)) ->
+               [<h 0> 'term'::*elem];
+
+   'term_set'::COMB(COMB(CONST(INSERT(),**),*elem),*elems) ->
+               [<hv 0,0,0> [<h 0> 'term'::*elem ","] *elems];
+
+   'term'::|*elems|COMB(COMB(CONST(INSERT(),**),*),*) ->
+           [<h 0> "{" 'term_set'::*elems "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\noindent
+A box labelled with {\small\verb%<hv%}~{\it dx,di,dh\/}{\small\verb%>%} in a
+format means that the components of the box should appear on the same line
+separated by {\it dx\/} spaces, but if this is not possible, the components
+which will not fit on the line can go on a new line separated from the
+previous line by {\it dh\/} blank lines. The text of the new line begins
+{\it di\/} spaces to the right of the beginning of the first component of the
+box.
+
+\vfill
+
+In our example the box of this type has two components. The first is itself a
+box which instructs the printer to display the element of the set followed by
+a comma {\em which must go on the same line}. The second component is the
+remainder of the set.
+
+\vfill
+
+Let's try out the modified rules.
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+
+#loadf `sets_pp`;;
+..() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\begin{session}\begin{verbatim}
+#let test = "INSERT 1 (INSERT 2 (INSERT 3 (INSERT 4 (INSERT 5 (INSERT 6
+#(EMPTY:(num)set))))))";;
+test = "{1,2,3,4,5,6}" : term
+
+#set_margin 15;;
+72 : int
+
+#test;;
+"{1,2,3,4,5,6}"
+: term
+
+#set_margin 14;;
+15 : int
+
+#test;;
+"{1,
+  2,3,4,5,6}"
+: term
+
+#set_margin 12;;
+14 : int
+
+#test;;
+"{1,
+  2,
+  3,4,5,6}"
+: term
+
+#set_margin 72;;
+12 : int
+\end{verbatim}\end{session}
+
+\vfill
+
+\noindent
+The rules are not doing what we want. This is because instead of having all
+the elements of the set appear at the same level of a single box, they occur
+at different levels in a chain of nested boxes\footnote{The nesting is not
+explicit in the rules, but occurs by way of the recursive calls to the
+printer.}. To be able to express a relationship between {\em all\/} the
+elements of the set, we need to be able to grab them all in one call to the
+printer, so that we may place them all at the same box level. There is a
+special pattern which allows us to do this.
+
+The {\it looping\/} construct consists of two patterns. The first is enclosed
+within square brackets. It is followed by the second pattern. The combined
+pattern tries to match the first pattern zero or more times, and when the first
+no longer matches it tries to match the second exactly once. This probably
+requires further explanation. We begin by looking at the rule for our example.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term'::[COMB(COMB(CONST(INSERT(),**),*elems),<>COMB(**))]
+           COMB(COMB(CONST(INSERT(),**),*elem),CONST(EMPTY(),**)) ->
+           [<h 0> "{" [<hv 0,0,0> **[<h 0> *elems ","] *elem] "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\vfill
+
+\noindent
+The {\small\verb%<>%} within the first part of the looping pattern is used to
+label the sub-tree which will be used on the next match attempt (the next time
+round the loop). This will typically appear without any pattern following it.
+This would indicate that no restriction is being placed on the sub-tree to be
+used on the next match attempt. However in the example, {\small\verb%<>%} is
+followed by {\small\verb%COMB(**)%}. This specifies that the sub-tree must
+have a {\small\verb%COMB%} as its root node.
+
+The looping part of the pattern matches a chain of {\small\verb%INSERT%}s. The
+representation of a set is such a chain. However, the last
+{\small\verb%INSERT%} in the chain is not matched by the looping part of the
+pattern, because the sub-tree to be used on the next match attempt does not
+have {\small\verb%COMB%} as its root (This is assuming that the chain of
+{\small\verb%INSERT%}s is terminated by an {\small\verb%EMPTY%}). For those
+{\small\verb%INSERT%}s which are matched during the loop, the elements being
+`inserted' are bound as a list to the metavariable {\small\verb%*elems%}.
+
+When the looping terminates, we are left with something of the form:
+
+\begin{small}\begin{verbatim}
+   (INSERT *elem) EMPTY
+\end{verbatim}\end{small}
+
+\noindent
+which as we have seen before is matched by the remainder of the pattern.
+
+We bind the last element separately because it needs to be treated differently
+in the format. (The last element is not followed by a comma).
+
+The {\small\verb%**[<h 0> *elems ","]%} in the format expands to a sequence of
+boxes, one for each element bound to {\small\verb%*elems%}, in which the
+element is followed by a comma (on the same line).
+
+There is a lot more to be said about these looping patterns and expanding
+boxes, but we shall not go into it here. Instead let's see if the new rules
+really do do what we want.
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `sets` ``;;
+() : void
+
+#loadf `sets_pp`;;
+..() : void
+
+#top_print (\t. pp (sets_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `term` [] (pp_convert_term t));;
+- : (term -> void)
+\end{verbatim}\end{session}
+
+\vfill
+
+\begin{session}\begin{verbatim}
+#test;;
+"{1,2,3,4,5,6}" : term
+
+#set_margin 14;;
+72 : int
+
+#test;;
+"{1,2,3,4,5,
+  6}"
+: term
+
+#set_margin 12;;
+14 : int
+
+#test;;
+"{1,2,3,4,
+  5,6}"
+: term
+
+#set_margin 72;;
+12 : int
+\end{verbatim}\end{session}
+
+\vfill
+
+\noindent
+There is one more thing to say before leaving the example. The pretty-printer
+for \HOL\ terms uses a parameter called {`}{\small\verb%prec%}{'} to hold the
+precedence of the parent operator. If a rule does not explicitly modify this
+parameter, it is passed on unchanged to recursive calls of the printer. The
+braces of the set notation prevent any ambiguity, so we do not need to know
+the precedence of the parent operator. If within a set we consider the
+separating commas to have the lowest possible precedence, then the elements of
+the set should not appear enclosed within parentheses. We force this by making
+{`}{\small\verb%prec%}{'} have its highest possible value (which corresponds
+to the lowest precedence) for all recursive calls of the printer.
+
+\begin{window}\begin{verbatim}
+prettyprinter sets =
+
+abbreviations
+   max_prec = {apply0 max_term_prec};
+
+end abbreviations
+
+
+rules
+   'term'::CONST(EMPTY(),**) -> [<h 0> "{}"];
+
+   'term'::[COMB(COMB(CONST(INSERT(),**),*elems),<>COMB(**))]
+           COMB(COMB(CONST(INSERT(),**),*elem),CONST(EMPTY(),**)) ->
+           [<h 0> "{" [<hv 0,0,0> **[<h 0> *elems with
+                                                     prec := max_prec
+                                                  end with
+                                           ","]
+                                  *elem with
+                                           prec := max_prec
+                                        end with] "}"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\vfill
+
+\noindent
+\ml{max\_prec} is a value suitable for use within the pretty-printing
+language. It is derived from the value of the \ML\ identifier
+\ml{max\_term\_prec}. The value of \ml{max\_term\_prec} is the largest
+possible precedence value (lowest precedence) for a \HOL\ `operator'. The
+transformation from \ml{max\_term\_prec} to \ml{max\_prec} is explained in
+Chapter~\ref{functions}.
+
+
+\section{CAUTION!}
+
+\setcounter{sessioncount}{1}
+\newwindow{{\small\tt bad.pp}}
+
+The previous section illustrates how the \HOL\ pretty-printer can be extended.
+It should not be hard to see that the same methods could be used to
+{\em modify\/} the \HOL\ pretty-printer. For example, consider the following
+pretty-printer which performs an exceedingly undesirable transformation.
+
+\begin{window}\begin{verbatim}
+prettyprinter bad =
+
+rules
+   'term'::CONST(F(),**) -> [<h 0> "T"];
+
+end rules
+
+
+end prettyprinter
+\end{verbatim}\end{window}
+
+\noindent
+We can make use of this in a \HOL\ session. First we enter \HOL\ and load the
+library \ml{prettyp}.
+
+\begin{session}\begin{verbatim}
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 2
+
+#load_library `prettyp`;;
+Loading library `prettyp` ...
+Updating help search path
+.............................................................................
+.............................................................................
+.............................................................................
+.............................................................
+Library `prettyp` loaded.
+() : void
+\end{verbatim}\end{session}
+
+\noindent
+Now we look at the definition of {\it false}.
+
+\begin{session}\begin{verbatim}
+#let test = F_DEF;;
+test = |- F = (!t. t)
+\end{verbatim}\end{session}
+
+\noindent
+The new pretty-printer can be compiled, loaded and linked into the \HOL\
+system:
+
+\begin{session}\begin{verbatim}
+#PP_to_ML false `bad` ``;;
+() : void
+
+#loadf `bad_pp`;;
+..() : void
+
+#top_print (\t. pp (bad_rules_fun then_try
+#                   hol_thm_rules_fun then_try
+#                   hol_term_rules_fun then_try
+#                   hol_type_rules_fun) `thm` [] (pp_convert_thm t));;
+- : (thm -> void)
+\end{verbatim}\end{session}
+
+\noindent
+The result is a theorem which, although perfectly valid in the underlying
+representation, appears to the user in a very unpleasant form.
+
+\begin{session}\begin{verbatim}
+#test;;
+|- T = (!t. t)
+\end{verbatim}\end{session}

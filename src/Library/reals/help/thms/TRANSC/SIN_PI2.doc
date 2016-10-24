@@ -1,0 +1,3 @@
+\THEOREM SIN_PI2 TRANSC
+|- sin(pi / (& 2)) = & 1
+\ENDTHEOREM

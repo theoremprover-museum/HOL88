@@ -1,0 +1,59 @@
+\begin{theindex}
+
+  \item \idxname{\ptt }{begin_proof}, 4, 5
+
+  \indexspace
+
+  \item \idxname{\ptt }{close_proof_file}, 4
+  \item \idxname{\ptt }{current_proof}, 5
+  \item \idxname{\ptt }{current_proof_file}, 4
+
+  \indexspace
+
+  \item \idxname{\ptt }{end_proof}, 4, 5
+
+  \indexspace
+
+  \item \idxname{\ptt }{get_steps}, 6
+
+  \indexspace
+
+  \item \idxname{\ptt }{is_recording_proof}, 6
+
+  \indexspace
+
+  \item \idxname{\ptt }{MakeProof}, 6
+
+  \indexspace
+
+  \item \idxname{\ptt }{new_proof_file}, 4
+
+  \indexspace
+
+  \item \idxname{\ptt }{PROVE}, 4
+  \item \idxname{\ptt }{prove}, 4
+  \item \idxname{\ptt }{prove_thm}, 4
+
+  \indexspace
+
+  \item \idxname{\ptt }{record_proof}, 6
+  \item \idxname{\ptt }{resume_recording}, 6
+
+  \indexspace
+
+  \item \idxname{\ptt }{suspend_recording}, 6
+  \item \idxname{\ptt }{SYM}, 2
+
+  \indexspace
+
+  \item \idxname{\ptt }{TAC_PROOF}, 4
+
+  \indexspace
+
+  \item \idxname{\ptt }{write_env}, 7
+  \item \idxname{\ptt }{write_line}, 7
+  \item \idxname{\ptt }{write_proof_add_to}, 7
+  \item \idxname{\ptt }{write_proof_to}, 6, 7
+  \item \idxname{\ptt }{write_thm_list}, 7
+
+\end{theindex}

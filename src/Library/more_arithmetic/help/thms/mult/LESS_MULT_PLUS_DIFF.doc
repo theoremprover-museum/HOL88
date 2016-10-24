@@ -1,0 +1,3 @@
+\THEOREM LESS_MULT_PLUS_DIFF mult
+|- !n k l. k < l ==> ((k * n) + n) <= (l * n)
+\ENDTHEOREM

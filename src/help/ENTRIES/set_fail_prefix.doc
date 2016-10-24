@@ -1,0 +1,30 @@
+\DOC set_fail_prefix
+
+\TYPE {set_fail_prefix : (string -> (* -> **) -> * -> **)}
+
+\SYNOPSIS
+Specifies a prefix to the failure string for a function evaluation.
+
+\DESCRIBE
+When applied to a string {s} and a function {f}, the function {set_fail_prefix}
+gives a function which behaves identically to {f} except that on failure, the
+failure string given by {f} has {s} and {`--`} prepended.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#BETA_CONV "1 + 1";;
+evaluation failed     BETA_CONV
+
+#(set_fail_prefix `Application to "1 + 1" ` BETA_CONV) "1 + 1";;
+evaluation failed     Application to "1 + 1"  -- BETA_CONV
+}
+\USES
+Providing a traceback of failures through function applications.
+
+\SEEALSO
+set_fail.
+
+\ENDDOC

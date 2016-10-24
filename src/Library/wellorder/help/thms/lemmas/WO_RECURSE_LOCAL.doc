@@ -1,0 +1,8 @@
+\THEOREM WO_RECURSE_LOCAL WELLORDER
+|- !l h ms.
+    woset l /\
+    (!x. fl l(ms x)) /\
+    (!f f' x.
+      (!y. less l(ms y,ms x) ==> (f y = f' y)) ==> (h f x = h f' x)) ==>
+    (!n. ?f. !x. l(ms x,n) ==> (f x = h f x))
+\ENDTHEOREM

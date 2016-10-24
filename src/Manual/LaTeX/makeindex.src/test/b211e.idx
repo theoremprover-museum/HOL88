@@ -1,0 +1,257 @@
+\indexentry{"@\char1 (character 1 (octal 1) (hex 1))}{1}
+\indexentry{"@\char2 (character 2 (octal 2) (hex 2))}{2}
+\indexentry{"@\char3 (character 3 (octal 3) (hex 3))}{3}
+\indexentry{"@\char4 (character 4 (octal 4) (hex 4))}{4}
+\indexentry{"@\char5 (character 5 (octal 5) (hex 5))}{5}
+\indexentry{"@\char6 (character 6 (octal 6) (hex 6))}{6}
+\indexentry{"@\char7 (character 7 (octal 7) (hex 7))}{7}
+\indexentry{"@\char8 (character 8 (octal 10) (hex 8))}{8}
+\indexentry{"	@\char9 (character 9 (octal 11) (hex 9))}{9}
+\indexentry{"
+@\char10 (character 10 (octal 12) (hex a))}{10}
+\indexentry{"@\char11 (character 11 (octal 13) (hex b))}{11}
+\indexentry{"@\char12 (character 12 (octal 14) (hex c))}{12}
+\indexentry{"@\char13 (character 13 (octal 15) (hex d))}{13}
+\indexentry{"@\char14 (character 14 (octal 16) (hex e))}{14}
+\indexentry{"@\char15 (character 15 (octal 17) (hex f))}{15}
+\indexentry{"@\char16 (character 16 (octal 20) (hex 10))}{16}
+\indexentry{"@\char17 (character 17 (octal 21) (hex 11))}{17}
+\indexentry{"@\char18 (character 18 (octal 22) (hex 12))}{18}
+\indexentry{"@\char19 (character 19 (octal 23) (hex 13))}{19}
+\indexentry{"@\char20 (character 20 (octal 24) (hex 14))}{20}
+\indexentry{"@\char21 (character 21 (octal 25) (hex 15))}{21}
+\indexentry{"@\char22 (character 22 (octal 26) (hex 16))}{22}
+\indexentry{"@\char23 (character 23 (octal 27) (hex 17))}{23}
+\indexentry{"@\char24 (character 24 (octal 30) (hex 18))}{24}
+\indexentry{"@\char25 (character 25 (octal 31) (hex 19))}{25}
+\indexentry{"@\char26 (character 26 (octal 32) (hex 1a))}{26}
+\indexentry{"@\char27 (character 27 (octal 33) (hex 1b))}{27}
+\indexentry{"@\char28 (character 28 (octal 34) (hex 1c))}{28}
+\indexentry{"@\char29 (character 29 (octal 35) (hex 1d))}{29}
+\indexentry{"@\char30 (character 30 (octal 36) (hex 1e))}{30}
+\indexentry{"@\char31 (character 31 (octal 37) (hex 1f))}{31}
+\indexentry{" @"  (space)}{32}
+\indexentry{"!@"! (exclamation point)}{33}
+\indexentry{""@"" (quotation mark))}{34}
+\indexentry{"#@"\# (sharp sign)}{35}
+\indexentry{"$@"\$ (dollar sign)}{36}
+\indexentry{"%@"\% (percent sign)}{37}
+\indexentry{"&@"\& (ampersand)}{38}
+\indexentry{"'@"' (apostrophe)}{39}
+\indexentry{"(@"( (left parenthesis)}{40}
+\indexentry{")@") (right parenthesis)}{41}
+\indexentry{"*@"* (asterisk)}{42}
+\indexentry{"+@"+ (plus)}{43}
+\indexentry{",@", (comma)}{44}
+\indexentry{"-@"- (minus)}{45}
+\indexentry{".@". (period)}{46}
+\indexentry{"/@"/ (slash)}{47}
+\indexentry{0@0}{48}
+\indexentry{1@1}{49}
+\indexentry{2@2}{50}
+\indexentry{3@3}{51}
+\indexentry{4@4}{52}
+\indexentry{5@5}{53}
+\indexentry{6@6}{54}
+\indexentry{7@7}{55}
+\indexentry{8@8}{56}
+\indexentry{9@9}{57}
+\indexentry{":@": (colon)}{58}
+\indexentry{";@"; (semicolon)}{59}
+\indexentry{"<@"$<$ (left angle bracket)}{60}
+\indexentry{"=@"= (equals)}{61}
+\indexentry{">@"$>$ (right angle bracket)}{62}
+\indexentry{"?@"? (query)}{63}
+\indexentry{"@@"@ (at sign)}{64}
+\indexentry{A@A}{65}
+\indexentry{B@B}{66}
+\indexentry{C@C}{67}
+\indexentry{D@D}{68}
+\indexentry{E@E}{69}
+\indexentry{F@F}{70}
+\indexentry{G@G}{71}
+\indexentry{H@H}{72}
+\indexentry{I@I}{73}
+\indexentry{J@J}{74}
+\indexentry{K@K}{75}
+\indexentry{L@L}{76}
+\indexentry{M@M}{77}
+\indexentry{N@N}{78}
+\indexentry{O@O}{79}
+\indexentry{P@P}{80}
+\indexentry{Q@Q}{81}
+\indexentry{R@R}{82}
+\indexentry{S@S}{83}
+\indexentry{T@T}{84}
+\indexentry{U@U}{85}
+\indexentry{V@V}{86}
+\indexentry{W@W}{87}
+\indexentry{X@X}{88}
+\indexentry{Y@Y}{89}
+\indexentry{Z@Z}{90}
+\indexentry{"[@"[ (left square bracket)}{91}
+\indexentry{"\@"\verb=\= (backslash)}{92}
+\indexentry{"]@"] (right square bracket)}{93}
+\indexentry{"^@"\verb=^= (caret)}{94}
+\indexentry{"_@"\verb=_= (underscore)}{95}
+\indexentry{"`@"\verb=~= (grave accent)}{96}
+\indexentry{a@a}{97}
+\indexentry{b@b}{98}
+\indexentry{c@c}{99}
+\indexentry{d@d}{100}
+\indexentry{e@e}{101}
+\indexentry{f@f}{102}
+\indexentry{g@g}{103}
+\indexentry{h@h}{104}
+\indexentry{i@i}{105}
+\indexentry{j@j}{106}
+\indexentry{k@k}{107}
+\indexentry{l@l}{108}
+\indexentry{m@m}{109}
+\indexentry{n@n}{110}
+\indexentry{o@o}{111}
+\indexentry{p@p}{112}
+\indexentry{q@q}{113}
+\indexentry{r@r}{114}
+\indexentry{s@s}{115}
+\indexentry{t@t}{116}
+\indexentry{u@u}{117}
+\indexentry{v@v}{118}
+\indexentry{w@w}{119}
+\indexentry{x@x}{120}
+\indexentry{y@y}{121}
+\indexentry{z@z}{122}
+\indexentry{"{@"\"{ (left brace)}{123}
+\indexentry{"|@"\verb="|= (vertical bar)}{124}
+\indexentry{"}@"\"} (right brace)}{125}
+\indexentry{"~@"\verb=~= (tilde)}{126}
+\indexentry{"@"\verb== (DELete)}{127}
+\indexentry{€@€ (character 128 (octal 200) (hex 80))}{128}
+\indexentry{@ (character 129 (octal 201) (hex 81))}{129}
+\indexentry{‚@‚ (character 130 (octal 202) (hex 82))}{130}
+\indexentry{ƒ@ƒ (character 131 (octal 203) (hex 83))}{131}
+\indexentry{„@„ (character 132 (octal 204) (hex 84))}{132}
+\indexentry{…@… (character 133 (octal 205) (hex 85))}{133}
+\indexentry{†@† (character 134 (octal 206) (hex 86))}{134}
+\indexentry{‡@‡ (character 135 (octal 207) (hex 87))}{135}
+\indexentry{ˆ@ˆ (character 136 (octal 210) (hex 88))}{136}
+\indexentry{‰@‰ (character 137 (octal 211) (hex 89))}{137}
+\indexentry{Š@Š (character 138 (octal 212) (hex 8a))}{138}
+\indexentry{‹@‹ (character 139 (octal 213) (hex 8b))}{139}
+\indexentry{Œ@Œ (character 140 (octal 214) (hex 8c))}{140}
+\indexentry{@ (character 141 (octal 215) (hex 8d))}{141}
+\indexentry{@ (character 142 (octal 216) (hex 8e))}{142}
+\indexentry{@ (character 143 (octal 217) (hex 8f))}{143}
+\indexentry{@ (character 144 (octal 220) (hex 90))}{144}
+\indexentry{‘@‘ (character 145 (octal 221) (hex 91))}{145}
+\indexentry{’@’ (character 146 (octal 222) (hex 92))}{146}
+\indexentry{“@“ (character 147 (octal 223) (hex 93))}{147}
+\indexentry{”@” (character 148 (octal 224) (hex 94))}{148}
+\indexentry{•@• (character 149 (octal 225) (hex 95))}{149}
+\indexentry{–@– (character 150 (octal 226) (hex 96))}{150}
+\indexentry{—@— (character 151 (octal 227) (hex 97))}{151}
+\indexentry{˜@˜ (character 152 (octal 230) (hex 98))}{152}
+\indexentry{™@™ (character 153 (octal 231) (hex 99))}{153}
+\indexentry{š@š (character 154 (octal 232) (hex 9a))}{154}
+\indexentry{›@› (character 155 (octal 233) (hex 9b))}{155}
+\indexentry{œ@œ (character 156 (octal 234) (hex 9c))}{156}
+\indexentry{@ (character 157 (octal 235) (hex 9d))}{157}
+\indexentry{@ (character 158 (octal 236) (hex 9e))}{158}
+\indexentry{Ÿ@Ÿ (character 159 (octal 237) (hex 9f))}{159}
+\indexentry{ @  (character 160 (octal 240) (hex a0))}{160}
+\indexentry{¡@¡ (character 161 (octal 241) (hex a1))}{161}
+\indexentry{¢@¢ (character 162 (octal 242) (hex a2))}{162}
+\indexentry{£@£ (character 163 (octal 243) (hex a3))}{163}
+\indexentry{¤@¤ (character 164 (octal 244) (hex a4))}{164}
+\indexentry{¥@¥ (character 165 (octal 245) (hex a5))}{165}
+\indexentry{¦@¦ (character 166 (octal 246) (hex a6))}{166}
+\indexentry{§@§ (character 167 (octal 247) (hex a7))}{167}
+\indexentry{¨@¨ (character 168 (octal 250) (hex a8))}{168}
+\indexentry{©@© (character 169 (octal 251) (hex a9))}{169}
+\indexentry{ª@ª (character 170 (octal 252) (hex aa))}{170}
+\indexentry{«@« (character 171 (octal 253) (hex ab))}{171}
+\indexentry{¬@¬ (character 172 (octal 254) (hex ac))}{172}
+\indexentry{­@­ (character 173 (octal 255) (hex ad))}{173}
+\indexentry{®@® (character 174 (octal 256) (hex ae))}{174}
+\indexentry{¯@¯ (character 175 (octal 257) (hex af))}{175}
+\indexentry{°@° (character 176 (octal 260) (hex b0))}{176}
+\indexentry{±@± (character 177 (octal 261) (hex b1))}{177}
+\indexentry{²@² (character 178 (octal 262) (hex b2))}{178}
+\indexentry{³@³ (character 179 (octal 263) (hex b3))}{179}
+\indexentry{´@´ (character 180 (octal 264) (hex b4))}{180}
+\indexentry{µ@µ (character 181 (octal 265) (hex b5))}{181}
+\indexentry{¶@¶ (character 182 (octal 266) (hex b6))}{182}
+\indexentry{·@· (character 183 (octal 267) (hex b7))}{183}
+\indexentry{¸@¸ (character 184 (octal 270) (hex b8))}{184}
+\indexentry{¹@¹ (character 185 (octal 271) (hex b9))}{185}
+\indexentry{º@º (character 186 (octal 272) (hex ba))}{186}
+\indexentry{»@» (character 187 (octal 273) (hex bb))}{187}
+\indexentry{¼@¼ (character 188 (octal 274) (hex bc))}{188}
+\indexentry{½@½ (character 189 (octal 275) (hex bd))}{189}
+\indexentry{¾@¾ (character 190 (octal 276) (hex be))}{190}
+\indexentry{¿@¿ (character 191 (octal 277) (hex bf))}{191}
+\indexentry{À@À (character 192 (octal 300) (hex c0))}{192}
+\indexentry{Á@Á (character 193 (octal 301) (hex c1))}{193}
+\indexentry{Â@Â (character 194 (octal 302) (hex c2))}{194}
+\indexentry{Ã@Ã (character 195 (octal 303) (hex c3))}{195}
+\indexentry{Ä@Ä (character 196 (octal 304) (hex c4))}{196}
+\indexentry{Å@Å (character 197 (octal 305) (hex c5))}{197}
+\indexentry{Æ@Æ (character 198 (octal 306) (hex c6))}{198}
+\indexentry{Ç@Ç (character 199 (octal 307) (hex c7))}{199}
+\indexentry{È@È (character 200 (octal 310) (hex c8))}{200}
+\indexentry{É@É (character 201 (octal 311) (hex c9))}{201}
+\indexentry{Ê@Ê (character 202 (octal 312) (hex ca))}{202}
+\indexentry{Ë@Ë (character 203 (octal 313) (hex cb))}{203}
+\indexentry{Ì@Ì (character 204 (octal 314) (hex cc))}{204}
+\indexentry{Í@Í (character 205 (octal 315) (hex cd))}{205}
+\indexentry{Î@Î (character 206 (octal 316) (hex ce))}{206}
+\indexentry{Ï@Ï (character 207 (octal 317) (hex cf))}{207}
+\indexentry{Ğ@Ğ (character 208 (octal 320) (hex d0))}{208}
+\indexentry{Ñ@Ñ (character 209 (octal 321) (hex d1))}{209}
+\indexentry{Ò@Ò (character 210 (octal 322) (hex d2))}{210}
+\indexentry{Ó@Ó (character 211 (octal 323) (hex d3))}{211}
+\indexentry{Ô@Ô (character 212 (octal 324) (hex d4))}{212}
+\indexentry{Õ@Õ (character 213 (octal 325) (hex d5))}{213}
+\indexentry{Ö@Ö (character 214 (octal 326) (hex d6))}{214}
+\indexentry{×@× (character 215 (octal 327) (hex d7))}{215}
+\indexentry{Ø@Ø (character 216 (octal 330) (hex d8))}{216}
+\indexentry{Ù@Ù (character 217 (octal 331) (hex d9))}{217}
+\indexentry{Ú@Ú (character 218 (octal 332) (hex da))}{218}
+\indexentry{Û@Û (character 219 (octal 333) (hex db))}{219}
+\indexentry{Ü@Ü (character 220 (octal 334) (hex dc))}{220}
+\indexentry{İ@İ (character 221 (octal 335) (hex dd))}{221}
+\indexentry{Ş@Ş (character 222 (octal 336) (hex de))}{222}
+\indexentry{ß@ß (character 223 (octal 337) (hex df))}{223}
+\indexentry{à@à (character 224 (octal 340) (hex e0))}{224}
+\indexentry{á@á (character 225 (octal 341) (hex e1))}{225}
+\indexentry{â@â (character 226 (octal 342) (hex e2))}{226}
+\indexentry{ã@ã (character 227 (octal 343) (hex e3))}{227}
+\indexentry{ä@ä (character 228 (octal 344) (hex e4))}{228}
+\indexentry{å@å (character 229 (octal 345) (hex e5))}{229}
+\indexentry{æ@æ (character 230 (octal 346) (hex e6))}{230}
+\indexentry{ç@ç (character 231 (octal 347) (hex e7))}{231}
+\indexentry{è@è (character 232 (octal 350) (hex e8))}{232}
+\indexentry{é@é (character 233 (octal 351) (hex e9))}{233}
+\indexentry{ê@ê (character 234 (octal 352) (hex ea))}{234}
+\indexentry{ë@ë (character 235 (octal 353) (hex eb))}{235}
+\indexentry{ì@ì (character 236 (octal 354) (hex ec))}{236}
+\indexentry{í@í (character 237 (octal 355) (hex ed))}{237}
+\indexentry{î@î (character 238 (octal 356) (hex ee))}{238}
+\indexentry{ï@ï (character 239 (octal 357) (hex ef))}{239}
+\indexentry{ğ@ğ (character 240 (octal 360) (hex f0))}{240}
+\indexentry{ñ@ñ (character 241 (octal 361) (hex f1))}{241}
+\indexentry{ò@ò (character 242 (octal 362) (hex f2))}{242}
+\indexentry{ó@ó (character 243 (octal 363) (hex f3))}{243}
+\indexentry{ô@ô (character 244 (octal 364) (hex f4))}{244}
+\indexentry{õ@õ (character 245 (octal 365) (hex f5))}{245}
+\indexentry{ö@ö (character 246 (octal 366) (hex f6))}{246}
+\indexentry{÷@÷ (character 247 (octal 367) (hex f7))}{247}
+\indexentry{ø@ø (character 248 (octal 370) (hex f8))}{248}
+\indexentry{ù@ù (character 249 (octal 371) (hex f9))}{249}
+\indexentry{ú@ú (character 250 (octal 372) (hex fa))}{250}
+\indexentry{û@û (character 251 (octal 373) (hex fb))}{251}
+\indexentry{ü@ü (character 252 (octal 374) (hex fc))}{252}
+\indexentry{ı@ı (character 253 (octal 375) (hex fd))}{253}
+\indexentry{ş@ş (character 254 (octal 376) (hex fe))}{254}
+\indexentry{ÿ@ÿ (character 255 (octal 377) (hex ff))}{255}
+

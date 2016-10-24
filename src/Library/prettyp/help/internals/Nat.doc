@@ -1,0 +1,10 @@
+\DOC Nat
+
+\TYPE {Nat : (int -> nat)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

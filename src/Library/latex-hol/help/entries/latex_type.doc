@@ -1,0 +1,45 @@
+\DOC latex_type
+
+\TYPE {latex_type : (type -> void)}
+
+\SYNOPSIS
+Translate \HOL\ types to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+The function {latex_type} converts a \HOL\ type to \LaTeX\ format for
+typesetting it. All \LaTeX\ special characters are escaped or changed
+to a \LaTeX\ command which should produces the desired symbol.  The
+result is written to the user's terminal. 
+For example,
+{
+# latex_type(":* # **");;
+":* \# **"
+() : void
+
+# latex_type(type_of"SUC");;
+":num -> num"
+() : void
+}
+The output of this function can be incorporated into a \LaTeX\
+document. Since types are usually printed in {typewriter} font, the
+above output can be put into a document as follows:
+{
+   The type of {SUC} is {\tt ":num -> num"} while a generic
+   pair has type {\tt ":* \# **"}.
+}
+This will produces: The type of {SUC} is {":num -> num"} while a generic
+pair has type {":* \# **"}.
+
+\FAILURE
+Fails if the argument is not a type.
+
+\SEEALSO
+{latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to}, {latex_term_add_to},
+{latex_thm}, {latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to}
+and {latex_theory_to}
+
+\ENDDOC

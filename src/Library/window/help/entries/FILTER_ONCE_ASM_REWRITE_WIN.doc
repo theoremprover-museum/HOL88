@@ -1,0 +1,26 @@
+\DOC FILTER_ONCE_ASM_REWRITE_WIN
+
+\TYPE {FILTER_ONCE_ASM_REWRITE_WIN :  ((term -> bool) -> thm list -> void)}
+
+\SYNOPSIS
+Rewrite the focus with selected terms of the context, theorems and basics.
+
+\LIBRARY window
+
+\DESCRIBE
+{FILTER_ONCE_ASM_REWRITE_WIN p thms} rewrites the focus of a
+window with {thms}, those theorems in the context of the window, the
+conclusions of which satisfy the predicate {p}, and a list of basic rewrites.
+
+\FAILURE
+{FILTER_ONCE_ASM_REWRITE_WIN p thms} will fail if the hypotheses of any of
+the theorems in {thms} are not a subset of the conjectures of the window.
+
+\SEEALSO
+ASM_REWRITE_WIN, GEN_REWRITE_WIN, PURE_REWRITE_WIN, REWRITE_WIN, 
+PURE_ONCE_REWRITE_WIN, ONCE_REWRITE_WIN,
+PURE_ASM_REWRITE_WIN, PURE_ONCE_ASM_REWRITE_WIN,
+ONCE_ASM_REWRITE_WIN, FILTER_ASM_REWRITE_WIN,
+FILTER_PURE_ASM_REWRITE_WIN, FILTER_PURE_ONCE_ASM_REWRITE_WIN
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM REAL_MUL_RID REAL
+|- !x. x * (& 1) = x
+\ENDTHEOREM

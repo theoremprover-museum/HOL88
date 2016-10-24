@@ -1,0 +1,52 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  12 MAR 1992 20:31
+**finite_sets
+(Manual/finite_sets.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/book.sty
+Document Style `book' <24 Nov 89>.
+(/usr/lib/tex/macros/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/fleqn.sty
+\mathindent=\dimen100
+)
+! I can't find file `../../../Manual/LaTeX/alltt.sty'.
+<to be read again> 
+                   \relax 
+...
+l.7 ...        ../../../Manual/LaTeX/layout]{book}
+                                                  
+Please type another input file name: 
+! I can't find file `.tex'.
+<to be read again> 
+                   \relax 
+...
+l.7 ...        ../../../Manual/LaTeX/layout]{book}
+                                                  
+Please type another input file name: 
+! Emergency stop.
+<to be read again> 
+                   \relax 
+...
+l.7 ...        ../../../Manual/LaTeX/layout]{book}
+                                                  
+End of file on the terminal!
+
+ 
+Here is how much of TeX's memory you used:
+ 155 strings out of 4463
+ 1587 string characters out of 63169
+ 26627 words of memory out of 262141
+ 2111 multiletter control sequences out of 9500
+ 18996 words of font info for 72 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 12i,0n,17p,173b,15s stack positions out of 300i,100n,60p,3000b,4000s
+No pages of output.

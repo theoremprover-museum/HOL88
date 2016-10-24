@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_CASES REAL
+|- !x. (x = & 0) \/ (& 0) < (abs x)
+\ENDTHEOREM

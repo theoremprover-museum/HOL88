@@ -1,0 +1,22 @@
+\DOC win_thm
+
+\TYPE {win_thm : (window -> thm)}
+
+\SYNOPSIS
+The theorem stored in a window.
+
+\LIBRARY window
+
+\DESCRIBE
+Returns the theorem stored in a window.
+The theorem will have the form that assuming some subset of the hypotheses and
+conjectures of the window, the current focus is related to the original focus
+by the relationship the window is supposed to preserve.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+WIN_THM, SAVE_WIN_THM
+
+\ENDDOC

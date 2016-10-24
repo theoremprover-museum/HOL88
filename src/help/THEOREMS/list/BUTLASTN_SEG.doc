@@ -1,0 +1,3 @@
+\THEOREM BUTLASTN_SEG list
+|- !n l. n <= (LENGTH l) ==> (BUTLASTN n l = SEG((LENGTH l) - n)0 l)
+\ENDTHEOREM

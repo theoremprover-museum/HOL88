@@ -1,0 +1,13 @@
+! Command file to build MakeIndex on TOPS-20 with KCC
+! [12-Dec-89]
+
+kcc -DOS_TOPS20 -DKCC_20 -DSHORTNAMES -Dshort=int -c genind.c
+kcc -DOS_TOPS20 -DKCC_20 -DSHORTNAMES -Dshort=int -c mkind.c
+kcc -DOS_TOPS20 -DKCC_20 -DSHORTNAMES -Dshort=int -c qsort.c
+kcc -DOS_TOPS20 -DKCC_20 -DSHORTNAMES -Dshort=int -c scanid.c
+kcc -DOS_TOPS20 -DKCC_20 -DSHORTNAMES -Dshort=int -c scanst.c
+kcc -DOS_TOPS20 -DKCC_20 -DSHORTNAMES -Dshort=int -c sortid.c
+kcc -DOS_TOPS20 -DKCC_20 -DSHORTNAMES -Dshort=int genind.rel mkind.rel -
+        qsort.rel scanid.rel scanst.rel sortid.rel -o makidx.exe
+reset
+rename makidx.exe makeindex.exe

@@ -1,0 +1,3 @@
+\THEOREM GREATER_EQ_ANTISYM ineq
+|- !n m. ~(n >= m /\ n < m)
+\ENDTHEOREM

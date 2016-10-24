@@ -1,0 +1,31 @@
+\DOC tactic_win
+
+\TYPE {tactic_win :  (tactic -> window -> window)}
+
+\SYNOPSIS
+Apply a tactic to the focus of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+Assuming {TAC} is an inference rule of the following form:
+{
+    P |- c
+   ======== TAC
+    P |- c'
+}
+\noindent {tactic_win TAC} can be used to transform the focus of a window
+from {c} to {c'}, providing the window is supposed to preserve {"==>"} or
+some weaker relation.
+
+\FAILURE
+{tactic_win t} will fail if the window is not supposed to preserve some
+relation which is equal to or weaker than {"==>"} or if the
+tactic produces multiple subgoals.
+
+\SEEALSO
+transform_win, TRANSFORM_WIN, convert_win, CONVERT_WIN, rule_win,
+RULE_WIN, thm_rule_win, THM_RULE_WIN, foc_rule_win, FOC_RULE_WIN,
+TACTIC_WIN, rewrite_win, REWRITE_WIN
+
+\ENDDOC

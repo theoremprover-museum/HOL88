@@ -1,0 +1,3 @@
+\THEOREM ltree_Axiom ltree
+|- !f. ?! fn. !v tl. fn(Node v tl) = f(MAP fn tl)v tl
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM FILTER_SNOC list
+|- !P x l. FILTER P(SNOC x l) = (P x => SNOC x(FILTER P l) | FILTER P l)
+\ENDTHEOREM

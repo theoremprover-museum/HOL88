@@ -1,0 +1,9 @@
+\THEOREM MULT_CLAUSES arithmetic
+|- !m n.
+    (0 * m = 0) /\
+    (m * 0 = 0) /\
+    (1 * m = m) /\
+    (m * 1 = m) /\
+    ((SUC m) * n = (m * n) + n) /\
+    (m * (SUC n) = m + (m * n))
+\ENDTHEOREM

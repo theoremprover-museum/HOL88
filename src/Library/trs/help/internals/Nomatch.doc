@@ -1,0 +1,10 @@
+\DOC Nomatch
+
+\TYPE {Nomatch : result_of_match}
+
+\SYNOPSIS
+Internal value of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

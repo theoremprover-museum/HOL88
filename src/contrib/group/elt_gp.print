@@ -1,0 +1,158 @@
+print_theory `elt_gp`;;
+The Theory elt_gp
+Parents --  HOL     
+Constants --
+  GROUP ":(* -> bool) # (* -> (* -> *)) -> bool"
+  ID ":(* -> bool) # (* -> (* -> *)) -> *"
+  INV ":(* -> bool) # (* -> (* -> *)) -> (* -> *)"     
+Definitions --
+  GROUP_DEF
+    |- !G prod.
+        GROUP(G,prod) =
+        (!x y. G x /\ G y ==> G(prod x y)) /\
+        (!x y z.
+          G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y z))) /\
+        (?e.
+          G e /\
+          (!x. G x ==> (prod e x = x)) /\
+          (!x. G x ==> (?y. G y /\ (prod y x = e))))
+  ID_DEF
+    |- !G prod.
+        ID(G,prod) =
+        (@e.
+          G e /\
+          (!x. G x ==> (prod e x = x)) /\
+          (!x. G x ==> (?y. G y /\ (prod y x = e))))
+  INV_DEF
+    |- !G prod x. INV(G,prod)x = (@y. G y /\ (prod y x = ID(G,prod)))
+  
+Theorems --
+
+%A group is closed under multiplication.%
+
+  CLOSURE  |- GROUP(G,prod) ==> (!x y. G x /\ G y ==> G(prod x y))
+
+
+%The multiplication in a group is associative.%
+
+  GROUP_ASSOC
+    |- GROUP(G,prod) ==>
+       (!x y z.
+         G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y z)))
+
+
+%ID is both a left and a right identity in G.%
+
+  ID_LEMMA
+    |- GROUP(G,prod) ==>
+       G(ID(G,prod)) /\
+       (!x. G x ==> (prod(ID(G,prod))x = x)) /\
+       (!x. G x ==> (prod x(ID(G,prod)) = x)) /\
+       (!x. G x ==> (?y. G y /\ (prod y x = ID(G,prod))))
+
+
+%G is closed under the taking of inverses.%
+
+  INV_CLOSURE  |- GROUP(G,prod) ==> (!x. G x ==> G(INV(G,prod)x))
+
+
+%A left inverse for x in G with respect to ID is also a right inverse
+ for x in G with respect to ID.%
+
+  LEFT_RIGHT_INV
+    |- GROUP(G,prod) ==>
+       (!x y.
+         G x /\ G y ==>
+         (prod y x = ID(G,prod)) ==> 
+         (prod x y = ID(G,prod)))
+
+
+%(INV x) is both a left inverse for x and a right inverse for x in G.%
+
+  INV_LEMMA
+    |- GROUP(G,prod) ==>
+       (!x.
+         G x ==>
+         (prod(INV(G,prod)x)x = ID(G,prod)) /\
+         (prod x(INV(G,prod)x) = ID(G,prod)))
+
+
+%We have right and left cancelation in G.%
+
+  LEFT_CANCELLATION
+    |- GROUP(G,prod) ==>
+       (!x y z. G x /\ G y /\ G z ==> (prod x y = prod x z) ==> (y = z))
+
+  RIGHT_CANCELLATION
+    |- GROUP(G,prod) ==>
+       (!x y z. G x /\ G y /\ G z ==> (prod y x = prod z x) ==> (y = z))
+
+
+%Given elements x and y in G, there exist a unique  element z in G such
+ that (prod x z = y).%
+
+  RIGHT_ONE_ONE_ONTO
+    |- GROUP(G,prod) ==>
+       (!x y.
+         G x /\ G y ==>
+         (?z.
+           G z /\
+           (prod x z = y) /\
+           (!u. G u /\ (prod x u = y) ==> (u = z))))
+
+
+%Given elements x and y in G, there exist a unique  element z in G such
+ that (prod z x = y).%
+
+  LEFT_ONE_ONE_ONTO
+    |- GROUP(G,prod) ==>
+       (!x y.
+         G x /\ G y ==>
+         (?z.
+           G z /\
+           (prod z x = y) /\
+           (!u. G u /\ (prod u x = y) ==> (u = z))))
+
+
+%ID is the unique left identity and the unique right identity in G.%
+
+  UNIQUE_ID
+    |- GROUP(G,prod) ==>
+       (!e.
+         G e /\
+         ((?x. G x /\ (prod e x = x)) \/ (?x. G x /\ (prod x e = x))) ==>
+         (e = ID(G,prod)))
+
+
+%(INV x) is the unique left inverse for x.%
+
+  UNIQUE_INV
+    |- GROUP(G,prod) ==>
+       (!x.
+         G x ==>
+         (!u. G u /\ (prod u x = ID(G,prod)) ==> (u = INV(G,prod)x)))
+
+
+%The inverse of the identity is the identity.%
+
+  INV_ID_LEMMA
+    |- GROUP(G,prod) ==> (INV(G,prod)(ID(G,prod)) = ID(G,prod))
+
+
+%The inverse of the inverse of x is x.%
+
+  INV_INV_LEMMA
+    |- GROUP(G,prod) ==> (!x. G x ==> (INV(G,prod)(INV(G,prod)x) = x))
+
+
+%The group product anti-distributes over the inverse.%
+
+  DIST_INV_LEMMA
+    |- GROUP(G,prod) ==>
+       (!x y.
+         G x /\ G y ==>
+         (prod(INV(G,prod)x)(INV(G,prod)y) = INV(G,prod)(prod y x)))
+  
+******************** elt_gp ********************
+
+() : void

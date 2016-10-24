@@ -1,0 +1,26 @@
+\DOC abs_type_info
+
+\TYPE {abs_type_info : (thm -> type)}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Retrieves the type of an abstract representation.
+
+\DESCRIBE
+A call to {abs_type_info thm} returns a type representing the abstract
+type of the object declared in the theorem {thm}.
+
+\USES
+{abs_type_info} is used to get the type of an abstract representation
+for use in making definitions and proving theorems about the abstract
+representation.  
+
+\FAILURE
+Fails if theorem is not of the form returned by
+{new_abstract_representation}. 
+
+\SEEALSO
+new_abstract_representation
+
+\ENDDOC

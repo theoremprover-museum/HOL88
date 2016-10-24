@@ -1,0 +1,4 @@
+\THEOREM FIRSTN_APPEND1 list
+|- !n l1.
+    n <= (LENGTH l1) ==> (!l2. FIRSTN n(APPEND l1 l2) = FIRSTN n l1)
+\ENDTHEOREM

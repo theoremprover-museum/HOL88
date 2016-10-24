@@ -1,0 +1,4 @@
+\THEOREM EQ_SYM_EQ \none
+|- !x y. (x = y) = (y = x)
+\ENDTHEOREM
+

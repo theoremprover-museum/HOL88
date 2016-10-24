@@ -1,0 +1,15 @@
+\DOC focus
+
+\TYPE {focus : (window -> term)}
+
+\SYNOPSIS
+The focus of a window.
+
+\LIBRARY window
+
+\FAILURE
+
+\SEEALSO
+FOCUS
+
+\ENDDOC

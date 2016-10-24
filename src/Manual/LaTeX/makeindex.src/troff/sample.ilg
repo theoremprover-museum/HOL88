@@ -1,0 +1,7 @@
+This is makeindex, portable version 2.6 [7-14-88].
+Scanning style file troff.ist..........................done (26 attributes redefined, 0 ignored).
+Scanning input file sample.idx....done (4 entries accepted, 0 rejected).
+Sorting entries....done (9 comparisons).
+Generating output file sample.ind....done (71 lines written, 0 warnings).
+Output written in sample.ind.
+Transcript written in sample.ilg.

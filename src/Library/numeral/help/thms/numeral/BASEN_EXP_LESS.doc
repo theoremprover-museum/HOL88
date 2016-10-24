@@ -1,0 +1,8 @@
+\THEOREM BASEN_EXP_LESS numeral
+|- !r l.
+    IS_BASEN r l ==>
+    IS_NORMALIZED l ==>
+    ~NULL l ==>
+    1 < r ==>
+    ((r EXP ((LENGTH l) - 1)) - 1) < (BASEN r l)
+\ENDTHEOREM

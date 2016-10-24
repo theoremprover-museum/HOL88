@@ -1,0 +1,3 @@
+\THEOREM EVEN_ODD_SUC odd_even
+|- !n. (EVEN(SUC n) = ODD n) /\ (ODD(SUC n) = EVEN n)
+\ENDTHEOREM

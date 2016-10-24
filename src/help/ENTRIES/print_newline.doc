@@ -1,0 +1,35 @@
+\DOC print_newline
+
+\TYPE {print_newline : (void -> void)}
+
+\SYNOPSIS
+Prints a newline.
+
+\DESCRIBE
+The function {print_newline} starts the text following it on the next
+line. This is done irrespective of consistent or inconsistent
+formatting and margin settings.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+A simple example is:
+{
+   #let example =
+      (print_string `first`;
+       print_newline();
+       print_string `second`;
+       print_newline());;
+}
+\noindent The result is:
+{
+   first
+   second
+   example = () : void
+}
+
+\SEEALSO
+print_begin, print_end, print_break
+
+\ENDDOC

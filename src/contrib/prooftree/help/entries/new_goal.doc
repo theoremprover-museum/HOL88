@@ -1,0 +1,36 @@
+\DOC new_goal
+
+\TYPE {new_goal : (string -> goal -> void)}
+
+\SYNOPSIS
+Starts a new named proof tree with a goal.
+
+\DESCRIBE
+This is analogous to the previous {set_goal} function, to start a
+new proof effort. Here there is a new argument, which gives a name to
+the proof being constructed.
+When a goal is started with a certain name, previous proof attempts
+with that name are removed.
+
+\KEYWORDS
+subgoal.
+
+\LIBRARY prooftree
+
+\USES
+To set up a new proof tree.
+
+\EXAMPLE
+{
+# new_goal `myproof` ([], "! a b . ( a /\ b) = ( b /\ a)") ;;
+
+"!a b. a /\ b = b /\ a"
+
+() : void
+}
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

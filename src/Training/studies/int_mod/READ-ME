@@ -1,0 +1,14 @@
++=====================================================================+
+|  HOL CASE STUDY: Modular Arithmetic	 (and supporting material)    |
++=====================================================================+
+
+
+DIRECTORY		DESCRIPTION
+                     
+  doing_alg_paper         Supporting paper on doing algebra in HOL.
+
+  int_mod.shell           \
+  int_sbgp.shell1         |- transcripts of related HOL sessions
+  int_sbgp.shell2         /
+
+  mod_arith_study         LaTeX sources for the modular arithmetic case study. 

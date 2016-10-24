@@ -1,0 +1,30 @@
+\DOC BASEN_GE_CONV
+
+\TYPE {BASEN_GE_CONV : term -> thm}
+
+\SYNOPSIS
+Given a term comparing two numerals, returns a theorem saying whether one is
+greater than or equal to the other.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term of the form {"BASEN r [...] >= BASEN r [...]"}, returns a theorem
+of the form {|- (BASEN r [...] >= BASEN r [...]) = b}, where {b} is {"T"} or
+{"F"}.
+
+\FAILURE
+The argument must be of the expected form, and the radix of the two numerals
+must be the same, and the radix must be a numeric constant that is at least
+2, and all elements of the digit lists must be numeric constants, and must be
+less than the radix.
+
+\EXAMPLE
+{
+#BASEN_GE_CONV "BASEN 16 [8;10;14] >= BASEN 16 [12;4]";;
+|- (BASEN 16[8;10;14]) >= (BASEN 16[12;4]) = T
+}
+\SEEALSO
+BASEN_COMPARE_CONV, BASEN_GT_CONV, BASEN_LE_CONV, BASEN_LT_CONV.
+
+\ENDDOC

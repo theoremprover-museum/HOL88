@@ -1,0 +1,3 @@
+\THEOREM LESS_SUB_IMP_SUM_LESS sub
+|- !i m. i < (m - 1) /\ 1 < m ==> (i + 1) < m
+\ENDTHEOREM

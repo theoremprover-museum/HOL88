@@ -1,0 +1,20 @@
+#!/bin/sh 
+# $1 should be a pathname to the HOL distribution directory
+# $2 = input file.idx
+# $3 = output tex file (e.g. "index.tex")
+arch=`/bin/arch`
+if [ -r $1/Manual/LaTeX/makeindex.bin/$arch/makeindex ]
+then
+   exec $1/Manual/LaTeX/makeindex.bin/$arch/makeindex < $2 > $3
+else
+   case $arch in
+        mips_ultrix) print="DECStations";;
+        sun3*) print="Sun3's";;
+        sun4*) print="Sparcs";;
+        hp*) print="Bobcats";;
+        *) print=$arch;;
+   esac
+   echo ""
+   echo "     makeindex is not built for $print."
+   echo ""
+fi

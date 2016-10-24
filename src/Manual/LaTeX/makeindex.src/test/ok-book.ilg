@@ -1,0 +1,6 @@
+This is makeindex, portable version 2.11 [11-Sep-1991].
+Scanning input file book.idx........done (4241 entries accepted, 0 rejected).
+Sorting entries...........................................done (59366 comparisons).
+Generating output file book.ind......done (785 lines written, 0 warnings).
+Output written in book.ind.
+Transcript written in book.ilg.

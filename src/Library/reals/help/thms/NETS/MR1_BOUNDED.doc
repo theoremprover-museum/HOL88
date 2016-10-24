@@ -1,0 +1,5 @@
+\THEOREM MR1_BOUNDED NETS
+|- !g f.
+    bounded(mr1,g)f =
+    (?k N. g N N /\ (!n. g n N ==> (abs(f n)) real_lt k))
+\ENDTHEOREM

@@ -1,0 +1,97 @@
+/************************************************************************/
+/*	Copyright 1988 by Chuck Musciano and Harris Corporation		*/
+/*									*/
+/*	Permission to use, copy, modify, and distribute this software	*/
+/*	and its documentation for any purpose and without fee is	*/
+/*	hereby granted, provided that the above copyright notice	*/
+/*	appear in all copies and that both that copyright notice and	*/
+/*	this permission notice appear in supporting documentation, and	*/
+/*	that the name of Chuck Musciano and Harris Corporation not be	*/
+/*	used in advertising or publicity pertaining to distribution	*/
+/*	of the software without specific, written prior permission.	*/
+/*	Chuck Musciano and Harris Corporation make no representations	*/
+/*	about the suitability of this software for any purpose.  It is	*/
+/*	provided "as is" without express or implied warranty.		*/
+/************************************************************************/
+
+
+     Tooltool is a new way to create windowed applications.  Using existing
+applications, and a simple specification language, users can produce
+windowed tools with gadgets, mouse actions, and keyboard remapping without
+having to learn or use the SunView programming interface.
+
+     To build tooltool, first check a few site dependencies in the Makefile
+and in tooltool.c.  These dependencies are:
+
+	In Makefile:
+		BINDIR		Where the executable will go, normally
+				/usr/local/bin
+		MANDIR		Where the man page will go, normally
+				/usr/man/manl
+		MANEXT		The man page extension, usually 'l',
+				for local man pages.  You may want to
+				make MANDIR /usr/man/man1, in which case
+				MANEXT should be '1'.
+		LPR		The complete command you would use to
+				print something on your local LaserWriter.
+				Typically, this is /usr/ucb/lpr, but you
+				might need a different printer name than
+				the default.
+	In windows.c:
+		TOOLTOOL_ICON	Where the tooltool icon can be found.
+				Normally, it is in the directory that you
+				created tooltool in, but you might want to move
+				it to a more global place.  We keep all our
+				icons in /usr/local/images, for example.
+				Fix this path to match where you put the icon.
+
+You can then build tooltool by typing "make tooltool".  If you wish to try out
+the sample applications, cd to samples, and type "../tooltool -f <file>.tt",
+where <file>.tt is any of the .tt files in the directory.  See the README
+in samples for more information.  When in samples, if you haven't installed
+tooltool, you'll need to use "../tooltool" to invoke tooltool.
+
+     Tooltool comes with extensive documentation, which is printed by typing
+"make manual".  The manual will emerge from your LaserWriter.  It should print
+on either a regular LaserWriter, LaserWriter Plus, or LaserWriter II NT or
+NTX.  If you have problems getting it to print, please send e-mail.  If you
+do not have a LaserWriter, I'll be glad to mail you hardcopy.  Just send
+a request via e-mail or call me.
+
+     I think tooltool opens up a new world of easy application programming.
+I am very interested in seeing how others use tooltool, and any comments
+or suggestions you may have.  If you send me your e-mail address, I will
+keep you up to date with bug fixes, patches, and enhancements.  If you
+have a good tooltool file, I'll be glad to distribute it to anyone who
+requests it.  In particular, I'd like to see tooltool specs for things
+like vi, gnuemacs, various games, and the like.  Bottom line: get on the
+tooltool mailing list, and I'll keep you up to date as things progress.
+
+     Many thanks are due the tooltool betatesting team, who perservered
+through early releases of this version while I frantically fixed all the
+bugs.  The betatesting team was:
+
+	Ian Clowes			Ken Laprade
+	Paul J. Emerson			Andy Lord
+	Phill Everson			David Masterson
+	David Fickes			Neil Movold
+	David Forslund			Troy D. Spetz
+	Len Jacobs			Larry W. Virden
+	Orest Jarosiewicz		C. Philip Wood
+	Doug Johnson			Peter Windsor
+	Philip Kegelmeyer		Mitchell F. Wyle 	
+	Francis Kam
+
+     Please send all bugs, comments, requests, suggestions, and tooltool
+files to:
+
+	Chuck Musciano
+	Advanced Technology Department
+	Harris Corporation
+	PO Box 37, MS 3A/1912
+	Melbourne, FL 32902
+
+	(407) 727-6131
+	ARPA: chuck@trantor.harris-atd.com
+
+I hope you find tooltool useful!

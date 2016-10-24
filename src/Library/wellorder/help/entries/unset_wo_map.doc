@@ -1,0 +1,28 @@
+\DOC unset_wo_map
+
+\TYPE {unset_wo_map : (void -> void)}
+
+\SYNOPSIS
+Removes interface map for constants in the ``wellorder'' library.
+
+\LIBRARY wellorder
+
+\DESCRIBE
+To increase flexibility, the constants used in the wellorder library are
+declared with a {wo_} prefix. The {unset_wo_map} function cancels the effect of
+{set_wo_map}, which sets up an interface map to eliminate them from view. Any
+existing interface map is preserved when the wellorder-related entries are
+eliminated. The constants which have their prefixes hidden are: {subset},
+{Union}, {fl}, {poset}, {chain}, {woset} and {inseg}.
+
+\FAILURE
+Fails only if some entries in the interface map matching the above have been
+set by other means, so if subtracted, a constant would be hidden.
+
+\COMMENTS
+The interface map is not set up by default when the library is loaded.
+
+\SEEALSO
+interface_map, set_interface_map, set_wo_map.
+
+\ENDDOC

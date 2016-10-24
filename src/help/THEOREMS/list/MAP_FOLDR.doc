@@ -1,0 +1,3 @@
+\THEOREM MAP_FOLDR list
+|- !f l. MAP f l = FOLDR(\x l'. CONS(f x)l')[]l
+\ENDTHEOREM

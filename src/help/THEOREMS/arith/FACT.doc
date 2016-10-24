@@ -1,0 +1,3 @@
+\THEOREM FACT arithmetic
+|- (FACT 0 = 1) /\ (!n. FACT(SUC n) = (SUC n) * (FACT n))
+\ENDTHEOREM

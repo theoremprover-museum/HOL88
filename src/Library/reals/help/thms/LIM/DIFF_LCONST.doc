@@ -1,0 +1,6 @@
+\THEOREM DIFF_LCONST LIM
+|- !f x l.
+    (f diffl l)x /\
+    (?d. (& 0) < d /\ (!y. (abs(x - y)) < d ==> (f y = f x))) ==>
+    (l = & 0)
+\ENDTHEOREM

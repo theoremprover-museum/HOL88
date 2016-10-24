@@ -1,0 +1,1001 @@
+\chapter{ML Functions in the numeral Library}
+\input{entries-intro}
+\DOC{BASEN\_ADD\_CONV}
+
+\TYPE {\small\verb%BASEN_ADD_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves the result of adding one numeral to another.
+
+\DESCRIBE
+If {\small\verb%m%} and {\small\verb%n%} are lists of digits in base {\small\verb%r%}, and {\small\verb%p%} is the list of digits
+in the base {\small\verb%r%} numeral representing the sum of {\small\verb%m%} and {\small\verb%n%}, then
+{\small\verb%BASEN_ADD_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- (BASEN r m + BASEN r n) = BASEN r p
+\end{verbatim}
+}
+If the addend and augend are not normalized, the resulting theorem expresses
+them normalized anyway.
+
+\FAILURE
+The argument to {\small\verb%BASEN_ADD_CONV%} must be of the form
+{\small\verb%"BASEN r [...] + BASEN r [...]"%}, the radix of the two numerals must be the
+same, and the radix must be a numeric constant that is at least 2, and all
+elements of the digit lists must be numeric constants, and must be less than
+the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_ADD_CONV "BASEN 10 [3;4;5] + BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] + BASEN 10 [3;4;5] = BASEN 10 [6;9;0]
+
+#BASEN_ADD_CONV "BASEN 2 [1;1;1;1] + BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] + BASEN 2 [1;1;1;0]) = BASEN 2 [1;1;1;0;1]
+
+#BASEN_ADD_CONV "BASEN 16 [8;10;14] + BASEN 16 [12;4]";;
+|- BASEN 16 [8;10;14] + BASEN 16 [12;4]) = BASEN 16 [9;7;2]
+\end{verbatim}
+}
+\SEEALSO
+BASEN_SUC_CONV.
+
+\ENDDOC
+\DOC{BASEN\_COMPARE\_CONV}
+
+\TYPE {\small\verb%BASEN_COMPARE_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a comparison of two numerals, returns a theorem relating their values
+with {\small\verb%"<"%}, {\small\verb%">"%}, or {\small\verb%"="%}.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"BASEN r [...] op BASEN r [...]"%}, returns a theorem
+of the form
+{\par\samepage\setseps\small
+\begin{verbatim}
+   |- ( BASEN r [...] ?? BASEN r [...] ) = T
+\end{verbatim}
+}
+where {\small\verb%??%} is {\small\verb%<%}, {\small\verb%>%} or {\small\verb%=%}.  Note that {\small\verb%op%} from the input term is ignored.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_COMPARE_CONV "BASEN 10 [1;2;3] < BASEN 10 [3;4;5]";;
+|- (BASEN 10[1;2;3]) < (BASEN 10[3;4;5]) = T
+
+#BASEN_COMPARE_CONV "BASEN 10 [7;8;9] < BASEN 10 [3;4;5]";;
+|- (BASEN 10[7;8;9]) > (BASEN 10[3;4;5]) = T
+\end{verbatim}
+}
+\FAILURE
+Fails if the numerals' radices are different, or if any element of either
+list is not a numeric constant, or is not less than the radix, or if the
+radix is 0 or 1.
+
+\SEEALSO
+BASEN_EQ_CONV, BASEN_LT_CONV, BASEN_LE_CONV, BASEN_GT_CONV, BASEN_GE_CONV.
+
+\ENDDOC
+\DOC{BASEN\_DIV\_CONV}
+
+\TYPE {\small\verb%BASEN_DIV_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves the result of dividing one numeral by another.
+
+\DESCRIBE
+If {\small\verb%m%} and {\small\verb%n%} are lists of digits in base {\small\verb%r%}, and {\small\verb%p%} is the list of digits
+in the base {\small\verb%r%} numeral representing the sum of {\small\verb%m%} and {\small\verb%n%}, then
+{\small\verb%BASEN_DIV_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- (BASEN r m DIV BASEN r n) = BASEN r p
+\end{verbatim}
+}
+\FAILURE
+The argument term must be of the form {\small\verb%"BASEN r [...] DIV BASEN r [...]"%}, and
+the radix of the two numerals must be the same, and the radix must be a numeric
+constant that is at least 2, and all elements of the digit lists must be
+numeric constants, and must be less than the radix, and the divisor must be
+nonzero.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_DIV_CONV "BASEN 10 [3;4;5] DIV BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] DIV BASEN 10 [3;4;5] = BASEN 10 [1]
+
+#BASEN_DIV_CONV "BASEN 2 [1;1;1;1] DIV BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] DIV BASEN 2 [1;1;1;0]) = BASEN 2 [1]
+
+#BASEN_DIV_CONV "BASEN 16 [8;10;14] DIV BASEN 16 [12;4]";;
+|- BASEN 16 [8;10;14] DIV BASEN 16 [12;4]) = BASEN 16 [11]
+\end{verbatim}
+}
+\SEEALSO
+BASEN_MOD_CONV
+
+\ENDDOC
+\DOC{BASEN\_EQ\_CONV}
+
+\TYPE {\small\verb%BASEN_EQ_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a term equating two numerals, returns a theorem saying whether the
+equation is true or false.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"BASEN r [...] = BASEN r [...]"%}, returns a theorem
+of the form {\small\verb%|- (BASEN r [...] op BASEN r [...]) = b%}, where {\small\verb%b%} is {\small\verb%"T"%} or
+{\small\verb%"F"%}.
+
+\FAILURE
+The argument must be of the expected form, and the radix of the two numerals
+must be the same, and the radix must be a numeric constant that is at least
+2, and all elements of the digit lists must be numeric constants, and must be
+less than the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_EQ_CONV "BASEN 10 [3;4;5] = BASEN 10 [3;4;5]";;
+|- (BASEN 10 [3;4;5] = BASEN 10 [3;4;5]) = T
+
+#BASEN_LT_CONV "BASEN 2 [1;1;1;1] < BASEN 2 [1;1;1;0]";;
+|- (BASEN 2[1;1;1;1]) < (BASEN 2[1;1;1;0]) = F
+
+#BASEN_GE_CONV "BASEN 16 [8;10;14] >= BASEN 16 [12;4]";;
+|- (BASEN 16[8;10;14]) >= (BASEN 16[12;4]) = T
+\end{verbatim}
+}
+\SEEALSO
+BASEN_COMPARE_CONV.
+
+\ENDDOC
+\DOC{BASEN\_EXP\_CONV}
+
+\TYPE {\small\verb%BASEN_EXP_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves the result of raising one numeral to the power specified by another.
+
+\DESCRIBE
+If {\small\verb%m%} and {\small\verb%n%} are lists of digits in base {\small\verb%r%}, and {\small\verb%p%} is the list of digits
+in the base {\small\verb%r%} numeral representing the sum of {\small\verb%m%} and {\small\verb%n%}, then
+{\small\verb%BASEN_EXP_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- (BASEN r m EXP BASEN r n) = BASEN r p
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_EXP_CONV%} must be of the form
+{\small\verb%"BASEN r [...] EXP BASEN r [...]"%}, and the radix of the two numerals must be
+the same, and the radix must be a numeric constant that is at least 2, and all
+elements of the digit lists must be numeric constants, and must be less than
+the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_EXP_CONV "BASEN 10 [2] EXP BASEN 10 [1;2]";;
+|- BASEN 10 [2] EXP BASEN 10 [1;2] = BASEN 10 [4;0;9;6]
+
+#BASEN_EXP_CONV "BASEN 2 [1;1] EXP BASEN 2 [1;0]";;
+|- BASEN 2 [1;1] EXP BASEN 2 [1;0]) = BASEN 2 [1;0;0;1]
+
+#BASEN_EXP_CONV "BASEN 16 [1;0] EXP BASEN 16 [4]";;
+|- BASEN 16 [1;0] EXP BASEN 16 [4]) = BASEN 16 [1;0;0;0;0]
+\end{verbatim}
+}
+\ENDDOC
+\DOC{BASEN\_GE\_CONV}
+
+\TYPE {\small\verb%BASEN_GE_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a term comparing two numerals, returns a theorem saying whether one is
+greater than or equal to the other.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"BASEN r [...] >= BASEN r [...]"%}, returns a theorem
+of the form {\small\verb%|- (BASEN r [...] >= BASEN r [...]) = b%}, where {\small\verb%b%} is {\small\verb%"T"%} or
+{\small\verb%"F"%}.
+
+\FAILURE
+The argument must be of the expected form, and the radix of the two numerals
+must be the same, and the radix must be a numeric constant that is at least
+2, and all elements of the digit lists must be numeric constants, and must be
+less than the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_GE_CONV "BASEN 16 [8;10;14] >= BASEN 16 [12;4]";;
+|- (BASEN 16[8;10;14]) >= (BASEN 16[12;4]) = T
+\end{verbatim}
+}
+\SEEALSO
+BASEN_COMPARE_CONV, BASEN_GT_CONV, BASEN_LE_CONV, BASEN_LT_CONV.
+
+\ENDDOC
+\DOC{BASEN\_GT\_CONV}
+
+\TYPE {\small\verb%BASEN_GT_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a term comparing two numerals, returns a theorem saying whether one is
+greater than the other.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"BASEN r [...] > BASEN r [...]"%}, returns a theorem
+of the form {\small\verb%|- (BASEN r [...] > BASEN r [...]) = b%}, where {\small\verb%b%} is {\small\verb%"T"%} or
+{\small\verb%"F"%}.
+
+\FAILURE
+The argument must be of the expected form, and the radix of the two numerals
+must be the same, and the radix must be a numeric constant that is at least
+2, and all elements of the digit lists must be numeric constants, and must be
+less than the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_GT_CONV "BASEN 16 [8;10;14] > BASEN 16 [12;4]";;
+|- (BASEN 16[8;10;14]) > (BASEN 16[12;4]) = T
+\end{verbatim}
+}
+\SEEALSO
+BASEN_COMPARE_CONV, BASEN_GE_CONV, BASEN_LE_CONV, BASEN_LT_CONV.
+
+\ENDDOC
+\DOC{BASEN\_LE\_CONV}
+
+\TYPE {\small\verb%BASEN_LE_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a term comparing two numerals, returns a theorem saying whether one is
+less than or equal to the other.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"BASEN r [...] <= BASEN r [...]"%}, returns a theorem
+of the form {\small\verb%|- (BASEN r [...] <= BASEN r [...]) = b%}, where {\small\verb%b%} is {\small\verb%"T"%} or
+{\small\verb%"F"%}.
+
+\FAILURE
+The argument must be of the expected form, and the radix of the two numerals
+must be the same, and the radix must be a numeric constant that is at least
+2, and all elements of the digit lists must be numeric constants, and must be
+less than the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_LE_CONV "BASEN 16 [8;10;14] <= BASEN 16 [12;4]";;
+|- (BASEN 16[8;10;14]) <= (BASEN 16[12;4]) = F
+\end{verbatim}
+}
+\SEEALSO
+BASEN_COMPARE_CONV, BASEN_GE_CONV, BASEN_GT_CONV, BASEN_LT_CONV.
+
+\ENDDOC
+\DOC{BASEN\_LT\_CONV}
+
+\TYPE {\small\verb%BASEN_LT_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a term comparing two numerals, returns a theorem saying whether one is
+less than the other.
+
+\DESCRIBE
+Given a term of the form {\small\verb%"BASEN r [...] < BASEN r [...]"%}, returns a theorem
+of the form {\small\verb%|- (BASEN r [...] < BASEN r [...]) = b%}, where {\small\verb%b%} is {\small\verb%"T"%} or
+{\small\verb%"F"%}.
+
+\FAILURE
+The argument must be of the expected form, and the radix of the two numerals
+must be the same, and the radix must be a numeric constant that is at least
+2, and all elements of the digit lists must be numeric constants, and must be
+less than the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_LT_CONV "BASEN 16 [8;10;14] < BASEN 16 [12;4]";;
+|- (BASEN 16[8;10;14]) < (BASEN 16[12;4]) = F
+\end{verbatim}
+}
+\SEEALSO
+BASEN_COMPARE_CONV, BASEN_GE_CONV, BASEN_GT_CONV, BASEN_LE_CONV.
+
+\ENDDOC
+\DOC{BASEN\_MOD\_CONV}
+
+\TYPE {\small\verb%BASEN_MOD_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves the result of taking the modulus of one numeral by another.
+
+\DESCRIBE
+If {\small\verb%m%} and {\small\verb%n%} are lists of digits in base {\small\verb%r%}, and {\small\verb%p%} is the list of digits
+in the base {\small\verb%r%} numeral representing the sum of {\small\verb%m%} and {\small\verb%n%}, then
+{\small\verb%BASEN_MOD_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- (BASEN r m MOD BASEN r n) = BASEN r p
+\end{verbatim}
+}
+\FAILURE
+The argument term must be of the form {\small\verb%BASEN r [...] MOD BASEN r [...]"%}, and
+the radix of the two numerals must be the same, and the radix must be a numeric
+constant that is at least 2, and all elements of the digit lists must be
+numeric constants, and must be less than the radix, and the divisor must be
+nonzero.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_MOD_CONV "BASEN 10 [3;4;5] MOD BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] MOD BASEN 10 [3;4;5] = BASEN 10 []
+
+#BASEN_MOD_CONV "BASEN 2 [1;1;1;1] MOD BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] MOD BASEN 2 [1;1;1;0]) = BASEN 2 [1]
+
+#BASEN_MOD_CONV "BASEN 16 [8;10;14] MOD BASEN 16 [12;4]";;
+|- BASEN 16 [8;10;14] MOD BASEN 16 [12;4]) = BASEN 16 [4;2]
+\end{verbatim}
+}
+\SEEALSO
+BASEN_DIV_CONV.
+
+\ENDDOC
+\DOC{BASEN\_MUL\_CONV}
+
+\TYPE {\small\verb%BASEN_MUL_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves the result of multiplying one numeral by another.
+
+\DESCRIBE
+If {\small\verb%m%} and {\small\verb%n%} are lists of digits in base {\small\verb%r%}, and {\small\verb%p%} is the list of digits
+in the base {\small\verb%r%} numeral representing the sum of {\small\verb%m%} and {\small\verb%n%}, then
+{\small\verb%BASEN_MUL_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- (BASEN r m * BASEN r n) = BASEN r p
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_MUL_CONV%} must be of the form
+{\small\verb%"BASEN r [...] * BASEN r [...]"%}, and the radix of the two numerals must be
+the same, and the radix must be a numeric constant that is at least 2, and all
+elements of the digit lists must be numeric constants, and must be less than
+the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_MUL_CONV "BASEN 10 [3;4;5] * BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] * BASEN 10 [3;4;5] = BASEN 10 [1;1;9;0;2;5]
+
+#BASEN_MUL_CONV "BASEN 2 [1;1;1;1] * BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] * BASEN 2 [1;1;1;0]) = BASEN 2 [1;1;0;1;0;0;1;0]
+
+#BASEN_MUL_CONV "BASEN 16 [1;0] * BASEN 16 [4]";;
+|- BASEN 16 [1;0] * BASEN 16 [4]) = BASEN 16 [4;0]
+\end{verbatim}
+}
+\ENDDOC
+\DOC{BASEN\_NORMALIZE\_CONV}
+
+\TYPE {\small\verb%BASEN_NORMALIZE_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves that a numeral is equal to itself with leading zeros removed.
+
+\DESCRIBE
+If {\small\verb%m%} is a list of base {\small\verb%r%} digits, and {\small\verb%n%} is the same list with leading
+zeros removed, then {\small\verb%BASEN_NORMALIZE_CONV "BASEN r m"%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- BASEN r m = BASEN r n
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_CONV%} must be of the form {\small\verb%"BASEN r [...]"%}, and the
+radix must be a numeric constant with a value of at least 2, and all elements
+of the digit list must be numeric constants less than the radix.  If the
+argument is already normalized, {\small\verb%BASEN_NORMALIZE_CONV%} returns a reflexive
+theorem.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_NORMALIZE_CONV "BASEN 16 [0;12;0;0]";;
+|- BASEN 16 [0;12;0;0] = BASEN 16 [12;0;0]
+
+#BASEN_NORMALIZE_CONV "BASEN 16 [0;0;0;0;3]";;
+|- BASEN 16 [0;0;0;0;3] = BASEN 16 [3]
+
+#BASEN_NORMALIZE_CONV "BASEN 8 [7;7;5;3;4]";;
+|- BASEN 8 [7;7;5;3;4] = BASEN 8 [7;7;5;3;4]
+\end{verbatim}
+}
+\SEEALSO
+BASEN_NORMALIZE_OR_FAIL_CONV, IS_NORMALIZED_CONV, IS_BASEN_CONV.
+
+\ENDDOC
+\DOC{BASEN\_NORMALIZE\_OR\_FAIL\_CONV}
+
+\TYPE {\small\verb%BASEN_NORMALIZE_OR_FAIL_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves that a numeral is equal to itself with leading zeros removed.
+
+\DESCRIBE
+If {\small\verb%m%} is a list of base {\small\verb%r%} digits, and {\small\verb%n%} is the same list with leading
+zeros removed, then {\small\verb%BASEN_NORMALIZE_OR_FAIL_CONV "BASEN r m"%} returns the
+theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- BASEN r m = BASEN r n
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_CONV%} must be of the form {\small\verb%"BASEN r [...]"%}, and the
+radix must be a numeric constant with a value of at least 2, and all elements
+of the digit list must be numeric constants less than the radix.  If the
+argument is already normalized, {\small\verb%BASEN_NORMALIZE_OR_FAIL_CONV%} fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_NORMALIZE_OR_FAIL_CONV "BASEN 16 [0;12;0;0]";;
+|- BASEN 16 [0;12;0;0] = BASEN 16 [12;0;0]
+
+#BASEN_NORMALIZE_OR_FAIL_CONV "BASEN 16 [0;0;0;0;3]";;
+|- BASEN 16 [0;0;0;0;3] = BASEN 16 [3]
+
+#BASEN_NORMALIZE_OR_FAIL_CONV "BASEN 8 [7;7;5;3;4]";;
+evaluation failed       BASEN_NORMALIZE_OR_FAIL_CONV
+\end{verbatim}
+}
+\COMMENTS
+{\small\verb%BASEN_NORMALIZE_OR_FAIL_CONV%} is needed to avoid looping in higher-level
+operations (like {\small\verb%NUM_ARITH_CONV%}).
+
+\SEEALSO
+BASEN_NORMALIZE_CONV, IS_NORMALIZED_CONV, IS_BASEN_CONV.
+
+\ENDDOC
+\DOC{basen\_of\_int}
+
+\TYPE {\small\verb%basen_of_int : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a radix and a value, returns a term containing a BASEN numeral in that
+radix, with that value.
+
+\DESCRIBE
+If {\small\verb%r%} and {\small\verb%n%} are ML integers, and {\small\verb%r%} is at least 2, and {\small\verb%n%} is positive,
+then {\small\verb%basen_of_int r n%} returns the term containing the canonical BASEN numeral
+in that radix, of that value.
+
+\FAILURE
+The radix must have a value of at least 2, and {\small\verb%n%} must be positive.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#basen_of_int (10, 34567);;
+"BASEN 10[3;4;5;6;7]" : term
+
+#basen_of_int (2, 23);;
+"BASEN 2[1;0;1;1;1]" : term
+
+#basen_of_int (16, 3072);;
+"BASEN 16[12;0;0]" : term
+\end{verbatim}
+}
+\SEEALSO
+BASEN_OF_NUM_CONV, int_of_basen, mk_basen.
+
+\ENDDOC
+\DOC{BASEN\_OF\_NUM\_CONV}
+
+\TYPE {\small\verb%BASEN_OF_NUM_CONV : conv%}\egroup
+
+\SYNOPSIS
+Proves what the numeral is that represents a given numeric value in a given
+radix.
+
+\DESCRIBE
+If {\small\verb%m%} and {\small\verb%r%} are numeric constants, and {\small\verb%n%} is a list of base {\small\verb%r%} digits with
+a value of {\small\verb%m%} (in base {\small\verb%r%}), then {\small\verb%BASEN_OF_NUM_CONV "r" "m"%} returns the
+theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- BASEN_DIGITS r m = n
+\end{verbatim}
+}
+\FAILURE
+The radix must be a numeric constant with a value of at least 2, and the value
+must be a numeric constant.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_OF_NUM_CONV "2" "32";;
+|- 32 = BASEN 2 [1;0;0;0;0;0]
+
+#BASEN_OF_NUM_CONV "10" "265";;
+|- 265 = BASEN 10 [2;6;5]
+
+#BASEN_OF_NUM_CONV "16" "3072";;
+|- 3072 = BASEN 16 [12;0;0]
+\end{verbatim}
+}
+\SEEALSO
+mk_basen, BASEN_CONV, basen_of_int.
+
+\ENDDOC
+\DOC{BASEN\_PRE\_CONV}
+
+\TYPE {\small\verb%BASEN_PRE_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Converts the predecessor function on a numeral into a subtract-one in the same
+radix.
+
+\DESCRIBE
+If {\small\verb%m%} is a list of digits in base {\small\verb%r%}, and {\small\verb%m%} is a list of digits in base
+{\small\verb%r%}, then {\small\verb%BASEN_PRE_CONV "PRE (BASEN r m)"%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- PRE (BASEN r m) = BASEN r m - BASEN r [1]
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_PRE_CONV%} must be of the form {\small\verb%"PRE (BASEN r [...])"%},
+and the radix must be a numeric constant that is at least 2, and all elements
+of the digit lists must be numeric constants, and must be less than the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_PRE_CONV "PRE (BASEN 10 [3;4;5])";;
+|- PRE(BASEN 10[3;4;5]) = BASEN 10[3;4;4]
+
+#BASEN_PRE_CONV "PRE (BASEN 10 [])";;
+|- PRE(BASEN 10[]) = BASEN 10[]
+
+#BASEN_PRE_CONV "PRE (BASEN 2 [1;1;1;1])";;
+|- PRE(BASEN 2[1;1;1;1]) = BASEN 2[1;1;1;0]
+
+#BASEN_PRE_CONV "PRE (BASEN 16 [8;10;14])";;
+|- PRE(BASEN 16[8;0;0]) = BASEN 16[7;15;15]
+\end{verbatim}
+}
+\SEEALSO
+BASEN_SUB_CONV, BASEN_SUC_CONV.
+
+\ENDDOC
+\DOC{BASEN\_SUB\_CONV}
+
+\TYPE {\small\verb%BASEN_SUB_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves the result of subtracting one numeral from another.
+
+\DESCRIBE
+If {\small\verb%m%} and {\small\verb%n%} are lists of digits in base {\small\verb%r%}, and {\small\verb%p%} is the list of digits
+in the base {\small\verb%r%} numeral representing the sum of {\small\verb%m%} and {\small\verb%n%}, then
+{\small\verb%BASEN_SUB_CONV%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- (BASEN r m - BASEN r n) = BASEN r p
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_SUB_CONV%} must be of the form
+{\small\verb%"BASEN r [...] - BASEN r [...]"%}, and the radix of the two numerals must be
+the same, and the radix must be a numeric constant that is at least 2, and all
+elements of the digit lists must be numeric constants, and must be less than
+the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_SUB_CONV "BASEN 10 [3;4;5] - BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] - BASEN 10 [3;4;5] = BASEN 10 []
+
+#BASEN_SUB_CONV "BASEN 2 [1;1;1;1] - BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] - BASEN 2 [1;1;1;0]) = BASEN 2 [1]
+
+#BASEN_SUB_CONV "BASEN 16 [10;14] - BASEN 16 [8;4]";;
+|- BASEN 16 [10;14] - BASEN 16 [8;4]) = BASEN 16 []
+\end{verbatim}
+}
+\COMMENTS
+This is natural number arithmetic, so subtracting a large number from a small
+number returns 0.
+
+\SEEALSO
+BASEN_PRE_CONV.
+
+\ENDDOC
+\DOC{BASEN\_SUC\_CONV}
+
+\TYPE {\small\verb%BASEN_SUC_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Converts the successor function on a numeral into an add-one in the same radix.
+
+\DESCRIBE
+If {\small\verb%m%} is a list of digits in base {\small\verb%r%}, and {\small\verb%m%} is a list of digits in base
+{\small\verb%r%}, then {\small\verb%BASEN_SUC_CONV "SUC (BASEN r m)"%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- SUC (BASEN r m) = BASEN r m + BASEN r [1]
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_SUC_CONV%} must be of the form {\small\verb%"SUC (BASEN r [...])"%},
+and the radix must be a numeric constant that is at least 2, and all elements
+of the digit lists must be numeric constants, and must be less than the radix.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#BASEN_SUC_CONV "SUC (BASEN 10 [3;4;5])";;
+|- SUC(BASEN 10[3;4;5]) = BASEN 10[3;4;6]
+
+#BASEN_SUC_CONV "SUC (BASEN 2 [1;1;1;1])";;
+|- SUC(BASEN 2[1;1;1;1]) = BASEN 2 [1;0;0;0;0]
+
+#BASEN_SUC_CONV "SUC (BASEN 16 [8;10;14])";;
+|- SUC(BASEN 16[8;10;14]) = BASEN 16[8;10;15]
+\end{verbatim}
+}
+\SEEALSO
+BASEN_ADD_CONV, BASEN_PRE_CONV.
+
+\ENDDOC
+\DOC{dest\_basen}
+
+\TYPE {\small\verb%dest_basen : term -> thm%}\egroup
+
+\SYNOPSIS
+Takes apart a BASEN numeral.
+
+\DESCRIBE
+Given a term containing such a BASEN numeral, {\small\verb%dest_basen%} returns a term
+containing the radix and a term containing the list of digits.
+
+\COMMENTS
+This is not exactly an inverse of {\small\verb%mk_basen%}, in that {\small\verb%mk_basen%} takes a list
+of digit terms, and {\small\verb%dest_basen%} returns a single term of the digit list.
+
+\FAILURE
+{\small\verb%dest_basen%} fails if the term is not a BASEN numeral.
+
+\ENDDOC
+\DOC{dest\_binary\_basen\_comb}
+
+\TYPE {\small\verb%dest_binary_basen_comb : term -> thm%}\egroup
+
+\SYNOPSIS
+Takes apart a term containing a binary operation on BASEN numerals, and returns
+the parts.
+
+\DESCRIBE
+Given a term containing an operation applied to two BASEN numerals, returns the
+operation, the radix of the two numerals, the numerals themselves, and the
+numerals' digits (in two forms).
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#dest_binary_basen_comb "$*" "BASEN 10 [2;3;4] * BASEN 10 [6;7;8;9]";;
+("10",
+ "BASEN 10[2;3;4]",
+ "[2;3;4]",
+ ["2"; "3"; "4"],
+ "BASEN 10[6;7;8;9]",
+ "[6;7;8;9]",
+ ["6"; "7"; "8"; "9"])
+: (term # term # term # term list # term # term # term list)
+\end{verbatim}
+}
+\FAILURE
+Fails if the numerals have different radices.
+
+\ENDDOC
+\DOC{dest\_unary\_basen\_comb}
+
+\TYPE {\small\verb%dest_unary_basen_comb  : term -> thm%}\egroup
+
+\SYNOPSIS
+Takes apart a term containing a unary operation on BASEN numerals, and returns
+the parts.
+
+\DESCRIBE
+Given a term containing an operation applied to one BASEN numeral, returns the
+operation, the radix of the numeral, the numeral itself, and the numeral's
+digits (in two forms).
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#dest_unary_basen_comb "SUC" "SUC (BASEN 10 [2;3;4])";;
+("10",
+ "BASEN 10[2;3;4]",
+ "[2;3;4]",
+ ["2"; "3"; "4"])
+: (term # term # term # term list)
+\end{verbatim}
+}
+\FAILURE
+Never fails.
+
+\ENDDOC
+\DOC{int\_of\_basen}
+
+\TYPE {\small\verb%int_of_basen : term -> thm%}\egroup
+
+\SYNOPSIS
+Given a term containing a BASEN numeral, return the value of that numeral.
+
+\DESCRIBE
+If {\small\verb%r%} is an ML integer and n is an ML integer list, then
+{\small\verb%int_of_basen "BASEN r n"%} returns the value of the base {\small\verb%r%} numeral with
+digits {\small\verb%n%}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#int_of_basen "BASEN 10[3;4;5;6;7]";;
+34567 : int
+
+#int_of_basen "BASEN 2[1;0;1;1;1]";;
+23 : int
+
+#int_of_basen "BASEN 16[12;0;0]";;
+3072 : int
+\end{verbatim}
+}
+\SEEALSO
+dest_basen, BASEN_CONV, basen_of_int.
+
+\ENDDOC
+\DOC{is\_basen}
+
+\TYPE {\small\verb%is_basen : term -> thm%}\egroup
+
+\SYNOPSIS
+Tests whether a term is a BASEN numeral.
+
+\DESCRIBE
+Given a term, {\small\verb%is_basen%} returns {\small\verb%true%} if the term is a BASEN numeral, and
+returns {\small\verb%false%} otherwise.
+
+\FAILURE
+Never fails.
+
+\ENDDOC
+\DOC{IS\_BASEN\_CONV}
+
+\TYPE {\small\verb%IS_BASEN_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves that a numeral's digits are or are not all less than its radix.
+
+\DESCRIBE
+If {\small\verb%r%} is a radix and {\small\verb%m%} is a list of radix {\small\verb%r%} digits (that is, each digit is
+less than {\small\verb%r%}), then {\small\verb%IS_BASEN_CONV "IS_BASEN r m"%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- IS_BASEN r m = T
+\end{verbatim}
+}
+and if one or more digits of {\small\verb%m%} is not a radix {\small\verb%r%} digit (that is, if some
+digit in {\small\verb%m%} is equal to or greater than {\small\verb%r%}), then
+{\small\verb%IS_BASEN_CONV "IS_BASEN r m"%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- IS_BASEN r m = F
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%IS_BASEN_CONV%} must be of the form {\small\verb%"IS_BASEN r [...]"%}, and
+the radix must be a numeric constant that is at least 2, and all elements of
+the digit list must be numeric constants.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#IS_BASEN_CONV "IS_BASEN 10 [2;3;5;0]";;
+|- IS_BASEN 10 [2;3;5;0] = T
+
+#IS_BASEN_CONV "IS_BASEN 10 [2;3;15;0]";;
+|- IS_BASEN 10 [2;3;15;0] = F
+
+#IS_BASEN_CONV "IS_BASEN 16 [2;3;15;0]";;
+|- IS_BASEN 16 [2;3;15;0] = F
+\end{verbatim}
+}
+\SEEALSO
+IS_NORMALIZED_CONV, BASEN_NORMALIZE_CONV.
+
+\ENDDOC
+\DOC{IS\_NORMALIZED\_CONV}
+
+\TYPE {\small\verb%IS_NORMALIZED_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves that a list of digits is normalized (that is, that it has no leading
+zeros).
+
+\DESCRIBE
+If {\small\verb%m%} is a list of digits, and {\small\verb%m%} is empty or the first digit of {\small\verb%m%} is
+nonzero, then {\small\verb%IS_NORMALIZED_CONV "m"%} returns the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- IS_NORMALIZED m = T
+\end{verbatim}
+}
+and if the first digit of {\small\verb%m%} is zero, then {\small\verb%IS_NORMALIZED_CONV "m"%} returns
+the theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- IS_NORMALIZED m = F
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%IS_NORMALIZED_CONV%} must be a list of type num list, and
+either the list must be empty or the first element must be a numeric constant
+added with {\small\verb%CONS%}.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#IS_NORMALIZED_CONV "IS_NORMALIZED [2;3;5;0]";;
+|- IS_NORMALIZED [2;3;5;0] = T
+
+#IS_NORMALIZED_CONV "IS_NORMALIZED [0;2;3;5;0]";;
+|- IS_NORMALIZED [0;2;3;5;0] = F
+
+#IS_NORMALIZED_CONV "IS_NORMALIZED []";;
+|- IS_NORMALIZED [] = T
+\end{verbatim}
+}
+\SEEALSO
+IS_BASEN_CONV, BASEN_NORMALIZE_CONV.
+
+\ENDDOC
+\DOC{mk\_basen}
+
+\TYPE {\small\verb%mk_basen : term -> thm%}\egroup
+
+\SYNOPSIS
+Constructs a BASEN numeral.
+
+\DESCRIBE
+Given a term containing a numeric constant to be used as a radix, and a list
+of terms to be taken as the digits, {\small\verb%mk_basen%} constructs a term containing a
+BASEN numeral in that radix with those digits.
+
+\FAILURE
+{\small\verb%mk_basen%} fails if the terms are of the wrong types.
+
+\ENDDOC
+\DOC{ONCE\_BASEN\_NORMALIZE\_CONV}
+
+\TYPE {\small\verb%ONCE_BASEN_NORMALIZE_CONV : term -> thm%}\egroup
+
+\SYNOPSIS
+Proves that a numeral is equal to itself with leading zeros removed.
+
+\DESCRIBE
+If {\small\verb%m%} is a list of base {\small\verb%r%} digits, and {\small\verb%n%} is the same list with a single
+leading zero removed, then {\small\verb%ONCE_BASEN_NORMALIZE_CONV "BASEN r m"%} returns the
+theorem:
+{\par\samepage\setseps\small
+\begin{verbatim}
+        |- BASEN r m = BASEN r n
+\end{verbatim}
+}
+\FAILURE
+The argument to {\small\verb%BASEN_CONV%} must be of the form {\small\verb%"BASEN r [...]"%}, and the
+radix must be a numeric constant with a value of at least 2, and all elements
+of the digit list must be numeric constants less than the radix.  If the
+argument is already normalized, {\small\verb%ONCE_BASEN_NORMALIZE_CONV%} fails.
+theorem.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#ONCE_BASEN_NORMALIZE_CONV "BASEN 16 [0;12;0;0]";;
+|- BASEN 16 [0;12;0;0] = BASEN 16 [12;0;0]
+
+#ONCE_BASEN_NORMALIZE_CONV "BASEN 16 [0;0;0;0;3]";;
+|- BASEN 16 [0;0;0;0;3] = BASEN 16 [3]
+
+#ONCE_BASEN_NORMALIZE_CONV "BASEN 8 [7;7;5;3;4]";;
+|- BASEN 8 [7;7;5;3;4] = BASEN 8 [7;7;5;3;4]
+\end{verbatim}
+}
+\SEEALSO
+BASEN_NORMALIZE_OR_FAIL_CONV, IS_BASEN_CONV, IS_NORMALIZED_CONV.
+
+\ENDDOC
+\DOC{sanity\_test}
+
+{\small
+\begin{verbatim}
+sanity_test : ((* -> **) ->
+string ->
+(* -> ** -> *** -> bool) ->
+(string # * # ***) list ->
+string)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Test a function to ensure that it returns the expected values.
+
+\DESCRIBE
+Its inputs are:
+  f             a function to test
+  f\_name        the name of that function as a string
+  relation      a function that compares the input, the actual output, and
+                the expected output and returns true if the actual output
+                was correct
+  test\_cases    a list of triples, each of which is a test case, consisting
+                of a string that identifies the test case and is to be printed
+                out in case of failure, an input, and an expected output.
+If the function signals failure when given the input on a test case, that test
+case is considered to have failed.  If all test cases pass, the output is nil.
+If any test case fails, a list is printed of the identification strings of all
+failing test cases, and then the whole function fails.
+
+\FAILURE
+None.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#let increment x = x + 1;;
+increment = - : (int -> int)
+
+#sanity_test increment `increment` relation [
+        `test 1: increment zero`,
+                0,      1;
+        `test 2: increment one`,
+                1,      3;
+        `test 3: increment a relatively small number`,
+                20,     21;
+        `test 4: increment causing a carry`,
+                9,      13;
+        `test 5: increment a large number`,
+                999999, 1000000 ]
+where relation input actual expected =
+  actual = expected;;
+
+Failures testing increment --
+  test 2: increment one     test 4: increment causing a carry
+evaluation failed     sanity test
+\end{verbatim}
+}
+\COMMENTS
+{\small\verb%sanity_test%} cannot be used to test the failure behaviour of a function.  It
+should be replaced by something that can.
+
+\ENDDOC

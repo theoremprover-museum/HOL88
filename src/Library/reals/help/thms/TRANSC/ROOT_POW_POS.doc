@@ -1,0 +1,3 @@
+\THEOREM ROOT_POW_POS TRANSC
+|- !n x. (& 0) <= x ==> ((root(SUC n)x) pow (SUC n) = x)
+\ENDTHEOREM

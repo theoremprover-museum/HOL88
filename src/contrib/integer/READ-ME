@@ -1,0 +1,96 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: integer						|
+|									|
+| DESCRIPTION   : development of basic algebraic and order-theoretic	|
+|		  structure of the integers and basic algebraic 	|
+|		  properties of modular arithmetic.			|
+|									|
+| AUTHOR	: E. L. Gunter						|
+| DATE		: 89.3.23						|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    mk_more_arith.ml   creates an ad-hoc collection of arithemtic theorems
+                       about the natural numbers.  Intended to speed the
+                       development of the integers.
+
+    more_arith.print   gives a listing of more_arith.th
+
+    num_tac.ml         contains the rule and tactic for general induction.
+
+    load_more_arith.ml loads the theory more_arith.th, together with the
+                       the rule and tactic for general induction from
+                       num_tac.ml
+
+
+    mk_integer.ml      defines the type of integer, the operations of
+                       plus, minus, neg, and times, the predicates POS,
+                       and NEG, and the relation below.  Develops much of
+                       the basic algebraic, and some basic order theoretic
+                       properties of the integers.
+
+    integer.print      gives a listing of the theory of integer.th
+
+    integer_tac.ml   defines rules and tactics for various arguements
+                       special to the  integers.  Contains the rule and
+                       tactic that were previously in int_cases_tac.ml.
+
+    load_integer.ml    loads the theory of integers (with the representation
+                       dependent part excluded), together with the tactics and
+                       functions from ../group/start.ml and integer_tac.ml
+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) To automatically load the theory of the integers, together with a
+      tactic for generalized induction on the natural numbers and a tactic
+      for proving theorems about all integers based on the cases of whether
+      the integer is positve, negative or zero, execute
+
+                 load_lib `integer`;;
+
+      This will add the necessary path for this directory to the search path.
+      Also, if you are in draft mode, it will add integer.th (and hence
+      more_arith.th and elg_gp.th (from Library/group)) as an ancestor.  If
+      you are not in draft, it will attempt to execute load_theory `integer`.
+      If it cannot succeed  with load_theory `integer`, it will proceed with
+      the remainer of the loading anyway.  But for it to succeed in the case
+      were you are not in draft mode and it cannot execute load_theory
+      `integer`, integer.th must be a predeclared ancestor of the current
+      theory.
+
+   2) To load the theorems of more_arith.th, instaed of or in addition to
+      loading the theory of the integers, execute
+
+                 loadt_from_lib `integer` `load_more_arith`;;
+
+      This behaves with respect to the treatment of the search path and the
+      theory `more_arith` the same as load_lib `integer` did (with `more_arith`
+      in place of `integer`.)  In addition to loading the theorems from
+      more_arith.th, this also loads the tactic for genralized induction.
+

@@ -1,0 +1,27 @@
+\DOC BAD_CONJECTURES
+
+\TYPE {BAD_CONJECTURES : (void -> term list)}
+
+\SYNOPSIS
+The conjectures of a window which have been used and that are not available
+in the parent window.
+
+\LIBRARY window
+
+\DESCRIBE
+{BAD_CONJECTURES ()} returns the set of conjectures which have been used
+to transform the window on top of the window stack, and which are not
+in the context of the parent window below.
+These conjectures are called bad because the top window can not be closed
+if it has any bad conjectures.
+
+\FAILURE
+
+\COMMENTS
+If there is only one window on the window stack,
+all of its used conjectures are considered bad.
+
+\SEEALSO
+used_conjectures, ESTABLISH, establish, PRINT_WIN
+
+\ENDDOC

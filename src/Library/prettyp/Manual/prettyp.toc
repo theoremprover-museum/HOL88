@@ -1,0 +1,97 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {1.1}Loading the library}{1}
+\contentsline {section}{\numberline {1.2}Example: a pretty-printer for set theory in HOL}{2}
+\contentsline {section}{\numberline {1.3}CAUTION!}{17}
+\contentsline {chapter}{\numberline {2}The pretty-printing language}{19}
+\contentsline {section}{\numberline {2.1}Naming a pretty-printer}{19}
+\contentsline {section}{\numberline {2.2}Declarations}{19}
+\contentsline {subsection}{\numberline {2.2.1}Blocks of ML code within the pretty-printer language}{20}
+\contentsline {section}{\numberline {2.3}Abbreviations}{20}
+\contentsline {section}{\numberline {2.4}Rules}{21}
+\contentsline {subsection}{\numberline {2.4.1}Patterns}{21}
+\contentsline {subsubsection}{\numberline {2.4.1.1}Context}{21}
+\contentsline {subsubsection}{\numberline {2.4.1.2}Tests in patterns}{21}
+\contentsline {subsubsection}{\numberline {2.4.1.3}Metavariables}{22}
+\contentsline {subsubsection}{\numberline {2.4.1.4}Patterns for trees}{23}
+\contentsline {subsubsection}{\numberline {2.4.1.5}Looping patterns}{24}
+\contentsline {subsubsection}{\numberline {2.4.1.6}Sequences of looping patterns}{26}
+\contentsline {subsubsection}{\numberline {2.4.1.7}Nested looping patterns}{26}
+\contentsline {subsection}{\numberline {2.4.2}Metavariable transformations}{27}
+\contentsline {subsection}{\numberline {2.4.3}Formats}{28}
+\contentsline {subsubsection}{\numberline {2.4.3.1}Boxes}{28}
+\contentsline {subsubsection}{\numberline {2.4.3.2}Box parameters}{32}
+\contentsline {subsubsection}{\numberline {2.4.3.3}Objects}{33}
+\contentsline {subsubsection}{\numberline {2.4.3.4}Assignments}{33}
+\contentsline {subsubsection}{\numberline {2.4.3.5}Changing context}{34}
+\contentsline {subsubsection}{\numberline {2.4.3.6}Leaves and subcalls}{34}
+\contentsline {subsubsection}{\numberline {2.4.3.7}Transformations}{36}
+\contentsline {subsubsection}{\numberline {2.4.3.8}Expansion-boxes}{36}
+\contentsline {subsubsection}{\numberline {2.4.3.9}Nested expansion-boxes}{38}
+\contentsline {subsubsection}{\numberline {2.4.3.10}Conditionals and expansion-boxes}{39}
+\contentsline {section}{\numberline {2.5}Additional language features}{39}
+\contentsline {subsection}{\numberline {2.5.1}Identifiers}{39}
+\contentsline {subsection}{\numberline {2.5.2}Strings}{39}
+\contentsline {subsection}{\numberline {2.5.3}Terminals}{40}
+\contentsline {subsection}{\numberline {2.5.4}Comments}{40}
+\contentsline {chapter}{\numberline {3}Using embedded ML functions}{41}
+\contentsline {section}{\numberline {3.1}Leaf and subcall transformations}{41}
+\contentsline {section}{\numberline {3.2}Functions with access to the environment}{42}
+\contentsline {subsection}{\numberline {3.2.1}Functions for use in tests}{43}
+\contentsline {subsection}{\numberline {3.2.2}Functions for accessing the environment values}{44}
+\contentsline {subsection}{\numberline {3.2.3}Making new functions which access environment values}{45}
+\contentsline {subsection}{\numberline {3.2.4}Functions for metavariable transformations}{46}
+\contentsline {chapter}{\numberline {4}Pretty-printing ML datatypes}{49}
+\contentsline {chapter}{\numberline {5}Linking pretty-printers to HOL}{51}
+\contentsline {section}{\numberline {5.1}Converting HOL terms into parse-trees}{51}
+\contentsline {subsection}{\numberline {5.1.1}Converting a HOL type}{51}
+\contentsline {subsection}{\numberline {5.1.2}Converting a HOL term}{53}
+\contentsline {subsection}{\numberline {5.1.3}Converting a HOL theorem}{54}
+\contentsline {subsection}{\numberline {5.1.4}Useful additional functions}{55}
+\contentsline {section}{\numberline {5.2}Compiling a pretty-printer}{56}
+\contentsline {section}{\numberline {5.3}Linking to the HOL system}{57}
+\contentsline {subsection}{\numberline {5.3.1}Print-rule functions}{58}
+\contentsline {subsection}{\numberline {5.3.2}Obtaining a parse-tree}{59}
+\contentsline {subsection}{\numberline {5.3.3}Installing a new printer}{60}
+\contentsline {subsubsection}{\numberline {5.3.3.1}Printers for new ML datatypes}{60}
+\contentsline {subsubsection}{\numberline {5.3.3.2}Extensions to the printer for HOL}{60}
+\contentsline {chapter}{\numberline {6}Errors and debugging}{63}
+\contentsline {section}{\numberline {6.1}Compiler errors}{63}
+\contentsline {section}{\numberline {6.2}Errors on loading the compiled code}{63}
+\contentsline {section}{\numberline {6.3}Run-time errors}{64}
+\contentsline {chapter}{\numberline {7}Examples}{65}
+\contentsline {section}{\numberline {7.1}HOL terms}{65}
+\contentsline {section}{\numberline {7.2}Lisp}{68}
+\contentsline {section}{\numberline {7.3}Pascal}{70}
+\contentsline {section}{\numberline {7.4}ELLA: A hardware description language}{73}
+\contentsline {section}{\numberline {7.5}Arithmetical expressions}{76}
+\contentsline {chapter}{\numberline {8}The pretty-printing algorithm}{83}
+\contentsline {section}{\numberline {8.1}Requirements}{83}
+\contentsline {section}{\numberline {8.2}Boxes}{84}
+\contentsline {subsection}{\numberline {8.2.1}Horizontal boxes}{86}
+\contentsline {subsection}{\numberline {8.2.2}Vertical boxes}{88}
+\contentsline {subsection}{\numberline {8.2.3}Horizontal/vertical boxes}{89}
+\contentsline {subsection}{\numberline {8.2.4}Horizontal-or-vertical boxes}{90}
+\contentsline {subsection}{\numberline {8.2.5}Building sub-boxes}{90}
+\contentsline {section}{\numberline {8.3}Limitations}{90}
+\contentsline {chapter}{\numberline {9}Pretty-printing HOL terms}{93}
+\contentsline {section}{\numberline {9.1}HOL types}{93}
+\contentsline {section}{\numberline {9.2}HOL terms}{94}
+\contentsline {subsection}{\numberline {9.2.1}Precedence}{94}
+\contentsline {subsection}{\numberline {9.2.2}Type information}{97}
+\contentsline {subsection}{\numberline {9.2.3}Dollared constants}{97}
+\contentsline {subsection}{\numberline {9.2.4}Special prefixes and infixes}{97}
+\contentsline {subsection}{\numberline {9.2.5}Uncurried arguments}{97}
+\contentsline {subsection}{\numberline {9.2.6}Abstractions and bindings}{98}
+\contentsline {subsection}{\numberline {9.2.7}Function applications}{98}
+\contentsline {subsection}{\numberline {9.2.8}Lists}{99}
+\contentsline {subsection}{\numberline {9.2.9}Conditionals}{100}
+\contentsline {subsection}{\numberline {9.2.10}Let statements}{100}
+\contentsline {subsection}{\numberline {9.2.11}Term quotes}{103}
+\contentsline {section}{\numberline {9.3}HOL theorems}{103}
+\contentsline {chapter}{References}{105}
+\contentsline {chapter}{\numberline {A}Syntax of the pretty-printing language}{107}
+\contentsline {section}{\numberline {A.1}Lexical objects}{107}
+\contentsline {section}{\numberline {A.2}The grammar}{108}
+\contentsline {chapter}{\numberline {B}New ML Types in the prettyp Library}{113}
+\contentsline {chapter}{\numberline {C}ML Functions in the prettyp Library}{115}
+\contentsline {chapter}{Index}{150}

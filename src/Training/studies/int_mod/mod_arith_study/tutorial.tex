@@ -1,0 +1,130 @@
+% =====================================================================
+% HOL Case Study: Modular Arithmetic. By Elsa Gunter
+% =====================================================================
+
+\documentstyle[12pt,twoside,fleqn,layout]{article}
+
+\sloppy
+
+
+% ---------------------------------------------------------------------
+% Preliminary settings etc.
+% ---------------------------------------------------------------------
+
+\renewcommand{\topfraction}{0.8}	  % 0.8 of the top page can be fig.
+\renewcommand{\bottomfraction}{0.8}	  % 0.8 of the bottom page can be fig.
+\renewcommand{\textfraction}{0.1}	  % 0.1 of the page must contain text
+\setcounter{totalnumber}{4}	 	  % max of 4 figures per page
+\setcounter{secnumdepth}{3}		  % number sections down to level 3
+\setcounter{tocdepth}{3}		  % toc contains numbers to level 3
+
+% ---------------------------------------------------------------------
+% Macros
+% ---------------------------------------------------------------------
+\input{commands}
+\input{ref-macros}
+
+\begin{document}
+
+  \pagestyle{plain}
+
+\begin{titlepage}
+
+\setcounter{page}{1}
+
+\begin{center}
+{\Huge{\bf HOL CASE STUDY}}\\
+\vskip .3in
+{\Large\bf Modular Arithmetic}\\
+\end{center}
+\vskip .4in
+
+
+\begin{inset}{Author}
+Elsa L.~Gunter\newline
+Department of Computer and Information Science\newline
+University of Pennsylvania\newline
+200 South 33rd Street\newline
+Philadelphia, PA 19104, USA\newline
+{\bf Telephone:} (1) 215-898-9514\newline
+{\bf Email:} \verb+elsa@linc.cis.upenn.edu+\newline
+\end{inset}
+
+\begin{inset}{Concepts illustrated}
+Application of abstract group theory, use of specialized tactics for group
+theory and for the integers, interactive proof, tactics.
+\end{inset}
+
+%\begin{inset}{Level of difficulty}
+%Intermediate to hard.
+%\end{inset}
+
+\begin{inset}{Prerequisites}
+At least as much knowledge of \HOL\ as is given in {\sl Getting started with
+\HOL}.  Knowledge of the definitions of a group and a subgroup
+\end{inset}
+
+\begin{inset}{Co-requisites}
+An understanding of the basic concepts of how to do algebra
+in \HOL, as explained in {\it Doing Algebra in Simple Type Theory}, 
+which can be found in {\small\verb!hol/Training/studies/int_mod!}.
+\end{inset}
+
+\begin{inset}{Supporting files}
+In the directories {\small\verb%hol/Training/studies/int_mod%} and
+{\small\verb%hol/Library/int_mod%}.
+\end{inset}
+
+\begin{inset}{Abstract}
+The development of the basic group theory of the integers, including
+basic modular arithmetic, is described in three sections.  This case
+study is intended to give the user extensive hands-on experience proving
+facts using theorems and tactics from group theory and the theory of
+the integers, applying and developing abstract theories, and working
+through large proofs.  The material presented in this case study in
+graded in difficulty, with increases in difficulty occurring mainly
+from section to section.  This study is intended to be worked through
+in an interactive fashion.  While substantial benefit should be obtainable
+by simply reading this case study, the full benefit can only be had
+by executing the commands here outline as they are read.  At the end
+of the second and third sections, projects have been suggested for those
+who wish to further test their understanding of the concepts studied
+in those sections.
+\end{inset}
+
+\thispagestyle{empty}
+
+\end{titlepage}
+
+\newpage
+\tableofcontents 
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\newpage
+
+\newcommand{\mvdots}{\vspace*{-12pt}\hspace*{2cm}\vdots\vspace*{-12pt}}
+\newcommand{\evdots}{\vspace*{-12pt}\hspace*{2cm}\vdots}
+
+\input{tut_intro}
+
+\input{tut1}
+
+\input{tut2}
+
+\input{tut3}
+
+\appendix
+
+\section{Related pre-proven theorems}
+\input{thm_app}
+
+\section{General-purpose tactics}
+\input{gen_tactics}
+
+\section{Specialized tactics and functions}
+\subsection{Group theory}
+\input{gp_tactics}
+
+\subsection{The integers}
+\input{int_tactics}
+
+\end{document}

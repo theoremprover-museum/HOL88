@@ -1,0 +1,3 @@
+\THEOREM SIN_NEG TRANSC
+|- !x. sin(-- x) = --(sin x)
+\ENDTHEOREM

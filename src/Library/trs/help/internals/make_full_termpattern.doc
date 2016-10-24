@@ -1,0 +1,10 @@
+\DOC make_full_termpattern
+
+\TYPE {make_full_termpattern : ((term # term list # type list) -> termpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

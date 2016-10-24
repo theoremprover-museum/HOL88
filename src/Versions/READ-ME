@@ -1,0 +1,15 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: Versions					|
++ ===================================================================== +
+
+This directory contains a record of all significant changes to versions
+of HOL prior to the one being currently released.  The files are:
+
+
+    Versions.pre.1.12   Changes made from HOL 88 version 1.10 to version 1.11
+    Version.1.12        Changes incorporated in HOL version 1.12
+
+The file hol/Version.n.m, in the top-level hol distribution directory,
+documents the new changes incorporated in the currently-distributed version
+of the system.
+

@@ -1,0 +1,4 @@
+\THEOREM GENLIST list
+|- (!f. GENLIST f 0 = []) /\
+   (!f n. GENLIST f(SUC n) = SNOC(f n)(GENLIST f n))
+\ENDTHEOREM

@@ -1,0 +1,91 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: more_arithmetic					|
+|									|
+| DESCRIPTION   : Definition of more_arithmetic theory.                 |
+|									|
+| EDITOR	: Paul Curzon						|
+| DATE		:  MAY 1991  			         		|
+|									|
++ =====================================================================	+
+| AUTHORS  :								|
+|       Mike Benjamin(British Aerospace Sowerby Research Centre,Bristol)|
+|	R.J.Boulton							|
+|	Albert J Camilleri (Hewlett-Packard Laboratories, Bristol)	|
+|	Rachel Cardell-Oliver						|
+|	Paul Curzon							|
+|	Elsa L Gunter							|
+|	Jeff Joyce							|
+|	Philippe Leveilley						|
+|	Paul Loewenstein						|
+|	Wim Ploegaerts   (Imec vzw Leuven, Belgium)			|
++ =====================================================================	+
+	
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+arith_ext.ml
+   Arithmetic theorems by WP
+
+arith_ext2.ml
+   Arithmetic theorems by PC
+
+arith_ext3.ml
+   Arithmetic theorems by MB
+
+arith_ext4.ml
+   Arithmetic theorems by RJB
+
+arith_ext5.ml
+   Arithmetic theorems by RCO
+
+odd_even.ml
+   Theory of odd and even numbers
+
+minmax.ml
+   Theory of maximum and minimum
+
+mk_more_arithmetic.ml
+   construct the more_arithmetic theory
+
+more_arithmetic.ml
+   load the library
+
+load_more_arithmetic.ml
+   define the function load_more_arithmetic
+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+This library contains an extension of the arithmetic theory.
+Arithmetic theorems from other libraries are collected here
+(in particular from the sets and bags  libraries).
+
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+   2) type "make clobber"
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+Ensure that the directory more_arithmetic is on the search path.
+
+Type "load_library `more_arithmetic`;;"
+

@@ -1,0 +1,7 @@
+\THEOREM BASEN_TRAILING numeral
+|- !r l.
+    1 < r ==>
+    IS_BASEN r l ==>
+    ~NULL l ==>
+    (BASEN r(TL l) = (BASEN r l) MOD (r EXP ((LENGTH l) - 1)))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM NOT_FORALL_SUC_LESS_EQ suc
+|- ~(!n m. (SUC m) <= n)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM DIV_ONE div_mod
+|- !q. q DIV (SUC 0) = q
+\ENDTHEOREM

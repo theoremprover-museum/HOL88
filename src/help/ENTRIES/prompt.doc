@@ -1,0 +1,19 @@
+\DOC prompt
+
+\TYPE {prompt : (bool -> bool)}
+
+\SYNOPSIS
+Switches the ML prompt on or off.
+
+\DESCRIBE
+{prompt true} switches on the ML prompt (which is `{#}' by default);
+{prompt false} switches it off. In either case, {prompt} returns the previous
+state ({true} for on, {false} for off).
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+set_prompt.
+
+\ENDDOC

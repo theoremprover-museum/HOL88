@@ -1,0 +1,18 @@
+\DOC mk_basen
+
+\TYPE {mk_basen : term -> thm}
+
+\SYNOPSIS
+Constructs a BASEN numeral.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term containing a numeric constant to be used as a radix, and a list
+of terms to be taken as the digits, {mk_basen} constructs a term containing a
+BASEN numeral in that radix with those digits.
+
+\FAILURE
+{mk_basen} fails if the terms are of the wrong types.
+
+\ENDDOC

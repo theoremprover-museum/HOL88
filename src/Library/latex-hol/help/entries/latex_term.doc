@@ -1,0 +1,42 @@
+\DOC latex_term
+
+\TYPE {latex_term : (term -> void)}
+
+\SYNOPSIS
+Translate \HOL\ terms to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+The function {latex_term} converts a \HOL\ term to \LaTeX\ format for
+typesetting it. All \LaTeX\ special characters are escaped or changed
+to a \LaTeX\ command which should produces the desired symbol.  All
+constants are tagged with the command {\CONST}. Numbers in variable
+names are converted to subscripts. The
+result is written to the user's terminal. 
+For example,
+{
+# latex_term "x1 /\ x2";;
+"x_{1} \AND  x_{2}"
+() : void
+
+# latex_term "F ==> anything";;
+"\CONST{F} \IMP  anything"
+() : void
+
+}
+The output of this function can be incorporated into a \LaTeX\
+document. They are usually in one of the math modes. The macro file
+{holmacs.tex} should be input before where the terms appear.
+
+\FAILURE
+Fails if the argument is not a term.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term_to}, {latex_term_add_to},
+{latex_thm}, {latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to}
+and {latex_theory_to}
+
+\ENDDOC

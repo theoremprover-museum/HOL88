@@ -1,0 +1,3 @@
+\THEOREM REAL_INV_1OVER REAL
+|- !x. inv x = (& 1) / x
+\ENDTHEOREM

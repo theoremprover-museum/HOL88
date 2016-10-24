@@ -1,0 +1,13 @@
+\DOC convert_PP
+
+\BLTYPE
+convert_PP : ((print_tree # (string # print_tree) list) ->
+              (print_tree # (string # print_tree) list))
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

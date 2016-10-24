@@ -1,0 +1,18 @@
+\DOC print_defined_types
+
+\TYPE {print_defined_types : (void -> void)}
+
+\SYNOPSIS
+Prints all currently defined ML types known to the system.
+
+\DESCRIBE
+The function prints all ML types defined by means of {lettype}. It also
+lists all abstract types in the system. The printing of {lettype}
+defined types can be suppressed by setting the flag {print_lettypes} to
+{false}. The resulting suppression is only partial as only the outer
+level of defined types is expanded.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

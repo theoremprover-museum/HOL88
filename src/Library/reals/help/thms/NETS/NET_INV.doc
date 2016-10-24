@@ -1,0 +1,7 @@
+\THEOREM NET_INV NETS
+|- !g.
+    dorder g ==>
+    (!x x0.
+      (x tends x0)(mtop mr1,g) /\ ~(x0 = real_of_num 0) ==>
+      ((\n. real_inv(x n)) tends (real_inv x0))(mtop mr1,g))
+\ENDTHEOREM

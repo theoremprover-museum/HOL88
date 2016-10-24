@@ -1,0 +1,3 @@
+\THEOREM SER_CMUL SEQ
+|- !x x0 c. x sums x0 ==> (\n. c * (x n)) sums (c * x0)
+\ENDTHEOREM

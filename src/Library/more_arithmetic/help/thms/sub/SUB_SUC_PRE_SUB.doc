@@ -1,0 +1,3 @@
+\THEOREM SUB_SUC_PRE_SUB sub
+|- !n m. 0 < n ==> (n - (SUC m) = (PRE n) - m)
+\ENDTHEOREM

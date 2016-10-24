@@ -1,0 +1,430 @@
+
+\section{Specification}
+
+This case study describes the definitions and theorems needed to build a
+complete sliding window protocol theory.  The files needed to do this are in
+the directory:
+
+\[ \verb%hol/Training/studies/protocols%. \]
+
+All the input commands which are given in boxes can be found in the file
+\verb%SWnew.ml%.  To work through this case study in HOL edit the file
+\verb%SWnew.ml% while running HOL and read through this document, entering
+commands as they appear in the text.
+
+To build the sliding window protocol theory, first enter HOL and set up the
+sliding window theory :
+
+\setcounter{sessioncount}{1}
+\begin{session}
+\begin{verbatim}
+loadf`startSW`;;
+\end{verbatim}
+\end{session}
+
+This command will open a new theory and load its parent theories.
+The parent theories for this sliding window protocol theory  
+are, \verb%myarith% which contains some necessary
+arithmetic theorems, \verb%plusm_subm% which contains a theory of
+modular arithmetic and \verb%hdi_tli% which contains definitions and
+theorems for operations on sections of lists.
+A summary of the theories \verb%hdi_tli% and \verb%plusm_subm% can be 
+found in Appendix A.
+
+The structure of the HOL model to be specified is illustrated in
+Figure~\ref{fig:holstruct}.  
+The boxes in the diagram represent HOL predicates and
+the arrows represent the flow of information or data in the system.
+
+\begin{figure}
+
+\setlength{\unitlength}{1mm}
+\small
+\begin{picture}(150,70)
+\put(15,0){
+\begin{picture}(120,70)
+\put(45,3){\framebox(30,7){{\sf CHANNEL} (ack)}}
+\put(23,55){\framebox(14,7){{\sf ABORT}}}
+\put(30,50){\line(0,1){5}}
+\put(15,20){\framebox(30,30){}}
+  \put(19,43){\makebox(22,6){{\sf SENDER}}}
+  \put(19,35){\framebox(22,7){{\sf DataTrans}}}
+  \put(27,32){s}
+  \put(32,32){rem}
+  \put(30,30){\vector(0,1){5}}
+  \put(19,23){\framebox(22,7){{\sf AckRecv}}}
+\put(75,20){\framebox(30,30){}}
+  \put(79,43){\makebox(22,6){{\sf RECEIVER}}}
+  \put(79,35){\framebox(22,7){{\sf DataRecv}}}
+  \put(92,32){r}
+  \put(90,35){\vector(0,-1){5}}
+  \put(79,23){\framebox(22,7){{\sf AckTrans}}}
+\put(55,29){\framebox(10,6){{\sf INIT}}}
+\put(45,55){\framebox(30,7){{\sf CHANNEL} (data)}}
+
+\put(10,26){\vector(1,0){8}}
+\put(6,28){\makebox(0,0){source}}
+\put(6,24){\makebox(0,0){= rem 0}}
+\put(102,38){\vector(1,0){8}}
+\put(114,38){\makebox(0,0){sink}}
+
+\put(41,42){\vector(2,3){8}}
+  \put(38,52){dataS}
+  \put(74,52){dataR}
+\put(71,55){\vector(2,-3){8}}
+\put(49,10){\vector(-2,3){8}}
+  \put(38,13){ackS}
+  \put(74,13){ackR}
+\put(79,23){\vector(-2,-3){8}}
+
+\put(65,29){\vector(4,-1){14}}
+\put(55,29){\vector(-4,-1){14}}
+\put(55,35){\vector(-4,1){14}}
+\put(65,35){\vector(4,1){14}}
+\end{picture} } 
+\end{picture}
+\normalsize
+\caption{HOL Sliding Window Protocol Model}
+\label{fig:holstruct}
+\end{figure}
+\normalsize
+
+To describe this model in HOL we must first define some types.  Enter the
+following definitions in HOL :
+
+\begin{session}
+\begin{verbatim}
+let  time = ":num"
+and  data = ":*"
+and  sequence = ":num"
+and  non_packet = ":one" ;; 
+
+let  packet = ":(^sequence # ^data) + ^non_packet" ;;
+let  channel = ":^time -> ^packet" ;;
+
+let  seqtime = ":^time->^sequence" ;;
+let  datatime = ":^time->^data list" ;;
+\end{verbatim}
+\end{session}
+
+The packet type is made up of either a sequence number, data message
+pair, or a non-packet which represents a message lost or garbled by 
+the channel or a time at which no message is being transmitted.
+The following
+operators are used for creating, reading and writing variables of the
+packet type.
+
+\begin{session}
+\begin{verbatim}
+let set_non_packet = new_definition(
+  `set_non_packet`,
+  "set_non_packet:^packet = INR(one)");;
+
+let good_packet = new_definition(
+ `good_packet`,
+  "good_packet (p:^packet) = (ISL p)");;
+
+let new_packet = new_definition(
+ `new_packet`,
+ "(new_packet (ss:^sequence) (dd:^data)):^packet = (INL(ss,dd))");;
+   
+let label = new_definition(
+ `label`,
+ "label (p:^packet) = FST(OUTL p)");;
+
+let message = new_definition(
+ `message`,
+ "message (p:^packet) = SND(OUTL p)");;
+\end{verbatim}
+\end{session}
+
+
+The \verb+INIT+ predicate describes the initial values of the main program
+variables and a condition for the range of sequence 
+numbers, \verb+maxseq+. 
+
+\begin{session}
+\begin{verbatim}
+let INIT = new_definition(
+  `INIT`,
+  "INIT (source:^data list) (maxseq:^sequence)
+        (rem :^datatime)  (s:^seqtime) 
+        (sink:^datatime)  (r:^seqtime)  =
+   ( ( 1 < maxseq )    /\ 
+     (rem 0 = source)  /\  (s 0 = 0) /\ 
+     (sink 0 = NIL)    /\  (r 0 = 0))");;
+\end{verbatim}
+\end{session}
+
+A channel is modelled by two streams, one for packets input to the channel
+and one for those output by the channel over time.
+The relationship between the two streams at any instant of time is that
+the 
+packet on the output stream is either a copy of the packet on the input
+stream or is a non-packet.  The assumption that packets can be output
+in the same time granule in which they are input is unrealistic
+and eventually a channel model including message delivery delay will be 
+used instead.
+
+\begin{session}
+\begin{verbatim}
+let CHANNEL = new_definition(
+   `CHANNEL`,
+   "CHANNEL (inC:^channel) (outC:^channel) =
+      (!t:^time. (outC t = inC t) \/ (outC t = set_non_packet))" );;
+\end{verbatim}
+\end{session}
+
+The predicate \verb+DATA_TRANS+ represents the data transmission parts of
+the SENDER program.  Any packet from the 
+SENDER window is chosen for transmission.
+The sender's window consists of the first \verb+SW+ elements of 
+\verb+(rem t)+.  
+The message chosen is the i-th element of \verb+rem+,
+\verb+HDI (i t) (rem t)+, for \verb+(i t) < SW+.  Its sequence number
+is 
+
+\bigskip
+\begin{center}
+\verb+plusm(s t, i t, maxseq)+
+\end{center}
+\bigskip
+
+\noindent where \verb+s t+ is the true sequence number of the first element
+of \verb+rem t+.  The functions \verb%plusm% and \verb%subm% perform
+addition and subtraction modulo \verb%maxseq%.
+The choice function, \verb+p+, guarantees
+that \verb+i t+ is within the window and that there are at least
+\verb+i t+
+data messages available in \verb+rem t+.  If \verb+p t+ is false then a 
+non-packet is transmitted instead.
+With the intention of making this implementation model as general as 
+possible, only the minimum information needed about \verb+p+, its type, 
+is given at this stage.  Later,
+different implementations can be defined by more fully defining such
+parameters. 
+The conjunct \verb+ ~(NULL rem t)+ is included in \verb+DATA_TRANS+ so
+that, after all data has been transmitted, 
+non-packets are transmitted forever.  That is, the
+program never exits, but the protocol will reach a stable 
+state once transmission of source data has been completed.
+
+\begin{session}
+\begin{verbatim}
+ let DATA_TRANS = new_definition(
+   `DATA_TRANS`,                                        
+   "DATA_TRANS
+      (rem:^datatime) (s:^seqtime) (SW:^sequence) 
+      (maxseq:^sequence)
+      (p:^time->^sequence->bool) (i:^seqtime)
+      (dataS:^channel) =       
+      ( (SW = (maxseq-1)) /\
+      (!t:^time. 
+        ( ((p t (i t)) ==> 
+              ((~NULL(TLI (i t) (rem t))) /\ ((i t) < SW) )) /\
+           ( ((p t (i t)) /\ ~(NULL(rem t)))          
+                   => (dataS t = new_packet 
+                                   (plusm(s t,i t,maxseq))
+                                   (HDI (i t) (rem t)) )
+                   |  (dataS t = set_non_packet ) ) ))) ");;   
+\end{verbatim}
+\end{session}
+
+
+For any packet, \verb+p+, \verb+(IN_WINDOW p b ws maxseq)+ tests whether
+\verb+p+ is within the sender or receiver's window by testing whether
+\verb+label p+ is less than window-size, \verb+ws+, sequence numbers from the
+bottom edge of the window, \verb+b+.
+
+\begin{session}
+\begin{verbatim}
+let IN_WINDOW = new_definition(
+  `IN_WINDOW`,
+  "IN_WINDOW (p:^packet) (b:^sequence) (ws:^sequence) (maxseq:^sequence) =
+    ( (good_packet p) /\
+      ( subm(label p,b,maxseq) < ws ) )");;
+\end{verbatim}
+\end{session}
+
+The predicate \verb+DATA_RECV+ represents the part of RECEIVER program which
+accepts incoming packets and outputs them to the sink if necessary.
+This particular predicate uses a receiver window size of one which means
+only packets which can be output immediately are accepted.  If the incoming
+packet, \verb+dataR t+ is acceptable, then its message part is appended to
+the sink list, otherwise \verb+DATA_RECV+ makes no changes.
+
+\begin{session}
+\begin{verbatim}
+let DATA_RECV = new_definition( 
+  `DATA_RECV`, 
+  "DATA_RECV (dataR:^channel)
+             (RW:^sequence) (maxseq:^sequence) 
+             (sink:^datatime) (r:^seqtime)  =
+  ( (RW = 1) /\
+    (!t:^time.  
+      (IN_WINDOW (dataR t) (r t) RW maxseq ) 
+          => ( (r (t+1) = plusm(r t,1,maxseq)) /\ 
+               (sink (t+1) = (APPEND (sink t) [message(dataR t)] ) )) 
+          |  ( (r (t+1) = (r t)) /\ 
+               (sink (t+1) = (sink t)) )))" );;
+\end{verbatim}
+\end{session}
+
+The RECEIVER program is also required to transmit information about its
+current state to the SENDER in the form of acknowledgement packets.
+The variables updated in \verb+DATA_RECV+ are used in the next acknowledgement
+packet. Since \verb+r+ is the value of the next sequence 
+number {\em expected}, the
+acknowledgement sequence is one less than \verb+r+ to represent the sequence
+number of the last message correctly received.  This strategy is chosen
+so that the model generalizes for all window sizes from one
+upwards.  The boolean 
+function \verb+q+ is like \verb+p+ in \verb+DATA_TRANS+.  
+An acknowledgement packet is only transmitted at
+times when \verb+q t+ is true.
+The data field of an acknowledgement packet is never used, and can be
+filled with any dummy data message.
+
+\begin{session}
+\begin{verbatim}
+ let ACK_TRANS = new_definition(
+   `ACK_TRANS`,                                                          
+   "ACK_TRANS (r:^seqtime) 
+              (maxseq:^sequence)
+              (q:^time->bool)
+              (ackR:^channel) = 
+    ( !t:^time. !dummy:^data.
+      ( (q t) => (ackR t = new_packet (subm((r t),1,maxseq)) dummy )
+              |  (ackR t = set_non_packet) ) )");;    
+\end{verbatim}
+\end{session}
+
+Acknowledgement packets received by the SENDER program are checked by
+\verb+ACK_RECV+.  If the acknowledgement represents the correct reception 
+of a packet within the SENDER's window then a new window is chosen starting
+from the first packet from the source stream which is as yet unacknowledged.
+That is, the sequence number \verb+s t+ represents the sender's knowledge of
+the latest message correctly delivered to the sink.  The
+first message {\em not} known to be correctly delivered has 
+sequence number \verb%s t%.
+
+\begin{session}
+\begin{verbatim}
+let ACK_RECV = new_definition(
+   `ACK_RECV`,     
+   "ACK_RECV (ackS:^channel) 
+             (SW:^sequence)
+             (maxseq:^sequence) 
+             (rem:^datatime) 
+             (s:^seqtime) = 
+    (!t:^time.                                                              
+        (IN_WINDOW (ackS t) (s t) SW maxseq)     
+           => ( (s (t+1) = plusm(label(ackS t),1,maxseq) ) /\
+                (rem (t+1) = 
+                     (TLI (subm (plusm(label(ackS t),1,maxseq),s t,maxseq)) 
+                          (rem t)) ) )
+           |  ( (s (t+1) = (s t)) /\                                        
+                (rem (t+1) = (rem t)) ) )");; 
+\end{verbatim}
+\end{session}
+
+The \verb+SENDER+ predicate contains all those sections of the above
+specification which would be part of the sender program in an implementation.
+The conjunction of predicates represents their concurrent execution (this
+is an abstraction of their real sequential execution).
+\begin{session}
+\begin{verbatim}
+let SENDER = new_definition(
+  `SENDER`,
+  "SENDER (maxseq:^sequence) 
+          (SW:^sequence)
+          (rem:^datatime) 
+          (s:^seqtime) 
+          (p:^time->^sequence->bool) (i:^seqtime)
+          (dataS:^channel) 
+          (ackS:^channel) = 
+    ( (DATA_TRANS rem s SW maxseq p i dataS) /\
+      (ACK_RECV ackS SW maxseq rem s) )");;
+\end{verbatim}
+\end{session}
+
+The liveness, or progress, of the sliding window protocol is monitored by 
+the \verb+ABORT+ predicate which would also be part of 
+the sender's program code in an implementation.  This
+predicate counts the lengths of times during which no
+valid acknowledgement arrives.  If any such waiting period exceeds 
+\verb+maxT+ then \verb+aborted+ is set to true and remains so.  
+Such a specification of liveness is called real-time liveness and
+is based on the solution used in most implementations.
+It is up to the program which is using
+the protocol to decide what action to take when the \verb%aborted% 
+signal has been set.  
+The \verb+aborted+ variable is 
+used in the verification of liveness because
+it can be proved that the protocol will eventually deliver all its data
+as long as \verb+aborted+ remains false.  Note that \verb+aborted+ will
+be always false once all the \verb+source+ data, contained in \verb+rem+, 
+has been delivered.  Throughout this specification termination is 
+represented by a predicate reaching and remaining in a stable state rather
+than actually exiting a program.
+
+\begin{session}
+\begin{verbatim}
+let ABORT = new_definition(
+  `ABORT`,
+  "ABORT (c:^time->num) (aborted:^time->bool) (maxT:num)
+         (maxseq:^sequence) (SW:^sequence) 
+         (s:^seqtime) (rem:^datatime) (ackS:^channel) =
+    (!t:^time. 
+      (c 0 = 0 ) /\ 
+      (c (t+1) = ( (IN_WINDOW (ackS t) (s t) SW maxseq) => 0 | ((c t)+1) )) /\
+      (aborted 0 = F) /\
+      (aborted(t+1) = (((c t >= maxT) \/ (aborted t)) /\ ~(NULL(rem t)))))");;
+\end{verbatim}
+\end{session}
+
+The \verb+RECEIVER+ predicate, like \verb+SENDER+, represents all the 
+functions of the receiver program of an implementation.
+
+\begin{session}
+\begin{verbatim}
+let RECEIVER = new_definition(
+  `RECEIVER`,
+  "RECEIVER (maxseq:^sequence)
+            (RW:^sequence)
+            (sink:^datatime) 
+            (r:^seqtime)
+            (q:^time->bool)
+            (ackR:^channel) 
+            (dataR:^channel) =
+    ( (ACK_TRANS r maxseq q ackR) /\
+      (DATA_RECV dataR RW maxseq sink r) )");;
+\end{verbatim}
+\end{session}
+
+Finally, all the implementation predicates described above are included in
+a single predicate, \verb+IMPL+.  A sliding window protocol
+implementation is a system satisfying the behaviour of each of
+its parts.
+
+\begin{session}
+\begin{verbatim}
+let IMPL = new_definition(
+  `IMPL`,
+  "IMPL (source:^data list)
+        (maxseq:^sequence) 
+        (rem:^datatime)  (s:^seqtime) (SW:^sequence)
+        (p:^time->^sequence->bool) (i:^seqtime)
+        (c:^time->num) (aborted:^time->bool) (maxT:num)
+        (sink:^datatime) (r:^seqtime) (RW:^sequence)
+        (q:^time->bool)
+        (dataS:^channel) (dataR:^channel) (ackS:^channel) (ackR:^channel) =
+  ( (INIT source maxseq rem s sink r) /\
+    (SENDER maxseq SW rem s p i dataS ackS) /\
+    (ABORT c aborted maxT maxseq SW s rem ackS) /\
+    (CHANNEL dataS dataR) /\
+    (RECEIVER maxseq RW sink r q ackR dataR) /\
+    (CHANNEL ackR ackS) )");;
+\end{verbatim}
+\end{session}
+

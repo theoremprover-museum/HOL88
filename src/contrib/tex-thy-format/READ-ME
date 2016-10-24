@@ -1,0 +1,31 @@
+format_thy --- to format a HOL theory in LaTeX format
+
+by Wai Wong, ww@eng.warwick.ac.uk
+
+Dept. of Engineering, University of Warwick, Coventry V4 7AL, U.K.
+
+27 January 1991
+
+format_thy is a shell command.
+It takes the name of the theory, e.g., 'bool', and creats a file named
+'bool.tex' which is the theory in LaTeX format. You can LaTeX it to 
+produce a hardcopy. The result is not perfect yet, but acceptable.
+
+ List of Files
+----------------
+format_thy 	a shell script. It starts a HOL session to create the 
+		theory in LaTeX format.
+format_thy.ml	ML functions. To print HOL theory in LaTeX format.
+		Based on the HOL ML function print_theory.
+holmac.tex	LaTeX commands. Required when LaTex the theory.
+READ-ME		This file.
+
+ Installation
+---------------
+1) Put format_thy in a directory in your PATH, e.g., ~/bin.
+2) Put format_thy.ml in a directory where HOL can find it, i.e., in
+   one of the directories in the list returned by search_path.
+3) Put holmac.tex in a directory where LaTeX can find it, usually
+   /usr/local/tex/inputs or /usr/local/tex/macros or your private
+   TeX macros collection.
+

@@ -1,0 +1,3 @@
+\THEOREM node tree
+|- !tl. node tl = ABS_tree(node_REP(MAP REP_tree tl))
+\ENDTHEOREM

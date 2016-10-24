@@ -1,0 +1,49 @@
+% A1.7 FUNCTIONS %
+
+fndec --> fnname [=] input_or_FNSET [:] {MK_one(`fnbody`,fnbody)} 
+          {MK_three(`fndec`,POP,POP,POP)}.
+
+input_or_FNSET --> [FNSET] [(] input [->] {MK_two(`fnarrow`,POP,typ)} 
+                   more_input_type [)] {MK_one(`fnarrows`,POP)} 
+                   {MK_one(`fnset`,POP)}
+                 | [FNSET] [\[] int [\]] [(] input [->] 
+                   {MK_two(`fnarrow`,POP,typ)} [)] {MK_two(`fnset`,POP,POP)}
+                 | input [->] {MK_two(`fnarrow`,POP,typ)} 
+                   {MK_one(`fnset`,POP)}.
+
+more_input_type --> [,] input [->] {MK_two(`fnarrow`,POP,typ)} 
+                    {add_to_list(POP,POP)} more_input_type 
+                  | [].
+
+input --> [(] inputitem more_inputs [)] {MK_one(`input`,POP)}.
+
+more_inputs --> [,] {add_to_list(POP,inputitem)} more_inputs
+              | [].
+
+inputitem --> typ poss_name.
+
+poss_name --> [:] name more_in_names {MK_two(`inputitem`,POP,POP)}
+            | {MK_one(`inputitem`,POP)}.
+
+more_in_names --> {add_to_list(POP,name)} more_in_names
+                | [].
+
+fnbody --> [DELAY] [(] const1 [,] int
+           poss_other_int_consts [)]
+         | [ARITH] {MK_one(`fnbody_ARITH`,int)}
+         | [BIOP] biopname poss_biopparms
+         | [REFORM] {MK_zero(`fnbody_REFORM`)}
+         | [IMPORT] {MK_zero(`fnbody_IMPORT`)}
+         | [IDELAY] [(] const1 [,] {MK_two(`fnbody_IDELAY`,POP,int)} [)]
+         | [RAM] [(] {MK_one(`fnbody_RAM`,const1)} [)]
+         | unit.
+
+poss_other_int_consts --> [,] const1 [,] 
+                          {MK_four(`fnbody_DELAY`,POP,POP,POP,int)} 
+                        | [,] {MK_three(`fnbody_DELAY`,POP,POP,int)}
+                        | {MK_two(`fnbody_DELAY`,POP,POP)}.
+
+poss_biopparms --> [\{] macparams [\}] {MK_two(`fnbody_BIOP`,POP,POP)}
+                 | {MK_one(`fnbody_BIOP`,POP)}.
+
+

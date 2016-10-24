@@ -1,0 +1,3 @@
+\THEOREM BASEN_SNOC numeral
+|- !r e l. BASEN r(SNOC e l) = ((BASEN r l) * r) + e
+\ENDTHEOREM

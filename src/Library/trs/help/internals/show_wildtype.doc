@@ -1,0 +1,10 @@
+\DOC show_wildtype
+
+\TYPE {show_wildtype : (wildtype -> type)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM WORDN_VAL wordn_num
+|- !l. WORDN(LENGTH l)(VAL l) = l
+\ENDTHEOREM

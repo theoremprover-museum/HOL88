@@ -1,0 +1,3 @@
+\THEOREM TREAL_LT_REFL REALAX
+|- !x. ~x treal_lt x
+\ENDTHEOREM

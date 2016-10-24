@@ -1,0 +1,50 @@
+% A1.4 TYPES %
+
+typedec --> name [=] {MK_two(`typedec`,POP,enum_or_type)}.
+
+enum_or_type --> [NEW] finish_enum
+               | typ.
+
+finish_enum --> [(] name_with_typ more_enum_typ [)]
+              | name char_or_int.
+
+char_or_int --> [/] [(] int [..] {MK_three(`enum_int`,POP,POP,int)} [)] 
+              | [(] poss_char_range more_char_ranges [)].
+
+poss_char_range --> char is_c_range.
+
+is_c_range --> [..] {MK_three(`enum_char`,POP,POP,char)} 
+             | {MK_two(`enum_char`,POP,POP)}.
+
+more_char_ranges --> [|] {add_to_list(POP,poss_char_range)} more_char_ranges
+                   | {MK_one(`enum_chars`,POP)}.
+
+more_enum_typ --> [|] {add_to_list(POP,name_with_typ)} more_enum_typ
+                | {MK_one(`enum_types`,POP)}.
+
+name_with_typ --> name poss_typ.
+
+poss_typ --> [&] {MK_two(`enum_type`,POP,typ)} | {MK_one(`enum_type`,POP)}.
+
+typ --> typ1 imp_typ1.
+
+imp_typ1 --> [->] {MK_two(`type`,POP,typ1)}
+           | {MK_one(`type`,POP)}.
+
+typ1 --> [(] typ more_typs [)] {MK_one(`type_tuple`,POP)} {MK_one(`type1`,POP)}
+       | [\[] int [\]] {MK_two(`type_int`,POP,typ)} {MK_one(`type1`,POP)}
+       | [STRING] [\[] int [\]] {MK_two(`type_STRING`,POP,typename)}
+         {MK_one(`type1`,POP)}
+       | {MK_one(`type1`,typename)}
+       | {MK_one(`type1`,typ2)}.
+
+more_typs --> [,] {add_to_list(POP,typ)} more_typs
+            | [].
+
+typ2 --> [STRING] [\[] [INT] typename [\]] {MK_two(`type_STRING_INT`,POP,name)}
+         {MK_one(`type2`,POP)}
+       | [TYPE] {MK_one(`type_TYPE`,typename)} {MK_one(`type2`,POP)}
+       | [\[] [INT] typename [\]] {MK_two(`type_INT`,POP,typ)}
+         {MK_one(`type2`,POP)}.
+
+

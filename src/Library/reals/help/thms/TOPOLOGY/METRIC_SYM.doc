@@ -1,0 +1,3 @@
+\THEOREM METRIC_SYM TOPOLOGY
+|- !m x y. dist m(x,y) = dist m(y,x)
+\ENDTHEOREM

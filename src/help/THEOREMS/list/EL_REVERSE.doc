@@ -1,0 +1,3 @@
+\THEOREM EL_REVERSE list
+|- !n l. n < (LENGTH l) ==> (EL n(REVERSE l) = EL(PRE((LENGTH l) - n))l)
+\ENDTHEOREM

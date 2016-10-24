@@ -1,0 +1,3 @@
+\THEOREM HRAT_MUL_RID HREAL
+|- !x. x hrat_mul hrat_1 = x
+\ENDTHEOREM

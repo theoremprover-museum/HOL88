@@ -1,0 +1,3 @@
+\THEOREM REAL_INV_POS REAL
+|- !x. (& 0) < x ==> (& 0) < (inv x)
+\ENDTHEOREM

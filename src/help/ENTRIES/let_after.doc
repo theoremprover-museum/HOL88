@@ -1,0 +1,46 @@
+\DOC let_after
+
+\TYPE {let_after : ((string # string # string list) -> void)}
+
+\SYNOPSIS
+Makes an ML declaration dynamically after other pending declarations.
+
+\DESCRIBE
+The call
+{
+   let_after(`x`,`f`,[`arg1`;...;`argn`])
+}
+\noindent puts an ML declaration
+{
+   let x = f [`arg1`;...;`argn`];;
+}
+\noindent at the end of the queue of currently pending toplevel items. It will
+be evaluated after the phrase which invoked {let_after}, and any other pending
+evaluations. This gives a way of performing declarations dynamically. Note that
+the first two argument strings are interpreted as single identifiers, whereas
+the arguments are passed as literal strings.
+
+\FAILURE
+Never fails, although the subsequent declaration may well fail for any of the
+usual reasons.
+
+\EXAMPLE
+{
+#let fn = \l:(string)list. 1;;
+fn = - : (string list -> int)
+
+#let_after(`x`,`fn`,[]);;
+() : void
+
+x = 1 : int
+
+#x;;
+1 : int
+}
+\USES
+Performing variants on autoloading.
+
+\SEEALSO
+inject_input, let_before, ML_eval.
+
+\ENDDOC

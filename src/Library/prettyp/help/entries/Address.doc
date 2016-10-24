@@ -1,0 +1,46 @@
+\DOC Address
+
+\TYPE {Address : (int list -> address)}
+
+\SYNOPSIS
+Type constructor for sub-tree addresses.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{Address il} denotes the address of a sub-tree within a tree. The integer
+list {il} is the path that has to be followed from the root node of the tree
+in order to reach the sub-tree.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The ML value {Address [1;2]} is the address within the tree:
+{
+         a
+        / \
+       b   c
+      / \   \
+     d   e   f
+        / \
+       g   h
+}
+\noindent of the sub-tree:
+{
+         e   
+        / \
+       g   h
+}
+\noindent The sub-tree is the second child of the first child of the main tree.
+
+\USES
+Sub-tree addresses are maintained as far as possible during the pretty-printing
+process. They can thus be used to determine which sub-tree of the original
+parse-tree was used to generate some specified part of the pretty-printed
+text.
+
+\SEEALSO
+No_address.
+
+\ENDDOC

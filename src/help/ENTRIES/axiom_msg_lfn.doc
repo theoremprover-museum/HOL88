@@ -1,0 +1,34 @@
+\DOC axiom_msg_lfn
+
+\TYPE {axiom_msg_lfn : (string list -> thm)}
+
+\SYNOPSIS
+Loads a given axiom from a given theory, with an autoload message.
+
+\DESCRIBE
+If {thy} is an ancestor theory, and {ax} one of its axioms, then the call
+{
+   axiom_msg_lfn [`thy`;`ax`]
+}
+\noindent will print a message of the form
+{
+   Axiom ax autoloaded from theory `thy`
+}
+\noindent and cancel any autoloading action associated with the name {ax},
+and will then return that axiom.
+
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {ax} is not one of its
+axioms.
+
+\EXAMPLE
+{
+#axiom_msg_lfn [`bool`;`ETA_AX`];;
+Axiom ETA_AX autoloaded from theory `bool`.
+|- !t. (\x. t x) = t
+}
+\SEEALSO
+autoload, autoload_theory, axiom, axioms, axiom_lfn, load_axiom, load_axioms,
+undo_autoload.
+
+\ENDDOC

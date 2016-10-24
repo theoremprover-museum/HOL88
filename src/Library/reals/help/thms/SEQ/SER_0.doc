@@ -1,0 +1,3 @@
+\THEOREM SER_0 SEQ
+|- !f n. (!m. n num_le m ==> (f m = & 0)) ==> f sums (Sum(0,n)f)
+\ENDTHEOREM

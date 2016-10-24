@@ -1,0 +1,3 @@
+\THEOREM HREAL_ADD_TOTAL HREAL
+|- !X Y. (X = Y) \/ (?D. Y = X hreal_add D) \/ (?D. X = Y hreal_add D)
+\ENDTHEOREM

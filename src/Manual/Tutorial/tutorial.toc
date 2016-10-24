@@ -1,0 +1,73 @@
+\contentsline {chapter}{\numberline {1}Getting and Installing HOL}{1}
+\contentsline {section}{\numberline {1.1}Getting HOL}{1}
+\contentsline {section}{\numberline {1.2}The {\ptt info-hol} mailing list}{1}
+\contentsline {section}{\numberline {1.3}Installing HOL}{2}
+\contentsline {section}{\numberline {1.4}Building HOL from sources}{5}
+\contentsline {subsection}{\numberline {1.4.1}Steps to make HOL under Unix}{6}
+\contentsline {section}{\numberline {1.5}Other HOL users}{7}
+\contentsline {section}{\numberline {1.6}HOL performance}{7}
+\contentsline {section}{\numberline {1.7}The HOL licence}{7}
+\contentsline {section}{\numberline {1.8}The REFERENCE browser}{8}
+\contentsline {chapter}{\numberline {2}Introduction to ML}{11}
+\contentsline {section}{\numberline {2.1}How to interact with ML}{11}
+\contentsline {chapter}{\numberline {3}The HOL Logic}{15}
+\contentsline {section}{\numberline {3.1}Overview of higher order logic}{15}
+\contentsline {section}{\numberline {3.2}Terms}{17}
+\contentsline {section}{\numberline {3.3}Theories}{19}
+\contentsline {chapter}{\numberline {4}Introduction to Proof with HOL}{27}
+\contentsline {section}{\numberline {4.1}Forward proof}{28}
+\contentsline {subsection}{\numberline {4.1.1}Derived rules}{30}
+\contentsline {section}{\numberline {4.2}Rewriting}{32}
+\contentsline {section}{\numberline {4.3}Tautologies}{34}
+\contentsline {chapter}{\numberline {5}Goal Oriented Proof: Tactics and Tacticals}{37}
+\contentsline {section}{\numberline {5.1}Using tactics to prove theorems}{41}
+\contentsline {section}{\numberline {5.2}Tacticals}{44}
+\contentsline {subsection}{\numberline {5.2.1}\ptt THENL : tactic -> tactic list -> tactic}{44}
+\contentsline {subsection}{\numberline {5.2.2}\ptt THEN : tactic -> tactic -> tactic}{45}
+\contentsline {subsection}{\numberline {5.2.3}\ptt ORELSE : tactic -> tactic -> tactic}{46}
+\contentsline {subsection}{\numberline {5.2.4}\ptt REPEAT : tactic -> tactic}{46}
+\contentsline {section}{\numberline {5.3}Some tactics built into HOL}{47}
+\contentsline {subsection}{\numberline {5.3.1}\ptt REWRITE\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : thm list -> tactic}{47}
+\contentsline {subsection}{\numberline {5.3.2}\ptt CONJ\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{48}
+\contentsline {subsection}{\numberline {5.3.3}\ptt EQ\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{48}
+\contentsline {subsection}{\numberline {5.3.4}\ptt DISCH\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{48}
+\contentsline {subsection}{\numberline {5.3.5}\ptt GEN\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{48}
+\contentsline {subsection}{\numberline {5.3.6}\ptt IMP\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}RES\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{49}
+\contentsline {subsection}{\numberline {5.3.7}\ptt STRIP\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{49}
+\contentsline {subsection}{\numberline {5.3.8}\ptt SUBST\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : thm list -> thm}{49}
+\contentsline {subsection}{\numberline {5.3.9}\ptt ACCEPT\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : thm -> tactic}{50}
+\contentsline {subsection}{\numberline {5.3.10}\ptt ALL\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{50}
+\contentsline {subsection}{\numberline {5.3.11}\ptt NO\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}TAC : tactic}{50}
+\contentsline {chapter}{\numberline {6}Example: a simple parity checker}{51}
+\contentsline {section}{\numberline {6.1}Introduction}{51}
+\contentsline {section}{\numberline {6.2}Specification}{52}
+\contentsline {section}{\numberline {6.3}Implementation}{55}
+\contentsline {section}{\numberline {6.4}Verification}{58}
+\contentsline {section}{\numberline {6.5}Exercises}{63}
+\contentsline {subsection}{\numberline {6.5.1}Exercise 1}{63}
+\contentsline {subsection}{\numberline {6.5.2}Exercise 2}{64}
+\contentsline {chapter}{\numberline {7}How to program a proof tool}{65}
+\contentsline {section}{\numberline {7.1}A simple implementation}{65}
+\contentsline {section}{\numberline {7.2}A more efficient implementation}{72}
+\contentsline {section}{\numberline {7.3}An even more efficient implementation}{74}
+\contentsline {section}{\numberline {7.4}Further optimizations}{79}
+\contentsline {section}{\numberline {7.5}Normalizing all subterms}{81}
+\contentsline {subsection}{\numberline {7.5.1}Exercise 1}{85}
+\contentsline {subsection}{\numberline {7.5.2}Exercise 2}{86}
+\contentsline {chapter}{\numberline {8}Example: the Binomial Theorem}{87}
+\contentsline {section}{\numberline {8.1}Pascal's Triangle and the Binomial Theorem}{87}
+\contentsline {section}{\numberline {8.2}The Binomial Coefficients}{89}
+\contentsline {section}{\numberline {8.3}Monoids, Groups and Commutative Rings}{90}
+\contentsline {subsection}{\numberline {8.3.1}Associativity and Commutativity}{90}
+\contentsline {subsection}{\numberline {8.3.2}Monoids}{93}
+\contentsline {subsection}{\numberline {8.3.3}Groups}{94}
+\contentsline {subsection}{\numberline {8.3.4}Rings}{95}
+\contentsline {section}{\numberline {8.4}Powers, Reductions, Ranges and Sums}{97}
+\contentsline {subsection}{\numberline {8.4.1}Scalar powers in a monoid}{97}
+\contentsline {subsection}{\numberline {8.4.2}Reduction in a monoid}{97}
+\contentsline {subsection}{\numberline {8.4.3}Subranges of the natural numbers}{98}
+\contentsline {subsection}{\numberline {8.4.4}$\Sigma $-notation}{98}
+\contentsline {section}{\numberline {8.5}The Binomial Theorem for a Commutative Ring}{99}
+\contentsline {section}{\numberline {8.6}The Binomial Theorem for Integers}{100}
+\contentsline {section}{\numberline {8.7}Principal lemmas}{101}
+\contentsline {chapter}{References}{105}

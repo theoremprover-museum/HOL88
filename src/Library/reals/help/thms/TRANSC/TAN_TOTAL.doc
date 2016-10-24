@@ -1,0 +1,3 @@
+\THEOREM TAN_TOTAL TRANSC
+|- !y. ?! x. (--(pi / (& 2))) < x /\ x < (pi / (& 2)) /\ (tan x = y)
+\ENDTHEOREM

@@ -1,0 +1,23 @@
+\DOC hol_pathname
+
+\TYPE {hol_pathname : (void -> string)}
+
+\SYNOPSIS
+Returns the absolute pathname to the hol system directory.
+
+\DESCRIBE
+Evaluating {hol_pathname()} returns a string giving the absolute pathname
+to the directory in which the HOL system is resident.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#hol_pathname();;
+`/usr/groups/hol/HOL2/sun4_sos` : string
+}
+\SEEALSO
+library_pathname.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM SUC_REP_DEF num
+|- SUC_REP = (@f. ONE_ONE f /\ ~ONTO f)
+\ENDTHEOREM

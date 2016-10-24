@@ -1,0 +1,3 @@
+\THEOREM SUB_LESS_0 arithmetic
+|- !n m. m < n = 0 < (n - m)
+\ENDTHEOREM

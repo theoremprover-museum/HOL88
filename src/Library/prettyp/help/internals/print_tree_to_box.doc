@@ -1,0 +1,18 @@
+\DOC print_tree_to_box
+
+\BLTYPE
+print_tree_to_box : (int ->
+                     int ->
+                     print_rule_function ->
+                     string ->
+                     (string # int) list ->
+                     print_tree ->
+                     address print_box)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

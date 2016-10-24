@@ -1,0 +1,3 @@
+\THEOREM ETA_AX bool
+|- !t. (\x. t x) = t
+\ENDTHEOREM

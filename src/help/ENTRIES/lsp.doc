@@ -1,0 +1,42 @@
+\DOC lsp
+
+\TYPE {lsp : (void -> void)}
+
+\SYNOPSIS
+Breaks out of top-level ML to Lisp.
+
+\DESCRIBE
+{lsp} breaks out of top-level ML to Lisp in such a fashion that one finds
+oneself in the particular Lisp's break-level debugger.  ML execution may
+be continued safely by issuing the appropriate continuation command to
+the Lisp in question.  In Franz, this is a {Control-D}, in Allegro CL it
+is {:continue}, in Lucid CL it is {(q)}, and in AKCL it is {:r}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#lsp();;
+
+Break nil
+<1>: ^D
+[Return to top level]
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 1.12 (Sun3/Franz), built on Feb 23 1991
+
+#
+}
+\COMMENTS
+{lsp} is not meant for general use, and should be treated with great
+care.  If one is not wary, it is entirely possible to corrupt HOL by
+using it.
+
+\SEEALSO
+dropout, lisp.
+
+\ENDDOC

@@ -1,0 +1,9 @@
+\THEOREM NET_DIV NETS
+|- !g.
+    dorder g ==>
+    (!x x0 y y0.
+      (x tends x0)(mtop mr1,g) /\
+      (y tends y0)(mtop mr1,g) /\
+      ~(y0 = real_of_num 0) ==>
+      ((\n. (x n) / (y n)) tends (x0 / y0))(mtop mr1,g))
+\ENDTHEOREM

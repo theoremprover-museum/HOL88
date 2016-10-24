@@ -1,0 +1,420 @@
+
+\chapter{Using embedded ML functions\label{functions}}
+
+The pretty-printing language does not provide significant computational
+facilities. Instead, \ML\ functions can be embedded within the language to
+perform any required computation. This can be rather messy, but it is hoped
+that the facilities will not be required to any great extent.
+
+There are two classes of functions actually made use of within the language.
+In addition, functions of any type can be declared and used as sub-functions to
+these two classes. The two classes are {\it leaf}/{\it subcall\/}
+transformations, and functions which have access to the pretty-printing
+environment.
+
+
+\section{Leaf and subcall transformations\label{leafandsubtrans}}
+
+For transforming the node-names of the trees to be printed, there are functions
+of \ML\ type:
+
+\begin{small}\begin{verbatim}
+   string -> string
+\end{verbatim}\end{small}
+
+\noindent
+For transforming lists of sub-trees, there are functions of type:
+
+\begin{small}\begin{verbatim}
+   (print_tree # address) list -> (print_tree # address) list
+\end{verbatim}\end{small}
+
+\noindent
+An example of a node-name transformer is a function which forces a string to
+uppercase. An example of a list transformer is a function to reverse the list
+of sub-trees, perhaps because they have been bound in the pattern in the
+opposite order to that in which they are to be printed.
+
+Such functions are normally quite easy to write. However, as can be seen from
+the type, the functions for transforming lists of sub-trees have to deal with
+sub-tree addresses in addition to the trees themselves. For a polymorphic
+operation, such as list reversal, the addresses present no problems, but for
+functions which examine the values of the trees, the addresses have to be
+dealt with explicitly.
+
+\index{sub-tree addresses|(}\index{address!of sub-trees|(}
+A sub-tree address is a list of integers representing the path from the root
+of the original tree to the sub-tree concerned. The \ML\ value:
+
+\begin{small}\begin{verbatim}
+   Address [1;2]
+\end{verbatim}\end{small}
+
+\noindent
+is the address of the sub-tree:
+
+\begin{small}\begin{verbatim}
+                                      e
+                                     / \
+                                    g   h
+\end{verbatim}\end{small}
+
+\noindent
+within the tree:
+
+\begin{small}\begin{verbatim}
+                                      a
+                                     / \
+                                    b   c
+                                   / \   \
+                                  d   e   f
+                                     / \
+                                    g   h
+\end{verbatim}\end{small}
+
+\noindent
+The sub-tree is the second child of the first child of the main tree.
+
+A sub-tree and its address should remain associated as a pair during a
+transformation. If this is not possible the address should be replaced by the
+\ML\ value \ml{No\_address}. Discarding address information should be avoided
+if at all possible, but under no circumstances should a transformation
+function leave an address associated with a sub-tree for which it is no longer
+valid. The address is no longer valid if the sub-tree has been changed. To put
+this another way, address information should be discarded if the
+transformation does anything more than rearrange the sub-trees within the list
+or select certain sub-trees from the list.
+\index{address!of sub-trees|)}\index{sub-tree addresses|)}
+
+
+\section
+   [Functions with access to the environment]
+   {Functions with access to the pretty-printing\\ environment\label{envfuns}}
+
+A more interesting class of functions are those which have access to the
+pretty-printing environment. These take a list of parameters and a metavariable
+binding as arguments, and return a value of some type appropriate to the
+context in which they are used.
+
+As the language stands the functions are of one of the following types, but
+functions of similar types may be used as sub-functions to these.
+
+\begin{small}\begin{verbatim}
+   (string # int) list -> print_binding -> bool
+
+   (string # int) list -> print_binding -> int
+
+   (string # int) list -> print_binding -> metavar_binding
+\end{verbatim}\end{small}
+
+\noindent
+The first argument to one of these functions is a list of parameters,
+represented by pairs. The first element of a pair is the name of the parameter.
+The second element is the parameter value.
+
+The second argument is the binding of metavariables to sub-trees and node-names
+resulting from matching the tree. The type \ml{print\_binding} is in fact
+just an abbreviation for the type:
+
+\begin{small}\begin{verbatim}
+   (string # metavar_binding) list
+\end{verbatim}\end{small}
+
+\noindent
+and the type \ml{metavar\_binding} is defined by:
+
+\begin{small}\begin{verbatim}
+   type metavar_binding = Bound_name of string # address
+                        | Bound_names of (string # address) list
+                        | Bound_child of print_tree # address
+                        | Bound_children of (print_tree # address) list;;
+\end{verbatim}\end{small}
+
+\noindent
+The current context\index{context in the environment} is also available for
+testing. It appears in the parameter list as a pair of the form:
+
+\begin{small}\begin{verbatim}
+   (`CONTEXT_xxxx`,n)
+\end{verbatim}\end{small}
+
+\noindent
+where {\small\verb%xxxx%} is the current context, and {\small\verb%n%} is any
+number (it does not matter which).
+
+The pretty-printer comes with a number of functions pre-defined to make it
+easier to extract information from the parameter list and binding, and to
+manipulate this information into the required form.
+
+
+\subsection{Functions for use in tests}
+
+\index{node-names!one rule for several names}
+\index{is\_a\_member\_of@{\ptt is\_a\_member\_of}|pin}
+There is in fact only one function specifically designed for use in a test,
+though others may be used. It is defined to be an infix function.
+
+\begin{boxed}\begin{verbatim}
+   is_a_member_of : string -> string list -> print_test
+\end{verbatim}\end{boxed}
+
+\noindent
+where \ml{print\_test} is an abbreviation for the type:
+
+\begin{small}\begin{verbatim}
+   (string # int) list -> print_binding -> bool
+\end{verbatim}\end{small}
+
+\noindent
+\ml{is\_a\_member\_of} forms a \ml{print\_test} which yields \ml{true} only
+if the metavariable whose name is the first argument to \ml{is\_a\_member\_of}
+is bound to a node-name which appears in the second argument. This evaluation
+to a Boolean value is only performed when the \ml{print\_test} is applied to
+a parameter list and a binding.
+
+The function fails if the metavariable named is bound to anything other than
+a single node-name.
+
+An example of the use of this function is the rule:
+
+\begin{small}\begin{verbatim}
+   ''::***node(*,*) where
+          {`node` is_a_member_of [`plus`;`minus`;`mult`;`div`]} ->
+       [<h 0> ***node];
+\end{verbatim}\end{small}
+
+
+\subsection{Functions for accessing the environment values}
+
+\index{bound\_number@{\ptt bound\_number}|pin}
+
+\begin{boxed}\begin{verbatim}
+   bound_number : string -> (string # int) list -> print_binding -> int
+\end{verbatim}\end{boxed}
+
+\noindent
+The function \ml{bound\_number} takes the name of a pretty-printer parameter
+as its first argument and returns a function. This function yields the integer
+value associated with the parameter, when it is presented with an environment
+via its two arguments. The binding is not used, but is present for consistency.
+The function fails if the parameter is not present in the parameter list.
+
+\index{bound\_name@{\ptt bound\_name}|pin}
+\index{bound\_names@{\ptt bound\_names}|pin}
+\index{bound\_child@{\ptt bound\_child}|pin}
+\index{bound\_children@{\ptt bound\_children}|pin}
+The next four functions can be used to obtain the data item bound to a named
+metavariable.
+
+\begin{boxed}\begin{verbatim}
+   bound_name :
+      string -> (string # int) list -> print_binding -> string
+   bound_names :
+      string -> (string # int) list -> print_binding -> string list
+   bound_child :
+      string -> (string # int) list -> print_binding -> print_tree
+   bound_children :
+      string -> (string # int) list -> print_binding -> print_tree list
+\end{verbatim}\end{boxed}
+
+\noindent
+\ml{bound\_name} takes the name of a metavariable (less the preceding
+{\small\verb%*%}, {\small\verb%**%}, or {\small\verb%***%}) as its first
+argument and returns a function of type:
+
+\begin{small}\begin{verbatim}
+   (string # int) list -> print_binding -> string
+\end{verbatim}\end{small}
+
+\noindent
+When given the current environment as arguments, this function yields the
+node-name bound to the specified metavariable. The parameter list is not used,
+but is present for consistency. The function fails if the specified
+metavariable is not bound to a single node-name. It also fails if the
+metavariable cannot be found in the binding.
+
+The other three functions perform similar operations for metavariables which
+are bound to a list of node-names, a single sub-tree, or a list of sub-trees.
+
+\index{context in the environment}
+\index{bound\_context@{\ptt bound\_context}|pin}
+The following function is intended to make it easier to extract the value of
+the current context from its rather contorted representation in the parameter
+list:
+
+\begin{boxed}\begin{verbatim}
+   bound_context : (string # int) list -> print_binding -> string
+\end{verbatim}\end{boxed}
+
+\noindent
+Unlike the functions just described, \ml{bound\_context} does not require an
+initial argument. When presented with the current environment by way of its
+arguments, \ml{bound\_context} returns the character string representing the
+current context. The binding is not used, but is present for consistency. The
+function will not fail unless it is given an invalid parameter list.
+
+Note that the parameter list and binding will not normally be supplied by the
+user. Instead, the printer provides these arguments during execution. So, from
+the point of view of the user, once one of the functions has been evaluated as
+far as a value of type:
+
+\begin{small}\begin{verbatim}
+   (string # int) list -> print_binding -> *
+\end{verbatim}\end{small}
+
+\noindent
+it is fully evaluated. Conceptually, one might want to write:
+
+\begin{small}\begin{verbatim}
+   (bound_number `test`) + 1
+\end{verbatim}\end{small}
+
+\noindent
+to obtain the value of the parameter `test' incremented by one. Of course this
+\ML\ expression does not type-check. The code for what is really meant is:
+
+\begin{small}\begin{verbatim}
+   \params. \pbind. (bound_number `test` params pbind) + 1
+\end{verbatim}\end{small}
+
+\noindent
+To make it easier to write valid \ML\ for such things, the following functions
+have been defined.
+
+
+\subsection{Making new functions which access environment values}
+
+Suppose a function is required which evaluates the length of the node-name
+bound to the metavariable {\small\verb%***x%}. The \ML\ code for this is:
+
+\begin{small}\begin{verbatim}
+   \params. \pbind. (length o explode) (bound_name `x` params pbind)
+\end{verbatim}\end{small}
+
+\noindent
+The function takes a parameter list and a binding as arguments. It uses these
+to find the node-name bound to the metavariable with name `x'. The resulting
+string is then exploded into a list of single character strings and the length
+of this list is computed.
+
+\index{apply1@{\ptt apply1}|pin}
+Now consider the following function declaration:
+
+\begin{boxed}\begin{verbatim}
+   let apply1 f val =
+
+      % : ((* -> **) ->                                        %
+      %       ((string # int) list -> print_binding -> *) ->   %
+      %          ((string # int) list -> print_binding -> **)) %
+
+      (\(params:(string # int) list) (pbind:print_binding).
+          f (val params pbind));;
+\end{verbatim}\end{boxed}
+
+\noindent
+\ml{apply1} is a higher-order function which can be used to simplify the
+\ML\ code above by removing the need for the bound variables:
+
+\begin{small}\begin{verbatim}
+   apply1 (length o explode) (bound_name `x`)
+\end{verbatim}\end{small}
+
+\index{apply2@{\ptt apply2}|pin}
+\noindent
+There is a similar function, \ml{apply2}, for use with functions of two
+(curried) arguments. It is defined by:
+
+\begin{boxed}\begin{verbatim}
+   let apply2 f val1 val2 =
+
+      % : ((* -> ** -> **) ->                                %
+      %    ((string # int) list -> print_binding -> *) ->    %
+      %    ((string # int) list -> print_binding -> **) ->   %
+      %       ((string # int) list -> print_binding -> ***)) %
+
+      (\(params:(string # int) list) (pbind:print_binding).
+          f (val1 params pbind) (val2 params pbind));;
+\end{verbatim}\end{boxed}
+
+\noindent
+So a function for testing whether the parameter `test' has value 1 can be
+written as:
+
+\begin{small}\begin{verbatim}
+   apply2 (curry $=) (bound_number `test`) (\params. \pbind. 1)
+\end{verbatim}\end{small}
+
+\index{apply0@{\ptt apply0}|pin}
+\noindent
+Note that `equals' takes its two arguments as a pair in \ML, and so has to be
+curried before use with \ml{apply2}. Also, the `1' has to be made into a 
+function-valued object. To simplify this, \ml{apply0} defined by:
+
+\begin{boxed}\begin{verbatim}
+   let apply0 f =
+
+      % : (* -> ((string # int) list -> print_binding -> *)) %
+
+      (\(params:(string # int) list) (pbind:print_binding). f);;
+\end{verbatim}\end{boxed}
+
+\noindent
+is used, giving the code:
+
+\begin{small}\begin{verbatim}
+   apply2 (curry $=) (bound_number `test`) (apply0 1)
+\end{verbatim}\end{small}
+
+
+\subsection{Functions for metavariable transformations}
+
+Within the metavariable-transformation part of a rule (see
+Section~\ref{pspecials}), a typical requirement is to `declare' a new
+metavariable to be bound to the result of performing a transformation on a
+{\em single\/} existing metavariable. The type of function required is:
+
+\begin{small}\begin{verbatim}
+   (string # int) list -> print_binding -> metavar_binding
+\end{verbatim}\end{small}
+
+\index{new\_name@{\ptt new\_name}|pin}
+\index{new\_names@{\ptt new\_names}|pin}
+\index{new\_child@{\ptt new\_child}|pin}
+\index{new\_children@{\ptt new\_children}|pin}
+\noindent
+There are four functions available to facilitate this, corresponding to the
+four different types of data which can be bound to a metavariable. The first
+is \ml{new\_name}:
+
+\begin{boxed}\begin{verbatim}
+   new_name : (string -> string) -> string ->
+                 (string # int) list -> print_binding -> metavar_binding
+\end{verbatim}\end{boxed}
+
+\noindent
+The first argument is the transformation function. The second argument is the
+name of the metavariable which is bound to the value to be transformed. When
+provided with these arguments and a pretty-printer environment, \ml{new\_name}
+extracts the item bound to the named metavariable and then applies the
+transformation function to it. The result is then made into a form suitable
+for binding to a metavariable, i.e.~it is made into an object of type
+\ml{metavar\_binding}. \ml{new\_name} fails if the named metavariable does
+not exist or is bound to an item of the wrong type.
+
+\ml{new\_names}, \ml{new\_child}, and \ml{new\_children} perform similar
+operations, but for transformations of different types:
+
+\begin{boxed}\begin{verbatim}
+   new_names    : ((string # address) list -> (string # address) list) -> ...
+   new_child    : (print_tree -> print_tree) -> ...
+   new_children :
+      ((print_tree # address) list -> (print_tree # address) list) -> ...
+\end{verbatim}\end{boxed}
+
+\noindent
+Note that the transformation functions for \ml{new\_names} and
+\ml{new\_children} have to deal with sub-tree addresses in addition to the
+node-names or trees. If the transformation function is polymorphic, as is for
+example a function to reverse the list, this will not cause any difficulties.
+The addresses have to be dealt with by the transformation function because the
+system cannot know how to reassign addresses to the values in the result list.

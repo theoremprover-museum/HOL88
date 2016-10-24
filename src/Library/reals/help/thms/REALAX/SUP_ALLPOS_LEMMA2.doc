@@ -1,0 +1,3 @@
+\THEOREM SUP_ALLPOS_LEMMA2 REALAX
+|- P(real_of_hreal X) = (\h. P(real_of_hreal h))X
+\ENDTHEOREM

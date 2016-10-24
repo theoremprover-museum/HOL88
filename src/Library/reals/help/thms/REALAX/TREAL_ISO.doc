@@ -1,0 +1,3 @@
+\THEOREM TREAL_ISO REALAX
+|- !h i. h hreal_lt i ==> (treal_of_hreal h) treal_lt (treal_of_hreal i)
+\ENDTHEOREM

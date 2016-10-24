@@ -1,0 +1,112 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: WF     						|
+|									|
+| DESCRIPTION   : Theory of well founded relations			|
+|									|
+| AUTHOR	: Wishnu Prasetya					|
+|									|
+| DATE		: December 8, 1992					|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    OLD_RES.ml         contains resolution tactics of HOL 1.1
+    MYTACTICS.ml       contains some tactics used in WF.ml    
+    predicate.ml       contains a theory for predicates
+    predicate-LIB.ml   contains some ML functions associated with 
+                       theory of predicates
+    mk_WF.ml           creates the theory of well founded relations
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `WF`  
+
+      In draft mode this makes WF a new parent, otherwise WF is loaded.
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+
+This library contains some basic theorems about well-founded set. 
+
+Well foundedness is defined as follows. A relation R is called well 
+founded iff it satisfies:
+       
+       !V. (!y. y IN V ==> (?x. R x y /\ x IN V)) ==> (V = {})
+
+That is, any non-empty set must have a minimal element m. This is an 
+equivalent definition with the more classical definition in term of 
+chains.
+
+The main results of this library is as follows:
+
+     - WELL_FOUNDED
+       The definition for well-foundedness.
+     
+     - ADMIT_WF_INDUCTION
+       Define the well-founded induction.
+
+     - WF_EQU_IND
+       States that well-foundedness is equivalent with admiting the WF 
+       induction.
+ 
+     - FIN_ADMIT_WF_IND        
+       States that a transitive and anti-reflexive relation on finite 
+       domain will admit WF induction.
+
+     - NUM_ADMIT_WF_INDUCTION
+       States that the relation < on natural number admits WF induction.
+
+     - REL_JOINT_ADMIT_WF_IND
+       States that the conjunction of two relations preserves WF induction.
+
+     - REL_PROD_ADMIT_WF_IND
+       States that the product of two relations preserves WF induction.
+
+     - REL_LEXI_ADMIT_WF_IND
+       States that the lexicographic product of two relations preserves WF 
+       induction.
+
+     - FPROD_ADMIT_WF_IND
+       States that the finite product of two relations preserves WF 
+       induction.
+
+      - FLEXI_ADMIT_WF_IND
+        States that the finite lexicographic product of two relations 
+        preserves WF induction.
+
+Hope this help.
+
+  Lib name: WF
+  Date    : Dec. 8 1992
+  Author  : Wishnu Prasetya
+            Dept. of Comp. Science
+            University of Utrecht, the Netherlands
+  EMail   : wishnu@cs.ruu.nl
+

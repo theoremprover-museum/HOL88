@@ -1,0 +1,3 @@
+\THEOREM SUM_ABS REAL
+|- !f m n. abs(Sum(m,n)(\m. abs(f m))) = Sum(m,n)(\m. abs(f m))
+\ENDTHEOREM

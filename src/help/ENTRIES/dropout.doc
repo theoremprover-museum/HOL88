@@ -1,0 +1,50 @@
+\DOC dropout
+
+\TYPE {dropout : (void -> void)}
+
+\SYNOPSIS
+Move from top-level ML to top-level Lisp.
+
+\DESCRIBE
+Unlike {lsp}, which breaks out of ML, and leaves one in a position to
+return to it by continuing lisp execution, {dropout} returns the user to
+the Lisp top-level.  The function {(tml)} must then be invoked to return to
+ML.  This is inherently dangerous (internal state may not be consistent),
+and should be avoided.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 1.12 (Sun3/Franz), built on Feb 23 1991
+
+#dropout();;
+
+[Return to top level]
+-> ^D
+EOF
+-> (tml)
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 1.12 (Sun3/Franz), built on Feb 23 1991
+
+##
+}
+\COMMENTS
+The behaviour of {dropout} is unpredictable in Common Lisp, but performs as
+advertised in plain Franz Lisp.  {dropout} is not meant for general use, and
+should be treated with great care.  If one is not wary, it is entirely possible
+to corrupt HOL by using it.
+
+\SEEALSO
+lisp, lsp.
+
+\ENDDOC

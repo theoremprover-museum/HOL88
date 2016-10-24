@@ -1,0 +1,10 @@
+\DOC do_once_only
+
+\TYPE {do_once_only : (* list -> * list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

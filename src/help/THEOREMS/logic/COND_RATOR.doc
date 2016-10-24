@@ -1,0 +1,4 @@
+\THEOREM COND_RATOR \none
+|- !b f g x. (b => f | g)x = (b => f x | g x)
+\ENDTHEOREM
+

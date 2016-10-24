@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_MONO_ADD_EQ1 add
+|- !m p. (m + p) <= p = m <= 0
+\ENDTHEOREM

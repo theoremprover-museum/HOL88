@@ -1,0 +1,3 @@
+\THEOREM SIN_POS_PI TRANSC
+|- !x. (& 0) < x /\ x < pi ==> (& 0) < (sin x)
+\ENDTHEOREM

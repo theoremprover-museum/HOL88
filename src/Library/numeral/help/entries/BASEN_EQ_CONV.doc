@@ -1,0 +1,36 @@
+\DOC BASEN_EQ_CONV
+
+\TYPE {BASEN_EQ_CONV : term -> thm}
+
+\SYNOPSIS
+Given a term equating two numerals, returns a theorem saying whether the
+equation is true or false.
+
+\LIBRARY basen
+
+\DESCRIBE
+Given a term of the form {"BASEN r [...] = BASEN r [...]"}, returns a theorem
+of the form {|- (BASEN r [...] op BASEN r [...]) = b}, where {b} is {"T"} or
+{"F"}.
+
+\FAILURE
+The argument must be of the expected form, and the radix of the two numerals
+must be the same, and the radix must be a numeric constant that is at least
+2, and all elements of the digit lists must be numeric constants, and must be
+less than the radix.
+
+\EXAMPLE
+{
+#BASEN_EQ_CONV "BASEN 10 [3;4;5] = BASEN 10 [3;4;5]";;
+|- (BASEN 10 [3;4;5] = BASEN 10 [3;4;5]) = T
+
+#BASEN_LT_CONV "BASEN 2 [1;1;1;1] < BASEN 2 [1;1;1;0]";;
+|- (BASEN 2[1;1;1;1]) < (BASEN 2[1;1;1;0]) = F
+
+#BASEN_GE_CONV "BASEN 16 [8;10;14] >= BASEN 16 [12;4]";;
+|- (BASEN 16[8;10;14]) >= (BASEN 16[12;4]) = T
+}
+\SEEALSO
+BASEN_COMPARE_CONV.
+
+\ENDDOC

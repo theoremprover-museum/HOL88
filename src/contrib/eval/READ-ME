@@ -1,0 +1,48 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: eval							|
+|									|
+| DESCRIPTION   : lisp-coded conversions and rules for dealing with 	|
+|		  constants, adding numbers, defining n-bit words.	|
+|									|
+| WARNING	: does not work by inference! Don't use these rules	|
+|		  unless you don't mind your proofs not being done	|
+|		  purely by inference.					|
+|									|
++ =====================================================================	+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    eval.l 	lisp definitions of conversions and rules.
+    dml-eval.l	code that makes these lisp programs available in ml.
+    wordn.ml	code to "declare" n-bit word types.
+
+    llmac.o	\
+    F-macro.o	|______ various HOL lisp object files needed to 
+    F-ol-rec.o	|	compile the two main files given above
+    genmacs.o	/
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load eval.ml
+

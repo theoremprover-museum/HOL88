@@ -1,0 +1,258 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{Basic definitions}
+\THEOREM wo\_chain WELLORDER
+|- !l P. chain l P = (!x y. P x /\ P y ==> l(x,y) \/ l(y,x))
+\ENDTHEOREM
+\THEOREM wo\_fl WELLORDER
+|- !l x. fl l x = (?y. l(x,y) \/ l(y,x))
+\ENDTHEOREM
+\THEOREM wo\_inseg WELLORDER
+|- !l m. l inseg m = (!x y. l(x,y) = m(x,y) /\ fl l y))
+\ENDTHEOREM
+\THEOREM wo\_linseg WELLORDER
+|- !l a. linseg l a = (\(x,y). l(x,y) /\ less l(y,a)))
+\ENDTHEOREM
+\THEOREM wo\_ordinal WELLORDER
+|- !l.
+    ordinal l = woset l /\ (!x. fl l x ==> (x = (@y. ~less l(y,x)))))
+\ENDTHEOREM
+\THEOREM wo\_poset WELLORDER
+|- !l.
+    poset l =
+    (!x. fl l x ==> l(x,x)) /\
+    (!x y z. l(x,y) /\ l(y,z) ==> l(x,z)) /\
+    (!x y. l(x,y) /\ l(y,x) ==> (x = y))
+\ENDTHEOREM
+\THEOREM wo\_subset WELLORDER
+|- !P Q. P subset Q = (!x. P x ==> Q x)
+\ENDTHEOREM
+\THEOREM wo\_Union WELLORDER
+|- !P. Union P = (\x. ?p. P p /\ p x)
+\ENDTHEOREM
+\THEOREM wo\_woset WELLORDER
+|- !l.
+    woset l =
+    (!x. fl l x ==> l(x,x)) /\
+    (!x y z. l(x,y) /\ l(y,z) ==> l(x,z)) /\
+    (!x y. l(x,y) /\ l(y,x) ==> (x = y)) /\
+    (!x y. fl l x /\ fl l y ==> l(x,y) \/ l(y,x)) /\
+    (!P.
+      (!x. P x ==> fl l x) /\ (?x. P x) ==>
+      (?y. P y /\ (!z. P z ==> l(y,z))))
+\ENDTHEOREM
+\section{Miscellaneous lemmas}
+\THEOREM AGREE\_LEMMA WELLORDER
+|- !l h ms m n f g z.
+    woset l /\
+    (!x. fl l(ms x)) /\
+    (!f f' x.
+      (!y. less l(ms y,ms x) ==> (f y = f' y)) ==> (h f x = h f' x)) /\
+    (!x. l(ms x,m) ==> (f x = h f x)) /\
+    (!x. l(ms x,n) ==> (g x = h g x)) /\
+    l(ms z,m) /\
+    l(ms z,n) ==>
+    (f z = g z)
+\ENDTHEOREM
+\THEOREM CHAIN\_SUBSET WELLORDER
+|- !l P Q. chain l P /\ Q subset P ==> chain l Q
+\ENDTHEOREM
+\THEOREM EXTEND\_FL WELLORDER
+|- !l x. woset l ==> (fl(\(x,y). l(x,y) /\ l(y,a))x = l(x,a))
+\ENDTHEOREM
+\THEOREM EXTEND\_INSEG WELLORDER
+|- !l a. woset l /\ fl l a ==> (\(x,y). l(x,y) /\ l(y,a)) inseg l
+\ENDTHEOREM
+\THEOREM EXTEND\_LINSEG WELLORDER
+|- !l a.
+    woset l /\ fl l a ==>
+    (\(x,y).
+      linseg l a(x,y) \/ (y = a) /\ (fl(linseg l a)x \/ (x = a))) inseg
+    l
+\ENDTHEOREM
+\THEOREM FL\_NUM WELLORDER
+|- !n. fl(\(m,n). m <= n)n
+\ENDTHEOREM
+\THEOREM FL\_SUC WELLORDER
+|- !l a.
+    fl(\(x,y). l(x,y) \/ (y = a) /\ (fl l x \/ (x = a)))x =
+    fl l x \/ (x = a)
+\ENDTHEOREM
+\THEOREM INSEG\_LINSEG WELLORDER
+|- !l m.
+    woset l ==>
+    (m inseg l = (m = l) \/ (?a. fl l a /\ (m = linseg l a)))
+\ENDTHEOREM
+\THEOREM INSEG\_PROPER\_SUBSET WELLORDER
+|- !l m. m inseg l /\ ~(l = m) ==> (?x y. l(x,y) /\ ~m(x,y))
+\ENDTHEOREM
+\THEOREM INSEG\_PROPER\_SUBSET\_FL WELLORDER
+|- !l m. m inseg l /\ ~(l = m) ==> (?a. fl l a /\ ~fl m a)
+\ENDTHEOREM
+\THEOREM INSEG\_SUBSET WELLORDER
+|- !l m. m inseg l ==> (!x y. m(x,y) ==> l(x,y))
+\ENDTHEOREM
+\THEOREM INSEG\_SUBSET\_FL WELLORDER
+|- !l m. m inseg l ==> (!x. fl m x ==> fl l x)
+\ENDTHEOREM
+\THEOREM INSEG\_WOSET WELLORDER
+|- !l m. m inseg l /\ woset l ==> woset m
+\ENDTHEOREM
+\THEOREM KL\_POSET\_LEMMA WELLORDER
+|- poset(\(c1,c2). C subset c1 /\ c1 subset c2 /\ chain l c2)
+\ENDTHEOREM
+\THEOREM LINSEG\_FL WELLORDER
+|- !l a x. woset l ==> (fl(linseg l a)x = less l(x,a))
+\ENDTHEOREM
+\THEOREM LINSEG\_INSEG WELLORDER
+|- !l a. woset l ==> (linseg l a) inseg l
+\ENDTHEOREM
+\THEOREM LINSEG\_WOSET WELLORDER
+|- !l a. woset l ==> woset(linseg l a)
+\ENDTHEOREM
+\THEOREM ORDINAL\_CHAINED WELLORDER
+|- !l m. ordinal l /\ ordinal m ==> m inseg l \/ l inseg m
+\ENDTHEOREM
+\THEOREM ORDINAL\_SUC WELLORDER
+|- !l.
+    ordinal l /\ (?x. ~fl l x) ==>
+    ordinal
+    (\(x,y).
+      l(x,y) \/ (y = (@y. ~fl l y)) /\ (fl l x \/ (x = (@y. ~fl l y))))
+\ENDTHEOREM
+\THEOREM ORDINAL\_UNION WELLORDER
+|- !P. (!l. P l ==> ordinal l) ==> ordinal(Union P)
+\ENDTHEOREM
+\THEOREM ORDINAL\_UNION\_LEMMA WELLORDER
+|- !l x. ordinal l ==> fl l x ==> fl(Union ordinal)x
+\ENDTHEOREM
+\THEOREM ORDINAL\_UP WELLORDER
+|- !l.
+    ordinal l ==>
+    (!x. fl l x) \/ (?m x. ordinal m /\ fl m x /\ ~fl l x)
+\ENDTHEOREM
+\THEOREM PAIRED\_EXT WELLORDER
+|- !l m. (!x y. l(x,y) = m(x,y)) = (l = m)
+\ENDTHEOREM
+\THEOREM POSET\_FLEQ WELLORDER
+|- !l. poset l ==> (!x. fl l x = l(x,x))
+\ENDTHEOREM
+\THEOREM SUBSET\_ANTISYM WELLORDER
+|- !P Q. P subset Q /\ Q subset P ==> (P = Q)
+\ENDTHEOREM
+\THEOREM SUBSET\_REFL WELLORDER
+|- !P. P subset P
+\ENDTHEOREM
+\THEOREM SUBSET\_TRANS WELLORDER
+|- !P Q R. P subset Q /\ Q subset R ==> P subset R
+\ENDTHEOREM
+\THEOREM UNION\_FL WELLORDER
+|- !P l. fl(Union P)x = (?l. P l /\ fl l x)
+\ENDTHEOREM
+\THEOREM UNION\_INSEG WELLORDER
+|- !P l. (!m. P m ==> m inseg l) ==> (Union P) inseg l
+\ENDTHEOREM
+\THEOREM WOSET WELLORDER
+|- !l.
+    woset l =
+    (!x y. l(x,y) /\ l(y,x) ==> (x = y)) /\
+    (!P.
+      (!x. P x ==> fl l x) /\ (?x. P x) ==>
+      (?y. P y /\ (!z. P z ==> l(y,z))))
+\ENDTHEOREM
+\THEOREM WOSET\_FLEQ WELLORDER
+|- !l. woset l ==> (!x. fl l x = l(x,x))
+\ENDTHEOREM
+\THEOREM WOSET\_NUM WELLORDER
+|- woset(\(m,n). m <= n)
+\ENDTHEOREM
+\THEOREM WOSET\_POSET WELLORDER
+|- !l. woset l ==> poset l
+\ENDTHEOREM
+\THEOREM WOSET\_TOTAL\_LE WELLORDER
+|- !l. woset l ==> (!x y. fl l x /\ fl l y ==> l(x,y) \/ less l(y,x))
+\ENDTHEOREM
+\THEOREM WOSET\_TOTAL\_LT WELLORDER
+|- !l.
+    woset l ==>
+    (!x y. fl l x /\ fl l y ==> (x = y) \/ less l(x,y) \/ less l(y,x))
+\ENDTHEOREM
+\THEOREM WOSET\_TRANS\_LE WELLORDER
+|- !l. woset l ==> (!x y z. l(x,y) /\ less l(y,z) ==> less l(x,z))
+\ENDTHEOREM
+\THEOREM WOSET\_TRANS\_LESS WELLORDER
+|- !l. woset l ==> (!x y z. less l(x,y) /\ l(y,z) ==> less l(x,z))
+\ENDTHEOREM
+\THEOREM WOSET\_WELL\_CONTRAPOS WELLORDER
+|- !l.
+    woset l ==>
+    (!P.
+      (!x. P x ==> fl l x) /\ (?x. P x) ==>
+      (?y. P y /\ (!z. less l(z,y) ==> ~P z)))
+\ENDTHEOREM
+\THEOREM WO\_FL\_RESTRICT WELLORDER
+|- !l.
+    woset l ==>
+    (!P. fl(\(x,y). P x /\ P y /\ l(x,y))x = P x /\ fl l x)
+\ENDTHEOREM
+\THEOREM WO\_INDUCT WELLORDER
+|- !P l.
+    woset l /\ (!x. fl l x /\ (!y. less l(y,x) ==> P y) ==> P x) ==>
+    (!x. fl l x ==> P x)
+\ENDTHEOREM
+\THEOREM WO\_LEMMA WELLORDER
+|- ?l. ordinal l /\ (!x. fl l x)
+\ENDTHEOREM
+\THEOREM WO\_RECURSE  WELLORDER
+|- !l h ms.
+    woset l /\
+    (!x. fl l(ms x)) /\
+    (!f g x.
+      (!y. less l(ms y,ms x) ==> (f y = g y)) ==> (h f x = h g x)) ==>
+    (?! f. !x. f x = h f x)
+\ENDTHEOREM
+\THEOREM WO\_RECURSE\_EXISTS WELLORDER
+|- !l h ms.
+    woset l /\
+    (!x. fl l(ms x)) /\
+    (!f f' x.
+      (!y. less l(ms y,ms x) ==> (f y = f' y)) ==> (h f x = h f' x)) ==>
+    (?f. !x. f x = h f x)
+\ENDTHEOREM
+\THEOREM WO\_RECURSE\_LOCAL WELLORDER
+|- !l h ms.
+    woset l /\
+    (!x. fl l(ms x)) /\
+    (!f f' x.
+      (!y. less l(ms y,ms x) ==> (f y = f' y)) ==> (h f x = h f' x)) ==>
+    (!n. ?f. !x. l(ms x,n) ==> (f x = h f x))
+\ENDTHEOREM
+\THEOREM WO\_RECURSE\_NUM WELLORDER
+|- !h ms.
+    (!f g x.
+      (!y. (ms y) < (ms x) ==> (f y = g y)) ==> (h f x = h g x)) ==>
+    (?! f. !x. f x = h f x)
+\ENDTHEOREM
+\section{Main theorems}
+\THEOREM HP WELLORDER
+|- !l.
+    poset l ==>
+    (?P. chain l P /\ (!Q. chain l Q /\ P subset Q ==> (Q = P)))
+\ENDTHEOREM
+\THEOREM KL WELLORDER
+|- !l.
+    poset l ==>
+    (!Q.
+      chain l Q ==>
+      (?P.
+        (chain l P /\ Q subset P) /\
+        (!R. chain l R /\ P subset R ==> (R = P))))
+\ENDTHEOREM
+\THEOREM WO WELLORDER
+|- !P. ?l. woset l /\ (fl l = P)
+\ENDTHEOREM
+\THEOREM ZL WELLORDER
+|- !l.
+    poset l /\ (!P. chain l P ==> (?y. fl l y /\ (!x. P x ==> l(x,y)))) ==>
+    (?y. fl l y /\ (!x. l(y,x) ==> (y = x)))
+\ENDTHEOREM

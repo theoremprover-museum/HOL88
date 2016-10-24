@@ -1,0 +1,30 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: course					|
++ ===================================================================== +
+
+This directory contains the LaTeX sources for the overhead slides used in 
+Tom Melham's introductory course on theorem proving using the HOL system.  
+The contents of this directory are copyright by T Melham.  The slides may,
+however, be used to conduct training courses, subject to the condition that 
+the LaTeX sources in this directory and slides produced using them may not, 
+in part or as a whole, be sold or otherwise distributed for commercial gain.
+
+The slides for the course are grouped into the following modules:
+
+
+   FILE 	    DESCRIPTION
+   ----------       ------------------------------------------------------
+   intro.tex        Introductory remarks to the whole course.
+   logicA.tex	    Overview of higher order logic (part A)
+   logicB.tex	    Overview of higher order logic (part B)
+   ml.tex 	    Brief introduction to ml programming.
+   systemA.tex      The HOL system: Introduction (concepts)
+   systemB.tex      The basic HOL system (core theories)
+   thmproveA.tex    Forward proof
+   thmproveB.tex    Backward (tactic) proof.
+   primrec.tex      Primitive recursion and induction
+   tydefs.tex	    The type definition package
+
+The modules are typically used in the above order.
+
+

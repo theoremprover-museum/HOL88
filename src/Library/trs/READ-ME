@@ -1,0 +1,50 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: trs							|
+|									|
+| DESCRIPTION   : A Theorem Retrieval System.				|
+|									|
+| 		  This library does not contain any theories. It is a	|
+|		  tool for finding stored theorems by specifying a	|
+|		  template for the term structure of the theorem.	|
+|									|
+| AUTHOR	: R.J.Boulton						|
+| DATE		: 14th July 1990					|
+|									|
+| MODIFIED      : 							|
+| DATE		: 							|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    trs.ml      Loads the library.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) Put the pathname of this library on the internal hol search path.
+
+   2) To load the library, load the file `trs`.
+
+
+

@@ -1,0 +1,3 @@
+\THEOREM LESS_CASES_IMP arithmetic
+|- !m n. ~m < n /\ ~(m = n) ==> n < m
+\ENDTHEOREM

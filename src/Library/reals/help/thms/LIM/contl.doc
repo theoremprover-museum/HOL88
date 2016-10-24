@@ -1,0 +1,3 @@
+\THEOREM contl LIM
+|- !f x. f contl x = ((\h. f(x + h)) --> (f x))(& 0)
+\ENDTHEOREM

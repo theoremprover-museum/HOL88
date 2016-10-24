@@ -1,0 +1,3 @@
+\THEOREM SUC_LESS_EQ suc
+|- !m n. m <= n /\ ~(m = n) ==> (SUC m) <= n
+\ENDTHEOREM

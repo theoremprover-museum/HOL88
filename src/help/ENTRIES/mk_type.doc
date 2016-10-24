@@ -1,0 +1,31 @@
+\DOC mk_type
+
+\TYPE {mk_type : ((string # type list) -> type)}
+
+\SYNOPSIS
+Constructs a type (other than a variable type).
+
+\DESCRIBE
+{mk_type(`op`,[":ty1";...;":tyn"])} returns {":(ty1,...,tyn)op"} where {op}
+is the name of a known {n}-ary type constructor.
+
+\FAILURE
+Fails with {mk_type} if the string is not the name of a known type, or if the
+type is known but the length of the list of argument types is not equal to
+the arity of the type constructor.
+
+\EXAMPLE
+{
+#mk_type (`bool`,[]);;
+":bool" : type
+
+#mk_type (`list`,[":bool"]);;
+":(bool)list" : type
+
+#mk_type (`fun`,[":num";":bool"]);;
+":num -> bool" : type
+}
+\SEEALSO
+dest_type, mk_vartype.
+
+\ENDDOC

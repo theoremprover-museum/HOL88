@@ -1,0 +1,7 @@
+\THEOREM NET_ADD NETS
+|- !g.
+    dorder g ==>
+    (!x x0 y y0.
+      (x tends x0)(mtop mr1,g) /\ (y tends y0)(mtop mr1,g) ==>
+      ((\n. (x n) real_add (y n)) tends (x0 real_add y0))(mtop mr1,g))
+\ENDTHEOREM

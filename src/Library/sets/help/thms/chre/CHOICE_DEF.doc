@@ -1,0 +1,3 @@
+\THEOREM CHOICE_DEF sets
+|- !s. ~(s = {{}}) ==> (CHOICE s) IN s
+\ENDTHEOREM

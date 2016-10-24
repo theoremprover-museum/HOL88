@@ -1,0 +1,3 @@
+\THEOREM ELL_LENGTH_CONS list
+|- !l x. ELL(LENGTH l)(CONS x l) = x
+\ENDTHEOREM

@@ -1,0 +1,301 @@
+
+\chapter{Syntax of the pretty-printing language}
+
+\newcommand\object[1]{\item[\small\tt #1\hfill]}
+
+
+\section{Lexical objects}
+
+\begin{list}{}
+ {\setlength{\leftmargin}{10em}
+  \setlength{\labelwidth}{10em}
+  \addtolength{\labelwidth}{-\labelsep}}
+\object{<number>}
+A sequence of one or more decimal digits.
+\object{<identifier>}
+A letter followed by zero or more occurrences of a letter or a digit or an
+underscore followed by a letter or a digit.
+\object{<string>}
+Any sequence of characters not containing line-feed, form-feed or
+carriage-return, enclosed within single quotation-marks, for example
+{\small\verb|'2fg F%01'|}. Two consequtive single quotes are interpreted as one
+single quote which appears in the string, e.g.~{\small\verb%'a''b'%} is
+interpreted as the string {\small\verb%a'b%}.
+\object{<terminal>}
+As for {\small\verb%<string>%} but with double quotation-marks rather than
+single quotation-marks.
+\object{<comment>}
+Any sequence of characters enclosed within percent signs ({\small\verb|%|}).
+{\small\verb|%%|} within the character sequence is interpreted as
+{\small\verb|%|}. Comments are ignored.
+\object{<id\_quote>}
+Any sequence of characters not containing line-feed, form-feed or
+carriage-return, enclosed within sharp signs ({\small\verb%#%}).
+{\small\verb%##%} within the character sequence is interpreted as
+{\small\verb%#%}. The text within the sharp signs is made into an identifier.
+This allows non-alphanumeric characters and keywords to be used as identifiers.
+\object{<ML\_function>}
+Any sequence of characters enclosed within braces. Line-feed, form-feed
+and carriage-return may appear. {\small\verb%{{%} is interpreted as
+{\small\verb%{%}. {\small\verb%}}%} is interpreted as {\small\verb%}%}.
+{\small\verb%{%} causes an error.
+\object{<special>}
+A special symbol. The special symbols are:
+
+\begin{small}\begin{verbatim}
+   +  -  *  **  ***  ,  ;  :  ::  =  :=  ->  ..
+   (  )  **[  [  ]  <  >  <<  >>  |
+\end{verbatim}\end{small}
+
+\object{<keyword>}
+A keyword. The keywords are:
+
+\begin{small}\begin{verbatim}
+   prettyprinter  rules  declarations
+   abbreviations  with  end  where
+   if  then  else  h  v  hv  hov
+\end{verbatim}\end{small}
+
+\end{list}
+In the grammar that follows, special symbols and keywords appear in
+double quotation-marks.
+
+\section{The grammar}
+
+\begin{small}\begin{verbatim}
+<integer>           ::=  <number>  |  "-" <number>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<name_metavar>      ::=  "***"  |  "***" <identifier>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<child_metavar>     ::=  "*"    |  "*"   <identifier>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<children_metavar>  ::=  "**"   |  "**"  <identifier>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<metavar_list>      ::=  <name_metavar>
+                      |  <child_metavar>
+                      |  <children_metavar>
+                      |  <name_metavar>     ";" <metavar_list>
+                      |  <child_metavar>    ";" <metavar_list>
+                      |  <children_metavar> ";" <metavar_list>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<min>               ::=  <number>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<max>               ::=  <number>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<loop_range>        ::=  <min> ".."
+                      |  ".." <max>
+                      |  <min> ".." <max>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<loop_link>         ::=  "<" ">"
+                      |  "<" <metavar_list> ">"
+                      |  "<" <loop_range> ">"
+                      |  "<" <loop_range> ":" <metavar_list> ">"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<label>             ::=  "|" <child_metavar> "|"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<node_name>         ::=  <identifier>  |  <name_metavar>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<child>             ::=  <children_metavar>
+                      |  <pattern_tree>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<child_list>        ::=  <child>
+                      |  <child> "," <child_list>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<pattern_tree>      ::=  <node_name> "(" ")"
+                      |  <node_name> "(" <child_list> ")"
+                      |  <child_metavar>
+                      |  <label> <pattern_tree>
+                      |  <loop_link>
+                      |  <loop_link> <pattern_tree>
+                      |  <loop>
+                      |  <loop> <pattern_tree>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<loop>              ::=  "[" <pattern_tree> "]"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<test>              ::=  <ML_function>  |  <identifier>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<pattern>           ::=  <string> "::" <pattern_tree>
+                      |  <string> "::" <pattern_tree> "where" <test>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<transformation>    ::=  <ML_function>  |  <identifier>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<p_special>         ::=  <name_metavar>     "=" <transformation>
+                      |  <child_metavar>    "=" <transformation>
+                      |  <children_metavar> "=" <transformation>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<p_special_list>    ::=  <p_special>
+                      |  <p_special> ";" <p_special_list>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<int_expression>    ::=  <integer>  |  <ML_function>  |  <identifier>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<assignment>        ::=  <identifier> ":=" <int_expression>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<assignments>       ::=  <assignment>
+                      |  <assignment> ";" <assignments>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<fun_subcall>       ::=  <name_metavar>
+                      |  <child_metavar>
+                      |  <children_metavar>
+                      |  <transformation> "(" <name_metavar> ")"
+                      |  <transformation> "(" <child_metavar> ")"
+                      |  <transformation> "(" <children_metavar> ")"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<context_subcall>   ::=  <fun_subcall>
+                      |  <string> "::" <fun_subcall>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<leaf_or_subcall>   ::=  <context_subcall>
+                      |  <context_subcall>
+                            "with" <assignments> "end" "with"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<indent>            ::=  <integer>  |  "+" <integer>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<h_params>          ::=  <number>
+<v_params>          ::=  <indent> "," <number>
+<hv_params>         ::=  <number> "," <indent> "," <number>
+<hov_params>        ::=  <number> "," <indent> "," <number>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<h_box>             ::=  "h"   <h_params>
+<v_box>             ::=  "v"   <v_params>
+<hv_box>            ::=  "hv"  <hv_params>
+<hov_box>           ::=  "hov" <hov_params>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<object>            ::=  <terminal>
+                      |  <leaf_or_subcall>
+                      |  <format>
+                      |  <expand>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<h_object>          ::=  <object>  |  "<" <h_params>   ">" <object>
+<v_object>          ::=  <object>  |  "<" <v_params>   ">" <object>
+<hv_object>         ::=  <object>  |  "<" <hv_params>  ">" <object>
+<hov_object>        ::=  <object>  |  "<" <hov_params> ">" <object>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<h_object_list>     ::=  <h_object>    |  <h_object>   <h_object_list>
+<v_object_list>     ::=  <v_object>    |  <v_object>   <v_object_list>
+<hv_object_list>    ::=  <hv_object>   |  <hv_object>  <hv_object_list>
+<hov_object_list>   ::=  <hov_object>  |  <hov_object> <hov_object_list>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<box_spec>          ::=  "<" <h_box>   ">" <h_object_list>
+                      |  "<" <v_box>   ">" <v_object_list>
+                      |  "<" <hv_box>  ">" <hv_object_list>
+                      |  "<" <hov_box> ">" <hov_object_list>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<expand>            ::=  "**[" <box_spec> "]"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<format>            ::=  "[" "]"
+                      |  "[" <box_spec> "]"
+                      |  "if" <test> "then" <format> "else" <format>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<rule>              ::=  <pattern> "->" <format>
+                      |  <pattern> "->"
+                            "<<" <p_special_list> ">>" <format>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<rule_list>         ::=  <rule> ";"  |  <rule> ";" <rule_list>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<rules>             ::=  "rules" <rule_list> "end" "rules"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<binding>           ::=  <identifier> "=" <ML_function>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<binding_list>      ::=  <binding> ";"
+                      |  <binding> ";" <binding_list>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<declarations>      ::=  "declarations" <binding_list>
+                            "end" "declarations"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<abbreviations>     ::=  "abbreviations" <binding_list>
+                            "end" "abbreviations"
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<body>              ::=  <rules>
+                      |  <declarations>  <rules>
+                      |  <abbreviations> <rules>
+                      |  <declarations>  <abbreviations> <rules>
+\end{verbatim}\end{small}
+
+\begin{small}\begin{verbatim}
+<pp>                ::=  "prettyprinter" <identifier> "="
+                            <body>
+                         "end" "prettyprinter"
+\end{verbatim}\end{small}

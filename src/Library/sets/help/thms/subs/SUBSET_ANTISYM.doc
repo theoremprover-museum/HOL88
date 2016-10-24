@@ -1,0 +1,3 @@
+\THEOREM SUBSET_ANTISYM sets
+|- !s t. s SUBSET t /\ t SUBSET s ==> (s = t)
+\ENDTHEOREM

@@ -1,0 +1,1641 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  READ-ME Makefile mk_zet.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 12:19:30 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'READ-ME' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'READ-ME'\"
+else
+echo shar: Extracting \"'READ-ME'\" \(2390 characters\)
+sed "s/^X//" >'READ-ME' <<'END_OF_FILE'
+X+ =====================================================================	+
+X|									|
+X| LIBRARY	: zet                                                   |
+X|									|
+X| DESCRIPTION   : Definition of the integers: zet.                      |
+X|									|
+X| AUTHOR	: T. kalker						|
+X| DATE		: 10 July 1989  			                |
+X|									|
+X+ =====================================================================	+
+X
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| FILES:								|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X
+X        mk_zet:     defines the type zet 
+X
+X	zet_tactics.ml: induction tactics     
+X
+X	zet_ind:    definition by induction
+X
+X        zet.ml:     loads the theory zet
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| DOCUMENTATION:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X 
+XThe theory of integers is constructed from the naturals
+Xusing a quotient construct. 
+XThe relation with the naturals is given via the function INT.
+XInduction is provided for by three tactics based upon
+Xthree differrent, but similar theorems.  
+X
+X0)  |-  "!Q.((!x.(NEG x) ==> Q x) /\ (!x.((POS x) /\ (Q x)) ==> 
+X                                       (Q (x plus een)))) ==> !x.Q x
+X
+X1)  |-  "!k Q.((!x.(x leq k) ==> (Q x)) /\
+X               (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> (!x.Q x)
+X
+X2)  |-  "!k Q.((Q k) /\ 
+X                  (!x.((x leq k) /\ (Q x)) ==> (Q (x minus een))) /\
+X                  (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> 
+X                    (!x.Q x)
+X
+XThe latter theorem is used for constructing the functions:
+X
+Xzet_recursive_definition, zet_zero_definition, zet_een_definition
+X 
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO REBUILD THE LIBRARY:						|
+X|									|
+X+ --------------------------------------------------------------------- +  
+X
+X   0) necessary libraries: auxiliary, quotient, surgery
+X
+X   1) edit the pathnames in the Makefile (if necessary)
+X
+X   2) type "make clean"
+X
+X   3) type "make all"
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO USE THE LIBRARY:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X   load_library `zet`;;
+X
+X
+END_OF_FILE
+if test 2390 -ne `wc -c <'READ-ME'`; then
+    echo shar: \"'READ-ME'\" unpacked with wrong size!
+fi
+chmod +x 'READ-ME'
+# end of 'READ-ME'
+fi
+if test -f 'Makefile' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Makefile'\"
+else
+echo shar: Extracting \"'Makefile'\" \(1527 characters\)
+sed "s/^X//" >'Makefile' <<'END_OF_FILE'
+X# =====================================================================
+X#
+X# 		 MAKEFILE FOR THE HOL LIBRARY: ZET
+X#
+X# =====================================================================
+X
+X# =====================================================================
+X#
+X# MAIN ENTRIES:
+X#
+X# make all	    : create theories and compile code
+X#
+X# make clean	    : remove theories and compiled code
+X#	
+X# =====================================================================
+X
+X# =====================================================================
+X# MACROS:
+X#
+X# Hol	    : the pathname of the version of hol used
+X# =====================================================================
+X
+XHol=~/com/hol
+X
+Xclean:
+X	rm -f *_ml.o *_ml.l *.th 
+X	@echo "===> library zet: all object code and theory files deleted"
+X                      
+Xzet.th: mk_zet.ml
+X	rm -f zet.th
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'loadt `mk_zet`;;' | ${Hol}
+X
+Xzet_tactics_ml.o: zet.th zet_tactics.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'load_theory `zet`;;'\
+X	     'load_from_lib false `auxiliary` `functions`;;'\
+X	     'autoload_defs_and_thms `zet`;;'\
+X	     'compilet `zet_tactics`;;'\
+X	     'quit();;' | ${Hol}
+X
+Xzet_ind_ml.o: zet.th zet_ind.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'load_theory `zet`;;'\
+X	     'load_from_lib false `auxiliary` `functions`;;'\
+X	     'autoload_defs_and_thms `zet`;;'\
+X	     'compilet `zet_ind`;;'\
+X	     'quit();;' | ${Hol}
+X
+Xall:    zet.th zet_tactics_ml.o zet_ind_ml.o 
+X	@echo "===> library zet rebuilt"
+END_OF_FILE
+if test 1527 -ne `wc -c <'Makefile'`; then
+    echo shar: \"'Makefile'\" unpacked with wrong size!
+fi
+chmod +x 'Makefile'
+# end of 'Makefile'
+fi
+if test -f 'mk_zet.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'mk_zet.ml'\"
+else
+echo shar: Extracting \"'mk_zet.ml'\" \(47320 characters\)
+sed "s/^X//" >'mk_zet.ml' <<'END_OF_FILE'
+X%< creates the theory of integers from
+X   a quotient construct>%
+X
+Xnew_theory `zet`;; 
+X
+Xload_library `auxiliary`;;
+X
+Xload_library `quotient`;; 
+X
+Xload_library `surgery`;;            
+X
+Xautoload_defs_and_thms `bool`;; 
+X
+Xautoload_defs_and_thms `prim_rec`;;
+X
+X
+X%<**************************DEFINITIONS*****************************>%
+X
+Xlet ZET_REL = 
+X    new_definition(
+X    `ZET_REL`,
+X     "ZET_REL (m1:num,n1:num) (m2,n2) = ((m1 + n2) = (m2 + n1))");; 
+X
+Xlet PRE_REV = 
+X   new_definition(
+X    `PRE_REV`,
+X    "PRE_REV (m1:num,n1:num) = (n1,m1)");;   
+X
+Xlet PRE_PLUS =
+X   new_infix_definition(
+X    `PRE_PLUS`,
+X    "PRE_PLUS (m1,n1) (m2,n2) = (m1 + m2,n1 + n2)");;
+X
+Xlet PRE_MULT =
+X   new_infix_definition(
+X    `PRE_MULT`,
+X    "PRE_MULT (m1,n1) (m2,n2) = ((m1 * m2) + (n1 * n2),(m1 * n2) + (m2 * n1))");;
+X
+X%<************************FUNCTIONS**********************************>%
+X
+Xlet COM_CONV = REWRITE_CONV ADD_SYM;;
+X
+Xlet RL_CONV = REWRITE_CONV ADD_ASSOC;;
+X
+Xlet LR_CONV = REWRITE_CONV (SYM(SPEC_ALL ADD_ASSOC));;
+X
+X%<*************************THEOREMS**********************************>%
+X
+Xlet w1 = "REFLEX ZET_REL";;
+X
+Xlet thm1 = 
+X    prove(
+X    w1,
+X    REWRITE_TAC[REFLEX] THEN
+X    BETA_TAC THEN
+X    CONV_TAC PROD_CONV THEN
+X    REWRITE_TAC[ZET_REL]);;
+X
+Xlet w2 = "SYMMETRY ZET_REL";;
+X
+Xlet thm2 =
+X    prove(
+X    w2,
+X    REWRITE_TAC[SYMMETRY] THEN 
+X    BETA_TAC THEN
+X    CONV_TAC ((BINDER_CONV PROD_CONV) THENC PROD_CONV) THEN
+X    REWRITE_TAC[ZET_REL] THEN
+X    REPEAT STRIP_TAC THEN
+X    EQ_TAC THEN
+X    STRIP_TAC THEN
+X    ASM_REWRITE_TAC[]);;  
+X
+Xlet w3a = "!n m k. (n + k = m + k) = (n = m)";;
+X
+Xlet INV_ADD = 
+X    prove(
+X    w3a,
+X    GEN_TAC THEN
+X    GEN_TAC THEN
+X    INDUCT_TAC THEN
+X    REWRITE_TAC[ADD_CLAUSES] THEN 
+X    EQ_TAC THEN 
+X    STRIP_TAC THENL
+X      [IMP_RES_TAC INV_SUC THEN
+X       FILTER_RULE_ASSUM_TAC [3] SYM;ALL_TAC] THEN
+X    ASM_REWRITE_TAC[]);;
+X
+Xlet w3b = "TRANSITIVITY ZET_REL";; 
+X
+Xlet thm3 =
+X    prove(
+X    w3b,
+X    REWRITE_TAC[TRANSITIVITY] THEN
+X    BETA_TAC THEN
+X    CONV_TAC ((BINDER_CONV(BINDER_CONV PROD_CONV)) THENC 
+X              (BINDER_CONV PROD_CONV) THENC
+X               PROD_CONV) THEN
+X    REWRITE_TAC[ZET_REL] THEN 
+X    REPEAT STRIP_TAC THEN
+X    SUBGOAL_THEN "(x1 + y2) + (y1 + z2) = (z1 + y2) + (y1 + x2)" ASSUME_TAC THENL
+X     [ASM_REWRITE_TAC[] THEN
+X      CONV_TAC (LHS_CONV COM_CONV) THEN
+X      REWRITE_TAC[];ALL_TAC] THEN
+X    SUBGOAL_THEN "(x1 + z2) + (y2 + y1) = (z1 + x2) + (y2 + y1)" ASSUME_TAC THENL
+X     [(CONV_TAC ((dir_CONV `fa` LR_CONV) THENC
+X                 (dir_CONV `faa` RL_CONV) THENC 
+X                 (dir_CONV `faafa` COM_CONV) THENC
+X                 (dir_CONV `faa` LR_CONV) THENC
+X                 (dir_CONV `faaa` COM_CONV) THENC
+X                 (dir_CONV `fa` RL_CONV) THENC
+X                 (dir_CONV `a` LR_CONV) THENC
+X                 (dir_CONV `aa` RL_CONV) THENC
+X                 (dir_CONV `aafa` COM_CONV) THENC
+X                 (dir_CONV `aa` LR_CONV) THENC
+X                 (dir_CONV `aaa` COM_CONV) THENC
+X                 (dir_CONV `a` RL_CONV)))  THEN
+X       ASM_REWRITE_TAC[];ALL_TAC] THEN
+X       RULE_ASSUM_TAC (REWRITE_RULE[INV_ADD]) THEN
+X       ASM_REWRITE_TAC[]);; 
+X
+Xlet w4 = "EQUIVALENCE ZET_REL";; 
+X
+Xlet EQUIVALENCE_ZET_REL =
+X    prove_thm(
+X    `EQUIVALENCE_ZET_REL`,
+X     w4,
+X     REWRITE_TAC[EQUIVALENCE] THEN
+X     BETA_TAC THEN
+X     REWRITE_TAC[thm1;thm2;thm3]);; 
+X
+Xlet [thm_onto;thm_univ;thm_factor] = define_quotient_type(`zet`,EQUIVALENCE_ZET_REL);;
+X
+Xlet ZET_FACTOR_TAC = FACTOR_TAC [thm_onto] [thm_univ];;  
+X
+Xlet ZET_QUOTIENT_TAC =
+X     CONV_TAC (BASE_CHANGE_CONV thm_onto) THEN
+X     CONV_TAC PROD_CONV THEN
+X     (2 TIMES GEN_TAC);;
+X
+X%<We start defining operations on `zet`.
+X  First of all REV (as INV is already in use>%
+X
+Xlet w5 = "?!h.(PROJ_zet o PRE_REV) = h o PROJ_zet";;  
+X
+Xlet thm5 =
+X    prove(
+X    w5,
+X    ZET_FACTOR_TAC THEN
+X    REWRITE_TAC[o_DEF] THEN
+X    BETA_TAC THEN 
+X    REWRITE_TAC[thm_univ] THEN
+X    REWRITE_TAC[PRE_REV;ZET_REL] THEN
+X    REPEAT STRIP_TAC THEN
+X    ONCE_REWRITE_TAC[ADD_SYM] THEN
+X    ASM_REWRITE_TAC[]);;   
+X
+Xlet thm6 = 
+X    let th1 = REWRITE_RULE[o_DEF] thm5 in
+X    let th2 = (CONV_RULE (BINDER_CONV (SYM_CONV THENC FUN_EQ_CONV))) th1 in
+X    let th3 = BETA_RULE th2 in
+X    let th4 = (CONV_RULE (BINDER_CONV PROD_CONV)) th3 in
+X    REWRITE_RULE[PRE_REV] th4;; 
+X
+X%<***********************DEFINITIONS****************************************>%
+X
+Xlet [REV;REV_UNIQUE] = new_unique_specification `REV` [`constant`,`REV`] thm6;;   
+X
+Xlet INT = 
+X    new_definition(
+X    `INT`,
+X    "INT x = PROJ_zet (x,0)");; 
+X
+Xlet ZERO =
+X    new_definition(
+X    `ZERO`,
+X    "zero = INT 0");;   
+X
+Xlet ONE =
+X    new_definition(
+X    `ONE`,
+X    "een = INT 1");;   
+X
+X
+Xlet POS =
+X    new_definition(
+X    `POS`,
+X    "POS x = ?y.x = INT y");;    
+X
+Xlet NEG = 
+X    new_definition(
+X    `NEG`,
+X    "NEG x = POS(REV x)");;
+X
+X%<*************************THEOREMS**********************************>%
+X
+Xlet w6 = "!x.REV(REV x) = x";; 
+X
+Xlet REV2_ID = prove_thm(
+X    `REV2_ID`,
+X     w6,  
+X     ZET_QUOTIENT_TAC THEN   
+X     REWRITE_TAC[REV]);; 
+X
+Xlet w7 = "ONE_ONE INT";;  
+X
+Xlet INV_INT = prove_thm(
+X    `INV_INT`,
+X     w7,
+X     REWRITE_TAC[ONE_ONE_DEF;INT;thm_univ;ZET_REL;ADD_CLAUSES]);;
+X                                                                   
+X
+Xlet w8 = "!n m.((m + m) = (n + n)) = (m = n)";; 
+X
+Xlet PRE_INV_MULT = prove(
+X    w8,
+X    INDUCT_TAC THENL
+X     [REWRITE_TAC[ADD_CLAUSES;ADD_EQ_0];INDUCT_TAC] THENL
+X     [REWRITE_TAC[ADD_CLAUSES;(CONV_RULE (BINDER_CONV(RAND_CONV SYM_CONV))) NOT_SUC];
+X      EQ_TAC THEN STRIP_TAC] THENL
+X     [RULE_ASSUM_TAC (REWRITE_RULE[ADD_CLAUSES]) THEN
+X      IMP_RES_TAC INV_SUC THEN
+X      IMP_RES_TAC INV_SUC THEN
+X      REWRITE_RULE_ASSUM_TAC [1] [5];ALL_TAC] THEN
+X     ASM_REWRITE_TAC[]);;
+X
+Xlet w9 = "!x.(REV x = x) = (x = zero)";; 
+X
+Xlet FIX_REV = prove_thm(
+X    `FIX_REV`,
+X     w9,
+X     ZET_QUOTIENT_TAC THEN
+X     REWRITE_TAC[REV;ZERO;INT;thm_univ;ZET_REL;ADD_CLAUSES;PRE_INV_MULT] THEN
+X     REPEAT GEN_TAC THEN 
+X     EQ_TAC THEN 
+X     STRIP_TAC THEN 
+X     ASM_REWRITE_TAC[]);;     
+X
+Xlet w10 = "!x.(POS x) \/ (POS (REV x))";;  
+X
+Xlet POS_PROP1 = prove_thm(
+X    `POS_PROP1`,
+X     w10,
+X     ZET_QUOTIENT_TAC THEN
+X     REWRITE_TAC[REV;POS;INT;thm_univ;ZET_REL;ADD_CLAUSES] THEN
+X     DISJ_CASES_TAC (SPEC "y2:num"(SPEC "y1:num" LESS_CASES)) THENL
+X      [DISJ2_TAC THEN
+X       IMP_RES_TAC LESS_ADD THEN
+X       CONV_TAC (BINDER_CONV SYM_CONV);
+X       DISJ1_TAC THEN
+X       IMP_RES_TAC SUB_ADD THEN
+X       EXISTS_TAC "y1 - y2"] THEN 
+X     ASM_REWRITE_TAC[]);;   
+X
+Xlet w11 = "!x.(POS x) /\ (POS (REV x)) ==> (x = zero)";;
+X
+Xlet POS_PROP2 = prove_thm(
+X   `POS_PROP2`,
+X    w11,
+X    REWRITE_TAC[POS] THEN 
+X    REPEAT STRIP_TAC THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X    FILTER_RULE_ASSUM_TAC [1] 
+X     (REWRITE_RULE[INT;REV;thm_univ;ZET_REL;ADD_CLAUSES]) THEN
+X    FILTER_RULE_ASSUM_TAC [1] SYM THEN
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[ADD_EQ_0]) THEN
+X    ASM_REWRITE_TAC[ZERO]);; 
+X
+Xlet w12 = "?!h.PROJ_zet o (\z.(FST z) PRE_PLUS (SND z)) = h o (PROJ_zet P PROJ_zet)";;
+X 
+Xlet thm12 = prove(
+X    w12,
+X    ZET_FACTOR_TAC THEN
+X    CONV_TAC PROD_CONV THEN 
+X    (4 TIMES GEN_TAC) THEN 
+X    CONV_TAC PROD_CONV THEN
+X    REPEAT GEN_TAC THEN
+X    REWRITE_TAC[o_DEF] THEN 
+X    BETA_TAC THEN
+X    REWRITE_TAC[thm_univ;PRE_PLUS;ZET_REL] THEN
+X    REPEAT STRIP_TAC THEN
+X    CONV_TAC ((dir_CONV `fa` RL_CONV) THENC
+X              (dir_CONV `fafa` LR_CONV) THENC
+X              (dir_CONV `fafaa` COM_CONV) THENC
+X              (dir_CONV `fafa` RL_CONV) THENC
+X              (dir_CONV `fa` LR_CONV) THENC   
+X              (dir_CONV `a` RL_CONV) THENC
+X              (dir_CONV `afa` LR_CONV) THENC
+X              (dir_CONV `afaa` COM_CONV) THENC
+X              (dir_CONV `afa` RL_CONV) THENC
+X              (dir_CONV `a` LR_CONV)) THEN  
+X   ASM_REWRITE_TAC[]);;  
+X
+Xlet thm13 = 
+X    let th1 = (CONV_RULE (BINDER_CONV (SYM_CONV THENC FUN_EQ_CONV THENC PROD_CONV))) thm12 in
+X    let th2 = (CONV_RULE (BINDER_CONV PROD_CONV)) th1 in
+X    let th3 = REWRITE_RULE[o_DEF;P] th2 in
+X    let th4 = BETA_RULE th3 in   
+X    let th5 = REWRITE_RULE[PRE_PLUS] th4 in
+X    let th6 = hd(CONJUNCTS CURRY_ISO) in
+X    let th7 = (CONV_RULE (BASE_CHANGE_CONV th6)) th5 in
+X    REWRITE_RULE[UNCURRY_DEF] th7;;
+X
+X
+X%<***********************DEFINITIONS****************************************>%   
+X
+Xlet [PLUS;PLUS_UNIQUE] = new_unique_specification `PLUS` [`infix`,`plus`] thm13;;  
+X
+Xlet MINUS = new_infix_definition(
+X    `MINUS`,
+X    "minus x y = x plus (REV y)");;  
+X
+Xlet LEQ = new_infix_definition(
+X    `LEQ`,
+X    "leq x y = POS(y minus x)");;
+X
+X
+X%<*************************PLUS_THEOREMS**********************************>%
+X
+Xlet w14 = "!x y.(INT x) plus (INT y) = (INT (x + y))";;
+X
+Xlet INT_PLUS = prove_thm(
+X    `INT_PLUS`,
+X     w14,
+X     REWRITE_TAC[INT;PLUS;thm_univ;ZET_REL;ADD_CLAUSES]);;  
+X
+Xlet w15 = "!x y.REV( x plus y) = ((REV x) plus (REV y))";;   
+X
+Xlet REV_PLUS = prove_thm(
+X    `REV_PLUS`,
+X     w15, 
+X     (2 TIMES ZET_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[PLUS;REV]);; 
+X
+Xlet w16 = "(!x.x plus zero = x) /\ (!x.zero plus x = x)";;   
+X
+Xlet ZERO_PLUS = prove_thm(
+X    `ZERO_PLUS`,
+X     w16, 
+X     CONJ_TAC THEN
+X     ZET_QUOTIENT_TAC THEN
+X     REWRITE_TAC[ZERO;INT;PLUS;thm_univ;ZET_REL;ADD_CLAUSES]);;
+X
+Xlet w17 = "(!x.x plus (REV x) = zero) /\ (!x.(REV x) plus x = zero)";; 
+X
+Xlet REV_PLUS_ZERO = prove_thm(
+X    `REV_PLUS_ZERO`,
+X     w17, 
+X     CONJ_TAC THEN
+X     ZET_QUOTIENT_TAC THEN
+X     REWRITE_TAC[ZERO;INT;PLUS;REV;thm_univ;ZET_REL;ADD_CLAUSES] THEN
+X     REPEAT GEN_TAC THEN 
+X     CONV_TAC (LHS_CONV COM_CONV) THEN 
+X     REWRITE_TAC[]);; 
+X
+Xlet w18 = "!x y.(x plus y) = (y plus x)";; 
+X
+Xlet PLUS_COM = prove_thm(
+X    `PLUS_COM`,
+X     w18, 
+X     (2 TIMES ZET_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[PLUS;thm_univ;ZET_REL;ADD_CLAUSES] THEN
+X     CONV_TAC (LHS_CONV((LHS_CONV COM_CONV) THENC (RAND_CONV COM_CONV))) THEN
+X     REWRITE_TAC[]);; 
+X
+Xlet w19 = "!x y z.x plus (y plus z) = ((x plus y) plus z)";;  
+X
+Xlet PLUS_ASSOC = prove_thm(
+X    `PLUS_ASSOC`,
+X     w19,
+X     (3 TIMES ZET_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[PLUS;thm_univ;ZET_REL;ADD_ASSOC]);; 
+X
+Xlet w20 = "(!x y.x plus (y minus x) = y) /\
+X           (!x y.(y minus x) plus x = y)";;  
+X
+Xlet MINUS_PROP = prove_thm(
+X   `MINUS_PROP`,
+X    w20,
+X    CONJ_TAC THENL
+X    [ONCE_REWRITE_TAC[PLUS_COM];ALL_TAC] THEN
+X    REWRITE_TAC[MINUS;SYM(SPEC_ALL PLUS_ASSOC);REV_PLUS_ZERO;ZERO_PLUS]);;  
+X
+Xlet w21 = "!k.ISO ($plus k)";; 
+X
+Xlet ISO_PLUS_K = prove_thm(
+X   `ISO_PLUS_K`,
+X    w21,
+X    GEN_TAC THEN
+X    SUBGOAL_THEN "(!x. k plus ((REV k) plus x) = x) /\  
+X                  (!x. (REV k) plus (k plus x) = x)" STRIP_ASSUME_TAC THENL
+X     [REWRITE_TAC[PLUS_ASSOC;REV_PLUS_ZERO;ZERO_PLUS];
+X      IMP_RES_TAC ID_ISO]);;   
+X
+X
+X%<*************************LEQ_THEOREMS**********************************>%
+X 
+Xlet w22 = "!x.x leq x";;
+X
+Xlet REFLEX_LEQ = prove_thm(
+X   `REFLEX_LEQ`,
+X    w22,
+X    REWRITE_TAC[LEQ;MINUS;REV_PLUS_ZERO;ZERO;SPEC "0" (MATCH_MP DEF_THM1 POS)]);;
+X
+Xlet w23 = "!x y. (x leq y) /\ (y leq x) ==> (x = y)";;
+X
+Xlet ANTI_SYM_LEQ = prove_thm(
+X   `ANTI_SYM_LEQ`,
+X    w23,
+X    REWRITE_TAC[LEQ;MINUS] THEN 
+X    REPEAT STRIP_TAC THEN
+X    SUBGOAL_THEN "(x plus (REV y)) = REV(y plus (REV x))" ASSUME_TAC THENL
+X                [REWRITE_TAC[REV_PLUS;REV2_ID] THEN
+X                 CONV_TAC (LHS_CONV (REWRITE_CONV PLUS_COM)) THEN
+X                 REWRITE_TAC[];ALL_TAC] THEN
+X    REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X    IMP_RES_TAC POS_PROP2 THEN
+X    FILTER_RULE_ASSUM_TAC [1] (AP_TERM "$plus") THEN
+X    FILTER_RULE_ASSUM_TAC [1] (\th.AP_THM  th "x:zet") THEN
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE
+X                           [SYM(SPEC_ALL  PLUS_ASSOC);REV_PLUS_ZERO;ZERO_PLUS]) THEN
+X    ASM_REWRITE_TAC[]);; 
+X
+X%<********************AUXILIARIES**********************************>%  
+X
+Xlet COM_CONV = REWRITE_CONV PLUS_COM;;
+X
+Xlet RL_CONV = REWRITE_CONV PLUS_ASSOC;;
+X
+Xlet LR_CONV = REWRITE_CONV (SYM(SPEC_ALL PLUS_ASSOC));; 
+X
+Xlet MK_MULT [th1;th2] = MK_COMB ((AP_TERM "$*" th1),th2);;
+X
+Xlet MK_ADD [th1;th2] = MK_COMB ((AP_TERM "$+" th1),th2);; 
+X
+Xlet MK_PLUS [th1;th2] = MK_COMB ((AP_TERM "$plus" th1),th2);;
+X
+Xlet CP = REWRITE_CONV ADD_SYM;;
+X
+Xlet CM = REWRITE_CONV MULT_SYM;;
+X
+Xlet RL = REWRITE_CONV ADD_ASSOC;;
+X
+Xlet LR = REWRITE_CONV (SYM(SPEC_ALL ADD_ASSOC));;  
+X
+Xlet RLM = REWRITE_CONV MULT_ASSOC;;
+X
+Xlet LRM = REWRITE_CONV (SYM(SPEC_ALL MULT_ASSOC));;  
+X
+Xlet cp = REWRITE_CONV PLUS_COM;;
+X 
+Xlet rl = REWRITE_CONV PLUS_ASSOC;;
+X
+Xlet lr = REWRITE_CONV (SYM(SPEC_ALL PLUS_ASSOC));;
+X
+X
+Xletrec DIR_CONV convlist  =
+X  if (convlist = []) then
+X                           ALL_CONV
+X  else 
+X     (let str,conv = hd convlist in
+X       (dir_CONV str conv) THENC (DIR_CONV (tl convlist)));;  
+X
+Xlet ISO_REV = CONJUNCT1(MATCH_MP ID_ISO (CONJ REV2_ID REV2_ID));;  
+X
+X%<*************************LEQ_THEOREMS**********************************>%
+X
+Xlet w24 = "!x y z.(x leq y) /\ (y leq z) ==> (x leq z)";;
+X
+Xlet TRANSITIVITY_LEQ = prove_thm(
+X   `TRANSITIVITY_LEQ`,
+X    w24,
+X    REWRITE_TAC[LEQ;MINUS;POS] THEN 
+X    REPEAT STRIP_TAC THEN
+X    EXISTS_TAC "y'' + y'" THEN
+X    FILTER_ASSUM_LIST [1;2] 
+X          (\[th1;th2].ASSUME_TAC (MK_COMB ((AP_TERM "$plus" th1),th2))) THEN
+X    FILTER_RULE_ASSUM_TAC [1] (CONV_RULE (
+X                             (dir_CONV `fa` LR_CONV) THENC
+X                             (dir_CONV `faa` RL_CONV))) THEN
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[REV_PLUS_ZERO;INT_PLUS;ZERO_PLUS]) THEN
+X    ASM_REWRITE_TAC[]);;
+X
+Xlet w25 ="!x y.(x leq y) \/ (y leq x)";;  
+X
+Xlet LINEAR_LEQ = prove_thm(
+X   `LINEAR_LEQ`,
+X    w25,
+X    REWRITE_TAC[LEQ;MINUS] THEN
+X    REPEAT STRIP_TAC THEN  
+X    SUBGOAL_THEN "(x plus (REV y)) = REV(y plus (REV x))" ASSUME_TAC THENL
+X                [REWRITE_TAC[REV_PLUS;REV2_ID] THEN
+X                 CONV_TAC (LHS_CONV (REWRITE_CONV PLUS_COM)) THEN
+X                 REWRITE_TAC[];ALL_TAC] THEN 
+X    ASM_REWRITE_TAC[POS_PROP1]);;
+X
+Xlet w26 = "!x y z.( x leq y) ==> ((x plus z) leq (y plus z))";; 
+X
+Xlet TRANSLATION_LEQ = prove_thm(
+X   `TRANSLATION_LEQ`,
+X    w26,
+X    REWRITE_TAC[LEQ;MINUS;POS] THEN 
+X    REPEAT STRIP_TAC THEN
+X    EXISTS_TAC "y':num" THEN
+X    REWRITE_TAC[REV_PLUS] THEN
+X    CONV_TAC ((dir_CONV `faa` COM_CONV) THENC
+X              (dir_CONV `fa` LR_CONV) THENC
+X              (dir_CONV `faa` RL_CONV)) THEN
+X    ASM_REWRITE_TAC[REV_PLUS_ZERO;ZERO_PLUS]);; 
+X
+Xlet w27 = "!x y.((INT x) leq (INT y)) = (x <= y)";; 
+X
+Xlet INT_LEQ = prove_thm(
+X   `INT_LEQ`,
+X    w27,
+X    REWRITE_TAC[LEQ;MINUS;POS] THEN 
+X    REPEAT STRIP_TAC THEN 
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THENL
+X     [RULE_ASSUM_TAC (AP_TERM "$plus") THEN
+X      RULE_ASSUM_TAC (\th.AP_THM th "INT x") THEN
+X      RULE_ASSUM_TAC 
+X        (REWRITE_RULE[SYM(SPEC_ALL PLUS_ASSOC);REV_PLUS_ZERO;ZERO_PLUS;INT_PLUS]) THEN
+X      IMP_RES_TAC (REWRITE_RULE[ONE_ONE_DEF] INV_INT) THEN
+X      ASM_REWRITE_TAC[] THEN
+X      ONCE_REWRITE_TAC[ADD_SYM] THEN
+X      REWRITE_TAC[LESS_EQ_ADD];
+X      IMP_RES_TAC SUB_ADD THEN
+X      EXISTS_TAC "y - x" THEN
+X      FILTER_RULE_ASSUM_TAC [1] (AP_TERM "INT") THEN
+X      FILTER_RULE_ASSUM_TAC [1] SYM THEN
+X      ASM_REWRITE_TAC[SYM(SPEC_ALL INT_PLUS);SYM(SPEC_ALL PLUS_ASSOC);
+X                                             REV_PLUS_ZERO;ZERO_PLUS]
+X    ]);;
+X
+Xlet w28= "~(zero = een) /\ ~(een = zero)";; 
+X
+Xlet ZERO_NOT_ONE = prove_thm(
+X   `ZERO_NOT_ONE`,
+X    w28,
+X    REWRITE_TAC[ZERO;ONE;INT;thm_univ;ZET_REL;ADD_CLAUSES] THEN
+X    CONV_TAC (LHS_CONV(RAND_CONV SYM_CONV)) THEN
+X    REWRITE_TAC[num_CONV "1";NOT_SUC]);;
+X
+Xlet w29 ="(!x.zero leq (INT x)) /\ (!x.(REV(INT x)) leq zero)";;
+X
+Xlet LEQ_CLAUSES = prove_thm(
+X   `LEQ_CLAUSES`,
+X    w29,
+X    REWRITE_TAC[LEQ;MINUS;REWRITE_RULE[] (SPEC "zero" FIX_REV);ZERO_PLUS;REV2_ID] THEN
+X    REWRITE_TAC[MATCH_MP DEF_THM1 POS]);;
+X
+Xlet w30 = "!x y.(x leq y) = ((REV y) leq (REV x))";; 
+X
+Xlet REV_LEQ = prove_thm(
+X   `REV_LEQ`,
+X    w30,
+X    REWRITE_TAC[LEQ;MINUS;REV2_ID] THEN
+X    REPEAT GEN_TAC THEN 
+X    AP_TERM_TAC THEN
+X    CONV_TAC (LHS_CONV (REWRITE_CONV PLUS_COM)) THEN
+X    REWRITE_TAC[]);; 
+X
+Xlet w31 = "!x. ((x minus een) leq x) /\ (x leq (x plus een))";; 
+X
+Xlet ONE_LEQ = prove_thm(
+X   `ONE_LEQ`,
+X    w31,
+X    REWRITE_TAC[LEQ;MINUS;REV_PLUS;REV2_ID] THEN
+X    REPEAT GEN_TAC THEN 
+X    CONV_TAC (RAND_CONV(RAND_CONV(REWRITE_CONV PLUS_COM))) THEN
+X    REWRITE_TAC[PLUS_ASSOC;REV_PLUS_ZERO;ZERO_PLUS;ONE] THEN
+X    REWRITE_TAC[MATCH_MP DEF_THM1 POS]);; 
+X
+Xlet w32 = "!x.~((x minus een) = x) /\ ~((x plus een) = x)";; 
+X 
+Xlet ONE_PROPER_LEQ = prove_thm(
+X   `ONE_PROPER_LEQ`,
+X    w32,
+X    REPEAT STRIP_TAC THEN
+X    RULE_ASSUM_TAC (\th.MK_PLUS [REFL "REV x";th]) THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[MINUS;PLUS_ASSOC;REV_PLUS_ZERO;ZERO_PLUS]) THENL
+X      [RULE_ASSUM_TAC (\th.REWRITE_RULE[REV2_ID] (AP_TERM "REV" th)) THEN
+X       RULE_ASSUM_TAC (REWRITE_RULE[REWRITE_RULE[] (SPEC "zero" FIX_REV)]);
+X       ALL_TAC] THEN
+X    IMP_RES_TAC ZERO_NOT_ONE);; 
+X
+Xlet w33 = "!x. ((een leq x) \/ (x leq (REV een))) ==> ~(x = zero)";;
+X
+Xlet ZERO_LEQ_ONE = prove_thm(
+X   `ZERO_LEQ_ONE`,
+X    w33,
+X    REPEAT STRIP_TAC THEN
+X    REWRITE_RULE_ASSUM_TAC [2] [1] THENL
+X     [ASSUME_TAC (REWRITE_RULE[ZERO_PLUS](CONJUNCT2(SPEC "zero" ONE_LEQ)));
+X      ASSUME_TAC (REWRITE_RULE[MINUS;ZERO_PLUS](CONJUNCT1(SPEC "zero" ONE_LEQ)))] THEN
+X    IMP_RES_TAC ANTI_SYM_LEQ THENL
+X     [ALL_TAC;
+X      FILTER_RULE_ASSUM_TAC [1] (\th.REWRITE_RULE[REV2_ID] (AP_TERM "REV" th)) THEN
+X      FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[REWRITE_RULE[] (SPEC "zero" FIX_REV)])] THEN
+X    IMP_RES_TAC ZERO_NOT_ONE);; 
+X
+X
+X 
+X
+X
+X%<********************ZET_INDUCTION_THEOREM***********************************>%
+X
+Xlet w34 = "!Q.((!x.(NEG x) ==> Q x) /\ (!x.((POS x) /\ (Q x)) ==> 
+X                                              (Q (x plus een)))) ==> !x.Q x";; 
+X
+Xlet ZET_INDUCTION0 = prove_thm(
+X    `ZET_INDUCTION0`,
+X     w34,
+X     REPEAT STRIP_TAC THEN
+X     DISJ_CASES_TAC (SPEC "x:zet" POS_PROP1) THENL
+X      [ALL_TAC;
+X       RULE_ASSUM_TAC (REWRITE_RULE[NEG]) THEN
+X       RES_TAC] THEN
+X     SUBGOAL_THEN "!x.Q (INT x)" ASSUME_TAC THENL
+X      [INDUCT_TAC;ALL_TAC] THENL
+X      [SUBGOAL_THEN "NEG zero" ASSUME_TAC;ALL_TAC;ALL_TAC] THENL
+X      [REWRITE_TAC[NEG] THEN
+X       REWRITE_TAC[REWRITE_RULE[] (SPEC "zero" FIX_REV)] THEN
+X       REWRITE_TAC[POS] THEN
+X       EXISTS_TAC "0" THEN
+X       REWRITE_TAC[ZERO];
+X       RES_TAC THEN
+X       RULE_ASSUM_TAC (REWRITE_RULE[ZERO]) THEN
+X       ASM_REWRITE_TAC[]; 
+X       ASSUME_TAC (MATCH_MP DEF_THM1 POS) THEN
+X       FILTER_RULE_ASSUM_TAC [4] (SPEC "INT x'") THEN
+X       REWRITE_RULE_ASSUM_TAC [4] [1] THEN
+X       RES_TAC THEN
+X       RULE_ASSUM_TAC (REWRITE_RULE[ONE;INT_PLUS]) THEN
+X       ASM_REWRITE_TAC[ADD1];
+X       FILTER_ASSUM_TAC [2] UNDISCH_TAC THEN
+X       REWRITE_TAC[POS] THEN 
+X       REPEAT STRIP_TAC THEN
+X       ASM_REWRITE_TAC[]]);;
+X
+X
+X%<**************************TACTIC(AL)S*******************************>%
+X
+X
+Xlet ZET_INDUCT0_TAC (A,t) = 
+X    (let th = ZET_INDUCTION0 in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in
+X     let tac = 
+X     (MATCH_MP_TAC thm THEN  
+X      CONJ_TAC THEN
+X      FIRST[CONV_TAC (BINDER_CONV((RAND_CONV BETA_CONV) THENC
+X                                  (LHS_CONV(RAND_CONV BETA_CONV))));
+X            CONV_TAC (BINDER_CONV(RAND_CONV BETA_CONV))] )in
+X      tac (A,t));;
+X
+X%<********************ZET_INDUCTION_THEOREM***********************************>%
+X
+Xlet w35 = "!k Q.((!x.(x leq k) ==> (Q x)) /\
+X                 (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> (!x.Q x)";;
+X     
+Xlet ZET_INDUCTION1 = prove_thm(
+X   `ZET_INDUCTION1`,
+X    w35,
+X    REWRITE_TAC[LEQ;MINUS] THEN 
+X    REPEAT STRIP_TAC THEN 
+X    SPEC_TAC ("x:zet","x:zet") THEN
+X    CONV_TAC (BASE_CHANGE_CONV (SPEC "k:zet" ISO_PLUS_K)) THEN
+X    ZET_INDUCT0_TAC THEN
+X    CONV_TAC (BASE_CHANGE_CONV (SPEC "REV k:zet" ISO_PLUS_K)) THEN
+X    REWRITE_TAC[NEG;PLUS_ASSOC;REV_PLUS_ZERO;ZERO_PLUS;REV_PLUS;REV2_ID] THENL
+X     [ASM_REWRITE_TAC[];
+X      CONV_TAC (BINDER_CONV(LHS_CONV (once_rewrite_CONV [PLUS_COM]))) THEN
+X      ASM_REWRITE_TAC[]]);; 
+X
+X%<**************************TACTIC(AL)S*******************************>%
+X
+X%<The parameter k in the tactic below determines the
+X  point where induction really starts>%
+X
+X
+X
+Xlet ZET_INDUCT1_TAC k (A,t) = 
+X    (let th = SPEC k ZET_INDUCTION1 in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in 
+X     let PART_MATCH' partfn th =
+X              (let pth = GSPEC th  in
+X               let pat = partfn(concl pth) in
+X               let matchfn = match pat in
+X               \tm. INST_TY_TERM (matchfn tm) pth) in  
+X     let MATCH_MP_TAC' thm:tactic (gl,g) =
+X              (let imp = ((PART_MATCH' (snd o dest_imp) thm) g) ? 
+X	       failwith `MATCH_MP_TAC` in
+X    
+X               ([gl,(fst(dest_imp(concl imp)))], \thl. MP imp (hd thl))) in
+X     let tac = 
+X     (MATCH_MP_TAC' thm THEN
+X      REPEAT CONJ_TAC THEN
+X      GEN_TAC THENL
+X      [CONV_TAC (RAND_CONV BETA_CONV);
+X       CONV_TAC ((RAND_CONV BETA_CONV) THENC
+X                 (LHS_CONV(RAND_CONV BETA_CONV)))] THEN
+X      REPEAT STRIP_TAC) in
+X     tac (A,t));;  
+X
+X%<********************ZET_INDUCTION_THEOREMS***********************************>%
+X
+Xlet w36 = "!k Q.((Q k) /\ (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> 
+X                    (!x.(k leq x) ==> (Q x))";; 
+X
+Xlet thm36 = prove(
+X    w36,
+X    2 TIMES GEN_TAC THEN
+X    STRIP_TAC THEN
+X    ZET_INDUCT1_TAC "k:zet" THENL
+X     [IMP_RES_TAC ANTI_SYM_LEQ THEN
+X      SUB_ASSUM_TAC [1;8] THEN
+X      ASM_REWRITE_TAC[];
+X      RES_TAC]);;  
+X
+X
+X
+Xlet w37 = "!k Q.((Q k) /\ (!x.((x leq k) /\ (Q x)) ==> (Q (x minus een)))) ==> 
+X                    (!x.(x leq k) ==> (Q x))";; 
+X
+Xlet thm37 = prove(
+X    w37,
+X    2 TIMES GEN_TAC THEN
+X    STRIP_TAC THEN
+X    CONV_TAC (BASE_CHANGE_CONV ISO_REV) THEN
+X    FILTER_RULE_ASSUM_TAC [1] (CONV_RULE (BASE_CHANGE_CONV ISO_REV)) THEN
+X    ZET_INDUCT1_TAC "REV k" THENL
+X     [RULE_ASSUM_TAC (REWRITE_RULE[LEQ;MINUS;REV2_ID;SYM(SPEC_ALL REV_PLUS)]) THEN  
+X      IMP_RES_TAC POS_PROP2 THEN
+X      SUB_ASSUM_TAC [1;7] THEN
+X      FILTER_RULE_ASSUM_TAC [1] (\th.MK_PLUS [REFL "REV k";th]) THEN
+X      RULE_ASSUM_TAC (REWRITE_RULE[PLUS_ASSOC;REV_PLUS_ZERO;ZERO_PLUS]) THEN
+X      ASM_REWRITE_TAC[REV2_ID];
+X      RULE_ASSUM_TAC (REWRITE_RULE[LEQ;MINUS;REV2_ID]) THEN
+X      REWRITE_TAC[REV_PLUS] THEN
+X      FILTER_RULE_ASSUM_TAC [3] (CONV_RULE (RAND_CONV (REWRITE_CONV PLUS_COM))) THEN
+X      RES_TAC]);;
+X
+Xlet w38 = "!k Q.((Q k) /\ 
+X                  (!x.((x leq k) /\ (Q x)) ==> (Q (x minus een))) /\
+X                  (!x.((k leq x) /\ (Q x)) ==> (Q (x plus een)))) ==> 
+X                    (!x.Q x)";; 
+X
+Xlet ZET_INDUCTION2 = prove_thm(
+X   `ZET_INDUCTION2`,
+X    w38,
+X    REPEAT STRIP_TAC THEN
+X    DISJ_CASES_TAC (SPEC "x:zet"(SPEC "k:zet" LINEAR_LEQ)) THENL
+X     [IMP_RES_TAC thm36;
+X      IMP_RES_TAC thm37]);;  
+X
+X%<**************************TACTIC(AL)S*******************************>%
+X
+X%<The parameter k in the tactic below determines the
+X  point where induction really starts>%
+X
+Xlet ZET_INDUCT2_TAC k (A,t) = 
+X    (let th = SPEC k ZET_INDUCTION2 in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in 
+X     let PART_MATCH' partfn th =
+X              (let pth = GSPEC th  in
+X               let pat = partfn(concl pth) in
+X               let matchfn = match pat in
+X               \tm. INST_TY_TERM (matchfn tm) pth) in  
+X     let MATCH_MP_TAC' thm:tactic (gl,g) =
+X              (let imp = ((PART_MATCH' (snd o dest_imp) thm) g) ? 
+X	       failwith `MATCH_MP_TAC` in
+X    
+X               ([gl,(fst(dest_imp(concl imp)))], \thl. MP imp (hd thl))) in
+X     let tac = 
+X     (MATCH_MP_TAC' thm THEN
+X      REPEAT CONJ_TAC THENL
+X      [ALL_TAC;GEN_TAC;GEN_TAC] THENL
+X      [CONV_TAC BETA_CONV;
+X       CONV_TAC ((RAND_CONV BETA_CONV) THENC
+X                 (LHS_CONV(RAND_CONV BETA_CONV)));
+X       CONV_TAC ((RAND_CONV BETA_CONV) THENC
+X                 (LHS_CONV(RAND_CONV BETA_CONV)))] THEN
+X      REPEAT STRIP_TAC) in
+X     tac (A,t));; 
+X
+Xlet w39 = "!f:*->**.ONE_ONE f ==>(!z.(@y.f z = f y) = z)";; 
+X
+Xlet PRE_LIFT_THM = prove(
+X    w39,
+X    REWRITE_TAC[ONE_ONE_DEF] THEN 
+X    REPEAT STRIP_TAC THEN
+X    SUBGOAL_THEN "?y:*.(f z = (f y:**))" ASSUME_TAC THENL
+X    [EXISTS_TAC "z:*" THEN REWRITE_TAC[];ALL_TAC] THEN
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[EXISTS_DEF]) THEN
+X    FILTER_RULE_ASSUM_TAC [1] (SYM o BETA_RULE) THEN
+X    RES_TAC);;  
+X
+Xlet w40 = "!f:*->**.ONE_ONE f ==>((!z.(@y.f z = f y) = z) /\
+X                                (!z.(@y.f y = f z) = z))";;
+X
+Xlet LIFT_THM = prove(
+X    w40,
+X    GEN_TAC THEN
+X    STRIP_TAC THEN
+X    CONJ_TAC THENL  
+X    [ALL_TAC;CONV_TAC (BINDER_CONV(LHS_CONV(BINDER_CONV SYM_CONV)))] THEN
+X    IMP_RES_TAC PRE_LIFT_THM);; 
+X
+Xlet INT_LIFT_THM = MATCH_MP LIFT_THM INV_INT;;
+X
+Xlet w41 ="!k (c:*) fd fu.?f.((f k) = c) /\ 
+X                       (!x.(x leq k) ==> ((f (x minus een)) = (fd (f x) x))) /\
+X                       (!x.(k leq x) ==> ((f (x plus een)) = (fu (f x) x)))";; 
+X
+Xlet ZET_REC_THM = prove_thm(
+X   `ZET_REC_THM`,
+X    w41,
+X    REPEAT GEN_TAC THEN
+X    DEFINE "Fu = \y:*.\n.fu y ((INT n) plus k):*" THEN
+X    DEFINE "Gu = PRIM_REC (c:*) Fu" THEN
+X    ASSUME_TAC (SPEC "Fu:* -> num -> *"(SPEC "c:*" PRIM_REC_THM)) THEN
+X    FILTER_RULE_ASSUM_TAC [2] SYM THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [3] THEN
+X    FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[ADD1]) THEN  
+X    DEFINE "gu = \x.Gu (@z.(x minus k) = INT z):*" THEN
+X    SUBGOAL_THEN "!x.(k leq x) ==> ((gu (x plus een):*) = fu (gu x) x)"   
+X                                                            ASSUME_TAC THENL
+X    [REWRITE_TAC[LEQ;POS] THEN 
+X     REPEAT STRIP_TAC THEN
+X     ASM_REWRITE_TAC[] THEN
+X     BETA_TAC THEN
+X     SUBGOAL_THEN "(x plus een) minus k = INT (y + 1)" ASSUME_TAC THENL
+X       [REWRITE_TAC[MINUS] THEN
+X        CONV_TAC (DIR_CONV [`fa`,lr;`faa`,cp;`fa`,rl]) THEN
+X        RULE_ASSUM_TAC (REWRITE_RULE[MINUS]) THEN
+X        ASM_REWRITE_TAC[ONE;INT_PLUS];ALL_TAC] THEN
+X     ASM_REWRITE_TAC[INT_LIFT_THM] THEN
+X     FILTER_RULE_ASSUM_TAC [2] SYM THEN
+X     ASM_REWRITE_TAC[MINUS_PROP];ALL_TAC] THEN
+X    SUBGOAL_THEN "gu (k:zet) = c:*" ASSUME_TAC THENL
+X    [ASM_REWRITE_TAC[] THEN
+X     BETA_TAC THEN
+X     ASM_REWRITE_TAC[MINUS;REV_PLUS_ZERO;ZERO;INT_LIFT_THM];ALL_TAC] THEN
+X    SUB_ASSUM_TAC[1;2] THEN
+X    DEFINE "Fd = \y:*.\n.fd y (k minus (INT n)):*" THEN
+X    DEFINE "Gd = PRIM_REC (c:*) Fd" THEN
+X    ASSUME_TAC (SPEC "Fd:* -> num -> *"(SPEC "c:*" PRIM_REC_THM)) THEN
+X    FILTER_RULE_ASSUM_TAC [2] SYM THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [3] THEN
+X    FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[ADD1]) THEN  
+X    DEFINE "gd = \x.Gd (@z.(k minus x) = INT z):*" THEN
+X    SUBGOAL_THEN "!x.(x leq k) ==> ((gd (x minus een):*) = fd (gd x) x)"   
+X                                                            ASSUME_TAC THENL  
+X    [REWRITE_TAC[LEQ;POS] THEN 
+X     REPEAT STRIP_TAC THEN
+X     ASM_REWRITE_TAC[] THEN
+X     BETA_TAC THEN
+X     SUBGOAL_THEN "k minus (x minus een) = INT (y + 1)" ASSUME_TAC THENL
+X       [REWRITE_TAC[MINUS;REV_PLUS;REV2_ID;PLUS_ASSOC] THEN
+X        RULE_ASSUM_TAC (REWRITE_RULE[MINUS]) THEN
+X        ASM_REWRITE_TAC[ONE;INT_PLUS];ALL_TAC] THEN
+X     ASM_REWRITE_TAC[INT_LIFT_THM] THEN
+X     FILTER_RULE_ASSUM_TAC [2] SYM THEN
+X     ASM_REWRITE_TAC[MINUS;REV_PLUS;REV2_ID;PLUS_ASSOC;REV_PLUS_ZERO;ZERO_PLUS];
+X                                                                 ALL_TAC] THEN
+X    SUBGOAL_THEN "gd (k:zet) = c:*" ASSUME_TAC THENL
+X    [ASM_REWRITE_TAC[] THEN
+X     BETA_TAC THEN
+X     ASM_REWRITE_TAC[MINUS;REV_PLUS_ZERO;ZERO;INT_LIFT_THM];ALL_TAC] THEN     
+X    SUB_ASSUM_TAC[1;2;7;8] THEN
+X    DEFINE "h = \x.((k leq x) => ((gu x):*) | (gd x))" THEN
+X    SUBGOAL_THEN "!x.(k leq x) ==> (h x = (gu x:*))" ASSUME_TAC THENL
+X    [REPEAT STRIP_TAC THEN
+X     ASM_REWRITE_TAC[] THEN
+X     BETA_TAC THEN
+X     ASM_REWRITE_TAC[];ALL_TAC] THEN
+X    SUBGOAL_THEN "!x.(x leq k) ==> (h x = (gd x:*))" ASSUME_TAC THENL
+X    [REPEAT STRIP_TAC THEN
+X     ASM_CASES_TAC "x = (k:zet)" THENL
+X      [ASSUME_TAC (SPEC "k:zet" REFLEX_LEQ) THEN
+X       ASM_REWRITE_TAC[] THEN
+X       BETA_TAC THEN ASM_REWRITE_TAC[];ALL_TAC] THEN
+X     ASM_CASES_TAC "k leq x" THENL
+X      [IMP_RES_TAC ANTI_SYM_LEQ THEN RES_TAC;ALL_TAC] THEN  
+X     ASM_REWRITE_TAC[] THEN
+X     BETA_TAC THEN
+X     ASM_REWRITE_TAC[];ALL_TAC] THEN
+X    SUB_ASSUM_TAC [1;2;4;5;6;7] THEN
+X    EXISTS_TAC "h:zet->*" THEN
+X    REPEAT STRIP_TAC THENL
+X    [ASSUME_TAC (SPEC "k:zet" REFLEX_LEQ) THEN RES_TAC THEN ASM_REWRITE_TAC[];
+X     STRIP_ASSUME_TAC (SPEC "x:zet" ONE_LEQ) THEN
+X     IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X     RES_TAC THEN ASM_REWRITE_TAC[];
+X     STRIP_ASSUME_TAC (SPEC "x:zet" ONE_LEQ) THEN
+X     IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X     RES_TAC THEN ASM_REWRITE_TAC[]]);;
+X
+Xlet w42 ="!k (c:*) fd fu.?!f.((f k) = c) /\ 
+X                       (!x.(x leq k) ==> ((f (x minus een)) = (fd (f x) x))) /\
+X                       (!x.(k leq x) ==> ((f (x plus een)) = (fu (f x) x)))";; 
+X                                        
+Xlet zet_Axiom = prove_thm(
+X   `zet_Axiom`,
+X    w42,
+X    REPEAT GEN_TAC THEN
+X    CONV_TAC EXISTS_UNIQUE_CONV THEN CONJ_TAC THENL
+X    [REWRITE_TAC[ZET_REC_THM]; 
+X     BETA_TAC THEN
+X     REPEAT STRIP_TAC THEN
+X     CONV_TAC FUN_EQ_CONV THEN
+X     ZET_INDUCT2_TAC "k:zet" THEN 
+X     RES_TAC THEN 
+X     ASM_REWRITE_TAC []]);;  
+X                                                                           
+X
+Xlet w43 = "!k x. (x leq k) \/ ((k plus een) leq x)";;
+X
+Xlet DISCRETE_ZET = prove_thm(
+X   `DISCRETE_ZET`,
+X    w43,
+X    GEN_TAC THEN
+X    ZET_INDUCT2_TAC "k:zet" THENL
+X      [REWRITE_TAC[REFLEX_LEQ];
+X       ASSUME_TAC (CONJUNCT1 (SPEC "x:zet" ONE_LEQ)) THEN
+X       IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X       ASM_REWRITE_TAC[];
+X       IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X       SUB_ASSUM_TAC [1] THEN
+X       NEW_IMP_RES_TAC TRANSLATION_LEQ THEN
+X       FILTER_RULE_ASSUM_TAC [1] (SPEC "REV k:zet") THEN
+X       FILTER_RULE_ASSUM_TAC [1] (ONCE_REWRITE_RULE[PLUS_COM]) THEN
+X       FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[PLUS_ASSOC;REV_PLUS_ZERO;ZERO_PLUS]) THEN
+X       ASSUME_TAC (REWRITE_RULE[ZERO_PLUS] (CONJUNCT2 (SPEC "zero" ONE_LEQ))) THEN
+X       SUB_ASSUM_TAC [1;2] THEN
+X       IMP_RES_TAC ANTI_SYM_LEQ THEN
+X       IMP_RES_TAC ZERO_NOT_ONE;
+X       IMP_RES_TAC ANTI_SYM_LEQ THEN
+X       SUB_ASSUM_TAC [1] THEN 
+X       ASM_REWRITE_TAC[REFLEX_LEQ];
+X       ASSUME_TAC (CONJUNCT2 (SPEC "x:zet" ONE_LEQ)) THEN
+X       SUB_ASSUM_TAC [1;2] THEN IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X       ASM_REWRITE_TAC[]]);; 
+X                                                                   
+X
+X%<******************PRE_MULT_THEOREMS**********************************>%  
+X
+Xlet w44 = "!x y z.(ZET_REL x y) ==> ZET_REL (x PRE_MULT z) (y PRE_MULT z)";;
+X
+Xlet thm44 = prove(
+X    w44,
+X    3 TIMES (CONV_TAC PROD_CONV THEN (2 TIMES GEN_TAC)) THEN
+X    REWRITE_TAC[ZET_REL;PRE_MULT] THEN
+X    REPEAT STRIP_TAC THEN
+X    ASSUM_LIST (\[th].ASSUME_TAC (MK_MULT [th;REFL "z1:num"])) THEN
+X    FILTER_ASSUM_LIST [2] (\[th].ASSUME_TAC (MK_MULT [SYM th;REFL "z2:num"])) THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[RIGHT_ADD_DISTRIB]) THEN
+X    CONV_TAC (DIR_CONV [`faaa`,CM;`aaa`,CM]) THEN
+X    CONV_TAC (DIR_CONV [`fa`,LR;`faa`,RL;`faafa`,CP;`faa`,CP;`fa`,RL]) THEN
+X    CONV_TAC (DIR_CONV [`a`,LR;`aa`,RL;`aafa`,CP;`aa`,CP;`a`,RL]) THEN
+X    ASM_REWRITE_TAC[]);;
+X
+Xlet w45 = "!x y z.(ZET_REL x y) ==> ZET_REL (z PRE_MULT x) (z PRE_MULT y)";;
+X
+Xlet thm45 = prove(
+X    w45,
+X    3 TIMES (CONV_TAC PROD_CONV THEN (2 TIMES GEN_TAC)) THEN
+X    REWRITE_TAC[ZET_REL;PRE_MULT] THEN
+X    REPEAT STRIP_TAC THEN
+X    ASSUM_LIST (\[th].ASSUME_TAC (MK_MULT [REFL "z1:num";th])) THEN
+X    FILTER_ASSUM_LIST [2] (\[th].ASSUME_TAC (MK_MULT [REFL "z2:num";SYM th])) THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[LEFT_ADD_DISTRIB]) THEN
+X    CONV_TAC (DIR_CONV [`faaa`,CM;`aaa`,CM]) THEN
+X    CONV_TAC (DIR_CONV [`fa`,LR;`faa`,RL;`faafa`,CP;`faa`,LR;`faaa`,CP;`fa`,RL]) THEN
+X    CONV_TAC (DIR_CONV [`a`,LR;`aa`,RL;`aafa`,CP;`aa`,LR;`aaa`,CP;`a`,RL]) THEN
+X    ASM_REWRITE_TAC[]);;
+X
+X
+Xlet w46 = "!x y z w.(ZET_REL x y) /\ (ZET_REL z w) ==>
+X                      ZET_REL (x PRE_MULT z) (y PRE_MULT w)";;
+X
+Xlet thm46 = prove(
+X    w46,
+X    REPEAT STRIP_TAC THEN
+X    IMP_RES_TAC (SPEC_ALL thm44) THEN
+X    IMP_RES_TAC (SPEC "y:num#num" (SPEC "z:num#num" (SPEC "w:num#num" thm45))) THEN
+X    SUB_ASSUM_TAC [2;5] THEN
+X    ASSUM_LIST (\[th1;th2].ASSUME_TAC (CONJ th2 th1)) THEN
+X    ASSUME_TAC ((BETA_RULE o (REWRITE_RULE[TRANSITIVITY])) thm3) THEN
+X    FILTER_ASSUM_LIST [1;2] (\[th1;th2].ASSUME_TAC (MATCH_MP th1 th2)) THEN
+X    ASM_REWRITE_TAC[]);;
+X
+Xlet w47 = "?!h.PROJ_zet o (\z.(FST z) PRE_MULT (SND z)) = h o (PROJ_zet P PROJ_zet)";;
+X
+Xlet thm47 = prove(
+X    w47,
+X    MATCH_MP_TAC FACTOR_THM THEN
+X    REWRITE_TAC[ONTO_SURJ_THM;thm_onto;o_DEF;P] THEN
+X    BETA_TAC THEN
+X    REWRITE_TAC[PAIR_EQ_THM;thm_univ;thm46]);;
+X
+Xlet thm48 = 
+X    let th1 = (CONV_RULE (BINDER_CONV (SYM_CONV THENC FUN_EQ_CONV THENC PROD_CONV))) thm47 in
+X    let th2 = (CONV_RULE (BINDER_CONV PROD_CONV)) th1 in
+X    let th3 = REWRITE_RULE[o_DEF;P] th2 in
+X    let th4 = BETA_RULE th3 in   
+X    let th5 = REWRITE_RULE[PRE_MULT] th4 in
+X    let th6 = hd(CONJUNCTS CURRY_ISO) in
+X    let th7 = (CONV_RULE (BASE_CHANGE_CONV th6)) th5 in
+X    REWRITE_RULE[UNCURRY_DEF] th7;;
+X
+X%<***********************DEFINITIONS****************************************>%   
+X
+Xlet [MULT;MULT_UNIQUE] = new_unique_specification `MULT` [`infix`,`mult`] thm48;;  
+X                                                                                   
+X
+X%<*************************DEFINITIONS********************************>%
+X
+Xlet LESS = new_infix_definition(
+X   `LESS`,
+X    "less x y =(x plus een) leq y");;  
+X
+X%<******************LESS_LEQQ_THEOREMS**********************************>%
+X
+Xlet w49 = "!x y. (x less y) = ((x leq y) /\ ~(x = y))";;
+X
+Xlet LESS_LEQ = prove_thm(
+X   `LESS_LEQ`,
+X    w49,
+X    REPEAT GEN_TAC 
+X    THEN REWRITE_TAC[LESS] THEN 
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THENL
+X     [ASSUME_TAC (CONJUNCT2 (SPEC "x:zet" ONE_LEQ)) THEN
+X      IMP_RES_TAC TRANSITIVITY_LEQ;
+X      REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X      ASSUME_TAC (CONJUNCT2 (SPEC "y:zet" ONE_LEQ)) THEN
+X      IMP_RES_TAC ANTI_SYM_LEQ THEN
+X      IMP_RES_TAC ONE_PROPER_LEQ;
+X      DISJ_CASES_TAC (SPEC "y:zet" (SPEC "x:zet" DISCRETE_ZET)) THEN
+X      ASM_REWRITE_TAC[] THEN
+X      IMP_RES_TAC ANTI_SYM_LEQ THEN
+X      RES_TAC]);;
+X
+Xlet w50 = "!x.~(x less x)";;
+X
+Xlet IRREFLEX_LESS = prove_thm(
+X   `IRREFLEX_LESS`,
+X    w50,
+X    REWRITE_TAC[LESS_LEQ]);;
+X
+Xlet w51 = "!x y z.(x less y) /\ (y leq z) ==> (x less z)";;
+X
+Xlet thm51 = prove(
+X    w51,
+X    REWRITE_TAC[LESS] THEN REPEAT STRIP_TAC THEN IMP_RES_TAC TRANSITIVITY_LEQ);;
+X
+Xlet w52 = "!x y z.(x leq y) /\ (y less z) ==> (x less z)";;
+X
+Xlet thm52 = prove(
+X    w52,
+X    REWRITE_TAC[LESS] THEN 
+X    REPEAT STRIP_TAC THEN 
+X    NEW_IMP_RES_TAC TRANSLATION_LEQ THEN
+X    FILTER_RULE_ASSUM_TAC [1] (SPEC "een") THEN
+X    IMP_RES_TAC TRANSITIVITY_LEQ);; 
+X
+Xlet w53 = "!x y z.(x less y) /\ (y less z) ==> (x less z)";;  
+X
+Xlet thm53 = prove(
+X    w53,
+X    REPEAT STRIP_TAC THEN 
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[LESS_LEQ]) THEN
+X    FILTER_STRIP_ASSUM_TAC [1] THEN 
+X    IMP_RES_TAC thm51);;
+X
+Xlet TRANSITIVITY_CLAUSES = save_thm(
+X   `TRANSITIVITY_CLAUSES`,
+X    (LIST_CONJ [TRANSITIVITY_LEQ;thm51;thm52;thm53]));;   
+X
+Xlet w54 = "!x y. (x less y) = ((REV y) less (REV x))";; 
+X
+Xlet REV_LESS = prove_thm(
+X   `REV_LESS`,
+X    w54,
+X    REWRITE_TAC[LESS_LEQ] THEN
+X    REPEAT GEN_TAC THEN 
+X    CONV_TAC (LHS_CONV (once_rewrite_CONV [REV_LEQ])) THEN
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THEN 
+X    ASM_REWRITE_TAC[] THEN
+X    FILTER_RULE_ASSUM_TAC [1] (\th.REWRITE_RULE[REV2_ID] (AP_TERM "REV" (SYM th))) THEN
+X    RES_TAC);;  
+X
+Xlet w55 = "!k x.(x leq k) \/ (k less x)";;  
+X
+Xlet LESS_LEQ_CASES = prove_thm(
+X   `LESS_LEQ_CASES`,
+X    w55,
+X    REWRITE_TAC[LESS;DISCRETE_ZET]);; 
+X
+X
+X%<*********************MULT_THEOREMS**********************************>%
+X
+Xlet w56 = "!x y.(INT x) mult (INT y) = INT (x * y)";;
+X
+Xlet INT_MULT = prove_thm(
+X    `INT_MULT`,
+X     w56,
+X     REWRITE_TAC[INT;MULT;thm_univ;ZET_REL;MULT_CLAUSES;ADD_CLAUSES]);;  
+X
+Xlet w57 = "(!x.x mult zero = zero) /\ (!x.zero mult x = zero)";;   
+X
+Xlet ZERO_MULT = prove_thm(
+X    `ZERO_MULT`,
+X     w57, 
+X     CONJ_TAC THEN
+X     ZET_QUOTIENT_TAC THEN
+X     REWRITE_TAC[ZERO;INT;MULT;thm_univ;ZET_REL;MULT_CLAUSES;ADD_CLAUSES]);;
+X
+Xlet w58 = "(!x.x mult een = x) /\ (!x.een mult x = x)";;    
+X
+Xlet ONE_MULT = prove_thm(
+X    `ONE_MULT`,
+X     w58, 
+X     CONJ_TAC THEN
+X     ZET_QUOTIENT_TAC THEN
+X     REWRITE_TAC[ONE;INT;MULT;thm_univ;ZET_REL;MULT_CLAUSES;ADD_CLAUSES]);;
+X
+Xlet w59 = "!x y.(x mult y) = (y mult x)";; 
+X
+Xlet MULT_COM = prove_thm(
+X    `MULT_COM`,
+X     w59, 
+X     (2 TIMES ZET_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[MULT;thm_univ;ZET_REL;MULT_CLAUSES;ADD_CLAUSES] THEN
+X     CONV_TAC (DIR_CONV [`fafafa`,CM;`fafaa`,CM;`faa`,CP]) THEN
+X     REWRITE_TAC[]);; 
+X
+Xlet w60 = "!x y z.x mult (y plus z) = ((x mult y) plus (x mult z))";;  
+X
+Xlet PLUS_LEFT_DISTRIB = prove_thm(
+X    `PLUS_LEFT_DISTRIB`,
+X     w60,
+X     (3 TIMES ZET_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[MULT;PLUS;thm_univ;ZET_REL;LEFT_ADD_DISTRIB;RIGHT_ADD_DISTRIB] THEN
+X     CONV_TAC (DIR_CONV[`fafa`,LR;`fafaa`,RL;`fafaafa`,CP;`fafaa`,LR;`fafa`,RL]) THEN
+X     CONV_TAC (DIR_CONV[`faa`,LR;`faaa`,RL;`faaafa`,CP;`faaa`,LR;`faa`,RL]) THEN
+X     REWRITE_TAC[]);;
+X
+Xlet w61 = "!x y z.(y plus z) mult x = ((y mult x) plus (z mult x))";;  
+X
+Xlet PLUS_RIGHT_DISTRIB = prove_thm(
+X    `PLUS_RIGHT_DISTRIB`,
+X     w61,
+X     (3 TIMES ZET_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[MULT;PLUS;thm_univ;ZET_REL;LEFT_ADD_DISTRIB;RIGHT_ADD_DISTRIB] THEN
+X     CONV_TAC (DIR_CONV[`fafa`,LR;`fafaa`,RL;`fafaafa`,CP;`fafaa`,LR;`fafa`,RL]) THEN
+X     CONV_TAC (DIR_CONV[`faa`,LR;`faaa`,RL;`faaafa`,CP;`faaa`,LR;`faa`,RL]) THEN
+X     REWRITE_TAC[]);;
+X
+Xlet w62 = "!x y.REV( x mult y) = ((REV x) mult y)";;   
+X
+Xlet REV_MULT1 = prove_thm(
+X    `REV_MULT1`,
+X     w62, 
+X     (2 TIMES ZET_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[MULT;REV;thm_univ;ZET_REL] THEN
+X     CONV_TAC (DIR_CONV [`fafaa`,CM;`fafa`,CP;`faaa`,CM;`faa`,CP]) THEN
+X     ASM_REWRITE_TAC[]);; 
+X
+Xlet w63 = "!x y.REV( x mult y) = (x mult (REV y))";;   
+X
+Xlet REV_MULT2 = prove_thm(
+X    `REV_MULT2`,
+X     w63, 
+X     REPEAT GEN_TAC THEN
+X     CONV_TAC (RAND_CONV (REWRITE_CONV MULT_COM)) THEN
+X     REWRITE_TAC[SYM(SPEC_ALL REV_MULT1)] THEN
+X     CONV_TAC (RAND_CONV(RAND_CONV (REWRITE_CONV MULT_COM))) THEN
+X     REWRITE_TAC[]);; 
+X
+Xlet w64 = "!x y z.x mult (y mult z) = (x mult y) mult z";; 
+X
+Xlet MULT_ASSOC = prove_thm(
+X   `MULT_ASSOC`,
+X    w64,
+X    ZET_INDUCT2_TAC "zero" THEN
+X    ASM_REWRITE_TAC[ZERO_MULT;MINUS;PLUS_RIGHT_DISTRIB;
+X                    SYM(SPEC_ALL REV_MULT1);ONE_MULT]);;
+X
+X
+Xlet w65 = "!x y.(zero leq x) /\ (zero leq y) ==> (zero leq (x mult y))";; 
+X
+Xlet LEQ_MULT = prove_thm(
+X   `LEQ_MULT`,
+X    w65,
+X    REWRITE_TAC[LEQ;MINUS;REWRITE_RULE[] (SPEC "zero" FIX_REV);ZERO_PLUS;POS] THEN
+X    REPEAT STRIP_TAC THEN
+X    EXISTS_TAC "y' * y''" THEN
+X    ASM_REWRITE_TAC[INT_MULT]);;
+X
+Xlet MK_mult [th1;th2] = MK_COMB ((AP_TERM "$mult" th1),th2);;  
+X
+Xlet w66 = "!x y.(een leq x) /\ (een leq y) ==> ((x leq (x mult y)) /\
+X                                                (y leq (x mult y)))";;
+X
+Xlet thm66 = prove(
+X    w66,
+X    REWRITE_TAC[LEQ;MINUS;POS] THEN
+X    REPEAT STRIP_TAC THEN 
+X    ASSUM_LIST (\[th1;th2].ASSUME_TAC (MK_mult [th2;th1])) THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[PLUS_LEFT_DISTRIB;PLUS_RIGHT_DISTRIB; 
+X                                   SYM(SPEC_ALL REV_MULT1);SYM(SPEC_ALL REV_MULT2);
+X                                   INT_MULT;ONE_MULT]) THENL
+X     [REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X      FILTER_RULE_ASSUM_TAC [1] (\th.MK_PLUS [th;REFL "INT y''"]) THEN
+X      RULE_ASSUM_TAC (REWRITE_RULE[SYM(SPEC_ALL PLUS_ASSOC);REV_PLUS_ZERO;
+X                                   ZERO_PLUS;INT_PLUS]) THEN
+X      EXISTS_TAC "(y' * y'') + y''" THEN
+X      ASM_REWRITE_TAC[];
+X      RULE_ASSUM_TAC (REWRITE_RULE[REV_PLUS]) THEN
+X      FILTER_RULE_ASSUM_TAC [1] 
+X             (CONV_RULE (DIR_CONV [`fa`,lr;`faa`,rl;`faafa`,cp;`faa`,lr;`fa`,rl])) THEN
+X      FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[SYM(SPEC_ALL REV_PLUS)]) THEN 
+X      REWRITE_RULE_ASSUM_TAC [1] [3] THEN
+X      FILTER_RULE_ASSUM_TAC [1] (\th.MK_PLUS [th;REFL "INT y'"]) THEN
+X      RULE_ASSUM_TAC (REWRITE_RULE[SYM(SPEC_ALL PLUS_ASSOC);REV_PLUS_ZERO;
+X                                   ZERO_PLUS;INT_PLUS]) THEN
+X      EXISTS_TAC "(y' * y'') + y'" THEN
+X      ASM_REWRITE_TAC[]]);;  
+X
+Xlet w67 = "!x.(x leq (REV een)) \/ (x = zero) \/ (een leq x)";;  
+X
+Xlet thm67 = prove(
+X    w67,
+X    GEN_TAC THEN 
+X    DISJ_CASES_TAC 
+X      (REWRITE_RULE[ZERO_PLUS] (SPEC "x:zet" (SPEC "zero" DISCRETE_ZET))) THENL
+X       [DISJ_CASES_TAC 
+X       (REWRITE_RULE[REV_PLUS_ZERO] (SPEC "x:zet" (SPEC "REV een" DISCRETE_ZET))) THENL
+X         [ASM_REWRITE_TAC[];
+X          IMP_RES_TAC ANTI_SYM_LEQ  THEN
+X          SUB_ASSUM_TAC [1] THEN 
+X          ASM_REWRITE_TAC[]];
+X        ASM_REWRITE_TAC[]]);; 
+X
+Xlet w68 = "!x y.~(x = zero) /\ ~(y = zero) ==> ~(( x mult y) = zero)";; 
+X
+Xlet thm68 = prove(
+X    w68,
+X    REPEAT STRIP_TAC THEN 
+X    DISJ_CASES_TAC (SPEC "x:zet" thm67) THEN
+X    DISJ_CASES_TAC (SPEC "y:zet" thm67) THEN
+X    RES_TAC THEN 
+X    REWRITE_RULE_ASSUM_TAC [1;2] [4;5] THENL
+X     [FILTER_RULE_ASSUM_TAC [1;2] (ONCE_REWRITE_RULE[REV_LEQ]);
+X      FILTER_RULE_ASSUM_TAC [2] (ONCE_REWRITE_RULE[REV_LEQ]);
+X      FILTER_RULE_ASSUM_TAC [1] (ONCE_REWRITE_RULE[REV_LEQ]);
+X      ALL_TAC] THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[REV2_ID]) THEN
+X    IMP_RES_TAC thm66 THEN
+X    SUB_ASSUM_TAC [1;8;10] THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[SYM(SPEC_ALL REV_MULT1);
+X                                 SYM(SPEC_ALL REV_MULT2);
+X                                 REV2_ID]) THEN
+X    IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X    IMP_RES_TAC ZERO_LEQ_ONE THEN
+X    SUB_ASSUM_TAC [2;8] THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X    FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[REWRITE_RULE[] (SPEC "zero" FIX_REV)]) THEN
+X    ASM_REWRITE_TAC[]);;
+X
+Xlet w69 = "!x y.((x mult y) = zero) = ((x =zero) \/ (y =zero))";;
+X
+Xlet MULT_EQ_ZERO = prove_thm(
+X   `MULT_EQ_ZER0`,
+X    w69,
+X    REPEAT STRIP_TAC THEN 
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THEN 
+X    ASM_REWRITE_TAC[ZERO_MULT] THEN
+X    ASM_CASES_TAC "x = zero" THEN 
+X    ASM_CASES_TAC "y = zero" THEN 
+X    ASM_REWRITE_TAC[] THEN
+X    IMP_RES_TAC thm68);;
+X                            
+Xlet w70 = "!x y.(zero less x) /\ (zero less y) ==> (zero less (x mult y))";;
+X
+Xlet LESS_MULT = prove_thm(
+X   `LESS_MULT`,
+X    w70,
+X    REWRITE_TAC[LESS;ZERO_PLUS] THEN
+X    REPEAT STRIP_TAC THEN IMP_RES_TAC thm66 THEN
+X    IMP_RES_TAC TRANSITIVITY_LEQ);;
+X
+X%<***********************DEFINITIONS****************************************>%   
+X
+Xlet MIN = new_definition(
+X   `MIN`,
+X    "MIN Q = @x.((Q x) /\ (!y.(Q y) ==> (x leq y)))");;
+X
+Xlet MAX = new_definition(
+X   `MAX`,
+X    "MAX Q = @x.((Q x) /\ (!y.(Q y) ==> (y leq x)))");; 
+X
+X
+X%<*************************THEOREMS**********************************>%
+X
+X
+Xlet w71 = "!Q.!k l.(!x.(x leq k) ==> ~(Q x)) /\ (Q l) ==> 
+X           (?z.(Q z) /\ (!w.(Q w) ==> (z leq w)))";;  
+X
+Xlet thm71 = prove(
+X    w71,
+X    REPEAT STRIP_TAC THEN 
+X    ASM_CASES_TAC "(?z.(Q z) /\ (!w.(Q w) ==> (z leq w)))" THEN
+X    ASM_REWRITE_TAC[] THEN
+X    FILTER_RULE_ASSUM_TAC [1] (CONV_RULE NOT_EXISTS_CONV) THEN
+X    SUBGOAL_THEN "!x y.(y leq x) ==> ~(Q y)" ASSUME_TAC THENL
+X    [ZET_INDUCT2_TAC "k:zet";ALL_TAC] THENL
+X      [RES_TAC;
+X       ASSUME_TAC (CONJUNCT1(SPEC "x:zet" ONE_LEQ)) THEN
+X       IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X       IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X       RES_TAC;
+X       DISJ_CASES_TAC (SPEC "y:zet"(SPEC "x:zet" DISCRETE_ZET)) THENL
+X       [RES_TAC;ALL_TAC] THEN
+X       IMP_RES_TAC ANTI_SYM_LEQ THEN
+X       REWRITE_RULE_ASSUM_TAC [7] [1] THEN 
+X       SUB_ASSUM_TAC [7;9;10;11;12;13] THEN
+X       FILTER_RULE_ASSUM_TAC [4] (SPEC "x plus een") THEN
+X       REWRITE_RULE_ASSUM_TAC [4] [1] THEN
+X       FILTER_ASSUM_TAC [4] UNDISCH_TAC THEN
+X       REWRITE_TAC[] THEN
+X       REPEAT STRIP_TAC THEN
+X       DISJ_CASES_TAC (SPEC "w:zet"(SPEC "x:zet" DISCRETE_ZET)) THEN 
+X       RES_TAC THEN
+X       ASM_REWRITE_TAC[];
+X       FILTER_RULE_ASSUM_TAC [1] 
+X          (\th.REWRITE_RULE[REFLEX_LEQ] (SPEC "l:zet"(SPEC "l:zet" th))) THEN
+X       RES_TAC]);; 
+X
+Xlet thm72 = 
+X    let th1 = REWRITE_RULE[EXISTS_DEF] thm71 in
+X    let th2 = BETA_RULE th1 in
+X    REWRITE_RULE[SYM(SPEC_ALL MIN)] th2;;
+X
+Xlet MIN_EXISTS = save_thm(
+X   `MIN_EXISTS`,
+X    thm72);;
+X
+Xlet w73 = "!Q.!k l.(!x.(k leq x) ==> ~(Q x)) /\ (Q l) ==> 
+X           (?z.(Q z) /\ (!w.(Q w) ==> (w leq z)))";;  
+X
+Xlet thm73 = prove(
+X    w73,
+X    REPEAT STRIP_TAC THEN 
+X    ASM_CASES_TAC "(?z.(Q z) /\ (!w.(Q w) ==> (w leq z)))" THEN
+X    ASM_REWRITE_TAC[] THEN
+X    FILTER_RULE_ASSUM_TAC [1] (CONV_RULE NOT_EXISTS_CONV) THEN
+X    SUBGOAL_THEN "!x y.(x leq y) ==> ~(Q y)" ASSUME_TAC THENL
+X    [ZET_INDUCT2_TAC "k:zet";ALL_TAC] THENL
+X      [RES_TAC;
+X       DISJ_CASES_TAC (SPEC "y:zet"(SPEC "x minus een" DISCRETE_ZET)) THENL
+X          [ALL_TAC;
+X           RULE_ASSUM_TAC (ONCE_REWRITE_RULE[PLUS_COM]) THEN
+X           RULE_ASSUM_TAC (REWRITE_RULE[MINUS_PROP]) THEN
+X           RES_TAC] THEN
+X       IMP_RES_TAC ANTI_SYM_LEQ THEN
+X       REWRITE_RULE_ASSUM_TAC [7] [2] THEN 
+X       SUB_ASSUM_TAC [7;9;10;11;12;13] THEN
+X       FILTER_RULE_ASSUM_TAC [4] (SPEC "x minus een") THEN
+X       REWRITE_RULE_ASSUM_TAC [4] [1] THEN
+X       FILTER_ASSUM_TAC [4] UNDISCH_TAC THEN
+X       REWRITE_TAC[] THEN
+X       REPEAT STRIP_TAC THEN
+X       DISJ_CASES_TAC (SPEC "w:zet"(SPEC "x minus een" DISCRETE_ZET)) THEN 
+X       ASM_REWRITE_TAC[] THEN
+X       RULE_ASSUM_TAC (ONCE_REWRITE_RULE[PLUS_COM]) THEN
+X       RULE_ASSUM_TAC (REWRITE_RULE[MINUS_PROP]) THEN
+X       RES_TAC;
+X       ASSUME_TAC (CONJUNCT2(SPEC "x:zet" ONE_LEQ)) THEN
+X       IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X       IMP_RES_TAC TRANSITIVITY_LEQ THEN
+X       RES_TAC;
+X       FILTER_RULE_ASSUM_TAC [1] 
+X          (\th.REWRITE_RULE[REFLEX_LEQ] (SPEC "l:zet"(SPEC "l:zet" th))) THEN
+X       RES_TAC]);; 
+X
+Xlet thm74 = 
+X    let th1 = REWRITE_RULE[EXISTS_DEF] thm73 in
+X    let th2 = BETA_RULE th1 in
+X    REWRITE_RULE[SYM(SPEC_ALL MAX)] th2;;
+X
+Xlet MAX_EXISTS = save_thm(
+X   `MAX_EXISTS`,
+X    thm74);;
+X
+X%<********************EXTRA**EXTRA*****************************>%
+X
+Xlet SIGMA = new_list_rec_definition(
+X   `SIGMA`,
+X    "(SIGMA [] = zero) /\ (SIGMA (CONS h tl) = (h plus (SIGMA tl)))");;  
+X
+Xlet PI = new_list_rec_definition(
+X   `PI`,
+X    "(PI [] = een) /\ (PI (CONS h tl) = (h mult (PI tl)))");; 
+X
+Xlet w75 = "!l1 l2.(SIGMA (APPEND l1 l2)) = ((SIGMA l1) plus (SIGMA l2))";; 
+X
+Xlet SIGMA_APPEND = prove_thm(
+X   `SIGMA_APPEND`,
+X    w75,
+X    LIST_INDUCT_TAC THEN
+X    ASM_REWRITE_TAC[APPEND;SIGMA;ZERO_PLUS;PLUS_ASSOC]);;
+X
+Xlet w76 = "!l1 l2.(PI (APPEND l1 l2)) = ((PI l1) mult (PI l2))";; 
+X
+Xlet PI_APPEND = prove_thm(
+X   `PI_APPEND`,
+X    w76,
+X    LIST_INDUCT_TAC THEN
+X    ASM_REWRITE_TAC[APPEND;PI;ONE_MULT;MULT_ASSOC]);;   
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+END_OF_FILE
+if test 47320 -ne `wc -c <'mk_zet.ml'`; then
+    echo shar: \"'mk_zet.ml'\" unpacked with wrong size!
+fi
+chmod +x 'mk_zet.ml'
+# end of 'mk_zet.ml'
+fi
+echo shar: End of shell archive.
+exit 0

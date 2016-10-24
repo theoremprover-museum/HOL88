@@ -1,0 +1,3 @@
+\THEOREM INTER_IDEMPOT sets
+|- !s. s INTER s = s
+\ENDTHEOREM

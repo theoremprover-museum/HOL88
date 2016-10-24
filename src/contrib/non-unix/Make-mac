@@ -1,0 +1,181 @@
+;;; Make-mac. Alternative make from UNIX Makefile.
+
+;;; First file-compile lisp sources, then exit. Variable %directory
+;;; should point to HOL directory; globally replace all other
+;;; absolute pathnames in this file by correct ones.
+
+(in-package 'user)
+#+procyon
+(setq *load-pathname-types* (list (make-pathname :type "fasl")))
+
+
+(defvar %directory "internal:hol21:")
+
+(eval-when (eval)
+   (mapc
+      #'(lambda (file)
+           (compile-file
+              (concatenate 'string %directory "lisp:" file))
+           (load
+              (concatenate 'string %directory "lisp:" file)))
+      '("f-cl.l" "f-constants.l" "f-macro.l" "f-ol-rec.l" 
+        "genmacs.l" "f-system.l"))
+   (mapc
+      #'(lambda (file)
+           (compile-file
+              (concatenate 'string %directory "lisp:" file)))
+      '("mk-ml.l" "mk-hol-lcf.l"
+        "f-site.l" "f-gp.l" "f-parser.l" "f-parsml.l"
+        "f-mlprin.l" "f-typeml.l" "f-dml.l" "f-format.l"
+        "f-tran.l" "f-iox-stand.l" "f-writml.l" "f-tml.l"
+        "f-lis.l" "f-ol-rec.l" "f-parsol.l"
+        "f-typeol.l" "f-help.l" "f-writol.l" "f-thyfns.l"
+        "f-freadth.l" "f-ol-syntax.l" "f-subst.l"
+        "f-inst.l" "f-simpl.l" "f-ol-net.l" "banner.l"))
+   (mapc
+      #'(lambda (file)
+           (compile-file
+              (concatenate 'string %directory "lisp:" file)))
+      '("genfns.l" "gnt.l" "hol-pars.l" "parslist.l" "parslet.l"
+        "constp.l" "hol-writ.l" "mk_pp_thm.l" "parse_as_binder.l")))
+
+
+;;; Re-enter lisp, load lisp code for HOL-LCF, load basic ML source code
+;;; (compiling it on the fly). Save HOL-LCF core image.
+
+(in-package 'user)
+#+procyon
+(setq *load-pathname-types* (list (make-pathname :type "fasl")))
+
+
+(defvar %directory "internal:hol21:")
+
+(eval-when (eval)
+   (load "internal:hol21:lisp:mk-ml")
+   (load "internal:hol21:lisp:mk-hol-lcf")
+   (setq |%compile_on_the_fly-flag| t)
+   (setq %version "2.1")
+   (set-make)
+   (tml))
+
+load(`ml:site-mac`,false);;
+load(`ml:ml-curry`,false);;
+load(`ml:lis`,false);;
+load(`ml:gen`,false);;
+load(`ml:killpp`,false);;
+lisp `(setq %system-name "HOL-LCF")`;;
+lisp `(setup)`;;
+save `hol-lcf`;;
+
+
+;;; In HOL-LCF, make BASIC-HOL theory - make each parent theory in a new
+;;; Lisp session. Then load theory, load ML source code (compiling it on
+;;; the fly). Save BASIC-HOL core image.
+
+loadt`theories:mk_PPLAMB.ml`;;
+
+loadt`theories:mk_bool.ml`;;
+
+loadt`theories:mk_ind.ml`;;
+
+loadt`theories:mk_BASIC-HOL.ml`;;
+
+
+set_search_path[``; `internal:hol21:theories:`];;
+load_theory `BASIC-HOL`;;
+loadf `ml:hol-in-out`;;
+loadf `ml:hol-rule`;;
+loadf `ml:hol-drule`;;
+loadf `ml:drul`;;
+loadf `ml:hol-thyfn`;;
+loadf `ml:tacticals`;;
+loadf `ml:tacont`;;
+loadf `ml:tactics`;;
+loadf `ml:conv`;;
+loadf `ml:hol-net`;;
+loadf `ml:rewrite`;;
+loadf `ml:resolve`;;
+loadf `ml:goals`;;
+loadf `ml:stack`;;
+loadf `ml:abs-rep`;;
+activate_binders `bool`;;
+lisp `(setq %version "2.1")`;;
+lisp `(setq %system-name "BASIC-HOL")`;;
+lisp `(setup)`;;
+save `basic-hol`;;
+
+
+;;; From BASIC-HOL, make groups of theories for HOL, each one in a new
+;;; Lisp session.
+
+loadt`theories:mk_one.ml`;;
+
+loadt`theories:mk_combin.ml`;;
+
+loadt`theories:mk_sum.ml`;;
+
+loadt`theories:mk_num.ml`;;
+
+loadt`theories:mk_prim_rec.ml`;;
+
+
+loadt`theories:mk_arith.ml`;;
+
+loadt`theories:mk_arith_thms.ml`;;
+
+
+loadt`theories:mk_list.ml`;;
+
+loadt`theories:mk_list_thms.ml`;;
+
+
+loadt`theories:mk_tree.ml`;;
+
+loadt`theories:mk_ltree.ml`;;
+
+loadt`theories:mk_tydefs.ml`;;
+
+
+;;; Finally make HOL theory.
+
+new_theory `HOL`;;
+map new_parent [`one`;`sum`;`tydefs`];;
+close_theory();;
+quit();;
+
+
+;;; From BASIC-HOL, load HOL theory, remainder of ML source, set up
+;;; directories for search path, and save HOL core image.
+
+set_search_path[``; `internal:hol21:theories:`];;
+load_theory `HOL`;;
+loadf `ml:load_thms`;;
+loadf `ml:numconv`;;
+loadf `ml:tydefs`;;
+loadf `ml:ind`;;
+loadf `ml:prim_rec`;;
+loadf `ml:tyfns`;;
+loadf `ml:num`;;
+loadf `ml:list`;;
+map delete_cache [`arithmetic`;`sum`;`list`];;
+map delete_cache [`tree`;`ltree`;`prim_rec`];;
+lisp `(load "internal:hol21:lisp:banner")`;;
+lisp `(setq %system-name "HOL")`;;
+lisp `(setq %hol-dir "internal:hol21")`;;
+lisp `(setq %lib-dir "internal:hol21:Library")`;;
+lisp `(setq %version "2.1")`;;
+set_flag(`abort_when_fail`,false);;
+set_search_path[``; `:`; `internal:hol21:theories:`];;
+set_help_search_path (words `internal:hol21:help:ENTRIES:`);;
+set_library_search_path [`internal:hol21:Library:`];;
+lisp `(setup)`;;
+save `hol`;;
+
+
+;;; Note: In HOL system as made for Procyon CL, hitting enter with cursor before
+;;; an ML expression in a window causes expression to be evaluated as ML.
+;;; Selecting a region and going 'evaluate' from the menu also evaluates
+;;; as ML.
+
+
+;;; End of file

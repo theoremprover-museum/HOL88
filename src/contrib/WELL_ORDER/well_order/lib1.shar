@@ -1,0 +1,1354 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  READ-ME Makefile mk_well_order.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 12:14:44 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'READ-ME' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'READ-ME'\"
+else
+echo shar: Extracting \"'READ-ME'\" \(4201 characters\)
+sed "s/^X//" >'READ-ME' <<'END_OF_FILE'
+X+ =====================================================================	+
+X|									|
+X| LIBRARY	: well_order						|
+X|									|
+X| DESCRIPTION   : Definition of canonical well_order.                   |
+X|									|
+X| AUTHOR	: T. kalker						|
+X| DATE		: 10 JUly 1989  			                |
+X|									|
+X+ =====================================================================	+
+X
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| FILES:								|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X
+X        mk_well_order: defines the well_order WLEQ   
+X
+X	mk_transfinite: defines the theory of transfinite
+X	                induction
+X
+X	wo_fns.ml: contains the definitions of the induction
+X	           tactic, and a  conversion/function for 
+X	           transfinite definition
+X
+X        well_order.ml: loads the theory "transfinite"
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| DOCUMENTATION:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X 
+XIt is well known from set theory that the axiom of choice
+Xis equivalent to the fact that every set can be well-ordered.
+XThat is to say, on every set there is partial order, which is
+Xlinear and, moreover, every non-empty subset has a smallest element.
+XA typical example of such a well-order is the natural ordening
+Xon the natural numbers (this fact is recorded in HOL).
+X
+XThe proof of the above mentioned fact is quite complicated, as
+Xcan be seen from the fact that we need some 30 theorems and
+Xabout 11 lemmas to prove the existence of such a well-order.
+X
+XThe outline from the proof is as follows: 
+X
+X	first we define a maximal chain of subsets,
+X    	which we call WOC. We start with BOT (the empty set),
+X        then we take an arbitrary element of TOP, say x0 and
+X 	the second element of our chain will be {x0}. Then
+X	we take an arbitrary element of TOP\{x0}, say x1,
+X	and we take {x0,x1} as the third set of our chain.
+X	And so on. To ensure that we use all elements,
+X        the technical definition of WOC is somewhat more
+X        complicated. We define WOC as the smallest set of
+X        sets such that it preserves UNIONS and INTERSECTION,
+X        and such that if A is a set of WOC, then also
+X        A U {x|x = @x.x member of TOP\A} is a member of WOC.
+X        We prove that WOC exists, that WOC is linear, that it is dense
+X        (it skips no elements) and that the subset ordering
+X        on WOC is a well-ordening. 
+X        To define a well-ordening on the original type
+X        all we have to do is find an embedding of
+X        the type into WOC. This is rather straight forward,
+X        except for the fact that this embedding (INWOC) is
+X        injective. Pulling the subset ordering on WOC
+X	back to the basis type defines a well-order.
+X        See also the documentation in "mk_well-order.ml".  
+X
+XThe well-ordening is named WLEQ; the associated choice function is
+Xnamed LEAST. That is, for every non empty set D, LEAST(D) is
+Xthe smallest element of D (which exists as WLEQ is a
+Xwell-order). 
+X
+XUsing the canonical well-order transfinite induction is
+Xintroduced. The main notion in this context is the constant
+XRESTRICT. "RESTRICT x f" is the pair (x,g), where "g y" equals "f y" if
+X"y WLESS x", and equals a universal constant in other cases.
+XThe file wo_fns.ml introduces WO_CONV and wo_rec_definition.
+X
+XWO_CONV tm;; %< evaluates to existence theorem derived from
+X                transfinite induction principle>%
+X
+Xwo_rec_definition tm;; %<Use the result from WO_CONV in new_specification>%
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO REBUILD THE LIBRARY:						|
+X|									|
+X+ --------------------------------------------------------------------- +  
+X
+X   0) necessary libraries: auxiliary, set, taut
+X
+X   1) edit the pathnames in the Makefile (if necessary)
+X
+X   2) type "make clean"
+X
+X   3) type "make all"
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO USE THE LIBRARY:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X   load_library `well_order`;;
+X
+X
+END_OF_FILE
+if test 4201 -ne `wc -c <'READ-ME'`; then
+    echo shar: \"'READ-ME'\" unpacked with wrong size!
+fi
+chmod +x 'READ-ME'
+# end of 'READ-ME'
+fi
+if test -f 'Makefile' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Makefile'\"
+else
+echo shar: Extracting \"'Makefile'\" \(1521 characters\)
+sed "s/^X//" >'Makefile' <<'END_OF_FILE'
+X# =====================================================================
+X#
+X# 		 MAKEFILE FOR THE HOL LIBRARY: WELL-ORDER
+X#
+X# =====================================================================
+X
+X# =====================================================================
+X#
+X# MAIN ENTRIES:
+X#
+X# make all	    : create theories and compile code
+X#
+X# make clean	    : remove theories and compiled code
+X#	
+X# =====================================================================
+X
+X# =====================================================================
+X# MACROS:
+X#
+X# Hol	    : the pathname of the version of hol used
+X# =====================================================================
+X
+XHol=~/com/hol
+X
+Xclean:
+X	rm -f *_ml.o *_ml.l *.th 
+X	@echo "===> library well_order: all object code and theory files deleted"
+X                      
+Xwell_order.th: mk_well_order.ml
+X	     rm -f well_order.th
+X	     echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'loadt `mk_well_order`;;' | ${Hol}           
+X
+Xtransfinite.th: well_order.th mk_transfinite.ml
+X	     rm -f transfinite.th
+X	     echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'loadt `mk_transfinite`;;' | ${Hol} 
+X
+Xwo_fns_ml.o: transfinite.th wo_fns.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	      'load_library `auxiliary`;;'\
+X	      'load_theory `transfinite`;;'\
+X	      'autoload_defs_and_thms `transfinite`;;'\
+X              'compilet `wo_fns`;;'\
+X              'quit();;' | ${Hol}
+X
+X
+Xall:    well_order.th transfinite.th wo_fns_ml.o
+X	@echo "===> library well_order rebuilt"
+END_OF_FILE
+if test 1521 -ne `wc -c <'Makefile'`; then
+    echo shar: \"'Makefile'\" unpacked with wrong size!
+fi
+chmod +x 'Makefile'
+# end of 'Makefile'
+fi
+if test -f 'mk_well_order.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'mk_well_order.ml'\"
+else
+echo shar: Extracting \"'mk_well_order.ml'\" \(46340 characters\)
+sed "s/^X//" >'mk_well_order.ml' <<'END_OF_FILE'
+X%<  
+XFILE: mk_well_order.ml
+X
+XAUTHOR: Ton Kalker
+X
+XDATE: 10 july 1989
+X
+XCOMMENT: This file contains definitions
+X         and theorems proving that
+X         the existence of a choice function
+X         (as is automatic in HOL) implies the
+X         existence of a well-order and the
+X         other way around. 
+X
+X         We start by defining a set of sets
+X         called WOC = (Well-Ordered Chain).
+X         In effect we prove that "WOC:(*->bool)->bool" can be
+X         viewed as the ordinals on ":*".
+X         That is, we prove that the subset ordering
+X         on WOC is linear and dense, and that
+X         the subset ordering on WOC is a well-order. 
+X         
+X         Next we define the canonical ordering on
+X         ":*" by embedding ":*" in the type defined
+X         by WOC via the function INWOC: "INWOC x" is
+X         defined as the smallest WOC set containing x.
+X         We prove that INWOC is an embedding, and
+X         it follows easily that the ordering on WOC
+X         pulled back to ":*" is a well-ordering.
+X         We call this well-ordering WLEQ and its
+X         associated choice function LEAST.
+X>%
+X
+Xnew_theory `well_order`;; 
+X
+Xload_library `auxiliary`;;
+X
+Xload_library `set`;;  %<Needed for notions union,intersection>%
+X
+Xload_library `taut`;; %<TAUT_TAC is used>%
+X
+Xlet BRANCH_PNTS = new_definition(`BRANCH_PNTS`,
+X          "BRANCH_PNTS (SS:(*->bool)->bool) X = 
+X                         let BS Y = ((SS Y) /\ (X PSUBSET Y)) in
+X                         ((SS X) /\ (GINTERSECT BS = X))");;
+X
+Xlet LINEAR = new_definition(`LINEAR`,
+X          "LINEAR (SS:(*->bool)->bool) = !X Y.((SS X) /\ (SS Y)) ==>
+X                                              ((X SUBSET Y) \/
+X                                               (Y SUBSET X))");; 
+X
+Xlet INTERSECT_CLOSED = new_definition(`INTERSECT_CLOSED`,
+X          "INTERSECT_CLOSED (SS:(*->bool)->bool) = 
+X                            !SB. (SB SUBSET SS) ==>
+X                                (SS (GINTERSECT SB))");;         
+X
+Xlet UNION_CLOSED = new_definition(`UNION_CLOSED`,
+X          "UNION_CLOSED (SS:(*->bool)->bool) = 
+X                            !SB. (SB SUBSET SS) ==>
+X                                (SS (GUNION SB))");;         
+X
+X%<Enlarging sets with one element>%
+X
+Xlet NEXT_x = new_definition(`NEXT_x`,
+X          "NEXT_x (X:*->bool) = @x.(TOP DELETE X) x");; 
+X
+Xlet NEXT = new_definition(`NEXT`,
+X          "NEXT (X:*->bool) = X UNION (SING (NEXT_x X))");; 
+X
+X%<PWO = Partial Well-Order>%
+X
+Xlet PWO= new_definition(`PWO`,
+X              "PWO (SS:(*->bool)->bool) = 
+X                  (!X.(SS X) ==> (SS (NEXT X))) /\
+X                  (INTERSECT_CLOSED SS) /\
+X                  (UNION_CLOSED SS)");; 
+X                            
+X%<WOC = smallest possible partial well-order; is indeed
+X        a partial well order, as is proved in thm1,thm2,thm5 and
+X        thm12>%
+X
+Xlet WOC = new_definition(`WOC`,
+X              "WOC = 
+X                 GINTERSECT PWO:(*->bool)->bool");;  
+X                                   
+X%<PRUNE = cutting a branch at the smallest branch point
+X          of a PWO (which exists by thm8) and leaving a PWO 
+X          (proved in thm12)>%
+X
+Xlet PRUNE = new_definition(`PRUNE`,
+X              "PRUNE (SS:(*->bool)->bool) X =
+X               let B = GINTERSECT (BRANCH_PNTS SS) in
+X               ((SS X) /\ ((X SUBSET B) \/ ((NEXT B) SUBSET X)))");; 
+X                                 
+X
+X%<PREV = union of all smaller WOC sets>%
+X
+Xlet PREV = new_definition(`PREV`,
+X          "PREV (X:*->bool) = (let SB Y = ((Y PSUBSET X) /\ (WOC Y)) in
+X                              (GUNION SB))");;
+X
+X%<INWOC x = the smallest WOC set contaning x,
+X            existence proved in thm19>%
+X
+Xlet INWOC = new_definition(`INWOC`,
+X          "INWOC (x:*) = GINTERSECT (\Y. (WOC Y) /\ (Y x))");;  
+X
+X%<Canonical ordering defined by subset ordering 
+X  via INWOC>%
+X  
+Xlet WLEQ = new_infix_definition(`WLEQ`,
+X          "WLEQ x (y:*) = (INWOC x) SUBSET (INWOC y)");; 
+X                                                 
+X%<LEAST_WOC_SET = candidate representative for
+X  smallest element of a non-emtpy set>%
+X
+Xlet LEAST_WOC_SET = new_definition(`LEAST_WOC_SET`,
+X          "LEAST_WOC_SET D = GINTERSECT 
+X                              (\Y.?x:*.((D x) /\ (Y = (INWOC x))))");; 
+X
+X%<LEAST = choice function associated to WLEQ; it
+X          chooses the smallest element in a non-empty
+X          set. Proved in thm28 and thm29.>%
+X
+Xlet LEAST = new_definition(`LEAST`,
+X            "LEAST (D:*->bool) = NEXT_x(PREV(LEAST_WOC_SET D))");;
+X                              
+Xlet w = "!SS X.(SS X) ==> (GINTERSECT SS) SUBSET (X:*->bool)";; 
+X
+Xlet LB_THM = prove(w, 
+X             REWRITE_TAC[GINTERSECT;SUBSET] THEN 
+X             REPEAT STRIP_TAC THEN RES_TAC);;  
+X
+Xlet w = "!SS Y.(!X:*->bool.(SS X) ==> (Y SUBSET X)) 
+X                   ==> (Y SUBSET (GINTERSECT SS))";;
+X
+Xlet GLB_THM = prove(w,
+X              REWRITE_TAC[SUBSET;GINTERSECT] THEN
+X              REPEAT STRIP_TAC THEN
+X              RES_TAC);;
+X
+Xlet w = "!SS TT:(*->bool)->bool.(SS SUBSET TT) 
+X                 ==> ( (GINTERSECT TT) SUBSET (GINTERSECT SS))";;  
+X
+Xlet INTERSECT_MONOTONE_THM = prove(w,
+X              REWRITE_TAC[SUBSET;GINTERSECT] THEN
+X              REPEAT STRIP_TAC THEN
+X              (2 TIMES RES_TAC));;
+X 
+X
+Xlet w = "!X Y Z:*->bool.((X SUBSET Y) /\ (Y SUBSET Z)) ==> (X SUBSET Z)";; 
+X
+Xlet lemma1 = prove(w,
+X             REWRITE_TAC[SUBSET] THEN 
+X             REPEAT STRIP_TAC THEN 
+X             (2 TIMES RES_TAC));;  
+X
+Xlet w = "!X Y Z:*->bool.((X SUBSET Y) /\ (Y PSUBSET Z)) ==> (X PSUBSET Z)";; 
+X
+Xlet lemma2 = prove(w,
+X             REWRITE_TAC[PSUBSET;SUBSET] THEN 
+X             REPEAT STRIP_TAC THEN 
+X             (2 TIMES RES_TAC) THEN 
+X             FILTER_ASSUM_TAC [3] UNDISCH_TAC THEN 
+X             REWRITE_TAC[] THEN 
+X             (CONV_TAC FUN_EQ_CONV) THEN 
+X             REWRITE_RULE_ASSUM_TAC [3] [1] THEN
+X             GEN_TAC THEN 
+X             EQ_TAC THEN 
+X             REPEAT STRIP_TAC THEN 
+X             RES_TAC);;
+X
+Xlet w = "!X Y Z:*->bool.((X PSUBSET Y) /\ (Y SUBSET Z)) ==> (X PSUBSET Z)";; 
+X
+Xlet lemma3 = prove(w,
+X             REWRITE_TAC[PSUBSET;SUBSET] THEN 
+X             REPEAT STRIP_TAC THEN 
+X             (2 TIMES RES_TAC) THEN 
+X             FILTER_ASSUM_TAC [4] UNDISCH_TAC THEN 
+X             REWRITE_TAC[] THEN 
+X             (CONV_TAC FUN_EQ_CONV) THEN 
+X             FILTER_RULE_ASSUM_TAC [1] SYM THEN
+X             REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X             GEN_TAC THEN 
+X             EQ_TAC THEN 
+X             REPEAT STRIP_TAC THEN 
+X             RES_TAC);; 
+X
+Xlet w = "!X:*->bool.~(X = TOP) ==> (X PSUBSET TOP) /\
+X                                   (X PSUBSET (NEXT X)) /\
+X                                   (~(X (NEXT_x X))) /\
+X                                   (NEXT X (NEXT_x X))";; 
+X
+Xlet lemma4 = prove(w,
+X             REWRITE_TAC[PSUBSET;SUBSET;NEXT;NEXT_x;TOP;UNION;DELETE;SING] THEN 
+X             BETA_TAC THEN
+X             REPEAT STRIP_TAC THEN 
+X             ASM_REWRITE_TAC[] THENL
+X               [REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X                ASM_REWRITE_TAC[];
+X                RULE_ASSUM_TAC (CONV_RULE (ONCE_DEPTH_CONV FUN_EQ_CONV)) THEN
+X                RULE_ASSUM_TAC BETA_RULE THEN
+X                FILTER_RULE_ASSUM_TAC [2] (CONV_RULE NOT_FORALL_CONV) THEN
+X                FILTER_RULE_ASSUM_TAC [2] SELECT_RULE THEN
+X                FILTER_RULE_ASSUM_TAC [1] (SPEC "@x:*.~(X x)") THEN
+X                FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[]) THEN
+X                REWRITE_RULE_ASSUM_TAC [2] [1] THEN 
+X                ASM_REWRITE_TAC[];
+X                FILTER_RULE_ASSUM_TAC [2] 
+X                         (CONV_RULE (ONCE_DEPTH_CONV FUN_EQ_CONV)) THEN
+X                FILTER_RULE_ASSUM_TAC [2] BETA_RULE THEN
+X                FILTER_RULE_ASSUM_TAC [2] (CONV_RULE NOT_FORALL_CONV) THEN
+X                FILTER_RULE_ASSUM_TAC [2] SELECT_RULE THEN 
+X                REWRITE_RULE_ASSUM_TAC [2] [1] THEN 
+X                ASM_REWRITE_TAC[]]);;  
+X
+Xlet w = "!X:*->bool.((TOP SUBSET X) ==>( X = TOP))";; 
+X
+Xlet lemma5 = prove(w,
+X             REWRITE_TAC[SUBSET;TOP] THEN
+X             REPEAT STRIP_TAC THEN 
+X             CONV_TAC FUN_EQ_CONV THEN 
+X             ASM_REWRITE_TAC[]);;  
+X
+Xlet w = "!X Y:*->bool.((X SUBSET Y) /\ (Y SUBSET (NEXT X))) ==>
+X                     ((Y = X) \/ (Y = NEXT X))";;  
+X
+Xlet lemma6 = prove(w,
+X             REWRITE_TAC[SUBSET;NEXT;UNION;SING] THEN 
+X             BETA_TAC THEN  
+X             REPEAT STRIP_TAC THEN 
+X             ASM_CASES_TAC "Y:*->bool = X" THEN 
+X             ASM_REWRITE_TAC[] THEN 
+X             CONV_TAC FUN_EQ_CONV THEN 
+X             BETA_TAC THEN 
+X             GEN_TAC THEN 
+X             EQ_TAC THEN 
+X             REPEAT STRIP_TAC THENL
+X                  [RES_TAC THEN ASM_REWRITE_TAC[];
+X                   RES_TAC;
+X                   FILTER_RULE_ASSUM_TAC [2] 
+X                        (CONV_RULE (RAND_CONV FUN_EQ_CONV)) THEN
+X                   FILTER_RULE_ASSUM_TAC [2] 
+X                        (CONV_RULE NOT_FORALL_CONV) THEN
+X                   FILTER_STRIP_ASSUM_TAC [2] THEN 
+X                   ASM_CASES_TAC "X (x':*):bool" THENL
+X                         [RES_TAC THEN 
+X                          REWRITE_RULE_ASSUM_TAC [3] [1;2] THEN
+X                          FILTER_ASSUM_LIST [3] (MAP_EVERY CONTR_TAC);
+X                          FILTER_RULE_ASSUM_TAC [4;5] (SPEC "x':*") THEN 
+X                          REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X                          REWRITE_RULE_ASSUM_TAC [4;5] [1;2] THEN
+X                          REWRITE_RULE_ASSUM_TAC [2] [4] THEN
+X                          SUB_ASSUM_TAC [2;3] THEN
+X                          ASM_REWRITE_TAC[]]]);; 
+X
+Xlet w = "!SS SB (X:*->bool).((SS X) /\ 
+X                            (SB SUBSET SS) /\  
+X                            (!Y.(SB Y) ==> (X PSUBSET Y)) /\
+X                            ((GINTERSECT SB) = X)) ==>
+X                            (BRANCH_PNTS SS X)";;  
+X
+Xlet lemma7 = prove(w,
+X             REWRITE_TAC [BRANCH_PNTS;LET_DEF] THEN BETA_TAC THEN
+X             REPEAT STRIP_TAC THEN 
+X             ASM_REWRITE_TAC[] THEN
+X             DEFINE "TT = \Y:*->bool.(SS Y) /\ (X PSUBSET Y)" THEN
+X             SUBGOAL_THEN "SB SUBSET (TT:(*->bool)->bool)" ASSUME_TAC THENL
+X              [ASM_REWRITE_TAC[SUBSET] THEN
+X               BETA_TAC THEN
+X               FILTER_RULE_ASSUM_TAC [4] (REWRITE_RULE[SUBSET]) THEN
+X               REPEAT STRIP_TAC THEN
+X               RES_TAC;ALL_TAC] THEN
+X             IMP_RES_TAC INTERSECT_MONOTONE_THM THEN
+X             FILTER_ASSUM_LIST [4] (REWRITE_TAC o (map SYM)) THEN
+X             REWRITE_RULE_ASSUM_TAC [2] [5] THEN
+X             SUB_ASSUM_TAC [2;3;4;6;7;8] THEN
+X             CONV_TAC FUN_EQ_CONV THEN GEN_TAC THEN
+X             EQ_TAC THEN
+X             SPEC_TAC ("x:*","x:*") THEN 
+X             REWRITE_TAC
+X               [(CONV_RULE (BINDER_CONV(BINDER_CONV SYM_CONV))) SUBSET] THEN
+X             ASM_REWRITE_TAC[] THEN 
+X             MATCH_MP_TAC GLB_THM THEN
+X             GEN_TAC THEN BETA_TAC THEN 
+X             REWRITE_TAC[PSUBSET;SUBSET] THEN
+X             REPEAT STRIP_TAC THEN ASM_REWRITE_TAC[]);; 
+X
+Xlet w = "!X:*->bool.GINTERSECT (SING X) = X";; 
+X
+Xlet lemma8 = prove(w,
+X            GEN_TAC THEN 
+X            CONV_TAC FUN_EQ_CONV THEN 
+X            REWRITE_TAC[GINTERSECT;SING] THEN
+X            BETA_TAC THEN GEN_TAC THEN
+X            EQ_TAC THEN 
+X            REPEAT STRIP_TAC THEN
+X            ASM_REWRITE_TAC[] THEN
+X            RULE_ASSUM_TAC ((REWRITE_RULE[]) o (SPEC "X:*->bool")) THEN 
+X            ASM_REWRITE_TAC[]);; 
+X
+Xlet w = "!SS SB:(*->bool)->bool.GINTERSECT(SS UNION SB) =
+X                                ((GINTERSECT SS) INTERSECT 
+X                                 (GINTERSECT SB))";;  
+X
+Xlet lemma9 = prove(w,
+X             REPEAT GEN_TAC THEN 
+X             CONV_TAC FUN_EQ_CONV THEN  
+X             REWRITE_TAC[GINTERSECT;UNION;INTERSECT] THEN
+X             BETA_TAC THEN
+X             GEN_TAC THEN 
+X             EQ_TAC THEN 
+X             REPEAT STRIP_TAC THEN 
+X             RES_TAC);;  
+X
+Xlet w = "!X Y:*->bool.((X SUBSET Y) /\ (Y SUBSET X)) ==> (X = Y)";;
+X
+Xlet lemma10 = prove(w,
+X              REWRITE_TAC[SUBSET] THEN
+X              REPEAT STRIP_TAC THEN
+X              CONV_TAC FUN_EQ_CONV THEN
+X              GEN_TAC THEN 
+X              EQ_TAC THEN STRIP_TAC THEN
+X              RES_TAC);;  
+X
+Xlet w1 = "INTERSECT_CLOSED (WOC:(*->bool)->bool)";;  
+X
+Xlet thm1 = prove(w1,
+X           REWRITE_TAC[INTERSECT_CLOSED] THEN
+X           GEN_TAC THEN
+X           DEFINE "X0:*->bool = GINTERSECT SB" THEN 
+X           RULE_ASSUM_TAC SYM THEN 
+X           ASM_REWRITE_TAC[] THEN
+X           REWRITE_TAC[WOC;SUBSET;GINTERSECT] THEN
+X           REPEAT STRIP_TAC THEN
+X           SUBGOAL_THEN "!a:*->bool.(SB a) ==> (X a)" ASSUME_TAC THENL
+X           [REPEAT STRIP_TAC THEN RES_TAC;ALL_TAC] THEN
+X           FILTER_ASSUM_LIST [2] 
+X                          (MAP_EVERY 
+X                            (STRIP_ASSUME_TAC o  
+X                             (REWRITE_RULE[PWO;INTERSECT_CLOSED;SUBSET]))) THEN
+X           SUB_ASSUM_TAC [2;4;7] THEN
+X           RES_TAC THEN
+X           REWRITE_RULE_ASSUM_TAC [1] [4] THEN
+X           ASM_REWRITE_TAC[]);;
+X
+Xlet w2 = "UNION_CLOSED (WOC:(*->bool)->bool)";;  
+X                                                 
+Xlet thm2 = prove(w2,
+X           REWRITE_TAC[UNION_CLOSED] THEN
+X           GEN_TAC THEN
+X           DEFINE "X0:*->bool = GUNION SB" THEN 
+X           RULE_ASSUM_TAC SYM THEN 
+X           ASM_REWRITE_TAC[] THEN
+X           REWRITE_TAC[WOC;SUBSET;GINTERSECT] THEN
+X           REPEAT STRIP_TAC THEN
+X           SUBGOAL_THEN "!a:*->bool.(SB a) ==> (X a)" ASSUME_TAC THENL
+X           [REPEAT STRIP_TAC THEN RES_TAC;ALL_TAC] THEN
+X           FILTER_ASSUM_LIST [2] 
+X                          (MAP_EVERY 
+X                            (STRIP_ASSUME_TAC o  
+X                             (REWRITE_RULE[PWO;UNION_CLOSED;SUBSET]))) THEN
+X           SUB_ASSUM_TAC [1;4;7] THEN
+X           RES_TAC THEN
+X           REWRITE_RULE_ASSUM_TAC [1] [4] THEN
+X           ASM_REWRITE_TAC[]);;
+X
+X
+Xlet w3 = "(WOC:(*->bool)->bool) BOT";;
+X
+Xlet thm3 = prove(w3,
+X           ASSUME_TAC (REWRITE_RULE[UNION_CLOSED] thm2) THEN
+X           SUBGOAL_THEN "BOT SUBSET (WOC:(*->bool)->bool)" ASSUME_TAC THENL
+X           [REWRITE_TAC[SUBSET;BOT];ALL_TAC] THEN
+X           RES_TAC THEN
+X           SUBGOAL_THEN "GUNION BOT = BOT:*->bool" ASSUME_TAC THENL
+X           [CONV_TAC FUN_EQ_CONV THEN BETA_TAC THEN
+X            GEN_TAC THEN 
+X            REWRITE_TAC[GUNION;BOT];ALL_TAC] THEN
+X           REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X           ASM_REWRITE_TAC[]);;
+X
+X
+Xlet w4 = "(WOC:(*->bool)->bool) TOP";;
+X
+Xlet thm4 = prove(w4,
+X           ASSUME_TAC (REWRITE_RULE[INTERSECT_CLOSED] thm1) THEN
+X           SUBGOAL_THEN "BOT SUBSET (WOC:(*->bool)->bool)" ASSUME_TAC THENL
+X           [REWRITE_TAC[SUBSET;BOT];ALL_TAC] THEN
+X           RES_TAC THEN
+X           SUBGOAL_THEN "GINTERSECT BOT = TOP:*->bool" ASSUME_TAC THENL
+X           [CONV_TAC FUN_EQ_CONV THEN BETA_TAC THEN
+X            GEN_TAC THEN 
+X            REWRITE_TAC[GINTERSECT;BOT;TOP];ALL_TAC] THEN
+X           REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X           ASM_REWRITE_TAC[]);;
+X  
+X
+Xlet w5 = "!X:*->bool.(WOC X) ==> (WOC (NEXT X))";; 
+X
+Xlet thm5 = prove(w5,
+X           REWRITE_TAC[INTERSECT_CLOSED] THEN
+X           GEN_TAC THEN
+X           DEFINE "X0:*->bool = GINTERSECT SB" THEN 
+X           RULE_ASSUM_TAC SYM THEN 
+X           ASM_REWRITE_TAC[] THEN
+X           REWRITE_TAC[WOC;GINTERSECT] THEN
+X           REPEAT STRIP_TAC THEN 
+X           RES_TAC THEN
+X           FILTER_ASSUM_LIST [2] 
+X                          (MAP_EVERY 
+X                            (STRIP_ASSUME_TAC o  
+X                             (REWRITE_RULE[PWO]))) THEN 
+X           RES_TAC);; 
+X
+Xlet w6 = "!SS:(*->bool)->bool.(PWO SS) ==> (WOC SUBSET SS)";; 
+X
+Xlet thm6 = prove(w6,
+X           REWRITE_TAC[WOC;SUBSET;GINTERSECT] THEN
+X           REPEAT STRIP_TAC THEN RES_TAC);; 
+X
+Xlet asl7 = ["INTERSECT_CLOSED (SS:(*->bool)->bool)"];;
+Xlet w7 = "BRANCH_PNTS  (SS:(*->bool)->bool) TOP";;  
+X                                                    
+Xlet thm7 = TAC_PROOF(
+X           (asl7,w7),
+X           REWRITE_TAC [BRANCH_PNTS;LET_DEF] THEN
+X           BETA_TAC THEN
+X           CONJ_TAC THENL
+X                [RULE_ASSUM_TAC (REWRITE_RULE[INTERSECT_CLOSED]) THEN
+X                 SUBGOAL_THEN "BOT SUBSET (SS:(*->bool)->bool)" ASSUME_TAC THENL
+X                  [REWRITE_TAC[SUBSET;BOT];ALL_TAC] THEN
+X                 RES_TAC THEN
+X                 SUBGOAL_THEN "GINTERSECT BOT = TOP:*->bool" ASSUME_TAC THENL
+X                  [CONV_TAC FUN_EQ_CONV THEN BETA_TAC THEN
+X                   GEN_TAC THEN 
+X                   REWRITE_TAC[GINTERSECT;BOT;TOP];ALL_TAC] THEN
+X                 REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X                 ASM_REWRITE_TAC[];
+X                 CONV_TAC FUN_EQ_CONV THEN 
+X                 REWRITE_TAC[GINTERSECT;TOP;PSUBSET;SUBSET] THEN 
+X                 BETA_TAC THEN
+X                 REPEAT STRIP_TAC THEN
+X                 ASM_REWRITE_TAC[]]);;  
+X
+Xlet asl8 = ["INTERSECT_CLOSED (SS:(*->bool)->bool)"];;
+Xlet w8 = "(BRANCH_PNTS  (SS:(*->bool)->bool) (GINTERSECT (BRANCH_PNTS SS)))";; 
+X
+Xlet thm8 = TAC_PROOF(
+X           (asl8,w8),
+X            REWRITE_TAC[BRANCH_PNTS;LET_DEF] THEN
+X            BETA_TAC THEN 
+X            CONJ_TAC THENL
+X               [RULE_ASSUM_TAC (REWRITE_RULE[INTERSECT_CLOSED]) THEN
+X                ASSUM_LIST (MAP_EVERY MATCH_MP_TAC) THEN
+X                REWRITE_TAC[SUBSET;BRANCH_PNTS;LET_DEF] THEN
+X                BETA_TAC THEN
+X                REPEAT STRIP_TAC THEN 
+X                ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            CONV_TAC FUN_EQ_CONV THEN REWRITE_TAC[GINTERSECT] THEN
+X            BETA_TAC THEN
+X            GEN_TAC THEN 
+X            EQ_TAC THEN           
+X            REPEAT STRIP_TAC THENL
+X               [NEW_IMP_RES_TAC LB_THM THEN
+X                SUB_ASSUM_TAC [3;4;5;6] THEN
+X                FILTER_RULE_ASSUM_TAC [2] 
+X                    (REWRITE_RULE[BRANCH_PNTS;LET_DEF])  THEN
+X                FILTER_RULE_ASSUM_TAC [2] BETA_RULE THEN
+X                FILTER_RULE_ASSUM_TAC [2] 
+X                    (CONV_RULE (ONCE_DEPTH_CONV FUN_EQ_CONV)) THEN
+X                FILTER_RULE_ASSUM_TAC [2] (REWRITE_RULE[GINTERSECT]) THEN
+X                FILTER_RULE_ASSUM_TAC [2] BETA_RULE THEN 
+X                FILTER_STRIP_ASSUM_TAC [2] THEN
+X                FILTER_RULE_ASSUM_TAC [1] 
+X                     (CONV_RULE (BINDER_CONV SYM_CONV)) THEN
+X                ASM_REWRITE_TAC[] THEN
+X                REPEAT STRIP_TAC THEN 
+X                NEW_IMP_RES_TAC  lemma2 THEN
+X                NEW_RES_TAC;
+X                FILTER_RULE_ASSUM_TAC [1] 
+X                   (REWRITE_RULE[PSUBSET;SUBSET;GINTERSECT]) THEN
+X                NEW_RES_TAC]);; 
+X
+Xlet w9 = "!SS.PRUNE (SS:(*->bool)->bool) SUBSET SS";; 
+X
+Xlet thm9 = prove(w9,
+X           REWRITE_TAC[SUBSET;PRUNE;LET_DEF] THEN
+X           BETA_TAC THEN
+X           REPEAT STRIP_TAC THEN
+X           ASM_REWRITE_TAC[]);;  
+X
+Xlet asl10 = ["INTERSECT_CLOSED (SS:(*->bool)->bool)";
+X             "~(GINTERSECT (BRANCH_PNTS SS:(*->bool)->bool) = TOP)"];;
+Xlet w10 = "PRUNE SS PSUBSET SS:(*->bool)->bool";; 
+X
+Xlet thm10 =TAC_PROOF(
+X         (asl10,w10),
+X         DEFINE "B:*->bool = GINTERSECT (BRANCH_PNTS SS)" THEN
+X         FILTER_ASSUM_LIST [1] 
+X           (\asl.(ASSUME_TAC (REWRITE_RULE (map SYM asl) thm8))) THEN 
+X         ASSUME_TAC thm7 THEN
+X         FILTER_RULE_ASSUM_TAC [1;2] (REWRITE_RULE[BRANCH_PNTS;LET_DEF]) THEN
+X         FILTER_RULE_ASSUM_TAC [1;2] BETA_RULE THEN
+X         FILTER_RULE_ASSUM_TAC [1] CONJUNCT1 THEN
+X         FILTER_STRIP_ASSUM_TAC [2] THEN
+X         FILTER_RULE_ASSUM_TAC [1] (CONV_RULE FUN_EQ_CONV) THEN
+X         FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[GINTERSECT]) THEN
+X         FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X         FILTER_FILTER_RULE_ASSUM_TAC [6] [4] (REWRITE_RULE o (map SYM)) THEN
+X         FILTER_RULE_ASSUM_TAC [1] (SPEC "(NEXT_x B:*)") THEN
+X         IMP_RES_TAC lemma4 THEN
+X         REWRITE_RULE_ASSUM_TAC [5] [2] THEN
+X         FILTER_RULE_ASSUM_TAC [5] (CONV_RULE NOT_FORALL_CONV) THEN
+X         FILTER_STRIP_ASSUM_TAC [5] THEN
+X         SUBGOAL_THEN "(SS (X:*->bool)) /\ (B PSUBSET X) /\ ~(X (NEXT_x B))" 
+X                    STRIP_ASSUME_TAC THENL
+X         [SUB_ASSUM_TAC [1] THEN 
+X          FILTER_ASSUM_TAC [1] UNDISCH_TAC THEN
+X          TAUT_TAC;ALL_TAC] THEN
+X         REWRITE_TAC [PRUNE;PSUBSET;SUBSET;LET_DEF] THEN
+X         BETA_TAC THEN 
+X         FILTER_RULE_ASSUM_TAC [11] SYM THEN
+X         REPEAT STRIP_TAC THEN ASM_REWRITE_TAC[] THEN
+X         FILTER_RULE_ASSUM_TAC [1] (CONV_RULE FUN_EQ_CONV) THEN
+X         FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[PRUNE;LET_DEF]) THEN
+X         FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X         REWRITE_RULE_ASSUM_TAC [1] [12] THEN
+X         FILTER_RULE_ASSUM_TAC [1] (SPEC "X:*->bool") THEN
+X         REWRITE_RULE_ASSUM_TAC [1] [4] THEN
+X         SUB_ASSUM_TAC [1;2;3;6;7;8] THEN
+X         FILTER_ASSUM_LIST [1] (MAP_EVERY DISJ_CASES_TAC) THENL
+X            [NEW_IMP_RES_TAC lemma2 THEN
+X             FILTER_ASSUM_TAC [2] UNDISCH_TAC  THEN
+X             REWRITE_TAC [PSUBSET;SUBSET];ALL_TAC] THEN
+X         FILTER_ASSUM_TAC [1] UNDISCH_TAC THEN
+X         REWRITE_TAC[SUBSET] THEN 
+X         CONV_TAC (ONCE_DEPTH_CONV FUN_EQ_CONV)  THEN
+X         CONV_TAC NOT_FORALL_CONV THEN
+X         EXISTS_TAC "NEXT_x B:*" THEN
+X         ASM_REWRITE_TAC[]);;  
+X
+Xlet asl11 =["PWO (SS:(*->bool)->bool)"];;
+Xlet w11 = "PWO (PRUNE (SS:(*->bool)->bool))";;  
+X
+Xlet thm11 = TAC_PROOF(
+X            (asl11,w11),
+X            FILTER_ASSUM_TAC [1] UNDISCH_TAC THEN
+X            REWRITE_TAC[PWO;INTERSECT_CLOSED;UNION_CLOSED;PRUNE] THEN
+X            REWRITE_TAC[LET_DEF] THEN BETA_TAC THEN
+X            REPEAT STRIP_TAC THENL
+X%<1>%         [RES_TAC; 
+X%<2>%          ASM_CASES_TAC 
+X%<most>%       "(NEXT (X:*->bool)) SUBSET (GINTERSECT(BRANCH_PNTS SS))" THEN 
+X%<difficult>%  ASM_REWRITE_TAC[] THEN
+X%<part>%       ASM_CASES_TAC "X:*->bool = (GINTERSECT(BRANCH_PNTS SS))" THENL
+X                [ASM_REWRITE_TAC[SUBSET];ALL_TAC] THEN
+X               ASM_CASES_TAC "X:*->bool = TOP" THENL
+X                [ASM_REWRITE_TAC[NEXT;UNION;SING;TOP;SUBSET];ALL_TAC] THEN
+X               IMP_RES_TAC lemma4  THEN
+X               DEFINE "SB = (SING (GINTERSECT(BRANCH_PNTS SS))) UNION 
+X                            (SING (NEXT (X:*->bool)))" THEN
+X               SUBGOAL_THEN 
+X                   "GINTERSECT (SB:(*->bool)->bool) = X" ASSUME_TAC THENL
+X                 [ASM_REWRITE_TAC[lemma9;lemma8] THEN
+X                  SUB_ASSUM_TAC[4;7;8;9] THEN
+X                      SUBGOAL_THEN "(X:*->bool) SUBSET 
+X                         ((GINTERSECT(BRANCH_PNTS SS)) INTERSECT (NEXT X))"
+X                                   ASSUME_TAC THENL
+X                       [REWRITE_TAC[SUBSET;INTERSECT] THEN 
+X                        RULE_ASSUM_TAC (REWRITE_RULE[PSUBSET;SUBSET]) THEN
+X                        BETA_TAC THEN 
+X                        REPEAT STRIP_TAC THEN RES_TAC;ALL_TAC] THEN
+X                      SUBGOAL_THEN 
+X                        "((GINTERSECT(BRANCH_PNTS SS)) INTERSECT (NEXT X)) 
+X                        SUBSET (NEXT (X:*->bool))" ASSUME_TAC THENL
+X                       [REWRITE_TAC[SUBSET;INTERSECT] THEN 
+X                        RULE_ASSUM_TAC (REWRITE_RULE[PSUBSET;SUBSET]) THEN
+X                        BETA_TAC THEN 
+X                        REPEAT STRIP_TAC THEN RES_TAC;ALL_TAC] THEN
+X                  IMP_RES_TAC lemma6 THEN
+X                  SUB_ASSUM_TAC [1;9] THEN 
+X                  RULE_ASSUM_TAC (REWRITE_RULE[INTERSECT;SUBSET]) THEN
+X                  FILTER_RULE_ASSUM_TAC [1]  
+X                        ( BETA_RULE o (CONV_RULE FUN_EQ_CONV)) THEN
+X                  FILTER_RULE_ASSUM_TAC [2] (CONV_RULE NOT_FORALL_CONV) THEN
+X                  FILTER_STRIP_ASSUM_TAC [2] THEN
+X                  FILTER_RULE_ASSUM_TAC [2] (SPEC "a:*") THEN
+X                  FILTER_ASSUM_TAC [1;2] UNDISCH_TAC THEN 
+X                  TAUT_TAC;ALL_TAC] THEN  
+X               SUBGOAL_THEN "SB SUBSET (SS:(*->bool)->bool)" ASSUME_TAC THENL
+X                  [ASM_REWRITE_TAC[SUBSET;UNION;SING] THEN
+X                   BETA_TAC THEN
+X                   IMP_RES_TAC 
+X                     (((REWRITE_RULE[INTERSECT_CLOSED]) o DISCH_ALL) thm8)
+X                                                           THEN
+X                   RES_TAC THEN
+X                   FILTER_RULE_ASSUM_TAC [2] 
+X                          (REWRITE_RULE[BRANCH_PNTS;LET_DEF]) THEN
+X                   FILTER_RULE_ASSUM_TAC [2] BETA_RULE THEN
+X                   FILTER_STRIP_ASSUM_TAC [2] THEN
+X                   REPEAT STRIP_TAC THEN ASM_REWRITE_TAC[];ALL_TAC] THEN
+X               SUBGOAL_THEN "!Y:*->bool.(SB Y) ==> (X PSUBSET Y)" 
+X                             ASSUME_TAC THENL
+X                  [ASM_REWRITE_TAC[UNION;SING] THEN BETA_TAC THEN
+X                   REPEAT STRIP_TAC THEN ASM_REWRITE_TAC[] THEN
+X                   ASM_REWRITE_TAC[PSUBSET];ALL_TAC] THEN
+X               IMP_RES_TAC lemma7 THEN
+X               SUB_ASSUM_TAC [1;24;26] THEN
+X               IMP_RES_TAC LB_THM THEN
+X               IMP_RES_TAC lemma10 THEN
+X               RES_TAC;
+X%<3>%          RES_TAC;
+X%<4>%          SUBGOAL_THEN "(X:*->bool) SUBSET (NEXT X)" ASSUME_TAC THENL
+X                 [REWRITE_TAC [NEXT;UNION;SUBSET] 
+X                  THEN BETA_TAC THEN TAUT_TAC;ALL_TAC] THEN
+X               NEW_IMP_RES_TAC lemma1 THEN
+X               ASM_REWRITE_TAC[];  
+X%<5>%          ASSUME_TAC thm9 THEN
+X               FILTER_RULE_ASSUM_TAC [1] (SPEC "SS:(*->bool)->bool") THEN
+X               NEW_IMP_RES_TAC lemma1 THEN
+X               RES_TAC;
+X%<6>%          FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[SUBSET;PRUNE;LET_DEF]) THEN
+X               FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X               ASM_CASES_TAC  "?X:*->bool.(SB X) /\ 
+X                             (X SUBSET (GINTERSECT(BRANCH_PNTS SS)))" THENL
+X                  [DISJ1_TAC THEN
+X                   FILTER_STRIP_ASSUM_TAC [1] THEN
+X                   IMP_RES_TAC LB_THM THEN
+X                   IMP_RES_TAC lemma1;
+X                   DISJ2_TAC THEN
+X                   FILTER_RULE_ASSUM_TAC [1] (CONV_RULE NOT_EXISTS_CONV) THEN
+X                   MATCH_MP_TAC GLB_THM THEN
+X                   REPEAT STRIP_TAC THEN
+X                   REWRITE_TAC [SUBSET] THEN
+X                   RES_TAC THEN
+X                   FILTER_RULE_ASSUM_TAC [4] (REWRITE_RULE[SUBSET]) THEN 
+X                   RES_TAC];
+X%<7>%          ASSUME_TAC (SPEC "SS:(*->bool)->bool" thm9) THEN
+X               IMP_RES_TAC lemma1 THEN RES_TAC;
+X%<8>%          FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[SUBSET;PRUNE;LET_DEF]) THEN
+X               FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X               ASM_CASES_TAC  "!X:*->bool.(SB X) ==> 
+X                             (X SUBSET (GINTERSECT(BRANCH_PNTS SS)))" THENL
+X                   [DISJ1_TAC THEN  
+X                    REWRITE_TAC[GUNION;SUBSET] THEN
+X                    REPEAT STRIP_TAC THEN
+X                    FILTER_RULE_ASSUM_TAC [3] (REWRITE_RULE[SUBSET]) THEN 
+X                    SUB_ASSUM_TAC[1;2;3] THEN
+X                    RES_TAC;
+X                    DISJ2_TAC THEN
+X                    FILTER_RULE_ASSUM_TAC [1] (CONV_RULE NOT_FORALL_CONV) THEN
+X                    FILTER_STRIP_ASSUM_TAC [1] THEN
+X                    ASM_CASES_TAC "SB (X:*->bool):bool" THEN 
+X                    REWRITE_RULE_ASSUM_TAC [2] [1] THENL
+X                    [ALL_TAC;FILTER_ASSUM_LIST [2] (MAP_EVERY CONTR_TAC)] THEN
+X                    RES_TAC THENL
+X                     [FILTER_RULE_ASSUM_TAC [5] (REWRITE_RULE[SUBSET]) THEN
+X                      RES_TAC;ALL_TAC] THEN
+X                    REWRITE_TAC [SUBSET;GUNION] THEN
+X                    REPEAT STRIP_TAC THEN
+X                    EXISTS_TAC "X:*->bool" THEN 
+X                    RES_TAC THEN ASM_REWRITE_TAC[]]]);;
+X
+X
+Xlet w12 = "PWO (WOC:(*->bool)->bool)";;
+X
+Xlet thm12 = prove(w12,
+X            REWRITE_TAC[PWO;thm1;thm2;thm5]);;
+X
+Xlet w13 = "(BRANCH_PNTS WOC = (SING (TOP:*->bool))) = 
+X           ((GINTERSECT (BRANCH_PNTS WOC)) = TOP:*->bool)";; 
+X
+Xlet thm13 = prove(w13,
+X            ASSUME_TAC thm1 THEN
+X            IMP_RES_TAC (DISCH_ALL thm7) THEN
+X            EQ_TAC THEN 
+X            STRIP_TAC THEN 
+X            MATCH_MP_TAC lemma10 THEN 
+X            CONJ_TAC THENL
+X             [REWRITE_TAC[SUBSET;TOP];
+X              ASM_REWRITE_TAC[lemma8;SUBSET];
+X              FILTER_RULE_ASSUM_TAC [1] (CONV_RULE FUN_EQ_CONV) THEN
+X              FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[GINTERSECT;TOP]) THEN
+X              REWRITE_TAC[SUBSET;SING;TOP] THEN 
+X              REPEAT STRIP_TAC THEN
+X              BETA_TAC THEN
+X              CONV_TAC FUN_EQ_CONV THEN 
+X              BETA_TAC THEN 
+X              REWRITE_TAC[] THEN
+X              GEN_TAC THEN
+X              RES_TAC;
+X              REWRITE_TAC[SUBSET;SING] THEN BETA_TAC THEN
+X              REPEAT STRIP_TAC THEN
+X              ASM_REWRITE_TAC[]]);;   
+X
+Xlet w14 = "BRANCH_PNTS WOC = (SING (TOP:*->bool))";;  
+X
+Xlet thm14 = prove(w14,
+X            REWRITE_TAC[thm13] THEN
+X            ASM_CASES_TAC "GINTERSECT(BRANCH_PNTS WOC) = TOP:*->bool" THEN
+X            ASM_REWRITE_TAC[] THEN
+X            ASSUME_TAC thm12 THEN
+X            ASSUME_TAC thm1 THEN
+X            IMP_RES_TAC (DISCH_ALL thm10) THEN
+X            IMP_RES_TAC (DISCH_ALL thm11) THEN
+X            IMP_RES_TAC thm6 THEN
+X            FILTER_RULE_ASSUM_TAC [4] (REWRITE_RULE[PSUBSET]) THEN
+X            FILTER_STRIP_ASSUM_TAC [4] THEN
+X            IMP_RES_TAC lemma10 THEN
+X            RES_TAC);; 
+X
+Xlet w15 = "!SB:(*->bool)->bool.((SB SUBSET WOC) /\ ~(SB = BOT)) ==>
+X                              (SB (GINTERSECT SB))";; 
+X
+Xlet thm15 = prove(w15,
+X            GEN_TAC THEN 
+X            DEFINE "B:*->bool = GINTERSECT SB" THEN
+X            ASM_CASES_TAC "SB (B:*->bool):bool" THENL
+X            [FILTER_RULE_ASSUM_TAC [2] SYM THEN 
+X             ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            REPEAT STRIP_TAC THEN
+X            IMP_RES_TAC (REWRITE_RULE[INTERSECT_CLOSED] thm1) THEN
+X            FILTER_RULE_ASSUM_TAC [5] SYM THEN
+X            REWRITE_RULE_ASSUM_TAC [1] [5] THEN
+X            SUBGOAL_THEN "!Y:*->bool.(SB Y) ==> (B PSUBSET Y)" 
+X                         ASSUME_TAC THENL
+X            [REWRITE_TAC[PSUBSET] THEN
+X             REPEAT STRIP_TAC THENL
+X               [REWRITE_RULE_ASSUM_TAC [6] [1] THEN
+X                RES_TAC;
+X                IMP_RES_TAC LB_THM THEN
+X                REWRITE_RULE_ASSUM_TAC [4] [10] THEN
+X                ASM_REWRITE_TAC[]];ALL_TAC] THEN
+X            IMP_RES_TAC lemma7 THEN
+X            SUB_ASSUM_TAC [1;8;9;10;11;12;13] THEN
+X            ASSUME_TAC ((CONV_RULE FUN_EQ_CONV) thm14) THEN
+X            FILTER_RULE_ASSUM_TAC [1] (BETA_RULE o (REWRITE_RULE[SING])) THEN
+X            REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X            REWRITE_RULE_ASSUM_TAC [3] [2] THEN
+X            FILTER_RULE_ASSUM_TAC [5] 
+X              (CONV_RULE((RAND_CONV FUN_EQ_CONV) THENC NOT_FORALL_CONV)) THEN
+X            FILTER_STRIP_ASSUM_TAC [5] THEN
+X            FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[BOT]) THEN
+X            RES_TAC THEN
+X            FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[PSUBSET]) THEN
+X            FILTER_STRIP_ASSUM_TAC [1] THEN
+X            IMP_RES_TAC lemma5 THEN
+X            FILTER_RULE_ASSUM_TAC [1] (CONV_RULE SYM_CONV) THEN
+X            RES_TAC);; 
+X
+Xlet w16 = "!SB:(*->bool)->bool.(LINEAR SB) = 
+X              (!X Y.let ST = (SING X) UNION (SING Y) in
+X                   ( ((SB X) /\ (SB Y)) ==> (ST (GINTERSECT ST))))";;
+X
+X
+Xlet thm16 = prove(w16, 
+X            REWRITE_TAC[LINEAR;LET_DEF] THEN 
+X            BETA_TAC THEN
+X            REWRITE_TAC[lemma8;lemma9] THEN
+X            REWRITE_TAC[SING;UNION;INTERSECT;SUBSET] THEN 
+X            BETA_TAC THEN
+X            GEN_TAC THEN 
+X            EQ_TAC THEN 
+X            REPEAT STRIP_TAC THENL 
+X             [CONV_TAC (LHS_CONV FUN_EQ_CONV) THEN
+X              CONV_TAC (RAND_CONV FUN_EQ_CONV) THEN
+X              BETA_TAC THEN
+X              FILTER_RULE_ASSUM_TAC [3] 
+X                ((SPEC "Y:*->bool") o (SPEC "X:*->bool")) THEN 
+X              RES_TAC THEN 
+X              SUB_ASSUM_TAC [1] THENL
+X              [DISJ1_TAC;DISJ2_TAC] THEN
+X              GEN_TAC THEN
+X              EQ_TAC THEN 
+X              REPEAT STRIP_TAC THEN
+X              RES_TAC THEN 
+X              ASM_REWRITE_TAC[];
+X              FILTER_RULE_ASSUM_TAC [3] 
+X                ((SPEC "Y:*->bool") o (SPEC "X:*->bool")) THEN 
+X              RES_TAC THEN 
+X              SUB_ASSUM_TAC [1] THENL 
+X              [DISJ1_TAC;DISJ2_TAC] THEN
+X              RULE_ASSUM_TAC ((CONV_RULE (BINDER_CONV SYM_CONV)) o 
+X                               BETA_RULE o 
+X                              (CONV_RULE FUN_EQ_CONV)) THEN
+X              GEN_TAC THEN 
+X              ONCE_ASM_REWRITE_TAC[] THEN 
+X              TAUT_TAC]);;
+X
+Xlet w17 = "LINEAR (WOC:(*->bool)->bool)";;
+X
+Xlet thm17 = prove(w17,
+X            REWRITE_TAC[thm16;LET_DEF] THEN
+X            BETA_TAC THEN
+X            REPEAT GEN_TAC THEN
+X            DEFINE "ST = (SING (X:*->bool)) UNION (SING Y)" THEN
+X            RULE_ASSUM_TAC SYM THEN
+X            ASM_REWRITE_TAC[] THEN
+X            REPEAT STRIP_TAC THEN
+X            FILTER_RULE_ASSUM_TAC [3] (CONV_RULE FUN_EQ_CONV) THEN
+X            FILTER_RULE_ASSUM_TAC [3] (REWRITE_RULE[UNION;SING]) THEN
+X            FILTER_RULE_ASSUM_TAC [3] BETA_RULE THEN
+X            FILTER_RULE_ASSUM_TAC [3] (CONV_RULE (BINDER_CONV SYM_CONV)) THEN
+X            SUBGOAL_THEN "~(ST = BOT:(*->bool)->bool)" ASSUME_TAC THENL
+X              [CONV_TAC ((RAND_CONV FUN_EQ_CONV) THENC 
+X                          NOT_FORALL_CONV) THEN
+X               REWRITE_TAC[BOT] THEN 
+X               EXISTS_TAC "X:*->bool" THEN
+X               ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            SUBGOAL_THEN "ST SUBSET (WOC:(*->bool)->bool)" ASSUME_TAC THENL
+X              [ASM_REWRITE_TAC [SUBSET] THEN
+X               REPEAT STRIP_TAC THEN 
+X               ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            IMP_RES_TAC thm15);;
+X
+Xlet w = "!X:*->bool.(WOC (PREV X)) /\ ((PREV X) SUBSET X)";;
+X
+Xlet lemma11 = prove(w,
+X              GEN_TAC THEN 
+X              REWRITE_TAC[PREV;LET_DEF] THEN 
+X              BETA_TAC THEN
+X              DEFINE "SB = \Y:*->bool.(Y PSUBSET X) /\ (WOC Y)" THEN
+X              RULE_ASSUM_TAC SYM THEN
+X              ASM_REWRITE_TAC[] THEN 
+X              RULE_ASSUM_TAC SYM THEN 
+X              SUBGOAL_THEN "(SB:(*->bool)->bool) SUBSET WOC" ASSUME_TAC THENL
+X               [ASM_REWRITE_TAC[SUBSET] THEN 
+X                BETA_TAC THEN
+X                TAUT_TAC;ALL_TAC] THEN
+X              IMP_RES_TAC (REWRITE_RULE[UNION_CLOSED] thm2) THEN 
+X              ASM_REWRITE_TAC[] THEN
+X              REWRITE_TAC[GUNION;PSUBSET;SUBSET] THEN
+X              BETA_TAC THEN
+X              REPEAT STRIP_TAC THEN
+X              RES_TAC);; 
+X
+Xlet w18 = "!X:*->bool.(WOC X) ==> 
+X                      (((PREV X) = X) \/ ((NEXT (PREV X)) = X))";;
+X
+Xlet thm18 = prove(w18, 
+X            GEN_TAC THEN 
+X            ASM_CASES_TAC "PREV (X:*->bool) = X" THEN 
+X            ASM_REWRITE_TAC[] THEN
+X            STRIP_ASSUME_TAC (SPEC "X:*->bool" lemma11) THEN
+X            IMP_RES_TAC thm5 THEN
+X            STRIP_TAC THEN
+X            SUBGOAL_THEN "PREV (X:*->bool) PSUBSET X" ASSUME_TAC THENL
+X            [ASM_REWRITE_TAC[PSUBSET];ALL_TAC] THEN
+X            IMP_RES_TAC (((SPEC "NEXT(PREV (X:*->bool))") o
+X                           (SPEC "X:*->bool") o 
+X                            REWRITE_RULE[LINEAR]) thm17) THEN
+X            SUB_ASSUM_TAC [1;5;6;7;8;9;10] THENL
+X            [IMP_RES_TAC lemma6 THENL
+X                  [FILTER_RULE_ASSUM_TAC [1] SYM THEN RES_TAC;
+X                   FILTER_RULE_ASSUM_TAC [1] SYM THEN ASM_REWRITE_TAC[]];
+X             ALL_TAC] THEN
+X            ASM_CASES_TAC "PREV (X:*->bool) = TOP" THENL
+X             [REWRITE_RULE_ASSUM_TAC [3;8] [1] THEN
+X              FILTER_RULE_ASSUM_TAC [3] (REWRITE_RULE[PSUBSET]) THEN
+X              FILTER_STRIP_ASSUM_TAC[3] THEN
+X              IMP_RES_TAC lemma5 THEN 
+X              FILTER_RULE_ASSUM_TAC [1] SYM THEN 
+X              RES_TAC;ALL_TAC] THEN
+X            IMP_RES_TAC lemma4 THEN
+X            SUB_ASSUM_TAC [3;6;7;8;9;10;11;12] THEN
+X            ASM_CASES_TAC "NEXT(PREV (X:*->bool)) = X" THEN 
+X            ASM_REWRITE_TAC[] THEN
+X            SUBGOAL_THEN "NEXT(PREV (X:*->bool)) PSUBSET X" ASSUME_TAC THENL
+X            [ASM_REWRITE_TAC[PSUBSET];ALL_TAC] THEN
+X            SUBGOAL_THEN "NEXT(PREV (X:*->bool)) SUBSET (PREV X)"
+X                                                  ASSUME_TAC THENL
+X            [REWRITE_TAC[SUBSET] THEN
+X             REPEAT STRIP_TAC THEN 
+X             REWRITE_TAC[PREV;LET_DEF] THEN 
+X             BETA_TAC THEN
+X             REWRITE_TAC[GUNION] THEN 
+X             BETA_TAC THEN
+X             EXISTS_TAC "NEXT(PREV (X:*->bool))" THEN
+X             ASM_REWRITE_TAC[];ALL_TAC] THEN   
+X             FILTER_RULE_ASSUM_TAC [4] (REWRITE_RULE[PSUBSET]) THEN 
+X             FILTER_STRIP_ASSUM_TAC [4] THEN 
+X             IMP_RES_TAC lemma10 THEN
+X             RES_TAC);;
+X
+Xlet w19 = "!x:*.(WOC (INWOC x)) /\ (INWOC x) x";;   
+X
+Xlet thm19 = prove(w19,
+X            GEN_TAC THEN
+X            DEFINE "SB = \Y.(WOC Y) /\ (Y (x:*))" THEN  
+X            SUBGOAL_THEN "SB (GINTERSECT (SB:(*->bool)->bool))" 
+X                                                   ASSUME_TAC THENL
+X            [MATCH_MP_TAC thm15 THEN
+X             ASM_REWRITE_TAC[SUBSET] THEN 
+X             BETA_TAC THEN
+X             REPEAT STRIP_TAC THEN 
+X             ASM_REWRITE_TAC[] THEN
+X             FILTER_RULE_ASSUM_TAC [1] (CONV_RULE FUN_EQ_CONV) THEN
+X             FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X             FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[BOT]) THEN
+X             FILTER_RULE_ASSUM_TAC [1] (SPEC "TOP:*->bool") THEN
+X             FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[thm4;TOP]) THEN
+X             FILTER_ASSUM_LIST [1] (MAP_EVERY CONTR_TAC);ALL_TAC] THEN
+X             REWRITE_TAC[INWOC;LET_DEF] THEN 
+X             BETA_TAC THEN
+X             FILTER_RULE_ASSUM_TAC [2] SYM THEN 
+X             ASM_REWRITE_TAC[] THEN
+X             FILTER_RULE_ASSUM_TAC [2] SYM THEN
+X             REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X             FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X             FILTER_RULE_ASSUM_TAC [2] SYM THEN
+X             REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X             ASM_REWRITE_TAC[]);; 
+X
+Xlet w20 = "!x:*.~((PREV (INWOC x)) = (INWOC x))";;
+X
+X
+Xlet thm20 = prove(w20,  
+X            GEN_TAC THEN
+X            REWRITE_TAC[PREV;LET_DEF] THEN   
+X            BETA_TAC THEN
+X            CONV_TAC (RAND_CONV FUN_EQ_CONV) THEN
+X            REWRITE_TAC[GUNION] THEN
+X            BETA_TAC THEN
+X            STRIP_TAC THEN
+X            RULE_ASSUM_TAC (SPEC "x:*") THEN 
+X            RULE_ASSUM_TAC (REWRITE_RULE[thm19]) THEN
+X            FILTER_STRIP_ASSUM_TAC [1] THEN
+X            SUBGOAL_THEN "(\Y.(WOC Y) /\ (Y (x:*)))X" ASSUME_TAC THENL
+X            [BETA_TAC THEN ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            IMP_RES_TAC LB_THM THEN
+X            FILTER_RULE_ASSUM_TAC [7] (REWRITE_RULE[PSUBSET;INWOC]) THEN
+X            SUB_ASSUM_TAC[3;7] THEN
+X            FILTER_STRIP_ASSUM_TAC [2] THEN
+X            IMP_RES_TAC lemma10 THEN 
+X            RES_TAC);;   
+X
+Xlet LB_INWOC = 
+X        let thm = SPEC "\Y.(WOC Y) /\ (Y (x:*))" LB_THM in
+X        let thm = BETA_RULE thm in
+X        let thm = REWRITE_RULE[(CONV_RULE (BINDER_CONV SYM_CONV)) INWOC] thm in
+X        GEN_ALL thm;;  
+X
+Xlet GLB_INWOC =
+X        let thm = SPEC "\Y.(WOC Y) /\ (Y (x:*))" GLB_THM in
+X        let thm = BETA_RULE thm in
+X        let thm = REWRITE_RULE[(CONV_RULE (BINDER_CONV SYM_CONV)) INWOC] thm in
+X        GEN_ALL thm;;
+X
+Xlet w21 = "!x:*.~((PREV (INWOC x)) x)";;  
+X        
+Xlet thm21 = prove(w21,
+X        GEN_TAC THEN
+X        STRIP_TAC THEN
+X        STRIP_ASSUME_TAC (SPEC "INWOC (x:*)" lemma11) THEN
+X        IMP_RES_TAC LB_INWOC THEN
+X        IMP_RES_TAC lemma10 THEN
+X        IMP_RES_TAC  thm20);;
+X
+Xlet w22 = "!x:*.NEXT_x(PREV (INWOC x)) = x";;
+X
+Xlet thm22 = prove(w22,
+X        GEN_TAC THEN
+X        ASSUME_TAC (SPEC "x:*" thm20) THEN
+X        STRIP_ASSUME_TAC (SPEC "x:*" thm19) THEN
+X        IMP_RES_TAC thm18 THENL
+X        [RES_TAC;ALL_TAC] THEN
+X        FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[NEXT]) THEN
+X        FILTER_RULE_ASSUM_TAC [1] (\thm.AP_THM thm "x:*") THEN
+X        FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[thm19;UNION]) THEN
+X        FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X        FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[thm21;SING]) THEN
+X        FILTER_RULE_ASSUM_TAC [1] ((CONV_RULE SYM_CONV) o BETA_RULE) THEN
+X        ASM_REWRITE_TAC[]);;
+X
+Xlet w23 = "!x:*.x WLEQ x";;
+X
+Xlet thm23 = prove(w23,
+X            REWRITE_TAC[WLEQ;SUBSET] THEN 
+X            REPEAT STRIP_TAC THEN 
+X            ASM_REWRITE_TAC[]);;  
+X
+Xlet w24 = "!x y z:*.(x WLEQ y) /\ (y WLEQ z) ==> (x WLEQ z)";;
+X
+Xlet thm24 = prove(w24,
+X            REWRITE_TAC[WLEQ] THEN 
+X            REPEAT STRIP_TAC THEN 
+X            IMP_RES_TAC lemma1);;  
+X
+Xlet w25 = "!x y:*.((x WLEQ y) /\ (y WLEQ x)) ==> (x = y)";;
+X
+Xlet thm25 = prove(w25,
+X            REWRITE_TAC[WLEQ] THEN
+X            REPEAT STRIP_TAC THEN 
+X            IMP_RES_TAC lemma10 THEN
+X            SUB_ASSUM_TAC [1] THEN
+X            CONV_TAC (LHS_CONV(REWRITE_CONV (SYM (SPEC "x:*" thm22)))) THEN
+X            CONV_TAC (RAND_CONV(REWRITE_CONV (SYM (SPEC "y:*" thm22)))) THEN
+X            ASM_REWRITE_TAC[]);;
+X
+Xlet w26 = "!x y:*.(x WLEQ y) \/ (y WLEQ x)";;
+X  
+Xlet thm26 = prove(w26,
+X            REWRITE_TAC[WLEQ] THEN 
+X            REPEAT STRIP_TAC THEN
+X            STRIP_ASSUME_TAC (SPEC "x:*" thm19) THEN
+X            STRIP_ASSUME_TAC (SPEC "y:*" thm19) THEN 
+X            IMP_RES_TAC (REWRITE_RULE[LINEAR] thm17) THEN 
+X            ASM_REWRITE_TAC[]);;
+X
+Xlet w27 = "!D:*->bool. ~(D = BOT) ==> (?z.(D z) /\ 
+X                                        ((LEAST_WOC_SET D) = (INWOC z)))";;
+X
+X
+Xlet thm27 = prove(w27,
+X            REWRITE_TAC[LEAST_WOC_SET] THEN
+X            GEN_TAC THEN
+X            DEFINE "SB = \Y:*->bool.?x. D x /\ (Y = INWOC x)" THEN
+X            RULE_ASSUM_TAC SYM THEN 
+X            ASM_REWRITE_TAC[] THEN
+X            STRIP_TAC THEN
+X            SUBGOAL_THEN "~(SB = (BOT:(*->bool)->bool))" ASSUME_TAC THENL
+X            [FILTER_RULE_ASSUM_TAC [2] SYM THEN 
+X             ASM_REWRITE_TAC[BOT] THEN
+X             CONV_TAC (RAND_CONV FUN_EQ_CONV) THEN
+X             CONV_TAC NOT_FORALL_CONV THEN 
+X             REWRITE_TAC[] THEN
+X             BETA_TAC THEN
+X             FILTER_RULE_ASSUM_TAC [1] (CONV_RULE (RAND_CONV FUN_EQ_CONV)) THEN
+X             FILTER_RULE_ASSUM_TAC [1] (CONV_RULE NOT_FORALL_CONV) THEN
+X             FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[BOT]) THEN
+X             FILTER_STRIP_ASSUM_TAC [1] THEN
+X             EXISTS_TAC "INWOC (x:*)" THEN 
+X             EXISTS_TAC "x:*" THEN 
+X             ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            SUBGOAL_THEN "SB SUBSET (WOC:(*->bool)->bool)" ASSUME_TAC THENL
+X             [FILTER_RULE_ASSUM_TAC [3] SYM THEN 
+X              ASM_REWRITE_TAC[SUBSET] THEN 
+X              BETA_TAC THEN
+X              REPEAT STRIP_TAC THEN
+X              STRIP_ASSUME_TAC (SPEC "x:*" thm19) THEN
+X              ASM_REWRITE_TAC[];ALL_TAC] THEN
+X             IMP_RES_TAC thm15 THEN
+X             FILTER_RULE_ASSUM_TAC [6] SYM THEN 
+X             REWRITE_RULE_ASSUM_TAC [1] [6] THEN
+X             FILTER_RULE_ASSUM_TAC [6] SYM THEN 
+X             FILTER_RULE_ASSUM_TAC [1] BETA_RULE THEN
+X             REWRITE_RULE_ASSUM_TAC [1] [6] THEN
+X             ASM_REWRITE_TAC[]);;
+X
+Xlet LEAST_LB = 
+X     let thm = SPEC "\Y:*->bool.?x. D x /\ (Y = INWOC x)" LB_THM in
+X     let thm = BETA_RULE thm in
+X     let thm = REWRITE_RULE[(CONV_RULE (BINDER_CONV SYM_CONV)) LEAST_WOC_SET] 
+X                                                        thm in  
+X     let thm = (CONV_RULE (BINDER_CONV EXISTS_IMP_FORALL_CONV)) thm in
+X     let thm = SPEC_ALL thm in 
+X     let thm = GEN "X:*->bool" thm in
+X     let thm = SPEC "INWOC (x:*)" thm in
+X     let thm = REWRITE_RULE[] thm in
+X     GEN_ALL thm;;
+X
+X
+Xlet LEAST_GLB_lemma = 
+X     let thm = SPEC "\Y:*->bool.?x. D x /\ (Y = INWOC x)" GLB_THM in
+X     let thm = BETA_RULE thm in
+X     let thm = REWRITE_RULE[(CONV_RULE (BINDER_CONV SYM_CONV)) LEAST_WOC_SET] 
+X                                                        thm in
+X     let thm = (CONV_RULE (BINDER_CONV (LHS_CONV 
+X                           (BINDER_CONV EXISTS_IMP_FORALL_CONV)))) thm in
+X     GEN_ALL thm;; 
+X
+Xlet w = "!D Y.(!x:*.(D x) ==> (Y SUBSET (INWOC x))) 
+X                                     ==> (Y SUBSET (LEAST_WOC_SET D))";;
+X
+Xlet LEAST_GLB =  prove(w,
+X                 REPEAT STRIP_TAC THEN
+X                 MATCH_MP_TAC LEAST_GLB_lemma THEN
+X                 REPEAT STRIP_TAC THEN
+X                 RES_TAC THEN
+X                 ASM_REWRITE_TAC[]);;
+X
+X
+Xlet w28 = "!D:*->bool.~(D = BOT) ==> (D (LEAST D))";;
+X
+Xlet thm28 = prove(w28,
+X            REPEAT STRIP_TAC THEN 
+X            IMP_RES_TAC thm27 THEN
+X            FILTER_STRIP_ASSUM_TAC [1] THEN
+X            ASSUME_TAC (SPEC "z:*" thm22) THEN
+X            REWRITE_TAC[LEAST] THEN
+X            ASM_REWRITE_TAC[]);;
+X
+Xlet w29 = "!D.!x:*.(D x) ==> (LEAST D) WLEQ x";;
+X
+Xlet thm29 = prove(w29,
+X            REWRITE_TAC[WLEQ;LEAST] THEN
+X            REPEAT STRIP_TAC THEN
+X            ASSUME_TAC (SPEC "D:*->bool" thm27) THEN
+X            FILTER_RULE_ASSUM_TAC [1] 
+X               (CONV_RULE (LHS_CONV(RAND_CONV FUN_EQ_CONV))) THEN
+X            FILTER_RULE_ASSUM_TAC [1] 
+X               (CONV_RULE (LHS_CONV NOT_FORALL_CONV)) THEN
+X            FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[BOT]) THEN
+X            FILTER_ASSUM_LIST [2] (MAP_EVERY
+X               (\thm.ASSUME_TAC (EXISTS ("?x:*.D x","x:*") thm ))) THEN
+X            RES_TAC THEN
+X            FILTER_STRIP_ASSUM_TAC [1] THEN
+X            ASM_REWRITE_TAC[thm22] THEN
+X            FILTER_RULE_ASSUM_TAC [1] SYM THEN 
+X            ASM_REWRITE_TAC[] THEN 
+X            MATCH_MP_TAC LEAST_LB THEN
+X            ASM_REWRITE_TAC[]);;  
+X
+Xlet w30 = "!x y:*.INWOC x y = (y WLEQ x)";; 
+X
+Xlet thm30 = prove(w30,
+X            REPEAT GEN_TAC THEN
+X            REWRITE_TAC[WLEQ] THEN
+X            EQ_TAC THEN
+X            STRIP_TAC THENL
+X            [MATCH_MP_TAC LB_INWOC THEN
+X             ASM_REWRITE_TAC[thm19];
+X             RULE_ASSUM_TAC (REWRITE_RULE[SUBSET]) THEN
+X             RULE_ASSUM_TAC ((REWRITE_RULE[thm19]) o (SPEC "y:*")) THEN
+X             ASM_REWRITE_TAC[]]);;
+X
+Xlet PWO_WOC = save_thm(`PWO_WOC`, thm12);;  
+X
+Xlet WOP_WOC = save_thm(`WOP_WOC`,thm15);;  
+X
+Xlet LINEAR_WOC = save_thm(`LINEAR_WOC`,thm17);;  
+X
+Xlet DENSE_WOC = save_thm(`DENSE_WOC`,thm18);;
+X
+Xlet REFLEX_WLEQ = save_thm(`REFLEX_WLEQ`,thm23);;
+X
+Xlet ANTI_SYM_WLEQ = save_thm(`ANTI_SYM_WLEQ`,thm25);; 
+X
+Xlet TRANS_WLEQ = save_thm(`TRANS_WLEQ`,thm24);; 
+X
+Xlet LINEAR_WLEQ = save_thm(`LINEAR_WLEQ`,thm26);;
+X
+Xlet WOP_LEAST = save_thm(`WOP_LEAST`,(CONJ thm28 thm29));;
+X
+Xlet INWOC_PROP = save_thm(`INWOC_PROP`, thm30);;
+END_OF_FILE
+if test 46340 -ne `wc -c <'mk_well_order.ml'`; then
+    echo shar: \"'mk_well_order.ml'\" unpacked with wrong size!
+fi
+chmod +x 'mk_well_order.ml'
+# end of 'mk_well_order.ml'
+fi
+echo shar: End of shell archive.
+exit 0

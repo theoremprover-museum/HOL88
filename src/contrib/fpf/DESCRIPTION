@@ -1,0 +1,93 @@
+
+
+
+% --------------------------------------------------------------------- %
+% DIRECTORY: fpf                                                        %
+%                                                                       %
+% DESCRIPTION: A theory of finite partial functions (finite maps).      %
+%                                                                       %
+% AUTHOR: Donald Syme                                                   %
+%                                                                       %
+% ADDRESS: Department of Computer Science                               %
+%          Australian National University                               %
+%          GPO Box 4,                                                   %
+%          Canberra, Australia, 2601                                    %
+%                                                                       %
+%          email: symdchon@cs.anu.edu.au                                %
+%  Also contact mcn@cs.anu.edu.au (Malcolm Newey)			%                                                                       %
+% DATE: 92.10.25                                                        %
+% --------------------------------------------------------------------- %
+
+
+NOTES ON fpf THEORY:
+
+%-----------------------------------------------------------------------%
+%
+This  theory  was  born  out of frustrations with trying to use
+lists  to  represent finite mappings between two domains. These
+sort   of   mappings   arose   out   of   trying  to  represent
+environments  and  states  for a programming language semantics
+in  HOL.  A  real theory for these objects is obviously needed.
+The  theory  becomes  surprisingly complex in a similar fashion
+to  the  set  and  list theories. However, all the theorems and
+definitions  are  of  a fairly simple form (even if some of the
+proofs are a little ugly).
+
+Some notes on finite partial functions (or finite maps):
+
+  The constants defined by the theory:
+    ZIP = The empty map
+    EXT = extends a map by adding on new mapping
+    APPLY = applies a value to the map to see what it maps to if anything
+    DOM = domain of the map (i.e. the things that are mapped to something)
+    EXTBY = adds one map to another, the first taking precedence
+    SUCCEEDS = true if an application succeeds, as in SUCCEEDS(APPLY x fpf)
+    FAILURE = the result of APPLY when what we are applying doesn't map to anything
+    RESULT x = the result of APPLY when what we are applying maps to x
+    RESULTOF = access the result of a successful application
+    PORTION = predicate to see if one map is a subset of another
+    TRANSFORM = transforms elements of the range of a map by a given function
+    RANGE = range of a map
+    UNEXT = deletes a mapping from a map (Un-Extension)
+    LIST_TO_FPF = converts a list of pairs to a map - useful to allow the use
+ of list notation to specify maps.
+    EVERYF = applies a predicate test to every mapping in the map.
+
+
+ Some examples of things that are easily provable by rewriting:
+   APPLY x ZIP = FAILURE 
+   APPLY 1 (EXT (1,10) ZIP) = RESULT 10
+   DOM ZIP = {}
+   DOM (EXT (1,10) ZIP) = {1}
+
+Besides  having  a  finite  domain,  the  important property of
+finite  maps  is  what  happens  when  we apply things to them.
+This  is  done  using  the  APPLY  function  defined below. Two
+results  are  possible  -  a  failure  (the  result  then being
+FAILURE),  or  a result (RESULT x). The actual type returned by
+APPLY  is  (**+one),  where  ** is the type of the range of the
+map.  Thus  FAILURE  =  INR one, and RESULT x = INL x. The user
+of  the  finite  partial  functions  can in general avoid using
+the  somewhat  cryptic  INL,  INR,  OUTL etc. constructors, for
+RESULT, FAILURE, RESULTOF and SUCCEEDS are far more inuitive.
+
+Finite  maps  are created using the EXT operator. All maps have
+their  basis  in  the  empty map ZIP. Inuitively EXT is a cross
+between  CONS  and  INSERT.  The  argument  to  EXT  is  a pair
+indicating  a  maplet  x  |->  y.  The  ordering  of  EXT's  is
+unimportant if all the domain elements are distinct. However:
+     EXT (1, 100) (EXT (1, 0) ZIP) = EXT (1,100)
+can be proven - i.e. extensions override original mappings.
+
+The  finiteness  of  the  maps  is  captured  by  the induction
+principles  that  are  proved.  The  first  induction principle
+(fpf_INDUCT)  is  often not useful, for it does not ensure that
+previous  mappings  are not overridden. Often we want to induct
+over  the  cardinality  of the domain of the map, or to use the
+additional  assumption  that  the  new extension being added to
+the  map  in the step case does not already have a value in the
+map. These induction principles are proved (see fpf_INDUCT_2).
+									%
+%-----------------------------------------------------------------------%
+
+

@@ -1,0 +1,3 @@
+\THEOREM LESS_ADD_ASSOC add
+|- !a b c d. a < (b + c) ==> a < (b + (c + d))
+\ENDTHEOREM

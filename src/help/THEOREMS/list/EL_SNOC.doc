@@ -1,0 +1,3 @@
+\THEOREM EL_SNOC list
+|- !n l. n < (LENGTH l) ==> (!x. EL n(SNOC x l) = EL n l)
+\ENDTHEOREM

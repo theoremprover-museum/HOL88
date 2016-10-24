@@ -1,0 +1,72 @@
+\DOC begin_proof
+
+\TYPE {begin_proof : string -> void}
+
+\KEYWORDS
+proof recording.
+
+\LIBRARY
+record_proof
+
+\SYNOPSIS
+Begin recording a proof.
+
+\DESCRIBE
+A proof is a list of inference steps.  The proof recorder records
+every inference performed by the system in an internal buffer.
+When a proof is completed, the raw records are converted into a list
+of proof lines as in Hilbert's style proofs. These lines are then
+output to a disk file. This file is in the {prf} format specified in
+[1]. A proof file may contain one or more of proofs.
+
+The function {begin_proof} starts the proof recorder. All inferences
+performed by the system will be recorded until the function
+{end_proof} is called. It stores the proof into the current proof
+file. The argument to {begin_proof} is the name of the proof which will be
+written into the proof file.
+
+The {begin_proof} and {end_proof} pair provides a simple user
+interface for recording forward proofs.
+For tactical proofs, use the functions {TAC_PROOF}, {PROVE},
+{prove} and {prove_thm}. They will save the proof in the current proof
+file automatically.
+
+\FAILURE
+Fails if a proof starts by {begin_proof} has not been terminated by {end_proof}.
+
+\EXAMPLE
+Below is an example showing the use of this function to record a simple
+proof:
+{
+#new_proof_file `myproof`;;
+() : void
+
+#let th = SPEC_ALL ADD_SYM;;
+Theorem ADD_SYM autoloading from theory `arithmetic` ...
+ADD_SYM = |- !m n. m + n = n + m
+
+th = |- m + n = n + m
+
+#let v = genvar ":num";;
+"GEN%VAR%536" : term
+
+#begin_proof`proof1`;;
+() : void
+
+#let th1 = (REFL "SUC(m + n)");;
+th1 = |- SUC(m + n) = SUC(m + n)
+
+#let th2 = SUBST [th,v] "SUC(m + n) = SUC ^v" th1;;
+th2 = |- SUC(m + n) = SUC(n + m)
+
+#end_proof();;
+() : void
+}
+
+
+\SEEALSO
+current_proof, current_proof_file,
+new_proof_file, close_proof_file, begin_proof, end_proof,
+TAC_PROOF, PROVE, prove, prove_thm
+
+\ENDDOC

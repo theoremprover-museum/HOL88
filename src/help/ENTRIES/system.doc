@@ -1,0 +1,23 @@
+\DOC system
+
+\TYPE {system : (string -> int)}
+
+\SYNOPSIS
+Executes a shell command.
+
+\DESCRIBE
+Escapes from {HOL} temporarily to execute a named shell command. The integer
+value returned is an error code: zero indicates successful completion of the
+shell command.
+
+\EXAMPLE
+{
+#system `zap`;;
+zap: Command not found.
+1 : int
+
+system `ls`;;
+file_a              file_b             file_c
+0:int
+}
+\ENDDOC

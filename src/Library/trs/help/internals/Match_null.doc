@@ -1,0 +1,10 @@
+\DOC Match_null
+
+\TYPE {Match_null : result_of_match}
+
+\SYNOPSIS
+Internal value of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

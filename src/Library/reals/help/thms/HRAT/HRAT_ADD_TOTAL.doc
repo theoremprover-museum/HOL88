@@ -1,0 +1,3 @@
+\THEOREM HRAT_ADD_TOTAL HRAT
+|- !h i. (h = i) \/ (?d. h = i hrat_add d) \/ (?d. i = h hrat_add d)
+\ENDTHEOREM

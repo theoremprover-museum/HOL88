@@ -1,0 +1,6 @@
+\THEOREM dorder NETS
+|- !g.
+    dorder g =
+    (!x y.
+      g x x /\ g y y ==> (?z. g z z /\ (!w. g w z ==> g w x /\ g w y)))
+\ENDTHEOREM

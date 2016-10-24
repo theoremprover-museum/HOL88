@@ -1,0 +1,26 @@
+\DOC set_equal
+
+\TYPE {set_equal : (* list -> * list -> bool)}
+
+\SYNOPSIS
+Tests two `sets' for equality.
+
+\DESCRIBE
+{set_equal l1 l2} returns {true} if every element of {l1} appears in {l2} and
+every element of {l2} appears in {l1}. Otherwise it returns {false}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#set_equal [1;2] [2;1;2];;
+true : bool
+
+#set_equal [1;2] [1;3];;
+false : bool
+}
+\SEEALSO
+setify, union, intersect, subtract.
+
+\ENDDOC

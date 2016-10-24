@@ -1,0 +1,3 @@
+\THEOREM ELL_SUC_SNOC list
+|- !n x l. ELL(SUC n)(SNOC x l) = ELL n l
+\ENDTHEOREM

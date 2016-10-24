@@ -1,0 +1,73 @@
+INT stacksize = 8.
+
+TYPE dataitem = NEW datum/(0..255),
+     data = NEW (somedata&dataitem |nodata),
+     exception= NEW (ok |stackoverflow |stackunderflow |full),
+     stack_pointer = NEW point/(1..stacksize).
+
+FN S_P_REGISTER = (stack_pointer) -> stack_pointer:
+DELAY (p&point/1,1).
+
+FN OVERFLOW_REGISTER = (exception) -> exception:
+DELAY (ok,1).
+
+FN MEMORY = ([stacksize]data) -> [stacksize]data:
+DELAY ([stacksize]nodata,1).
+
+FN STACK = ([stacksize]data: a, exception: b,stack_pointer: c) ->
+           ([stacksize]data, exception, stack_pointer):
+(MEMORY a, OVERFLOW_REGISTER b, S_P_REGISTER c).
+
+TYPE contrl = NEW (push |pop |donothing).
+
+FN INCR = (stack_pointer: number) -> stack_pointer:
+CASE number
+OF p&point/stacksize: full
+ELSE (
+      FN INC = (pointer: num) -> pointer: ARITH num+1.
+      LET inc = INC (number//p).
+     OUTPUT p&inc
+     )
+ESAC.
+
+FN DECR = (stack_pointer: number) -> stack_pointer:
+CASE number
+OF full: p&point/stacksize
+ELSE (
+      FN DEC = (pointer: num) -> pointer: ARITH num-1.
+      LET dec = DEC (number//p).
+     OUTPUT p&dec
+     )
+ESAC.
+
+FN PUSH = (data: dataelement, [stacksize]data: memory,
+           stack_pointer: s_p_register) -> [stacksize]data:
+BEGIN SEQ
+      VAR mem := [stacksize]nodata;
+      mem := memory;
+      mem [[s_p_register//p]] := dataelement;
+OUTPUT mem
+END.
+
+FN LIFO = (data: dataelement, contrl: push_or_pop)
+          -> (data, exception):
+(
+ MAKE STACK: stack.
+ LET memory = stack[1],
+     overflow_register = stack[2],
+     s_p_register = stack[3].
+ JOIN CASE push_or_pop
+      OF pop: CASE sp_p_register
+              OF p&point/1: (memory, stackunderflow, s_p_register)
+              ELSE (memory, ok, DECR s_p_register)
+              ESAC,
+         push: CASE s_p_register
+               OF full: (memory, stackoverflow, s_p_register)
+               ELSE (PUSH(dataelement,memory,s_p_register),
+                     ok, INCR s_p_register)
+               ESAC,
+         donothing: (memory, ok, s_p_register)
+      ESAC
+              -> stack.
+OUTPUT (memory [[(DECR s_p_register)//p]], overflow_register)
+).

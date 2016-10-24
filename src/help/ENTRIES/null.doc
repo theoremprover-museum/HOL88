@@ -1,0 +1,22 @@
+\DOC null
+
+\TYPE {null : (* list -> bool)}
+
+\SYNOPSIS
+Tests for empty list.
+
+\DESCRIBE
+Returns {true} for an empty list. Otherwise it returns {false}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#null [];;
+true : bool
+
+#null [1;2;3];;
+false : bool
+}
+\ENDDOC

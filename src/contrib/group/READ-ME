@@ -1,0 +1,123 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: group							|
+|									|
+| DESCRIPTION   : development of first-order and higher order group	|
+|		  theory, including the notions of subgroup,		|
+|		  left coset, normal subgroup, quotient group,		|
+|		  homomorphism, and isomorphism.			|
+|									|
+| AUTHOR	: E. L. Gunter						|
+| DATE		: 89.3.20						|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    add_lib_path.ml    defines a function for easy addition of a path for
+                       a subdirectory of Library
+
+    start_groups.ml    defines a collection of general purpose functions,
+                       rules, and tactics which are used throughout this
+                       library entry and the library entry, integer.
+
+    mk_elt_gp.ml       creates the standard first-order theory of groups.
+                       The resulting theory file is called elt_gp.th
+
+    elt_gp.show.ml     gives a history of the development of elt_gp.th, by
+                       displaying all the set_goal commands and expand 
+                       commands that where given to produce the theorems in
+                       the theory.  It can be loaded by loadt and it will
+                       also create elt_gp.th, but in a most verbose manner.
+
+    elt_gp.print       gives an annotated listing of the theory of elt_gp.th  
+
+    group_tac.ml       defines a tactic for solving routine group
+                       membership goals, and rules and tactics for
+                       reassociating subexpresions to the left or to the
+                       right.
+
+    inst_gp.ml         defines functions for instantiating part or all of
+                       the first-order group thoery of elt_gp.th in a given
+                       setting.
+
+    load_elt_gp.ml     loads the first-order group theory into HOL, together
+                       with the tactics and functions from start.ml,
+                       group_tac.ml, and inst_gp.ml.
+
+    mk_more_gp.ml      creates the some of the hogher-order theory of groups.
+                       The resulting theory file is called more_gp.th
+                       No group theory involving finite set theory is
+                       included.
+
+    more_gp.show.ml    gives a history of the development of more_gp.th, by
+                       displaying all the set_goal commands and expand 
+                       commands that where given to produce the theorems in
+                       the theory.  It can be loaded by loadt and it will
+                       also create more_gp.th, but in a most verbose manner.
+
+    more_gp.print      gives a listing of the theory of more_gp.th  
+
+    load_more_gp.ml    loads the higher-order group theory into HOL,
+                       together with the tactics and functions from
+                       start.ml group_tac.ml, and inst_gp.ml.
+
+
+    group.ml           Loads definitions, theorems, rules and tactics
+                       developed for the first-order and higher-order group
+                       theory contained in this library.	
+
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) To load automatically all the theories and special functions of
+      this directory, execute
+
+                 load_lib `group`;;
+
+      This will add the necessary path for this directory to the search path.
+      Also, if you are in draft mode, it will add more_gp.th (and hence
+      elg_gp.th) as an ancestor.  If you are not in draft, it will attempt
+      to execute load_theory `more_gp`.  If it cannot succeed  with
+      load_theory `more_gp`, it will proceed with the remainer of the loading
+      anyway.  But for it to succeed in the case where you are not in draft
+      mode and it cannot execute load_theory `more_gp`, more_gp must be a
+      predeclared ancestor of the current theory.
+
+ If you only want to load part of this directory, then
+
+   2) To load the first-order group theory from the library, execute:
+
+		loadt_from_lib `group` `load_elt_gp`;;
+
+      To load the higher-order group theory from the library, execute:
+
+		load_from_lib `group` `load_more_gp`;;
+
+      Loading the higher-order group theory does not load the first-order
+      group theory.  Each of these bahaves the same as load_lib `group`;;
+      with respect to the treatment of the search path and of the theories
+      involved.  (Of course, load_from_lib `group` `load_elt_gp`;; uses
+      `elt_gp` in place of `more_gp`.)
+

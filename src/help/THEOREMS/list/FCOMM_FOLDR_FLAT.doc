@@ -1,0 +1,7 @@
+\THEOREM FCOMM_FOLDR_FLAT list
+|- !g f.
+    FCOMM g f ==>
+    (!e.
+      LEFT_ID g e ==>
+      (!l. FOLDR f e(FLAT l) = FOLDR g e(MAP(FOLDR f e)l)))
+\ENDTHEOREM

@@ -1,0 +1,72 @@
+.\" start of index output
+
+.SH
+.ce
+\s+2INDEX\s-2
+
+.2C
+.de IS
+.sp 0.5
+\s+2\fB
+.ce
+..
+.de IE
+.sp 0.5
+\s-2\fP
+..
+.de I1
+.ti 0.25i
+..
+.de 1I
+.ti 0.25i
+..
+.de I2
+.ti 0.5i
+..
+.de 2I
+.ti 0.5i
+..
+
+
+
+.IS
+I
+.IE
+
+.br
+indexing
+.1I
+programs
+.2I
+C language, 1.
+.sp
+
+
+.IS
+K
+.IE
+
+.br
+Knuth, 2.
+.sp
+
+
+.IS
+M
+.IE
+
+.br
+\fImakeindex\fP(1L), 1.
+.sp
+
+
+.IS
+T
+.IE
+
+.br
+typesetting
+.1I
+computer-aided, 2.
+
+.\" end of index output

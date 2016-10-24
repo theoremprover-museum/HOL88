@@ -1,0 +1,26 @@
+\DOC print_string
+
+\TYPE {print_string : (string -> void)}
+
+\SYNOPSIS
+Prints an ML string to the terminal (without surrounding string quotes).
+
+\DESCRIBE
+{print_string s} returns {():void} with the side-effect of printing the string
+{s} to the terminal. String quotes are not printed around the string, and the
+text is not terminated with a carriage return. In fact, the text is queued
+until the pretty-printer decides where line breaks are needed, or until the
+queue is explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#print_string `This is an example`;;
+This is an example() : void
+}
+\SEEALSO
+print_tok, message, print_begin, print_end, print_newline.
+
+\ENDDOC

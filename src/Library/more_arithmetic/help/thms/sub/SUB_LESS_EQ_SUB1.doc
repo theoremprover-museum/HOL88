@@ -1,0 +1,3 @@
+\THEOREM SUB_LESS_EQ_SUB1 sub
+|- !x. x > 0 ==> (!a. (a - x) <= (a - 1))
+\ENDTHEOREM

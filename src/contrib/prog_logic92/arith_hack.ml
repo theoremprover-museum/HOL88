@@ -1,0 +1,349 @@
+
+new_theory `arith_hack`;;
+
+loadf `mytactics`;;
+
+load_library `more_arithmetic`;;
+load_library `reduce`;;
+
+let SUB_ONE_LEFT_CANCEL = prove_thm
+(	`SUB_ONE_LEFT_CANCEL`,
+	"!n. 1 <= n ==> (1 + (n - 1) = n)",
+	GEN_TAC
+	THEN DISCH_TAC 
+	THEN IMP_RES_TAC (SYM_th LESS_EQ_ADD_SUB) 
+	THEN ASM_REWRITE_TAC[]
+	THEN ONCE_REWRITE_TAC [ADD_SYM] 
+	THEN REWRITE_TAC[ADD_SUB]
+);; 
+
+let SUB_ONE_RIGHT_CANCEL =
+	ONCE_REWRITE_RULE[ADD_SYM] SUB_ONE_LEFT_CANCEL;; 
+	
+let NOUGHT_LESS_ONE = prove_thm
+(	`NOUGHT_LESS_ONE`,
+	"!n. n < 1 = (n = 0)",
+	GEN_TAC
+	THEN EQ_TAC
+	THENL [
+		DISCH_TAC
+		THEN ASSUME_TAC (SPEC "n:num" ZERO_LESS_EQ)
+		THEN IMP_RES_THEN (ASSUME_TAC o REDUCE_RULE) SUB_LESS_OR
+		THEN IMP_RES_TAC LESS_EQUAL_ANTISYM;
+		DISCH_THEN SUBST1_TAC
+		THEN REDUCE_TAC
+	]
+);; 
+ 
+let ZERO_OR_ONE_MINUS = prove_thm
+(	`ZERO_OR_ONE_MINUS`,
+	"!n. n <=1 ==> ((n - 1) = 0)", 
+	REWRITE_TAC[LESS_OR_EQ;NOUGHT_LESS_ONE]
+	THEN REPEAT STRIP_TAC
+	THEN ASM_REWRITE_TAC[]
+	THEN REDUCE_TAC	
+);;	
+	
+
+let LESS_LESS_EQ_TRANS = prove_thm (
+	`LESS_LESS_EQ_TRANS`,
+	"!n m p. n < m ==> m <= p ==> n < p",
+	REPEAT STRIP_TAC
+	THEN IMP_RES_TAC LESS_OR_EQ			
+	THENL [
+		IMP_RES_TAC LESS_TRANS;
+		FIRST_ASSUM SUBST_ALL_TAC 
+		THEN ASSUM_REDUCE_TAC
+	]
+);;
+ 
+let LESS_EQ_LESS_TRANS = prove_thm (
+	`LESS_EQ_LESS_TRANS`,
+	"!n m p. n <= m ==> m < p ==> n < p",
+	REPEAT STRIP_TAC
+	THEN IMP_RES_TAC LESS_OR_EQ			
+	THENL [
+		IMP_RES_TAC LESS_TRANS;
+		FIRST_ASSUM SUBST_ALL_TAC 
+		THEN ASSUM_REDUCE_TAC
+	]
+);;
+
+let ZERO_LESS_ONE_LESS_EQ = prove_thm
+(	`ZERO_LESS_ONE_LESS_EQ`,
+	"!n. 0<n ==> 1<=n",
+	REPEAT STRIP_TAC
+	THEN IMP_RES_TAC LESS_EQ
+	THEN RULE_ASSUM_TAC REDUCE_RULE
+	THEN ASM_REWRITE_TAC[]
+);;
+
+let NOT_ZERO_LESS = prove_thm
+(	`NOT_ZERO_LESS`,
+	"!n. ~(n=0) = 0<n",
+	GEN_TAC
+	THEN DISJ_CASES_TAC (SPEC "n:num" LESS_0_CASES)
+	THEN ASM_REWRITE_TAC[LESS_REFL]
+	THEN STRIP_TAC
+	THEN FIRST_ASSUM SUBST_ALL_TAC
+	THEN IMP_RES_TAC LESS_REFL
+);;
+ 
+let SUB_ONE_LESS = prove_thm
+(	`SUB_ONE_LESS`,
+	"!n. 1 <= n ==> ((n-1) < n)", 
+	REPEAT STRIP_TAC
+	THEN REWRITE_TAC [LESS_EQ;ADD1]
+	THEN IMP_RES_TAC SUB_ONE_RIGHT_CANCEL 
+	THEN ASM_REWRITE_TAC[LESS_EQ_REFL]
+);;		
+
+let LESS_OR_EQ_ONE = prove_thm
+(	`LESS_OR_EQ_ONE`,
+	"!n. n <= 1 ==> ((n =0 ) \/ (n=1))",
+	REWRITE_TAC [LESS_OR_EQ;NOUGHT_LESS_ONE] 
+);;
+
+let LESS_EQ_SYM = prove_thm
+(	`LESS_EQ_SYM`,
+	"!m n. ~n <= m ==> m <= n",
+	REPEAT STRIP_TAC 
+	THEN REPLACE_ASSUM "~n<=m" 
+		(REWRITE_RULE [SYM_th NOT_LESS])
+	THEN IMP_RES_TAC LESS_IMP_LESS_OR_EQ
+);;
+
+let LESS_AS_LESS_EQ = prove_thm
+(	`LESS_AS_LESS_EQ`,
+	"!m n. n < m = n <= m /\ ~ (n=m)",
+	REWRITE_TAC [LESS_OR_EQ]
+	THEN REPEAT GEN_TAC
+	THEN EQ_TAC
+	THEN REPEAT STRIP_TAC
+	THENL	[ASM_REWRITE_TAC[]
+		;FIRST_ASSUM SUBST_ALL_TAC
+		 THEN IMP_RES_TAC LESS_ANTISYM
+		;RES_TAC
+		]
+);;
+
+let SUC_1_SHIFT = prove_thm 
+(	`SUC_1_SHIFT`,
+	"!n.~(n=0)==>((SUC n)-1 = SUC(n-1))",
+	GEN_TAC
+	THEN DISCH_TAC
+	THEN IMP_RES_TAC NOT_EQ_0
+	THEN IMP_RES_TAC GREATER_EQ
+	THEN IMP_RES_TAC SUB_ADD
+	THEN ASM_REWRITE_TAC[ADD1;ADD_SUB]
+);;
+
+let LESS_EQ_0 = prove_thm 
+(	`LESS_EQ_0`,
+	"!n. n <=0 = (n = 0)",
+	GEN_TAC
+	THEN REWRITE_TAC [LESS_OR_EQ]
+	THEN EQ_TAC
+	THEN REPEAT STRIP_TAC
+	THEN ASM_REWRITE_TAC[]
+	THEN DISJ_CASES_TAC (SPEC "n:num" LESS_0_CASES)
+	THEN ASM_REWRITE_TAC[]
+	THEN IMP_RES_TAC LESS_ANTISYM
+);;
+
+let PRE_LESS_EQ_MONO = prove_thm
+(	`PRE_LESS_EQ_MONO`,
+	"!n m. n <= m ==> (PRE n) <= (PRE m)",
+	GEN_TAC
+	THEN REWRITE_TAC [PRE_SUB1]
+	THEN INDUCT_TAC
+	THEN REWRITE_TAC[ADD1;SUB_0]
+	THEN REPEAT STRIP_TAC
+	THENL	[IMP_RES_TAC LESS_EQ_0
+		 THEN FIRST_ASSUM SUBST_ALL_TAC
+		 THEN REWRITE_TAC [SUB_0]
+		 THEN ASSUM_REDUCE_TAC
+		;REWRITE_TAC [ADD_SUB]
+		 THEN APPLY_TO  "n <= (m + 1)"
+			(STRIP_ASSUME_TAC o (REWRITE_RULE[LESS_OR_EQ]))
+		 THENL	[IMP_RES_TAC SUB_LESS_OR
+			 THEN REWRITE_ASSUM  [ADD_SUB]  "n <= ((m + 1) - 1)" 
+			 THEN RES_TAC
+			 THEN SUPPOSE_TAC "(m-1)<=m"
+			 THENL	[IMP_RES_TAC LESS_EQ_TRANS
+				;REWRITE_TAC[SUB_LESS_EQ]
+				]
+			;ASM_REWRITE_TAC[ADD_SUB;LESS_EQ_REFL]
+			]
+		]
+);;
+
+let SUB_MONO = prove_thm
+(	`SUB_MONO`,
+	"!n m p. n <= m ==> (n - p) <= (m - p)",
+	GEN_TAC THEN GEN_TAC
+	THEN INDUCT_TAC
+	THENL	[DISCH_TAC
+		 THEN ASM_REWRITE_TAC [SUB_0]
+		;REWRITE_TAC [ADD1;SUB_PLUS]
+		 THEN DISCH_TAC
+		 THEN RES_TAC
+		 THEN IMP_RES_TAC PRE_LESS_EQ_MONO
+		 THEN ASM_REWRITE_TAC [SYM_th PRE_SUB1]
+		]
+);;
+  
+let LESS_SUB_MONO = prove_thm
+(	`LESS_SUB_MONO`,
+	"!n m p. p<= n ==> n < m ==> (n-p) < (m-p)",
+	REPEAT STRIP_TAC     
+	THEN IMP_RES_TAC LESS_IMP_LESS_OR_EQ   
+	THEN IMP_RES_TAC SUB_MONO 
+	THEN APPLY_TO
+		"!p. (n - p) <= (m - p)"
+		( STRIP_ASSUME_TAC 
+		o REWRITE_RULE [LESS_OR_EQ] 
+		o (SPEC "p:num")
+		)   
+	THEN SUPPOSE_TAC "(n-p)+p=(m-p)+p"
+	THEN ASM_REWRITE_TAC[] 
+	THEN IMP_RES_TAC LESS_EQ_LESS_TRANS
+	THEN IMP_RES_TAC LESS_IMP_LESS_OR_EQ
+        THEN IMP_RES_TAC SUB_ADD     
+	THEN APPLY_TO "(n - p) + p = n" SUBST_ALL_TAC  
+	THEN APPLY_TO "(m - p) + p = m" SUBST_ALL_TAC 
+	THEN APPLY_TO "n = m:num" SUBST_ALL_TAC 
+	THEN IMP_RES_TAC LESS_ANTISYM
+);; 
+
+let INV_PRE_LESS_SHARP = prove_thm
+(	`INV_PRE_LESS_SHARP`,
+	"!n n'. 0 < n ==> ((PRE n) < (PRE n') = n < n')",
+	REPEAT STRIP_TAC
+	THEN EQ_TAC
+	THEN DISCH_TAC
+	THEN IMP_RES_TAC PRE_MONO
+	THEN IMP_RES_TAC LESS_TRANS
+	THEN IMP_RES_TAC INV_PRE_LESS
+);;
+
+let ADD1_CHOOSE = prove_thm 
+(	`ADD1_CHOOSE`,
+	"!n. 0 < n ==> ?m. n = m+1",
+	REPEAT STRIP_TAC
+	THEN EXISTS_TAC "PRE n"
+	THEN REWRITE_TAC [PRE_SUB1]
+	THEN IMP_RES_THEN (ASSUME_TAC o REDUCE_RULE) LESS_EQ
+	THEN IMP_RES_TAC SUB_ADD
+	THEN ASM_REWRITE_TAC[]	
+);;
+
+let ONE_LESS_NOUGHT_LESS = prove_thm
+(	`ONE_LESS_NOUGHT_LESS`,
+	"!n. 1<n ==> 0<n",
+	REPEAT STRIP_TAC
+	THEN ASSUME_TAC(SPEC "1:num" ZERO_LESS_EQ)
+	THEN IMP_RES_TAC LESS_EQ_LESS_TRANS
+);;
+
+% load_theorems `pre`;;%
+
+let SUC_LESS_PRE_SHARP = prove_thm
+(	`SUC_LESS_PRE_SHARP`,
+	"!m n. SUC m < n = m < PRE n",
+	REPEAT GEN_TAC
+	THEN EQ_TAC
+	THEN DISCH_TAC
+	THENL	[IMP_RES_TAC SUC_LESS_PRE
+		;IMP_RES_TAC LESS_MONO
+		 THEN ASSUME_TAC(SPEC "m:num" ZERO_LESS_EQ)
+		 THEN ASSUME_TAC(SPEC "n:num" PRE_LESS_EQ)
+		 THEN IMP_RES_TAC LESS_EQ_LESS_TRANS
+		 THEN IMP_RES_TAC LESS_LESS_EQ_TRANS
+		 THEN IMP_RES_TAC SUC_PRE
+		 THEN REWRITE_ASM[]
+		 THEN ASM_REWRITE_TAC[]
+		]
+);; 
+
+let LESS_LESS_EQ_SUB1 = prove_thm
+(	`LESS_LESS_EQ_SUB1`,
+	"!n. 0<n ==> 0 <=(n-1)",
+	REPEAT STRIP_TAC
+	THEN IMP_RES_TAC PRE_MONO_LESS_EQ
+	THEN REWRITE_ASM[PRE;PRE_SUB1]
+	THEN ASM_REWRITE_TAC[]
+);; 
+
+%
+: A quick proof of well-ordering on num
+%
+
+let least = new_definition
+(	`least`,
+	"!m:num.!P:num->bool. least P m = P m /\ (!n. P n ==> m <= n)"
+);;
+
+let well_order = prove_thm
+(	`well_order`,
+	"!P. (?n. P n) ==> (?m. least P m)",
+	GEN_TAC
+	THEN CONV_TAC LEFT_IMP_EXISTS_CONV
+	THEN REWRITE_TAC[least]
+	THEN GEN_INDUCT_TAC
+	THEN DISCH_TAC
+	THENL	[EXISTS_TAC "0"
+		 THEN ASM_REWRITE_TAC [ZERO_LESS_EQ]
+		;ASM_CASES_TAC "?m. m < n /\ P m"
+		 THENL	[FIRST_ASSUM (CHOOSE_THEN STRIP_ASSUME_TAC)
+		 	 THEN RES_TAC
+		 	 THEN EXISTS_TAC "m':num"
+		 	 THEN ASM_REWRITE_TAC[]
+			;EXISTS_TAC "n:num"
+			 THEN ASM_REWRITE_TAC[]
+			 THEN REPEAT STRIP_TAC	
+			 THEN FIRST_ASSUM 
+				(DISJ_CASES_TAC 
+				o (SPEC "n':num")
+				o (REWRITE_RULE[DE_MORGAN_THM])
+				o (CONV_RULE NOT_EXISTS_CONV)
+				)  
+			 THEN RES_TAC
+			 THEN IMP_RES_TAC NOT_LESS	
+			]
+		]	
+);;
+
+let well_order_less = prove_thm
+(	`well_order_less`,
+	"!P m. least P m ==> (!n. n < m ==> ~P n)",
+	REWRITE_TAC [least]
+	THEN REPEAT STRIP_TAC
+	THEN RES_TAC
+	THEN IMP_RES_TAC NOT_LESS
+);;
+
+%
+: Some logic hacks to complement EQ_TRANS
+%
+
+let EQ_LEFT_TRANS = prove_thm
+(	`EQ_LEFT_TRANS`,
+	"!a b c:*. (b=a) ==> (c=a) ==> (b=c)",
+	REPEAT GEN_TAC
+	THEN DISCH_THEN SUBST1_TAC
+	THEN DISCH_THEN SUBST1_TAC
+	THEN REFL_TAC
+);;
+
+let EQ_RIGHT_TRANS = prove_thm
+(	`EQ_RIGHT_TRANS`,
+	"!a b c:*. (a=b) ==> (a=c) ==> (b=c)",
+	REPEAT GEN_TAC
+	THEN DISCH_THEN SUBST1_TAC
+	THEN DISCH_THEN SUBST1_TAC
+	THEN REFL_TAC
+);;
+
+
+close_theory ();;

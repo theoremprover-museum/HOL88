@@ -1,0 +1,24 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY:   int                                                      %
+%                                                                       %
+% DESCRIPTION: Theory of integers.                                      %
+%                                                                       %
+% AUTHOR:      John Harrison                                            %
+%                                                                       %
+% ADDRESS:     University of Cambridge Computer Laboratory              %
+%              New Museums Site                                         %
+%              Pembroke Street                                          %
+%              Cambridge CB2 3QG                                        %
+%              U. K.                                                    %
+%                                                                       %
+%              email: jrh@cl.cam.ac.uk                                  %
+%                                                                       %
+% DATE:        93.03.04                                                 %
+% --------------------------------------------------------------------- %
+
+The integers are constructed as equivalence classes of pairs of integers
+using the quotient type procedure in "equiv.ml".
+
+This theory was constructed for use in the HOL-ELLA system, using many of
+the principles, and some of the code, used in the reals library. It is my
+eventual intention to produce a more unified library of number systems.

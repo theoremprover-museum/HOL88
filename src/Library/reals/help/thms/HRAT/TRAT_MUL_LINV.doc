@@ -1,0 +1,3 @@
+\THEOREM TRAT_MUL_LINV HRAT
+|- !h. ((trat_inv h) trat_mul h) trat_eq trat_1
+\ENDTHEOREM

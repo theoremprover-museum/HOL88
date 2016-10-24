@@ -1,0 +1,3 @@
+\THEOREM K_THM combin
+|- !x y. K x y = x
+\ENDTHEOREM

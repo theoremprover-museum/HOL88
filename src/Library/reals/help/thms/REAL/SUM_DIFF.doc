@@ -1,0 +1,3 @@
+\THEOREM SUM_DIFF REAL
+|- !f m n. Sum(m,n)f = (Sum(0,m num_add n)f) - (Sum(0,m)f)
+\ENDTHEOREM

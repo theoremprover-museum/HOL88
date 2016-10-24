@@ -1,0 +1,38 @@
+ LIBRARY:  sets   						
+
+ DESCRIPTION: 
+ 
+ Definition of logical types for sets and derivation of theorems for sets. 
+
+
+ AUTHOR: P. J. Windley
+ DATE: May 12, 1989
+
+ 
+ ADDITIONS: Phillipe Leveilley
+ DATE:      May 25, 1989
+
+ FILES:								
+
+    mk_sets.ml 	       defines theory sets.th and proves properites about
+                       sets 
+
+    card.ml            defines cardinality (added by Philippe Leveilley)
+
+    sets.ml            loads the library into hol
+
+ TO REBUILD THE LIBRARY:						
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
+
+ TO USE THE LIBRARY:							
+
+   load_library `sets`;;
+
+This makes the theory `sets` a new parent if you are in draft mode,
+or loads the theory otherwise.

@@ -1,0 +1,10 @@
+\DOC make_matching
+
+\TYPE {make_matching : (termpattern -> term -> matching)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

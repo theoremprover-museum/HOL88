@@ -1,0 +1,3 @@
+\THEOREM REAL_LE_NEGL REAL
+|- !x. (-- x) <= x = (& 0) <= x
+\ENDTHEOREM

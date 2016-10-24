@@ -1,0 +1,28 @@
+\DOC prove_wordn_cases_thm
+
+\TYPE {prove_wordn_cases_thm : thm -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+
+
+\DESCRIBE
+
+
+\FAILURE
+
+
+\EXAMPLE
+
+
+\USES
+
+
+\COMMENTS
+
+
+\SEEALSO
+
+
+\ENDDOC

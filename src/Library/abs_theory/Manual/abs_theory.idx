@@ -1,0 +1,15 @@
+\indexentry{ABS\_TAC\_PROOF@{\ptt ABS\_TAC\_PROOF}}{19}
+\indexentry{abs\_type\_info@{\ptt abs\_type\_info}}{19}
+\indexentry{close\_theory@{\ptt close\_theory}}{20}
+\indexentry{EXPAND\_THOBS\_TAC@{\ptt EXPAND\_THOBS\_TAC}}{21}
+\indexentry{g@{\ptt g}}{21}
+\indexentry{instantiate\_abstract\_definition@{\ptt instantiate\_abstract\_definition}}{22}
+\indexentry{instantiate\_abstract\_theorem@{\ptt instantiate\_abstract\_theorem}}{22}
+\indexentry{new\_abstract\_representation@{\ptt new\_abstract\_representation}}{23}
+\indexentry{new\_abs\_parent@{\ptt new\_abs\_parent}}{23}
+\indexentry{new\_theory@{\ptt new\_theory}}{24}
+\indexentry{new\_theory\_obligations@{\ptt new\_theory\_obligations}}{25}
+\indexentry{prove\_abs\_thm@{\ptt prove\_abs\_thm}}{26}
+\indexentry{set\_abs\_goal@{\ptt set\_abs\_goal}}{27}
+\indexentry{STRIP\_THOBS\_TAC@{\ptt STRIP\_THOBS\_TAC}}{27}
+\indexentry{STRIP\_THOBS\_THEN@{\ptt STRIP\_THOBS\_THEN}}{28}

@@ -1,0 +1,63 @@
+\DOC BEGIN_STACK_TAC
+
+\TYPE {BEGIN_STACK_TAC : (string -> path -> thm list -> tactic)}
+
+\SYNOPSIS
+Open a subwindow on the current goal of the subgoals package.
+
+\LIBRARY window
+
+\DESCRIBE
+The tactic {BEGIN_STACK_TAC name path thms} leaves the current goal unchanged,
+but as a side-effect it creates a new window stack called {name}.
+The focus of the top (and only) window of this new stack is the selected
+subterm of the goal.
+The window will have the assumptions of the goal as it's assumptions, as
+well as any assumptions which follow from it's context.
+The window will have {thms} as it's set of relevant theorems.
+The relation preserved by the window will be such that if {goal} is
+the current goal, the window can be used to transform {goal} to {goal'},
+generating the theorem {(H |- goal' ==> goal)}.
+When the stack is ended with {END_STACK_TAC name} the goal will be
+transformed from {goal} to {goal'}.
+
+\FAILURE
+{BEGIN_STACK_TAC name path thms} will fail if the goal stack is empty, if
+{path} denotes a position which is not present in the current goal, or
+these already exists a window stack called {name}.
+
+\EXAMPLE
+{
+	#set_goal ([], "A \/ (B \/ F)");;
+	"A \/ B \/ F"
+
+	() : void
+
+	#e (BEGIN_STACK_TAC `tac` [RAND] []);;
+	OK..
+		! ~A
+	==> * B \/ F
+	"A \/ B \/ F"
+
+	() : void
+
+	#REWRITE_WIN [];;
+		! ~A
+	==> * B
+	() : void
+
+	#e (END_STACK_TAC `tac`);;
+	OK..
+	"A \/ B"
+
+	() : void
+}
+
+\COMMENTS
+{BEGIN_STACK_TAC} is for interactive use only.
+For noninteractive applications use {open_TAC}.
+
+\SEEALSO
+open_TAC, END_STACK_TAC
+
+\ENDDOC

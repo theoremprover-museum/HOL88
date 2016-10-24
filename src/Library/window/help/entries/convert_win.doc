@@ -1,0 +1,24 @@
+\DOC convert_win
+
+\TYPE {convert_win :  (conv -> window -> window)}
+
+\SYNOPSIS
+Apply a conversion to the focus of a window.
+
+\LIBRARY window
+
+\DESCRIBE
+If the focus of the window, {win}, is {"f"}, and applying a conversion {c} to
+{"f"} yields {(|- f = f')}, then {CONVERT_WIN c win} transforms the
+focus of {win} from {"f"} to {"f'"}.
+
+\FAILURE
+{convert_win c win} will fail if the hypotheses of the theorem returned when
+{c} is applied to the focus of the window are not a subset of the
+context of {win}.
+
+\SEEALSO
+transform_win, TRANSFORM_WIN, CONVERT_WIN, 
+rewrite_win, REWRITE_WIN
+
+\ENDDOC

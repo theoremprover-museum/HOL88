@@ -1,0 +1,2 @@
+(setq %theorydata '((parents wordn_num wordn_bitops wordn_base more_lists) (types) (nametypes) (operators) (paired-infixes) (curried-infixes) (predicates) (version . "2.01 (Franz: pre-release)") (stamp . 717263725)))
+(setq %theorems '((sharetypes 1 (arb%0 %VARTYPE . *)) (axiom) (fact (LIST_OF_BINDERS pred HOL_ASSERT comb ((const BINDERS) var arb %t . arb%0) bool))))

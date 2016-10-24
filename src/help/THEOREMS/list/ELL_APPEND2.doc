@@ -1,0 +1,3 @@
+\THEOREM ELL_APPEND2 list
+|- !n l2. n < (LENGTH l2) ==> (!l1. ELL n(APPEND l1 l2) = ELL n l2)
+\ENDTHEOREM

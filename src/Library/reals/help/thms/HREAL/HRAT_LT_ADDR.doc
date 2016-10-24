@@ -1,0 +1,3 @@
+\THEOREM HRAT_LT_ADDR HREAL
+|- !x y. y hrat_lt (x hrat_add y)
+\ENDTHEOREM

@@ -1,0 +1,10 @@
+\DOC no_rep
+
+\TYPE {no_rep : (* list -> bool)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

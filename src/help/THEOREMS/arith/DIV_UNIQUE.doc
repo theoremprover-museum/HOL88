@@ -1,0 +1,3 @@
+\THEOREM DIV_UNIQUE arithmetic
+|- !n k q. (?r. (k = (q * n) + r) /\ r < n) ==> (k DIV n = q)
+\ENDTHEOREM

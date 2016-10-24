@@ -1,0 +1,3 @@
+\THEOREM SOME_EL_FOLDR_MAP list
+|- !P l. SOME_EL P l = FOLDR $\/ F(MAP P l)
+\ENDTHEOREM

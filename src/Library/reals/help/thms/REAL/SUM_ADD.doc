@@ -1,0 +1,3 @@
+\THEOREM SUM_ADD REAL
+|- !f g m n. Sum(m,n)(\n'. (f n') + (g n')) = (Sum(m,n)f) + (Sum(m,n)g)
+\ENDTHEOREM

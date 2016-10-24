@@ -1,0 +1,10 @@
+\DOC bad_conjectures
+
+\TYPE {bad_conjectures : (window_stack -> term list)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

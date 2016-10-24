@@ -1,0 +1,63 @@
+\DOC cancel_tac
+
+\TYPE {cancel_tac : (string -> string -> void)}
+
+\SYNOPSIS
+Marks a node in a {prooftree} as unexplored, and discards the subtree
+of the proof under the node.
+
+\DESCRIBE
+Facilitates backtracking over a proof tree: marks the indicated node
+as unexplored and throws away the subtrees rooted at the node. Unlike
+the previous \verb|backup| command, it does not act only on the last
+node which was expanded; a tactic at any node can be cancelled. The
+first argument indicates the proof tree, the second argument
+indicates the node in the proof.
+
+\KEYWORDS
+subgoal.
+
+\LIBRARY prooftree
+
+\FAILURE
+This function fails when there is no proof tree of the given name or
+when the node adressed by the second argument does not exist.
+
+\USES
+Allows the user to backtrack over tactics used in a proof. Provides
+distinctly more generality than the previous {backup} command.
+
+\EXAMPLE
+{
+# do_tac `biggie` `1` (EQ_TAC) ;;
+
+new goals:
+
+"a /\ b ==> b /\ a"
+"b /\ a ==> a /\ b"
+
+() : void
+
+
+# e STRIP_TAC ;;
+
+new goals:
+
+"b /\ a"
+      ["b"]
+      ["a"]
+
+() : void
+
+# cancel_tac `biggie` `1` ;;
+
+"a /\ b = b /\ a"
+
+() : void
+}
+\SEEALSO
+all_subgoals, compact, complete_proof, current_proof, do_tac,
+move_to_proof, new_goal, proven, remove_proof, show_all_proofs,
+show_tac, store_thm, subgoal_tag.
+
+\ENDDOC

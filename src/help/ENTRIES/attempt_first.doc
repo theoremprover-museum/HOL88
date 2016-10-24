@@ -1,0 +1,9 @@
+\DOC attempt_first
+
+\TYPE {attempt_first : (subgoals -> tactic -> subgoals)}
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC

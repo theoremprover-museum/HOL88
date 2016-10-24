@@ -1,0 +1,797 @@
+
+
+===============================================================================
+         HOL88 Version 2.01 (SUN4/AKCL), built on 4/12/92
+===============================================================================
+
+#####false : bool
+Run time: 0.0s
+
+##false : bool
+Run time: 0.0s
+
+##() : void
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+#######NEXT = 
+|- !done x1 x2.
+    NEXT(x1,x2)done =
+    x1 < x2 /\ done x2 /\ (!x. x1 < x /\ x < x2 ==> ~done x)
+Run time: 0.2s
+Intermediate theorems generated: 2
+
+######STABLE = 
+|- !i x1 x2. STABLE(x1,x2)i = (!x. x1 <= x /\ x < x2 ==> (i x = i x1))
+Run time: 0.3s
+Intermediate theorems generated: 2
+
+###########Theorem LESS_LESS_SUC autoloading from theory `arithmetic` ...
+LESS_LESS_SUC = |- !m n. ~(m < n /\ n < (SUC m))
+Run time: 1.1s
+
+Theorem LESS_SUC_REFL autoloading from theory `prim_rec` ...
+LESS_SUC_REFL = |- !n. n < (SUC n)
+Run time: 0.4s
+Garbage collection time: 0.4s
+
+NEXT_SUC1 = |- !done x. done(SUC x) ==> NEXT(x,SUC x)done
+Run time: 0.5s
+Intermediate theorems generated: 126
+
+#######Theorem LESS_SUC_EQ_COR autoloading from theory `arithmetic` ...
+LESS_SUC_EQ_COR = |- !m n. m < n /\ ~(SUC m = n) ==> (SUC m) < n
+Run time: 0.2s
+
+LESS_SUC_EQ_LEMMA = |- ~(n = SUC m) ==> m < n ==> (SUC m) < n
+Run time: 0.1s
+Intermediate theorems generated: 14
+
+#################Theorem FUN_EQ_LEMMA autoloading from theory `arithmetic` ...
+FUN_EQ_LEMMA = |- !f x1 x2. f x1 /\ ~f x2 ==> ~(x1 = x2)
+Run time: 0.2s
+Garbage collection time: 0.4s
+
+Theorem SUC_LESS autoloading from theory `prim_rec` ...
+SUC_LESS = |- !m n. (SUC m) < n ==> m < n
+Run time: 0.2s
+
+NEXT_SUC2 = 
+|- !done x1 x2. NEXT(x1,x2)done /\ ~done(SUC x1) ==> NEXT(SUC x1,x2)done
+Run time: 1.4s
+Intermediate theorems generated: 463
+
+##############Theorem LESS_TRANS autoloading from theory `arithmetic` ...
+LESS_TRANS = |- !m n p. m < n /\ n < p ==> m < p
+Run time: 0.2s
+
+Definition LESS_OR_EQ autoloading from theory `arithmetic` ...
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+Run time: 0.2s
+Intermediate theorems generated: 1
+
+STABLE_SUC = |- !x1 x2 i. STABLE(x1,x2)i ==> STABLE(SUC x1,x2)i
+Run time: 1.5s
+Garbage collection time: 0.5s
+Intermediate theorems generated: 563
+
+#####Theorem ADD_CLAUSES autoloading from theory `arithmetic` ...
+ADD_CLAUSES = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+Run time: 0.2s
+
+SUC_LEMMA = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   (SUC(m + n) = (SUC m) + n) /\
+   (m + (SUC n) = SUC(m + n))
+Run time: 0.1s
+Intermediate theorems generated: 10
+
+#####stb_SUC = 
+. |- x <= (SUC x) /\ (SUC x) < ((SUC x) + d) ==> (i(SUC x) = i x)
+Run time: 0.2s
+Intermediate theorems generated: 2
+
+################Theorem LESS_EQ_SUC_REFL autoloading from theory `arithmetic` ...
+LESS_EQ_SUC_REFL = |- !m. m <= (SUC m)
+Run time: 0.1s
+Garbage collection time: 0.4s
+
+Theorem LESS_ADD_NONZERO autoloading from theory `arithmetic` ...
+LESS_ADD_NONZERO = |- !m n. ~(n = 0) ==> m < (m + n)
+Run time: 0.2s
+
+STABLE_LEMMA = 
+|- !x d i. STABLE(x,(SUC x) + d)i /\ ~(d = 0) ==> (i x = i(SUC x))
+Run time: 0.7s
+Intermediate theorems generated: 96
+
+##############Theorem LESS_CASES_IMP autoloading from theory `arithmetic` ...
+LESS_CASES_IMP = |- !m n. ~m < n /\ ~(m = n) ==> n < m
+Run time: 0.2s
+
+NEXT_LEMMA1 = 
+|- !done x1 x2. NEXT(x1,x2)done /\ NEXT(x1,x3)done ==> (x2 = x3)
+Run time: 1.6s
+Intermediate theorems generated: 589
+
+######next_SUC = |- (d = 0) ==> done((SUC x) + d) ==> done(SUC x)
+Run time: 0.3s
+Intermediate theorems generated: 29
+
+##########NEXT_LEMMA2 = 
+|- !x d done. NEXT(x,(SUC x) + d)done /\ ~done(SUC x) ==> ~(d = 0)
+Run time: 0.5s
+Garbage collection time: 0.4s
+Intermediate theorems generated: 130
+
+####assm = 
+. |- (!x. (done x = f(s x)) /\ (s(SUC x) = g(i x,s x))) /\
+     (!a b. FUN(a,b) = (f b => b | FUN(a,g(a,b))))
+Run time: 0.3s
+Intermediate theorems generated: 1
+
+##done_s = . |- !x. (done x = f(s x)) /\ (s(SUC x) = g(i x,s x))
+FUN = . |- !a b. FUN(a,b) = (f b => b | FUN(a,g(a,b)))
+Run time: 0.1s
+Intermediate theorems generated: 2
+
+####ind_hyp = 
+. |- !x.
+      NEXT(x,x + d)done /\ STABLE(x,x + d)i ==>
+      (s(x + d) = FUN(i x,g(i x,s x)))
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+###s_tm = . |- s((SUC x) + d) = FUN(i(SUC x),g(i(SUC x),s(SUC x)))
+Run time: 0.2s
+Intermediate theorems generated: 1
+
+########################################Theorem ADD_INV_0 autoloading from theory `arithmetic` ...
+ADD_INV_0 = |- !m n. (m + n = m) ==> (n = 0)
+Run time: 0.0s
+Garbage collection time: 0.5s
+
+Theorem LESS_REFL autoloading from theory `prim_rec` ...
+LESS_REFL = |- !n. ~n < n
+Run time: 0.1s
+
+Theorem ADD1 autoloading from theory `arithmetic` ...
+ADD1 = |- !m. SUC m = m + 1
+Run time: 0.1s
+
+NEXT_THM = 
+|- !FUN f g done i s.
+    (!x. (done x = f(s x)) /\ (s(x + 1) = g(i x,s x))) /\
+    (!a b. FUN(a,b) = (f b => b | FUN(a,g(a,b)))) ==>
+    (!d x.
+      NEXT(x,x + d)done /\ STABLE(x,x + d)i ==>
+      (s(x + d) = FUN(i x,g(i x,s x))))
+Run time: 4.0s
+Garbage collection time: 0.5s
+Intermediate theorems generated: 938
+
+##() : void
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+##Bye.
+
+
+===============================================================================
+         HOL88 Version 2.01 (SUN4/AKCL), built on 4/12/92
+===============================================================================
+
+#false : bool
+Run time: 0.0s
+
+##false : bool
+Run time: 0.0s
+
+##() : void
+Run time: 0.0s
+Intermediate theorems generated: 1
+
+#########MULT_FUN_CURRY = 
+|- (!i1 i2 m t.
+     MULT_FUN_CURRY 0 i1 i2 m t =
+     (t => (m,0,t) | (((i1 = 0) => m | i2 + m),0,T))) /\
+   (!n i1 i2 m t.
+     MULT_FUN_CURRY(SUC n)i1 i2 m t =
+     (t => 
+      (m,SUC n,t) | 
+      MULT_FUN_CURRY 
+      n 
+      i1 
+      i2
+      ((i1 = 0) => m | i2 + m)
+      ((n - 1 = 0) \/ (i2 = 0))))
+Run time: 1.3s
+Intermediate theorems generated: 253
+
+#############Theorem SUC_SUB1 autoloading from theory `arithmetic` ...
+SUC_SUB1 = |- !m. (SUC m) - 1 = m
+Run time: 1.1s
+
+Definition SUB autoloading from theory `arithmetic` ...
+SUB = 
+|- (!m. 0 - m = 0) /\ (!m n. (SUC m) - n = (m < n => 0 | SUC(m - n)))
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+Theorem num_CASES autoloading from theory `arithmetic` ...
+num_CASES = |- !m. (m = 0) \/ (?n. m = SUC n)
+Run time: 0.1s
+Garbage collection time: 0.4s
+
+MULT_FUN_CURRY_THM = 
+|- !i1 i2 m n t.
+    MULT_FUN_CURRY n i1 i2 m t =
+    (t => 
+     (m,n,t) | 
+     MULT_FUN_CURRY
+     (n - 1)
+     i1 
+     i2
+     ((i1 = 0) => m | i2 + m)
+     (((n - 1) - 1 = 0) \/ (i2 = 0)))
+Run time: 2.1s
+Intermediate theorems generated: 393
+
+#####MULT_FUN = 
+|- !i1 i2 m n t. MULT_FUN((i1,i2),m,n,t) = MULT_FUN_CURRY n i1 i2 m t
+Run time: 0.3s
+Intermediate theorems generated: 2
+
+############MULT_FUN_DEF = 
+|- !i1 i2 m n t.
+    MULT_FUN((i1,i2),m,n,t) =
+    (t => 
+     (m,n,t) | 
+     MULT_FUN
+     ((i1,i2),((i1 = 0) => m | i2 + m),n - 1,
+      (((n - 1) - 1 = 0) \/ (i2 = 0))))
+Run time: 0.5s
+Intermediate theorems generated: 32
+
+##Bye.
+
+
+===============================================================================
+         HOL88 Version 2.01 (SUN4/AKCL), built on 4/12/92
+===============================================================================
+
+#false : bool
+Run time: 0.0s
+
+##false : bool
+Run time: 0.0s
+
+##() : void
+Run time: 0.0s
+Intermediate theorems generated: 1
+
+##Theory MULT_FUN_CURRY loaded
+() : void
+Run time: 0.2s
+
+##########MULT_FUN_DEF = 
+|- !i1 i2 m n t.
+    MULT_FUN((i1,i2),m,n,t) =
+    (t => 
+     (m,n,t) | 
+     MULT_FUN
+     ((i1,i2),((i1 = 0) => m | i2 + m),n - 1,
+      (((n - 1) - 1 = 0) \/ (i2 = 0))))
+Run time: 0.1s
+
+#########MULT_FUN_T = |- !i1 i2 m n. MULT_FUN((i1,i2),m,n,T) = m,n,T
+Run time: 0.6s
+Intermediate theorems generated: 48
+
+##########MULT_FUN_F = 
+|- !i1 i2 m n.
+    MULT_FUN((i1,i2),m,n,F) =
+    MULT_FUN
+    ((i1,i2),((i1 = 0) => m | i2 + m),n - 1,
+     (((n - 1) - 1 = 0) \/ (i2 = 0)))
+Run time: 0.7s
+Intermediate theorems generated: 48
+
+#######Theorem LESS_0 autoloading from theory `prim_rec` ...
+LESS_0 = |- !n. 0 < (SUC n)
+Run time: 0.4s
+
+Definition LESS_OR_EQ autoloading from theory `arithmetic` ...
+LESS_OR_EQ = |- !m n. m <= n = m < n \/ (m = n)
+Run time: 1.1s
+Garbage collection time: 0.3s
+Intermediate theorems generated: 1
+
+Theorem LESS_EQ_0 autoloading from theory `arithmetic` ...
+LESS_EQ_0 = |- !n. n <= 0 = (n = 0)
+Run time: 0.1s
+
+LESS_EQ_0 = |- !m. 0 <= m
+Run time: 0.3s
+Intermediate theorems generated: 62
+
+#######Theorem LESS_MONO_EQ autoloading from theory `arithmetic` ...
+LESS_MONO_EQ = |- !m n. (SUC m) < (SUC n) = m < n
+Run time: 0.1s
+Garbage collection time: 0.4s
+
+LESS_EQ_SUC_1 = |- !m. 1 <= (SUC m)
+Run time: 0.4s
+Intermediate theorems generated: 90
+
+################Theorem ADD_CLAUSES autoloading from theory `arithmetic` ...
+ADD_CLAUSES = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+Run time: 0.2s
+
+Theorem ADD_EQ_SUB autoloading from theory `arithmetic` ...
+ADD_EQ_SUB = |- !m n p. n <= p ==> ((m + n = p) = (m = p - n))
+Run time: 0.1s
+
+SUB_LEMMA1 = |- !m. ~(m = 0) ==> (m - 1 = 0) ==> (m = 1)
+Run time: 0.6s
+Intermediate theorems generated: 94
+
+########Theorem SUB_0 autoloading from theory `arithmetic` ...
+SUB_0 = |- !m. (0 - m = 0) /\ (m - 0 = m)
+Run time: 0.2s
+
+SUB_LEMMA2 = |- !m. (m = 0) ==> ~(m - 1 = 0) ==> F
+Run time: 0.3s
+Intermediate theorems generated: 28
+
+#########Theorem LESS_EQ_ADD autoloading from theory `arithmetic` ...
+LESS_EQ_ADD = |- !m n. m <= (m + n)
+Run time: 0.2s
+
+Theorem ADD_SYM autoloading from theory `arithmetic` ...
+ADD_SYM = |- !m n. m + n = n + m
+Run time: 0.1s
+
+Theorem MULT_CLAUSES autoloading from theory `arithmetic` ...
+MULT_CLAUSES = 
+|- !m n.
+    (0 * m = 0) /\
+    (m * 0 = 0) /\
+    (1 * m = m) /\
+    (m * 1 = m) /\
+    ((SUC m) * n = (m * n) + n) /\
+    (m * (SUC n) = m + (m * n))
+Run time: 0.2s
+Garbage collection time: 0.5s
+
+MULT_NOT_0_LESS = |- !m n. ~(m = 0) ==> n <= (m * n)
+Run time: 0.3s
+Intermediate theorems generated: 83
+
+###########Theorem SUB_ADD autoloading from theory `arithmetic` ...
+SUB_ADD = |- !m n. n <= m ==> ((m - n) + n = m)
+Run time: 0.1s
+
+Theorem RIGHT_SUB_DISTRIB autoloading from theory `arithmetic` ...
+RIGHT_SUB_DISTRIB = |- !m n p. (m - n) * p = (m * p) - (n * p)
+Run time: 0.2s
+
+Theorem ADD_ASSOC autoloading from theory `arithmetic` ...
+ADD_ASSOC = |- !m n p. m + (n + p) = (m + n) + p
+Run time: 0.1s
+
+MULT_ADD_LEMMA1 = 
+|- !m. ~(m = 0) ==> (!n p. ((m - 1) * n) + (n + p) = (m * n) + p)
+Run time: 0.6s
+Intermediate theorems generated: 112
+
+########################Theorem SUC_SUB1 autoloading from theory `arithmetic` ...
+SUC_SUB1 = |- !m. (SUC m) - 1 = m
+Run time: 0.1s
+
+MULT_FUN_THM = 
+|- !n i1 i2 m t.
+    MULT_FUN((i1,i2),m,n,t) =
+    (t => 
+     (m,n,t) | 
+     (((n - 1 = 0) \/ (i2 = 0)) => 
+      (((i1 = 0) => m | i2 + m),n - 1,T) | 
+      (((i1 = 0) => m | ((n - 1) * i2) + m),1,T)))
+Run time: 21.7s
+Garbage collection time: 4.4s
+Intermediate theorems generated: 5096
+
+###########MULT_ADD_LEMMA2 = |- !m. ~(m = 0) ==> (!n. ((m - 1) * n) + n = m * n)
+Run time: 0.4s
+Intermediate theorems generated: 79
+
+###############MULT_FUN_LEMMA = 
+|- !i1 i2.
+    MULT_FUN((i1,i2),((i1 = 0) => 0 | i2),i1,((i1 - 1 = 0) \/ (i2 = 0))) =
+    i1 * i2,(((i1 - 1 = 0) \/ (i2 = 0)) => i1 | 1),T
+Run time: 4.5s
+Garbage collection time: 1.0s
+Intermediate theorems generated: 1201
+
+##Bye.
+
+
+===============================================================================
+         HOL88 Version 2.01 (SUN4/AKCL), built on 4/12/92
+===============================================================================
+
+############.........................................() : void
+
+##false : bool
+Run time: 0.0s
+
+##false : bool
+Run time: 0.1s
+
+##() : void
+Run time: 0.0s
+Intermediate theorems generated: 1
+
+##time = ":num" : type
+Run time: 0.1s
+
+###sig = ":num -> bool" : type
+bus = ":num -> num" : type
+Run time: 0.1s
+
+###################[|- !switch i1 i2 out.
+     MUX(switch,i1,i2,out) = (!x. out x = (switch x => i1 x | i2 x));
+ |- !i out. REG(i,out) = (!x. out(x + 1) = i x);
+ |- !i out. FLIPFLOP(i,out) = (!x. out(x + 1) = i x);
+ |- !i out. DEC(i,out) = (!x. out x = (i x) - 1);
+ |- !i1 i2 out. ADDER(i1,i2,out) = (!x. out x = (i1 x) + (i2 x));
+ |- !i out. ZERO_TEST(i,out) = (!x. out x = (i x = 0));
+ |- !i1 i2 out. OR_GATE(i1,i2,out) = (!x. out x = i1 x \/ i2 x);
+ |- !out. ZERO out = (!x. out x = 0)]
+: thm list
+Run time: 0.9s
+Garbage collection time: 0.4s
+Intermediate theorems generated: 16
+
+##() : void
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+##() : void
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+##Theory prims loaded
+() : void
+Run time: 0.0s
+
+#####################|- !i1 i2 o1 o2 done.
+    MULT_IMP(i1,i2,o1,o2,done) =
+    (?b1 b2 b3 b4 l1 l2 l3 l4 l5 l6 l7 l8 l9.
+      MUX(done,l8,l7,l6) /\
+      REG(l6,o2) /\
+      ADDER(l8,o2,l7) /\
+      DEC(i1,l5) /\
+      MUX(done,l5,l3,l4) /\
+      MUX(done,i1,l2,l1) /\
+      REG(l1,o1) /\
+      DEC(o1,l2) /\
+      DEC(l2,l3) /\
+      ZERO l9 /\
+      MUX(b4,l9,i2,l8) /\
+      ZERO_TEST(i1,b4) /\
+      ZERO_TEST(l4,b1) /\
+      ZERO_TEST(i2,b2) /\
+      OR_GATE(b1,b2,b3) /\
+      FLIPFLOP(b3,done))
+Run time: 0.9s
+Intermediate theorems generated: 2
+
+##() : void
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+##() : void
+Run time: 0.1s
+Intermediate theorems generated: 1
+
+##Theory MULT_IMP loaded
+() : void
+Run time: 0.1s
+
+#Theory MULT_FUN loaded
+() : void
+Run time: 0.3s
+
+#Theory NEXT loaded
+() : void
+Run time: 0.3s
+
+#####prims = 
+[|- !switch i1 i2 out.
+     MUX(switch,i1,i2,out) = (!x. out x = (switch x => i1 x | i2 x));
+ |- !i out. REG(i,out) = (!x. out(x + 1) = i x);
+ |- !i out. FLIPFLOP(i,out) = (!x. out(x + 1) = i x);
+ |- !i out. DEC(i,out) = (!x. out x = (i x) - 1);
+ |- !i1 i2 out. ADDER(i1,i2,out) = (!x. out x = (i1 x) + (i2 x));
+ |- !i out. ZERO_TEST(i,out) = (!x. out x = (i x = 0));
+ |- !out. ZERO out = (!x. out x = 0);
+ |- !i1 i2 out. OR_GATE(i1,i2,out) = (!x. out x = i1 x \/ i2 x)]
+: thm list
+Run time: 0.2s
+Intermediate theorems generated: 8
+
+##MULT_IMP = 
+|- !i1 i2 o1 o2 done.
+    MULT_IMP(i1,i2,o1,o2,done) =
+    (?b1 b2 b3 b4 l1 l2 l3 l4 l5 l6 l7 l8 l9.
+      MUX(done,l8,l7,l6) /\
+      REG(l6,o2) /\
+      ADDER(l8,o2,l7) /\
+      DEC(i1,l5) /\
+      MUX(done,l5,l3,l4) /\
+      MUX(done,i1,l2,l1) /\
+      REG(l1,o1) /\
+      DEC(o1,l2) /\
+      DEC(l2,l3) /\
+      ZERO l9 /\
+      MUX(b4,l9,i2,l8) /\
+      ZERO_TEST(i1,b4) /\
+      ZERO_TEST(l4,b1) /\
+      ZERO_TEST(i2,b2) /\
+      OR_GATE(b1,b2,b3) /\
+      FLIPFLOP(b3,done))
+Run time: 0.1s
+Garbage collection time: 0.6s
+Intermediate theorems generated: 1
+
+###MULT_IMP_UNFOLD = 
+|- MULT_IMP(i1,i2,o1,o2,done) =
+   (?b1 b2 b3 b4 l1 l2 l3 l4 l5 l6 l7 l8 l9.
+     (!x. l6 x = (done x => l8 x | l7 x)) /\
+     (!x. o2(x + 1) = l6 x) /\
+     (!x. l7 x = (l8 x) + (o2 x)) /\
+     (!x. l5 x = (i1 x) - 1) /\
+     (!x. l4 x = (done x => l5 x | l3 x)) /\
+     (!x. l1 x = (done x => i1 x | l2 x)) /\
+     (!x. o1(x + 1) = l1 x) /\
+     (!x. l2 x = (o1 x) - 1) /\
+     (!x. l3 x = (l2 x) - 1) /\
+     (!x. l9 x = 0) /\
+     (!x. l8 x = (b4 x => l9 x | i2 x)) /\
+     (!x. b4 x = (i1 x = 0)) /\
+     (!x. b1 x = (l4 x = 0)) /\
+     (!x. b2 x = (i2 x = 0)) /\
+     (!x. b3 x = b1 x \/ b2 x) /\
+     (!x. done(x + 1) = b3 x))
+Run time: 0.6s
+Intermediate theorems generated: 165
+
+###MULT_IMP_UNWIND = 
+|- MULT_IMP(i1,i2,o1,o2,done) =
+   (?b1 b2 b3 b4 l1 l2 l3 l4 l5 l6 l7 l8 l9.
+     (!x.
+       done(x + 1) =
+       ((done x => (i1 x) - 1 | ((o1 x) - 1) - 1) = 0) \/ (i2 x = 0)) /\
+     (!x.
+       o2(x + 1) =
+       (done x => 
+        ((i1 x = 0) => 0 | i2 x) | 
+        ((i1 x = 0) => 0 | i2 x) + (o2 x))) /\
+     (!x.
+       b3 x =
+       ((done x => (i1 x) - 1 | ((o1 x) - 1) - 1) = 0) \/ (i2 x = 0)) /\
+     (!x.
+       l6 x =
+       (done x => 
+        ((i1 x = 0) => 0 | i2 x) | 
+        ((i1 x = 0) => 0 | i2 x) + (o2 x))) /\
+     (!x. b1 x = ((done x => (i1 x) - 1 | ((o1 x) - 1) - 1) = 0)) /\
+     (!x. l7 x = ((i1 x = 0) => 0 | i2 x) + (o2 x)) /\
+     (!x. l4 x = (done x => (i1 x) - 1 | ((o1 x) - 1) - 1)) /\
+     (!x. o1(x + 1) = (done x => i1 x | (o1 x) - 1)) /\
+     (!x. l1 x = (done x => i1 x | (o1 x) - 1)) /\
+     (!x. l3 x = ((o1 x) - 1) - 1) /\
+     (!x. l8 x = ((i1 x = 0) => 0 | i2 x)) /\
+     (!x. l5 x = (i1 x) - 1) /\
+     (!x. l2 x = (o1 x) - 1) /\
+     (!x. l9 x = 0) /\
+     (!x. b4 x = (i1 x = 0)) /\
+     (!x. b2 x = (i2 x = 0)))
+Run time: 0.9s
+Intermediate theorems generated: 44
+
+###MULT_IMP_PRUNE = 
+|- MULT_IMP(i1,i2,o1,o2,done) =
+   (!x.
+     done(x + 1) =
+     ((done x => (i1 x) - 1 | ((o1 x) - 1) - 1) = 0) \/ (i2 x = 0)) /\
+   (!x.
+     o2(x + 1) =
+     (done x => 
+      ((i1 x = 0) => 0 | i2 x) | 
+      ((i1 x = 0) => 0 | i2 x) + (o2 x))) /\
+   (!x. o1(x + 1) = (done x => i1 x | (o1 x) - 1))
+Run time: 2.7s
+Garbage collection time: 0.4s
+Intermediate theorems generated: 1259
+
+##MULT_IMP_EXPAND = 
+|- MULT_IMP(i1,i2,o1,o2,done) =
+   (!x.
+     done(x + 1) =
+     ((done x => (i1 x) - 1 | ((o1 x) - 1) - 1) = 0) \/ (i2 x = 0)) /\
+   (!x.
+     o2(x + 1) =
+     (done x => 
+      ((i1 x = 0) => 0 | i2 x) | 
+      ((i1 x = 0) => 0 | i2 x) + (o2 x))) /\
+   (!x. o1(x + 1) = (done x => i1 x | (o1 x) - 1))
+Run time: 3.8s
+Garbage collection time: 0.5s
+Intermediate theorems generated: 1468
+
+###MULT_FUN_T = |- !i1 i2 m n. MULT_FUN((i1,i2),m,n,T) = m,n,T
+MULT_FUN_F = 
+|- !i1 i2 m n.
+    MULT_FUN((i1,i2),m,n,F) =
+    MULT_FUN
+    ((i1,i2),((i1 = 0) => m | i2 + m),n - 1,
+     (((n - 1) - 1 = 0) \/ (i2 = 0)))
+Run time: 0.1s
+
+#######COND_ADD_LEMMA = |- (b => m | n) + p = (b => m + p | n + p)
+Run time: 0.4s
+Intermediate theorems generated: 49
+
+#################Theorem ADD_CLAUSES autoloading from theory `arithmetic` ...
+ADD_CLAUSES = 
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+Run time: 1.2s
+
+MULT_FUN_EXPANDED_DEF = 
+|- !i1 i2 m n t.
+    MULT_FUN((i1,i2),m,n,t) =
+    (t => 
+     (m,n,t) | 
+     MULT_FUN
+     ((i1,i2),(t => ((i1 = 0) => 0 | i2) | ((i1 = 0) => 0 | i2) + m),
+      (t => i1 | n - 1),(((t => i1 - 1 | (n - 1) - 1) = 0) \/ (i2 = 0))))
+Run time: 1.6s
+Garbage collection time: 0.5s
+Intermediate theorems generated: 228
+
+##NEXT_THM = 
+|- !FUN f g done i s.
+    (!x. (done x = f(s x)) /\ (s(x + 1) = g(i x,s x))) /\
+    (!a b. FUN(a,b) = (f b => b | FUN(a,g(a,b)))) ==>
+    (!d x.
+      NEXT(x,x + d)done /\ STABLE(x,x + d)i ==>
+      (s(x + d) = FUN(i x,g(i x,s x))))
+Run time: 0.1s
+
+#########G_FUN = 
+|- !i1 i2 m n t.
+    G_FUN((i1,i2),m,n,t) =
+    (t => ((i1 = 0) => 0 | i2) | ((i1 = 0) => 0 | i2) + m),
+    (t => i1 | n - 1),(((t => i1 - 1 | (n - 1) - 1) = 0) \/ (i2 = 0))
+Run time: 0.4s
+Garbage collection time: 0.4s
+Intermediate theorems generated: 2
+
+################NEXT_MULT_LEMMA1 = 
+|- (!x.
+     o2(x + 1),o1(x + 1),done(x + 1) =
+     G_FUN((i1 x,i2 x),o2 x,o1 x,done x)) /\
+   (!a b. MULT_FUN(a,b) = (SND(SND b) => b | MULT_FUN(a,G_FUN(a,b)))) ==>
+   (!d x.
+     NEXT(x,x + d)done /\ STABLE(x,x + d)(\x'. (i1 x',i2 x')) ==>
+     (o2(x + d),o1(x + d),done(x + d) =
+      MULT_FUN((i1 x,i2 x),G_FUN((i1 x,i2 x),o2 x,o1 x,done x))))
+Run time: 1.0s
+Intermediate theorems generated: 82
+
+##MULT_IMP_EXPAND = 
+|- MULT_IMP(i1,i2,o1,o2,done) =
+   (!x.
+     done(x + 1) =
+     ((done x => (i1 x) - 1 | ((o1 x) - 1) - 1) = 0) \/ (i2 x = 0)) /\
+   (!x.
+     o2(x + 1) =
+     (done x => 
+      ((i1 x = 0) => 0 | i2 x) | 
+      ((i1 x = 0) => 0 | i2 x) + (o2 x))) /\
+   (!x. o1(x + 1) = (done x => i1 x | (o1 x) - 1))
+Run time: 0.1s
+
+###########NEXT_MULT_LEMMA2 = 
+|- MULT_IMP(i1,i2,o1,o2,done) ==>
+   (!x.
+     o2(x + 1),o1(x + 1),done(x + 1) =
+     G_FUN((i1 x,i2 x),o2 x,o1 x,done x))
+Run time: 0.9s
+Intermediate theorems generated: 70
+
+#############G_FUN_LEMMA = 
+|- G_FUN(a,b) =
+   (SND(SND b) => 
+    ((FST a = 0) => 0 | SND a) | 
+    ((FST a = 0) => 0 | SND a) + (FST b)),
+   (SND(SND b) => FST a | (FST(SND b)) - 1),
+   (((SND(SND b) => (FST a) - 1 | ((FST(SND b)) - 1) - 1) = 0) \/
+    (SND a = 0))
+Run time: 0.6s
+Intermediate theorems generated: 22
+
+#############NEXT_MULT_LEMMA3 = 
+|- MULT_FUN(a,b) = (SND(SND b) => b | MULT_FUN(a,G_FUN(a,b)))
+Run time: 0.5s
+Intermediate theorems generated: 41
+
+########NEXT_MULT_LEMMA4 = 
+|- MULT_IMP(i1,i2,o1,o2,done) ==>
+   (!d x.
+     NEXT(x,x + d)done /\ STABLE(x,x + d)(\x'. (i1 x',i2 x')) ==>
+     (o2(x + d),o1(x + d),done(x + d) =
+      MULT_FUN((i1 x,i2 x),G_FUN((i1 x,i2 x),o2 x,o1 x,done x))))
+Run time: 0.5s
+Intermediate theorems generated: 53
+
+##MULT_FUN_LEMMA1 = 
+|- !i1 i2.
+    MULT_FUN((i1,i2),((i1 = 0) => 0 | i2),i1,((i1 - 1 = 0) \/ (i2 = 0))) =
+    i1 * i2,(((i1 - 1 = 0) \/ (i2 = 0)) => i1 | 1),T
+Run time: 0.0s
+
+#########MULT_FUN_LEMMA2 = 
+|- done x ==>
+   (MULT_FUN((i1 x,i2 x),G_FUN((i1 x,i2 x),o2 x,o1 x,done x)) =
+    (i1 x) * (i2 x),((((i1 x) - 1 = 0) \/ (i2 x = 0)) => i1 x | 1),T)
+Run time: 0.7s
+Garbage collection time: 0.4s
+Intermediate theorems generated: 66
+
+###################PAIR_SPLIT = |- !x1 y1 x2 y2. (x1,y1 = x2,y2) = (x1 = x2) /\ (y1 = y2)
+Run time: 0.9s
+Intermediate theorems generated: 78
+
+##NEXT_MULT_LEMMA4 = 
+|- MULT_IMP(i1,i2,o1,o2,done) ==>
+   (!d x.
+     NEXT(x,x + d)done /\ STABLE(x,x + d)(\x'. (i1 x',i2 x')) ==>
+     (o2(x + d),o1(x + d),done(x + d) =
+      MULT_FUN((i1 x,i2 x),G_FUN((i1 x,i2 x),o2 x,o1 x,done x))))
+Run time: 0.1s
+
+#MULT_FUN_LEMMA2 = 
+|- done x ==>
+   (MULT_FUN((i1 x,i2 x),G_FUN((i1 x,i2 x),o2 x,o1 x,done x)) =
+    (i1 x) * (i2 x),((((i1 x) - 1 = 0) \/ (i2 x = 0)) => i1 x | 1),T)
+Run time: 0.1s
+
+#PAIR_SPLIT = |- !x1 y1 x2 y2. (x1,y1 = x2,y2) = (x1 = x2) /\ (y1 = y2)
+Run time: 0.1s
+
+##############MULT_CORRECTNESS = 
+|- MULT_IMP(i1,i2,o1,o2,done) /\
+   NEXT(x,x + d)done /\
+   STABLE(x,x + d)(\x'. (i1 x',i2 x')) /\
+   done x ==>
+   (o2(x + d) = (i1 x) * (i2 x))
+Run time: 0.9s
+Intermediate theorems generated: 287
+
+##Bye.
+Multiplier verified in hol22

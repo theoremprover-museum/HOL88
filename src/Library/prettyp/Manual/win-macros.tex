@@ -1,0 +1,29 @@
+% ---------------------------------------------------------------------
+% Environment for simulating screen windows using labelled boxes.
+%
+% Usage: (1) \newwindow{text} sets the window banner to `text'.
+%
+%	 (2) \begin{window}\begin{verbatim}
+%	     .
+%	     < contents of window >
+%	     .
+%	     \end{verbatim}\end{window}   
+%
+%            typesets window contents in a box with a left-aligned
+%            banner.
+% ---------------------------------------------------------------------
+
+\def\newwindow#1{\def\windowbanner{#1}}
+
+\newenvironment{window}{\begin{flushleft}
+ \begin{tabular}{@{}|c@{}|@{}}\hline 
+ \begin{minipage}[b]{\hsbw}
+    \vspace{4pt}
+    \windowbanner
+ \end{minipage}\\
+ \hline
+ \begin{minipage}[b]{\hsbw}
+ \vspace{4pt}
+ \begingroup\small\baselineskip\HOLSpacing}{\endgroup\end{minipage}\\ \hline 
+ \end{tabular}
+ \end{flushleft}}

@@ -1,0 +1,17 @@
+\DOC o
+
+\TYPE {$o : (((* -> **) # (*** -> *)) -> *** -> **)}
+
+\SYNOPSIS
+Composes two functions: {(f o g) x} = {f (g x)}.
+
+\KEYWORDS
+combinator.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+\#, B, C, Co, I, K, KI, oo, S, W.
+
+\ENDDOC

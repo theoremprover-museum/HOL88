@@ -1,0 +1,3 @@
+\THEOREM SUB_LESS_BOTH_SIDES sub
+|- !m n p. p <= m /\ m < n ==> (m - p) < (n - p)
+\ENDTHEOREM

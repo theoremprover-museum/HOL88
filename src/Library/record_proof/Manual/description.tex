@@ -1,0 +1,321 @@
+% Document Type: LaTeX
+
+\chapter{The \recproof\ Library}
+
+This library provides a user interface to the proof recording feature
+of \HOL. This feature allows the user to record and output a proof to
+a file. This proof can then be checked by an independent system, such
+as a proof checker.
+
+\section{Proofs in HOL}
+
+A {\it proof\/} is a finite sequence of {\it inferences\/} in a
+deductive system. 
+Each inference is a pair $(L, (\Gamma, t))$ where $(\Gamma, t)$ is
+known as a {\it sequent\/} and $L$ is a (possibly empty) list of
+sequents $(\Gamma_1, t_1)\ldots(\Gamma_n, t_n)$.  In practice, a
+particular deductive system is usually specified by a number of
+schematic {\it rules of inference\/} written in the form
+\begin{equation}
+\frac{\Gamma_1 \THM t_1 \quad \ldots \quad \Gamma_n\THM  t_n}{\Gamma \THM t}
+\label{eq-inf-rule}
+\end{equation}
+The sequents above the line are called the {\it hypotheses\/} of the
+rule and the sequent below the line is called its {\it conclusion\/}.
+Each inference step in the sequence of inferences forming a proof must
+be satisfied by one of the inference rules of the deductive system. There
+are eight primitive rules of inference in \HOL. They are described
+in detail in Section~10.3.1 of \DESCRIPTION.
+
+In \HOL, rules of inference are represented by ML functions. More complex
+inference can be derived by combining the primitive inference rules.
+For example, the rule of {\it symmetry of equality\/}([{\tt SYM}])
+can be specified as
+\begin{equation}
+\frac{\Gamma \THM t_1 = t_2}{\Gamma \THM t_2 = t_1}.
+\end{equation}
+This can be derived using the primitive rules as follows:
+\begin{hproof}
+1. & \Gamma \THM t_1 = t_2 & Hypothesis \\
+2. & \THM t_1 = t_1  & Reflexivity \\
+3. & \Gamma \THM t_2 = t_1  & Substitution of 1 into 2 \\
+\end{hproof}
+This style of presenting a proof is known as {\it Hilbert\/}
+style. Each line is a single step in the sequence of inferences. The
+first column is the line number. The middle column is the resulting
+theorem(s) of the inference. The right-hand column is known as the {\it
+justification\/} which tells which rule of inference is applied in each step.
+
+Derived rules are also represented by ML functions. They are implemented in
+terms of the primitive rules.  A theorem prover in which
+all proofs are fully expanded into primitive inferences is known as
+{\it fully-expansive\/}\cite{Boulton:HOLeffiency}. The advantage of
+this type of theorem prover is that the soundness of the proof is
+guaranteed since every primitive inference step is actually performed.
+However, this is very expensive in terms of both time and space for
+any sizable proof. To improve the efficiency of \HOL, some of the
+simple derived rules, such as \mlname{SYM}, are not fully expanded,
+but are implemented directly in ML.
+
+These rules, including the primitive rules and derived rules that are
+implemented directly in ML, will be referred to as {\it basic
+inference rules\/} or simply {\it basic rules\/} below. When
+recording a proof, all inference steps in which a basic
+inference rule is applied should be included so that any error
+resulting from bugs in the implementation of the inference rules can
+be caught.
+
+Simple proofs can be carried out in \HOL\ by calling the inference
+rules in sequence. However, these inference steps
+are too small for any sizable proof. Another more powerful way of
+carrying out proof, known as {\it goal-directed\/} or {\it tactical\/}
+proof is often used. In this proof style, a term in the same form as
+the required theorem is set up as a goal, tactics are used to reduce
+the goal to simpler subgoals recursively until all the subgoal are
+resolved. In such a proof, the user does not call the inference rules
+directly. However, a correct sequence of inferences is calculated and
+performed by the system behind the scene automatically to derive the theorem.
+These proofs can be checked using these sequence of inferences.
+
+A proof in \HOL\ as described above is carried out within an
+environment. It consists of a type structure $\Omega$ and a signature
+under the type structure $\Sigma_{\Omega}$. The type structure
+$\Omega$ is a set of type constants, each of which is a pair $(\nu,n)$
+where $\nu$ is the name 
+and $n$ is known as the arity. Type constants include both the atomic
+types and the type operators. For example, the name of the atomic type
+$:bool$ is the string {\tt bool} and its arity is 0, and the name of
+the type operator $list$ is $list$ and its arity is 1.
+The signature $\Sigma_{\Omega}$ is a set of constants, each of which
+is a pair $(\CONST*{c},\sigma)$ where \CONST*{c} is the name and
+$\sigma$ is its type and all the type constants occur in the $\sigma$s
+must be in $\Omega$. 
+This provides a context against which the well-typedness of terms can
+be checked.
+
+\section{The Proof File Format}
+
+A recorded proof is saved in a disk file in a format known as {\tt
+prf} format which is specified in \cite{WW:recordproof}. Proof files
+in this format are intended primarily for automatic checkers. They
+follow the Hilbert style of proofs as described in the previous
+section. It is a linear model which simplifies both the generation and
+the checking of proofs.
+
+The proof file format {\tt prf} is in two levels: the {\it core} level
+allows proofs using only primitive inference rules to be written into
+the file, and the {\it extended\/} levels allows all basic inference rules.
+
+A checker accepting the core level file will be very simple, so it may
+possibly be verified formally. Another program can be developed to
+expand the inference step involving derived rules into a sequence of
+primitive steps before being sent to the core checker.
+
+The syntax of the proof file format {\tt prf} is similar to LISP
+S-expression.  Objects, such as lines, theorems, terms and so on, are
+enclosed in a pair of matching parentheses. The first atom in an
+object is a tag specifying what kind of object it is.  A file in this
+format begins with a format expression which identifies the name, version
+and level of the format it conforms to. This is followed by an
+environment expression. The remainder of the file consists of one
+or more proofs. Each proof expression begins with the {\tt PROOF} tag
+identifying the expression as a proof. This is followed by the name of
+the proof and a list of theorems. These theorems are the goals of the
+proof. A checker checking the proof may stop processing the remaining proof
+lines after it has found all the theorems in the theorem fields of the
+proof lines. The last part of a proof expression is a sequence of lines.
+
+
+\section{The User Interface}
+
+To a user, recording proof is a feature which can be enabled or
+disabled. Whatever the state the system is in, it performs proofs in
+the same way except that the extra step of recording the proofs in a
+file is carried out only if the feature is enabled. 
+The typical use of this feature is
+\begin{enumerate}
+\item the user carries out a proof in the usual manner;
+\item when he/she is satisfied with the proof, the proof recording
+feature is enabled by loading the library {\tt record\_proof},
+the proof is re-done once more and is saved in a proof file.
+\end{enumerate}
+To help explain the user interface, a simple interactive session with
+\HOL\ is shown below.
+
+\begin{session}
+\begin{verbatim}
+#load_library`record_proof`;;
+Loading library record_proof ...
+Updating search path
+........................................Updating help search path
+.
+Library record_proof loaded.
+() : void
+
+#new_theory`THY`;;
+() : void
+
+#new_proof_file`myproof.prf`;;
+() : void
+
+#prove_thm(`ADD_0`,
+#  "!m. m + 0 = m",
+#   INDUCT_TAC THEN ASM_REWRITE_TAC[ADD]);;
+|- !m. m + 0 = m
+
+#close_proof_file();;
+() : void
+
+#close_theory();;
+() : void
+\end{verbatim}
+\end{session}
+After loading the library, a new theory named {\tt THY} is created first for
+saving the theorem. A new proof file with the name {\tt myproof.prf}
+is opened using the library function \mlname{new_proof_file}. This
+file becomes the current proof file. The name of the current proof
+file can be returned by calling the ML function
+\mlname{current_proof_file}. A theorem with 
+the name {\tt ADD\_0} is proved and saved in the current theory using
+the system function \mlname{prove_thm}, and the proof is saved
+automatically in the current proof file. In fact, every call to the
+tactical proof functions \mlname{TAC_PROOF}, \mlname{PROVE},
+\mlname{prove} and \mlname{prove_thm} will save a proof into the
+current proof file. When all the proofs are completed, the library
+function \mlname{close_proof_file} is called to close the proof file.
+Since the proof file is usually very large, it will be automatically
+compressed. The name of the compressed file is obtained by adding the
+suffix {\tt .gz} to the name string passed to \mlname{new_proof_file}.
+The compress program is the GNU compress unitilty {\tt gzip}. The file
+can be decompressed using the program {\tt gunzip} or {\tt gzcat}.
+
+To record forward proofs, one needs to use the library functions
+\mlname{begin_proof} and \mlname{end_proof} to enclose the proof
+procedures. Below is a simple example of forward proof:
+\begin{session}
+\begin{verbatim}
+#let th = SPEC_ALL ADD_SYM;;
+Theorem ADD_SYM autoloading from theory `arithmetic` ...
+ADD_SYM = |- !m n. m + n = n + m
+
+th = |- m + n = n + m
+
+#let v = genvar ":num";;
+"GEN%VAR%536" : term
+
+#begin_proof`proof1`;;
+() : void
+
+#let th1 = (REFL "SUC(m + n)");;
+th1 = |- SUC(m + n) = SUC(m + n)
+
+#let th2 = SUBST [th,v] "SUC(m + n) = SUC ^v" th1;;
+th2 = |- SUC(m + n) = SUC(n + m)
+
+#end_proof();;
+() : void
+\end{verbatim}
+\end{session}
+Any inferences performed between the calls of \mlname{begin_proof}
+and \mlname{end_proof} will be saved in the current proof file.
+The string passed to the function \mlname{begin_proof} is the name of
+the proof. The function \mlname{current_proof} returns the name of the
+current proof if it is called within a forward proof. A null string
+returned indicates that no proof is in progress.
+
+While one is developing the proof, one will not require
+the system to record and save the proof in a disk file. To disable the
+proof recording feature, the library part {\tt disable} is loaded
+instead of the whole library. This is done by the command:
+\begin{verbatim}
+   load_library`record_proof:disable`;;
+\end{verbatim}
+
+Usually, the input to the system is saved in a script file.
+It can then be loaded into the system to perform the proof in a batch
+processing fashion. By loading different parts of the library as 
+required, the same script file can be used to perform normal proofs and
+to generate proof files without any modification.
+
+
+\section{The Developer's Interface}
+
+This section describes a lower level interface to the proof recorder
+which consists of a small set of ML functions.
+These lower level functions provide a finer control to the proof
+recorder. They are useful for developing alternative user interfaces.
+
+The process of recording proof and
+generating proof files can be divided into three stages: 
+\begin{enumerate}
+\item recording inference steps;
+\item generating a proof;
+\item outputting to a text file.
+\end{enumerate}
+In Stage~1, once the proof recorder is enabled by calling an ML function,
+every application of basic inference rule is recorded in an internal
+buffer. Each inference is represented by a ML object of type {\tt step}.
+The recording can be temporarily suspended and resumed later. The
+current state of the recorder and the internal buffer can be accessed
+by calling ML functions. The ML functions available to the developer
+for managing the proof recorder are:
+\begin{itemize}
+\item \mlname{record_proof} \verb|:bool -> void|\newline
+When called with {\tt true}, this function clears the internal buffer
+for storing proof steps and enables 
+the recording of proof. When called with {\tt false}, it just disables the
+feature without clearing the internal buffer.
+\item \mlname{is_recording_proof} \verb|:void -> bool|\newline
+This function returns the current state of the proof recorder.
+If it is enabled, {\tt true} is returned.
+\item \mlname{get_steps} \verb|:void -> step list|\newline
+This function returns the proof in the internal buffer as a list of
+inference steps since the last time the proof recorder is enabled.
+\item \mlname{suspend_recording} \verb|:void -> void|\newline
+Disable the recorder temporarily without clearing the internal buffer.
+It should be re-enable using \mlname{resume_recording}.
+\item \mlname{resume_recording} \verb|:void -> void|\newline
+Re-enable the proof recorder without clearing the internal buffer.
+\end{itemize}
+
+In the second stage, the raw records of the inference steps are
+processed to reduce the duplicated information. The result is a list
+of proof lines which is represented by the ML type {\tt line}.
+The only ML function available for this stage is \mlname{MakeProof}
+which has type \verb|step list -> line list|. It converts a list of
+inference steps to a list of proof lines.
+
+The last stage is to convert the list of proof lines into text in the
+{\tt prf} format and to output to a disc file.
+The ML functions available to the developer for this stage are:
+\begin{itemize}
+\item \mlname{write_proof_to}
+\verb|: string -> string -> thm list -> line list -> void|\newline
+This function outputs a proof into a proof file. The first string argument is
+the name of the output file, and the second is the name of the proof.
+If a file of the given name exists, it will be overwritten. The
+theorem list contains the theorem this proof supposes to derive. It
+may be null. In such case, a checker reading the proof should check
+all the lines. The last argument is a list of proof lines.
+\item \mlname{write_proof_add_to}
+\verb|: string -> string -> thm list -> line list -> void|\newline
+This function appends a proof into a proof file. The first string
+argument is the name of the output file. If no file of the given name
+exists, it will be created. If the named file exists and the version
+expression in it is not the same as the version the system is using, this
+function fails. The remaining arguments are interpreted in the same
+way as \mlname{write_proof_to}.
+\item \mlname{write_env} \verb|:string -> void|\newline
+This function outputs the current proof environment to the output
+port given as the argument.
+\item \mlname{write_line} \verb|:string -> line -> void|\newline
+This function converts a proof line from its internal representation
+to a text string and outputs it to the port given as the first argument.
+\item \mlname{write_thm_list} \verb|:string -> thm list -> void|\newline
+This function converts a list of theorems from its internal representation
+in to text in the {\tt prf} format and outputs it to the port given as
+the first argument.
+\end{itemize}
+
+The implementation details of all these functions and internal data
+structures are described in \cite{WW:recordproof}.

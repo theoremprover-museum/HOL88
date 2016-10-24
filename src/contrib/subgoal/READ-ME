@@ -1,0 +1,26 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: subgoal							%
+%									%
+% DESCRIPTION: experimental new subgoal package				%
+%									%
+% AUTHOR: R. A. Fleming							%
+%									%
+% ADDRESS: Hewlett Packard Laboratories,				%
+%          Filton Road,							%
+%          Stoke Gifford						%
+%          Bristol BS12 6QZ						%
+%          U.K.								%
+%									%
+%	   email: ..!mcvax!ukc!hplb!raf					%
+%                 raf@hplb.hpl.hp.com					%
+%		  raf@hpl.hp.co.uk					%
+%									%
+% DATE: 90.12.12							%
+% --------------------------------------------------------------------- %
+
+The contents of this directory are as follows:
+
+    subgoal.ml  -- new subgoal package (experimental)
+
+See the file itself for documentation.
+

@@ -1,0 +1,3 @@
+\THEOREM EL_LENGTH_SNOC list
+|- !l x. EL(LENGTH l)(SNOC x l) = x
+\ENDTHEOREM

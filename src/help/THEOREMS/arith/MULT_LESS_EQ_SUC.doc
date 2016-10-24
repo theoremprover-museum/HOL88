@@ -1,0 +1,3 @@
+\THEOREM MULT_LESS_EQ_SUC arithmetic
+|- !m n p. m <= n = ((SUC p) * m) <= ((SUC p) * n)
+\ENDTHEOREM

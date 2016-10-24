@@ -1,0 +1,3 @@
+\THEOREM REAL_NEG_GE0 REAL
+|- !x. (& 0) <= (-- x) = x <= (& 0)
+\ENDTHEOREM

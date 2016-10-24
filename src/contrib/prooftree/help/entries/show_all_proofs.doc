@@ -1,0 +1,35 @@
+\DOC show_all_proofs
+
+\TYPE {show_all_proofs : (void -> void)}
+
+\SYNOPSIS
+Prints the names of all proof efforts currently in progress.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. Multiple incomplete proofs are supported. The
+function {show_all_proofs} displays the names of all current proofs,
+as well as the goal with which each of them was started,
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\EXAMPLE
+{
+# show_all_proofs () ;;
+
+another
+"!a b c. (a = b) /\ (b = c) ==> (a = c)"
+myproof
+"!a b. a /\ b = b /\ a"
+() : void
+}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_goal,
+current_proof, move_to_proof, new_goal, remove_proof,
+show_all_subgoals, show_tac, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM SIMP_REC_REL prim_rec
+|- !fun x f n.
+    SIMP_REC_REL fun x f n =
+    (fun 0 = x) /\ (!m. m < n ==> (fun(SUC m) = f(fun m)))
+\ENDTHEOREM

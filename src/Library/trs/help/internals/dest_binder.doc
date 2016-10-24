@@ -1,0 +1,10 @@
+\DOC dest_binder
+
+\TYPE {dest_binder : (term -> (term # term))}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

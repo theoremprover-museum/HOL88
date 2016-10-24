@@ -1,0 +1,4 @@
+\THEOREM COND_CLAUSES \none
+|- !t1 t2. ((T => t1 | t2) = t1) /\ ((F => t1 | t2) = t2)
+\ENDTHEOREM
+

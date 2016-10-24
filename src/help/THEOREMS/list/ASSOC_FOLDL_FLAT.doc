@@ -1,0 +1,7 @@
+\THEOREM ASSOC_FOLDL_FLAT list
+|- !f.
+    ASSOC f ==>
+    (!e.
+      RIGHT_ID f e ==>
+      (!l. FOLDL f e(FLAT l) = FOLDL f e(MAP(FOLDL f e)l)))
+\ENDTHEOREM

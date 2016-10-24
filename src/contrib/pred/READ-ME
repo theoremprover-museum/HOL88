@@ -1,0 +1,24 @@
+
+==============================================================================
+  DESCIPTION:   A Sequent Formulation of a Logic of Predicates in HOL.
+  AUTHOR:       Ching-Tsun Chou
+  DATE:         Tue Oct  6 13:59:26 PDT 1992
+==============================================================================
+
+This directory contains the following files:
+
+    README
+    Makefile
+    mk_pred.ml
+    use_pred.ml
+    pred_pp.dvi
+
+To build the theory, type "make all" in a shell.
+
+To use the code, type "loadt `use_pred`" in HOL.
+
+The documentation is in "pred_pp.dvi", which contains the paper:
+
+    "A Sequent Formulation of a Logic of Predicates in HOL"
+    by Ching-Tsun Chou
+    (To appear in the Proceedings of the 1992 HOL Workshop)

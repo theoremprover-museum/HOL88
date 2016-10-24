@@ -1,0 +1,19 @@
+\DOC traverse
+
+\TYPE {traverse : (path -> term -> term)}
+
+\SYNOPSIS
+Use a path to select a subterm from a term.
+
+\LIBRARY window
+
+\EXAMPLE
+{
+   #traverse [RATOR; RAND] "A /\ B";;
+   "A" : term
+}
+
+\FAILURE
+Fails if the path selects a subterm which is not in the term.
+
+\ENDDOC

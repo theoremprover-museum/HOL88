@@ -1,0 +1,13 @@
+\DOC equiv_tm
+
+\TYPE {equiv_tm : term}
+
+\SYNOPSIS
+The boolean constant "=:bool -> (bool -> bool)".
+
+\LIBRARY window
+
+\SEEALSO
+imp_tm, pmi_tm.
+
+\ENDDOC

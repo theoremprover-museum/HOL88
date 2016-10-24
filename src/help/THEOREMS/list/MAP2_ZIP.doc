@@ -1,0 +1,5 @@
+\THEOREM MAP2_ZIP list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (!f. MAP2 f l1 l2 = MAP(UNCURRY f)(ZIP(l1,l2)))
+\ENDTHEOREM

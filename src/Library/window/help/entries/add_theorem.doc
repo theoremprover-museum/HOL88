@@ -1,0 +1,27 @@
+\DOC add_theorem
+
+\TYPE {add_theorem : (thm -> window -> window)}
+
+\SYNOPSIS
+Add a theorem to the set of theorems relevant to a window.
+
+\LIBRARY window
+
+\DESCRIBE
+{add_theorem (a |- c)} adds the theorem {(a |- c)} to the set of theorems
+considered relevant to a window.
+The theorem will not be added if a stronger 
+(alpha-equivalent conclusion, fewer assumptions) theorem is already held
+by the window.
+When each theorem is added, a limited amount of resolution is performed.
+For example if the theorem {(b |- a)} is already held by the system,
+and the theorem {(a |- c)} was added, then the theorem {(b |- c)}
+would be inferred.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+ADD_THEOREM
+
+\ENDDOC

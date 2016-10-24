@@ -1,0 +1,3 @@
+\THEOREM FOLDR_FILTER list
+|- !f e P l. FOLDR f e(FILTER P l) = FOLDR(\x y. (P x => f x y | y))e l
+\ENDTHEOREM

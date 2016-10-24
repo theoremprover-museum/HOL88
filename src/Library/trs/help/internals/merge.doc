@@ -1,0 +1,10 @@
+\DOC merge
+
+\TYPE {merge : ((* # **) list -> (* # **) list -> (* # **) list)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

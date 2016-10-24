@@ -1,0 +1,10 @@
+\THEOREM NORMALIZED_LENGTHS_LEMMA numeral
+|- !l1 l2 r.
+    ~(1 < r /\
+      IS_BASEN r l1 /\
+      IS_BASEN r l2 /\
+      IS_NORMALIZED l1 /\
+      IS_NORMALIZED l2 /\
+      (BASEN r l1 = BASEN r l2) /\
+      (LENGTH l1) < (LENGTH l2))
+\ENDTHEOREM

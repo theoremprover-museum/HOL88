@@ -1,0 +1,5 @@
+\THEOREM COMM_MONOID_FOLDL list
+|- !f.
+    COMM f ==>
+    (!e'. MONOID f e' ==> (!e l. FOLDL f e l = f e(FOLDL f e' l)))
+\ENDTHEOREM

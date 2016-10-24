@@ -1,0 +1,7 @@
+\THEOREM FCOMM_FOLDL_APPEND list
+|- !f g.
+    FCOMM f g ==>
+    (!e.
+      RIGHT_ID g e ==>
+      (!l1 l2. FOLDL f e(APPEND l1 l2) = g(FOLDL f e l1)(FOLDL f e l2)))
+\ENDTHEOREM

@@ -1,0 +1,36 @@
+% ------------------------------------------------------------------- %
+% DIRECTORY: non-unix                                                 %
+%                                                                     %
+% DESCRIPTION: Instructions for making HOL on non-UNIX machines       %
+%                                                                     %
+% AUTHOR: John Carroll                                                %
+%                                                                     %
+% ADDRESS: University of Cambridge                                    %
+%        Computer Laboratory                                          %
+%        New Museums Site                                             %
+%        Pembroke Street                                              %
+%        Cambridge, CB2 3QG                                           %
+%        England                                                      %
+%                                                                     %
+%        email: jac@cl.cam.ac.uk                                      %
+%                                                                     %
+% DATE: 92.06.18                                                      %
+% ------------------------------------------------------------------- %
+
+This directory contains the files:
+
+   Make-mac  : instructions on how to build version 2.1 of the system
+               for the Apple Macintosh without using the supplied
+               UNIX Makefile
+
+   MAKE-PC   : instructions on how to build version 2.1 of the system
+               for IBM PC-compatibles (running DOS/Windows) without
+               using the supplied UNIX Makefile
+
+   site-mac.ml : To be edited to insert correct pathname and put in the
+                 ml/ directory when using Make-mac
+
+   SITE-PC.ML  : To be put in the ml/ directory when using MAKE-PC (no
+                 editing required)
+
+

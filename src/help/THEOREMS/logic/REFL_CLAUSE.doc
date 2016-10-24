@@ -1,0 +1,4 @@
+\THEOREM REFL_CLAUSE \none
+|- !x. (x = x) = T
+\ENDTHEOREM
+

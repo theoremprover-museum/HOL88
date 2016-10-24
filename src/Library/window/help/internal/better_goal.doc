@@ -1,0 +1,10 @@
+\DOC better_goal
+
+\TYPE {better_goal : (goal -> goal -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

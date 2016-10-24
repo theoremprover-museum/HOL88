@@ -1,0 +1,3 @@
+\THEOREM CUT_NONEMPTY HREAL
+|- !X. ?x. cut X x
+\ENDTHEOREM

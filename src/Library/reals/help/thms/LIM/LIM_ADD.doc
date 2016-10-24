@@ -1,0 +1,4 @@
+\THEOREM LIM_ADD LIM
+|- !f g l m.
+    (f --> l)x /\ (g --> m)x ==> ((\x. (f x) + (g x)) --> (l + m))x
+\ENDTHEOREM

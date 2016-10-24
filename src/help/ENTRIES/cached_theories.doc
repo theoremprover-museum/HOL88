@@ -1,0 +1,20 @@
+\DOC cached_theories
+
+\TYPE {cached_theories : (void -> (string # bool) list)}
+
+\SYNOPSIS
+Gives a list of cached and uncached theories.
+
+\DESCRIBE
+A call {cached_theories()} returns a list pairs, one for each loaded theory,
+associating the name of the theory with either {true}, indicating that a theory
+has been removed from the cache by {delete_cache}, or {false} otherwise. For
+more details of the cacheing mechanism, see the DESCRIPTION.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+delete_cache.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM dest_node tree
+|- !t. dest_node t = (@p. t = node p)
+\ENDTHEOREM

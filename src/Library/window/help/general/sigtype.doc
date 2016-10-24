@@ -1,0 +1,23 @@
+\DOC sigtype
+
+\TYPE {sigtype : (string -> string -> void)}
+
+\SYNOPSIS
+Creates a new signal type.
+
+\LIBRARY window
+
+\DESCRIBE
+{sigtype `name` `type`} defines a new function
+{newsig_name : void -> type signal} which can then be used to create new 
+signals of type {type}.
+
+Only works when the {compiling} flag is {true}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+clear, handle, signal.
+
+\ENDDOC

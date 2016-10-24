@@ -1,0 +1,109 @@
+\section{Introduction}
+
+This case study is designed to help the intermediate-level user of
+\HOL\ to become familiar with proving facts using the group theory and
+theory of the integers found in two of the directories in the Library
+directory accompanying \HOL.  While it is hoped that this case study will
+provide the user with an enhanced capacity for using the \HOL\ theorem
+prover for proving theorems in general, it will be assumed here that
+the user has a basic familiarity with the inference rules and tactics
+found in the \HOL\ System Manual, and has at least some experience using
+the goal-stack in \HOL\ for goal-directed theorem proving.  For a basic
+introduction to the \HOL\ system, see {\sl Getting started with \HOL}.
+
+The first section, Subgroups of the Integers, is intended to help you
+become familiar with the the ideas of subgroup and normal subgroup and
+some basic ways of proving theorems with these ideas.  In the next
+section, Basic Modular Arithmetic, we will use the notion of a quotient
+group to define the integers mod {\small\tt n} together with modular 
+addition.  Then we shall use this as an example of how to instantiate
+the abstract first order group theory with a concrete case.  The last
+section, Subgroups of the Integers, Revisited, focuses heavily on two
+important methods for proving facts about the integers.  The first
+method is to break the problem into two cases, one where we assume the
+integer is non-negative and the other where we assume the integer is
+negative and we assume that we already know the result for the
+non-negative integers.  In each of these cases we can further reduce
+to the natural numbers where we have access to the principle of
+induction, should we desire it.  There exists a tactic to carry out
+these reductions and we shall have several opportunities to use it.
+The other method is to use the fact that any non-empty set which is
+bounded above contains its least upper bound (and similarly a greatest
+lower bound for sets bounded below).  In this method, you divide the
+problem into the subgoals of showing that the set in question is
+non-empty and bounded above (and hence has a maximum) and the subgoal
+of finishing the principal goal with the consequences of the existence
+of such a maximal element added as assumptions.  There exists a tactic
+to carry out this reduction (which actually returns the last subgoal
+first and the other subgoals after) and there exists a similar tactic
+for reasoning about minimal elements.
+
+It will be assumed throughout this case study that the reader is
+executing the various commands described herein on a system that is
+running \HOL.  The particular environment that will be assumed for
+this study is:
+\begin{enumerate}
+\item \HOL\ version 1.07 (or later)
+\item An emacs editor
+\end{enumerate}
+It will also be assumed that the user has sufficient familiarity with
+an emacs editor to be able to create two windows, move between buffers,
+copy material from one buffer to another, etc.
+
+While you are working through this case study, you will often need to
+use the theorems that have already been proved in the theories
+{\small\verb+elt_gp+}, {\small\verb+more_gp+}, and
+{\small\verb+integer+}.  A listing of theorems can be found in
+Appendix A. They can also be found respectively in the files:
+\begin{verbatim}
+   hol/Library/group/elt_gp.print
+   hol/Library/group/more_gp.print
+   hol/Library/integer/integer.print
+\end{verbatim}
+You will also need to use a variety of tactics, both general-purpose
+and subject-specific, that are new and not discussed in the \HOL\
+manual.  The various general-purpose tactics are described in Appendix
+B, and the subject-specific tactics are described in Appendix C.
+
+Throughout the text below there are a series of boxes which contain
+pieces of sessions with the \HOL\ system which illustrate the
+concepts that have been discussed immediately before.  The text within
+these boxes should be understood to come in sequence, with later work
+depending on the earlier work having been done.  The lines beginning
+with a {\small\verb+#+} are entered by the user.  The text within
+the boxes does not represent an entire session with the \HOL\ system,
+nor does it always represent a continuous portion of a session; often
+portions of the system response have been omitted.  Omissions are only
+of portions of the system response, and they will be indicated by
+three vertical dots within the boxes.  All user inputs (with one
+stated exception) are included.  Complete shell scripts for each
+of the three sessions discussed here may be found in the files:
+\begin{verbatim}
+  hol/Training/studies/int_mod/int_sbgp.shell1
+  hol/Training/studies/int_mod/int_mod.shell
+  hol/Training/studies/int_mod/int_sbgp.shell2
+\end{verbatim}
+
+As you work through this case study, you will be presented with
+problems to be solved, usually of the form ``We need to reduce this
+goal to these other subgoals''.  Immediately after, there will follow
+(almost always) a box containing a piece of a session with the \HOL\
+system which demonstrates a solution to the problem.  At first, you
+should enter the solution given and  mainly try to see why the
+answer given is an answer.  As you progress you should try more and
+more to give your own answer before looking at the one given, and then
+afterwards compare.  In general, there is no one right answer to any
+of these problems.  You should feel free to experiment, but it will be
+necessary that you perform the same reductions (if by other means) as
+the tactics that are given do, so that the remainder of the case study
+makes sense.  At any time, if you want to try something different out,
+remember that you can always use
+\begin{verbatim}
+   backup();;
+\end{verbatim}
+or simply
+\begin{verbatim}
+   b();;
+\end{verbatim}
+to undo the last thing you did to the goal stack.
+

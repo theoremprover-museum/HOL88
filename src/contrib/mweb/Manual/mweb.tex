@@ -1,0 +1,51 @@
+% Document Type: LaTeX
+\documentstyle[newlfont,12pt,titlepage,fancyheadings,
+   array,multicol,verbatim,vrbinput,makeidx]{article}
+
+
+\input macros
+
+\pagestyle{fancy}
+
+\setcounter{tocdepth}{2}
+%\nofiles
+
+\makeindex
+
+\begin{document}
+
+   % ---------------------------------------------------------------------
+   % prelims
+   % ---------------------------------------------------------------------
+
+   \pagenumbering{roman}                  % roman page numbers for prelims
+   \setcounter{page}{1}                   % start at page 1
+
+   \include{title}                        % title page
+   \tableofcontents                       % table of contents
+
+\vspace{10pc}
+\section*{Acknowledgement}
+Thanks to B. T. Graham who spotted several bugs in earlier version of
+the programs and extended the \mweb\ suite and wrote the
+manual section for the extension, and to P. Curzon who proof-read this manual.
+
+   \cleardoublepage                      % kick to a right-hand page
+   \pagenumbering{arabic}                % arabic page numbers
+   \setcounter{page}{1}                  % start at page 1
+
+\input description
+
+\input winnow
+
+\input imp
+
+\addcontentsline{toc}{section}{Reference}
+\bibliography{litprog}
+\bibliographystyle{plain}
+
+\newpage
+\addcontentsline{toc}{section}{Index}
+\printindex
+
+\end{document}

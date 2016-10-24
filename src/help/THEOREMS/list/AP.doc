@@ -1,0 +1,5 @@
+\THEOREM AP ltree
+|- (!l. AP[]l = []) /\
+   (!h t l. AP(CONS h t)l = CONS(h(HD l))(AP t(TL l)))
+\ENDTHEOREM
+

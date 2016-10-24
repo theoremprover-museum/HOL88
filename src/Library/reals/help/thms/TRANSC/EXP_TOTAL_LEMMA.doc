@@ -1,0 +1,4 @@
+\THEOREM EXP_TOTAL_LEMMA TRANSC
+|- !y.
+    (& 1) <= y ==> (?x. (& 0) <= x /\ x <= (y - (& 1)) /\ (exp x = y))
+\ENDTHEOREM

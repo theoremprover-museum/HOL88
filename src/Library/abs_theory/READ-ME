@@ -1,0 +1,41 @@
+
+This is release 2 of the UI Abstract Theory Package for the HOL theorem
+prover.  
+
+The new version of the UI Abstract Theory package provides the following
+features not found in the original:
+
+o Abstract representations create a real type that can be used to
+  conveniently form expressions.
+
+o The process of creating abstract representations has been speeded up
+  substantially.  There is no longer the need to have special functions for
+  accessing the abstract type or creating the instantiation theorems.
+
+o The theory obligations are stored in the theory so that abstract theorems
+  can be proven across file boundaries.
+
+o Theory obligations are added to the hypothesis list dynamically when the
+  goal is created rather than statically when they are defined.  This has
+  the advantage that more than one abstract representation of the same type
+  can be used in a theorem.
+
+o Instantiation is done on a theorem by theorem basis for greater control.
+  Instantiated theorems are not automatically saved in the theory.
+
+o Instantiation is more robust and faster.
+
+o Support for explicit use of theory obligations has been included.
+
+The following files are included:
+
+    Makefile		--- Makefile for compiling code and running example
+    READ-ME		--- this file
+    abs_theory.ml	--- ML code implementing the abstract theory package
+    abs_theory.ps	--- PostScript version of the documentation.
+    monoid_def.ml	--- Example abstract theory of monoids
+    group_def.ml	--- Example abstract theory of groups using monoids
+    example.ml		--- Instantiation of groups for xor on :bool
+
+
+

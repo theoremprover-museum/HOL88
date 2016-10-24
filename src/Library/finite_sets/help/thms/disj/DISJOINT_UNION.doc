@@ -1,0 +1,3 @@
+\THEOREM DISJOINT_UNION finite_sets
+|- !s t u. DISJOINT(s UNION t)u = DISJOINT s u /\ DISJOINT t u
+\ENDTHEOREM

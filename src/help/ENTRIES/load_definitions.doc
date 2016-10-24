@@ -1,0 +1,38 @@
+\DOC load_definitions
+
+\TYPE {load_definitions : (string -> void list)}
+
+\SYNOPSIS
+Loads in all the definitions from a given theory.
+
+\DESCRIBE
+If {thy} is the name of an ancestor theory, then the call
+{
+   load_definitions `thy`
+}
+\noindent attempts to load in all the definitions of that theory, that is, for
+each definition {def}, to perform dynamically the following toplevel binding:
+{
+  let def = definition `thy` `def`;;
+}
+
+\FAILURE
+Fails unless {thy} is an ancestor theory.
+
+\EXAMPLE
+{
+#load_definitions `combin`;;
+[(); (); (); ()] : void list
+
+I_DEF = |- I = S K K
+
+S_DEF = |- S = (\f g x. f x(g x))
+
+K_DEF = |- K = (\x y. x)
+
+o_DEF = |- !f g. f o g = (\x. f(g x))
+}
+\SEEALSO
+definitions, let_after, let_before, load_definition.
+
+\ENDDOC

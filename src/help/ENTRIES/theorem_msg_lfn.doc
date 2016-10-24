@@ -1,0 +1,34 @@
+\DOC theorem_msg_lfn
+
+\TYPE {theorem_msg_lfn : (string list -> thm)}
+
+\SYNOPSIS
+Loads a given theorem from a given theory, with an autoload message.
+
+\DESCRIBE
+If {thy} is an ancestor theory, and {th} one of its theorems, then the call
+{
+   theorem_msg_lfn [`thy`;`th`]
+}
+\noindent will print a message of the form
+{
+   Theorem th autoloaded from theory `thy`
+}
+\noindent and cancel any autoloading action associated with the name {th},
+and will then return that theorem.
+
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {th} is not one of its
+theorems.
+
+\EXAMPLE
+{
+#theorem_msg_lfn [`num`; `INV_SUC`];;
+Theorem INV_SUC autoloaded from theory `num`.
+|- !m n. (SUC m = SUC n) ==> (m = n)
+}
+\SEEALSO
+autoload, autoload_theory, theorem, theorems, theorem_lfn, load_theorem,
+load_theorems, undo_autoload.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM TAN_0 TRANSC
+|- tan(& 0) = & 0
+\ENDTHEOREM

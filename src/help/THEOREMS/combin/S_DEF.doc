@@ -1,0 +1,3 @@
+\THEOREM S_DEF combin
+|- S = (\f g x. f x(g x))
+\ENDTHEOREM

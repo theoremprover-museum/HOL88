@@ -1,0 +1,2457 @@
+******************************************************************************
+******************************** Version 2.02 ********************************
+******************************************************************************
+
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix for Common Lisp                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-parsml.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          5 December 1992.                                            |
++----------------------------------------------------------------------------+
+
+Preterm handlers were not working in Common Lisp. Fixed by forcing
+some atoms to be lower case.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (sets libraries).                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/{sets,finite_sets,pred_sets}                        |
+|----------------------------------------------------------------------------|
+| DATE:          4 January 1993.                                             |
++----------------------------------------------------------------------------+
+
+Konrad Slind noticed that the insert function was sometimes used as a prefix
+"INSERT x s" rather than an infix "x INSERT s" in the sources for the set
+theory libraries.  To avoid confusing people who may be reading the sources,
+the infix form has been universally adopted.  Users should not notice the
+change.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (X_SKOLEM_CONV / SKOLEM_CONV)                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          5 February 1993.                                            |
++----------------------------------------------------------------------------+
+
+Formerly, SKOLEM_CONV would succeed (with no effect) on simply existential
+terms like "?x. x = 1". This was considered undesirable because it makes it
+inconvenient to achieve multiple skolemizations by REDEPTH_CONV etc. Now
+X_SKOLEM_CONV has been changed so if given a term "!x1..xn. ?y. ..." it will
+fail unless there is at least one variable x1..xn. There is a consequent effect
+on SKOLEM_CONV.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement/Bug-fix.                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/latex-hol                                           |
+|----------------------------------------------------------------------------|
+| DATE:          5 February 1993.                                            |
++----------------------------------------------------------------------------+
+
+This library is enhanced to handle restricted quatifiers. They are formatted
+in the syntax similar to that pretty printed by the system when the
+flag print_restict is true. And bugs in the LaTeX macros are fixed.
+
+File: holmacs.tex
+ 1) Fix bug in macro definitions for symbols.
+    Adding \relax in front of \ifmmode to prevent it to be expand before
+    alignment. This fixes the problem where these symbols are the first
+    thing in a line within an eqnarray environment.
+ 2) Adding the macro definition for double colons. Required by restricted
+    quantifiers.
+
+File: latex_term.pp
+
+ Adding the rule for restricted quatifiers.
+
+File: precedence.ml
+
+ Adding precedence for restriced quatifiers. They have equal
+ precedence as binders.
+
+File: filters.ml
+
+ Add translation from HOL constants to LaTeX symbols for restricted
+ quantifiers.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bug-fix (theory loading)                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          8 February 1993.                                            |
++----------------------------------------------------------------------------+
+
+The loading of theories was slow due to the repeatedly activating binders
+of the ancestors theories in the function activate_all_binders.
+This function is called by the theory loading functions load_theory,
+extend_theory and new_parent.
+
+The function activate_all_binders is reimplemented as a local
+function. It first finds out all the ancestors, then activates the
+binders in each of them. It then remember the theories it has visited
+so when ask to activate binders next time, it will not visit those
+theories again.
+
+The REFERENCE entry of activate_all_binders is deleted.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bug-fix (parsing HOL lists)                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/parslist.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          9 February 1993.                                            |
++----------------------------------------------------------------------------+
+
+
+Recently introduced bug that prevented nested lists like "[[1];[2]]"
+from parsing has been fixed.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (library loading)                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_lists/more_lists.ml,                           |
+|                Library/more_lists/call_load_auxiliary.ml                   |
+|----------------------------------------------------------------------------|
+| DATE:          16 February 1993.                                           |
++----------------------------------------------------------------------------+
+
+A bug that prevented the more_lists library from loading  when in draft mode
+has been fixed.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Support for recording proofs                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|                ml/hol-rule.ml                                              |
+|                ml/hol-drule.ml                                             |
+|                ml/drul.ml                                                  |
+|                ml/numconv.ml                                               |
+|                ml/proof_rec.ml (new file)                                  |
+|----------------------------------------------------------------------------|
+| DATE:          03 March 1993                                               |
++----------------------------------------------------------------------------+
+
+This change is based on the same changed made by MJCG. A separate version of
+HOL was created for experiment this new feature. I now incorporate
+this feature into the regular version of the system.
+
+Those functions that generate theorems directly (i.e. call mk_thm)
+have been modified to record a trace of their application in an ML
+local assignable variable called steplist.
+
+A step is a new ML concrete type defined by:
+
+   type step = AssumeStep of term
+             | ReflStep of term
+             | SubstStep of (thm#term)list # term # thm
+             | BetaConvStep of term
+             | AbsStep of term # thm
+             | InstTypeStep of (type#type)list # thm
+             | DischStep of term # thm
+             | MpStep of thm # thm
+             | MkCombStep of thm # thm
+             | MkAbsStep of thm
+             | AlphaStep of term # term
+             | AddAssumStep of term # thm
+             | SymStep of thm
+             | TransStep of thm # thm
+             | ImpTransStep of thm # thm
+             | ApTermStep of term # thm
+             | ApThmStep of thm # term
+             | EqMpStep of thm # thm
+             | EqImpRuleStep of thm
+             | SpecStep of term # thm
+             | EqtIntroStep of thm
+             | GenStep of term # thm
+             | EtaConvStep of term
+             | ExtStep of thm
+             | ExistsStep of (term # term) # thm
+             | ChooseStep of (term # thm) # thm
+             | ImpAntisymRuleStep of thm # thm
+             | MkExistsStep of thm
+             | SubsStep of thm list # thm
+             | SubsOccsStep of (int list # thm) list # thm
+             | SubstConvStep of (thm # term) list # term # term
+             | ConjStep of thm # thm
+             | Conjunct1Step of thm
+             | Conjunct2Step of thm
+             | Disj1Step of thm # term
+             | Disj2Step of term # thm
+             | DisjCasesStep of thm # thm # thm
+             | NotIntroStep of thm
+             | NotElimStep of thm
+             | ContrStep of term # thm
+             | CcontrStep of term # thm
+             | InstStep of (term # term) list # thm
+             | StoreDefinitionStep of string # term
+             | DefinitionStep of string # string
+             | DefExistsRuleStep of term
+             | NewAxiomStep of string # term
+             | AxiomStep of string # string
+             | TheoremStep of string # string
+             | NewConstantStep of string # type
+             | NewTypeStep of int # string
+             | NumConvStep of term
+
+The recording of steps is controlled by a flag `record_proof_flag`, which
+is a local variable, and it is initially false. After setting it to
+true, any step that is performed is added to the front of steplist.
+
+The function
+
+   record_proof : bool -> void
+
+sets the flag `record_proof_flag` to its argument. If this is true, it
+clears the list steplist. The function
+
+   is_recording_proof : void -> void
+
+returns the current setting of the flag `record_proof_flag`.
+The function
+
+   last_proof : void -> step list
+
+returns the current value of the step list without modifying it. The
+actual recording is done by the function
+
+   RecordStep : step -> void
+
+which adds its argument, a step, to the front of the step list only if
+the `record_proof_flag` is true, otherwise it does nothing.
+
+The function
+
+   MakeProof : step list -> line list
+
+converts a list of steps into a Hilbert style formal proof,
+represented by a list of lines, where a line is defined by:
+
+   type line = Line of (int # thm list # justification)
+
+Where  a line
+
+   Line(m, [th1;...;thn], j)
+
+is the mth step in a proof; proves th1,...,thn and is
+justified by j, where justifications are defined by:
+
+   type justification =
+      Hypothesis
+    | Assume of term
+    | Refl of term
+    | Subst of (int#term)list # term # int
+    | BetaConv of term
+    | Abs of term # int
+    | InstType of (type#type)list # int
+    | Disch of term # int
+    | Mp of int # int
+    | MkComb of int # int
+    | MkAbs of int
+    | Alpha of term # term
+    | AddAssum of term # int
+    | Sym of int
+    | Trans of int # int
+    | ImpTrans of int # int
+    | ApTerm of term # int
+    | ApThm of int # term
+    | EqMp of int # int
+    | EqImpRule of int
+    | Spec of term # int
+    | EqtIntro of int
+    | Gen of term # int
+    | EtaConv of term
+    | Ext of int
+    | Exists of (term # term) # int
+    | Choose of (term # int) # int
+    | ImpAntisymRule of int # int
+    | MkExists of int
+    | Subs of int list # int
+    | SubsOccs of (int list # int) list # int
+    | SubstConv of (int # term) list # term # term
+    | Conj of int # int
+    | Conjunct1 of int
+    | Conjunct2 of int
+    | Disj1 of int # term
+    | Disj2 of term # int
+    | DisjCases of int # int # int
+    | NotIntro of int
+    | NotElim of int
+    | Contr of term # int
+    | Ccontr of term # int
+    | Inst of (term # term) list # int
+    | StoreDefinition of string # term
+    | Definition of string # string
+    | DefExistsRule of term
+    | NewAxiom of string # term
+    | Axiom of string # string
+    | Theorem of string # string
+    | NewConstant of string # type
+    | NewType of int # string
+    | NumConv of term
+
+Justifications are like steps, but have the line number establishing a
+theorem replacing the explicit theorem in a step.
+
+Hypotheses (the first kind of justification) are theorems occurring in
+steps that are not proved by the proof. They are given negative line
+numbers.
+
+Example:
+
+#record_proof true;;
+() : void
+
+#last_proof();;
+[] : step list
+
+#g "A ==> (A \/ B)";;
+"A ==> A \/ B"
+
+() : void
+
+#e(STRIP_TAC THEN ASM_REWRITE_TAC[]);;
+OK..
+goal proved
+|- A ==> A \/ B
+
+Previous subproof:
+goal proved
+() : void
+
+#top_print print_all_thm;; % causes assumptions of theorems to be printed %
+- : (thm -> void)
+
+#rev (last_proof());;
+[AssumeStep"A";
+ AssumeStep"A";
+ EqtIntroStepA |- A;
+ ApTermStep("$\/", A |- A = T);
+ ApThmStep(A |- $\/ A = $\/ T, "B");
+ InstStep([("B", "GEN%VAR%266")], |- T \/ GEN%VAR%266 = T);
+ TransStep(A |- A \/ B = T \/ B, |- T \/ B = T);
+ SymStepA |- A \/ B = T;
+ EqMpStep(A |- T = A \/ B, |- T);
+ DischStep("A", A |- A \/ B);
+ MpStep(|- A ==> A \/ B, A |- A);
+ DischStep("A", A |- A \/ B);
+ SymStepA |- A \/ B = T;
+ EqMpStep(A |- T = A \/ B, |- T);
+ DischStep("A", A |- A \/ B);
+ MpStep(|- A ==> A \/ B, A |- A);
+ DischStep("A", A |- A \/ B)]
+: step list
+
+#ShowProof ();;
+[Line(-2, [|- T], Hypothesis);
+ Line(-1, [|- T \/ GEN%VAR%266 = T], Hypothesis);
+ Line(1, [A |- A], Assume"A");
+ Line(2, [A |- A], Assume"A");
+ Line(3, [A |- A = T], EqtIntro 2);
+ Line(4, [A |- $\/ A = $\/ T], ApTerm("$\/", 3));
+ Line(5, [A |- A \/ B = T \/ B], ApThm(4, "B"));
+ Line(6, [|- T \/ B = T], Inst([("B", "GEN%VAR%266")], -1));
+ Line(7, [A |- A \/ B = T], Trans(5, 6));
+ Line(8, [A |- T = A \/ B], Sym 7);
+ Line(9, [A |- A \/ B], EqMp(8, -2));
+ Line(10, [|- A ==> A \/ B], Disch("A", 9));
+ Line(11, [A |- A \/ B], Mp(10, 2));
+ Line(12, [|- A ==> A \/ B], Disch("A", 11));
+ Line(13, [A |- T = A \/ B], Sym 7);
+ Line(14, [A |- A \/ B], EqMp(13, -2));
+ Line(15, [|- A ==> A \/ B], Disch("A", 14));
+ Line(16, [A |- A \/ B], Mp(15, 2));
+ Line(17, [|- A ==> A \/ B], Disch("A", 16))]
+: line list
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (wellorder library)                             |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/wellorder/mk_wellorder.ml                           |
+|----------------------------------------------------------------------------|
+| DATE:          31 March 1993.                                              |
++----------------------------------------------------------------------------+
+
+Some theorems about induction and recursion over wellordered sets have been
+added; in particular a theorem justifying quite general forms of transfinite
+recursion.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new library.                                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/Makefile                                            |
+|                Library/res_quan                                            |
+|----------------------------------------------------------------------------|
+| DATE:          16 April 1993.                                              |
++----------------------------------------------------------------------------+
+
+A new library res_quan containing tools for manipulating restricted
+quantifications and conditional rewriting is added to the system.
+See the manual or a summary of facicities in the directory Manual for
+more details.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (mk_thm)                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JVT                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          21 April 1993.                                              |
++----------------------------------------------------------------------------+
+
+The definition of mk_thm has been changed to remove occurrences of "o"
+and "#".  These created additional embedded calls to "%ap" when expanded
+by the ML -> lisp translator.  See the comments in ml/hol-syn.ml for the
+before and after versions of the function.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (num_EQ_CONV)                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/num.ml                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          5 May 1993.                                                 |
++----------------------------------------------------------------------------+
+
+The built-in conversion num_EQ_CONV had a bug (spotted by Konrad Slind)
+that manifested itself in failure to prove certain inequalities:
+
+
+   #num_EQ_CONV "3 = SUC(SUC(SUC 1))";;
+   evaluation failed     num_EQ_CONV
+
+This has now been fixed.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (adding theorem)                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theory/mk_list_thms.ml                                      |
+|                ml/load_thms.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          7 May 1993.                                                 |
++----------------------------------------------------------------------------+
+
+The following theorem is added to the list theory:
+  LENGTH_MAP2
+        |- !l1 l2. (LENGTH l1 = LENGTH l2) ==>
+           (!f:*->**->***.
+             (LENGTH(MAP2 f l1 l2) = LENGTH l1) /\
+             (LENGTH(MAP2 f l1 l2) = LENGTH l2))
+It is set up to be auto-loaded.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (recording proof)                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml, ml/proof_rec.ml                              |
+|----------------------------------------------------------------------------|
+| DATE:          11 May 1993.                                                |
++----------------------------------------------------------------------------+
+
+Several functions are added to the suite of utitlies for recording proofs.
+The first two are:
+
+        suspend_recording : void -> void
+        resume_recording : void -> void
+
+By using these functions, one can temporarily suspend the recording of
+a proof.  This allows one to do some auxiliary proofs whish are not
+recorded in the midst of the main proof.
+
+The functions
+        write_last_proof : string -> void
+        write_last_proof_add_to : string -> string -> void
+output the proof steps since last time record_proof is called into a
+text file. The first arguament of these functions is the name of the
+file. The difference between the functions is that the second one
+appends the proof to the named file. The second argument to this
+function specifies the name  of the proof.
+
+The syntax of the proof file is simple LISP-like expresseions. A file
+may contain one or more proofs. The syntax of a proof is given below:
+
+proof ::= `(` `PROOF` string proof_line_list `)` ;;
+
+proof_line ::= `(` `LINE` num justification thm_list `)` ;;
+
+justification ::= `(` just_name just_arg `)` ;;
+
+thm ::= `(` `THM` term_list term `)` ;;
+
+term ::= `(` term_atom `)` ;;
+
+term_atom ::= `V` string type | `C` string type
+        | `A` term term | `L` term term ;;
+
+type ::= `(` type_atom `) ;;
+
+type_atom ::= `TV` string | `TO` string type_list ;;
+
+The terminal tokens are enclosed in backquote(`). The non-terminal
+tokens which end with the suffix _list represent a list of tokens of
+the same kind. For example, term_list is a list of terms. Every list
+if enclosed in brackets, e.g. [(A (...)(...)) (C ...(...))] is a list
+of two terms.
+
+The token string represents a string of non-blank characters. Strings
+are interpreted as names or identifiers, so they should follow the
+rules of HOL identifiers, i.e., they can be either alphnumeric or
+symbolic. The string following `TV` should begin with `*` since it is
+type variable.
+
+Space between items are optional except were the absence of it will
+cause ambiguity. The general rules are
+ 1) two alphanumeric tokens must separated by space, and
+ 2) two symbolic tokens must separated by space.
+The TAB, NEWLINE, LINEFEED and FORMFEED are treated as space
+characters.
+
+The token just_name is a string representing the name of
+justification. The token just_arg is the argument of the justification
+which varies according to the kind of justification. (See previous
+comment on the type justification.)
+
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement                                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_arithmetic/                                    |
+|----------------------------------------------------------------------------|
+| DATE:          12 May 1993.                                                |
++----------------------------------------------------------------------------+
+
+Several new theorems by Wai Wong have been added. These include many theorems
+about DIV and MOD for which a new theory div_mod has been created. The new
+theorems are given below. The theory heirarchy has been modified.
+
+The theory pre:
+Theorems --
+  LESS_IMP_LESS_EQ_PRE    |- !m n. 0 < n ==> (m < n = m <= (PRE n))
+
+The theory mult:
+Theorems --
+  NOT_MULT_LESS_0     |- !m n. 0 < m /\ 0 < n ==> 0 < (m * n)
+  EXP1                |- !n. n EXP 1 = n
+  ZERO_LESS_TWO_EXP   |- !n. 0 < (2 EXP n)
+  ONE_LESS_EQ_TWO_EXP |- !n. 1 <= (2 EXP n)
+
+The theory div_mod:
+Theorems --
+  SUC_MOD          |- !n m. (SUC n) < m ==> ((SUC n) MOD m = SUC(n MOD m))
+  MULT_DIV         |- !n q. 0 < n ==> ((q * n) DIV n = q)
+  LESS_DIV_EQ_ZERO |- !r n. r < n ==> (r DIV n = 0)
+  MOD_MULT_MOD
+    |- !m n. 0 < n /\ 0 < m ==> (!x. (x MOD (n * m)) MOD n = x MOD n)
+  DIV_ONE          |- !q. q DIV (SUC 0) = q
+  ADD_DIV_SUC_DIV  |- !n. 0 < n ==> (!r. (n + r) DIV n = SUC(r DIV n))
+  SUC_MOD_SELF     |- !n. (SUC n) MOD (SUC n) = 0
+  SUC_DIV_SELF     |- !n. (SUC n) DIV (SUC n) = 1
+  ADD_DIV_ADD_DIV  |- !n. 0 < n ==> (!x r. ((x * n) + r) DIV n = x + (r DIV n))
+  SUC_DIV_CASES
+    |- !n. 0 < n ==>
+            (!x. ((SUC x) DIV n = x DIV n) \/ ((SUC x) DIV n = SUC(x DIV n)))
+  DIV_DIV_DIV_MULT
+    |- !m n. 0 < m /\ 0 < n ==> (!x. (x DIV m) DIV n = x DIV (m * n))
+  LESS_EQ_MONO_DIV |- !n. 0 < n ==> (!p q. p <= q ==> (p DIV n) <= (q DIV n))
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement                                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    PC                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_lists/                                         |
+|----------------------------------------------------------------------------|
+| DATE:          12 May 1993.                                                |
++----------------------------------------------------------------------------+
+
+Several new theorems, conversions and tactics by Wai Wong have been added.
+ELL which extracts elements indexed from the end of a list has been defined,
+and a new theory ell created. The theory heirarchy has been modified.
+The theorems EL_MAP and MAP_EL1_SUC_CONS have been moved to the theory el.
+
+The following tactics have been added:
+  EQ_LENGTH_INDUCT_TAC
+  EQ_LENGTH_SNOC_INDUCT_TAC
+  LENGTH_LIST_INDUCT_TAC
+
+The following conversions have been added:
+  BUTLAST_CONV
+  EL_CONV
+  LAST_CONV
+  MAP2_CONV
+  NBUTLAST_CONV
+  SPLIT_CONV
+  ELL_CONV
+  LASTN_CONV
+  SNOC_CONV
+
+The following theorems have been added:
+Theory snoc:
+Theorems --
+  SAME_LENGTH_SNOC
+    |- !l a b. (LENGTH l = LENGTH(SNOC a b)) =
+            (?a' b'. (LENGTH b' = LENGTH b) /\ (l = SNOC a' b'))
+
+Theory append:
+Theorems --
+  APPEND_LENGTH_EQ
+   |- !l1 l1'.
+        (LENGTH l1 = LENGTH l1') ==>
+          (!l2 l2'.
+             (LENGTH l2 = LENGTH l2') ==>
+             ((APPEND l1 l2 = APPEND l1' l2') = (l1 = l1') /\ (l2 = l2')))
+
+Theory map:
+Theorems --
+  NULL_MAP   |- !f l. NULL(MAP f l) = NULL l
+  TAIL_MAP   |- !f l. TAIL(MAP f l) = MAP f(TAIL l)
+  MAP2_SNOC
+    |- !f h1 h2 l1 l2.
+      (LENGTH l1 = LENGTH l2) ==>
+      (MAP2 f(SNOC h1 l1)(SNOC h2 l2) = SNOC(f h1 h2)(MAP2 f l1 l2))
+
+Theory el:
+Theorems --
+  EL_BUTLAST
+    |- !l x. ~NULL l ==> (SUC x) < (LENGTH l) ==> (EL x(BUTLAST l) = EL x l)
+  MAP_EL  |- !f l n. n < (LENGTH l) ==> (MAP f[EL n l] = [f(EL n l)])
+  EL_MAP2
+    |- !f l l' n.
+      (LENGTH l = LENGTH l') ==>
+      n < (LENGTH l) \/ n < (LENGTH l') ==>
+      (EL n(MAP2 f l l') = f(EL n l)(EL n l'))
+  MAP2_EL
+    |- !f l l' n.
+      (LENGTH l = LENGTH l') ==>
+      n < (LENGTH l) \/ n < (LENGTH l') ==>
+      (MAP2 f[EL n l][EL n l'] = [f(EL n l)(EL n l')])
+
+Theory ell:
+Definitions --
+  ELL
+    |- (!l. ELL 0 l = LAST l) /\ (!n l. ELL(SUC n)l = ELL n(BUTLAST l))
+
+Theorems --
+  ELL_LAST  |- !l. ~NULL l ==> (ELL 0 l = LAST l)
+  ELL_LENGTH_APPEND
+    |- !l1 l2. ~NULL l1 ==> (ELL(LENGTH l2)(APPEND l1 l2) = LAST l1)
+  ELL_SNOC0  |- !l x. ELL 0(SNOC x l) = x
+  ELL_SNOC  |- !l x k. 0 < k ==> (ELL k(SNOC x l) = ELL(PRE k)l)
+  ELL_SUC_SNOC  |- !k x l. ELL(SUC k)(SNOC x l) = ELL k l
+  ELL_CONS  |- !l x k. k < (LENGTH l) ==> (ELL k(CONS x l) = ELL k l)
+  HD_ELL_LENGTH_SNOC
+    |- !l x. ELL(LENGTH l)(SNOC x l) = (NULL l => x | HD l)
+  HD_ELL_LENGTH_CONS  |- !l x. ELL(LENGTH l)(CONS x l) = x
+  ELL_APPEND_1
+    |- !l1 l2 k. k < (LENGTH l2) ==> (ELL k(APPEND l1 l2) = ELL k l2)
+  ELL_APPEND_2
+    |- !l1 l2 k.
+        (LENGTH l2) <= k ==>
+        (ELL k(APPEND l1 l2) = ELL(k - (LENGTH l2))l1)
+  HD_ELL_PRE_LENGTH  |- !l. ~NULL l ==> (ELL(PRE(LENGTH l))l = HD l)
+  EL_ELL
+    |- !l k. k < (LENGTH l) ==> (EL k l = ELL(PRE((LENGTH l) - k))l)
+  ELL_EL
+    |- !l k. k < (LENGTH l) ==> (ELL k l = EL(PRE((LENGTH l) - k))l)
+  ELL_MAP  |- !f l n. n < (LENGTH l) ==> (ELL n(MAP f l) = f(ELL n l))
+  MAP_ELL  |- !f l n. n < (LENGTH l) ==> (MAP f[ELL n l] = [f(ELL n l)])
+  ELL_MAP2
+    |- !f l l' n.
+        (LENGTH l = LENGTH l') ==>
+        n < (LENGTH l) \/ n < (LENGTH l') ==>
+        (ELL n(MAP2 f l l') = f(ELL n l)(ELL n l'))
+  MAP2_ELL
+    |- !f l l' n.
+        (LENGTH l = LENGTH l') ==>
+        n < (LENGTH l) \/ n < (LENGTH l') ==>
+        (MAP2 f[ELL n l][ELL n l'] = [f(ELL n l)(ELL n l')])
+
+Theory last_subseq:
+Theorems --
+  LASTN_LENGTH_APPEND  |- !l1 l2. LASTN(LENGTH l2)(APPEND l1 l2) = l2
+  NBUTLAST_CONS
+    |- !h l2 n.
+        n <= (LENGTH l2) ==>
+        (NBUTLAST n(CONS h l2) = CONS h(NBUTLAST n l2))
+  NBUTLAST_LENGTH_CONS  |- !l h. NBUTLAST(LENGTH l)(CONS h l) = [h]
+  NOT_NULL_NBUTLAST  |- !k l. k < (LENGTH l) ==> ~NULL(NBUTLAST k l)
+  LAST_NBUTLAST_EL
+    |- !k l.
+        k < (LENGTH l) ==>
+        (LAST(NBUTLAST k l) = EL(PRE((LENGTH l) - k))l)
+  EL_NBUTLAST
+    |- !l x k.
+        k < (LENGTH l) /\ x < ((LENGTH l) - k) ==>
+        (EL x(NBUTLAST k l) = EL x l)
+  NBUTLAST_SUC_SNOC  |- !l x i. NBUTLAST(SUC i)(SNOC x l) = NBUTLAST i l
+  LASTN_SUC_SNOC  |- !l x i. LASTN(SUC i)(SNOC x l) = SNOC x(LASTN i l)
+  LAST_LASTN
+    |- !l m. m <= (LENGTH l) ==> 0 < m ==> (LAST(LASTN m l) = LAST l)
+  NBUTLAST_LASTN_NIL
+    |- !l i. i <= (LENGTH l) ==> (NBUTLAST i(LASTN i l) = [])
+  LASTN_NBUTLAST
+    |- !l i k.
+        (i + k) < (LENGTH l) ==>
+        (LASTN k(NBUTLAST i l) = NBUTLAST i(LASTN(i + k)l))
+  NBUTLAST_LASTN
+    |- !l i k.
+        i <= k /\ k <= (LENGTH l) ==>
+        (NBUTLAST i(LASTN k l) = LASTN(k - i)(NBUTLAST i l))
+  APPEND_LASTN_LASTN
+    |- !l m1 m2.
+        (m1 + m2) <= (LENGTH l) ==>
+        (APPEND(LASTN m2(NBUTLAST m1 l))(LASTN m1 l) = LASTN(m1 + m2)l)
+  LAST_TO_LASTN  |- !l. ~NULL l ==> ([LAST l] = LASTN 1 l)
+  BUTLAST_TO_NBUTLAST  |- !l. ~NULL l ==> (BUTLAST l = NBUTLAST 1 l)
+  LASTN_NBUTLAST_TL_SPLIT
+    |- !l m k.
+        0 < m /\ (k + m) < (LENGTH l) ==>
+        (LASTN m(NBUTLAST k l) =
+         APPEND(LASTN(m - 1)(NBUTLAST(k + 1)l))(LASTN 1(NBUTLAST k l)))
+  NBUTLAST_APPEND1
+    |- !l1 l2 k.
+        (LENGTH l2) <= k ==>
+        (NBUTLAST k(APPEND l1 l2) = NBUTLAST(k - (LENGTH l2))l1)
+  LASTN_APPEND
+    |- !l1 l2 n.
+        n <= (LENGTH l2) ==> (LASTN n(APPEND l1 l2) = LASTN n l2)
+  LASTN_APPEND2
+    |- !l1 l2 n.
+        (LENGTH l2) <= n ==>
+        (LASTN n(APPEND l1 l2) = APPEND(LASTN(n - (LENGTH l2))l1)l2)
+  LASTN_MAP
+    |- !f l n. n <= (LENGTH l) ==> (LASTN n(MAP f l) = MAP f(LASTN n l))
+  NBUTLAST_MAP
+    |- !f l n.
+        n <= (LENGTH l) ==> (NBUTLAST n(MAP f l) = MAP f(NBUTLAST n l))
+  LASTN_MAP2
+    |- !f l1 l2 n.
+        (LENGTH l1 = LENGTH l2) ==>
+        n <= (LENGTH l1) ==>
+        (LASTN n(MAP2 f l1 l2) = MAP2 f(LASTN n l1)(LASTN n l2))
+  NBUTLAST_MAP2
+    |- !f l1 l2 n.
+        (LENGTH l1 = LENGTH l2) ==>
+        n <= (LENGTH l1) ==>
+        (NBUTLAST n(MAP2 f l1 l2) =
+         MAP2 f(NBUTLAST n l1)(NBUTLAST n l2))
+  LAST_NBUTLAST_ELL
+    |- !k l. k < (LENGTH l) ==> (LAST(NBUTLAST k l) = ELL k l)
+  ELL_NBUTLAST
+    |- !l k j.
+        (j + k) <= (LENGTH l) ==> (ELL j(NBUTLAST k l) = ELL(j + k)l)
+  ELL_LASTN
+    |- !l m j.
+        m <= (LENGTH l) ==> j < m ==> (ELL j(LASTN m l) = ELL j l)
+  LASTN_NBUTLAST_APPEND
+    |- !l1 l2 m k.
+        (m + k) <= ((LENGTH l1) + (LENGTH l2)) /\
+        k < (LENGTH l2) /\
+        (LENGTH l2) <= (m + k) ==>
+        (LASTN m(NBUTLAST k(APPEND l1 l2)) =
+         APPEND
+         (LASTN((m + k) - (LENGTH l2))l1)
+         (LASTN((LENGTH l2) - k)(NBUTLAST k l2)))
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Optimization                                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JVT                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml ml/hol-syn.ml ml/rewrite.ml ml/tacticals.ml      |
+|----------------------------------------------------------------------------|
+| DATE:          13 May 1993.                                                |
++----------------------------------------------------------------------------+
+
+Recent profiling has shown that function composition in ML ("o") creates extra
+calls to %ap (the ML application function).  The primitive rewrites, as well
+as other core functions, have been rewritten to take advantage of this fact.
+See the comments in the above-mentioned files to see exactly what was done
+to each function.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (adding theorems)                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/more_lists/map.ml                                   |
+|                Library/more_lists/lastn.ml                                 |
+|----------------------------------------------------------------------------|
+| DATE:          13 May 1993.                                                |
++----------------------------------------------------------------------------+
+
+The following two theorems have been added to the library more_lists
+in the theory as indicated:
+
+ EVERY_SNOC snoc
+        |- !P h l. EVERY P(SNOC h l) = EVERY P l /\ P
+
+ EVERY_LASTN last_subseq
+        |- !P l. EVERY P l ==> (!m. m <= (LENGTH l) ==> EVERY P(LASTN m l))
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (library loading)                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Makefile                                                    |
+|                ml/lis.ml                                                   |
+|                ml/lib_loader.ml (new file)                                 |
+|----------------------------------------------------------------------------|
+| DATE:          19 May 1993.                                                |
++----------------------------------------------------------------------------+
+
+A generic library loader which carries out the standard library loading
+procedures is provided for library authors. The library loading file
+can be written much more concisely. The following three functions are added
+to the system:
+
+   library_loader --- a generic library loader
+   define_load_lib_function --- defines load library function dynamically
+   splitp --- general list function
+
+Manual entries of these functions are added as well.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (new library)                                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/Makefile                                            |
+|                Library/word (new directory)                                |
+|----------------------------------------------------------------------------|
+| DATE:          19 May 1993.                                                |
++----------------------------------------------------------------------------+
+
+A new library `word' for modelling bit vectors is added to the system.
+See manual for details.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Optimization (SELECT_RULE)                                  |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-drule.ml                                             |
+|----------------------------------------------------------------------------|
+| DATE:          29 June 1993.                                               |
++----------------------------------------------------------------------------+
+
+A new version of SELECT_RULE has been introduced. It avoids a lot of run-time
+computation, and is about twice as fast. It has the additional (potential)
+advantage of not relying of CHOOSE.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Update (makeindex sources).                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Manual/LaTeX/makeindex.src                                  |
+|----------------------------------------------------------------------------|
+| DATE:          3 July 1993.                                                |
++----------------------------------------------------------------------------+
+
+The makeindex sources distribued with the system have been updated
+from version 2.4 [20-Mar-88] to version 2.11 [19-Oct-1991].
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Optimization (ancestors)                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-thyfn.ml                                             |
+|                ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          5 July 1993.                                                |
++----------------------------------------------------------------------------+
+
+The ML function ancestors is very slow du to unnecessary recursive
+search up the theory hierarchy. The new implementation uses a local
+function which takes auxiliary list as extra arugment for storing the
+search results to avoid repeated search. The order of the theories in
+the resulting list is different from the original slow version.
+
+This function is moved to the file hol-syn.ml since it is needed
+in activate_binders (See change log entry dated 8 February 1993.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Support for proof recording                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          5 July 1993.                                                |
++----------------------------------------------------------------------------+
+
+The function new_infix was defined by dml so, unlike constants, when a
+new infix constant is defined it won't be recorded. Define this
+function in ML and call RecordStep.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Optimization.                                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM/slind                                                   |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          22 July 1993.                                               |
++----------------------------------------------------------------------------+
+
+Konrad Slind noticed that in SUB_QCONV we have
+
+     if (is_abs tm) then
+        (let (bv,body) = dest_abs tm
+        in  let bodyth = conv body
+        in  MK_ABS (GEN bv bodyth))
+
+It seems to me that the
+
+    MK_ABS (GEN bv bodyth)
+
+bit could be replaced with
+
+    ABS bv bodyth
+
+which might save on a bit of computation. This change has therefore
+been made.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bug fix.                                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    TFM                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/tactics.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          22 July 1993.                                               |
++----------------------------------------------------------------------------+
+
+ACCEPT_TAC has been fixed so that the justification it returns proves a
+theorem syntactically identical to the goal and not just alpha-equivalent.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Support for proof recording                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml                                               |
+|                Makefile, Library/Makefile                                  |
+|                ml/prim_rec.ml, ml/lis.ml                                   |
+| FILE DELETED:  ml/proof_rec.ml                                             |
+| NEW LIBRARY:   record_proof                                                |
+|----------------------------------------------------------------------------|
+| DATE:          24 July 1993.                                               |
++----------------------------------------------------------------------------+
+
+A new library record_proof for recording proof is added to the system.
+See the manual in the library for more information.
+
+Some functions in the library were implemented in the system in the file
+`ml/proof_rec.ml`. As they are now in the library, the file
+proof_rec.ml is deleted, and its entry in the Makefile is also deleted.
+
+The function last_proof in ml/hol-syn.ml has been renamed to
+get_steps.
+
+Document pages for proof recording functions implemented in the system
+are added to the help directory.
+
+The function remove in the file ml/prim_rec.ml is moved to the file
+ml/lis.ml because ml/hol-syn.ml need it but ml/prim_rec is compiled after
+ml/hol-syn.ml
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bug fix / Generalisation                                    |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/conv.ml                                                  |
+|----------------------------------------------------------------------------|
+| DATE:          19 October 1993.                                            |
++----------------------------------------------------------------------------+
+
+SELECT_CONV will now work with alpha-equivalnce.
+That is it works with terms like: "!z. (@e. !x. e + x = x) + z = z",
+where previously this would have to be: "!x. (@e. !x. e + x = x) + x = x".
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-pars.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          17 November 1993.                                           |
++----------------------------------------------------------------------------+
+
+An obscure problem with parsing using defined constants named `::` has
+been fixed.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-syn.ml ml/hol-thyfn.ml                               |
+|----------------------------------------------------------------------------|
+| DATE:          6 December 1993.                                            |
++----------------------------------------------------------------------------+
+
+The name `definition' has been bound to two functions at top level.
+Once in the file ml/hol-syn.ml and once in the file ml/hol-thyfn.ml. The
+function in hol-syn.ml has been masked out by the function in hol-thyfn.ml.
+
+The binding and the function in hol-syn.ml are deleted. The
+functionality, namely recording proof step, is incorporated in to the
+function in hol-thyfn.ml.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/window/basic_close.ml                               |
+|----------------------------------------------------------------------------|
+| DATE:          7 December 1993.                                            |
++----------------------------------------------------------------------------+
+
+Fixed a bug in LET_CLOSE which filtered out the assumption it was supposed to
+add.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement                                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/window/hol_ext.ml                                   |
+|----------------------------------------------------------------------------|
+| DATE:          7 December 1993.                                            |
++----------------------------------------------------------------------------+
+
+Added the new functions IMP_PMI_CONV and PMI_PMI_CONV.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/window/inter.ml                                     |
+|----------------------------------------------------------------------------|
+| DATE:          7 December 1993.                                            |
++----------------------------------------------------------------------------+
+
+Fixed bug where you could not end a stack if there was a current stack.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement                                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/window/win.ml                                       |
+|----------------------------------------------------------------------------|
+| DATE:          7 December 1993.                                            |
++----------------------------------------------------------------------------+
+
+Now when you open a window to establish a conjecture,
+the conjecture (and the lemmas that depend on it) dissapear from the
+context.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   new library (numeral)                                       |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/Makefile                                            |
+|                Library/numeral                                             |
+|----------------------------------------------------------------------------|
+| DATE:          13 December 1993                                            |
++----------------------------------------------------------------------------+
+
+A new library `numeral', written by Tim Leonard,  has been added. It provides
+facilities for the manipulation of positionally-represented numbers and fast
+arithmetic on them. Full standard documentation is provided.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New built-in theory fun                                     |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| NEW FILE:      theories/mk_fun.ml                                          |
+|----------------------------------------------------------------------------|
+| DATE:          5 January 1994                                              |
++----------------------------------------------------------------------------+
+
+This new thoery contains definitions of several predicates on functions
+and some theorems about them. They are used in the new list theory. They
+are also generally useful. So this new theory is created for them.
+The output of "print_theory`fun`" is as below:
+
+The Theory fun
+Parents --  BASIC-HOL
+Constants --
+  ASSOC ":(* -> (* -> *)) -> bool"
+  COMM ":(* -> (* -> **)) -> bool"
+  FCOMM ":(* -> (* -> *)) -> ((* -> (* -> *)) -> bool)"
+  RIGHT_ID ":(* -> (** -> *)) -> (** -> bool)"
+  LEFT_ID ":(** -> (* -> *)) -> (** -> bool)"
+  MONOID ":(* -> (* -> *)) -> (* -> bool)"
+Definitions --
+  ASSOC_DEF  |- !f. ASSOC f = (!x y z. f x(f y z) = f(f x y)z)
+  COMM_DEF  |- !f. COMM f = (!x y. f x y = f y x)
+  FCOMM_DEF  |- !f g. FCOMM f g = (!x y z. g x(f y z) = f(g x y)z)
+  RIGHT_ID_DEF  |- !f e. RIGHT_ID f e = (!x. f x e = x)
+  LEFT_ID_DEF  |- !f e. LEFT_ID f e = (!x. f e x = x)
+  MONOID_DEF
+    |- !f e. MONOID f e = ASSOC f /\ RIGHT_ID f e /\ LEFT_ID f e
+
+Theorems --
+  ASSOC_CONJ  |- ASSOC $/\
+  ASSOC_DISJ  |- ASSOC $\/
+  FCOMM_ASSOC  |- !f. FCOMM f f = ASSOC f
+  MONOID_CONJ_T  |- MONOID $/\ T
+  MONOID_DISJ_F  |- MONOID $\/ F
+
+******************** fun ********************
+
+() : void
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Revision of the theory list                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_list_thms.ml                                    |
+| NEW FILE:      theories/mk_list_defs.ml theories/mk_list_thm2.ml           |
+|----------------------------------------------------------------------------|
+| DATE:          5 January 1994                                              |
++----------------------------------------------------------------------------+
+
+The built-in theory list has been extensively revised and extended.
+
+All definitions and theorem in the old list theory are kept unchanged
+except the constant EVERY.  It has been changed to ALL_EL. The name of
+its definition is changed from EVERY_DEF to ALL_EL, and two theorems,
+EVERY_CONJ and EVERY_EL are changed to ALL_EL_CONJ and ALL_EL_EL,
+respectively.
+
+The files creating the list theory:
+   theories/mk_list.ml --- list type definition (old, unchanged)
+   theories/mk_list_defs.ml --- all constant definitions (new)
+   theories/mk_list_thms.ml --- old theorems (old, changed)
+   theories/mk_list_thm2.ml --- new theorems (new)
+
+The list theory now looks like below:
+
+The Theory list
+Parents --  BASIC-HOL     arithmetic     combin
+Types --  ":(*)list"
+Constants --
+  IS_list_REP ":(num -> *) # num -> bool"
+  REP_list ":(*)list -> (num -> *) # num"
+  ABS_list ":(num -> *) # num -> (*)list"     NIL ":(*)list"
+  CONS ":* -> ((*)list -> (*)list)"     NULL ":(*)list -> bool"
+  HD ":(*)list -> *"     TL ":(*)list -> (*)list"
+  SNOC ":* -> ((*)list -> (*)list)"
+  FOLDR ":(* -> (** -> **)) -> (** -> ((*)list -> **))"
+  FOLDL ":(** -> (* -> **)) -> (** -> ((*)list -> **))"
+  FILTER ":(* -> bool) -> ((*)list -> (*)list)"
+  SCANL ":(** -> (* -> **)) -> (** -> ((*)list -> (**)list))"
+  SCANR ":(* -> (** -> **)) -> (** -> ((*)list -> (**)list))"
+  REVERSE ":(*)list -> (*)list"
+  APPEND ":(*)list -> ((*)list -> (*)list)"
+  FLAT ":((*)list)list -> (*)list"     LENGTH ":(*)list -> num"
+  MAP ":(* -> **) -> ((*)list -> (**)list)"
+  MAP2 ":(* -> (** -> ***)) -> ((*)list -> ((**)list -> (***)list))"
+  ALL_EL ":(* -> bool) -> ((*)list -> bool)"
+  SOME_EL ":(* -> bool) -> ((*)list -> bool)"
+  IS_EL ":* -> ((*)list -> bool)"
+  FIRSTN ":num -> ((*)list -> (*)list)"
+  BUTFIRSTN ":num -> ((*)list -> (*)list)"
+  SEG ":num -> (num -> ((*)list -> (*)list))"
+  LAST ":(*)list -> *"     BUTLAST ":(*)list -> (*)list"
+  LASTN ":num -> ((*)list -> (*)list)"
+  BUTLASTN ":num -> ((*)list -> (*)list)"
+  EL ":num -> ((*)list -> *)"     ELL ":num -> ((*)list -> *)"
+  IS_PREFIX ":(*)list -> ((*)list -> bool)"
+  IS_SUFFIX ":(*)list -> ((*)list -> bool)"
+  IS_SUBLIST ":(*)list -> ((*)list -> bool)"
+  SPLITP ":(* -> bool) -> ((*)list -> (*)list # (*)list)"
+  PREFIX ":(* -> bool) -> ((*)list -> (*)list)"
+  SUFFIX ":(* -> bool) -> ((*)list -> (*)list)"
+  ZIP ":(*)list # (*)list -> (* # *)list"
+  UNZIP ":(* # **)list -> (*)list # (**)list"
+  UNZIP_FST ":(* # **)list -> (*)list"
+  UNZIP_SND ":(* # **)list -> (**)list"     SUM ":(num)list -> num"
+Definitions --
+  IS_list_REP
+    |- !r. IS_list_REP r = (?f n. r = (\m. (m < n => f m | (@x. T))),n)
+  list_TY_DEF  |- ?rep. TYPE_DEFINITION IS_list_REP rep
+  list_ISO_DEF
+    |- (!a. ABS_list(REP_list a) = a) /\
+       (!r. IS_list_REP r = (REP_list(ABS_list r) = r))
+  NIL_DEF  |- [] = ABS_list((\n. @e. T),0)
+  CONS_DEF
+    |- !h t.
+        CONS h t =
+        ABS_list
+        ((\m. ((m = 0) => h | FST(REP_list t)(PRE m))),
+         SUC(SND(REP_list t)))
+  NULL_DEF  |- (NULL[] = T) /\ (!h t. NULL(CONS h t) = F)
+  HD  |- !h t. HD(CONS h t) = h
+  TL  |- !h t. TL(CONS h t) = t
+  SNOC
+    |- (!x. SNOC x[] = [x]) /\
+       (!x x' l. SNOC x(CONS x' l) = CONS x'(SNOC x l))
+  FOLDR
+    |- (!f e. FOLDR f e[] = e) /\
+       (!f e x l. FOLDR f e(CONS x l) = f x(FOLDR f e l))
+  FOLDL
+    |- (!f e. FOLDL f e[] = e) /\
+       (!f e x l. FOLDL f e(CONS x l) = FOLDL f(f e x)l)
+  FILTER
+    |- (!P. FILTER P[] = []) /\
+       (!P x l.
+         FILTER P(CONS x l) = (P x => CONS x(FILTER P l) | FILTER P l))
+  SCANL
+    |- (!f e. SCANL f e[] = [e]) /\
+       (!f e x l. SCANL f e(CONS x l) = CONS e(SCANL f(f e x)l))
+  SCANR
+    |- (!f e. SCANR f e[] = [e]) /\
+       (!f e x l.
+         SCANR f e(CONS x l) = CONS(f x(HD(SCANR f e l)))(SCANR f e l))
+  REVERSE
+    |- (REVERSE[] = []) /\ (!x l. REVERSE(CONS x l) = SNOC x(REVERSE l))
+  APPEND
+    |- (!l. APPEND[]l = l) /\
+       (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+  FLAT  |- (FLAT[] = []) /\ (!h t. FLAT(CONS h t) = APPEND h(FLAT t))
+  LENGTH  |- (LENGTH[] = 0) /\ (!h t. LENGTH(CONS h t) = SUC(LENGTH t))
+  MAP
+    |- (!f. MAP f[] = []) /\
+       (!f h t. MAP f(CONS h t) = CONS(f h)(MAP f t))
+  MAP2
+    |- (!f. MAP2 f[][] = []) /\
+       (!f h1 t1 h2 t2.
+         MAP2 f(CONS h1 t1)(CONS h2 t2) = CONS(f h1 h2)(MAP2 f t1 t2))
+  ALL_EL
+    |- (!P. ALL_EL P[] = T) /\
+       (!P x l. ALL_EL P(CONS x l) = P x /\ ALL_EL P l)
+  SOME_EL
+    |- (!P. SOME_EL P[] = F) /\
+       (!P x l. SOME_EL P(CONS x l) = P x \/ SOME_EL P l)
+  IS_EL_DEF  |- !x l. IS_EL x l = SOME_EL(\y. x = y)l
+  FIRSTN
+    |- (!l. FIRSTN 0 l = []) /\
+       (!n x l. FIRSTN(SUC n)(CONS x l) = CONS x(FIRSTN n l))
+  BUTFIRSTN
+    |- (!l. BUTFIRSTN 0 l = l) /\
+       (!n x l. BUTFIRSTN(SUC n)(CONS x l) = BUTFIRSTN n l)
+  SEG
+    |- (!k l. SEG 0 k l = []) /\
+       (!m x l. SEG(SUC m)0(CONS x l) = CONS x(SEG m 0 l)) /\
+       (!m k x l. SEG(SUC m)(SUC k)(CONS x l) = SEG(SUC m)k l)
+  LAST_DEF  |- !l. LAST l = HD(SEG 1(PRE(LENGTH l))l)
+  BUTLAST_DEF  |- !l. BUTLAST l = SEG(PRE(LENGTH l))0 l
+  LASTN
+    |- (!l. LASTN 0 l = []) /\
+       (!n x l. LASTN(SUC n)(SNOC x l) = SNOC x(LASTN n l))
+  BUTLASTN
+    |- (!l. BUTLASTN 0 l = l) /\
+       (!n x l. BUTLASTN(SUC n)(SNOC x l) = BUTLASTN n l)
+  EL  |- (!l. EL 0 l = HD l) /\ (!l n. EL(SUC n)l = EL n(TL l))
+  ELL
+    |- (!l. ELL 0 l = LAST l) /\ (!n l. ELL(SUC n)l = ELL n(BUTLAST l))
+  IS_PREFIX
+    |- (!l. IS_PREFIX l[] = T) /\
+       (!x l. IS_PREFIX[](CONS x l) = F) /\
+       (!x1 l1 x2 l2.
+         IS_PREFIX(CONS x1 l1)(CONS x2 l2) =
+         (x1 = x2) /\ IS_PREFIX l1 l2)
+  IS_SUFFIX
+    |- (!l. IS_SUFFIX l[] = T) /\
+       (!x l. IS_SUFFIX[](SNOC x l) = F) /\
+       (!x1 l1 x2 l2.
+         IS_SUFFIX(SNOC x1 l1)(SNOC x2 l2) =
+         (x1 = x2) /\ IS_SUFFIX l1 l2)
+  IS_SUBLIST
+    |- (!l. IS_SUBLIST l[] = T) /\
+       (!x l. IS_SUBLIST[](CONS x l) = F) /\
+       (!x1 l1 x2 l2.
+         IS_SUBLIST(CONS x1 l1)(CONS x2 l2) =
+         (x1 = x2) /\ IS_PREFIX l1 l2 \/ IS_SUBLIST l1(CONS x2 l2))
+  SPLITP
+    |- (!P. SPLITP P[] = [],[]) /\
+       (!P x l.
+         SPLITP P(CONS x l) =
+         (P x =>
+          ([],CONS x l) |
+          (CONS x(FST(SPLITP P l)),SND(SPLITP P l))))
+  PREFIX_DEF  |- !P l. PREFIX P l = FST(SPLITP($~ o P)l)
+  SUFFIX_DEF
+    |- !P l. SUFFIX P l = FOLDL(\l' x. (P x => SNOC x l' | []))[]l
+  ZIP
+    |- (ZIP([],[]) = []) /\
+       (!x1 l1 x2 l2.
+         ZIP(CONS x1 l1,CONS x2 l2) = CONS(x1,x2)(ZIP(l1,l2)))
+  UNZIP
+    |- (UNZIP[] = [],[]) /\
+       (!x l.
+         UNZIP(CONS x l) =
+         CONS(FST x)(FST(UNZIP l)),CONS(SND x)(SND(UNZIP l)))
+  UNZIP_FST_DEF  |- !l. UNZIP_FST l = FST(UNZIP l)
+  UNZIP_SND_DEF  |- !l. UNZIP_SND l = SND(UNZIP l)
+  SUM  |- (SUM[] = 0) /\ (!h t. SUM(CONS h t) = h + (SUM t))
+
+Theorems --
+  list_Axiom
+    |- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+  NULL  |- NULL[] /\ (!h t. ~NULL(CONS h t))
+  list_INDUCT
+    |- !P. P[] /\ (!t. P t ==> (!h. P(CONS h t))) ==> (!l. P l)
+  list_CASES  |- !l. (l = []) \/ (?t h. l = CONS h t)
+  CONS_11  |- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+  NOT_NIL_CONS  |- !h t. ~([] = CONS h t)
+  NOT_CONS_NIL  |- !h t. ~(CONS h t = [])
+  LIST_NOT_EQ
+    |- !l1 l2. ~(l1 = l2) ==> (!h1 h2. ~(CONS h1 l1 = CONS h2 l2))
+  NOT_EQ_LIST
+    |- !h1 h2. ~(h1 = h2) ==> (!l1 l2. ~(CONS h1 l1 = CONS h2 l2))
+  EQ_LIST
+    |- !h1 h2.
+        (h1 = h2) ==> (!l1 l2. (l1 = l2) ==> (CONS h1 l1 = CONS h2 l2))
+  CONS  |- !l. ~NULL l ==> (CONS(HD l)(TL l) = l)
+  APPEND_ASSOC
+    |- !l1 l2 l3. APPEND l1(APPEND l2 l3) = APPEND(APPEND l1 l2)l3
+  LENGTH_APPEND
+    |- !l1 l2. LENGTH(APPEND l1 l2) = (LENGTH l1) + (LENGTH l2)
+  MAP_APPEND
+    |- !f l1 l2. MAP f(APPEND l1 l2) = APPEND(MAP f l1)(MAP f l2)
+  LENGTH_MAP  |- !l f. LENGTH(MAP f l) = LENGTH l
+  LENGTH_NIL  |- !l. (LENGTH l = 0) = (l = [])
+  LENGTH_CONS
+    |- !l n.
+        (LENGTH l = SUC n) = (?h l'. (LENGTH l' = n) /\ (l = CONS h l'))
+  LENGTH_EQ_CONS
+    |- !P n.
+        (!l. (LENGTH l = SUC n) ==> P l) =
+        (!l. (LENGTH l = n) ==> (\l. !x. P(CONS x l))l)
+  LENGTH_EQ_NIL  |- !P. (!l. (LENGTH l = 0) ==> P l) = P[]
+  LENGTH_MAP2
+    |- !l1 l2.
+        (LENGTH l1 = LENGTH l2) ==>
+        (!f.
+          (LENGTH(MAP2 f l1 l2) = LENGTH l1) /\
+          (LENGTH(MAP2 f l1 l2) = LENGTH l2))
+  NULL_EQ_EMPTY  |- !l. NULL l = (l = [])
+  LENGTH_EQ  |- !x y. (x = y) ==> (LENGTH x = LENGTH y)
+  LENGTH_NOT_NULL  |- !l. 0 < (LENGTH l) = ~NULL l
+  REVERSE_SNOC  |- !x l. REVERSE(SNOC x l) = CONS x(REVERSE l)
+  REVERSE_REVERSE  |- !l. REVERSE(REVERSE l) = l
+  SNOC_Axiom
+    |- !e f. ?! fn. (fn[] = e) /\ (!x l. fn(SNOC x l) = f(fn l)x l)
+  SNOC_INDUCT
+    |- !P. P[] /\ (!l. P l ==> (!x. P(SNOC x l))) ==> (!l. P l)
+  SNOC_CASES  |- !l. (l = []) \/ (?l' x. l = SNOC x l')
+  LENGTH_SNOC  |- !x l. LENGTH(SNOC x l) = SUC(LENGTH l)
+  NOT_NULL_SNOC  |- !x l. ~NULL(SNOC x l)
+  NOT_NIL_SNOC  |- !x l. ~([] = SNOC x l)
+  NOT_SNOC_NIL  |- !x l. ~(SNOC x l = [])
+  SNOC_11  |- !x l x' l'. (SNOC x l = SNOC x' l') = (x = x') /\ (l = l')
+  SNOC_EQ_LENGTH_EQ
+    |- !x1 l1 x2 l2.
+        (SNOC x1 l1 = SNOC x2 l2) ==> (LENGTH l1 = LENGTH l2)
+  SNOC_REVERSE_CONS  |- !x l. SNOC x l = REVERSE(CONS x(REVERSE l))
+  SNOC_APPEND  |- !x l. SNOC x l = APPEND l[x]
+  MAP_SNOC  |- !f x l. MAP f(SNOC x l) = SNOC(f x)(MAP f l)
+  FOLDR_SNOC  |- !f e x l. FOLDR f e(SNOC x l) = FOLDR f(f x e)l
+  FOLDL_SNOC  |- !f e x l. FOLDL f e(SNOC x l) = f(FOLDL f e l)x
+  FOLDR_FOLDL  |- !f e. MONOID f e ==> (!l. FOLDR f e l = FOLDL f e l)
+  LENGTH_FOLDR  |- !l. LENGTH l = FOLDR(\x l'. SUC l')0 l
+  LENGTH_FOLDL  |- !l. LENGTH l = FOLDL(\l' x. SUC l')0 l
+  MAP_FOLDR  |- !f l. MAP f l = FOLDR(\x l'. CONS(f x)l')[]l
+  MAP_FOLDL  |- !f l. MAP f l = FOLDL(\l' x. SNOC(f x)l')[]l
+  MAP_o  |- !f g. MAP(f o g) = (MAP f) o (MAP g)
+  MAP_MAP_o  |- !f g l. MAP f(MAP g l) = MAP(f o g)l
+  FILTER_FOLDR
+    |- !P l. FILTER P l = FOLDR(\x l'. (P x => CONS x l' | l'))[]l
+  FILTER_SNOC
+    |- !P x l.
+        FILTER P(SNOC x l) = (P x => SNOC x(FILTER P l) | FILTER P l)
+  FILTER_FOLDL
+    |- !P l. FILTER P l = FOLDL(\l' x. (P x => SNOC x l' | l'))[]l
+  FILTER_COMM
+    |- !f1 f2 l. FILTER f1(FILTER f2 l) = FILTER f2(FILTER f1 l)
+  FILTER_IDEM  |- !f l. FILTER f(FILTER f l) = FILTER f l
+  FILTER_MAP
+    |- !f1 f2 l. FILTER f1(MAP f2 l) = MAP f2(FILTER(f1 o f2)l)
+  LENGTH_SEG
+    |- !n k l. (n + k) <= (LENGTH l) ==> (LENGTH(SEG n k l) = n)
+  APPEND_NIL  |- (!l. APPEND l[] = l) /\ (!l. APPEND[]l = l)
+  APPEND_SNOC  |- !l1 x l2. APPEND l1(SNOC x l2) = SNOC x(APPEND l1 l2)
+  REVERSE_APPEND
+    |- !l1 l2. REVERSE(APPEND l1 l2) = APPEND(REVERSE l2)(REVERSE l1)
+  APPEND_FOLDR  |- !l1 l2. APPEND l1 l2 = FOLDR CONS l2 l1
+  APPEND_FOLDL  |- !l1 l2. APPEND l1 l2 = FOLDL(\l' x. SNOC x l')l1 l2
+  FOLDR_APPEND
+    |- !f e l1 l2. FOLDR f e(APPEND l1 l2) = FOLDR f(FOLDR f e l2)l1
+  FOLDL_APPEND
+    |- !f e l1 l2. FOLDL f e(APPEND l1 l2) = FOLDL f(FOLDL f e l1)l2
+  CONS_APPEND  |- !x l. CONS x l = APPEND[x]l
+  ASSOC_APPEND  |- ASSOC APPEND
+  FCOMM_APPEND_CONS  |- !f. FCOMM APPEND(\x l'. CONS(f x)l')
+  FCOMM_SNOC_APPEND  |- !f. FCOMM(\l' x. SNOC(f x)l')APPEND
+  RIGHT_ID_APPEND_NIL  |- RIGHT_ID APPEND[]
+  LEFT_ID_APPEND_NIL  |- LEFT_ID APPEND[]
+  MONOID_APPEND_NIL  |- MONOID APPEND[]
+  APPEND_LENGTH_EQ
+    |- !l1 l1'.
+        (LENGTH l1 = LENGTH l1') ==>
+        (!l2 l2'.
+          (LENGTH l2 = LENGTH l2') ==>
+          ((APPEND l1 l2 = APPEND l1' l2') = (l1 = l1') /\ (l2 = l2')))
+  FILTER_APPEND
+    |- !f l1 l2.
+        FILTER f(APPEND l1 l2) = APPEND(FILTER f l1)(FILTER f l2)
+  FLAT_SNOC  |- !x l. FLAT(SNOC x l) = APPEND(FLAT l)x
+  FLAT_FOLDR  |- !l. FLAT l = FOLDR APPEND[]l
+  FLAT_FOLDL  |- !l. FLAT l = FOLDL APPEND[]l
+  LENGTH_FLAT  |- !l. LENGTH(FLAT l) = SUM(MAP LENGTH l)
+  REVERSE_FOLDR  |- !l. REVERSE l = FOLDR SNOC[]l
+  REVERSE_FOLDL  |- !l. REVERSE l = FOLDL(\l' x. CONS x l')[]l
+  LENGTH_REVERSE  |- !l. LENGTH(REVERSE l) = LENGTH l
+  REVERSE_EQ_NIL  |- !l. (REVERSE l = []) = (l = [])
+  ALL_EL_SNOC  |- !P x l. ALL_EL P(SNOC x l) = ALL_EL P l /\ P x
+  ALL_EL_CONJ
+    |- !P Q l. ALL_EL(\x. P x /\ Q x)l = ALL_EL P l /\ ALL_EL Q l
+  ALL_EL_MAP  |- !P f l. ALL_EL P(MAP f l) = ALL_EL(P o f)l
+  ALL_EL_APPEND
+    |- !P l1 l2. ALL_EL P(APPEND l1 l2) = ALL_EL P l1 /\ ALL_EL P l2
+  SOME_EL_SNOC  |- !P x l. SOME_EL P(SNOC x l) = P x \/ SOME_EL P l
+  NOT_ALL_EL_SOME_EL  |- !P l. ~ALL_EL P l = SOME_EL($~ o P)l
+  NOT_SOME_EL_ALL_EL  |- !P l. ~SOME_EL P l = ALL_EL($~ o P)l
+  IS_EL
+    |- (!x. IS_EL x[] = F) /\
+       (!y x l. IS_EL y(CONS x l) = (y = x) \/ IS_EL y l)
+  IS_EL_SNOC  |- !y x l. IS_EL y(SNOC x l) = (y = x) \/ IS_EL y l
+  SUM_SNOC  |- !x l. SUM(SNOC x l) = (SUM l) + x
+  SUM_FOLDR  |- !l. SUM l = FOLDR $+ 0 l
+  SUM_FOLDL  |- !l. SUM l = FOLDL $+ 0 l
+  IS_PREFIX_APPEND  |- !l1 l2. IS_PREFIX l1 l2 = (?l. l1 = APPEND l2 l)
+  IS_SUFFIX_APPEND  |- !l1 l2. IS_SUFFIX l1 l2 = (?l. l1 = APPEND l l2)
+  IS_SUBLIST_APPEND
+    |- !l1 l2. IS_SUBLIST l1 l2 = (?l l'. l1 = APPEND l(APPEND l2 l'))
+  IS_PREFIX_IS_SUBLIST  |- !l1 l2. IS_PREFIX l1 l2 ==> IS_SUBLIST l1 l2
+  IS_SUFFIX_IS_SUBLIST  |- !l1 l2. IS_SUFFIX l1 l2 ==> IS_SUBLIST l1 l2
+  IS_PREFIX_REVERSE
+    |- !l1 l2. IS_PREFIX(REVERSE l1)(REVERSE l2) = IS_SUFFIX l1 l2
+  IS_SUFFIX_REVERSE
+    |- !l1 l2. IS_SUFFIX(REVERSE l1)(REVERSE l2) = IS_PREFIX l1 l2
+  IS_SUBLIST_REVERSE
+    |- !l1 l2. IS_SUBLIST(REVERSE l1)(REVERSE l2) = IS_SUBLIST l1 l2
+  PREFIX_FOLDR
+    |- !P l. PREFIX P l = FOLDR(\x l'. (P x => CONS x l' | []))[]l
+  PREFIX
+    |- (!P. PREFIX P[] = []) /\
+       (!P x l. PREFIX P(CONS x l) = (P x => CONS x(PREFIX P l) | []))
+  IS_PREFIX_PREFIX  |- !P l. IS_PREFIX l(PREFIX P l)
+  LENGTH_SCANL  |- !f e l. LENGTH(SCANL f e l) = SUC(LENGTH l)
+  LENGTH_SCANR  |- !f e l. LENGTH(SCANR f e l) = SUC(LENGTH l)
+  FOLDL_IDENT
+    |- !f.
+        COMM f ==>
+        (!unt.
+          MONOID f unt ==> (!e l. FOLDL f e l = f e(FOLDL f unt l)))
+  FOLDR_IDENT
+    |- !f.
+        COMM f ==>
+        (!unt.
+          MONOID f unt ==> (!e l. FOLDR f e l = f e(FOLDR f unt l)))
+  FOLDR_APPEND_FOLDR
+    |- !f g.
+        FCOMM g f ==>
+        (!e.
+          LEFT_ID g e ==>
+          (!l1 l2.
+            FOLDR f e(APPEND l1 l2) = g(FOLDR f e l1)(FOLDR f e l2)))
+  FOLDL_APPEND_FOLDL
+    |- !g f.
+        FCOMM f g ==>
+        (!e.
+          RIGHT_ID g e ==>
+          (!l1 l2.
+            FOLDL f e(APPEND l1 l2) = g(FOLDL f e l1)(FOLDL f e l2)))
+  MONOID_FOLDR_APPEND_FOLDR
+    |- !f e.
+        MONOID f e ==>
+        (!l1 l2.
+          FOLDR f e(APPEND l1 l2) = f(FOLDR f e l1)(FOLDR f e l2))
+  MONOID_FOLDL_APPEND_FOLDL
+    |- !f e.
+        MONOID f e ==>
+        (!l1 l2.
+          FOLDL f e(APPEND l1 l2) = f(FOLDL f e l1)(FOLDL f e l2))
+  FOLDL_SINGLE  |- !f e x. FOLDL f e[x] = f e x
+  FOLDR_SINGLE  |- !f e x. FOLDR f e[x] = f x e
+  FOLDR_CONS_NIL  |- !l. FOLDR CONS[]l = l
+  FOLDL_SNOC_NIL  |- !l. FOLDL(\xs x. SNOC x xs)[]l = l
+  FOLDR_FOLDL_REVERSE
+    |- !f e l. FOLDR f e l = FOLDL(\x y. f y x)e(REVERSE l)
+  FOLDL_FOLDR_REVERSE
+    |- !f e l. FOLDL f e l = FOLDR(\x y. f y x)e(REVERSE l)
+  FOLDR_REVERSE  |- !f e l. FOLDR f e(REVERSE l) = FOLDL(\x y. f y x)e l
+  FOLDL_REVERSE  |- !f e l. FOLDL f e(REVERSE l) = FOLDR(\x y. f y x)e l
+  FOLDR_MAP  |- !f e g l. FOLDR f e(MAP g l) = FOLDR(\x y. f(g x)y)e l
+  FOLDL_MAP  |- !f e g l. FOLDL f e(MAP g l) = FOLDL(\x y. f x(g y))e l
+  ALL_EL_FOLDR  |- !P l. ALL_EL P l = FOLDR(\x l'. P x /\ l')T l
+  ALL_EL_FOLDL  |- !P l. ALL_EL P l = FOLDL(\l' x. l' /\ P x)T l
+  SOME_EL_FOLDR  |- !P l. SOME_EL P l = FOLDR(\x l'. P x \/ l')F l
+  SOME_EL_FOLDL  |- !P l. SOME_EL P l = FOLDL(\l' x. l' \/ P x)F l
+  ALL_EL_FOLDR_MAP  |- !P l. ALL_EL P l = FOLDR $/\ T(MAP P l)
+  ALL_EL_FOLDL_MAP  |- !P l. ALL_EL P l = FOLDL $/\ T(MAP P l)
+  SOME_EL_FOLDR_MAP  |- !P l. SOME_EL P l = FOLDR $\/ F(MAP P l)
+  SOME_EL_FOLDL_MAP  |- !P l. SOME_EL P l = FOLDL $\/ F(MAP P l)
+  FOLDR_FILTER
+    |- !f e P l.
+        FOLDR f e(FILTER P l) = FOLDR(\x y. (P x => f x y | y))e l
+  FOLDL_FILTER
+    |- !f e P l.
+        FOLDL f e(FILTER P l) = FOLDL(\x y. (P y => f x y | x))e l
+  FOLDR_FLAT
+    |- !f.
+        ASSOC f ==>
+        (!e.
+          LEFT_ID f e ==>
+          (!l. FOLDR f e(FLAT l) = FOLDR f e(MAP(FOLDR f e)l)))
+  MONOID_FOLDR_FLAT
+    |- !f e.
+        MONOID f e ==>
+        (!l. FOLDR f e(FLAT l) = FOLDR f e(MAP(FOLDR f e)l))
+  FOLDL_FLAT
+    |- !f.
+        ASSOC f ==>
+        (!e.
+          RIGHT_ID f e ==>
+          (!l. FOLDL f e(FLAT l) = FOLDL f e(MAP(FOLDL f e)l)))
+  MONOID_FOLDL_FLAT
+    |- !f e.
+        MONOID f e ==>
+        (!l. FOLDL f e(FLAT l) = FOLDL f e(MAP(FOLDL f e)l))
+  FCOMM_FOLDR_FLAT
+    |- !f.
+        FCOMM APPEND f ==>
+        (!l. FOLDR f[](FLAT l) = FLAT(MAP(FOLDR f[])l))
+  FCOMM_FOLDL_FLAT
+    |- !f.
+        FCOMM f APPEND ==>
+        (!l. FOLDL f[](FLAT l) = FLAT(MAP(FOLDL f[])l))
+  MAP_FLAT  |- !f l. MAP f(FLAT l) = FLAT(MAP(MAP f)l)
+  FILTER_FLAT  |- !P l. FILTER P(FLAT l) = FLAT(MAP(FILTER P)l)
+  SOME_EL_MAP  |- !P f l. SOME_EL P(MAP f l) = SOME_EL(P o f)l
+  SOME_EL_APPEND
+    |- !P l1 l2. SOME_EL P(APPEND l1 l2) = SOME_EL P l1 \/ SOME_EL P l2
+  SOME_EL_DISJ
+    |- !P Q l. SOME_EL(\x. P x \/ Q x)l = SOME_EL P l \/ SOME_EL Q l
+  IS_EL_APPEND
+    |- !l1 l2 x. IS_EL x(APPEND l1 l2) = IS_EL x l1 \/ IS_EL x l2
+  IS_EL_FOLDR  |- !y l. IS_EL y l = FOLDR(\x l'. (y = x) \/ l')F l
+  IS_EL_FOLDL  |- !y l. IS_EL y l = FOLDL(\l' x. l' \/ (y = x))F l
+  NULL_FOLDR  |- !l. NULL l = FOLDR(\x l'. F)T l
+  NULL_FOLDL  |- !l. NULL l = FOLDL(\x l'. F)T l
+  MAP_REVERSE  |- !f l. MAP f(REVERSE l) = REVERSE(MAP f l)
+  FILTER_REVERSE  |- !P l. FILTER P(REVERSE l) = REVERSE(FILTER P l)
+  LAST  |- !x l. LAST(SNOC x l) = x
+  BUTLAST  |- !x l. BUTLAST(SNOC x l) = l
+  SEG_LENGTH_ID  |- !l. SEG(LENGTH l)0 l = l
+  SEG_SUC_CONS  |- !m n l x. SEG m(SUC n)(CONS x l) = SEG m n l
+  SEG_SNOC0
+    |- !m l x. m <= (LENGTH l) ==> (SEG m 0(SNOC x l) = SEG m 0 l)
+  BUTLASTN_SEG
+    |- !n l. n <= (LENGTH l) ==> (BUTLASTN n l = SEG((LENGTH l) - n)0 l)
+  LASTN_CONS
+    |- !n l. n <= (LENGTH l) ==> (!x. LASTN n(CONS x l) = LASTN n l)
+  LENGTH_LASTN  |- !n l. n <= (LENGTH l) ==> (LENGTH(LASTN n l) = n)
+  LASTN_LENGTH_ID  |- !l. LASTN(LENGTH l)l = l
+  LASTN_LASTN
+    |- !l n m.
+        m <= (LENGTH l) ==> n <= m ==> (LASTN n(LASTN m l) = LASTN n l)
+  FIRSTN_LENGTH_ID  |- !l. FIRSTN(LENGTH l)l = l
+  FIRSTN_SNOC
+    |- !n l. n <= (LENGTH l) ==> (!x. FIRSTN n(SNOC x l) = FIRSTN n l)
+  BUTLASTN_LENGTH_NIL  |- !l. BUTLASTN(LENGTH l)l = []
+  BUTLASTN_SUC_BUTLAST
+    |- !n l.
+        n < (LENGTH l) ==> (BUTLASTN(SUC n)l = BUTLASTN n(BUTLAST l))
+  BUTLASTN_BUTLAST_SYM
+    |- !n l.
+        n < (LENGTH l) ==>
+        (BUTLASTN n(BUTLAST l) = BUTLAST(BUTLASTN n l))
+  LENGTH_BUTLASTN
+    |- !n l. n <= (LENGTH l) ==> (LENGTH(BUTLASTN n l) = (LENGTH l) - n)
+  BUTLASTN_BUTLASTN
+    |- !m n l.
+        (n + m) <= (LENGTH l) ==>
+        (BUTLASTN n(BUTLASTN m l) = BUTLASTN(n + m)l)
+  APPEND_BUTLASTN_LASTN
+    |- !n l. n <= (LENGTH l) ==> (APPEND(BUTLASTN n l)(LASTN n l) = l)
+  APPEND_FIRSTN_LASTN
+    |- !m n l.
+        (m + n = LENGTH l) ==> (APPEND(FIRSTN n l)(LASTN m l) = l)
+  BUTLASTN_APPEND2
+    |- !n l1 l2.
+        n <= (LENGTH l2) ==>
+        (BUTLASTN n(APPEND l1 l2) = APPEND l1(BUTLASTN n l2))
+  BUTLASTN_LENGTH_APPEND
+    |- !l2 l1. BUTLASTN(LENGTH l2)(APPEND l1 l2) = l1
+  LASTN_LENGTH_APPEND  |- !l1 l2. LASTN(LENGTH l2)(APPEND l1 l2) = l2
+  BUTLASTN_CONS
+    |- !n l.
+        n <= (LENGTH l) ==>
+        (!x. BUTLASTN n(CONS x l) = CONS x(BUTLASTN n l))
+  BUTLASTN_LENGTH_CONS  |- !l x. BUTLASTN(LENGTH l)(CONS x l) = [x]
+  LAST_LASTN_LAST
+    |- !n l. n <= (LENGTH l) ==> 0 < n ==> (LAST(LASTN n l) = LAST l)
+  BUTLASTN_LASTN_NIL
+    |- !n l. n <= (LENGTH l) ==> (BUTLASTN n(LASTN n l) = [])
+  LASTN_BUTLASTN
+    |- !m n l.
+        (m + n) < (LENGTH l) ==>
+        (LASTN n(BUTLASTN m l) = BUTLASTN m(LASTN(m + n)l))
+  BUTLASTN_LASTN
+    |- !m n l.
+        m <= n /\ n <= (LENGTH l) ==>
+        (BUTLASTN m(LASTN n l) = LASTN(n - m)(BUTLASTN m l))
+  LAST_LASTN  |- !l. ~NULL l ==> ([LAST l] = LASTN 1 l)
+  BUTLAST_BUTLASTN  |- !l. ~NULL l ==> (BUTLAST l = BUTLASTN 1 l)
+  BUTLASTN_APPEND1
+    |- !l2 n.
+        (LENGTH l2) <= n ==>
+        (!l1. BUTLASTN n(APPEND l1 l2) = BUTLASTN(n - (LENGTH l2))l1)
+  LASTN_APPEND2
+    |- !n l2.
+        n <= (LENGTH l2) ==> (!l1. LASTN n(APPEND l1 l2) = LASTN n l2)
+  LASTN_APPEND1
+    |- !l2 n.
+        (LENGTH l2) <= n ==>
+        (!l1.
+          LASTN n(APPEND l1 l2) = APPEND(LASTN(n - (LENGTH l2))l1)l2)
+  LASTN_MAP
+    |- !n l.
+        n <= (LENGTH l) ==> (!f. LASTN n(MAP f l) = MAP f(LASTN n l))
+  BUTLASTN_MAP
+    |- !n l.
+        n <= (LENGTH l) ==>
+        (!f. BUTLASTN n(MAP f l) = MAP f(BUTLASTN n l))
+  ALL_EL_LASTN
+    |- !P l.
+        ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(LASTN m l))
+  ALL_EL_BUTLASTN
+    |- !P l.
+        ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(BUTLASTN m l))
+  LENGTH_FIRSTN  |- !n l. n <= (LENGTH l) ==> (LENGTH(FIRSTN n l) = n)
+  FIRSTN_FIRSTN
+    |- !m l.
+        m <= (LENGTH l) ==>
+        (!n. n <= m ==> (FIRSTN n(FIRSTN m l) = FIRSTN n l))
+  LENGTH_BUTFIRSTN
+    |- !n l.
+        n <= (LENGTH l) ==> (LENGTH(BUTFIRSTN n l) = (LENGTH l) - n)
+  BUTFIRSTN_LENGTH_NIL  |- !l. BUTFIRSTN(LENGTH l)l = []
+  BUTFIRSTN_APPEND1
+    |- !n l1.
+        n <= (LENGTH l1) ==>
+        (!l2. BUTFIRSTN n(APPEND l1 l2) = APPEND(BUTFIRSTN n l1)l2)
+  BUTFIRSTN_APPEND2
+    |- !l1 n.
+        (LENGTH l1) <= n ==>
+        (!l2. BUTFIRSTN n(APPEND l1 l2) = BUTFIRSTN(n - (LENGTH l1))l2)
+  BUTFIRSTN_BUTFIRSTN
+    |- !n m l.
+        (n + m) <= (LENGTH l) ==>
+        (BUTFIRSTN n(BUTFIRSTN m l) = BUTFIRSTN(n + m)l)
+  APPEND_FIRSTN_BUTFIRSTN
+    |- !n l. n <= (LENGTH l) ==> (APPEND(FIRSTN n l)(BUTFIRSTN n l) = l)
+  LASTN_SEG
+    |- !n l. n <= (LENGTH l) ==> (LASTN n l = SEG n((LENGTH l) - n)l)
+  FIRSTN_SEG  |- !n l. n <= (LENGTH l) ==> (FIRSTN n l = SEG n 0 l)
+  BUTFIRSTN_SEG
+    |- !n l.
+        n <= (LENGTH l) ==> (BUTFIRSTN n l = SEG((LENGTH l) - n)n l)
+  APPEND_BUTLAST_LAST
+    |- !l. ~(l = []) ==> (APPEND(BUTLAST l)[LAST l] = l)
+  BUTFIRSTN_SNOC
+    |- !n l.
+        n <= (LENGTH l) ==>
+        (!x. BUTFIRSTN n(SNOC x l) = SNOC x(BUTFIRSTN n l))
+  APPEND_BUTLASTN_BUTFIRSTN
+    |- !m n l.
+        (m + n = LENGTH l) ==> (APPEND(BUTLASTN m l)(BUTFIRSTN n l) = l)
+  SEG_SEG
+    |- !n1 m1 n2 m2 l.
+        (n1 + m1) <= (LENGTH l) /\ (n2 + m2) <= n1 ==>
+        (SEG n2 m2(SEG n1 m1 l) = SEG n2(m1 + m2)l)
+  SEG_APPEND1
+    |- !n m l1.
+        (n + m) <= (LENGTH l1) ==>
+        (!l2. SEG n m(APPEND l1 l2) = SEG n m l1)
+  SEG_APPEND2
+    |- !l1 m n l2.
+        (LENGTH l1) <= m /\ n <= (LENGTH l2) ==>
+        (SEG n m(APPEND l1 l2) = SEG n(m - (LENGTH l1))l2)
+  SEG_BUTFISTN_FIRSTN
+    |- !n m l.
+        (n + m) <= (LENGTH l) ==> (SEG n m l = FIRSTN n(BUTFIRSTN m l))
+  SEG_APPEND
+    |- !m l1 n l2.
+        m < (LENGTH l1) /\
+        (LENGTH l1) <= (n + m) /\
+        (n + m) <= ((LENGTH l1) + (LENGTH l2)) ==>
+        (SEG n m(APPEND l1 l2) =
+         APPEND
+         (SEG((LENGTH l1) - m)m l1)
+         (SEG((n + m) - (LENGTH l1))0 l2))
+  SEG_LENGTH_SNOC  |- !l x. SEG 1(LENGTH l)(SNOC x l) = [x]
+  SEG_SNOC
+    |- !n m l.
+        (n + m) <= (LENGTH l) ==> (!x. SEG n m(SNOC x l) = SEG n m l)
+  ELL_SEG
+    |- !n l.
+        n < (LENGTH l) ==> (ELL n l = HD(SEG 1(PRE((LENGTH l) - n))l))
+
+******************** list ********************
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (better error message)                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-simpl.l                                              |
+|----------------------------------------------------------------------------|
+| DATE:          1 January 1994                                              |
++----------------------------------------------------------------------------+
+
+The error message produced by the LISP function |ml-term_match| has been
+changed from TERM-MATCH to MATCH.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (CHOOSE rule)                                        |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/hol-drule.ml                                             |
+|                help/ENTRIES/CHOOSE.doc                                     |
+|----------------------------------------------------------------------------|
+| DATE:          12 January 1994                                             |
++----------------------------------------------------------------------------+
+The derived rule CHOOSE was specified as
+
+    A1 |- ?x. s[x]    A2 u {{s[v/x]}} |- t
+   ---------------------------------------  CHOOSE ("v",(A1 |- ?x. s[x]))
+                A1 u A2 |- t
+where {v} is not free in {A1}, {A2} or {t}.
+
+There are two changes made to the rule CHOOSE:
+
+1) The implementation and the document of the derived rule CHOOSE are
+   inconsistent.  When applied to a theorem not of the correct form,
+   namely, the term s[v/x] does not occur in the assumptions of the second
+   theorem,  CHOOSE does not fail as described in the document, but return the
+   input theorem. Although, this bug should not lead to unsoundedness, it
+   is undesirable that such behaviour may be used in other proof procedure.
+
+A check for the occurrence of an assumption in the second input theorem which
+matches the body of the existentially quantified theorem in the first
+theorem is added. Also, the failure message is made clearer.
+
+2) The old implementation requires that the variable v is free in A1.
+   This is too restrictive. It is relaxed by removing the check on this.
+   The document (on line help entry) is modified to reflect the change.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (MP rule)                                            |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| NEW FILE:  help/ENTRIES/dest_neg_imp.doc                                   |
+| FILES CHANGED: ml/hol-syn.ml  help/ENTRIES/dest_imp.doc                    |
+|                ml/hol-rule.ml ml/drul.ml ml/resovle.ml ml/conv.ml          |
+|                ml/hol-drule.ml ml/tydefs.ml ml/tyfns.ml ml/tacont.ml       |
+|                ml/tactics.ml                                               |
+|----------------------------------------------------------------------------|
+| DATE:          24 January 1994                                             |
++----------------------------------------------------------------------------+
+The primitive inference rule MP performs extra inferences in addition
+to strict  Modus Ponens. It treats negation as an implication with F
+as its conclusion.  For example,
+   MP (A1 |- ~t) (A2 |- t) = (A1,A2 |- F)
+This was discovered in the course of testing a proof checker.
+
+This special behaviour is due to some historical decisions made on the
+implementation of dest_imp. This function is renamed to dest_neg_imp.
+dest_imp is re-implemented as a strict implication destructor.
+Document of old dest_imp is also renemed. New document is added for
+new dest_imp.
+
+The new implementation of MP performs a strict primitive Modus Ponens. The
+behaviour of the old MP function is implemented by NOT_MP. Users are
+not recommended to use NOT_MP. It may disappear in future version of
+the system. Document of MP need not be changed as it is a correct
+description of primitive Modus Ponens.
+
+As dest_imp and MP are used in many places in the system. The above
+changes may affect many functions. These may be classified
+into three cases and the solutions of each cases are detailed below.
+
+1) Functions which should use only the documented behaviour of dest_imp
+and/or MP. They are documented as such, e.g., they fails when the
+argument is not strictly an implication.  No changes need to be made
+to such functions since the changes in dest_imp and MP will enforce this.
+
+2) Functions which are known to depend on ONLY the special behaviour of either
+dest_imp or MP, e.g., NOT_EQ_SYM. These functions are modified to
+reflect this fact. dest_neg and extra inference, such as NOT_ELIM,
+will be used instead of dest_imp or MP.
+
+3) Functions which depend both on the special behaviours
+of dest_imp and/or MP, i.e., they may work on both implication and
+negation. To preserve the behaviour of such functions,
+the calls to dest_imp and MP are changed to calls to dest_neg_imp and
+NOT_MP.
+
+Below is a list of functions to whom changes have been made. The
+number after the function name indicates which of the above groups it
+belongs to. The number "3.2" means that the function should be in
+group 2, but group 3 fix has been done. All these functions should
+behave as before.
+
+hol-drule.ml:
+        UNDISCH 3
+        NOT_EQ_SYM 2
+drul.ml:
+        IMP_CANON 3
+resolve.ml:
+        RES_CANON 3
+        MATCH_MP (local version) 3
+        MATCH_MP_TAC 3
+conv.ml:
+        NOT_FORALL_CONV 3.2
+        NOT_EXISTS_CONV 3.2
+        FORALL_OR_CONV 3.2
+        LEFT_OR_FORALL_CONV 3.2
+        RIGHT_OR_FORALL_CONV 3.2
+        EXISTS_IMP_CONV 3.2
+        CONTRAPOS_CONV 2
+tydefs.ml:
+        prove_existence 3
+tyfns.ml:
+        prove_cases_thm 3
+tacont.ml:
+        DISCH_THEN 3
+tactics.ml:
+        FILTER_DISCH_THEN 3
+
+Below is a list od group 1 functions. No change has been made to their
+source code. As the result of changes in dest_imp and MP, these
+function will fail if the input term or theorem are no implicative.
+This failure condition has already been documented in their reference pages.
+
+abs-rep.ml:
+        define_new_type_bijection
+conv.ml:
+        ANTE_CONJ_CONV
+        EXISTS_IMP_CONV
+        EXISTS_UNIQUE_CONV
+        EXISTENCE
+        FORALL_IMP_CONV
+        LEFT_AND_EXISTS_CONV
+        LEFT_IMP_EXISTS_CONV
+        LEFT_IMP_FORALL_CONV
+        MATCH_MP
+        RIGHT_AND_EXISTS_CONV
+        RIGHT_IMP_EXISTS_CONV
+        RIGHT_IMP_FORALL_CONV
+drul.ml:
+        IMP_CONJ
+        IMP_ELIM
+        LIST_MP
+        PROVE_HYP
+hol-drule.ml:
+        CONJ_DISCH
+        IMP_TRANS
+        SELECT_ELIM
+        SELECT_INTRO
+ind.ml:
+        INDUCT_THEN
+        TACF (local)
+list.ml:
+        LIST_INDUCT
+num.ml:
+        INDUCT
+        num_EQ_CONV
+tactics.ml:
+        MP_TAC
+tydefs.ml:
+        EQN_ELIM_CONV (local)
+        FORALL_IN_CONV (local)
+        LENGTH_MAP_CONV (local)
+        OR_IMP_CONV (local)
+        define_type
+tyfns.ml:
+        ANTE_ALL_CONV (local)
+        DISJ_CHAIN (local)
+        STEP_CONV (local)
+        UNIQUENESS (local)
+        prove_constructors_distinct
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Bugfix (INST_TYPE)                                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-inst.l                                               |
+|----------------------------------------------------------------------------|
+| DATE:          25 January 1994.                                            |
++----------------------------------------------------------------------------+
+
+The following proof of |- F is due to Richard Boulton, exploiting a bug
+in INST_TYPE discovered by Joakim Von Wright.
+
+   #let th1 = REFL (mk_abs("x:*","x:bool"));;
+   th1 = |- (\x. x) = (\x. x)
+
+   #let th2 =
+   # prove
+   #  (mk_eq(mk_abs("x:*","x':bool"),mk_abs("y:*","x':bool")),
+   #   CONV_TAC FUN_EQ_CONV THEN GEN_TAC THEN BETA_TAC THEN REFL_TAC);;
+   th2 = |- (\x. x') = (\y. x')
+
+   #let th3 = CONJ th1 th2;;
+   th3 = |- ((\x. x) = (\x. x)) /\ ((\x. x') = (\y. x'))
+
+   #let th4 = INST_TYPE[":bool",":*"] th3;;
+   th4 = |- ((\x'. x) = (\x'. x)) /\ ((\x'. x') = (\y. x'))
+
+   #let th5 = CONJUNCT2 th4;;
+   th5 = |- (\x'. x') = (\y. x')
+
+   #let th6 = AP_THM th5 "F";;
+   th6 = |- (\x'. x')F = (\y. x')F
+
+   #let th7 = BETA_RULE th6;;
+   th7 = |- F = x'
+
+   #let th8 = EQT_ELIM (SPEC "T" (GEN "x':bool" th7));;
+   th8 = |- F
+
+INST_TYPE has now been fixed to block this.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   fixes                                                       |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: libraries (see below)                                       |
+|----------------------------------------------------------------------------|
+| DATE:          26 January 1994.                                            |
++----------------------------------------------------------------------------+
+
+Due to changes described in the previous two entries, a small number
+of proofs in the libraries do not work. Changes are necessary in order
+to rebuild them.
+
+Library pair:
+    File conv.ml:
+        Changes were made in the proofs NOT_FORALL_THM,
+        NOT_EXISTS_THM, LEFT_FORALL_OR_THM, RIGHT_FORALL_OR_THM,
+        LEFT_EXISTS_IMP_THM. These fixes are of class 2 described in
+        the above entry about MP.
+
+Library prog_logic88:
+    File mk_dijkstra.ml:
+        A change was made in the proof T_SPEC_WP. The tactic to solve
+        the first subgoal was
+         IMP_RES_TAC WP_WEAKEST THEN IMP_RES_TAC WEAKER
+        The second resolution failed to solve the subgoal because a
+        variable was instantiated and did not match the supplied
+        theorem. The new tactic now is:
+         IMP_RES_THEN MP_TAC WP_WEAKEST THEN
+         PURE_ONCE_REWRITE_TAC[WEAKER] THEN DISCH_TAC THEN RES_TAC;
+
+Library group:
+    File mk_more_gp:
+        Changes were made in the proof LEFT_COSET_DISJOINT_UNION.
+        Two calls to REPEAT STRIP_TAC were eliminated. Instead, less
+        powerful tactics are used.
+
+Library integer:
+    File mk_integer:
+        A change was make in the proof DISCRETE because a call to
+        RES_TAC did not solve the subgoal.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   enhancement                                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/gen.ml                                                   |
+|----------------------------------------------------------------------------|
+| DATE:          29 January 1994.                                            |
++----------------------------------------------------------------------------+
+
+The application |funpow f n x| will now return |x| if |n| is negative.
+Previously it failed to terminate.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   enhancement (numeral library)                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/numeral/numeral_theory.ml                           |
+|                Library/numeral/numeral_rules.ml                            |
+|----------------------------------------------------------------------------|
+| DATE:          30 January 1994.                                            |
++----------------------------------------------------------------------------+
+
+The numeral library has been tidied in various minor ways, including removing
+dependence on all other libraries. An asymptotically faster version of the
+multiplication operation has been added.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix (PCHOOSE rule)                                       |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JG                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Library/pair/exi.ml                                         |
+|----------------------------------------------------------------------------|
+| DATE:          31 January 1994                                             |
++----------------------------------------------------------------------------+
+
+Updated the functionality of the paired choose rule in line with the change
+made by WW to the basic CHOOSE rule.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Change to printing of subgoals (print_hyps)                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: ml/goals.ml                                                 |
+|----------------------------------------------------------------------------|
+| DATE:          31 January 1994.                                            |
+|                08 February 1994.                                           |
++----------------------------------------------------------------------------+
+
+Assumptions of goals printed by the subgoal package are now
+numbered. This can be disabled by setting the flag `number_subgoals`
+to false.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Enhancement (infix_variable)                                |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/f-parsol.l                                             |
+|                lisp/hol-writ.l                                             |
+|                lisp/f-dml.l                                                |
+|                help/ENTRIES/infix_variable.doc                             |
+|----------------------------------------------------------------------------|
+| DATE:          01 February 1994.                                           |
++----------------------------------------------------------------------------+
+
+An example:
+
+   #new_special_symbol `<<`;;
+   () : void
+
+   #infix_variable `<<`;;
+   () : void
+
+   #"!$<<. TRANSITIVE $<< = !(x y z:*). x << y /\ y << z ==> x << z";;
+   "TRANSITIVE $<< = (!x y z. x << y /\ y << z ==> x << z)" : term
+
+See help/ENTRIES/infix_variable.doc for full details.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Revision of the theory list                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: theories/mk_list_thms.ml                                    |
+|                theories/mk_list_defs.ml theories/mk_list_thm2.ml           |
+|                ml/list.ml ml/load_thms.ml                                  |
+|----------------------------------------------------------------------------|
+| DATE:          2 February 1994                                             |
++----------------------------------------------------------------------------+
+
+More definitions, theorems, conversions and tactics are added. All
+definitions and theorems in the list theorey, except a few theorem used
+only for low level type definition, add set up to autoload.
+
+New conversions added are:
+
+ FOLDR_CONV, FOLDL_CONV, list_FOLD_CONV,
+ SUM_CONV, FILTER_CONV, SNOC_CONV, REVERSE_CONV, FLAT_CONV,
+ EL_CONV, ELL_CONV,  MAP2_CONV, ALL_EL_CONV,  SOME_EL_CONV,
+ IS_EL_CONV,  LAST_CONV, BUTLAST_CONV, SEG_CONV, LASTN_CONV,
+ BUTLASTN_CONV, BUTFIRSTN_CONV, FIRSTN_CONV, SCANL_CONV, SCANR_CONV,
+ REPLICATE_CONV, GENLIST_CONV
+
+New tactics added are:
+
+  SNOC_INDUCT_TAC, EQ_LENGTH_INDUCT_TAC, EQ_LENGTH_SNOC_INDUCT_TAC
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Correction of documentation                                 |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: Manual/Description/system.tex                               |
+|                Manual/Description/version2.tex                             |
+|----------------------------------------------------------------------------|
+| DATE:          7 February 1994                                             |
++----------------------------------------------------------------------------+
+
+In DESCRIPTION (and page 250 of "Introduction to HOL") the description
+of define_finite_set_syntax has a small typo:
+
+  "c1 t1 (c1 t2 ... (c1 tn c2) ... ))"
+
+should be:
+
+  "c2 t1 (c2 t2 ... (c2 tn c1) ... ))"
+
+However, the online documentation is correct.
+
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix in Lisp                                              |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/hol-pars.l                                             |
+|----------------------------------------------------------------------------|
+| DATE:          8 February 1994.                                            |
++----------------------------------------------------------------------------+
+
+"#*" used to crash the system. This was due to an uninitialized
+variable (zeros-count) in the Lisp code to support the parsing of
+constants "#..." of ":word<n>" type. This code is probably obsolete
+and its deletion is under consideration.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Updating the library word                                   |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| DATE:          8 February 1994                                             |
++----------------------------------------------------------------------------+
+The library word has been updated. It used to depend on the more_lists
+library. Since the list theory in the core system has been expanded,
+the word library does no longer need to use more_lists. The dependence
+is removed.
+
+The constant SEG in the word library is changed to WSEG to avoid name
+crash with the list theory.
+
+The predicate EXISTSABIT is now defined in terms of SOME_EL.
+The function NVAL is now defined in terms of FOLDL.
+
+A number of proofs are changed to use new theorems in the list theory.
+
+The conversions PWORDLEN_CONV and PWORDLEN_bitop_CONV now return an
+equational theorem whose right-hand side is T.
+
+The Manual is revised to refect these changes.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Deletion of more_list library                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| DATE:          9 February 1994                                             |
++----------------------------------------------------------------------------+
+Since the list theory in the core system has been revised and
+expanded, the more_list library should not been needed. It is deleted
+from the system. However, the library is kept in the contrib directory
+in case some is despair for it.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Automated doc file generation                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILE CHANGED: Manual/Reference/Makefile                                    |
+|----------------------------------------------------------------------------|
+| DATE:          9 February 1994                                             |
++----------------------------------------------------------------------------+
+
+An entry is added to the Makefile in Manual/Reference. This entry
+specifies how to create .doc files for the definitions and
+theorems in the theories which are descentants of BASIC-HOL.
+Type "make thmdoc" to activate this entry. This is necessary if one of
+the theory has been changed. This automatic recreation of doc file
+keeps the document up-to-date with the system.
+
+Note: doc files of the definitions and theorems in the theories ind
+and bool, and of theorems which are not saved in any theory are not
+recreated by this make entry because they are not grouped according to
+theory.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   New functions                                               |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    WW                                                          |
+|----------------------------------------------------------------------------|
+| FILE CHANGED:  ml/num.ml                                                   |
+|----------------------------------------------------------------------------|
+| NEW FILES:     help/ENTRIES/int_of_term.doc help/ENTRIES/term_of_int.doc   |
+|----------------------------------------------------------------------------|
+| DATE:          10 February 1994                                            |
++----------------------------------------------------------------------------+
+
+Two new functions, int_of_term and term_of_int, for converting between
+ML integers and numeric terms are added to the core system. They were
+defined in several libraries.
+
+For example:
+
+#int_of_term "2";;
+2 : int
+
+#term_of_int 2;;
+"2" : term
+
+#term_of_int (-2);;
+evaluation failed     mk_const: -2 not a constant
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Modification to rewriting (with two new functions)          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILE CHANGED:  ml/conv.ml ml/rewrite.ml                                    |
+|                help/ENTRIES/TOP_DEPTH_CONV.doc                             |
+|                help/ENTRIES/ONCE_DEPTH_CONV.doc                            |
+|----------------------------------------------------------------------------|
+| NEW FILES:     help/ENTRIES/REW_DEPTH_CONV.doc                             |
+|                help/ENTRIES/ONCE_REW_DEPTH_CONV.doc                        |
+|----------------------------------------------------------------------------|
+| DATE:          15 February 1994                                            |
++----------------------------------------------------------------------------+
+
+The rewriting conversions, rules, and tactics have been modified to fix the
+following bug (reported by John Harrison):
+
+   Consider the sequence below. The assumption "Q x" disables the possible
+   rewrite "!x. P x". What seems to go wrong is that when recursively going
+   through the term, both assumptions seem valid rewrites. But then when we
+   come to perform the ABS it cannot be done since "x" is free in the
+   assumptions -- this throws away *both* rewrites.
+
+   #g "!(P:*->bool) Q. Q x /\ (!x. P x) ==> (!x. Q x ==> P x)";;
+   "!P Q. Q x /\ (!x. P x) ==> (!x. Q x ==> P x)"
+
+   () : void
+
+   #e(REPEAT GEN_TAC THEN STRIP_TAC);;
+   OK..
+   "!x. Q x ==> P x"
+       [ "Q x" ]
+       [ "!x. P x" ]
+
+   () : void
+
+   #e(ASM_REWRITE_TAC[]);;
+   OK..
+   "!x. Q x ==> P x"
+       [ "Q x" ]
+       [ "!x. P x" ]
+
+   () : void
+
+   #e(UNDISCH_TAC "(Q:*->bool) x" THEN DISCH_THEN(K ALL_TAC));;
+   OK..
+   "!x. Q x ==> P x"
+       [ "!x. P x" ]
+
+   () : void
+
+   #e(ASM_REWRITE_TAC[]);;
+   OK..
+   goal proved
+   . |- !x. Q x ==> P x
+   .. |- !x. Q x ==> P x
+   .. |- !x. Q x ==> P x
+   |- !P Q. Q x /\ (!x. P x) ==> (!x. Q x ==> P x)
+
+   Previous subproof:
+   goal proved
+   () : void
+
+This has been fixed by using a special version of SUB_CONV. If failure occurs
+when ABS is applied to the result of rewriting the body, the abstraction is
+alpha converted so that the bound variable is a genvar, and the conversion is
+reapplied.
+
+The rewriting functions formerly used SUB_CONV via TOP_DEPTH_CONV and
+ONCE_DEPTH_CONV. They now use new functions called REW_DEPTH_CONV and
+ONCE_REW_DEPTH_CONV respectively. The original behaviour of TOP_DEPTH_CONV
+and ONCE_DEPTH_CONV is retained, so any conversions written using them should
+not be affected.
+
+The proofs of the following theorems required fixes:
+
+   Library/reals/theories/hreal.ml   HREAL_MUL_LINV
+   Library/group/mk_more_gp.ml       QUOTIENT_IM_LEMMA
+
+Compatibility files can be found in: contrib/pre-v2.02-rewr/
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   bugfix                                                      |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    MJCG                                                        |
+|----------------------------------------------------------------------------|
+| FILES CHANGED: lisp/parslet.l                                              |
+|----------------------------------------------------------------------------|
+| DATE:          28 February 1994.                                           |
+|                04 March 1994.                                              |
++----------------------------------------------------------------------------+
+
+Malcolm Newey reported the bug illustrated below:
+
+-------------------------------------------------------------------------------
+
+===============================================================================
+         HOL88 Version 2.02 (SUN4/AKCL), built on 24/2/94
+===============================================================================
+
+#new_theory `bugs`;;
+() : void
+
+#let In_Def = new_infix_definition (`In_Def`, "in (x:*) f = (f x):bool");;
+In_Def = |- !x f. x in f = f x
+
+#"0 in f";;
+"0 in f" : term
+
+#"T in g";;
+"T in g" : term
+
+#"0 in f)";;
+cannot find end of quotation
+skipping: f ) " ;; parse failed
+
+#"0 in f";;
+Badly typed application of:  "0"
+   which has type:           ":num"
+to the argument term:        "$in"
+   which has type:           ":?1 -> ((?1 -> bool) -> bool)"
+
+evaluation failed     mk_comb in quotation
+
+#"0 in f";;
+Badly typed application of:  "0"
+   which has type:           ":num"
+to the argument term:        "$in"
+   which has type:           ":?1 -> ((?1 -> bool) -> bool)"
+
+evaluation failed     mk_comb in quotation
+
+#quit();;
+Bye.
+
+
+%------------------------------------------------------------------------
+
+   File:        infix_bug.ml
+   Description:
+                Exhibits a bug that manifests itself in error recovery.
+                The infix defined must be "in".
+
+   Author:      M. C. Newey
+   Date:        December, 1989
+
+-------------------------------------------------------------------------------
+
+This is due to the ollp of a user defined infix "in" being clobbered
+on error recovery (by the Lisp function hol-insetup). This clobbering
+has been suppressed. A similar bug with "and" predicted and also fixed.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Libraries moved to contrib                                  |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    RJB                                                         |
+|----------------------------------------------------------------------------|
+| FILE CHANGED:  Library/UNITY/                                              |
+|                Library/auxiliary/                                          |
+|                Library/bags/                                               |
+|                Library/convert/                                            |
+|                Library/eval/                                               |
+|                Library/fixpoints/                                          |
+|                Library/group/                                              |
+|                Library/int_mod/                                            |
+|                Library/integer/                                            |
+|                Library/prog_logic88/                                       |
+|                Library/quotient/                                           |
+|----------------------------------------------------------------------------|
+| DATE:          1 March 1994                                                |
++----------------------------------------------------------------------------+
+
+The libraries UNITY, auxiliary, bags, convert, eval, fixpoints, group,
+int_mod, integer, prog_logic88, and quotient have been moved to the contrib
+directory because they do not have proper documentation.
+
++----------------------------------------------------------------------------+
+| CHANGE TYPE:   Library reorganization (wellorder)                          |
+|----------------------------------------------------------------------------|
+| CHANGED BY:    JRH                                                         |
+|----------------------------------------------------------------------------|
+| FILE CHANGED:  Library/wellorder/mk_wellorder.ml                           |
+|                Library/wellorder/wellorder.ml                              |
+|----------------------------------------------------------------------------|
+| DATE:          3 March 1994                                                |
++----------------------------------------------------------------------------+
+
+The internal organization of the wellorder library has been changed somewhat.
+This entails the introduction of a few new theorems and constants, but few
+users should notice any change in the external behaviour.
+

@@ -1,0 +1,3 @@
+\THEOREM CONS list
+|- !l. ~NULL l ==> (CONS(HD l)(TL l) = l)
+\ENDTHEOREM

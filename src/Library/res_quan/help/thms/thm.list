@@ -1,0 +1,19 @@
+ RESQ_FORALL_CONJ_DIST
+    |- !P Q R. (!i :: P. Q i /\ R i) = (!i :: P. Q i) /\ (!i :: P. R i)
+  RESQ_FORALL_DISJ_DIST
+    |- !P Q R.
+        (!i :: \i. P i \/ Q i. R i) = (!i :: P. R i) /\ (!i :: Q. R i)
+  RESQ_FORALL_UNIQUE  |- !P j. (!i :: $= j. P i) = P j
+  RESQ_FORALL_FORALL
+    |- !P R x. (!x. !i :: P. R i x) = (!i :: P. !x. R i x)
+  RESQ_FORALL_REORDER
+    |- !P Q R. (!i :: P. !j :: Q. R i j) = (!j :: Q. !i :: P. R i j)
+  RESQ_EXISTS_DISJ_DIST
+    |- !P Q R. (?i :: P. Q i \/ R i) = (?i :: P. Q i) \/ (?i :: P. R i)
+  DISJ_RESQ_EXISTS_DIST
+    |- !P Q R.
+        (?i :: \i. P i \/ Q i. R i) = (?i :: P. R i) \/ (?i :: Q. R i)
+  RESQ_EXISTS_UNIQUE  |- !P j. (?i :: $= j. P i) = P j
+  RESQ_EXISTS_REORDER
+    |- !P Q R. (?i :: P. ?j :: Q. R i j) = (?j :: Q. ?i :: P. R i j)
+ 

@@ -1,0 +1,3 @@
+\THEOREM SEG_LENGTH_SNOC list
+|- !l x. SEG 1(LENGTH l)(SNOC x l) = [x]
+\ENDTHEOREM

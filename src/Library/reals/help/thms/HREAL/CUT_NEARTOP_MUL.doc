@@ -1,0 +1,3 @@
+\THEOREM CUT_NEARTOP_MUL HREAL
+|- !X u. hrat_1 hrat_lt u ==> (?x. cut X x /\ ~cut X(u hrat_mul x))
+\ENDTHEOREM

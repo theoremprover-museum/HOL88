@@ -1,0 +1,6 @@
+\THEOREM CHAIN_LEMMA1 LIM
+|- !f g x h.
+    ((f(g(x + h))) - (f(g x))) / h =
+    (((f(g(x + h))) - (f(g x))) / ((g(x + h)) - (g x))) *
+    (((g(x + h)) - (g x)) / h)
+\ENDTHEOREM

@@ -1,0 +1,35 @@
+\DOC SMASH
+
+\TYPE {SMASH : (thm -> thm list)}
+
+\SYNOPSIS
+Recursively splits a compound theorem into a list of simpler one.
+
+\LIBRARY window
+
+\DESCRIBE
+The operation of {SMASH} is similar to that of {CONJUNCTS} except that
+it does not just break apart conjunctions.
+{SMASH} recursively applies the following inference rules to a theorem
+to smash it into a list of smaller theorems.
+{
+       H |- A /\ B         H |- ~(A \/ B)      H |- ~(A ==> B)
+    -----------------    -------------------  ------------------
+     H |- A   H |- B      H |- ~A   H |- ~B    H |- A   H |- ~B
+                                                                   
+     H |- ~(A <== B)      H |- A => B | F
+    ------------------   -----------------
+     H |- ~A   H |- B     H |- A   H |- B
+}
+
+\FAILURE
+Never Fails.
+
+\USES
+Used in the assumption generating field of a window rule to smash a single
+assumption into a list of assumptions.
+
+\SEEALSO
+CONJUNCTS.
+
+\ENDDOC

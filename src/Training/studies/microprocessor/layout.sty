@@ -1,0 +1,136 @@
+% =====================================================================
+%
+% Standard LaTeX style file for the HOL case studies.
+%
+% =====================================================================
+
+% ---------------------------------------------------------------------
+% BOOLEAN FLAG FOR PAPER SIZE.
+%
+% set:   \Afourtrue    to make paper size A4
+%        \Afourfalse   to make paper size 8.5 x 11 inches
+% ---------------------------------------------------------------------
+
+\newif\ifAfour
+\Afourtrue
+
+% ---------------------------------------------------------------------
+% PAPER SIZE  (latex overrides these anyway)
+%
+% TeX expects 1 inch margins all around.
+%    * a4 (european paper) is exactly 297mm high by 210mm wide
+%    * 8.5x11 (american paper) is exactly 279.4mm high by 215.9mm wide
+%
+% 1 inch = 25.4 mm
+% ---------------------------------------------------------------------
+
+\ifAfour \hsize=159.2truemm \else \hsize=165.1truemm \fi
+\ifAfour \vsize=246.2truemm \else \vsize=228.6truemm \fi
+
+% ---------------------------------------------------------------------
+% PAGE LAYOUT  
+% ---------------------------------------------------------------------
+
+\textwidth 160truemm
+\textheight 225truemm
+
+% ---------------------------------------------------------------------
+% POSITION ON PAPER  Adjusted for local conditions (see \Afour above)
+% ---------------------------------------------------------------------
+
+% Double sided
+%\ifAfour \oddsidemargin=6.6truemm \else \oddsidemargin=8.55truemm \fi
+%\ifAfour \evensidemargin=-7.4truemm \else \evensidemargin=-3.45truemm \fi
+
+% Single Sided 
+\ifAfour \oddsidemargin=-0.4truemm \else \oddsidemargin=2.55truemm \fi
+\ifAfour \evensidemargin=-0.4truemm \else \evensidemargin=2.55truemm \fi
+
+\ifAfour \topmargin 1truemm \else \topmargin -4truemm \fi
+
+% ---------------------------------------------------------------------
+% MATH INDENTATION.  = \tabcolsep + three small verbatim spaces  (!)
+% ---------------------------------------------------------------------
+\setlength{\mathindent}{\tabcolsep}
+\addtolength{\mathindent}{\the\fontdimen2\elvtt}
+\addtolength{\mathindent}{\the\fontdimen2\elvtt}
+\addtolength{\mathindent}{\the\fontdimen2\elvtt}
+
+% ---------------------------------------------------------------------
+% HEAD: no header
+% ---------------------------------------------------------------------
+\headheight 0pt
+\headsep 0pt 
+
+% ---------------------------------------------------------------------
+% FOOT: 
+% ---------------------------------------------------------------------
+\footheight 12pt
+\footskip 15mm
+
+% ---------------------------------------------------------------------
+% INDENTATION: 4mm indentation
+% --------------------------------------------------------------------- 
+\parindent 4mm
+
+% ---------------------------------------------------------------------
+% FOOTNOTES: footnotes are in 10 point font.
+%
+% put 12+1-1 points between text and rule
+% put 10pt between at start of footnote
+% foot note rule is 40mm long
+% ---------------------------------------------------------------------
+\skip\footins 12pt plus 2pt minus 2pt
+\footnotesep 10pt
+\def\footnoterule{\kern-3\p@ \hrule width 40mm \kern 2.6\p@}
+
+% ---------------------------------------------------------------------
+% FLOATS
+% ---------------------------------------------------------------------
+\floatsep 12pt plus 2pt minus 2pt
+\textfloatsep  20pt plus 2pt minus 4pt
+\intextsep 12pt plus 2pt minus 2pt
+\@maxsep 20pt
+
+% ---------------------------------------------------------------------
+% Make "@" a "letter" for definitions that follow
+% ---------------------------------------------------------------------
+\makeatletter   
+
+% ---------------------------------------------------------------------
+% REFERENCES
+%
+% (1) For references use:
+%
+%        \begin{thebibliography} ... \end{thebibliography}
+%
+%     This makes the references a new section.
+% ---------------------------------------------------------------------
+
+\def\thebibliography#1{\section{References} 
+ \list {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep
+ \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \sloppy
+ \sfcode`\.=1000\relax}
+ \let\endthebibliography=\endlist
+
+\ps@headings  %to override previous
+
+% ---------------------------------------------------------------------
+% Make "@" an "other" again
+% ---------------------------------------------------------------------
+\makeatother
+
+% ---------------------------------------------------------------------
+% Preliminary settings etc.
+% ---------------------------------------------------------------------
+
+\renewcommand{\topfraction}{0.8}	  % 0.8 of the top page can be fig.
+\renewcommand{\bottomfraction}{0.8}	  % 0.8 of the bottom page can be fig.
+\renewcommand{\textfraction}{0.1}	  % 0.1 of the page must contain text
+\setcounter{totalnumber}{4}	 	  % max of 4 figures per page
+\setcounter{secnumdepth}{3}		  % number sections down to level 3
+\setcounter{tocdepth}{3}		  % toc contains numbers to level 3
+\flushbottom				  % text extends right to the bottom

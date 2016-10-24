@@ -1,0 +1,3 @@
+\THEOREM LOG_1 numeral
+|- !r. 1 < r ==> (LOG r 1 = 0)
+\ENDTHEOREM

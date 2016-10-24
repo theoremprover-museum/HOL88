@@ -1,0 +1,4 @@
+\THEOREM SUM_OFFSET REAL
+|- !f n k.
+    Sum(0,n)(\m. f(m num_add k)) = (Sum(0,n num_add k)f) - (Sum(0,k)f)
+\ENDTHEOREM

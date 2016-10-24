@@ -1,0 +1,3 @@
+\THEOREM LESS_0_CASES arithmetic
+|- !m. (0 = m) \/ 0 < m
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM EXP_MONO_IMP TRANSC
+|- !x y. x < y ==> (exp x) < (exp y)
+\ENDTHEOREM

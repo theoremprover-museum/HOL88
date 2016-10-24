@@ -1,0 +1,389 @@
+******************************************************************************
+******************************************************************************
+**                                                                          **
+** This file describes the various bits and pieces making up the HOL system **
+** ======================================================================== **
+**                                                                          **
+**                                                                          **
+**                                                                          **
+**                            WARNING                                       **
+**                            -------                                       **
+**                                                                          **
+**       The HOL system is not user friendly.                               **
+**       You are strongly advised to undergo a training course in           **
+**       its use before trying to work with it. In the hands of an          **
+**       expert, HOL is a powerful and robust tool; in the hands of         **
+**       an untrained novice it may lead to frustration, disillusionment    **
+**       and despair.                                                       **
+**                                                                          **
+**       Details of how to arrange a course in using HOL are available      **
+**       from: Mike Gordon, University of Cambridge, Computer Laboratory,   **
+**       New Museums Site, Pembroke Street, Cambridge CB2 3QG               **
+**       (tel 0223 334627).                                                 **
+**                                                                          **
+******************************************************************************
+******************************************************************************
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!                                                                            !
+!                            IMPORTANT NOTICE                                !
+!                            ================                                !
+!                                                                            !
+! The HOL system is made available on an as is basis. No guarantee of        !
+! maintenance or reliability is provided.                                    !
+!                                                                            !
+! Users of the HOL system shall not hold its developers liable for any       !
+! consequences arising from use of the software whether by himself or by     !
+! any other party.  Users shall indemnify the developers and their staff     !
+! against any claim by any third party arising from or in connection         !
+! with the use of HOL.                                                       !
+!                                                                            !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+==============================================================================
+| This is HOL88 Version 2.01. See the directory Manual for documentation.    |
+| The file Version.2.01 describes changes made to HOL88 since Version 2.0    |
+==============================================================================
+
+* ========================================================================== *
+*									     *
+* Installing the HOL system  						     *
+*									     *
+* ========================================================================== *
+
+You may find an executable version of the HOL system in the form of a file
+called 'hol' in this directory. To reconfigure an existing executable hol
+type:
+
+   install `<pathname>`;;
+
+after starting an interactive hol session, where <pathname> is the absolute
+pathname of the directory hol on your machine. For example, to reconfigure hol
+to the Cambridge Computer Lab installation do:
+
+   install `/usr/groups/hol/hol_13`;;
+
+If there is no executable hol on the distribution, or if the version you have
+is for the wrong machine, then you will have to build hol from sources. How to
+do this is explained below.  
+
+* ========================================================================== *
+*									     *
+* Rebuilding the HOL system  						     *
+*									     *
+* ========================================================================== *
+
+0) Common Lisp
+
+   HOL can now be run under Common Lisp (thanks to Hewlett-Packard and SRI
+   International who jointly paid for the work, and John Carroll who did it).
+   See the file hol/Makefile for current details.
+
+1) Franz Lisp
+
+   To create hol, you need Franz Lisp or Common Lisp. 
+   At Cambridge, we build hol on Vaxes using Franz Lisp Opus 38.69.  
+   To build hol on in Franz Lisp a Sun you should ideally have Franz Lisp, 
+   Opus 42.16.1., but earlier public domain versions can also be used. 
+
+   If your tape contains a directory hol/franz then this is a Sun3 public
+   domain Lisp (see hol/franz/READ-ME for more details).  Note that to build
+   hol you may find you need to reconfigure Lisp to be bigger than its usual
+   default (see Appendix E of the Opus 42 Franz Lisp Manual). You should not
+   run on a Sun with less than 8 megabytes of memory (it will work with 4, 
+   but will be unbearably slow due to thrashing).
+
+2) Setting up path names.
+
+   There are two flags and four site-dependent pathnames used in
+   the makefile which you may have to change to rebuild hol at
+   your site. These are:
+
+        LispType  : the type of the lisp system used to build HOL. 
+                    Possibilities are cl (for Common Lisp) or franz
+		    (for Franz Lisp).
+
+        Obj       : the default filename extension for compiled lisp files.
+                    for Franz Lisp this is o; for Common Lisp this depends on
+                    the implementation. Some implementations and values are:
+
+                      Lucid CL   :   lbin
+                      KCL, AKCL  :   o
+                      Allegro CL :   fasl
+
+        Lisp      : the lisp system used to build HOL.  This can be 
+		    an absolute pathname, a relative pathname, or simply
+		    the name "lisp" (provided lisp can be found by 
+		    following the builder's search path).
+
+        Liszt     : the franz lisp complier used to build HOL.  This can be 
+		    an absolute pathname, a relative pathname, or simply
+		    the name "liszt" (provided liszt can be found by 
+	            following the builder's search path). This macro is 
+		    only relevant for building a Franz Lisp version of HOL.
+
+        LisztComm : the command issued (internally) by HOL to call the 
+		    lisp compiler when compiling ML.  This can be just 
+		    "liszt", if liszt will be found by following the HOL 
+		    user's search path. An absolute pathname can also be 
+		    used for LisztComm. This macro is only relevant for 
+		    building a Franz Lisp version of HOL.
+
+	HOLdir	  : the absolute pathname of the top-level HOL directory
+
+3) Once the site dependent path-names have been defined, you can try to 
+   rebuild HOL.  This is done by typing:
+
+	make hol
+
+    This will rebuild hol from whatever object code is around, but it won't 
+    recreate theories or recompile more than is necessary.
+
+    To make hol completely from scratch, type:
+
+	make clobber
+	make hol
+
+    This will remove all the object code and built-in theories, and 
+    rebuild hol completely from scratch.  This takes a long time, but 
+    it may be necessary to get hol running at your site.  In fact, it 
+    may be worth trying, just to make sure you've got a completely
+    consistent version of hol.
+
+    After building hol, this directory should contain the following
+    executable files:
+
+     hol-lcf   ---   A stripped down lcf containing just those things
+                     that are needed by HOL (it includes ML but very 
+		     little PPLAMBDA stuff).  This can be removed, if
+		     you're short of space.
+
+     basic-hol ---   The HOL system without various built-in theories.
+     		     This can also be removed if necessary.
+
+     hol       ---   The full HOL system.
+
+
+* ========================================================================== *
+*									     *
+* building HOL with other versions of franz
+*									     *
+* ========================================================================== *
+
+There have been quite a few messages asking about building HOL88 with Franzes
+other than the one on the distribution tape.  Most people will know the
+following basic information about this. But it may be helpful to a few others,
+so here it is.
+
+1) you don't necessarily have to build HOL88 using the public-domain
+   Franz lisp that's distributed on the tape.  HOL88 should (in principle)
+   be buildable using other versions of Franz.  However, I must add that
+   we haven't done this for quite a while here in Cambridge, so there
+   may be a few little problems. (or even big ones---has anyone tried?)
+
+2) from the Makefile for HOL88, it should be clear how to rebuild
+   the system using a version of franz that differs from the distributed
+   one. You just have to change a few pathnames.
+
+3) the real problem, is that Franz has a built-in limit on how big
+   a lisp core-image is allowed to get.  To rebuild hol, you must
+   use a version of franz (and liszt) which has this limit increased.
+   This is known as the TTSIZE problem.  You have to make a franz
+   system constant called "TTSIZE" bigger.
+
+4) this entails having a copy of the SOURCE code for franz lisp.  You have
+   to change TTSIZE, and then completely rebuild the franz system from
+   this slightly modified source.  The resulting "lisp" and "liszt" object
+   codes can then be used to build hol.
+
+5) unfortunately, it seems that not everyone has access to the sources.
+   I don't know what can be done about this.  There is a licence
+   restriction that forbids people who have ULTRIX franz, for example, to 
+   give the sources to others. 
+
+6) if, however, you do have the franz source code, then proceed as follows:
+
+   a) completely rebuild the Franz system with a bigger TTSIZE.
+      Do this as follows:
+
+      (i)   locate the c source code file in which TTSIZE is defined.
+            In the distributed version, this is the file called:
+
+	      /franz/lisp/franz/h/config.h
+          
+      (ii)  change TTSIZE to something big.  In the distributed
+            version, it's set as follows:
+
+	     define TTSIZE 12950
+   
+  	    the number 12950 means the number of 512-byte blocks.  So, this
+	    is about 6 meg.  Try to make this number as big as you can,
+	    given the machine(s) you're running on.  When I first encountered
+	    this problem (with LCF_LSM in 1984) I set TTSIZE to the equivalent
+	    of about 18 meg (it was for a VAX 780).  I never had problems
+	    running out of space after that, even when I was doing proofs
+	    involving huge theorems. (I may have forgotten the details of
+	    this---e.g. it may not have been 18 meg, but something else).
+
+      (iii) completely rebuild the entire Franz lisp system (lisp and 
+      	    liszt).  There should be a makefile for your franz, if you
+	    have the source. (do a complete rebuild, because it's best to 
+	    be sure).
+
+   b) use the newly-built "large" franz to rebuild hol.  This is an entirely
+      separate operation.  
+
+7) if there are problems with the HOL part of rebuilding, due to the hol/lisp
+   interface (e.g. your franz is less permissive than the distributed one, 
+   and you find that some things have to be changes to get it to rebuild)
+   then let us know, so we can fix the distribution source.
+
+8) OTHER LISPS:
+  
+   The above does not cover building hol with common lisp, zeta-lisp etc.
+
+
+Tom Melham
+
+* ========================================================================== *
+*									     *
+* Running the HOL system						     *
+*									     *
+* ========================================================================== *
+
+Once you have built the the HOL system, it is invoked by typing:
+
+    hol
+
+This will print a sign-on message, load a hol-init.ml file if one is present
+and then print out the ML prompt # (which can be changed using the set_prompt
+function).
+
+The following two 'features' of the HOL system sometimes confuse beginners.
+
+1. The rules for typechecking quotations are different from the rules for
+   typechecking ML. There must always be enough explicit type information 
+   to determine the type of polymorphic constants. Unlike the ML typechecker, 
+   the HOL typechecker will not use the type a polymorphic constant was 
+   declared with as a 'default'. For example, "x=[]" will not work,
+   but "x=([]:* list)" and "x=1" are OK. Lack of enough type information
+   results in the error message like
+
+      Indeterminate types:  "$=:(?1)list -> ((?1)list -> bool)"
+
+      evaluation failed     types indeterminate in quotation
+
+   The "?1" indicates an indeterminate type.
+
+   A type error like "1(2)")  causes the message
+
+      Badly typed application of:  "1"
+         which has type:           ":num"
+      to the argument term:        "2"
+         which has type:           ":num"
+      
+      evaluation failed     mk_comb in quotation 
+
+2. Use of "in". If you use "in" as a variable in the HOL logic, then
+   the parser will occasionally get confused. This is because "in" is a 
+   keyword associated with the construct "let x=t1 in t2" and if you use "in"
+   as a variable the parser sometimes thinks there is a missing "let". This 
+   is a rare problem, but confusing if you are not aware of the possibility.
+
+
+* ========================================================================== *
+*									     *
+* Documentation								     *
+*									     *
+* ========================================================================== *
+
+This is in the directory Manual.  Online help files are in the directory help.
+
+* ========================================================================== *
+*									     *
+* Library								     *
+*									     *
+* ========================================================================== *
+
+The library directory hol/Library contains generally useful theories and
+code which is not included in the built-in version of HOL.
+
+* ========================================================================== *
+*									     *
+* Examples								     *
+*									     *
+* ========================================================================== *
+
+Examples of the use of HOL are in the directory: .historical/examples.
+
+WARNING: Many of these these examples may not work, because of the recent 
+changes to HOL.  Eventually they will be fixed.
+
+Examples worth looking at include:
+
+   i.	 Cantor's theorem (in directory examples/cantor).
+
+   ii.   The multiplier (see examples/mult/READ-ME).
+
+   iii.  Some CMOS examples (see examples/cmos/READ-ME).
+
+   iv.   An example illustrating the representation of a modal
+         logic in HOL (in directory examples/Modal)
+
+   v.    The Primitive Recursion Theorem (hol/theories/mk_prim_rec.ml).
+
+   vi.   The Mike Fourman shift register (examples/mk_nmos.ml).
+
+   vii.  Jeff Joyce's proof of a little computer 
+         (examples/computer/READ-ME, examples/tamarack/README).
+
+   viii. The parity checker example from the paper "HOL: A Proof Generating
+         System for Higher-Order Logic" which can be found on 
+         hol/doc/HOLSYS.tex (examples/PARITY.ml). See xi below also.
+
+   ix.   An NMOS version of the COUNT example due to Jeff Joyce
+         (examples/mos-count/READ-ME).
+
+   x.    A resetable register built out of non-resetable registers
+         (examples/RESET_REG.ml).
+
+   xi.   A resetable parity checker. Similar to viii, but more complicated
+         (examples/RESET_PARITY.ml).
+
+
+* ========================================================================== *
+*									     *
+* Studies								     *
+*									     *
+* ========================================================================== *
+
+The directory hol/help/Tutorial/Studies contains tutorial case studies.
+
+* ========================================================================== *
+*									     *
+* contrib								     *
+*									     *
+* ========================================================================== *
+
+This directory contains contributions from the HOL user community which are
+distributed with the HOL source.  The contributions are not edited, and the
+University of Cambridge Computer Laboratory assumes no responsibility to
+support any HOL code or tools distributed in this directory.
+
+The aim of contrib is to provide a vehicle to make it easy for the HOL
+community to share theories, proofs, examples, tools, documents, and other
+material which may be of interest to users of the HOL system, but which is
+not included in the library.
+
+Each contribution is given a separate subdirectory within contrib. A standard
+READ-ME file is included in each subdirectory, giving at least the following
+information: 
+
+   * name of the subdirectory
+   * a one-line description of the contents
+   * names and addresses of the authors, 
+   * date of inclusion in contrib
+
+Contributors may also include other information in the READ-ME file.
+
+More contributed material from users is most welcome.

@@ -1,0 +1,3 @@
+\THEOREM HRAT_MUL_LINV HRAT
+|- !h. (hrat_inv h) hrat_mul h = hrat_1
+\ENDTHEOREM

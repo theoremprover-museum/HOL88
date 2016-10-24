@@ -1,0 +1,3 @@
+\THEOREM REAL_MUL REAL
+|- !m n. (& m) * (& n) = &(m num_mul n)
+\ENDTHEOREM

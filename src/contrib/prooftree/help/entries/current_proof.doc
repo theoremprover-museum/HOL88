@@ -1,0 +1,45 @@
+\DOC current_proof
+
+\TYPE {current_proof : (void -> void)}
+
+\SYNOPSIS
+Displays the proof currently being manipulated.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {current_proof} has the
+functionality supplied by the function {print_state} in the inbuilt
+subgoal package. The difference is that the proof is pretty-printed,
+with goals and tactics displayed in a logical fashion.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails when the set of proof trees is empty.
+
+\EXAMPLE
+{
+#current_proof () ;;
+
+"!a b. a /\ b = b /\ a"
+   (STRIP_TAC THEN (STRIP_TAC THEN EQ_TAC))
+   "a /\ b ==> b /\ a"
+      STRIP_TAC
+      "b /\ a"
+            [..]
+         (REWRITE_TAC [])
+         "b /\ a"
+               [..]
+   "b /\ a ==> a /\ b"
+() : void
+}
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_goal,
+move_to_proof, new_goal, remove_proof, show all_proofs,
+show_all_subgoals, show_tac, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC

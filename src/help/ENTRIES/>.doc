@@ -1,0 +1,14 @@
+\DOC >
+
+\TYPE {$> : ((int # int) -> bool)}
+
+\SYNOPSIS
+Performs a greater-than test on ML integers.
+
+\KEYWORDS
+arithmetic, number, order.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

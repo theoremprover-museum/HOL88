@@ -1,0 +1,39 @@
+\DOC link
+
+\TYPE {link : ((string # string) -> void)}
+
+\SYNOPSIS
+Makes a new link to a file.
+
+\DESCRIBE
+If {old} and {new} are filenames, where {old} exists and {new} does not, then
+the call
+{
+   link(`old`,`new`)
+}
+\noindent will link the name {new} to the file {old} in the manner of the Unix
+shell command
+{
+   ln old new
+}
+\FAILURE
+A call to {link} may fail in various system-related ways, in particular if
+{old} does not exist, or is a directory, or {new} already exists.
+
+\EXAMPLE
+The following example is assumed to be run under Unix:
+{
+   #system `touch test-file`;;
+   0 : int
+
+   #link(`test-file`,`test-link`);;
+   () : void
+}
+\COMMENTS
+This call is somewhat Unix-related, and may not work under other operating
+systems.
+
+\SEEALSO
+system, unlink.
+
+\ENDDOC

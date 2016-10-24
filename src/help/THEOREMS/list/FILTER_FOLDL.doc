@@ -1,0 +1,3 @@
+\THEOREM FILTER_FOLDL list
+|- !P l. FILTER P l = FOLDL(\l' x. (P x => SNOC x l' | l'))[]l
+\ENDTHEOREM

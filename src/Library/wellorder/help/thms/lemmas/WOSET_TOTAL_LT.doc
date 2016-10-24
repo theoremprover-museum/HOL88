@@ -1,0 +1,5 @@
+\THEOREM WOSET_TOTAL_LT WELLORDER
+|- !l.
+    woset l ==>
+    (!x y. fl l x /\ fl l y ==> (x = y) \/ less l(x,y) \/ less l(y,x))
+\ENDTHEOREM

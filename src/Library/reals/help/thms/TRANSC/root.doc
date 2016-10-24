@@ -1,0 +1,3 @@
+\THEOREM root TRANSC
+|- !n x. root n x = (@u. ((& 0) < x ==> (& 0) < u) /\ (u pow n = x))
+\ENDTHEOREM

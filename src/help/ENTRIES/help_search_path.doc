@@ -1,0 +1,24 @@
+\DOC help_search_path
+
+\TYPE {help_search_path : (void -> string list)}
+
+\SYNOPSIS
+Returns the internal search path use by HOL to find online help files.
+
+\DESCRIBE
+Evaluating {help_search_path()} returns a list of strings representing the
+pathnames of the directories that are searched when the {help} function
+searches for online help files. Although the help search path can be set to an
+arbitrary list of strings, each string is normally expected to be either empty
+({``}) or a pathname with `{/}' as its final character.  When the {help}
+function looks for an online help file, the directories in the help search path
+are searched in the order in which they occur in the list returned by
+{help_search_path}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+install, search_path, set_help_search_path, set_search_path.
+
+\ENDDOC

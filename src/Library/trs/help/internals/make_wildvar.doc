@@ -1,0 +1,10 @@
+\DOC make_wildvar
+
+\TYPE {make_wildvar : (term -> wildvar)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

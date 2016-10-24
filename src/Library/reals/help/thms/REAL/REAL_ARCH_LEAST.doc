@@ -1,0 +1,5 @@
+\THEOREM REAL_ARCH_LEAST REAL
+|- !y.
+    (& 0) < y ==>
+    (!x. (& 0) <= x ==> (?n. ((& n) * y) <= x /\ x < ((&(SUC n)) * y)))
+\ENDTHEOREM

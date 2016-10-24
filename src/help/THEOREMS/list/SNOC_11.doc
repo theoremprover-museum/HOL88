@@ -1,0 +1,3 @@
+\THEOREM SNOC_11 list
+|- !x l x' l'. (SNOC x l = SNOC x' l') = (x = x') /\ (l = l')
+\ENDTHEOREM

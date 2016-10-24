@@ -1,0 +1,3 @@
+\THEOREM METRIC_SAME TOPOLOGY
+|- !m x. dist m(x,x) = & 0
+\ENDTHEOREM

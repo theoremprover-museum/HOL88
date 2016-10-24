@@ -1,0 +1,3 @@
+\THEOREM CONS_11 list
+|- !h t h' t'. (CONS h t = CONS h' t') = (h = h') /\ (t = t')
+\ENDTHEOREM

@@ -1,0 +1,120 @@
+\section{Simple examples}
+
+This session illustrates some typical uses of the retrieval system.
+
+\setcounter{sessioncount}{1}
+
+\begin{session}\begin{verbatim}
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 2
+
+#load_library `trs`;;
+Loading library `trs` ...
+Updating help search path
+.............................................................................
+......................
+Library `trs` loaded.
+() : void
+\end{verbatim}\end{session}
+
+First we search for the commutativity of multiplication within the built-in
+theories of the \HOL\ system. We want the search\index{searching!steps} to
+stop as soon as a matching theorem has been found. However, the search cannot
+stop in the middle of a theory.
+
+The pattern\index{patterns!for terms} matches whether or not the theorem is
+universally quantified. The variables used in the theorem need not be
+{\small\verb%a%} and {\small\verb%b%}. In fact, the pattern will also match
+any theorems in which the {\small\verb%a%} and {\small\verb%b%} are replaced
+by arbitrary terms of the appropriate type, but such theorems are unlikely to
+exist.
+
+The first function call begins the search. Only one theory is examined
+initially. The result of the function is a list of theorems found, as well as
+a function to continue the search.
+
+\begin{session}\begin{verbatim}
+#find_theorems ("conc:bool" has_body "a * b = b * a")
+#              (Paths [Ancestors ([`HOL`],[])]);;
+Searching theory HOL
+Step([], -) : searchstep
+\end{verbatim}\end{session}
+
+\noindent
+We now continue\index{searching!continuation} the search until the theorem
+required is found:
+
+\begin{session}\begin{verbatim}
+#search_until_find it;;
+Searching theory tydefs
+Searching theory sum
+Searching theory one
+Searching theory BASIC-HOL
+Searching theory ltree
+Searching theory combin
+Searching theory ind
+Searching theory tree
+Searching theory bool
+Searching theory list
+Searching theory PPLAMB
+Searching theory arithmetic
+Step([((Theorem), `arithmetic`, `MULT_SYM`, |- !m n. m * n = n * m)], -)
+: searchstep
+\end{verbatim}\end{session}
+
+More general searches may also be attempted. The next function call searches
+for commutative laws which occur in the theory {\small\verb%arithmetic%}.
+{\small\verb%C%} is a function in the logic. It is likely that it will match
+an infix operator.
+
+\begin{session}\begin{verbatim}
+#find_theorems ("conc:bool" has_body "(C:*->*->**) a b = C b a")
+#              (Paths [Theory `arithmetic`]);;
+Searching theory arithmetic
+Step([((Theorem), `arithmetic`, `MULT_SYM`, |- !m n. m * n = n * m);
+      ((Theorem), `arithmetic`, `ADD_SYM`, |- !m n. m + n = n + m)],
+     -)
+: searchstep
+\end{verbatim}\end{session}
+
+Theorems concerning a specific operator\index{searching!for operators} can
+be obtained, though for many operators the list returned will be very large.
+
+\begin{session}\begin{verbatim}
+#full_search ("conc:bool" contains ">")
+#            (Paths [Ancestors ([`HOL`],[])]);;
+Searching theory HOL
+Searching theory tydefs
+Searching theory sum
+Searching theory one
+Searching theory BASIC-HOL
+Searching theory ltree
+Searching theory combin
+Searching theory ind
+Searching theory tree
+Searching theory bool
+Searching theory list
+Searching theory PPLAMB
+Searching theory arithmetic
+Searching theory prim_rec
+Searching theory num
+[((Definition),
+  `arithmetic`,
+  `GREATER_OR_EQ`,
+  |- !m n. m >= n = m > n \/ (m = n));
+ ((Definition), `arithmetic`, `GREATER`, |- !m n. m > n = n < m)]
+: foundthm list
+\end{verbatim}\end{session}
+
+\noindent
+This is the end of the first session.
+
+\begin{session}\begin{verbatim}
+#quit();;
+$
+\end{verbatim}\end{session}
+

@@ -1,0 +1,3 @@
+\THEOREM trat_inv HRAT
+|- !x y. trat_inv(x,y) = y,x
+\ENDTHEOREM

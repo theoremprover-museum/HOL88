@@ -1,0 +1,10 @@
+\DOC Not'
+
+\TYPE {Not' : (thmpattern_rep -> thmpattern_rep)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

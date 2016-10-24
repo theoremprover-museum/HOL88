@@ -1,0 +1,4 @@
+\THEOREM tree_ISO_DEF tree
+|- (!a. ABS_tree(REP_tree a) = a) /\
+   (!r. Is_tree_REP r = (REP_tree(ABS_tree r) = r))
+\ENDTHEOREM

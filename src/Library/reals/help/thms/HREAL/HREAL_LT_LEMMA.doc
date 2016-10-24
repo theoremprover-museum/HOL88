@@ -1,0 +1,3 @@
+\THEOREM HREAL_LT_LEMMA HREAL
+|- !X Y. X hreal_lt Y ==> (?x. ~cut X x /\ cut Y x)
+\ENDTHEOREM

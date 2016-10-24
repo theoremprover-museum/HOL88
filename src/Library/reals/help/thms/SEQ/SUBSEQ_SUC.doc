@@ -1,0 +1,3 @@
+\THEOREM SUBSEQ_SUC SEQ
+|- !f. subseq f = (!n. (f n) num_lt (f(SUC n)))
+\ENDTHEOREM

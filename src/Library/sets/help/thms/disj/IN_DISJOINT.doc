@@ -1,0 +1,3 @@
+\THEOREM IN_DISJOINT sets
+|- !s t. DISJOINT s t = ~(?x. x IN s /\ x IN t)
+\ENDTHEOREM

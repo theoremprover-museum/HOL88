@@ -1,0 +1,3 @@
+\THEOREM EXISTS_wordn_REP wordn_base
+|- !n. ?l. (\l. LENGTH l = n)l
+\ENDTHEOREM

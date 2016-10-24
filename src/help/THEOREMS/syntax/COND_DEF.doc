@@ -1,0 +1,5 @@
+\THEOREM COND_DEF bool
+|- COND =
+   (\t t1 t2. @x. ((t = T) ==> (x = t1)) /\ ((t = F) ==> (x = t2)))
+\ENDTHEOREM
+

@@ -1,0 +1,22 @@
+\DOC help
+
+\TYPE {help : (string -> void)}
+
+\SYNOPSIS
+Displays help on a given identifier in the system.
+
+\DESCRIBE
+{help} will attempt to display the help file associated with a particular
+identifier in the system.  The identifier is provided as an ML string, and
+the file should be located somewhere on the help search path. Normally the help
+file for an identifier {name} would be called {name.doc}, but there are a few
+exceptions, because some identifiers have characters that cannot be put in
+filenames (e.g. `{/}' under Unix, which is the directory separator).
+
+\FAILURE
+Fails if no information can be found on the identifier in question.
+
+\SEEALSO
+help_search_path, set_help_search_path.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM K_DEF combin
+|- K = (\x y. x)
+\ENDTHEOREM

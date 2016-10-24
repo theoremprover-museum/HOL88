@@ -1,0 +1,10 @@
+\DOC match_of_var
+
+\TYPE {match_of_var : (matching -> wildvar -> term)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

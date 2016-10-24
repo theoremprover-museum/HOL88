@@ -1,0 +1,27 @@
+\DOC inr
+
+\TYPE {inr : (* -> (** + *))}
+
+\SYNOPSIS
+Injects into right of disjoint union type.
+
+\DESCRIBE
+The function {inr} is a constructor function for disjoint union (sum) types,
+which takes an element of an arbitrary type {**} and creates an element of type
+{* # **} which holds the same data.
+
+\FAILURE
+Never fails
+
+\EXAMPLE
+{
+#let x = inr 1;;
+x = inr 1 : (* + int)
+
+#let y = inr 12 : string + int;;
+y = inr 12 : (string + int)
+}
+\SEEALSO
+inl, isl, outl, outr.
+
+\ENDDOC

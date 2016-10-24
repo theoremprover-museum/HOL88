@@ -1,0 +1,3 @@
+\THEOREM IS_HEX_CONS_IMP_IS_HEX numeral
+|- !l e. IS_HEX(CONS e l) ==> IS_HEX l
+\ENDTHEOREM

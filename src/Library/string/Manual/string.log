@@ -1,0 +1,82 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:25
+**string.tex
+(string.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+\@indexfile=\write3
+
+Writing index file string.idx 
+(string.aux (title.aux) (description.aux) (entries.aux) (theorems.aux)
+(references.aux) (index.aux)) (title.tex [1
+
+
+] [2]) (string.toc)
+\tf@toc=\write4
+ [3
+
+
+] [4
+
+]
+(description.tex
+Chapter 1.
+[1
+
+
+] [2] [3] [4] [5] [6] [7]) [8] (entries.tex
+Chapter 2.
+(entries-intro.tex) [9
+
+
+
+] [10]) [11] (theorems.tex [12
+
+
+
+]
+Chapter 3.
+(theorems-intro.tex) [13] [14]) [15] (references.tex [16
+
+
+
+]) [17] (index.tex
+[18
+
+
+
+]) (string.aux (title.aux) (description.aux) (entries.aux) (theorems.aux)
+(references.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 466 strings out of 11977
+ 3898 string characters out of 87025
+ 39305 words of memory out of 262141
+ 2290 multiletter control sequences out of 9500
+ 19640 words of font info for 75 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 18i,12n,19p,250b,561s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on string.dvi (22 pages, 41752 bytes).

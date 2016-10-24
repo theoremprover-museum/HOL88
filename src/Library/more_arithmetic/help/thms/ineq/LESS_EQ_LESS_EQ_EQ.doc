@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_LESS_EQ_EQ ineq
+|- !m n. m <= n /\ n <= m = (m = n)
+\ENDTHEOREM

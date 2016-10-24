@@ -1,0 +1,47 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: benchmark							%
+%									%
+% DESCRIPTION: The HOL "multiplier" benchmark (for version 1.12).	%
+%									%
+% AUTHOR: Mike Gordon							%
+%									%
+% ADDRESS: University of Cambridge 					%
+%	   Computer Laboratory						%
+%	   New Museums Site						%
+%          Pembroke Street						%
+%	   Cambridge, CB2 3QG						%
+%	   England							%
+%									%
+%	   email: mjcg@cl.cam.ac.uk					%
+%									%
+% DATE: 91.01.28							%
+% --------------------------------------------------------------------- %
+
+This directory contains the proof of the multiplier example, which is often
+used as a HOL benchmark, from the LCF_LSM paper done in HOL.
+
+It has been modified to run in HOL version 12.
+
+The file HOL_MULT.ml loads the library unwind.
+
+The steps in the proof are:
+
+   1. Prove NEXT_THM by loading mk_NEXT.ml into HOL
+      (first delete NEXT.th).
+
+   2. Prove MULT_FUN_DEF (the existence of MULT_FUN) by loading 
+      MULT_FUN_CURRY.ml into HOL (first delete MULT_FUN_CURRY.th).
+
+   3. Prove that MULT_FUN does multiplication by loading MULT_FUN.ml into HOL
+      (first delete MULT_FUN.th).
+
+   4. Set up the specifications of various primitives and the multiplier, and
+      then prove MULT_CORRECTNESS by loading HOL_MULT.ml into HOL
+      (first delete prims.th, MULT_IMP.th and MULT_VER.th).
+
+A unix shell script that does the above steps automatically is available
+in the file: benchmark.  The entire benchmark can be run by doing:
+
+	csh < benchmark > LOG&
+
+

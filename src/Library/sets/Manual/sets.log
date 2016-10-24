@@ -1,0 +1,86 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:24
+**sets.tex
+(sets.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+\@indexfile=\write3
+
+Writing index file sets.idx 
+(sets.aux (title.aux) (description.aux) (entries.aux) (theorems.aux)
+(references.aux) (index.aux)) (title.tex [1
+
+
+] [2]) (sets.toc [3
+
+
+])
+\tf@toc=\write4
+ [4]
+(description.tex
+Chapter 1.
+[1
+
+
+
+] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+[18] [19] [20]) [21] (entries.tex [22
+
+
+
+]
+Chapter 2.
+(entries-intro.tex) [23] [24] [25] [26] [27] [28] [29] [30] [31]) [32]
+(theorems.tex
+Chapter 3.
+(theorems-intro.tex) [33
+
+
+
+] [34] [35] [36] [37] [38] [39] [40] [41] [42] [43]
+[44] [45] [46]) [47] (references.tex [48
+
+
+
+]) [49] (index.tex [50
+
+
+
+] [51] [52]
+[53
+
+]) (sets.aux (title.aux) (description.aux) (entries.aux) (theorems.aux)
+(references.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 474 strings out of 11977
+ 3897 string characters out of 87025
+ 41650 words of memory out of 262141
+ 2298 multiletter control sequences out of 9500
+ 19808 words of font info for 76 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 18i,12n,19p,248b,580s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on sets.dvi (57 pages, 129604 bytes).

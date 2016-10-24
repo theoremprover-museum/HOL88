@@ -1,0 +1,24 @@
+\DOC int_of_term
+
+\TYPE {int_of_term : (term -> int)}
+
+\SYNOPSIS
+Maps a numeric term to the corresponding ML integer.
+
+\DESCRIBE
+Given a term representing a natural number, i.e., of type {:num}
+{int_of_term} returns the corresponding ML integer constant.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+   #int_of_term "2";;
+   2 : int
+}
+
+\SEEALSO
+term_of_int, string_of_int, int_of_string.
+
+\ENDDOC

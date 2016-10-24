@@ -1,0 +1,3 @@
+\THEOREM RIGHT_ID_ADD_0 arithmetic
+|- RIGHT_ID $+ 0
+\ENDTHEOREM

@@ -1,0 +1,28 @@
+\DOC print_thm
+
+\TYPE {print_thm : (thm -> void)}
+
+\SYNOPSIS
+Prints a HOL theorem to the terminal (abbreviating assumptions).
+
+\DESCRIBE
+{print_thm th} returns {():void} with the side-effect of printing the value
+of {th} to the terminal. The text is not terminated with a carriage return.
+In fact, the text is queued until the pretty-printer decides where line breaks
+are needed, or until the queue is explicitly flushed.
+
+Each assumption of the theorem is printed as one dot (period, full stop).
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#print_thm CONJ_SYM;;
+|- !t1 t2. t1 /\ t2 = t2 /\ t1() : void
+}
+\SEEALSO
+print_all_thm, print_begin, print_end, print_newline, show_types, print_type,
+print_term.
+
+\ENDDOC

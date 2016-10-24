@@ -1,0 +1,3 @@
+\THEOREM IN_INFINITE_NOT_FINITE sets
+|- !s t. INFINITE s /\ FINITE t ==> (?x. x IN s /\ ~x IN t)
+\ENDTHEOREM

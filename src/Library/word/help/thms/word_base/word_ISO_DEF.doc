@@ -1,0 +1,6 @@
+\THEOREM word_ISO_DEF word_base
+|- (!a. ABS_word(REP_word a) = a) /\
+   (!r.
+     TRP(\v tl. (?l. v = l) /\ (LENGTH tl = 0))r =
+     (REP_word(ABS_word r) = r))
+\ENDTHEOREM

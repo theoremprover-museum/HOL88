@@ -1,0 +1,4 @@
+\THEOREM DISJ_ASSOC \none
+|- !t1 t2 t3. t1 \/ t2 \/ t3 = (t1 \/ t2) \/ t3
+\ENDTHEOREM
+

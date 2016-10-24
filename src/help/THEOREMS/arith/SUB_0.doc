@@ -1,0 +1,3 @@
+\THEOREM SUB_0 arithmetic
+|- !m. (0 - m = 0) /\ (m - 0 = m)
+\ENDTHEOREM

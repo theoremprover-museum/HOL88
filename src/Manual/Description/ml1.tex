@@ -1,0 +1,1087 @@
+\chapter{Introduction and Examples}\label{ML-intro}
+
+\ML\ is an interactive language. At top-level\index{ML@\ML!top level of}\index{top level, of ML@top level, of \ML} one can:
+
+\begin{itemize}
+  \item evaluate expressions
+  \item perform declarations
+\end{itemize}
+
+To give a first impression of the system, we reproduce below a session at a
+terminal in which simple uses of various \ML\ constructs are illustrated.  To
+make the session easier to follow, it is split into a sequence of
+sub-sessions.  A complete description of the syntax and semantics of \ML\ 
+is given in Chapter~\ref{MLsyntax} and Chapter~\ref{MLsemantics}
+respectively.
+
+
+\section {Expressions}
+
+The \ML\ prompt\index{prompt, in ML@prompt, in \ML}\index{ML@\ML!prompt character of} is {\small\verb!#!}\index{ prompt, in ML@{\small\verb+#+} (prompt, in \ML)} so  lines beginning  with this contain
+the user's contribution; all other lines are output by the system.
+
+\begin{session}
+\begin{verbatim}
+#2+3;;
+5 : int
+
+#it;;
+5 : int
+\end{verbatim}
+\end{session}
+
+\ML\ prompted with {\small\verb%#%},  the user  then typed {\small\verb%2+3;;%}
+followed by  a  carriage  return;  \ML\  then  responded  with
+{\small\verb%5 : int%}\index{int@\ml{int}}\index{type constraint!in ML@in \ML},
+ a new line, and then prompted again.  The user then typed
+{\small\verb%it;;%} followed by a carriage return, and the  system responded by
+typing {\small\verb%5 : int%} again.   In  general to  evaluate an expression
+$e$ one types $e$\index{terminator, of ML expressions@terminator, of \ML\ expressions}\index{ terminator, of ML expressions@{\small\verb+;;+} (terminator, of \ML\ expressions)}\index{expressions, in ML@expressions, in \ML!terminator for}\index{top level terminator, in ML@top level terminator, in \ML}\index{ML@\ML!top level expression terminator in}
+  followed by  a carriage return\index{carriage return!after ML expressions@after \ML\ expressions}\index{expressions, in ML@expressions, in \ML!carriage return after}; the system 
+then prints  $e$'s value  and type
+(the type prefaced by a colon).   The  value of the
+last expression  evaluated  at  top  level  is  remembered  in  the  identifier
+{\small\verb%it%}\index{it@\ml{it}}.
+
+
+\section {Declarations}
+
+\index{let in@\ml{let} $\ldots$ \ml{in} $\ldots$|(}
+The declaration {\small\verb%let%} $x${\small\verb%=%}$e$\index{let, in ML@\ml{let}, in \ML} evaluates $e$ and
+binds\index{bindings, in ML@bindings, in \ML!in declarations|(} the 
+resulting value to $x$.
+
+\begin{session}
+\begin{verbatim}
+#let x=2*3;;
+x = 6 : int
+
+#it=x;;
+false : bool
+\end{verbatim}
+\end{session}
+
+Notice that declarations\index{declarations, in ML@declarations, in \ML!effect on it@effect on \ml{it}} do not affect {\small\verb%it%}\index{it@\ml{it}}.  To bind the variables
+$x_1,\ldots,x_n$ simultaneously\index{bindings, in ML@bindings, in \ML!simultaneous} to the values of the expressions
+$e_1,\ldots,e_n$ one can
+perform either the declaration {\small\verb%let %}$x_1${\small\verb%=%}$e_1$ 
+{\small\verb% and %}$x_2${\small\verb%=%}$e_2\ldots${\small\verb% and %}
+$x_n${\small\verb%=%}$e_n$
+or {\small\verb%let %}$x_1,x_2,\ldots,x_n${\small\verb%=%}$e_1,e_2,\ldots,e_n$.
+These two declarations are equivalent.
+
+\begin{session}
+\begin{verbatim}
+#let y=10 and z=x;;
+y = 10 : int
+z = 6 : int
+
+#let x,y = y,x;;
+x = 10 : int
+y = 6 : int
+\end{verbatim}
+\end{session}
+
+
+A declaration $d$ can be made local\index{declarations, in ML@declarations, in \ML!local} to the evaluation of an expression
+$e$ by evaluating the expression $d${\small\verb% in %}$e$.  The expression 
+$e${\small\verb% where %}$b$\index{where@{\small\verb+where+}}
+(where $b$ is a {\it binding\/} such as {\small\verb%x=2%}) is
+equivalent to {\small\verb%let %}$b${\small\verb% in %}$e$.
+
+\begin{session}
+\begin{verbatim}
+#let x=2 in x*y;;
+12 : int
+
+#x;;
+10 : int
+
+#x*y where x=2;;
+12 : int
+\end{verbatim}
+\end{session}
+\index{bindings, in ML@bindings, in \ML!in declarations|)}
+\index{let in@\ml{let} $\ldots$ \ml{in} $\ldots$|)}
+
+\section{Assignment}
+
+Identifiers can be declared assignable\index{variables, in ML@variables, in \ML!assignable}\index{assignable variables, in ML@assignable variables, in \ML} using {\small\verb%letref%}\index{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$} instead of
+{\small\verb%let%}.  Values bound to such 
+identifiers\footnote{In this document, it is sometimes said
+that values are
+bound to identifiers, but it is also sometimes said that identifiers are 
+bound to values. This imprecision will be corrected
+in later versions.} can be changed with the
+assignment expression $x${\small\verb%:=%}$e$\index{ assignment, in ML@{\small\verb+:=+} (assignment, in \ML)}, which changes the value bound to
+$x$ to be the value of $e$.  Attempts to assign to
+non-assignable variables are detected by the type checker.
+
+\begin{session}
+\begin{verbatim}
+#x:=1;;
+
+unbound or non-assignable variable x
+1 error in typing
+typecheck failed
+
+#letref x=1 and y=2;;
+x = 1 : int
+y = 2 : int
+
+#x:=6;;
+6 : int
+
+#x;;
+6 : int
+\end{verbatim}
+\end{session}
+
+
+
+The value of an assignment $x${\small\verb%:=%}$e$ is the value of
+$e$ (hence the value of {\small\verb%y:=6%} is 6).
+Simultaneous assignments\index{assignments, in ML@assignments, in \ML!simultaneous} can also be done:
+
+\begin{session}
+\begin{verbatim}
+#x,y := y,x;;
+(2,6) : (int # int)
+
+#x,y;;
+(2,6) : (int # int)
+\end{verbatim}
+\end{session}
+
+
+\noindent The type {\small\verb%(int # int)%}\index{ product type operator, in ML@{\small\verb+#+} (product type operator, in \ML)} is the type of pairs\index{pairs, in ML@pairs, in \ML} of integers.
+
+
+\section {Functions}
+
+To define  a function $f$ with  formal parameter $x$
+and body $e$ one performs the declaration: 
+{\small\verb%let %}$f$ $x${\small\verb% = %}$e$.
+To apply\index{function application, in ML@function application, in \ML} the
+ function $f$ to an actual parameter
+$e$ one evaluates the expression: $f$ $e$.
+
+\begin{session}
+\begin{verbatim}
+#let f x = 2*x;;
+f = - : (int -> int)
+
+#f 4;;
+8 : int
+\end{verbatim}
+\end{session}
+
+
+Functions are printed as 
+a dash, {\small\verb%-%}\index{non-printable values in ML@non-printable values in \ML}\index{printing, of ML@printing, of \ML!of functions}\index{functions in ML, printing of@functions in \ML, printing of}\index{ non-printable symbol, in ML@{\small\verb+-+} (`non-printable' symbol, in \ML)}, followed by 
+their type, since a function as such is not printable.
+Application
+\index{function application, in ML@function application, in \ML!precedence of}
+\index{precedence, in ML@precedence, in \ML!of function application in ML@of function application in \ML}
+binds more tightly than anything else in the language; thus, for example,
+$f${\small\verb% 3 + 4%} means {\small\verb%(%}$f${\small\verb% 3)+4%} not 
+$f${\small\verb%(3+4)%}. Functions of several arguments can be defined:
+
+\begin{session}
+\begin{verbatim}
+#let add x y = x+y;;
+add = - : (int -> int -> int)
+
+#add 3 4;;
+7 : int
+
+#let f = add 3;;
+f = - : (int -> int)
+
+#f 4;;
+7 : int
+\end{verbatim}
+\end{session}
+
+
+Application\index{function application, in ML@function application, in \ML!associativity of} associates\index{associativity, of constructs in ML@associativity, of constructs in \ML} to the left so {\small\verb%add 3 4%} means 
+{\small\verb%(add 3)4%}.  In the expression {\small\verb%add 3%}, 
+the function {\small\verb%add%} is partially applied\index{function application, in ML@function application, in \ML!partial}\index{partial function application, in ML@partial function application, in \ML} to
+{\small\verb%3%}; the resulting value is the function of type
+{\small\verb%int -> int%} which adds {\small\verb%3%} to its argument.  Thus 
+\ml{add} takes
+its arguments one at a time. We could have made {\small\verb%add%} take a single
+argument of the cartesian product type {\small\verb%(int # int)%}:
+
+\begin{session}
+\begin{verbatim}
+#let add(x,y) = x+y;;
+add = - : ((int # int) -> int)
+
+#add(3,4);;
+7 : int
+
+#let z = (3,4) in add z;;
+7 : int
+
+#add 3;;
+
+ill-typed phrase: 3
+has an instance of type  int
+which should match type  (int # int)
+1 error in typing
+typecheck failed
+\end{verbatim}
+\end{session}
+
+
+As well as taking structured arguments (\eg\ {\small\verb%(3,4)%}) functions
+may also return structured results.
+
+\begin{session}
+\begin{verbatim}
+#let sumdiff(x,y) = (x+y,x-y);;
+sumdiff = - : ((int # int) -> (int # int))
+
+#sumdiff(3,4);;
+(7, -1) : (int # int)
+\end{verbatim}
+\end{session}
+
+
+
+\section {Recursion}
+
+The following is an attempt to define the factorial function:
+
+\begin{session}
+\begin{verbatim}
+#let fact n = if n=0 then 1 else n*fact(n-1);;
+
+unbound or non-assignable variable fact
+1 error in typing
+typecheck failed
+\end{verbatim}
+\end{session}
+
+
+The problem is that any free variables\index{free variables, in ML@free variables, in \ML!in function definitions} in the body of a function have the
+bindings\index{bindings, in ML@bindings, in \ML!in function definitions} they had just before the function was declared; {\small\verb%fact%} is
+such a free variable in the body of the declaration above, and since it
+is not defined before its own declaration, an error results.  To make things
+clear consider:
+\begin{session}
+\begin{verbatim}
+#let f n = n+1;;
+f = - : (int -> int)
+
+#let f n = if n=0 then 1 else n*f(n-1);;
+f = - : (int -> int)
+
+#f 3;;
+9 : int
+\end{verbatim}
+\end{session}
+
+
+Here {\small\verb%f 3%} results in the evaluation of {\small\verb%3*f(2)%}, but now the
+first {\small\verb%f%} is used so {\small\verb%f(2)%} evaluates to {\small\verb%2+1=3%}, hence
+the expression {\small\verb%f 3%} results in {\small\verb%3*3=9%}.  To make a function
+declaration hold within its own body, {\small\verb%letrec%}\index{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$} instead of
+{\small\verb%let%} must be used.  The correct recursive definition of the
+factorial function is thus:
+\begin{session}
+\begin{verbatim}
+#letrec fact n = if n=0 then 1 else n*fact(n-1);;
+fact = - : (int -> int)
+
+#fact 3;;
+6 : int
+\end{verbatim}
+\end{session}
+
+\section {Iteration}
+
+\index{conditional loop construct, in ML@conditional/loop construct, in \ML|(}
+Here is an iterative definition of {\small\verb%fact%} using 
+two local assignable 
+variables:\index{assignable variables, in ML@assignable variables, in \ML} {\small\verb%count%} and {\small\verb%result%}.
+\begin{session}
+\begin{verbatim}
+#let fact n = 
+#    letref count=n and result=1
+#      in while count > 0 do count,result := count-1,count*result
+#         ;result;;
+fact = - : (int -> int)
+\end{verbatim}
+\end{session}
+
+
+The semicolon denotes sequencing. When an expression 
+$e_1${\small\verb%;%}$\ldots${\small\verb%;%}$e_n$\index{sequencing!of ML expressions@of \ML\ expressions}\index{ sequencing, in ML@{\small\verb+;+} (sequencing, in \ML)} is
+evaluated, each $e_i$ is evaluated in turn and the value of the entire
+expression is the value of $e_n$. The while construct 
+binds\index{precedence, in ML@precedence, in \ML!of while
+construct, in ML@of while construct, in \ML} more tightly
+than sequencing.
+
+The construct 
+{\small\verb%if %}$e_1${\small\verb% then %}$e_2${\small\verb% loop %}$e_3$
+\index{if then loop@{\small if $\cdots$ then $\cdots$ loop $\cdots$}|(} is the same as
+{\small\verb%if %}$e_1${\small\verb% then %}$e_2${\small\verb% else %}$e_3$
+\index{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}|(}
+in the true case; when $e_1$ evaluates
+to false, $e_3$ is evaluated and control loops back to the front of the
+construct again.  As an illustration, here is an alternative definition of
+{\small\verb%fact%}.
+\begin{session}
+\begin{verbatim}
+#let fact n =
+#    letref count=n and result=1
+#    in     if count=0
+#           then result
+#           loop count,result := count-1,count*result;;
+fact = - : (int -> int)
+
+#fact 4;;
+24 : int
+\end{verbatim}
+\end{session}
+
+Replacing the {\small\verb%then%} in 
+{\small\verb%if %}$e_1${\small\verb% then %}$e_2${\small\verb% else %}$e_3$\index{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}}
+by {\small\verb%loop%} causes iteration when $e_1$ evaluates to true: e.g.,
+{\small\verb%if %}$e_1${\small\verb% loop %}$e_2${\small\verb% else %}$e_3$\index{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}}
+is equivalent to
+{\small\verb%if not(%}$e_1${\small\verb%) then %}$e_3${\small\verb% loop %}$e_2$.  The conditional/loop\index{conditional loop construct, in ML@conditional/loop construct, in \ML|)} construct can
+have a number of conditions, each preceded by {\small\verb%if%}. The expression
+guarded by each condition may be preceded by {\small\verb%then%}, or by
+{\small\verb%loop%} when the whole construct is to be re-evaluated after
+evaluating the guarded expression:
+\index{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}|)}
+\index{if then loop@{\small if $\cdots$ then $\cdots$ loop $\cdots$}|)}
+\begin{session}
+\begin{verbatim}
+#let gcd(x,y) =
+#    letref x,y = x,y
+#    in     if x>y loop x:=x-y
+#           if x<y loop y:=y-x
+#           else x;;
+gcd = - : ((int # int) -> int)
+
+#gcd(12,20);;
+4 : int
+\end{verbatim}
+\end{session}
+
+
+\section {Lists}
+
+If $e_1,\ldots,e_n$  all  have  type  $ty$  then the \ML\
+expression {\small\verb%[%}$e_1${\small\verb%;%}$\ldots${\small\verb%;%}$e_n${\small\verb%]%}\index{ lists, in ML@{\small\ml{[} $\cdots$ \ml{;} $\cdots$ \ml{]}} (lists, in \ML)}  
+has type {\small\verb%(%}$ty${\small\verb% list)%}.  The
+standard functions  on  lists are  {\small\verb%hd%} (head)\index{hd@\ml{hd}}, {\small\verb%tl%}\index{tl@\ml{tl}}
+(tail), {\small\verb%null%}\index{null@\ml{null}}  (which  tests whether  a list  is empty---\ie\ is
+equal to {\small\verb%[]%}), and the infixed operators {\small\verb%.%} (cons)\index{list constructor, in ML@list constructor, in \ML}
+and {\small\verb%@%}\index{list concatenation, in ML@list concatenation, in \ML}
+(append, or concatenation).
+\vfill
+\newpage
+
+\begin{session}
+\begin{verbatim}
+#let m = [1;2;(2+1);4];;
+m = [1; 2; 3; 4] : int list
+
+#hd m , tl m;;
+(1, [2; 3; 4]) : (int # int list)
+
+#null m , null [];;
+(false, true) : (bool # bool)
+
+#0.m;;
+[0; 1; 2; 3; 4] : int list
+
+#[1; 2] @ [3; 4; 5; 6];;
+[1; 2; 3; 4; 5; 6] : int list
+
+#[1;true;2];;
+
+ill-typed phrase: true
+has an instance of type   bool
+which should match type   int
+1 error in typing
+typecheck failed
+\end{verbatim}
+\end{session}
+
+
+All the members of a list must have the same type (although this type could
+be a sum, or disjoint union type---see Chapter~\ref{ML-types}).
+
+
+\section {Strings}
+
+A sequence of characters enclosed between string quotes 
+({\small\verb%`%} -- i.e. ascii 96)\index{ string markers@{\small\verb+`+ $\cdots$ \verb+`+} (string markers, in \ML)} is a string.
+
+\begin{session}
+\begin{verbatim}
+#`this is a string`;;
+`this is a string` : string
+
+#``;;
+`` : string
+\end{verbatim}
+\end{session}
+
+
+\section {Polymorphism}
+
+\index{polymorphism, in ML@polymorphism, in \ML|(}
+The list processing functions {\small\verb%hd%}\index{hd@\ml{hd}},
+ {\small\verb%tl%}\index{tl@\ml{tl}} \etc\ can be
+used on all types of lists.
+
+\begin{session}
+\begin{verbatim}
+#hd [1;2;3];;
+1 : int
+
+#hd [true;false;true];;
+true : bool
+
+#hd [1,2;3,4];;
+(1, 2) : (int # int)
+\end{verbatim}
+\end{session}
+
+
+\noindent Thus {\small\verb%hd%} has several types; 
+for example, it is used above
+with types {\small\verb%(int list) -> int%}, {\small\verb%(bool list) -> bool%} and
+{\small\verb%(int # int) list -> (int # int)%}.  In fact if $ty$ is {\it
+any} type then {\small\verb%hd%} has the type 
+{\small\verb%(%}$ty${\small\verb% list) -> %}$ty$.
+Functions, like {\small\verb%hd%}, with many types are called 
+{\it polymorphic}, and \ML\ uses type 
+variables\index{type variables, in ML@type variables, in \ML} {\small\verb%*%}\index{ type variables, in ML@{\small\verb+*+, \verb+**+,$\ldots$}
+(type variables, in \ML)}, {\small\verb%**%}, {\small\verb%***%} \etc\ to
+represent their types.
+
+\begin{session}
+\begin{verbatim}
+#hd;;
+- : (* list -> *)
+
+#letrec map f l = if null l then []
+#                           else f(hd l).map f (tl l);;
+map = - : ((* -> **) -> * list -> ** list)
+
+#map fact [1;2;3;4];;
+[1; 2; 6; 24] : int list
+\end{verbatim}
+\end{session}
+
+The \ML\  function  {\small\verb%map%}\index{map@\ml{map}}  takes  a  function
+ $f$  (with  argument  type
+{\small\verb%*%} and result type {\small\verb%**%}), and a list
+$l$ (of elements of type  {\small\verb%*%}), and  returns the list
+obtained by  applying  $f$  to  each  element  of $l$
+(which is a list of elements of type  {\small\verb%**%}).   {\small\verb%map%} can  be used at
+any instance of its type:   above, both  {\small\verb%*%} and {\small\verb%**%}
+were instantiated to {\small\verb%int%}; below, {\small\verb%*%} is
+instantiated to {\small\verb%(int list)%} and {\small\verb%**%} to
+{\small\verb%bool%}.  Notice  that the  instance need  not be  specified; it is
+determined by the type checker\index{type checking, in ML@type checking, in \ML!inference involved in}.
+
+\begin{session}
+\begin{verbatim}
+#map null [[1;2]; []; [3]; []];;
+[false; true; false; true] : bool list
+\end{verbatim}
+\end{session}
+\index{polymorphism, in ML@polymorphism, in \ML|)}
+
+\section {Lambda-expressions}
+
+\index{lambda expressions, in ML@lambda expressions, in \ML|(}
+The expression 
+{\small\verb%\%}$x${\small\verb%. %}$e$\index{ function abstraction binder, in ML@{\small\verb+\+} (function abstraction binder, in \ML)} 
+evaluates to a function with formal parameter
+$x$ and body $e$. Thus the declaration 
+{\small\verb%let %}$f$ $x${\small\verb% = %}$e$ is equivalent to
+{\small\verb%let %}$f${\small\verb% = \%}$x${\small\verb%.%}$e$. 
+Similarly {\small\verb%let %}$f${\small\verb%(%}$x${\small\verb%,%}$y${\small\verb%)%}$z${\small\verb% = %}$e$\index{declarations, in ML@declarations, in \ML!relation to function abstraction}\index{function abstraction, in ML@function abstraction, in \ML!relation to declarations} is equivalent to
+{\small\verb%let %}$f${\small\verb% = \(%}$x${\small\verb%,%}$y${\small\verb%). \%}$z${\small\verb%. %}$e$.  Repeated {\small\verb%\%}'s, as in
+{\small\verb%\(%}$x${\small\verb%,%}$y${\small\verb%). \%}$z${\small\verb%. %}$e$, may be abbreviated by {\small\verb%\(%}$x${\small\verb%,%}$y${\small\verb%) %}$z${\small\verb%.%}$e$.  The character {\small\verb%\%} is our 
+representation of lambda, and expressions like
+{\small\verb%\%}$x${\small\verb%. %}$e$ and 
+{\small\verb%\(%}$x${\small\verb%,%}$y${\small\verb%) %}$z${\small\verb%.%}$e$
+ are called lambda-expressions.
+\vfill
+\newpage
+
+\begin{session}
+\begin{verbatim}
+#\x.x+1;;
+- : (int -> int)
+
+#it 3;;
+4 : int
+
+#map (\x.x*x) [1;2;3;4];;
+[1; 4; 9; 16] : int list
+
+#let doubleup = map (\x.x@x);;
+doubleup = - : (* list list -> * list list)
+
+#doubleup [ [1;2]; [3;4;5] ];;
+[[1; 2; 1; 2]; [3; 4; 5; 3; 4; 5]] : int list list
+
+#doubleup [];;
+[] : * list list
+\end{verbatim}
+\end{session}
+\index{lambda expressions, in ML@lambda expressions, in \ML|)}
+
+\section {Failure}
+
+
+Some standard functions {\it fail\/}\index{failure, in ML@failure, in \ML|(} at run-time on certain arguments,
+yielding a string\index{strings, in ML@strings, in \ML!to identify failures}\index{failure strings, in ML@failure strings, in \ML|(} (which is usually the function name) to identify the sort
+of failure.  A failure with string {\small\verb%`%}$t${\small\verb%`%} 
+may also be generated explicitly by evaluating the expression 
+{\small\verb%failwith `%}$t${\small\verb%`%}
+\index{failwith@\ml{failwith}} (or more
+generally {\small\verb%failwith %}$e$ where $e$ has type \ml{string}).
+
+\begin{session}
+\begin{verbatim}
+#hd(tl[2]);;
+evaluation failed     hd
+
+#1/0;;
+evaluation failed     div
+
+#(1/0)+1000;;
+evaluation failed     div
+
+#failwith (hd [`a`;`b`]);;
+evaluation failed     a
+\end{verbatim}
+\end{session}
+
+
+A failure can be trapped\index{failure, in ML@failure, in \ML!trapping of} by {\small\verb%?%};\index{failure, in ML@failure, in \ML}\index{ failure trap, in ML@{\small\verb+?+} (failure trap, in \ML)} the value of the expression
+$e_1${\small\verb%?%}$e_2$ is that of $e_1$, unless $e_1$ causes a failure, in
+which case it is the value of $e_2$.
+\vfill
+\newpage
+\begin{session}
+\begin{verbatim}
+#hd(tl[2]) ? 0;;
+0 : int
+
+#(1/0)?1000;;
+1000 : int
+
+#let half n =
+#    if n=0 then failwith `zero`
+#           else let m=n/2
+#                in  if n=2*m then m else failwith`odd`;;
+half = - : (int -> int)
+\end{verbatim}
+\end{session}
+
+
+The function \ml{half} only succeeds on non-zero even numbers; on {\small\verb%0%} it
+fails with {\small\verb%`zero`%}, and on odd numbers it fails with {\small\verb%`odd`%}.
+
+\begin{session}
+\begin{verbatim}
+#half 4;; 
+2 : int
+
+#half 0;;
+evaluation failed zero
+
+#half 3;;
+evaluation failed odd
+
+#half 3 ? 1000;;
+1000 : int
+\end{verbatim}
+\end{session}
+
+
+Failures may be trapped selectively\index{failure, in ML@failure, in \ML!selective trapping of} (on string) by {\small\verb%??%};\index{ failure trap, selective, in ML@{\small\verb+??+} (failure trap, selective, in \ML)} if
+$e_1$ fails with string $t$, then the value of
+$e_1${\small\verb% ?? [%}$t_1${\small\verb%;%}$\ldots${\small\verb%;%}$t_n${\small\verb%] %}$e_2$ is the value of $e_2$ if $t$ is
+one of $t_1${\small\verb%,%}$\ldots${\small\verb%,%}$t_n$; otherwise the expression fails with the value of $t$.
+
+\begin{session}
+\begin{verbatim}
+#half(0) ?? [`zero`;`plonk`] 1000;;
+1000 : int
+
+#half(1) ?? [`zero`;`plonk`] 1000;;
+evaluation failed     odd
+\end{verbatim}
+\end{session}
+
+
+One may add several {\small\verb%??%} traps to an expression, and one may add
+a {\small\verb%?%} trap at the end as a catch-all\index{failure, in ML@failure, in \ML!catch-all trap for}.
+
+\begin{session}
+\begin{verbatim}
+#half(1)
+#  ??[`zero`] 1000
+#  ??[`odd`]  2000;;
+2000 : int
+
+#hd(tl[half(4)])
+#  ??[`zero`] 1000
+#  ??[`odd`]  2000
+#  ? 3000;;
+3000 : int
+\end{verbatim}
+\end{session}
+
+
+One may use {\small\verb%!%}\index{ failure trap, iterative, in ML@{\small\verb+"!+} (failure trap, iterative, in \ML)}\index{failure, in ML@failure, in \ML!iterative trapping of}
+or {\small\verb%!!%}\index{ failure trap, iterative selective, in ML@{\small\verb+"!"!+}
+(failure trap, iterative selective, in \ML)}\index{failure, in ML@failure, in \ML!iterative selective trapping of}
+in place of {\small\verb%?%}
+or {\small\verb%??%}
+to cause re-iteration of the whole construct, analogously
+to using {\small\verb%loop%} in
+place of {\small\verb%then%}.
+
+\begin{session}
+\begin{verbatim}
+#let same(x,y) =
+#    if x>y then failwith `greater`
+#    if x<y then failwith `less`
+#           else x;;
+same = - : ((int # int) -> int)
+
+#let gcd(x,y) =
+#    letref x,y = x,y
+#    in  same(x,y)
+#          !![`greater`] x:=x-y
+#          !![`less`]    y:=y-x;;
+gcd = - : ((int # int) -> int)
+
+#gcd(12,20);;
+4 : int
+\end{verbatim}
+\end{session}
+\index{failure strings, in ML@failure strings, in \ML|)}
+\index{failure, in ML@failure, in \ML|)}
+
+\section {Type abbreviations}
+
+Types can be given names:
+
+\begin{session}
+\index{lettype@{\small\verb+lettype+}}
+\begin{verbatim}
+#lettype intpair = int # int;;
+type intpair defined
+
+#let p = 12,20;;
+p = (12, 20) : intpair
+\end{verbatim}
+\end{session}
+
+
+\noindent The new name is simply an abbreviation\index{type abbreviations!in ML@in \ML}\index{types, in ML@types, in \ML!abbreviation of}\index{abbreviation of types, in ML@abbreviation of types, in \ML};
+for example, {\small\verb%intpair%} and
+{\small\verb%int#int%} are completely equivalent. The system always uses the most
+recently defined name when printing types.
+
+\begin{session}
+\begin{verbatim}
+#gcd;;
+- : (intpair -> int)
+
+#gcd p;;
+4 : int
+\end{verbatim}
+\end{session}
+
+
+\section {Concrete types}
+
+\index{type@\ml{type}|(}
+\index{bindings, in ML@bindings, in \ML!concrete type|(}
+New types (rather than mere abbreviations) can also be defined.
+Concrete types\index{concrete types, in ML@concrete types, in \ML}\index{types, in ML@types, in \ML!concrete|(}
+are types defined by a set of constructors which can
+be used to create objects of that type and also (in patterns) to
+decompose objects of that type.
+For example, to define a type {\small\verb%card%} one could
+use the construct \ml{type}:
+
+\begin{session}
+\begin{verbatim}
+#type card = king | queen | jack | other of int;;
+
+New constructors declared:
+king : card
+queen : card
+jack : card
+other : (int -> card)
+\end{verbatim}
+\end{session}
+
+
+Such a declaration declares {\small\verb%king%}, {\small\verb%queen%}, {\small\verb%jack%} and
+{\small\verb%other%} as constructors and gives them values. The value of a 0-ary
+constructor such as {\small\verb%king%} is the constant value {\small\verb%king%}. The
+value of a constructor such as {\small\verb%other%} is a function that given an
+integer value $n$ produces {\small\verb%other(%}$n${\small\verb%)%}.
+
+\begin{session}
+\begin{verbatim}
+#king;;
+king : card
+
+#other 9;;
+other 9 : card
+\end{verbatim}
+\end{session}
+
+
+To define functions that take their argument from a concrete type, we shall
+extend the notion of lambda-expression\index{lambda expressions, in ML@lambda expressions, in \ML!extended form of}
+to expressions of the form
+{\small\verb%fun %}$pat_1${\small\verb%.%}$e_1${\small\verb% |%}$\ldots${\small\verb% | %}$pat_n${\small\verb%.%}$e_n$\index{fun@{\ml{fun$\cdots$}\ml{"|}\ml{$\cdots$}}}\index{function (pattern) selection abstraction, in ML@function (pattern) selection abstraction, in \ML}
+The idea is that such an expression
+denotes a function that given a value $v$ selects the first pattern
+that matches $v$, say $pat_i$, binds the variables of $pat_i$
+to the corresponding components of the value and then evaluates the
+expression $e_i$. We use {\small\verb%fun%} rather than {\small\verb%\%}
+ in such expressions because {\small\verb%\%} tends to be difficult to see. 
+However, when function definitions have only one case, we use indifferently
+{\small\verb%fun%} or {\small\verb%\%}.  We could for example define the values
+ of the different cards in the following way:
+
+\begin{session}
+\begin{verbatim}
+#let value = fun  king . 500
+#              |  queen . 200
+#              |  jack . 100
+#              |  (other n) . 5*n;;
+value = - : (card -> int)
+\end{verbatim}
+\end{session}
+
+The notion of concrete type is very basic and could enable us to build
+\ML\ elementary types from scratch.  For example, the booleans could be
+defined simply by:
+
+\begin{session}
+\begin{verbatim}
+#type bool = true | false;;
+
+New constructors declared:
+true : bool
+false : bool
+\end{verbatim}
+\end{session}
+
+\noindent and the positive integers by:
+
+\begin{session}
+\begin{verbatim}
+#rectype int = zero | suc of int;;
+
+New constructors declared:
+zero : int
+suc : (int -> int)
+\end{verbatim}
+\end{session}
+
+
+Notice that we have employed 
+{\small\verb%rectype%}\index{rectype@\ml{rectype}} here instead of {\small\verb%type%}
+because the type {\small\verb%int%} is defined in terms of itself.  
+In a similar way, LISP S-expressions could be defined by:
+
+\begin{session}
+\begin{verbatim}
+#rectype sexp =   litatom of string 
+#               | numatom of int
+#               | cons    of sexp # sexp;;
+
+New constructors declared:
+litatom : (string -> sexp)
+numatom : (int -> sexp)
+cons : ((sexp # sexp) -> sexp)
+
+#let car (cons(x,y)) = x 
+#and cdr (cons(x,y)) = y;;
+car = - : (sexp -> sexp)
+cdr = - : (sexp -> sexp)
+\end{verbatim}
+\end{session}
+
+
+A definition of the form {\small\verb%let %}$fn$ $pat${\small\verb% = %}$e$
+ is an equivalent form for
+{\small\verb%let %}$fn${\small\verb% = fun %}$pat${\small\verb% . %}$e$ or
+{\small\verb%let %}$fn${\small\verb% = \%}$pat${\small\verb% . %}$e$ which can
+ be used when a function definition has only one case. We see from the example
+of {\small\verb%car%} and {\small\verb%cdr%} that the set of patterns\index{patterns, in ML@patterns, in \ML} used in a
+function definition need not be exhaustive.  When such a function is applied
+to a value and if that value cannot be matched by any pattern, a failure
+occurs with value {\small\verb%`%}{\em pattern}{\small\verb%`%}.
+
+\begin{session}
+\begin{verbatim}
+#car (litatom `foo`);;
+evaluation failed    pattern
+\end{verbatim}
+\end{session}
+
+
+The case construct permits one to compute by cases on an expression of a
+concrete type.  The expression 
+{\small\verb%case %}$e${\small\verb% of %}$pat_1${\small\verb% . %}$e_1${\small\verb% | %}$\ldots${\small\verb% | %}$pat_n${\small\verb% . %}$e_n$\index{case of@{\small\ml{case} $\cdots$ \ml{of} $\cdots$ \ml{"|} $\cdots$}!relation to abstraction}, 
+is an equivalent form for the application
+{\small\verb%(fun %}$pat_1${\small\verb% . %}$e_1${\small\verb% | %}$\ldots${\small\verb% | %}$pat_n${\small\verb% . %}$e_n${\small\verb%) %}$e$\index{bindings, in ML@bindings, in \ML!concrete type|)}\index{type@\ml{type}|)}\index{types, in ML@types, in \ML!concrete|)}.
+
+\section{Abstract types}
+
+\index{types, in ML@types, in \ML!abstract|(}
+\index{bindings, in ML@bindings, in \ML!abstract type|(}
+\index{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|(}
+\index{abstract types, in ML@abstract types, in \ML|(}
+New types can also be defined by abstraction.  For example, to define a
+type {\small\verb%time%} we could 
+use the construct \ml{abstype}:
+
+\begin{session}
+\begin{verbatim}
+#abstype time = int # int
+# with maketime(hrs,mins) = if  hrs<0 or 23<hrs or
+#                              mins<0 or 59<mins
+#                           then fail
+#                           else abs_time(hrs,mins)
+# and hours t = fst(rep_time t)
+# and minutes t = snd(rep_time t);;
+maketime = - : (intpair -> time)
+hours = - : (time -> int)
+minutes = - : (time -> int)
+\end{verbatim}
+\end{session}
+
+
+This defines an abstract type {\small\verb%time%} and three
+primitive functions: {\small\verb%maketime%}, {\small\verb%hours%} and {\small\verb%minutes%}.
+In general, an abstract type declaration has the form
+{\small\verb%abstype %}$ty${\small\verb%=%}$ty'${\small\verb% with %}$b$ 
+where $b$ is a binding, \ie\ the kind
+of phrase that can follow {\small\verb%let%} or {\small\verb%letrec%}.  Such a
+declaration introduces a new type $ty$ which is represented by
+$ty'$.  Only within $b$ can one use the (automatically declared)
+functions {\small\verb%abs_%}$ty$\index{abs_@{\small\verb+abs_+$\ldots$}} 
+(of type $ty'${\small\verb%->%}$ty$) and 
+{\small\verb%rep_%}$ty$\index{rep_@{\small\verb+rep_+$\ldots$}} (of type
+$ty${\small\verb%->%}$ty'$), which map between a type and its representation.
+ In the
+example above {\small\verb%abs_time%} and {\small\verb%rep_time%} are 
+only available in
+the definitions of {\small\verb%maketime%}, {\small\verb%hours%} and {\small\verb%minutes%};
+these latter three functions, on the other hand, are defined throughout the
+scope of the declaration. Thus an abstract type declaration simultaneously
+declares a new type together with primitive functions for the type. The
+representation of the type (\ie\ $ty'$), and of the primitives 
+(\ie\ the right hand sides of the definitions in $b$), is not accessible
+outside the {\small\verb%with%}-part of the declaration.
+
+\begin{session}
+\begin{verbatim}
+#let t = maketime(8,30);;
+t = - : time
+
+#hours t , minutes t;;
+(8, 30) : intpair
+\end{verbatim}
+\end{session}
+
+
+\noindent Notice that values of an abstract type are printed as {\small\verb%-%}\index{non-printable values in ML@non-printable values in \ML}, like
+functions\index{ non-printable symbol, in ML@{\small\verb+-+} (`non-printable' symbol, in \ML)}\index{printing, of ML@printing, of \ML!of abstract-typed values}\index{abstract-typed values, in ML@abstract-typed values, in \ML!printing of}.
+\index{abstract types, in ML@abstract types, in \ML|)}
+\index{abstype with@\ml{abstype}$\ldots$\ml{with}$\ldots$|)}
+\index{bindings, in ML@bindings, in \ML!abstract type|)}
+\index{types, in ML@types, in \ML!abstract|)}
+
+\section {Type constructors}
+
+Both {\small\verb%list%} and {\small\verb%#%} are examples of type constructors\index{type constructors!in ML@in \ML|(};
+{\small\verb%list%} has one argument (hence {\small\verb%* list%}) whereas
+{\small\verb%#%}
+has two (hence {\small\verb%* # **%}).  Each type constructor has various
+primitive operations associated with it, for example {\small\verb%list%} has
+{\small\verb%null%}, {\small\verb%hd%}, {\small\verb%tl%}, \ldots\ etc, and {\small\verb%#%} has
+{\small\verb%fst%}, {\small\verb%snd%} and the infix `{\small\verb%,%}'.
+
+\begin{session}
+\begin{verbatim}
+#let z = it;;
+z = (8, 30) : intpair
+
+#fst z;;
+8 : int
+
+#snd z;;
+30 : int
+\end{verbatim}
+\end{session}
+
+
+Another standard constructor of two arguments is {\small\verb%+%}\index{ disjoint union type operator, in ML@{\small\verb:+:} (disjoint union type operator, in \ML)};
+{\small\verb%* + **%} is the disjoint union\index{disjoint union, in ML@disjoint union, in \ML} of types {\small\verb%*%} and {\small\verb%**%}, and
+associated with it are the following primitives:
+
+\begin{hol}
+\index{isl@\ml{isl}}
+\index{inl@\ml{inl}}
+\index{isr@\ml{isr}}
+\index{inr@\ml{inr}}
+\index{outl@\ml{outl}}
+\index{outr@\ml{outr}}
+\begin{alltt}
+   isl  : (* + **) -> bool    {\rm  tests membership of left summand}
+   inl  : * -> (* + **)       {\rm  injects into left summand}
+   inr  : * -> (** + *)       {\rm  injects into right summand}
+   outl : (* + **) -> *       {\rm  projects out of left summand}
+   outr : (* + **) -> **      {\rm  projects out of right summand}
+\end{alltt}\end{hol}
+
+\noindent These are illustrated by:
+
+\begin{session}
+\begin{verbatim}
+#let x = inl 1
+#and y = inr 2;;
+x = inl 1 : (int + *)
+y = inr 2 : (* + int)
+
+#isl x;;
+true : bool
+
+#isl y;;
+false : bool
+
+#outl x;;
+1 : int
+
+#outl y;;
+evaluation failed     outl
+
+#outr x;;
+evaluation failed     outr
+
+#outr y;;
+2 : int
+\end{verbatim}
+\end{session}
+
+\noindent Note that {\small\verb%isr%} is not provided as it is
+easily defined as the complement of {\small\verb%isl%}. 
+
+Concrete types such as {\small\verb%card%} or {\small\verb%sexp%} and abstract types
+such as {\small\verb%time%} defined above can be thought of as type constructors
+with no arguments (\ie\ nullary constructors). The {\small\verb%type...%} and
+{\small\verb%abstype...with...%} constructs may also be used to define
+non-nullary type constructors.  For example, the disjoint union of types
+can be easily redefined by:
+
+\begin{session}
+\begin{verbatim}
+#type (*,**) sum = inl of * | inr of **;;
+
+New constructors declared:
+inl : (* -> (*,**) sum)
+inr : (* -> (**,*) sum)
+\end{verbatim}
+\end{session}
+
+The other primitives of the type {\small\verb%sum%} can be defined by:
+
+\begin{session}
+\begin{verbatim}
+#let isl = fun (inl x) . true | (inr x) . false;;
+isl = - : ((*,**) sum -> bool)
+
+#let outl = fun (inl x) . x | (inr x) . failwith `outl`;;
+outl = - : ((*,**) sum -> *)
+
+#let outr = fun (inl x) . failwith `outr` | (inr x) . x;;
+outr = - : ((*,**) sum -> **)
+\end{verbatim}
+\end{session}
+
+The type constructor {\small\verb%list%} can be redefined by:
+
+\begin{session}
+\begin{verbatim}
+#rectype * list = nil | cons of * # * list;;
+
+New constructors declared:
+nil : * list
+cons : ((* # * list) -> * list)
+
+#let hd (cons(x,y)) = x
+#and tl (cons(x,y)) = y
+#and null = fun [] . true | _ . false;;
+hd = - : (* list -> *)
+tl = - : (* list -> * list)
+null = - : (* list -> bool)
+\end{verbatim}
+\end{session}
+
+\noindent This is like the built-in type of lists, except that the
+empty list is {\small\verb%nil%} rather than {\small\verb%[]%}.
+
+The symbol {\small\verb%_%}\index{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}\index{wildcard, in ML@wildcard, in \ML} is a special symbol that can be used in patterns to
+match anything and saves the burden of inventing useless variable names.
+It can have multiple occurrences in a pattern with possibly incompatible
+types.
+
+The type constructor {\small\verb%set%} can be defined in the following way:
+
+\begin{session}
+\begin{verbatim}
+#abstype * set = * list
+#with emptyset = abs_set []
+#and  isempty = \s . null (rep_set s)
+#and  member  = letrec member = fun ( _ , []) . false
+#                                |  (x,(y.z)) . (x=y) or member(x,z)
+#               in \(u,v) . member(u,rep_set v)
+#and  add = letrec add = fun (x,[])    . [x]
+#                         |  (x,(y.z)) . if x=y then y.z else y.add(x,z)
+#           in \(u,v) . abs_set(add(u,rep_set v));;
+emptyset = - : * set
+isempty = - : (* set -> bool)
+member = - : ((* # * set) -> bool)
+add = - : ((* # * set) -> * set)
+\end{verbatim}
+\end{session}\index{type constructors!in ML@in \ML|)}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,3 @@
+\THEOREM UNIV_DEF sets
+|- UNIV = SPEC(\x. T)
+\ENDTHEOREM

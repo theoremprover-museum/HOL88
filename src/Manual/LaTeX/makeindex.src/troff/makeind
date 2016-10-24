@@ -1,0 +1,23 @@
+#!/bin/sh
+
+extract="ptroff -ms -t"
+grep=egrep
+in=$1
+out=/dev/null
+base=`echo $in | sed 's/\(.*\)\..*/\1/'`
+idx=$base.idx
+tmp=/tmp/$idx
+cmd='^IX:'
+sty = troff.ist
+
+echo -n "Extracting index terms from $in..."
+$extract $in > $out 2> $tmp
+echo "done"
+
+echo -n "Writing index terms to $idx..."
+$grep $cmd $tmp > $idx
+rm -f $tmp
+echo "done"
+
+makeindex -s $sty $idx
+

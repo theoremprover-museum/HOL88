@@ -1,0 +1,300 @@
+\contentsline {part}{\uppercase {i}\phspace {1em}The Meta-language ML }{1}
+\contentsline {chapter}{\numberline {1}The History of ML}{3}
+\contentsline {section}{\numberline {1.1}Preface to `The ML Handbook'}{4}
+\contentsline {section}{\numberline {1.2}Preface to `Edinburgh LCF'}{4}
+\contentsline {chapter}{\numberline {2}Introduction and Examples}{7}
+\contentsline {section}{\numberline {2.1}Expressions}{7}
+\contentsline {section}{\numberline {2.2}Declarations}{7}
+\contentsline {section}{\numberline {2.3}Assignment}{8}
+\contentsline {section}{\numberline {2.4}Functions}{9}
+\contentsline {section}{\numberline {2.5}Recursion}{10}
+\contentsline {section}{\numberline {2.6}Iteration}{11}
+\contentsline {section}{\numberline {2.7}Lists}{12}
+\contentsline {section}{\numberline {2.8}Strings}{13}
+\contentsline {section}{\numberline {2.9}Polymorphism}{13}
+\contentsline {section}{\numberline {2.10}Lambda-expressions}{14}
+\contentsline {section}{\numberline {2.11}Failure}{15}
+\contentsline {section}{\numberline {2.12}Type abbreviations}{17}
+\contentsline {section}{\numberline {2.13}Concrete types}{17}
+\contentsline {section}{\numberline {2.14}Abstract types}{19}
+\contentsline {section}{\numberline {2.15}Type constructors}{20}
+\contentsline {chapter}{\numberline {3}Syntax of ML}{23}
+\contentsline {section}{\numberline {3.1}Syntax equations for ML}{24}
+\contentsline {section}{\numberline {3.2}Notes on the syntax equations for ML}{26}
+\contentsline {section}{\numberline {3.3}Identifiers and other lexical matters}{27}
+\contentsline {subsection}{\numberline {3.3.1}Identifiers}{27}
+\contentsline {subsection}{\numberline {3.3.2}Constant expressions}{29}
+\contentsline {subsection}{\numberline {3.3.3}Prefixes and infixes}{29}
+\contentsline {chapter}{\numberline {4}Semantics of ML}{31}
+\contentsline {section}{\numberline {4.1}Declarations}{33}
+\contentsline {subsection}{\numberline {4.1.1}The evaluation of bindings}{33}
+\contentsline {subsection}{\numberline {4.1.2}Matching patterns and expression values}{34}
+\contentsline {section}{\numberline {4.2}Expressions}{35}
+\contentsline {chapter}{\numberline {5}ML Types}{39}
+\contentsline {section}{\numberline {5.1}Types and objects}{39}
+\contentsline {subsection}{\numberline {5.1.1}The syntax of types}{40}
+\contentsline {section}{\numberline {5.2}Typing of ML phrases}{41}
+\contentsline {section}{\numberline {5.3}Discussion of type constraints}{45}
+\contentsline {section}{\numberline {5.4}Type abbreviations}{47}
+\contentsline {section}{\numberline {5.5}Concrete types}{48}
+\contentsline {section}{\numberline {5.6}Abstract types}{49}
+\contentsline {chapter}{\numberline {6}Primitive ML Identifier Bindings}{51}
+\contentsline {section}{\numberline {6.1}Predeclared ordinary identifiers}{51}
+\contentsline {section}{\numberline {6.2}Predeclared dollared identifiers}{53}
+\contentsline {chapter}{\numberline {7}General Purpose and List Processing Functions}{55}
+\contentsline {section}{\numberline {7.1}General purpose functions and combinators}{55}
+\contentsline {section}{\numberline {7.2}Miscellaneous list processing functions}{58}
+\contentsline {section}{\numberline {7.3}List mapping and iterating functions}{59}
+\contentsline {section}{\numberline {7.4}List searching functions}{61}
+\contentsline {section}{\numberline {7.5}List transforming functions}{62}
+\contentsline {section}{\numberline {7.6}Functions for lists representing sets}{64}
+\contentsline {section}{\numberline {7.7}Miscellaneous string processing functions}{65}
+\contentsline {section}{\numberline {7.8}Failure handling functions}{67}
+\contentsline {chapter}{\numberline {8}ML System Functions}{69}
+\contentsline {section}{\numberline {8.1}Input and output}{69}
+\contentsline {subsection}{\numberline {8.1.1}Reading and writing files}{69}
+\contentsline {subsection}{\numberline {8.1.2}Terminal input and output}{70}
+\contentsline {subsection}{\numberline {8.1.3}Loading ML files}{70}
+\contentsline {subsection}{\numberline {8.1.4}Compiling ML files}{72}
+\contentsline {section}{\numberline {8.2}Output}{72}
+\contentsline {subsection}{\numberline {8.2.1}Pretty printing}{72}
+\contentsline {section}{\numberline {8.3}Exiting and re-entering the system}{76}
+\contentsline {section}{\numberline {8.4}Autoloading}{76}
+\contentsline {section}{\numberline {8.5}Interpreting lists of numbers as ML input}{79}
+\contentsline {section}{\numberline {8.6}Initialization}{80}
+\contentsline {section}{\numberline {8.7}Operating system calls from ML}{80}
+\contentsline {section}{\numberline {8.8}Getting the version number}{81}
+\contentsline {section}{\numberline {8.9}Ordering of ML values}{81}
+\contentsline {section}{\numberline {8.10}Printing defined types}{82}
+\contentsline {section}{\numberline {8.11}Lisp in ML}{82}
+\contentsline {section}{\numberline {8.12}Fast arithmetic}{82}
+\contentsline {section}{\numberline {8.13}Flags}{83}
+\contentsline {section}{\numberline {8.14}Modifying the ML read-eval-print loop}{85}
+\contentsline {subsection}{\numberline {8.14.1}Changing the ML prompt}{85}
+\contentsline {subsection}{\numberline {8.14.2}Changing the top-level printing of values in ML}{86}
+\contentsline {subsection}{\numberline {8.14.3}Suppressing the printing of ML types}{87}
+\contentsline {section}{\numberline {8.15}The help system}{87}
+\contentsline {section}{\numberline {8.16}Syntax blocks}{88}
+\contentsline {section}{\numberline {8.17}Relocating HOL}{89}
+\contentsline {section}{\numberline {8.18}Libraries}{90}
+\contentsline {subsection}{\numberline {8.18.1}Library load files}{91}
+\contentsline {subsection}{\numberline {8.18.2}Libraries available in Version 2.0}{92}
+\contentsline {subsection}{\numberline {8.18.3}Location of libraries}{92}
+\contentsline {subsection}{\numberline {8.18.4}Adding a new library}{93}
+\contentsline {section}{\numberline {8.19}Experimental support for a new interface}{94}
+\contentsline {part}{\uppercase {ii}\phspace {1em}The HOL Logic }{99}
+\contentsline {chapter}{\numberline {9}Syntax and Semantics}{101}
+\contentsline {section}{\numberline {9.1}Introduction}{101}
+\contentsline {section}{\numberline {9.2}Types}{102}
+\contentsline {subsection}{\numberline {9.2.1}Type structures}{104}
+\contentsline {subsection}{\numberline {9.2.2}Semantics of types}{104}
+\contentsline {subsection}{\numberline {9.2.3}Instances and substitution}{106}
+\contentsline {section}{\numberline {9.3}Terms}{107}
+\contentsline {subsection}{\numberline {9.3.1}Terms-in-context}{108}
+\contentsline {subsection}{\numberline {9.3.2}Semantics of terms}{109}
+\contentsline {subsection}{\numberline {9.3.3}Substitution}{111}
+\contentsline {section}{\numberline {9.4}Standard notions}{113}
+\contentsline {subsection}{\numberline {9.4.1}Standard type structures}{113}
+\contentsline {subsection}{\numberline {9.4.2}Standard signatures}{113}
+\contentsline {chapter}{\numberline {10}Theories}{115}
+\contentsline {section}{\numberline {10.1}Introduction}{115}
+\contentsline {section}{\numberline {10.2}Sequents}{116}
+\contentsline {section}{\numberline {10.3}Logic}{117}
+\contentsline {subsection}{\numberline {10.3.1}The HOL deductive system}{117}
+\contentsline {subsection}{\numberline {10.3.2}Soundness theorem}{119}
+\contentsline {section}{\numberline {10.4}HOL Theories}{120}
+\contentsline {subsection}{\numberline {10.4.1}The theory {\ptt MIN}}{120}
+\contentsline {subsection}{\numberline {10.4.2}The theory {\ptt LOG}}{121}
+\contentsline {subsection}{\numberline {10.4.3}The theory {\ptt INIT}}{123}
+\contentsline {subsection}{\numberline {10.4.4}Consistency}{124}
+\contentsline {section}{\numberline {10.5}Extensions of theories}{124}
+\contentsline {subsection}{\numberline {10.5.1}Extension by constant definition}{125}
+\contentsline {subsection}{\numberline {10.5.2}Extension by constant specification}{127}
+\contentsline {subsection}{\numberline {10.5.3}Remarks about constants in HOL}{129}
+\contentsline {subsection}{\numberline {10.5.4}Extension by type definition}{130}
+\contentsline {subsection}{\numberline {10.5.5}Extension by type specification\footnotemark }{132}
+\contentsline {part}{\uppercase {iii}\phspace {1em}The HOL System }{137}
+\contentsline {chapter}{\numberline {11}The HOL Logic in ML}{139}
+\contentsline {section}{\numberline {11.1}Lexical matters}{139}
+\contentsline {subsection}{\numberline {11.1.1}Identifiers}{140}
+\contentsline {subsubsection}{\numberline {11.1.1.1}Separators}{141}
+\contentsline {subsection}{\numberline {11.1.2}Type variable names}{142}
+\contentsline {section}{\numberline {11.2}Types}{142}
+\contentsline {section}{\numberline {11.3}Terms}{143}
+\contentsline {section}{\numberline {11.4}Quotation}{144}
+\contentsline {subsection}{\numberline {11.4.1}Type quotation}{146}
+\contentsline {subsection}{\numberline {11.4.2}Term quotation}{146}
+\contentsline {subsection}{\numberline {11.4.3}Special syntactic forms}{147}
+\contentsline {section}{\numberline {11.5}Syntax for restricted quantification}{148}
+\contentsline {subsection}{\numberline {11.5.1}Conditionals}{151}
+\contentsline {subsection}{\numberline {11.5.2}Paired abstractions}{152}
+\contentsline {subsection}{\numberline {11.5.3}{\ptt let}-terms}{153}
+\contentsline {section}{\numberline {11.6}Syntax for sets}{154}
+\contentsline {subsection}{\numberline {11.6.1}Antiquotation}{156}
+\contentsline {subsection}{\numberline {11.6.2}User-programmable quotation typechecker}{156}
+\contentsline {section}{\numberline {11.7}Theorems}{158}
+\contentsline {section}{\numberline {11.8}Theories}{160}
+\contentsline {subsection}{\numberline {11.8.1}Primitive ML functions for creating theories}{161}
+\contentsline {subsection}{\numberline {11.8.2}Functions for creating definitional extensions}{163}
+\contentsline {subsubsection}{\numberline {11.8.2.1}Constant definitions}{163}
+\contentsline {subsubsection}{\numberline {11.8.2.2}Constant specifications}{165}
+\contentsline {subsubsection}{\numberline {11.8.2.3}Type definitions}{166}
+\contentsline {subsubsection}{\numberline {11.8.2.4}Defining bijections}{167}
+\contentsline {subsubsection}{\numberline {11.8.2.5}Properties of type bijections}{168}
+\contentsline {subsection}{\numberline {11.8.3}Primitive ML function for accessing theories}{169}
+\contentsline {subsection}{\numberline {11.8.4}The theory {\ptt HOL}}{170}
+\contentsline {subsubsection}{\numberline {11.8.4.1}The theory {\ptt bool}}{170}
+\contentsline {subsubsection}{\numberline {11.8.4.2}The theory {\ptt ind}}{172}
+\contentsline {subsection}{\numberline {11.8.5}Primitive rules of inference of the HOL Logic}{173}
+\contentsline {subsubsection}{\numberline {11.8.5.1}Assumption introduction}{173}
+\contentsline {subsubsection}{\numberline {11.8.5.2}Reflexivity}{173}
+\contentsline {subsubsection}{\numberline {11.8.5.3}Beta-conversion}{173}
+\contentsline {subsubsection}{\numberline {11.8.5.4}Substitution}{174}
+\contentsline {subsubsection}{\numberline {11.8.5.5}Abstraction}{174}
+\contentsline {subsubsection}{\numberline {11.8.5.6}Type instantiation}{175}
+\contentsline {subsubsection}{\numberline {11.8.5.7}Discharging an assumption}{175}
+\contentsline {subsubsection}{\numberline {11.8.5.8}Modus Ponens}{175}
+\contentsline {subsection}{\numberline {11.8.6}Type abbreviations}{176}
+\contentsline {section}{\numberline {11.9}The ancestry of the theory {\ptt HOL}}{177}
+\contentsline {subsection}{\numberline {11.9.1}The theory {\ptt PPLAMB}}{178}
+\contentsline {subsection}{\numberline {11.9.2}The theory {\ptt bool}}{178}
+\contentsline {subsubsection}{\numberline {11.9.2.1}Pairs and the type {\ptt prod}}{179}
+\contentsline {subsection}{\numberline {11.9.3}The theory {\ptt BASIC-HOL}}{181}
+\contentsline {subsection}{\numberline {11.9.4}The theory {\ptt num}}{181}
+\contentsline {subsubsection}{\numberline {11.9.4.1}Numerals}{181}
+\contentsline {subsection}{\numberline {11.9.5}The theory {\ptt prim\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}rec}}{182}
+\contentsline {subsubsection}{\numberline {11.9.5.1}Primitive recursive definitions}{182}
+\contentsline {subsubsection}{\numberline {11.9.5.2}The less-than relation}{185}
+\contentsline {subsection}{\numberline {11.9.6}The theory {\ptt arithmetic}}{186}
+\contentsline {subsection}{\numberline {11.9.7}The theory {\ptt list}}{186}
+\contentsline {subsection}{\numberline {11.9.8}The theory {\ptt combin}}{188}
+\contentsline {subsection}{\numberline {11.9.9}The theories {\ptt tree} and {\ptt ltree}}{189}
+\contentsline {subsubsection}{\numberline {11.9.9.1}The theory {\ptt tree}}{189}
+\contentsline {subsubsection}{\numberline {11.9.9.2}The theory {\ptt ltree}}{190}
+\contentsline {subsection}{\numberline {11.9.10}The theory {\ptt tydefs}}{191}
+\contentsline {subsection}{\numberline {11.9.11}The theory {\ptt sum}}{191}
+\contentsline {subsection}{\numberline {11.9.12}The theory {\ptt one}}{192}
+\contentsline {section}{\numberline {11.10}The type definition package}{192}
+\contentsline {subsection}{\numberline {11.10.1}Defining types}{193}
+\contentsline {subsubsection}{\numberline {11.10.1.1}Input syntax}{194}
+\contentsline {subsubsection}{\numberline {11.10.1.2}The type specified}{194}
+\contentsline {subsubsection}{\numberline {11.10.1.3}The output}{194}
+\contentsline {subsubsection}{\numberline {11.10.1.4}Examples}{196}
+\contentsline {subsection}{\numberline {11.10.2}Defining recursive functions}{197}
+\contentsline {subsubsection}{\numberline {11.10.2.1}More examples}{199}
+\contentsline {subsection}{\numberline {11.10.3}Structural induction}{200}
+\contentsline {subsubsection}{\numberline {11.10.3.1}Examples}{201}
+\contentsline {subsection}{\numberline {11.10.4}Structural induction tactics}{201}
+\contentsline {subsection}{\numberline {11.10.5}Other tools}{203}
+\contentsline {subsubsection}{\numberline {11.10.5.1}Examples}{203}
+\contentsline {section}{\numberline {11.11}Miscellaneous system features}{204}
+\contentsline {subsection}{\numberline {11.11.1}Flags for the HOL logic}{205}
+\contentsline {subsection}{\numberline {11.11.2}Sticky types and default types}{206}
+\contentsline {subsection}{\numberline {11.11.3}Interface maps}{207}
+\contentsline {subsection}{\numberline {11.11.4}Changing the lambda symbol}{211}
+\contentsline {subsection}{\numberline {11.11.5}Changing the turnstile symbol}{211}
+\contentsline {subsection}{\numberline {11.11.6}Hiding constants}{212}
+\contentsline {subsection}{\numberline {11.11.7}Autoloading of axioms, definitions and theorems}{213}
+\contentsline {subsection}{\numberline {11.11.8}Cached theories}{213}
+\contentsline {subsection}{\numberline {11.11.9}Adjusting the pretty-print depth}{214}
+\contentsline {subsection}{\numberline {11.11.10}Timing and counting theorems}{215}
+\contentsline {part}{\uppercase {iv}\phspace {1em}Theorem Proving with HOL}{217}
+\contentsline {chapter}{\numberline {12}Derived Inference Rules}{219}
+\contentsline {section}{\numberline {12.1}Simple derivations}{219}
+\contentsline {section}{\numberline {12.2}Rewriting}{222}
+\contentsline {section}{\numberline {12.3}Derivation of the standard rules}{223}
+\contentsline {subsection}{\numberline {12.3.1}Adding an assumption}{225}
+\contentsline {subsection}{\numberline {12.3.2}Undischarging}{226}
+\contentsline {subsection}{\numberline {12.3.3}Symmetry of equality}{226}
+\contentsline {subsection}{\numberline {12.3.4}Transitivity of equality}{226}
+\contentsline {subsection}{\numberline {12.3.5}Application of a term to a theorem}{227}
+\contentsline {subsection}{\numberline {12.3.6}Application of a theorem to a term}{227}
+\contentsline {subsection}{\numberline {12.3.7}Modus Ponens for equality}{227}
+\contentsline {subsection}{\numberline {12.3.8}Implication from equality}{228}
+\contentsline {subsection}{\numberline {12.3.9}{\psf T}-Introduction}{228}
+\contentsline {subsection}{\numberline {12.3.10}Equality-with-{\psf T}\ elimination}{228}
+\contentsline {subsection}{\numberline {12.3.11}Specialization ($\forall $-elimination)}{229}
+\contentsline {subsection}{\numberline {12.3.12}Equality-with-{\psf T}\ introduction}{229}
+\contentsline {subsection}{\numberline {12.3.13}Generalization ($\forall $-introduction)}{230}
+\contentsline {subsection}{\numberline {12.3.14}Simple $\alpha $-conversion}{230}
+\contentsline {subsection}{\numberline {12.3.15}$\eta $-conversion}{231}
+\contentsline {subsection}{\numberline {12.3.16}Extensionality}{232}
+\contentsline {subsection}{\numberline {12.3.17}$\varepsilon $-introduction}{232}
+\contentsline {subsection}{\numberline {12.3.18}$\varepsilon $-elimination}{233}
+\contentsline {subsection}{\numberline {12.3.19}$\exists $-introduction}{233}
+\contentsline {subsection}{\numberline {12.3.20}$\exists $-elimination}{234}
+\contentsline {subsection}{\numberline {12.3.21}Use of a definition}{234}
+\contentsline {subsection}{\numberline {12.3.22}Use of a definition}{235}
+\contentsline {subsection}{\numberline {12.3.23}$\wedge $-introduction}{235}
+\contentsline {subsection}{\numberline {12.3.24}$\wedge $-elimination}{236}
+\contentsline {subsection}{\numberline {12.3.25}Right $\vee $-introduction}{236}
+\contentsline {subsection}{\numberline {12.3.26}Left $\vee $-introduction}{237}
+\contentsline {subsection}{\numberline {12.3.27}$\vee $-elimination}{237}
+\contentsline {subsection}{\numberline {12.3.28}Classical contradiction rule}{238}
+\contentsline {chapter}{\numberline {13}Conversions}{239}
+\contentsline {section}{\numberline {13.1}Conversion combining operators}{241}
+\contentsline {section}{\numberline {13.2}Writing compound conversions}{245}
+\contentsline {section}{\numberline {13.3}Built in conversions}{248}
+\contentsline {subsection}{\numberline {13.3.1}Generalized beta-reduction}{249}
+\contentsline {subsection}{\numberline {13.3.2}Arithmetical conversions}{249}
+\contentsline {subsection}{\numberline {13.3.3}List processing conversions}{250}
+\contentsline {subsection}{\numberline {13.3.4}Simplifying {\ptt let}-terms}{250}
+\contentsline {subsection}{\numberline {13.3.5}Skolemization}{251}
+\contentsline {subsection}{\numberline {13.3.6}Quantifier movement conversions}{252}
+\contentsline {section}{\numberline {13.4}Rewriting tools}{254}
+\contentsline {chapter}{\numberline {14}Goal Directed Proof: Tactics and Tacticals}{257}
+\contentsline {section}{\numberline {14.1}Tactics, goals and justifications}{258}
+\contentsline {subsection}{\numberline {14.1.1}Details of proving theorems}{263}
+\contentsline {section}{\numberline {14.2}The subgoal package}{264}
+\contentsline {section}{\numberline {14.3}Some tactics built into HOL}{267}
+\contentsline {subsection}{\numberline {14.3.1}Acceptance of a theorem}{267}
+\contentsline {subsection}{\numberline {14.3.2}Adding an assumption}{268}
+\contentsline {subsection}{\numberline {14.3.3}Specialization}{268}
+\contentsline {subsection}{\numberline {14.3.4}Conjunction}{269}
+\contentsline {subsection}{\numberline {14.3.5}Discharging an assumption}{269}
+\contentsline {subsection}{\numberline {14.3.6}Combined simple decompositions}{269}
+\contentsline {subsection}{\numberline {14.3.7}Substitution}{269}
+\contentsline {subsection}{\numberline {14.3.8}Case analysis on a boolean term}{270}
+\contentsline {subsection}{\numberline {14.3.9}Case analysis on a disjunction}{270}
+\contentsline {subsection}{\numberline {14.3.10}Rewriting}{270}
+\contentsline {subsection}{\numberline {14.3.11}Resolution by Modus Ponens}{271}
+\contentsline {subsection}{\numberline {14.3.12}Identity}{272}
+\contentsline {subsection}{\numberline {14.3.13}Null}{272}
+\contentsline {subsection}{\numberline {14.3.14}Splitting logical equivalences}{272}
+\contentsline {subsection}{\numberline {14.3.15}Solving existential goals}{273}
+\contentsline {section}{\numberline {14.4}Tacticals}{273}
+\contentsline {subsection}{\numberline {14.4.1}Alternation}{273}
+\contentsline {subsection}{\numberline {14.4.2}First success}{274}
+\contentsline {subsection}{\numberline {14.4.3}Change detection}{274}
+\contentsline {subsection}{\numberline {14.4.4}Sequencing}{274}
+\contentsline {subsection}{\numberline {14.4.5}Selective sequencing}{276}
+\contentsline {subsection}{\numberline {14.4.6}Successive application}{276}
+\contentsline {subsection}{\numberline {14.4.7}Repetition}{277}
+\contentsline {section}{\numberline {14.5}Tactics for manipulating assumptions}{277}
+\contentsline {subsection}{\numberline {14.5.1}Theorem continuations with popping}{278}
+\contentsline {subsection}{\numberline {14.5.2}Theorem continuations without popping}{285}
+\contentsline {chapter}{References}{289}
+\contentsline {chapter}{\numberline {A}Version 2.0}{291}
+\contentsline {section}{\numberline {A.1}Directory reorganization}{292}
+\contentsline {section}{\numberline {A.2}Location of libraries}{293}
+\contentsline {section}{\numberline {A.3}More flexible help system}{294}
+\contentsline {section}{\numberline {A.4}Syntax for restricted quantification}{295}
+\contentsline {section}{\numberline {A.5}Syntax for sets}{297}
+\contentsline {section}{\numberline {A.6}Revised set theory libraries}{299}
+\contentsline {section}{\numberline {A.7}Syntax blocks}{301}
+\contentsline {section}{\numberline {A.8}User-programmable quotation typechecker}{302}
+\contentsline {section}{\numberline {A.9}New conversions}{303}
+\contentsline {subsection}{\numberline {A.9.1}Generalized beta-reduction}{303}
+\contentsline {subsection}{\numberline {A.9.2}Arithmetical conversions}{304}
+\contentsline {subsection}{\numberline {A.9.3}List processing conversions}{304}
+\contentsline {subsection}{\numberline {A.9.4}Simplifying {\ptt let}-terms}{305}
+\contentsline {subsection}{\numberline {A.9.5}Skolemization}{306}
+\contentsline {subsection}{\numberline {A.9.6}Quantifier movement conversions}{307}
+\contentsline {section}{\numberline {A.10}New built-in theorems}{308}
+\contentsline {subsection}{\numberline {A.10.1}New arithmetical theorems}{308}
+\contentsline {subsection}{\numberline {A.10.2}New theorems about lists}{310}
+\contentsline {subsection}{\numberline {A.10.3}New propositional theorems}{310}
+\contentsline {section}{\numberline {A.11}Additions and deletions}{310}
+\contentsline {subsection}{\numberline {A.11.1}Additions}{311}
+\contentsline {subsection}{\numberline {A.11.2}Deletions}{312}
+\contentsline {chapter}{Index}{315}

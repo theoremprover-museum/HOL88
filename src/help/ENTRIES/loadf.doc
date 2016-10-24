@@ -1,0 +1,34 @@
+\DOC loadf
+
+\TYPE {loadf : (string -> void)}
+
+\SYNOPSIS
+Loads an ML file with the verbose flag set to {false}.
+
+\DESCRIBE
+The function {loadf} takes a string indicating the ML file name as
+argument and loads it in the same manner as {load}, except that the
+verbose flag is always set to false.
+
+\FAILURE
+{loadf} will fail if the file named by the argument does not exist in
+the search path. It will fail in the same manner if the file is not a
+valid  ML file. Failure in the ML file will terminate loading.
+
+\EXAMPLE
+If we have a ML file called {foo.ml} which contains the line
+{
+   let x=2+2;;
+}
+\noindent this can be loaded as follows:
+{
+   #loadf `foo.ml`;;
+}
+\noindent and the system would respond with:
+{
+   .() : void
+}
+\SEEALSO
+load, loadf.
+
+\ENDDOC

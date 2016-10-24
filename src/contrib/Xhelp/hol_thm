@@ -1,0 +1,26 @@
+
+
+
+THMSED=/usr/groups/hol/HOL21/src/contrib/Xhelp/h_thm.sed
+DEFTHMHELPPATH=/usr/groups/hol/HOL21/src/help/THEOREMS/*
+CUR_HELP_PATH=`echo ${THM_HELP_PATH} ${DEFTHMHELPPATH} |sed 's/ /:/g'`
+
+
+for i in `echo $CUR_HELP_PATH | sed 's/^:/.:/
+				s/::/:.:/g
+				s/:$/:./
+				s/:/ /g'`
+do
+	for j in $i/*${1}*.doc
+	do
+	if test -f $j
+	then
+		sed -f $THMSED $j
+		echo ""
+	fi
+	done
+done
+
+
+
+

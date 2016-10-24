@@ -1,0 +1,29 @@
+% ===================================================================== %
+% FILE		: auxiliary.ml						%
+% DESCRIPTION   : loads the library "auxiliary" into hol.		%
+%									%
+% AUTHOR	: T. Kalker						%
+% DATE		: 28 August 1989					%
+% REVISED	: 90.12.01 (TFM)					%
+%   	    	    	    	    					%
+% WW 17 May 93 Modified to call the library loader.			%
+% ===================================================================== %
+
+let this_lib_name = `auxiliary`
+and parent_libs = []
+and theories = [`auxiliary`]
+and codes = [`functions`; `tactics`; `rules`; `conversions`]
+and load_parent = ``
+and part_path = ``
+and help_paths = [`entries`]
+in
+library_loader (this_lib_name, parent_libs, theories, codes,
+ load_parent, part_path, help_paths);;
+
+
+% --------------------------------------------------------------------- %
+% Make a couple of abbreviations.		(why? [TFM])		%
+% --------------------------------------------------------------------- %
+
+let goal = g
+and apply  = expandf;;

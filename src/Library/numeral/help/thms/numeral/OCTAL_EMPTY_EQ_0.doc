@@ -1,0 +1,3 @@
+\THEOREM OCTAL_EMPTY_EQ_0 numeral
+|- !l. IS_NORMALIZED l ==> ((OCTAL l = 0) = (l = []))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM INV_PRE_LESS arithmetic
+|- !m. 0 < m ==> (!n. (PRE m) < (PRE n) = m < n)
+\ENDTHEOREM

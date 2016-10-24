@@ -1,0 +1,588 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{Membership, equality, and set specifications}
+\THEOREM EXTENSION pred\_sets
+|- !s t. (s = t) = (!x. x IN s = x IN t)
+\ENDTHEOREM
+\THEOREM GSPECIFICATION pred\_sets
+|- !f v. v IN (GSPEC f) = (?x. v,T = f x)
+\ENDTHEOREM
+\THEOREM NOT\_EQUAL\_SETS pred\_sets
+|- !s t. ~(s = t) = (?x. x IN t = ~x IN s)
+\ENDTHEOREM
+\THEOREM NUM\_SET\_WOP pred\_sets
+|- !s. (?n. n IN s) = (?n. n IN s /\ (!m. m IN s ==> n <= m))
+\ENDTHEOREM
+\THEOREM SET\_MINIMUM pred\_sets
+|- !s M. (?x. x IN s) = (?x. x IN s /\ (!y. y IN s ==> (M x) <= (M y)))
+\THEOREM SPECIFICATION pred\_sets
+|- !P x. x IN P = P x
+\ENDTHEOREM
+\section{The empty and universal sets}
+\THEOREM EMPTY\_DEF pred\_sets
+|- {} = (\x. F)
+\ENDTHEOREM
+\THEOREM EMPTY\_NOT\_UNIV pred\_sets
+|- ~({} = UNIV)
+\ENDTHEOREM
+\THEOREM EQ\_UNIV pred\_sets
+|- (!x. x IN s) = (s = UNIV)
+\ENDTHEOREM
+\THEOREM IN\_UNIV pred\_sets
+|- !x. x IN UNIV
+\ENDTHEOREM
+\THEOREM MEMBER\_NOT\_EMPTY pred\_sets
+|- !s. (?x. x IN s) = ~(s = {})
+\ENDTHEOREM
+\THEOREM NOT\_IN\_EMPTY pred\_sets
+|- !x. ~x IN {}
+\ENDTHEOREM
+\THEOREM UNIV\_DEF pred\_sets
+|- UNIV = (\x. T)
+\ENDTHEOREM
+\THEOREM UNIV\_NOT\_EMPTY pred\_sets
+|- ~(UNIV = {})
+\ENDTHEOREM
+\section{Set inclusion}
+\THEOREM EMPTY\_SUBSET pred\_sets
+|- !s. {} SUBSET s
+\ENDTHEOREM
+\THEOREM NOT\_PSUBSET\_EMPTY pred\_sets
+|- !s. ~s PSUBSET {}
+\ENDTHEOREM
+\THEOREM NOT\_UNIV\_PSUBSET pred\_sets
+|- !s. ~UNIV PSUBSET s
+\ENDTHEOREM
+\THEOREM PSUBSET\_DEF pred\_sets
+|- !s t. s PSUBSET t = s SUBSET t /\ ~(s = t)
+\ENDTHEOREM
+\THEOREM PSUBSET\_IRREFL pred\_sets
+|- !s. ~s PSUBSET s
+\ENDTHEOREM
+\THEOREM PSUBSET\_MEMBER pred\_sets
+|- !s t. s PSUBSET t = s SUBSET t /\ (?y. y IN t /\ ~y IN s)
+\ENDTHEOREM
+\THEOREM PSUBSET\_TRANS pred\_sets
+|- !s t u. s PSUBSET t /\ t PSUBSET u ==> s PSUBSET u
+\ENDTHEOREM
+\THEOREM PSUBSET\_UNIV pred\_sets
+|- !s. s PSUBSET UNIV = (?x. ~x IN s)
+\ENDTHEOREM
+\THEOREM SUBSET\_ANTISYM pred\_sets
+|- !s t. s SUBSET t /\ t SUBSET s ==> (s = t)
+\ENDTHEOREM
+\THEOREM SUBSET\_DEF pred\_sets
+|- !s t. s SUBSET t = (!x. x IN s ==> x IN t)
+\ENDTHEOREM
+\THEOREM SUBSET\_EMPTY pred\_sets
+|- !s. s SUBSET {} = (s = {})
+\ENDTHEOREM
+\THEOREM SUBSET\_REFL pred\_sets
+|- !s. s SUBSET s
+\ENDTHEOREM
+\THEOREM SUBSET\_TRANS pred\_sets
+|- !s t u. s SUBSET t /\ t SUBSET u ==> s SUBSET u
+\ENDTHEOREM
+\THEOREM SUBSET\_UNIV pred\_sets
+|- !s. s SUBSET UNIV
+\ENDTHEOREM
+\THEOREM UNIV\_SUBSET pred\_sets
+|- !s. UNIV SUBSET s = (s = UNIV)
+\ENDTHEOREM
+\section{Intersection and union}
+\THEOREM DELETE\_INTER pred\_sets
+|- !s t x. (s DELETE x) INTER t = (s INTER t) DELETE x
+\ENDTHEOREM
+\THEOREM EMPTY\_UNION pred\_sets
+|- !s t. (s UNION t = {}) = (s = {}) /\ (t = {})
+\ENDTHEOREM
+\THEOREM INTER\_ASSOC pred\_sets
+|- !s t u. (s INTER t) INTER u = s INTER (t INTER u)
+\ENDTHEOREM
+\THEOREM INTER\_COMM pred\_sets
+|- !s t. s INTER t = t INTER s
+\ENDTHEOREM
+\THEOREM INTER\_DEF pred\_sets
+|- !s t. s INTER t = {x | x IN s /\ x IN t}
+\ENDTHEOREM
+\THEOREM INTER\_EMPTY pred\_sets
+|- (!s. {} INTER s = {}) /\ (!s. s INTER {} = {})
+\ENDTHEOREM
+\THEOREM INTER\_IDEMPOT pred\_sets
+|- !s. s INTER s = s
+\ENDTHEOREM
+\THEOREM INTER\_OVER\_UNION pred\_sets
+|- !s t u. s UNION (t INTER u) = (s UNION t) INTER (s UNION u)
+\ENDTHEOREM
+\THEOREM INTER\_SUBSET pred\_sets
+|- (!s t. (s INTER t) SUBSET s) /\ (!s t. (t INTER s) SUBSET s)
+\ENDTHEOREM
+\THEOREM INTER\_UNIV pred\_sets
+|- (!s. UNIV INTER s = s) /\ (!s. s INTER UNIV = s)
+\ENDTHEOREM
+\THEOREM IN\_INTER pred\_sets
+|- !s t x. x IN (s INTER t) = x IN s /\ x IN t
+\ENDTHEOREM
+\THEOREM IN\_UNION pred\_sets
+|- !s t x. x IN (s UNION t) = x IN s \/ x IN t
+\ENDTHEOREM
+\THEOREM SUBSET\_INTER\_ABSORPTION pred\_sets
+|- !s t. s SUBSET t = (s INTER t = s)
+\ENDTHEOREM
+\THEOREM SUBSET\_UNION pred\_sets
+|- (!s t. s SUBSET (s UNION t)) /\ (!s t. s SUBSET (t UNION s))
+\ENDTHEOREM
+\THEOREM SUBSET\_UNION\_ABSORPTION pred\_sets
+|- !s t. s SUBSET t = (s UNION t = t)
+\ENDTHEOREM
+\THEOREM UNION\_ASSOC pred\_sets
+|- !s t u. (s UNION t) UNION u = s UNION (t UNION u)
+\ENDTHEOREM
+\THEOREM UNION\_COMM pred\_sets
+|- !s t. s UNION t = t UNION s
+\ENDTHEOREM
+\THEOREM UNION\_DEF pred\_sets
+|- !s t. s UNION t = {x | x IN s \/ x IN t}
+\ENDTHEOREM
+\THEOREM UNION\_EMPTY pred\_sets
+|- (!s. {} UNION s = s) /\ (!s. s UNION {} = s)
+\ENDTHEOREM
+\THEOREM UNION\_IDEMPOT pred\_sets
+|- !s. s UNION s = s
+\ENDTHEOREM
+\THEOREM UNION\_OVER\_INTER pred\_sets
+|- !s t u. s INTER (t UNION u) = (s INTER t) UNION (s INTER u)
+\ENDTHEOREM
+\THEOREM UNION\_UNIV pred\_sets
+|- (!s. UNIV UNION s = UNIV) /\ (!s. s UNION UNIV = UNIV)
+\ENDTHEOREM
+\section{Set difference}
+\THEOREM DIFF\_DEF pred\_sets
+|- !s t. s DIFF t = {x | x IN s /\ ~x IN t}
+\ENDTHEOREM
+\THEOREM DIFF\_DIFF pred\_sets
+|- !s t. (s DIFF t) DIFF t = s DIFF t
+\ENDTHEOREM
+\THEOREM DIFF\_EMPTY pred\_sets
+|- !s. s DIFF {} = s
+\ENDTHEOREM
+\THEOREM DIFF\_EQ\_EMPTY pred\_sets
+|- !s. s DIFF s = {}
+\ENDTHEOREM
+\THEOREM DIFF\_UNIV pred\_sets
+|- !s. s DIFF UNIV = {}
+\ENDTHEOREM
+\THEOREM EMPTY\_DIFF pred\_sets
+|- !s. {} DIFF s = {}
+\ENDTHEOREM
+\THEOREM IN\_DIFF pred\_sets
+|- !s t x. x IN (s DIFF t) = x IN s /\ ~x IN t
+\ENDTHEOREM
+\section{Disjoint sets}
+\THEOREM DISJOINT\_DEF pred\_sets
+|- !s t. DISJOINT s t = (s INTER t = {})
+\ENDTHEOREM
+\THEOREM DISJOINT\_DELETE\_SYM pred\_sets
+|- !s t x. DISJOINT(s DELETE x)t = DISJOINT(t DELETE x)s
+\ENDTHEOREM
+\THEOREM DISJOINT\_EMPTY pred\_sets
+|- !s. DISJOINT {} s /\ DISJOINT s {}
+\ENDTHEOREM
+\THEOREM DISJOINT\_EMPTY\_REFL pred\_sets
+|- !s. (s = {}) = DISJOINT s s
+\ENDTHEOREM
+\THEOREM DISJOINT\_SYM pred\_sets
+|- !s t. DISJOINT s t = DISJOINT t s
+\ENDTHEOREM
+\THEOREM DISJOINT\_UNION pred\_sets
+|- !s t u. DISJOINT(s UNION t)u = DISJOINT s u /\ DISJOINT t u
+\ENDTHEOREM
+\THEOREM IN\_DISJOINT pred\_sets
+|- !s t. DISJOINT s t = ~(?x. x IN s /\ x IN t)
+\ENDTHEOREM
+\section{Insertion and deletion of an element}
+\THEOREM ABSORPTION pred\_sets
+|- !x s. x IN s = (x INSERT s = s)
+\ENDTHEOREM
+\THEOREM COMPONENT pred\_sets
+|- !x s. x IN (x INSERT s)
+\ENDTHEOREM
+\THEOREM DECOMPOSITION pred\_sets
+|- !s x. x IN s = (?t. (s = x INSERT t) /\ ~x IN t)
+\ENDTHEOREM
+\THEOREM DELETE\_COMM pred\_sets
+|- !x y s. (s DELETE x) DELETE y = (s DELETE y) DELETE x
+\ENDTHEOREM
+\THEOREM DELETE\_DEF pred\_sets
+|- !s x. s DELETE x = s DIFF {x}
+\ENDTHEOREM
+\THEOREM DELETE\_DELETE pred\_sets
+|- !x s. (s DELETE x) DELETE x = s DELETE x
+\ENDTHEOREM
+\THEOREM DELETE\_INSERT pred\_sets
+|- !x y s.
+    (x INSERT s) DELETE y =
+    ((x = y) => s DELETE y | x INSERT (s DELETE y))
+\ENDTHEOREM
+\THEOREM DELETE\_NON\_ELEMENT pred\_sets
+|- !x s. ~x IN s = (s DELETE x = s)
+\ENDTHEOREM
+\THEOREM DELETE\_SUBSET pred\_sets
+|- !x s. (s DELETE x) SUBSET s
+\ENDTHEOREM
+\THEOREM DIFF\_INSERT pred\_sets
+|- !s t x. s DIFF (x INSERT t) = (s DELETE x) DIFF t
+\ENDTHEOREM
+\THEOREM DISJOINT\_INSERT pred\_sets
+|- !x s t. DISJOINT(x INSERT s)t = DISJOINT s t /\ ~x IN t
+\ENDTHEOREM
+\THEOREM EMPTY\_DELETE pred\_sets
+|- !x. {} DELETE x = {}
+\ENDTHEOREM
+\THEOREM INSERT\_COMM pred\_sets
+|- !x y s. x INSERT (y INSERT s) = y INSERT (x INSERT s)
+\ENDTHEOREM
+\THEOREM INSERT\_DEF pred\_sets
+|- !x s. x INSERT s = {y | (y = x) \/ y IN s}
+\ENDTHEOREM
+\THEOREM INSERT\_DELETE pred\_sets
+|- !x s. x IN s ==> (x INSERT (s DELETE x) = s)
+\ENDTHEOREM
+\THEOREM INSERT\_DIFF pred\_sets
+|- !s t x.
+    (x INSERT s) DIFF t = (x IN t => s DIFF t | x INSERT (s DIFF t))
+\ENDTHEOREM
+\THEOREM INSERT\_INSERT pred\_sets
+|- !x s. x INSERT (x INSERT s) = x INSERT s
+\ENDTHEOREM
+\THEOREM INSERT\_INTER pred\_sets
+|- !x s t.
+    (x INSERT s) INTER t = (x IN t => x INSERT (s INTER t) | s INTER t)
+\ENDTHEOREM
+\THEOREM INSERT\_SUBSET pred\_sets
+|- !x s t. (x INSERT s) SUBSET t = x IN t /\ s SUBSET t
+\ENDTHEOREM
+\THEOREM INSERT\_UNION pred\_sets
+|- !x s t.
+    (x INSERT s) UNION t = (x IN t => s UNION t | x INSERT (s UNION t))
+\ENDTHEOREM
+\THEOREM INSERT\_UNION\_EQ pred\_sets
+|- !x s t. (x INSERT s) UNION t = x INSERT (s UNION t)
+\ENDTHEOREM
+\THEOREM INSERT\_UNIV pred\_sets
+|- !x. x INSERT UNIV = UNIV
+\ENDTHEOREM
+\THEOREM IN\_DELETE pred\_sets
+|- !s x y. x IN (s DELETE y) = x IN s /\ ~(x = y)
+\ENDTHEOREM
+\THEOREM IN\_DELETE\_EQ pred\_sets
+|- !s x x'.
+    (x IN s = x' IN s) = (x IN (s DELETE x') = x' IN (s DELETE x))
+\ENDTHEOREM
+\THEOREM IN\_INSERT pred\_sets
+|- !x y s. x IN (y INSERT s) = (x = y) \/ x IN s
+\ENDTHEOREM
+\THEOREM NOT\_EMPTY\_INSERT pred\_sets
+|- !x s. ~({} = x INSERT s)
+\ENDTHEOREM
+\THEOREM NOT\_INSERT\_EMPTY pred\_sets
+|- !x s. ~(x INSERT s = {})
+\ENDTHEOREM
+\THEOREM PSUBSET\_INSERT\_SUBSET pred\_sets
+|- !s t. s PSUBSET t = (?x. ~x IN s /\ (x INSERT s) SUBSET t)
+\ENDTHEOREM
+\THEOREM SET\_CASES pred\_sets
+|- !s. (s = {}) \/ (?x t. (s = x INSERT t) /\ ~x IN t)
+\ENDTHEOREM
+\THEOREM SUBSET\_DELETE pred\_sets
+|- !x s t. s SUBSET (t DELETE x) = ~x IN s /\ s SUBSET t
+\ENDTHEOREM
+\THEOREM SUBSET\_INSERT pred\_sets
+|- !x s. ~x IN s ==> (!t. s SUBSET (x INSERT t) = s SUBSET t)
+\ENDTHEOREM
+\THEOREM SUBSET\_INSERT\_DELETE pred\_sets
+|- !x s t. s SUBSET (x INSERT t) = (s DELETE x) SUBSET t
+\ENDTHEOREM
+\section{The {\tt CHOICE} and {\tt REST} functions}
+\THEOREM CHOICE\_DEF pred\_sets
+|- !s. ~(s = {}) ==> (CHOICE s) IN s
+\ENDTHEOREM
+\THEOREM CHOICE\_INSERT\_REST pred\_sets
+|- !s. ~(s = {}) ==> ((CHOICE s) INSERT (REST s) = s)
+\ENDTHEOREM
+\THEOREM CHOICE\_NOT\_IN\_REST pred\_sets
+|- !s. ~(CHOICE s) IN (REST s)
+\ENDTHEOREM
+\THEOREM CHOICE\_SING pred\_sets
+|- !x. CHOICE{x} = x
+\ENDTHEOREM
+\THEOREM REST\_DEF pred\_sets
+|- !s. REST s = s DELETE (CHOICE s)
+\ENDTHEOREM
+\THEOREM REST\_PSUBSET pred\_sets
+|- !s. ~(s = {}) ==> (REST s) PSUBSET s
+\ENDTHEOREM
+\THEOREM REST\_SING pred\_sets
+|- !x. REST{x} = {}
+\ENDTHEOREM
+\THEOREM REST\_SUBSET pred\_sets
+|- !s. (REST s) SUBSET s
+\ENDTHEOREM
+\THEOREM SING\_IFF\_EMPTY\_REST pred\_sets
+|- !s. SING s = ~(s = {}) /\ (REST s = {})
+\ENDTHEOREM
+\section{Image of a function on a set}
+\THEOREM IMAGE\_COMPOSE pred\_sets
+|- !f g s. IMAGE(f o g)s = IMAGE f(IMAGE g s)
+\ENDTHEOREM
+\THEOREM IMAGE\_DEF pred\_sets
+|- !f s. IMAGE f s = {f x | x IN s}
+\ENDTHEOREM
+\THEOREM IMAGE\_DELETE pred\_sets
+|- !f x s. ~x IN s ==> (IMAGE f(s DELETE x) = IMAGE f s)
+\ENDTHEOREM
+\THEOREM IMAGE\_EMPTY pred\_sets
+|- !f. IMAGE f{} = {}
+\ENDTHEOREM
+\THEOREM IMAGE\_EQ\_EMPTY pred\_sets
+|- !s f. (IMAGE f s = {}) = (s = {})
+\ENDTHEOREM
+\THEOREM IMAGE\_ID pred\_sets
+|- !s. IMAGE(\x. x)s = s
+\ENDTHEOREM
+\THEOREM IMAGE\_IN pred\_sets
+|- !x s. x IN s ==> (!f. (f x) IN (IMAGE f s))
+\ENDTHEOREM
+\THEOREM IMAGE\_INSERT pred\_sets
+|- !f x s. IMAGE f(x INSERT s) = (f x) INSERT (IMAGE f s)
+\ENDTHEOREM
+\THEOREM IMAGE\_INTER pred\_sets
+|- !f s t. (IMAGE f(s INTER t)) SUBSET ((IMAGE f s) INTER (IMAGE f t))
+\ENDTHEOREM
+\THEOREM IMAGE\_SUBSET pred\_sets
+|- !s t. s SUBSET t ==> (!f. (IMAGE f s) SUBSET (IMAGE f t))
+\ENDTHEOREM
+\THEOREM IMAGE\_UNION pred\_sets
+|- !f s t. IMAGE f(s UNION t) = (IMAGE f s) UNION (IMAGE f t)
+\ENDTHEOREM
+\THEOREM IN\_IMAGE pred\_sets
+|- !y s f. y IN (IMAGE f s) = (?x. (y = f x) /\ x IN s)
+\ENDTHEOREM
+\section{Mappings between sets}
+\THEOREM BIJ\_COMPOSE pred\_sets
+|- !f g s t u. BIJ f s t /\ BIJ g t u ==> BIJ(g o f)s u
+\ENDTHEOREM
+\THEOREM BIJ\_DEF pred\_sets
+|- !f s t. BIJ f s t = INJ f s t /\ SURJ f s t
+\ENDTHEOREM
+\THEOREM BIJ\_EMPTY pred\_sets
+|- !f. (!s. BIJ f{}s = (s = {})) /\ (!s. BIJ f s{} = (s = {}))
+\ENDTHEOREM
+\THEOREM BIJ\_ID pred\_sets
+|- !s. BIJ(\x. x)s s
+\ENDTHEOREM
+\THEOREM IMAGE\_SURJ pred\_sets
+|- !f s t. SURJ f s t = (IMAGE f s = t)
+\ENDTHEOREM
+\THEOREM INJ\_COMPOSE pred\_sets
+|- !f g s t u. INJ f s t /\ INJ g t u ==> INJ(g o f)s u
+\ENDTHEOREM
+\THEOREM INJ\_DEF pred\_sets
+|- !f s t.
+    INJ f s t =
+    (!x. x IN s ==> (f x) IN t) /\
+    (!x y. x IN s /\ y IN s ==> (f x = f y) ==> (x = y))
+\ENDTHEOREM
+\THEOREM INJ\_EMPTY pred\_sets
+|- !f. (!s. INJ f{}s) /\ (!s. INJ f s{} = (s = {}))
+\ENDTHEOREM
+\THEOREM INJ\_ID pred\_sets
+|- !s. INJ(\x. x)s s
+\ENDTHEOREM
+\THEOREM LINV\_DEF pred\_sets
+|- !f s t. INJ f s t ==> (!x. x IN s ==> (LINV f s(f x) = x))
+\ENDTHEOREM
+\THEOREM RINV\_DEF pred\_sets
+|- !f s t. SURJ f s t ==> (!x. x IN t ==> (f(RINV f s x) = x))
+\ENDTHEOREM
+\THEOREM SURJ\_COMPOSE pred\_sets
+|- !f g s t u. SURJ f s t /\ SURJ g t u ==> SURJ(g o f)s u
+\ENDTHEOREM
+\THEOREM SURJ\_DEF pred\_sets
+|- !f s t.
+    SURJ f s t =
+    (!x. x IN s ==> (f x) IN t) /\
+    (!x. x IN t ==> (?y. y IN s /\ (f y = x)))
+\ENDTHEOREM
+\THEOREM SURJ\_EMPTY pred\_sets
+|- !f. (!s. SURJ f{}s = (s = {})) /\ (!s. SURJ f s{} = (s = {}))
+\ENDTHEOREM
+\THEOREM SURJ\_ID pred\_sets
+|- !s. SURJ(\x. x)s s
+\ENDTHEOREM
+\section{Singleton sets}
+\THEOREM DELETE\_EQ\_SING pred\_sets
+|- !s x. x IN s ==> ((s DELETE x = {}) = (s = {x}))
+\ENDTHEOREM
+\THEOREM DISJOINT\_SING\_EMPTY pred\_sets
+|- !x. DISJOINT{x}{}
+\ENDTHEOREM
+\THEOREM EQUAL\_SING pred\_sets
+|- !x y. ({x} = {y}) = (x = y)
+\ENDTHEOREM
+\THEOREM FINITE\_SING pred\_sets
+|- !x. FINITE{x}
+\ENDTHEOREM
+\THEOREM INSERT\_SING\_UNION pred\_sets
+|- !s x. x INSERT s = {x} UNION s
+\ENDTHEOREM
+\THEOREM IN\_SING pred\_sets
+|- !x y. x IN {y} = (x = y)
+\ENDTHEOREM
+\THEOREM NOT\_EMPTY\_SING pred\_sets
+|- !x. ~({} = {x})
+\ENDTHEOREM
+\THEOREM NOT\_SING\_EMPTY pred\_sets
+|- !x. ~({x} = {})
+\ENDTHEOREM
+\THEOREM SING pred\_sets
+|- !x. SING{x}
+\ENDTHEOREM
+\THEOREM SING\_DEF pred\_sets
+|- !s. SING s = (?x. s = {x})
+\ENDTHEOREM
+\THEOREM SING\_DELETE pred\_sets
+|- !x. {x} DELETE x = {}
+\ENDTHEOREM
+\THEOREM SING\_FINITE pred\_sets
+|- !s. SING s ==> FINITE s
+\ENDTHEOREM
+\section{Finite and infinite sets}
+\THEOREM FINITE\_DEF pred\_sets
+|- !s.
+    FINITE s = (!P. P{} /\ (!s'. P s' ==> (!e. P(e INSERT s'))) ==> P s)
+\ENDTHEOREM
+\THEOREM FINITE\_DELETE pred\_sets
+|- !x s. FINITE(s DELETE x) = FINITE s
+\ENDTHEOREM
+\THEOREM FINITE\_DIFF pred\_sets
+|- !s. FINITE s ==> (!t. FINITE(s DIFF t))
+\ENDTHEOREM
+\THEOREM FINITE\_EMPTY pred\_sets
+|- FINITE{}
+\ENDTHEOREM
+\THEOREM FINITE\_INDUCT pred\_sets
+|- !P.
+    P{} /\ (!s. FINITE s /\ P s ==> (!e. ~e IN s ==> P(e INSERT s))) ==>
+    (!s. FINITE s ==> P s)
+\ENDTHEOREM
+\THEOREM FINITE\_INSERT pred\_sets
+|- !x s. FINITE(x INSERT s) = FINITE s
+\ENDTHEOREM
+\THEOREM FINITE\_ISO\_NUM pred\_sets
+|- !s.
+    FINITE s ==>
+    (?f.
+      (!n m. n < (CARD s) /\ m < (CARD s) ==> (f n = f m) ==> (n = m)) /\
+      (s = {f n | n < (CARD s)}))
+\ENDTHEOREM
+\THEOREM FINITE\_PSUBSET\_INFINITE pred\_sets
+|- !s. INFINITE s = (!t. FINITE t ==> t SUBSET s ==> t PSUBSET s)
+\ENDTHEOREM
+\THEOREM FINITE\_PSUBSET\_UNIV pred\_sets
+|- INFINITE UNIV = (!s. FINITE s ==> s PSUBSET UNIV)
+\ENDTHEOREM
+\THEOREM FINITE\_UNION pred\_sets
+|- !s t. FINITE(s UNION t) = FINITE s /\ FINITE t
+\ENDTHEOREM
+\THEOREM IMAGE\_11\_INFINITE pred\_sets
+|- !f.
+    (!x y. (f x = f y) ==> (x = y)) ==>
+    (!s. INFINITE s ==> INFINITE(IMAGE f s))
+\ENDTHEOREM
+\THEOREM IMAGE\_FINITE pred\_sets
+|- !s. FINITE s ==> (!f. FINITE(IMAGE f s))
+\ENDTHEOREM
+\THEOREM INFINITE\_DEF pred\_sets
+|- !s. INFINITE s = ~FINITE s
+\ENDTHEOREM
+\THEOREM INFINITE\_DIFF\_FINITE pred\_sets
+|- !s t. INFINITE s /\ FINITE t ==> ~(s DIFF t = {})
+\ENDTHEOREM
+\THEOREM INFINITE\_SUBSET pred\_sets
+|- !s. INFINITE s ==> (!t. s SUBSET t ==> INFINITE t)
+\ENDTHEOREM
+\THEOREM INFINITE\_UNIV pred\_sets
+|- INFINITE (UNIV:*->bool) =
+   (?f:*->*. (!x y. (f x = f y) ==> (x = y)) /\ (?y. !x. ~(f x = y)))
+\ENDTHEOREM
+\THEOREM INTER\_FINITE pred\_sets
+|- !s. FINITE s ==> (!t. FINITE(s INTER t))
+\ENDTHEOREM
+\THEOREM IN\_INFINITE\_NOT\_FINITE pred\_sets
+|- !s t. INFINITE s /\ FINITE t ==> (?x. x IN s /\ ~x IN t)
+\ENDTHEOREM
+\THEOREM NOT\_IN\_FINITE pred\_sets
+|- INFINITE UNIV = (!s. FINITE s ==> (?x. ~x IN s))
+\ENDTHEOREM
+\THEOREM PSUBSET\_FINITE pred\_sets
+|- !s. FINITE s ==> (!t. t PSUBSET s ==> FINITE t)
+\ENDTHEOREM
+\THEOREM SUBSET\_FINITE pred\_sets
+|- !s. FINITE s ==> (!t. t SUBSET s ==> FINITE t)
+\ENDTHEOREM
+\section{Cardinality of sets}
+\THEOREM CARD\_DEF pred\_sets
+|- (CARD{} = 0) /\
+   (!s.
+     FINITE s ==>
+     (!x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s))))
+\ENDTHEOREM
+\THEOREM CARD\_DELETE pred\_sets
+|- !s.
+    FINITE s ==>
+    (!x. CARD(s DELETE x) = (x IN s => (CARD s) - 1 | CARD s))
+\ENDTHEOREM
+\THEOREM CARD\_DIFF pred\_sets
+|- !t.
+    FINITE t ==>
+    (!s. FINITE s ==> (CARD(s DIFF t) = (CARD s) - (CARD(s INTER t))))
+\ENDTHEOREM
+\THEOREM CARD\_EMPTY pred\_sets
+|- CARD{} = 0
+\ENDTHEOREM
+\THEOREM CARD\_EQ\_0 pred\_sets
+|- !s. FINITE s ==> ((CARD s = 0) = (s = {}))
+\ENDTHEOREM
+\THEOREM CARD\_INSERT pred\_sets
+|- !s.
+    FINITE s ==>
+    (!x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s)))
+\ENDTHEOREM
+\THEOREM CARD\_INTER\_LESS\_EQ pred\_sets
+|- !s. FINITE s ==> (!t. (CARD(s INTER t)) <= (CARD s))
+\ENDTHEOREM
+\THEOREM CARD\_PSUBSET pred\_sets
+|- !s. FINITE s ==> (!t. t PSUBSET s ==> (CARD t) < (CARD s))
+\ENDTHEOREM
+\THEOREM CARD\_SING pred\_sets
+|- !x. CARD{x} = 1
+\ENDTHEOREM
+\THEOREM CARD\_SUBSET pred\_sets
+|- !s. FINITE s ==> (!t. t SUBSET s ==> (CARD t) <= (CARD s))
+\ENDTHEOREM
+\THEOREM CARD\_UNION pred\_sets
+|- !s.
+    FINITE s ==>
+    (!t.
+      FINITE t ==>
+      ((CARD(s UNION t)) + (CARD(s INTER t)) = (CARD s) + (CARD t)))
+\ENDTHEOREM
+\THEOREM LESS\_CARD\_DIFF pred\_sets
+|- !t.
+    FINITE t ==>
+    (!s. FINITE s ==> (CARD t) < (CARD s) ==> 0 < (CARD(s DIFF t)))
+\ENDTHEOREM
+\THEOREM SING\_IFF\_CARD1 pred\_sets
+|- !s. SING s = (CARD s = 1) /\ FINITE s
+\ENDTHEOREM

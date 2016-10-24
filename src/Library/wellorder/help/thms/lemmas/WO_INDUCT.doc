@@ -1,0 +1,5 @@
+\THEOREM WO_INDUCT WELLORDER
+|- !P l.
+    woset l /\ (!x. fl l x /\ (!y. less l(y,x) ==> P y) ==> P x) ==>
+    (!x. fl l x ==> P x)
+\ENDTHEOREM

@@ -1,0 +1,16 @@
+\DOC print_tree_name
+
+\TYPE {print_tree_name : (print_tree -> string)}
+
+\SYNOPSIS
+Function to extract the name (label) of the root node of a print-tree.
+
+\LIBRARY prettyp
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+print_tree_children, Print_node.
+
+\ENDDOC

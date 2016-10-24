@@ -1,0 +1,3 @@
+\THEOREM hreal_sup HREAL
+|- !P. hreal_sup P = hreal(\w. ?X. P X /\ cut X w)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REVERSE_FOLDL list
+|- !l. REVERSE l = FOLDL(\l' x. CONS x l')[]l
+\ENDTHEOREM

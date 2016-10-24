@@ -1,0 +1,23 @@
+\DOC raw_tree_rules_fun
+
+\TYPE {raw_tree_rules_fun : print_rule_function}
+
+\SYNOPSIS
+Pretty-printing rules (as a function) for raw print-trees (parse-trees).
+
+\LIBRARY prettyp
+
+\DESCRIBE
+In the event of no pretty-printing rules matching the tree to be printed, a
+default set of rules are used. These rules always match, and the output
+generated is a textual representation of the structure of the tree. The default
+rules are available to the user as {raw_tree_rules_fun}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+hol_type_rules_fun, hol_term_rules_fun, hol_thm_rules_fun, hol_rules_fun,
+then_try, pretty_print, pp, pp_write.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM POW_ABS REAL
+|- !c n. (abs c) pow n = abs(c pow n)
+\ENDTHEOREM

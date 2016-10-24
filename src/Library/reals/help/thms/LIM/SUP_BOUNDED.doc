@@ -1,0 +1,5 @@
+\THEOREM SUP_BOUNDED LIM
+|- !P a b.
+    (?x. P x) /\ (!x. P x ==> a <= x /\ x <= b) ==>
+    a <= (sup P) /\ (sup P) <= b
+\ENDTHEOREM

@@ -1,0 +1,15 @@
+\DOC GET_MAX_HIST
+
+\TYPE {GET_MAX_HIST: (void -> int)}
+
+\SYNOPSIS
+Returns the maximum history size that can be stored for a window stack.
+
+\LIBRARY window
+
+\FAILURE
+
+\SEEALSO
+UNDO, REDO, SET_MAX_HIST
+
+\ENDDOC

@@ -1,0 +1,303 @@
+#define		update_display(t)	{ tenths     = t[0]; \
+					  second_one = t[1]; \
+					  second_ten = t[2]; \
+					  minute_one = t[3]; \
+					  minute_ten = t[4]; \
+					  hour_one   = t[5]; \
+					  hour_ten   = t[6]; \
+					}
+
+#define		set_time(t)		{ t[0] = tenths; \
+					  t[1] = second_one; \
+					  t[2] = second_ten; \
+					  t[3] = minute_one; \
+					  t[4] = minute_ten; \
+					  t[5] = hour_one; \
+					  t[6] = hour_ten; \
+					}
+
+#define		inc_time(a,b,c,d,e,f,g)	{ if (by_seconds) \
+					     b = ++time[1]; \
+					  else if ((a = ++time[0]) > 9) { \
+					     a = time[0] = 0; \
+					     b = ++time[1]; \
+					     } \
+					  if (time[1] > 9) { \
+					     b = time[1] = 0; \
+					     if ((c = ++time[2]) > 5) { \
+ 					        c = time[2] = 0; \
+ 					        if ((d = ++time[3]) > 9) { \
+ 					           d = time[3] = 0; \
+ 					           if ((e = ++time[4]) > 5) { \
+ 					              e = time[4] = 0; \
+ 					              if ((f = ++time[5]) > 9) { \
+ 					                 f = time[5] = 0; \
+ 					                 if ((g = ++time[6]) > 9) \
+					                    g = time[6] = 0; \
+					                 } \
+					              } \
+					           } \
+					        } \
+					     } \
+					}
+
+#define		dec_time(a,b,c,d,e,f,g)	{ if (by_seconds) \
+					     b = --time[1]; \
+					  else if ((a = --time[0]) < 0) { \
+					     a = time[0] = 9; \
+					     b = --time[1]; \
+					     } \
+					  if (time[1] < 0) { \
+					     b = time[1] = 9; \
+					     if ((c = --time[2]) < 0) { \
+ 					        c = time[2] = 5; \
+ 					        if ((d = --time[3]) < 0) { \
+ 					           d = time[3] = 9; \
+ 					           if ((e = --time[4]) < 0) { \
+ 					              e = time[4] = 5; \
+ 					              if ((f = --time[5]) < 0) { \
+ 					                 f = time[5] = 9; \
+ 					                 if ((g = --time[6]) < 0) \
+					                    g = time[6] = 9; \
+					                 } \
+					              } \
+					           } \
+					        } \
+					     } \
+					}
+
+#define		TINY_FONT	"/usr/lib/fonts/fixedwidthfonts/screen.r.7"
+#define		MEDIUM_FONT	"/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+#define		BIG_FONT	"/usr/lib/fonts/fixedwidthfonts/gallant.r.19"
+
+#define		TRUE		1
+#define		FALSE		0
+
+#define		ROW_1		4
+#define		ROW_2		17
+#define		ROW_3		39
+
+application ""
+   size 0 by 200 pixels
+   label "  << Stopwatch >>"
+   icon "stopwatch.icon"
+   initialize {
+      remove split_button;
+      remove resume_button;
+      remove stop_button;
+      display start_button;
+      display reset_button;
+      remove split_light;
+      in_split = FALSE;
+      time = tokenize("0 0 0 0 0 0 0");
+      }
+
+   timer {
+      if (count_down) {
+         if (in_split)
+            dec_time(d,d,d,d,d,d,d)
+         else
+            dec_time(tenths, second_one, second_ten, minute_one, minute_ten, hour_one, hour_ten);
+         if (time == "0 0 0 0 0 0 0") {
+            interval = 0;
+            beep;
+            beep;
+            beep;
+            remove stop_button;
+            remove split_button;
+            display start_button;
+            if (!in_split)
+               display reset_button;
+            }
+         }
+      else if (in_split)
+         inc_time(d,d,d,d,d,d,d)
+      else
+         inc_time(tenths, second_one, second_ten, minute_one, minute_ten, hour_one, hour_ten);
+      }
+
+gadgets
+   font MEDIUM_FONT
+   choice count_down
+      at 4 ROW_1
+      display current
+      "Up" : TINY_FONT	nothing;
+      "Down": TINY_FONT	nothing;
+   end_choice
+   label split_light
+      at 61 ROW_1
+      "Split" : TINY_FONT
+   end_label
+   choice by_seconds
+      at 110 ROW_1
+      display current
+      "0.1 sec" : TINY_FONT {
+         display decimal_point;
+         display tenths;
+         if (interval > 0)
+            interval = 0.1;
+         }
+      "  1 sec" : TINY_FONT {
+         remove decimal_point;
+         remove tenths;
+         tenths = time[0] = 0;
+         if (interval > 0)
+            interval = 1;
+         }
+   end_choice
+   choice hour_ten
+      at 16 ROW_2
+      display current
+      "0" : BIG_FONT		nothing;
+      "1" : BIG_FONT		nothing;
+      "2" : BIG_FONT		nothing;
+      "3" : BIG_FONT		nothing;
+      "4" : BIG_FONT		nothing;
+      "5" : BIG_FONT		nothing;
+      "6" : BIG_FONT		nothing;
+      "7" : BIG_FONT		nothing;
+      "8" : BIG_FONT		nothing;
+      "9" : BIG_FONT		nothing;
+   end_choice
+   choice hour_one
+      at 28 ROW_2
+      display current
+      "0" : BIG_FONT		nothing;
+      "1" : BIG_FONT		nothing;
+      "2" : BIG_FONT		nothing;
+      "3" : BIG_FONT		nothing;
+      "4" : BIG_FONT		nothing;
+      "5" : BIG_FONT		nothing;
+      "6" : BIG_FONT		nothing;
+      "7" : BIG_FONT		nothing;
+      "8" : BIG_FONT		nothing;
+      "9" : BIG_FONT		nothing;
+   end_choice
+   label
+      at 40 ROW_2
+      ":" : BIG_FONT
+   end_label
+   choice minute_ten
+      at 52 ROW_2
+      display current
+      "0" : BIG_FONT		nothing;
+      "1" : BIG_FONT		nothing;
+      "2" : BIG_FONT		nothing;
+      "3" : BIG_FONT		nothing;
+      "4" : BIG_FONT		nothing;
+      "5" : BIG_FONT		nothing;
+   end_choice
+   choice minute_one
+      at 64 ROW_2
+      display current
+      "0" : BIG_FONT		nothing;
+      "1" : BIG_FONT		nothing;
+      "2" : BIG_FONT		nothing;
+      "3" : BIG_FONT		nothing;
+      "4" : BIG_FONT		nothing;
+      "5" : BIG_FONT		nothing;
+      "6" : BIG_FONT		nothing;
+      "7" : BIG_FONT		nothing;
+      "8" : BIG_FONT		nothing;
+      "9" : BIG_FONT		nothing;
+   end_choice
+   label
+      at 76 ROW_2
+      ":" : BIG_FONT
+   end_label
+   choice second_ten
+      at 88 ROW_2
+      display current
+      "0" : BIG_FONT		nothing;
+      "1" : BIG_FONT		nothing;
+      "2" : BIG_FONT		nothing;
+      "3" : BIG_FONT		nothing;
+      "4" : BIG_FONT		nothing;
+      "5" : BIG_FONT		nothing;
+   end_choice
+   choice second_one
+      at 100 ROW_2
+      display current
+      "0" : BIG_FONT		nothing;
+      "1" : BIG_FONT		nothing;
+      "2" : BIG_FONT		nothing;
+      "3" : BIG_FONT		nothing;
+      "4" : BIG_FONT		nothing;
+      "5" : BIG_FONT		nothing;
+      "6" : BIG_FONT		nothing;
+      "7" : BIG_FONT		nothing;
+      "8" : BIG_FONT		nothing;
+      "9" : BIG_FONT		nothing;
+   end_choice
+   label decimal_point
+      at 112 ROW_2
+      "." : BIG_FONT
+   end_label
+   choice tenths
+      at 124 ROW_2
+      display current
+      "0" : BIG_FONT		nothing;
+      "1" : BIG_FONT		nothing;
+      "2" : BIG_FONT		nothing;
+      "3" : BIG_FONT		nothing;
+      "4" : BIG_FONT		nothing;
+      "5" : BIG_FONT		nothing;
+      "6" : BIG_FONT		nothing;
+      "7" : BIG_FONT		nothing;
+      "8" : BIG_FONT		nothing;
+      "9" : BIG_FONT		nothing;
+   end_choice
+   button start_button
+      at 4 ROW_3
+      normal "Start" {
+         interval = by_seconds? 1 : 0.1;
+         if (!in_split)
+            set_time(time);
+         remove start_button;
+         remove reset_button;
+         display stop_button;
+         if (!in_split)
+            display split_button;
+         }
+   end_button
+   button stop_button
+      at 4 ROW_3
+      normal "Stop" {
+         interval = 0;
+         remove stop_button;
+         remove split_button;
+         display start_button;
+         if (!in_split)
+            display reset_button;
+         }
+   end_button
+   button split_button
+      at 91 ROW_3
+      normal "Split" {
+         in_split = TRUE;
+         remove split_button;
+         display resume_button;
+         display split_light;
+         }
+   end_button
+   button resume_button
+      at 91 ROW_3
+      normal "Resume" {
+         in_split = FALSE;
+         remove resume_button;
+         remove split_light;
+         update_display(time);
+         if (interval > 0)
+            display split_button;
+         else
+            display reset_button;
+         }
+   end_button
+   button reset_button
+      at 91 ROW_3
+      normal "Reset" {
+         time = tokenize("0 0 0 0 0 0 0");
+         update_display(time);
+         }
+   end_button
+end_gadgets

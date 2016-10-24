@@ -1,0 +1,3 @@
+\THEOREM LENGTH list
+|- (LENGTH[] = 0) /\ (!h t. LENGTH(CONS h t) = SUC(LENGTH t))
+\ENDTHEOREM

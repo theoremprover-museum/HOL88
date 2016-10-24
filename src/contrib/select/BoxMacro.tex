@@ -1,0 +1,91 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                      %%
+%%   Set of LaTeX macros for typesetting scripts framed in a box.       %%
+%%                                                                      %%
+%%   Some of this code is taken from the TeX book p421.                 %%
+%%                                                                      %%
+%%----------------------------------------------------------------------%%
+%%   DATE:    1.Mar.89                                                  %%
+%%   AUTHOR:  ISD                                                       %%
+%%----------------------------------------------------------------------%%
+%%                                                                      %%
+%%   The following macros provide two commands, namely:                 %%
+%%                                                                      %%
+%%       \begintt                                                       %%
+%%                                                                      %%
+%%       \endtt                                                         %%
+%%                                                                      %%
+%%   Anything between these two commands is typeset using the almost    %%
+%%   verbatim environment.  There are three major diffeences;           %%
+%%                                                                      %%
+%%   1.  The back-slash "\" is retained as the escape character.        %%
+%%       So now other funny characters can easily be included.  For     %%
+%%       example the forall symbol can be included using \(\forall\)    %%
+%%                                                                      %%
+%%   2.  A box is drawn around the entire block of text with width      %%
+%%       equal to the present \textwidth and height variable to         %%
+%%       accomodate the typed text.                                     %%
+%%                                                                      %%
+%%   3.  There is no check to ensure that the text isn't too wide,      %%
+%%       it merely runs off the right side of the page without any      %%
+%%       errors or warnings.                                            %%
+%%                                                                      %%
+%%   Finally there are twoplaces which allow the macro to be            %%
+%%   customised depending on which pointsize of documentstyle one is    %%
+%%   using.  These places are clearly indicated with comments.          %%
+%%   Comment out the appropriate lines depending on which               %%
+%%   documentstyle you are using.                                       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chardef\other=12
+
+\def\ttverbatim{\begingroup
+                \catcode`\{=\other
+                \catcode`\}=\other
+                \catcode`\$=\other	% Matching $
+                \catcode`\&=\other
+                \catcode`\#=\other
+                \catcode`\%=\other
+                \catcode`\~=\other
+                \catcode`\_=\other
+                \catcode`\^=\other
+                \catcode`\<=\other
+                \obeyspaces
+                \def\par{\leavevmode\endgraf}
+                \obeylines
+                \tt}
+
+{\obeyspaces\gdef {\ }}
+
+\newlength{\ttboxwidth}
+\setlength{\ttboxwidth}{\textwidth}
+\addtolength{\ttboxwidth}{-0.4pt}    % Width of two lines on either side
+\addtolength{\ttboxwidth}{-0.8em}    % hspace inserted after the left line.
+
+\outer\def\begintt{\begin{flushleft}
+                   \begin{tabular}{@{}|@{\hspace{0.8em}}l@{}|@{}}
+                   \hline
+                   \begin{minipage}{\ttboxwidth}
+%		   \begin{normalsize}	% for default documentstyle (10pt)
+		   \begin{small}  	% for documentstyle[11pt, ... ]
+%		   \begin{footnotesize}	% for documentstyle[12pt, ... ]
+                   $$
+                   %	Matching $$
+                   \let\par=\endgraf
+                   \ttverbatim
+                   \parskip=0pt
+                   \rightskip=-5pc
+                   \ttfinish}
+
+{\obeylines\gdef\ttfinish#1^^M#2\endtt{#1\vbox{#2}\endgroup$$
+                   %	Matching $$
+                   \vspace{0.5ex}
+%		   \end{normalsize}	% for default documentstyle (10pt)
+		   \end{small}		% for documentstyle[11pt, ... ]
+%		   \end{footnotesize}	% for documentstyle[12pt, ... ]
+                   \end{minipage}\\ \hline\end{tabular}
+                   \end{flushleft}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                           End of Macro...                            %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

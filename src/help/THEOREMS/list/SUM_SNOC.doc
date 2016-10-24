@@ -1,0 +1,3 @@
+\THEOREM SUM_SNOC list
+|- !x l. SUM(SNOC x l) = (SUM l) + x
+\ENDTHEOREM

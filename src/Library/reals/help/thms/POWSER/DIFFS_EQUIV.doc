@@ -1,0 +1,6 @@
+\THEOREM DIFFS_EQUIV POWSER
+|- !c x.
+    summable(\n. (diffs c n) * (x pow n)) ==>
+    (\n. (& n) * ((c n) * (x pow (n num_sub 1)))) sums
+    (suminf(\n. (diffs c n) * (x pow n)))
+\ENDTHEOREM

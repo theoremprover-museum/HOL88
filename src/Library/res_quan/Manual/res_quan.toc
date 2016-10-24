@@ -1,0 +1,16 @@
+\contentsline {chapter}{\numberline {1}The {\ptt res\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}quan}\ Library}{1}
+\contentsline {section}{\numberline {1.1}Syntax for restricted quantification}{1}
+\contentsline {section}{\numberline {1.2}The theory {\ptt res\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}quan.{}th}}{3}
+\contentsline {section}{\numberline {1.3}ML functions}{4}
+\contentsline {subsection}{\numberline {1.3.1}Conditional rewriting tools}{4}
+\contentsline {subsubsection}{\numberline {1.3.1.1}Conditional theorems}{4}
+\contentsline {subsubsection}{\numberline {1.3.1.2}Conditional rewriting tactic}{5}
+\contentsline {subsubsection}{\numberline {1.3.1.3}Conditional rewriting conversion}{5}
+\contentsline {subsection}{\numberline {1.3.2}Syntax functions}{5}
+\contentsline {subsection}{\numberline {1.3.3}Derived rules}{6}
+\contentsline {subsection}{\numberline {1.3.4}Conversions}{7}
+\contentsline {subsection}{\numberline {1.3.5}Tactics}{8}
+\contentsline {subsection}{\numberline {1.3.6}Constant definitions}{9}
+\contentsline {chapter}{\numberline {2}ML Functions in the {\ptt res\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}quan} Library}{11}
+\contentsline {chapter}{\numberline {3}Pre-proved Theorems}{53}
+\contentsline {chapter}{Index}{54}

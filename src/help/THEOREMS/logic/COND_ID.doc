@@ -1,0 +1,4 @@
+\THEOREM COND_ID \none
+|- !b t. (b => t | t) = t
+\ENDTHEOREM
+

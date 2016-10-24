@@ -1,0 +1,3 @@
+\THEOREM PRE_SUB arithmetic
+|- !m n. PRE(m - n) = (PRE m) - n
+\ENDTHEOREM

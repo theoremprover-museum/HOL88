@@ -1,0 +1,185 @@
+
+		HOLER: The HOL Evaluator
+		------------------------
+		     (Version 2.01-1.0)
+
+------------------------------
+Sreeranga Rajan
+Department of Computer Science
+University of British Columbia
+Vancouver, B.C V6T 1Z2
+Canada
+
+Email: sree@cs.ubc.ca OR 
+       sree@cs.stanford.edu
+-----------------------------
+		
+When one writes HOL specifications, quite often it is desirable to
+execute them and check their behavior for different concrete values
+before a (lengthy) proof is undertaken.
+This ML interpreter fulfills that desire to a certain extent.
+HOL terms are translated into ML programs in the HOL environment and
+could be evaluated in the environment by loading the ML programs.
+
+A dvi copy of the paper on executing HOL specifications is included in
+this directory as paper.dvi.
+
+References: 
+----------
+"Executing HOL Specifications: Towards an Evaluation Semantics
+ for Classical Higher Order Logic", Sreeranga Rajan, 
+1992 International Workshop on Higher Order Logic, Sept. 21-24 1992.
+
+Portability
+-----------
+The very basic constructs of ML have been used to make the
+program as portable as possible.
+
+Setup files needed
+------------------
+This directory contains the files needed for an ML interpreter for
+a subset of HOL with limited quantification. The current limitations
+of the translation are outlined in the paper referenced above.
+After entering a HOL session, you first need to update the search path 
+to contain the path for these HOL Evaluator source files. 
+Then, you need to load the main file: "hol-eval_setup.ml" into your
+HOL session.
+
+Commands available:
+-------------------
+
+1> evalt <theory_name> 
+         <string list of constants to be translated>
+	 <term list of constructors to be translated>
+	 <output file name>
+
+2> evalts <LIST of 
+	      <theory_name>
+	      <string list of constants to be translated>
+	      <term list of constructors to be translated>>
+
+   Output file name is fixed to <theory_name>_hol.ml
+
+3> exec <theory_name> 
+        <string list of constants to be blocked>
+        <term list of constructors to be blocked>
+
+   This will translate HOL definitions, in the theory name that has
+   to be loaded, into the current HOL environment you are in, before
+   using this command. The blocked constants and constructors will not
+   be translated.
+
+4> eval <hol_term> 
+   It translates the given <hol_term> to ML.
+
+5> exit ()
+   This is to exit the interpreter
+
+All commands at the prompt MUST end with ";;"
+
+Key Limitations
+---------------
+* The ML key introduced by "define_type" for a type <Type>
+  must be of the form <Type>_Axiom
+	eg:
+		define_type 
+	        `Type1_Axiom` 
+		`Type1 = ...`;;
+
+* Almost all quantifications are removed while translation. But,
+  the unsafe ones are automatically rejected by the HOL-ML 
+  interpreter when the translated files are loaded into it:
+  so it is the user's burden to make sure that the translation is
+  conducted on safely skolemizable HOL terms for correct results.
+
+* The user is better off by splitting large theories into 
+  smaller ones for efficiency. This has nothing to do with the
+  translation process itself, but the HOL function "definitions thy"
+  takes a long time to retrieve all the definitions in the theory.
+  This is true especially if the theory contains many
+  type definitions introducing a lot of constructors.
+
+* Using ML reserved words in HOL terms would create problems when
+  the translated files are read by the HOL-ML interpreter.
+	eg: fun, or, and, it ...should not be used
+
+* Other smaller limitations are listed in the paper accompanying this
+  software.
+
+Note
+----
+The file "prim.ml" contains primitive definitions needed
+for executing the translated programs. In case, the translated
+programs are run by directly loading the translated file into
+HOL (i.e without going through the commands listed above),
+the file "prim.ml" has to be loaded prior to loading the
+translated programs.
+
+Successful Execution Examples
+-------------------------------
+* Compilers, including Paul Curzon's Visa
+* Microprocessor specifications
+* Miscellaneous HOL specifications such as boolean arithmetic
+
+Example Session:
+----------------
+
+logic[1] hol
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+
+          Version 2.0, built on 15/7/92
+
+#set_search_path (
+    append (search_path())
+           [`/isd/local/generic/src/hol-exec/ML_interpreter1.1/`]
+                );;
+
+###() : void
+
+##loadf `hol-eval_setup`;;
+......Loading library `string` ...
+Updating search path
+.Updating help search path
+.Theory string loaded
+......
+Library `string` loaded.
+...........................() : void
+
+#eval "3+2";;
+` FIX_PLUS  ( 3 ) ( 2 );;` : string
+
+#new_theory `foo`;;
+() : void
+
+#let fact = new_prim_rec_definition (
+           `fact`,
+           "(fact 0 = 1) /\
+            (fact (SUC n) = (SUC n) * (fact n))");;
+
+###fact = |- (fact 0 = 1) /\ (!n. fact(SUC n) = (SUC n) * (fact n))
+
+##exec `foo` [] [];;
+Translating HOL definitions in foo and its parents ...
+
+Loading derived ML definitions in foo_hol.ml ...
+.................................
+Type a function name to evaluate or
+Type "eval <hol_term>;;" to evaluate a new <hol_term> or
+Type "exit();;" to exit
+`#` : string
+
+hol-exec> fact 10;;
+3628800 : int
+
+hol-exec> exit();;
+`hol-exec> ` : string
+
+#close_theory();;
+() : void
+
+#quit();;
+Bye.
+logic[2] exit

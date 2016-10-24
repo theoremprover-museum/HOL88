@@ -1,0 +1,21 @@
+\begin{theindex}
+
+ 0\item a-delim0-1
+  01\subitem ab-delim1-2
+   1\subitem ac-delim1-3
+   1\subitem ad-delim1-4
+    12\subsubitem ae-delim2-5
+     2\subsubitem af-delim2-6
+     2\subsubitem ag-delim2-7
+
+  \indexspace
+
+ 0\item b
+  x1\subitem bb-delim1-1
+   1\subitem bc-delim1-2
+   1\subitem bd
+    x2\subsubitem be-delim2-3
+     2\subsubitem bf-delim2-4
+     2\subsubitem bg-delim2-5
+
+\end{theindex}

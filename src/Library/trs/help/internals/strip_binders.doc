@@ -1,0 +1,10 @@
+\DOC strip_binders
+
+\TYPE {strip_binders : (term -> term)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

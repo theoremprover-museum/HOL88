@@ -1,0 +1,4 @@
+\THEOREM topology_tybij TOPOLOGY
+|- (!a. topology(open a) = a) /\
+   (!r. istopology r = (open(topology r) = r))
+\ENDTHEOREM

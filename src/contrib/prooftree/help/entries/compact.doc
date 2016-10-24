@@ -1,0 +1,78 @@
+\DOC compact
+
+\TYPE {compact : (string -> void)}
+
+\SYNOPSIS
+Compacts the sequence of tactics in a proof tree, thus reducing the
+size of a proof in development.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. At intermediate stages a proof tree may be very
+long and difficult to observe (specially when the terms present at
+nodes are large) it is useful to concatenate the different tactics
+applied into a single (albeit more complex) tactic using {THEN}s and
+{THENL}s. That is what is accomplished by the use of {compact}. The
+remaining subgoals remain the same, however the body of the proof is
+restructured, with many of the intermediate nodes being eliminated.
+The argument should be the name of the proof to be compacted.
+
+\KEYWORDS
+subgoal.
+
+\LIBRARY prooftree
+
+\FAILURE
+The function {compact} fails when a {prooftree} of the given name does
+not exist.
+
+\EXAMPLE
+
+{
+#current_proof () ;;
+"!enable in out.
+    store enable in out ==>
+       (!t1 t2. 0 <= t1 /\
+                t1 < t2 /\
+                (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+                   (out t2 = out t1))"
+   ((REWRITE_TAC [store])  THEN ((REPEAT GEN_TAC)  THEN STRIP_TAC ))
+   "!t1 t2. 0 <= t1 /\
+            t1 < t2 /\
+            (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+               (out t2 = out t1)"
+         [..]
+      GEN_TAC
+      "!t2. 0 <= t1 /\
+            t1 < t2 /\
+            (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+               (out t2 = out t1)"
+            [..]
+         (INDUCT_TAC THEN (REPEAT STRIP_TAC))
+         "out 0 = out t1"
+               [.....]
+         "out (SUC t2) = out t1"
+               [......]
+() : void
+
+#compact contextname ;;
+"!enable in out.
+    store enable in out ==>
+       (!t1 t2. 0 <= t1 /\
+                t1 < t2 /\
+                (!t3. t1 <= t3 /\ t3 < t2 ==> ~enable t3) ==>
+                   (out t2 = out t1))"
+   ((REWRITE_TAC [store])  THEN ((REPEAT GEN_TAC)  THEN STRIP_TAC ) THEN
+    (GEN_TAC  THEN (INDUCT_TAC THEN (REPEAT STRIP_TAC)) ))
+   "out 0 = out t1"
+         [.....]
+   "out (SUC t2) = out t1"
+         [......]
+() : void
+}
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM SUC_LESS_EQ_PRE pre
+|- !m n. 0 < n ==> (SUC m) <= n ==> m <= (PRE n)
+\ENDTHEOREM

@@ -1,0 +1,4 @@
+\THEOREM ABS_SIMP \none
+|- !t1 t2. (\x. t1)t2 = t1
+\ENDTHEOREM
+

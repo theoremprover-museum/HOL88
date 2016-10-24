@@ -1,0 +1,36 @@
+\DOC dest_neg_imp
+
+\TYPE {dest_neg_imp : (term -> (term # term))}
+
+\SYNOPSIS
+Breaks apart an implication (or negation) into antecedent and consequent.
+
+\DESCRIBE
+{dest_neg_imp} is a term destructor for implications, which treats negations as
+implications with consequent {F}. Thus
+{
+   dest_neg_imp "t1 ==> t2"
+}
+\noindent returns
+{
+   ("t1","t2")
+}
+\noindent and also
+{
+   dest_neg_imp "~t"
+}
+\noindent returns
+{
+   ("t","F")
+}
+\FAILURE
+Fails with {dest_neg_imp} if term is neither an implication nor a negation.
+
+\COMMENTS
+Destructs negations for compatibility with PPLAMBDA code.
+This function used to be called {dest_imp}
+
+\SEEALSO
+is_neg_imp, dest_imp, strip_imp.
+
+\ENDDOC

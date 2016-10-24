@@ -1,0 +1,3 @@
+\THEOREM SUM_FOLDL list
+|- !l. SUM l = FOLDL $+ 0 l
+\ENDTHEOREM

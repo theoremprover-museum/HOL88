@@ -1,0 +1,3 @@
+\THEOREM HRAT_LT_RADD HREAL
+|- !x y z. (x hrat_add z) hrat_lt (y hrat_add z) = x hrat_lt y
+\ENDTHEOREM

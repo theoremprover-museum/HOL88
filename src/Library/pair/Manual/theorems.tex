@@ -1,0 +1,21 @@
+\chapter{Pre-proved Theorems}
+\input{theorems-intro}
+\section{Theorems}
+\THEOREM CURRY\_ONE\_ONE\_THM -
+|- (CURRY f = CURRY g) = (f = g)
+\ENDTHEOREM
+\THEOREM CURRY\_UNCURRY\_THM -
+|- !f. CURRY(UNCURRY f) = f
+\ENDTHEOREM
+\THEOREM PEXISTS\_THM -
+|- !f. (?x y. f x y) = (?(x,y). f x y)
+\ENDTHEOREM
+\THEOREM PFORALL\_THM -
+|- !f. (!x y. f x y) = (!(x,y). f x y)
+\ENDTHEOREM
+\THEOREM UNCURRY\_CURRY\_THM -
+|- !f. UNCURRY(CURRY f) = f
+\ENDTHEOREM
+\THEOREM UNCURRY\_ONE\_ONE\_THM -
+|- (UNCURRY f = UNCURRY g) = (f = g)
+\ENDTHEOREM

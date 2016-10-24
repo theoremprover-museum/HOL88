@@ -1,0 +1,3 @@
+\THEOREM INTER_EMPTY finite_sets
+|- (!s. {{}} INTER s = {{}}) /\ (!s. s INTER {{}} = {{}})
+\ENDTHEOREM

@@ -1,0 +1,70 @@
+\DOC new_infix_list_rec_definition
+
+\TYPE {new_infix_list_rec_definition : ((string # term) -> thm)}
+
+\SYNOPSIS
+Defines an infix primitive recursive function over the type of lists.
+
+\DESCRIBE
+The function {new_infix_list_rec_definition} provides the facility for defining
+primitive recursive functions with infix status on the type of lists. It
+takes a pair argument, consisting of the name under which the resulting
+definition will be saved in the current theory segment, and a term giving the
+desired definition.  The value returned by {new_infix_list_rec_definition} is
+a theorem which states the definition requested by the user.  This theorem is
+derived by formal proof from an instance of the theorem {list_Axiom}:
+{
+   |- !x f. ?! fn. (fn[] = x) /\ (!h t. fn(CONS h t) = f(fn t)h t)
+}
+\noindent Evaluating
+{
+   new_infix_list_rec_definition
+    (`fun_DEF`,
+     "(fun [] x = f_1[x]) /\
+      (fun (CONS h t) x = f_2[fun t x', h, t, x])");;
+}
+\noindent where all the free variables in the term {x'} are
+contained in {{{h, t, x}}}, automatically proves the theorem:
+{
+   |-  ?fun. !x. fun x = f_1[x] /\
+             !x. fun (CONS h t) x = f_2[fun t x', h, t, x]
+}
+\noindent and then declares a new constant {fun} with this property as its
+specification. This constant specification is returned as a theorem by
+{new_infix_list_rec_definition} and is saved with name {fun_DEF} in the
+current theory segment.
+
+The ML function {new_infix_list_rec_definition} is, in fact, slightly
+more general than is indicated above.  In particular, a curried
+primitive recursive function can be defined by primitive recursion on
+either one of its arguments using this ML function.  The ML function
+{new_infix_list_rec_definition} also allows the user to partially
+specify the value of a function defined (possibly recursively) on
+lists by giving its value for only one of {[]} or {CONS h t}.
+
+\FAILURE
+Failure occurs if: HOL cannot prove there is a function satisfying the
+specification (i.e. if the term supplied to {new_infix_list_rec_definition}
+is not a well-formed primitive recursive definition), or if
+any other condition for making a constant specification is violated
+(see the failure conditions for {new_specification}).
+
+\EXAMPLE
+An infix append function on polymorphic lists can be defined by
+{
+   new_infix_list_rec_definition
+   (`app_i`, "($app_i [] l = l) /\
+              ($app_i (CONS (h:*) t) l = CONS h ($app_i t l))");;
+}
+\noindent The {$}'s are there (as documentation) to indicate that the constant
+{app_i} is being declared to be an infix.  Evaluating this ML expression will
+create the following constant specification in the current theory segment:
+{
+    |- (!l. [] app_i l = l) /\ (!h t l. (CONS h t) app_i l = CONS h(t app_i l))
+}
+\SEEALSO
+new_definition, new_infix_definition, new_infix_prim_rec_definition,
+new_list_rec_definition, new_prim_rec_definition, new_recursive_definition,
+new_type_definition, new_specification, list_Axiom.
+
+\ENDDOC

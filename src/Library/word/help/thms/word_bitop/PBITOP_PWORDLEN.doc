@@ -1,0 +1,3 @@
+\THEOREM PBITOP_PWORDLEN word_bitop
+|- !op :: PBITOP. !n. !w :: PWORDLEN n. PWORDLEN n(op w)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM metric_TY_DEF TOPOLOGY
+|- ?rep. TYPE_DEFINITION ismet rep
+\ENDTHEOREM

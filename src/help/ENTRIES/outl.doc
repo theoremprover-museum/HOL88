@@ -1,0 +1,31 @@
+\DOC outl
+
+\TYPE {outl : ((* + **) -> *)}
+
+\SYNOPSIS
+Projects out of left summand.
+
+\DESCRIBE
+The function {outl} is associated with the disjoint union
+construction of types. It projects out of the left summand of the union.
+
+\FAILURE
+Fails if the operand is a right summand.
+
+\EXAMPLE
+{
+#let x = inl 1
+#and y = inr 2;;
+x = inl 1 : (int + *)
+y = inr 2 : (* + int)
+
+#outl x;;
+1 : int
+
+#outl y;;
+evaluation failed     outl
+}
+\SEEALSO
+outr inl inr isl.
+
+\ENDDOC

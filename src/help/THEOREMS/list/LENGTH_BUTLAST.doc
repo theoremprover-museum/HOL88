@@ -1,0 +1,3 @@
+\THEOREM LENGTH_BUTLAST list
+|- !l. ~(l = []) ==> (LENGTH(BUTLAST l) = PRE(LENGTH l))
+\ENDTHEOREM

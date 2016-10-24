@@ -1,0 +1,29 @@
+\DOC full_search
+
+\TYPE {full_search : (thmpattern -> source -> foundthm list)}
+
+\SYNOPSIS
+Function to perform a complete search.
+
+\LIBRARY trs
+
+\DESCRIBE
+A search can be performed using the function {full_search}. It takes a pattern
+and a source as arguments, and performs every step of the search without
+pausing. If the source was a list of theorems there is only one step.
+Otherwise, the steps correspond to searches of individual theory segments.
+The result of {full_search} is a list of theorems found during the search.
+
+\FAILURE
+Fails if any theory segment in the source is not an ancestor of the current
+theory segment. Also fails if a side-condition in the pattern attempts to test
+the binding of a variable that does not occur in the main part of the pattern.
+The function may fail for other similar reasons. Since the user may supply
+his/her own side-condition functions, an exhaustive list of possible failures
+cannot be given.
+
+\SEEALSO
+find_theorems, FT, run_search, continue_search, CS, show_step,
+search_until_find, search_n_theories, search_n_until_find.
+
+\ENDDOC

@@ -1,0 +1,30 @@
+\DOC set_turnstile
+
+\TYPE {set_turnstile : (string -> string)}
+
+\SYNOPSIS
+Sets the `turnstile' symbol used in printing theorems.
+
+\DESCRIBE
+If {s} is a string, then {set_turnstile s} sets to {s} the `turnstile' symbol
+(by default `{|- }') which is used to represent entailment, i.e. to separate
+assumptions from conclusion when printing a theorem. The call returns the
+previous string used for the turnstile.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The following shows the turnstile being set to `{|= }'. A space is necessary
+at the end to separate the conclusion neatly, but not at the beginning.
+{
+   #set_turnstile `|= `;;
+   `|- ` : string
+
+   #ASSUME "F";;
+   . |= F
+}
+\SEEALSO
+set_lambda, set_prompt.
+
+\ENDDOC

@@ -1,0 +1,21 @@
+\DOC psh_win_sig
+
+\TYPE {psh_win_sig : void signal}
+
+\SYNOPSIS
+Raised after a new window is pushed onto the current stack.
+
+\LIBRARY window
+
+\DESCRIBE
+When the window library is first loaded this signal has associated
+with it the handler {\\(). PRINT\_STACK ()} which ensures that
+the top window is printed every time a new one is pushed onto the stack.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+beg_stack_sig, end_stack_sig, set_stack_sig, pop_win_sig, cng_win_sig.
+
+\ENDDOC

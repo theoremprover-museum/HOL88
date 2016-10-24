@@ -1,0 +1,367 @@
+\DOC GROUP_TAC
+{
+GROUP_TAC : thm list -> tactic
+}
+
+\SYNOPSIS
+A tactic for solving or reducing goals of group membership.
+
+\DESCRIBE
+The tactic
+{
+   GROUP_TAC thm_list
+}
+\noindent repeatedly reduces the goal using matching and reverse modus
+ponens with the assumptions, the theorems from {elt_gp.th} which express
+closure facts, and the theorem in {thm_list}.  It returns those subgoal
+which cannot be further reduced with the given facts.
+
+\EXAMPLE
+{
+   GROUP_TAC [INT_SBGP_neg;INT_SBGP_TIMES_CLOSED]
+}
+\noindent applied to the goal
+{
+   (["GROUP(H,$plus)"; "H N"; "H MIN"], "H(N plus (neg(MAX times MIN)))")
+}
+\noindent where
+{
+   INT_SBGP_neg =
+     |- !H. SUBGROUP((\N. T),$plus)H ==> (!N. H N ==> H(neg N))
+
+   INT_SBGP_TIMES_CLOSED =
+     |- !H. SUBGROUP((\N. T),$plus)H ==> (!m p. H p ==> H(m times p))
+}
+\noindent solves the goal, whereas
+{
+   GROUP_ELT_TAC
+}
+\noindent returns the subgoal
+{
+   (["GROUP(H,$plus)"; "H N"; "H MIN"], "H(neg(MAX times MIN))")
+}
+
+\USES
+Reducing a goal of showing that a compound element is in a group using
+standard group theory closure facts, and any others added by the user.
+
+
+\SEEALSO
+{
+REDUCE_TAC, GROUP_ELT_TAC
+}
+
+\DOC GROUP_ELT_TAC
+{
+GROUP_ELT_TAC : tactic
+}
+
+\SYNOPSIS
+A tactic to solve or reduce routine goals of group membership.
+
+\DESCRIBE
+The tactic
+{
+   GROUP_ELT_TAC
+}
+\noindent has the same effect as
+{
+   GROUP_TAC []
+}
+
+\EXAMPLE
+{
+   GROUP_ELT_TAC
+}
+\noindent applied to the goal
+{
+   (["GROUP(H,$plus)"; "H N"; "H MIN"],
+    "H(N plus (INV(H,$plus)(MAX times MIN)))")
+}
+\noindent returns the goal
+{
+   (["GROUP(H,$plus)"; "H N"; "H MIN"], "H(MAX times MIN)")
+}
+
+\USES
+Solving or reducing routine goals of group membership.
+
+\SEEALSO
+{
+REDUCE_TAC, GROUP_TAC
+}
+
+\ENDDOC
+
+\DOC GROUP_RIGHT_ASSOC_TAC
+{
+GROUP_RIGHT_ASSOC_TAC : term -> tactic
+}
+
+\SYNOPSIS
+Reassociate a subterm from left to right.
+
+\DESCRIBE
+The tactic
+{
+   GROUP_RIGHT_ASSOC_TAC tm
+}
+\noindent rewrites a goal {P(tm)} into {P(tm')} where {tm} is of the form
+{(prod (prod a b) c)} for some product {prod} and terms {a}, {b} and {c},
+and {tm'} is {(prod a (prod b c))} provided the goal has an assumption
+of the form {GROUP(G,prod)}.  {GROUP_RIGHT_ASSOC_TAC} uses {GROUP_ELT_TAC}
+to handle the group membership requirements which arise.
+
+\FAILURE
+The tactic {GROUP_RIGHT_ASSOC_TAC} fails if it is not given a term of
+the form {(prod (prod a b) c)}, or if it does not find an assumption
+of the form {GROUP(G,prod)}.
+
+\EXAMPLE
+{
+   GROUP_RIGHT_ASSOC_TAC "comb (comb (comb u v) s) t)"
+}
+\noindent applied to the goal
+{
+   (["GROUP(M,comb)";"M s"; "M t"; "M u"; "M v"],
+    "comb(comb(comb(comb u v)s)t)(INV(M,comb)(comb s t)) = comb u v")
+}
+\noindent returns the subgoal
+{
+   (["M(comb u v)"; "GROUP(M,comb)"; "M s"; "M t"; "M u"; "M v"],
+    "comb(comb(comb u v)(comb s t))(INV(M,comb)(comb s t)) = comb u v")
+}
+
+\USES
+Careful rewriting of computational expressions.
+
+\SEEALSO
+{
+GROUP_LEFT_ASSOC_TAC, INT_RIGHT_ASSOC_TAC, INT_LEFT_ASSOC_TAC
+}
+
+\ENDDOC
+
+\DOC GROUP_LEFT_ASSOC_TAC
+{
+GROUP_LEFT_ASSOC_TAC : term -> tactic
+}
+
+\SYNOPSIS
+Reassociate a subterm from right to left.
+
+\DESCRIBE
+The tactic
+{
+  GROUP_LEFT_ASSOC_TAC tm
+}
+\noindent rewrites a goal {P(tm)} into {P(tm')} where {tm} is of the form
+{(prod a (prod b c))} for some product {prod} and terms {a}, {b} and {c},
+and {tm'} is {(prod (prod a b) c)} provided the goal has an assumption
+of the form {GROUP(G,prod)}.  {GROUP_LEFT_ASSOC_TAC} uses {GROUP_ELT_TAC}
+to handle the group membership requirements which arise.
+
+\FAILURE
+The tactic {GROUP_LEFT_ASSOC_TAC} fails if it is not given a term of
+the form {(prod a (prod b c))}, or if it does not find an assumption
+of the form {GROUP(G,prod)}.
+
+\EXAMPLE
+{
+   GROUP_LEFT_ASSOC_TAC "comb u (comb v (comb s t))"
+}
+\noindent applied to the goal
+{
+   (["GROUP(M,comb)"; "M s"; "M t"; "M u"; "M v"],
+    "comb(INV(M,comb)(comb u v))(comb u(comb v(comb s t))) = comb s t")
+}
+\noindent returns the subgoal
+{
+   (["M(comb s t)"; "GROUP(M,comb)"; "M s"; "M t"; "M u"; "M v"],
+    "comb(INV(M,comb)(comb u v))(comb(comb u v)(comb s t)) = comb s t")
+}
+
+\USES
+Careful rewriting of computational expressions.
+
+\SEEALSO
+{
+GROUP_RIGHT_ASSOC_TAC, INT_RIGHT_ASSOC_TAC, INT_LEFT_ASSOC_TAC
+}
+
+\ENDDOC
+
+\DOC return_GROUP_thm
+{
+return_GROUP_thm : string -> thm -> thm list -> thm
+return_GROUP_thm : string -> thm -> proof
+}
+
+\SYNOPSIS
+A function for instantiating and simplifying a theorem from {elt_gp.th}.
+
+\DESCRIBE
+The function
+{
+   return_GROUP_thm thm_name is_group_thm rewrite_list
+}
+\noindent returns the result of instantiating the theorem named {thm_name}
+in the theory {elt_gp.th} with the group and product given in the theorem
+{is_group_thm}, removing the {GROUP(G,prod)} hypothesis from it using this
+theorem, and rewriting it with {rewrite_list}.
+
+\FAILURE
+The function {return_GROUP_thm} fails if it is not given a theorem
+of the form {|- GROUP(G,prod)}.
+
+\EXAMPLE
+{
+  return_GROUP_thm
+    `INV_LEMMA`
+    (theorem `integer` `integer_as_GROUP`)
+    [(SYM (definition `integer` `neg_DEF`)); (theorem `integer` `ID_EQ_0`)];;
+}
+\noindent returns
+{
+  |- !x. ((neg x) plus x = INT 0) /\ (x plus (neg x) = INT 0)
+}
+\noindent which is what the theorem {INV_LEMMA} from {elt_gp.th} says
+in the case of the integers.
+
+\USES
+Accessing a specific theorem from {elt_gp.th} reworded in a theory which is an
+instance of a group.
+
+\SEEALSO
+{
+include_GROUP_thm, return_GROUP_theory, include_GROUP_theory
+}
+
+\ENDDOC
+
+\DOC include_GROUP_thm
+{
+include_GROUP_thm : string -> string -> thm -> thm list -> thm
+include_GROUP_thm : string -> string -> thm -> proof
+}
+
+\SYNOPSIS
+A function for instantiating and simplifying, and then storing a theorem
+from {elt_gp.th}.
+
+\DESCRIBE
+The function
+{
+   include_GROUP_thm elt_gp_name new_thm_name is_group_thm rewrite_list
+}
+\noindent has the effect of
+{
+   save_thm (new_thm_name,
+             (return_GROUP_thm elt_gp_name is_group_thm rewrite_list));;
+}
+
+\FAILURE
+The function {include_GROUP_thm} fails either if it is not given a
+theorem of the form {|- GROUP(G,prod)}, causing {return_GROUP_thm} to
+fail, or if it is given a string that is the same as the name of a
+previously saved theorem, causing {save_thm} to fail.
+
+\EXAMPLE
+{
+   include_GROUP_thm
+     `INV_LEMMA`
+     `PLUS_neg_LEMMA`
+     (theorem `integer` `integer_as_GROUP`)
+     [(SYM (definition `integer` `neg_DEF`)); (theorem `integer` `ID_EQ_0`)];;
+}
+\noindent saves the theorem
+{
+   |- !x. ((neg x) plus x = INT 0) /\ (x plus (neg x) = INT 0)
+}
+\noindent under the name {PLUS_neg_LEMMA} in the current theory.
+
+\USES
+Adding to the current theory a specific theorem for group theory in a
+theory which is an instance of a group.
+
+\SEEALSO
+{
+return_GROUP_thm, return_GROUP_theory, include_GROUP_theory
+}
+
+\ENDDOC
+
+\DOC return_GROUP_theory
+{
+return_GROUP_theory : string -> thm -> thm list -> (string # thm)list
+}
+
+\SYNOPSIS
+A function for instantiating and simplifying all the theorems from
+{elt_gp.th}.
+
+
+\DESCRIBE
+The function
+{
+   return_GROUP_theory prefix is_group_thm rewrite_list
+}
+\noindent returns the list resulting from of instantiating the each
+theorem in the theory {elt_gp.th} with the group and product given in
+the theorem {is_group_thm}, removing the {GROUP(G,prod)} hypothesis
+from it using this theorem, rewriting it with {rewrite_list},
+and pairing it with its original name prefixed by {prefix}.
+
+\FAILURE
+The function {return_GROUP_theory} fails if it is not given a theorem
+of the form {|- GROUP(G,prod)}.
+
+\USES
+Accessing all the theorems from {elt_gp.th} reworded in a theory which is an
+instance of a group, in order to further modify some of the theorems before
+storing the collection in the current theory.
+
+\SEEALSO
+{
+return_GROUP_thm, include_GROUP_thm, include_GROUP_theory
+}
+
+\ENDDOC
+
+\DOC include_GROUP_theory
+{
+include_GROUP_theory : string -> thm -> thm list -> thm list
+}
+
+\SYNOPSIS
+A function for instantiating and simplifying, and then storing all
+the theorems from {elt_gp.th}.
+
+\DESCRIBE
+The function
+{
+   include_GROUP_theory prefix is_group_thm rewrite_list
+}
+\noindent has the effect of mapping {save_thm} over the result of
+{
+   return_GROUP_theory prefix is_group_thm rewrite_list
+}
+\noindent after removing all trivial theorems ({|- T}) from the list.
+
+\FAILURE
+The function {include_GROUP_theory} fails either if it is not given a
+theorem of the form {|- GROUP(G,prod)}, causing {return_GROUP_theory}
+to fail, or if one of the names in the list returned by
+{return_GROUP_theory} is the same as the name of a previously saved
+theorem, causing {save_thm} to fail.
+
+\USES
+Adding to the current theory all the theorems from {elt_gp.th}, in a form
+that is compatible with the current theory.
+
+\SEEALSO
+{
+return_GROUP_thm, include_GROUP_thm, return_GROUP_theory
+}
+
+\ENDDOC

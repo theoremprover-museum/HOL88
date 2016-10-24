@@ -1,0 +1,154 @@
+application "top"
+   size 16 by 80 characters
+   font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+   icon "top.icon"
+   label "<< Top >>"
+   at 156 0
+   close "s1000\n"
+   open "s5\n"
+gadgets
+   top
+   align middle
+   font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+   button
+      normal	"Close"		close;
+      shift	"Exit"		send "q";
+   end_button
+   slider interval
+      label "Display Interval:"
+      range off
+      value on
+      initial 5
+      minimum 1
+      maximum 240
+      width 227
+      action send format("s%d\n", interval);
+   end_slider
+   button
+      normal	"Kill a Process"	display kill_process_dialog;
+   end_button
+   button
+      normal	" Change Process Priority "	display change_process_dialog;
+   end_button
+   button
+      normal	"Show Errors"	send "e";
+   end_button
+end_gadgets
+dialog kill_process_dialog
+   size 24 by 50 characters
+   gadgets
+      align middle
+      font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+      label
+         "Enter the pid of the process to be killed"
+      end_label
+      button
+         normal	"OK"	{ if (verify(kill_pid, "0123456789")) {
+         		     send format("k%d\n", kill_pid);
+         		     remove kill_process_dialog;
+         		     }
+         		  else
+         		     popup invalid_pid;
+         		}
+      end_button
+      text kill_pid
+         label "Pid:"
+         font "/usr/lib/fonts/fixedwidthfonts/screen.r.14"
+         trigger "\n\r"
+         display 20
+         action { if (verify(kill_pid, "0123456789")) {
+         	     send format("k%d\n", kill_pid);
+         	     remove kill_process_dialog;
+         	     }
+         	  else
+         	     popup invalid_pid;
+         	}
+      end_text
+      button
+         normal "Cancel" remove kill_process_dialog;
+      end_button
+   end_gadgets
+end_dialog
+dialog change_process_dialog
+   size 24 by 60 characters
+   gadgets
+      align middle
+      font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+      label
+         "Enter the pid of the process, and its new priority"
+      end_label
+      button
+         normal	"OK"	{ if (verify(change_pid, "0123456789"))
+         		     if (verify(priority, "-0123456789") && priority >= -20 && priority <= 20) {
+         		        send format("r%d %d\n", priority, change_pid);
+         		        remove change_process_dialog;
+         		        }
+         		     else
+         		        popup invalid_priority;
+         		  else
+         		     popup invalid_pid;
+         		}
+      end_button
+      text change_pid
+         label "Pid:"
+         font "/usr/lib/fonts/fixedwidthfonts/screen.r.14"
+         trigger "\n\r"
+         display 10
+         action { if (verify(change_pid, "0123456789"))
+         	     if (verify(priority, "-0123456789") && priority >= -20 && priority <= 20) {
+         	        send format("r%d %d\n", priority, change_pid);
+         	        remove change_process_dialog;
+         	        }
+         	     else
+         	        popup invalid_priority;
+         	  else
+         	     popup invalid_pid;
+         	}
+      end_text
+      text priority
+         label "Priority:"
+         font "/usr/lib/fonts/fixedwidthfonts/screen.r.14"
+         trigger "\n\r"
+         display 10
+         action { if (verify(change_pid, "0123456789"))
+         	     if (verify(priority, "-0123456789") && priority >= -20 && priority <= 20) {
+         	        send format("r%d %d\n", priority, change_pid);
+         	        remove change_process_dialog;
+         	        }
+         	     else
+         	        popup invalid_priority;
+         	  else
+         	     popup invalid_pid;
+         	}
+      end_text
+      button
+         normal "Cancel" remove change_process_dialog;
+      end_button
+   end_gadgets
+end_dialog
+dialog invalid_pid
+   gadgets
+      font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+      align middle
+      ragged
+      label
+         "The specified pid is not valid   "
+      end_label
+      button
+         normal "  OK  " remove invalid_pid;
+      end_button
+   end_gadgets
+end_dialog
+dialog invalid_priority
+   gadgets
+      font "/usr/lib/fonts/fixedwidthfonts/screen.b.14"
+      align middle
+      ragged
+      label
+         "The specified priority is not valid   "
+      end_label
+      button
+         normal "  OK  " remove invalid_priority;
+      end_button
+   end_gadgets
+end_dialog

@@ -1,0 +1,7 @@
+\THEOREM DIFF_SUM LIM
+|- !f f' m n x.
+    (!r.
+      m num_le r /\ r num_lt (m num_add n) ==>
+      ((\x'. f r x') diffl (f' r x))x) ==>
+    ((\x'. Sum(m,n)(\n'. f n' x')) diffl (Sum(m,n)(\r. f' r x)))x
+\ENDTHEOREM

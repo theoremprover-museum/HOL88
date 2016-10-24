@@ -1,0 +1,22 @@
+\DOC tty_write
+
+\TYPE {tty_write : (string -> void)}
+
+\SYNOPSIS
+Writes a string to the standard output.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+The call {tty_write s} will write the string {s} to the standard output, which
+in an interactive HOL session will normally be the screen.
+
+\FAILURE
+Will only fail under unusual system-dependent circumstances, for example if the
+standard output cannot be written.
+
+\SEEALSO
+append_openw, close, openi, openw, read, tty_read, write.
+
+\ENDDOC

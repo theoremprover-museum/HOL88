@@ -1,0 +1,347 @@
+\setlength{\unitlength}{1mm}
+\mbox{}
+\vskip .6in
+\begin{center}\huge\bf
+A Simple Microprocessor System
+\end{center}
+\vskip .4in
+
+\section{Introduction}
+
+This case study describes how the \HOL\ system has been
+used to verify the design of a very simple microprocessor called
+\Tamarack.
+This microprocessor has just eight
+programming level instructions and a single addressing mode.
+The only kind of exception is
+a single level, non-vectored hardware interrupt.
+The microprocessor can be interfaced to external memory to
+operate in one of three possible modes:
+fully synchronous,
+fully asynchronous,
+and extended cycle mode.
+All I/0 is memory-mapped.
+Figure~\ref{fig-func}
+shows a functional diagram for the externally available
+signals of \Tamarack\
+(excluding clock signals, reset signal and voltage sources).
+These signals would be pins or groups of pins
+in a microchip implementation of this design.
+
+\begin{figure}
+\begin{center}
+\input{fig-func}
+
+\caption{Functional View of the TAMARACK-3 Microprocessor.}
+\label{fig-func}
+\end{center}
+\end{figure}
+
+The original version of this example was described by Gordon
+\cite{Gordon81,Gordon:tech42} for a predecessor of the \HOL\ system called
+\LCF\_LSM\ \cite{Gordon:tech41}.
+This example was re-done in \HOL,
+implemented as a CMOS microchip
+(as an exercise in verification-driven design),
+and given the name \mbox{\footnotesize TAMARACK-1}
+\cite{Joyce:tech100,Joyce:calgary86,Joyce:integration}.
+The design was then streamlined in \mbox{\footnotesize TAMARACK-2}
+by eliminating some unessential control features
+as a first step in the development of this case study.
+The version described here,
+\Tamarack,
+is distinguished from earlier versions by the addition
+of a hardware interrupt mechanism and the ability to interact
+asynchronously with external devices using handshaking signals.
+Gordon's original version of this example has also been used to illustrate
+several other approaches to simulating and verifying
+hardware.  This includes work by
+Barrow \cite{Barrow}, Camilleri \cite{Camilleri:thesis,Camilleri:pisa},
+Curzon \cite{Curzon:thesis}, Davie \cite{Davie:thesis},
+Richards \cite{Richards:tech84},
+Shankar et al. \cite{SRI}, Van Tassel \cite{VanTassel:thesis}, and
+Weise \cite{Weise:thesis}.
+
+Because
+\Tamarack\ was designed as a verification example,
+it is not seriously intended for practical applications.
+\footnote{
+But with a few more ALU functions,
+more kinds of conditional branches, and
+an alternative to absolute addressing for instruction operands,
+it is possible to imagine the use
+of a \mbox{\scriptsize TAMARACK}-like microprocessor in a very simple
+real-time control application
+(see suggested exercise in Section~\ref{sec-exer})}
+We have deliberately avoided
+some kinds of complexity found in `real designs' such
+as multiple addressing modes
+which do not necessarily contribute
+interesting verification problems aside from the
+very important problem of managing the sheer size of such proofs.
+Multiple addressing modes are not provided because the problem of
+establishing correctness results for a particular instruction
+in different addressing modes is largely a matter of repeating
+the same proof strategy with slight variations for each case.
+
+The relatively simple design of \Tamarack\
+is obviously an advantage when presenting this case study
+as an introduction to verifying microprocessor systems.
+But not every aspect of \Tamarack\ is completely trivial.
+By avoiding as much uninteresting complexity as possible,
+we have been left with a great deal of flexibility
+to consider several problems at the forefront of
+research into the use of formal methods
+to verify microprocessor systems.
+Some of the research problems considered in this work are:
+
+\begin{itemize}
+\item
+Strategies
+and techniques for structuring a formal verification into several layers.
+\item
+Trade-offs between using functions and relations for various parts
+of the formal specification.
+\item
+Reasoning about
+intrinsically complex aspects of system timing such as
+the interaction of a microprocessor with external devices.
+\end{itemize}
+
+Most of the
+basic proof techniques described in this case study
+are standard in \HOL\ circles.
+Readers curious about how these basic techniques scale upwards
+to the complexity of a real design are referred to
+work by Cohn \cite{Cohn:calgary86,Cohn:banff87,Cohn:jar}
+on using the \HOL\ system to verify the commercially-available
+\Viper\ microprocessor \cite{Cullyer:lncs331}.
+In addition to these basic techniques,
+some technical points of interest in this case study are:
+
+\begin{itemize}
+\item
+The use of uninterpreted data types (represented as polymorphic variables)
+in place of special-purpose data types for
+reasoning about hardware.
+\item
+The `parameterization' of the formal
+theory\footnote{
+The term `theory' has a technical meaning in the \HOL\ system,
+but we use this term more generally throughout this case study to
+mean the formal specification of \mbox{\scriptsize TAMARACK-3} and
+its logical consequences.}
+by a representation variable which can be used
+to relate this theory to other levels of proof.
+\item
+Embedding another calculi, namely, a form of temporal logic,
+in the framework of higher-order logic.
+\end{itemize}
+
+The work described this case study owes much to
+previous work by Hunt on the FM8501 microprocessor
+\cite{Hunt:thesis,Bevier87,Bevier89} and by Cohn on the
+\Viper\ microprocessor
+\cite{Cohn:calgary86,Cohn:banff87,Cohn:jar}.
+These two examples are widely seen as the current
+state-of-the-art in microprocessor verification.
+Hunt was the first (as far as we know) to consider
+the problem of reasoning about the
+implementation of a handshaking protocol
+in a microprocessor system.
+Cohn's work on \Viper\ has contributed a deep appreciation
+of the scope and limits of using formal methods
+to verify microprocessor systems.
+
+The diversity of structure and behaviour in a typical microprocessor
+provides a rich source of verification problems.
+For this reason, it is likely
+that microprocessor verification will be the main-spring of many future
+developments in hardware verification.
+
+\subsection{Overview}
+
+This case study is less closely tied to
+the intricacies of the \HOL\ system
+than some of the other case studies in this tutorial.
+This is partly due to the size of the formal specifications
+and proofs of correctness.
+We also interested in reaching a more general audience
+than just \HOL\ users
+as a basis for comparisons between the \HOL\ approach
+(the system, the logic and conventional specification style)
+and other approaches to verifying microprocessor systems.
+
+Readers with access to the \HOL\ system who
+want to experiment with the \HOL\ system by re-running
+parts of this proof will find
+essential documentation in
+Sections~\ref{sec-abst} and \ref{sec-spec}.
+A very straightforward version of the proof
+(the so-called ``Bread and Butter'' method) is outlined
+in Sections~\ref{sec-plan} and~\ref{sec-verf}.
+Enhancements and extensions to this proof
+(which may only interest some readers)
+are described in Sections~\ref{sec-temp} and~\ref{sec-asyn}.
+
+Because the proof of correctness is too large
+to describe in terms of \HOL\ interactions,
+most of our discussion consists of proof sketches
+which outline the main steps in the proof.
+However,
+Sections~\ref{sec-verfphase} and~\ref{sec-verfmicro}
+illustrate some details of how these proof steps are achieved by
+showing a sequence of intermediate results extracted
+from a \HOL\ session.
+This may be helpful to readers
+who are interested in the level of interaction with the \HOL\ system
+required for this kind of proof.
+
+Other readers with a more general interest
+in how formal proof can be used to reason about a large hardware design
+will find methodology discussed throughout this document.
+Some of our discussion concerns the \HOL\ system,
+but much of it is also relevant
+to verifying hardware in other verification systems besides the
+\HOL\ system.
+One of the aims of the work described in this case study
+is to avoid using special-purpose infra-structure for reasoning
+about hardware which might make it difficult to re-produce
+hardware proofs in other verification systems.
+
+We begin by describing the design and operation of \Tamarack\
+in a conventional style of informal microprocessor description.
+This informal description is divided into three main parts:
+programming level model, memory interface, and internal operation.
+Some aspects of this informal description are
+essential documentation.
+Other, less-essential parts of this informal description
+are mostly intended to provide background for proof strategies.
+
+\subsection{Notation}
+
+Machine-readable \HOL\ syntax
+is used in this document except for the
+following substitutions where conventional symbols from logic have been
+used instead of standard {\footnotesize ASCII} characters.
+Section~\ref{sec-asyn} describes a set of additional substitutions,
+e.g., $\Box$, $\Diamond$,
+used exclusively in our discussion of how
+temporal logic can be embedded in the \HOL\ logic.
+
+\begin{quote}
+\begin{tabular}{lcl@{\hspace{1in}}lcl}
+$\forall$ & replaces & \verb"!"  & $\neg$        & replaces & \verb"~"\\
+$\exists$ & \verb+"+ & \verb"?"  & $\lambda$     & \verb+"+ & \verb"\"\\
+$\wedge$  & \verb+"+ & \verb"/\" & $\varepsilon$ & \verb+"+ & \verb"@"\\
+$\vee$    & \verb+"+ & \verb"\/"
+\end{tabular}
+\end{quote}
+
+\subsection{Supporting files}
+
+{\bf Formal Specification}
+\vskip .075in
+
+\noindent
+Section~\ref{sec-abst}
+$\left\{
+\begin{minipage}[c]{125mm}
+\begin{tabular}{ll}
+\parbox{27mm}{header.ml} &	- representation variable type\\
+\parbox{27mm}{rep.ml} &	- basic data types and operations
+\end{tabular}
+\end{minipage}
+\right.$
+\vskip .25in
+
+\noindent
+Section~\ref{sec-spec}
+${\left\{
+\begin{minipage}[c]{125mm}
+\begin{tabular}{ll}
+\parbox{27mm}{impspec.ml} &	- internal architecture\\
+\parbox{27mm}{behspec.ml} &	- programming level model\\
+\parbox{27mm}{synspec1.ml} &	- memory model and correctness conditions\\
+\parbox{27mm}{example1.ml} &	- assembling microcode with proof rules
+\end{tabular}
+\end{minipage}
+\right.}$
+\vskip .25in
+
+\noindent
+{\bf Formal Verification: ``Bread and Butter'' Method}
+\vskip .075in
+
+\noindent
+Section~\ref{sec-verf}
+$\left\{
+\begin{minipage}[c]{125mm}
+\begin{tabular}{ll}
+\parbox{27mm}{proof1.ml} &	- symbolic execution of phase level\\
+\parbox{27mm}{example2.ml} &	- detailed view of phase level\\
+\parbox{27mm}{proof2.ml} &	- symbolic execution of microprogramming level\\
+\parbox{27mm}{example3.ml} &	- detailed view of microprogramming level\\
+\parbox{27mm}{proof3.ml} &	- top level correctness result (version 1)
+\end{tabular}
+\end{minipage}
+\right.$
+\vskip .25in
+
+\noindent
+{\bf Synchronizing Multiple Levels of Timing}
+\vskip .075in
+
+\noindent
+Section~\ref{sec-temp}
+$\left\{
+\begin{minipage}[c]{125mm}
+\begin{tabular}{ll}
+\parbox{27mm}{tempabs.ml} &	- temporal abstraction\\
+\parbox{27mm}{synspec2.ml} &	- memory model and correctness conditions\\
+\parbox{27mm}{proof4.ml} &	- symbolic execution of microprogramming level\\
+\parbox{27mm}{proof5.ml} &	- top level correctness result (version 2)
+\end{tabular}
+\end{minipage}
+\right.$
+\vskip .25in
+
+\noindent
+{\bf Using Temporal Logic to Deal with Asynchrony}
+\vskip .075in
+
+\noindent
+Section~\ref{sec-asyn}
+$\left\{
+\begin{minipage}[c]{125mm}
+\begin{tabular}{ll}
+\parbox{27mm}{tlops.ml} &	- temporal logic operators and derived rules\\
+\parbox{27mm}{handspecs.ml} &	- sender and receiver specifications\\
+\parbox{27mm}{handthms1.ml} &	- handshaking theorems (sender conditions)\\
+\parbox{27mm}{handthms2.ml} &	- handshaking theorems (data transfers)\\
+\parbox{27mm}{asynspec.ml} &	- memory model and correctness conditions\\
+\parbox{27mm}{proof6.ml} &	- correct implementation of sender conditions\\
+\parbox{27mm}{example4.ml} &	- simple implementation of sender conditions\\
+\parbox{27mm}{proof7.ml} &	- collapse `waitidle' loops to single steps\\
+\parbox{27mm}{proof8.ml} &	- collapse `waitdack' loops to single steps\\
+\parbox{27mm}{proof9.ml} &	- symbolic execution of microprogramming level\\
+\parbox{27mm}{proof10.ml} &	- top level correctness result (version 3)
+\end{tabular}
+\end{minipage}
+\right.$
+\vskip .25in
+
+\noindent
+{\bf Relating This Proof to Other Levels}
+\vskip .075in
+
+\noindent
+Section~\ref{sec-relate}
+$\left\{
+\begin{minipage}[c]{125mm}
+\begin{tabular}{ll}
+\parbox{27mm}{example5.ml} &	- linking this proof into a verified stack
+\end{tabular}
+\end{minipage}
+\right.$
+\vskip .25in

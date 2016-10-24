@@ -1,0 +1,3 @@
+\THEOREM REAL_ISO_EQ REALAX
+|- !h i. h hreal_lt i = (real_of_hreal h) < (real_of_hreal i)
+\ENDTHEOREM

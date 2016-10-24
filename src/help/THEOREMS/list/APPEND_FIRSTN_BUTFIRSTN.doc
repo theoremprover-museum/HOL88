@@ -1,0 +1,3 @@
+\THEOREM APPEND_FIRSTN_BUTFIRSTN list
+|- !n l. n <= (LENGTH l) ==> (APPEND(FIRSTN n l)(BUTFIRSTN n l) = l)
+\ENDTHEOREM

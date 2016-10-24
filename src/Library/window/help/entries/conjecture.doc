@@ -1,0 +1,22 @@
+\DOC conjecture
+
+\TYPE {conjecture : (term -> window -> window)}
+
+\SYNOPSIS
+Add a conjecture to a window.
+
+\LIBRARY window
+
+\DESCRIBE
+The command {conjecture "c"} is a short-hand way of adding a supposition
+to a window.
+{conjecture "c"} works like {add_suppose (p ?- c)} where {"p"} represents the
+hypotheses of the window.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+add_suppose, ADD_SUPPOSE, add_theorem, ADD_THEOREM, establish
+
+\ENDDOC

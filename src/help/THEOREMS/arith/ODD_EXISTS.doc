@@ -1,0 +1,3 @@
+\THEOREM ODD_EXISTS arithmetic
+|- !n. ODD n = (?m. n = SUC(2 * m))
+\ENDTHEOREM

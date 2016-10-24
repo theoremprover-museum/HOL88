@@ -1,0 +1,5 @@
+\THEOREM SEG_APPEND2 list
+|- !l1 m n l2.
+    (LENGTH l1) <= m /\ n <= (LENGTH l2) ==>
+    (SEG n m(APPEND l1 l2) = SEG n(m - (LENGTH l1))l2)
+\ENDTHEOREM

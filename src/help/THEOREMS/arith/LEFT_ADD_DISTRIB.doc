@@ -1,0 +1,3 @@
+\THEOREM LEFT_ADD_DISTRIB arithmetic
+|- !m n p. p * (m + n) = (p * m) + (p * n)
+\ENDTHEOREM

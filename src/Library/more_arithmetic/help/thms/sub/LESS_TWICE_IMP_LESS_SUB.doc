@@ -1,0 +1,3 @@
+\THEOREM LESS_TWICE_IMP_LESS_SUB sub
+|- !a b m. a < m /\ b < m /\ m <= (a + b) ==> ((a + b) - m) < m
+\ENDTHEOREM

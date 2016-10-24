@@ -1,0 +1,378 @@
+
+\DOC INT_CASES_TAC
+{
+INT_CASES_TAC : tactic
+}
+
+\SYNOPSIS
+A tactic for turning a problem over the integers into two cases over
+the natural numbers.
+
+\DESCRIBE
+The tactic
+{
+   INT_CASES_TAC
+}
+\noindent reduces a universally quantified goal over the integers,
+{
+   ([a1;...;an], "!n:integer. P n")
+}
+\noindent to two subgoals:
+{
+   ([a1;...;an], "!n1:num. P (INT n1)")
+
+   (["!n1:num. P (INT n1)";a1;...;an], "!n2:num. P (neg(INT n2))")
+}
+\noindent After making this reduction one can proceed by induction on the
+natural numbers.
+
+
+\FAILURE
+The tactic {INT_CASES_TAC} fails if it is applied to a goal that is
+not a universal quantification over the type {":integer"}.
+
+\EXAMPLE
+{
+   INT_CASES_TAC
+}
+\noindent when applied to the goal
+{
+   (["SUBGROUP((\N. T),$plus)H"], "!m p. H p ==> H(m times p)")
+}
+\noindent returns the subgoals
+{
+   (["SUBGROUP((\N. T),$plus)H"], "!n1 p. H p ==> H((INT n1) times p)")
+}
+\noindent and
+{
+   (["!n1 p. H p ==> H((INT n1) times p)"; "SUBGROUP((\N. T),$plus)H"],
+    "!n2 p. H p ==> H((neg(INT n2)) times p)")
+}
+
+\USES
+Reducing a goal over the integers to ones over the natural numbers,
+where induction can be applied.
+
+\SEEALSO
+{
+SIMPLE_INT_CASES_TAC
+}
+
+\ENDDOC
+
+\DOC SIMPLE_INT_CASES_TAC
+{
+SIMPLE_INT_CASES_TAC : tactic
+}
+
+\SYNOPSIS
+A tactic for splitting a problem over the integers into the three cases
+of positive integers, negative integers, and zero.
+
+\DESCRIBE
+The tactic
+{
+   SIMPLE_INT_CASES_TAC
+}
+\noindent reduces a universally quantified goal over the integers,
+{
+   ([a1;...;an], "!N:integer. P N")
+} to three subgoals:
+{
+   ([a1;...;an], "!N. POS N ==> P N")
+
+   (["!N. POS N ==> P N";a1;...;an], "!N. NEG N ==> P N")
+
+   ([a1;...;an], "P (INT 0)")
+}
+
+\FAILURE
+The tactic {SIMPLE_INT_CASES_TAC} fails if it is applied to a goal
+that is not a universal quantification over the type {":integer"}.
+
+\EXAMPLE
+{
+   SIMPLE_INT_CASES_TAC
+}
+\noindent when applied to the goal
+{
+   (["SUBGROUP((\N. T),$plus)H";
+     "~(!m1. H m1 ==> (m1 = INT 0))";
+     "!N. N below MIN ==> ~(POS N /\ H N)";
+     "POS MIN";
+     "H MIN"],
+    "!N. H N ==> ?p. N = p times MIN")
+}
+\noindent returns the subgoals
+{
+   (["SUBGROUP((\N. T),$plus)H";
+     "~(!m1. H m1 ==> (m1 = INT 0))";
+     "!N. N below MIN ==> ~(POS N /\ H N)";
+     "POS MIN";
+     "H MIN"],
+    "!N. POS N ==> H N ==> ?p. N = p times MIN")
+
+   (["!N. POS N ==> H N ==> ?p. N = p times MIN";
+     "SUBGROUP((\N. T),$plus)H";
+     "~(!m1. H m1 ==> (m1 = INT 0))";
+     "!N. N below MIN ==> ~(POS N /\ H N)";
+     "POS MIN";
+     "H MIN"],
+    "!N. NEG N ==> H N ==> ?p. N = p times MIN")
+
+   (["SUBGROUP((\N. T),$plus)H";
+     "~(!m1. H m1 ==> (m1 = INT 0))";
+     "!N. N below MIN ==> ~(POS N /\ H N)";
+     "POS MIN";
+     "H MIN"],
+    "H (INT 0) ==> ?p. INT 0 = p times MIN"
+}
+The value for {p} that is needed for the first of these subgoals is
+the greatest integer that can be multiplied times {MIN} and subtracted
+from {N} leaving a non-negative result.  (This value is not found
+by induction (at least not in any direct fashion.)  The value for
+{p} needed for the second subgoal is the negative of the one given
+for {neg N} by the first case.  The value for {p} in the last case is
+(INT 0).
+
+\USES
+Reducing a goal over the integers to the cases of positive integers,
+negative integers, and the zero case, particularly when you do not want
+to reduce the problem to one of induction over the natural numbers.
+
+\SEEALSO
+{
+INT_CASES_TAC
+}
+
+\ENDDOC
+
+\DOC INT_MIN_TAC
+{
+INT_MIN_TAC : term -> tactic
+}
+
+\SYNOPSIS
+Tactic to add the assumption that {MIN} is the least element 
+given set of integers, and add the additional subgoals to prove
+that such a least element exists.
+
+\DESCRIBE
+The tactic
+{
+   INT_MIN_TAC "S:integer -> bool"
+}
+\noindent adds to a goal {([a1;...;an], Goal)} the assumptions
+{
+   S MIN
+}
+\noindent and
+{
+   !N. N below MIN ==> ~S N
+}
+\noindent and returns the additional subgoals:
+{
+   ([a1;...;an], "?M:integer. S M")
+
+   (["S M";a1;...;an], "?LB. !N. N below LB ==> ~S N")
+}
+\noindent to show {S} is not empty, and {S} has a lower bound.
+
+\FAILURE
+The tactic {NT_MIN_TAC} fails if it is not given a term of type
+{":integer -> bool"}.
+
+
+\EXAMPLE
+The tactic
+{
+   INT_MIN_TAC "\q. ~NEG (Y minus (q times X))";;
+}
+\noindent when applied to the goal
+{
+   (["POS X"; "POS Y"],
+    "?q r. (Y = (q times X) plus r) /\ r below Y /\ ~NEG r")
+}
+\noindent yields the following three subgoals:
+{
+   (["~NEG(Y minus (MIN times X))";
+     "!N. N below MIN ==> ~~NEG(Y minus (N times X))";
+     "POS X";
+     "POS Y"],
+    "?q r. (Y = (q times X) plus r) /\ r below Y /\ ~NEG r")
+
+   (["POS X"; "POS Y"], "?M. ~NEG(Y minus (M times X))")
+
+   (["~NEG(Y minus (M times X))"; "POS X"; "POS Y"],
+    "?LB. !N. N below LB ==> ~~NEG(Y minus (N times X))");;
+}
+\noindent The next step would then be to use {EXISTS_TAC "MIN:integer"} on the
+first subgoal.
+
+
+\USES
+Setting up to solve an existence goal, where the solution will be
+given by the least element satisfying some property.
+
+
+\SEEALSO
+{
+INT_MAX_TAC
+}
+
+\ENDDOC
+
+\DOC INT_MAX_TAC
+{
+INT_MAX_TAC : term -> tactic
+}
+
+\SYNOPSIS
+Tactic to add the assumption that {MAX} is the greatest element 
+given set of integers, and add the additional subgoals to prove
+that such a greatest element exists.
+
+\DESCRIBE
+The tactic
+{
+   INT_MAX_TAC "S:integer -> bool"
+}
+\noindent adds to a goal {([a1;...;an], Goal)} the assumptions
+{
+   S MAX
+}
+\noindent and
+{
+   !N. MAX below N ==> ~S N
+}
+\noindent and returns the additional subgoals:
+{
+   ([a1;...;an], "?M:integer. S M")
+
+   (["S M";a1;...;an], "?UB. !N. UB below N ==> ~S N")
+}
+\noindent to show {S} is not empty, and {S} has an upper bound.
+
+\FAILURE
+The tactic {NT_MAX_TAC} fails if it is not given a term of type
+{":integer -> bool"}.
+
+
+\EXAMPLE
+The tactic
+{
+   INT_MAX_TAC "\q. ~POS (Y minus (q times X))";;
+}
+\noindent when applied to the goal
+{
+   (["POS X"; "POS Y"],
+    "?q r. (Y = (q times X) minus r) /\ r below Y /\ ~NEG r")
+}
+\noindent yields the following three subgoals:
+{
+   (["~POS(Y minus (MAX times X))";
+     "!N. MAX below N ==> ~~POS(Y minus (N times X))";
+     "POS X";
+     "POS Y"],
+    "?q r. (Y = (q times X) minus r) /\ r below Y /\ ~NEG r")
+
+   (["POS X"; "POS Y"], "?M. ~POS(Y minus (M times X))")
+
+   (["~POS(Y minus (M times X))"; "POS X"; "POS Y"],
+    "?UB. !N. UB below N ==> ~~POS(Y minus (N times X))");;
+}
+The next step would then be to use {EXISTS_TAC "MAX:integer"} on the
+first subgoal.
+
+
+\USES
+Setting up to solve an existence goal, where the solution will be
+given by the greatest element satisfying some property.
+
+
+\SEEALSO
+{
+INT_MIN_TAC
+}
+
+\ENDDOC
+
+\DOC INT_RIGHT_ASSOC_TAC
+{
+INT_RIGHT_ASSOC_TAC : term -> tactic
+}
+
+\DESCRIBE
+The tactic
+{
+   INT_RIGHT_ASSOC_TAC tm
+}
+\noindent rewrites a goal {P(tm)} into {P(tm')} where {tm} is of the form
+{(a plus b) plus c)} and {tm'} is {(a plus (b plus c))}.
+
+\FAILURE
+The tactic {INT_RIGHT_ASSOC_TAC} fails if it is not given a term of
+the form {((a plus b) plus c)}.
+
+\EXAMPLE
+{
+   INT_RIGHT_ASSOC_TAC " ((u plus v) plus s) plus t"
+}
+\noindent applied to the goal
+{
+   ([], "(((u plus v) plus s) plus t) plus (neg(s plus t)) = u plus v")
+}
+\noindent returns the subgoal
+{
+   ([],"((u plus v) plus (s plus t)) plus (neg(s plus t)) = u plus v")
+}
+
+\USES
+Careful rewriting of computational expressions over the integers.
+
+\SEEALSO
+{
+GROUP_RIGHT_ASSOC_TAC, GROUP_LEFT_ASSOC_TAC, INT_LEFT_ASSOC_TAC
+}
+
+\ENDDOC
+
+\DOC INT_LEFT_ASSOC_TAC
+{
+INT_LEFT_ASSOC_TAC : term -> tactic
+}
+
+\DESCRIBE
+The tactic
+{
+   INT_LEFT_ASSOC_TAC tm
+}
+\noindent rewrites a goal {P(tm)} into {P(tm')} where {tm} is of the form
+{(a plus (b plus c))} and {tm'} is {(a plus b) plus c)}.
+
+\FAILURE
+The tactic {INT_LEFT_ASSOC_TAC} fails if it is not given a term of
+the form {(a plus (b plus c))}.
+
+\EXAMPLE
+{
+   INT_LEFT_ASSOC_TAC " u plus (v plus (s plus t))"
+}
+\noindent applied to the goal
+{
+   ([], "(neg (u plus v)) plus (u plus (v plus (s plus t))) = s plus t")
+}
+\noindent returns the subgoal
+{
+   ([],"(neg(u plus v)) plus ((u plus v) plus (s plus t)) = s plus t")
+}
+
+\USES
+Careful rewriting of computational expressions over the integers.
+
+\SEEALSO
+{
+GROUP_RIGHT_ASSOC_TAC, GROUP_LEFT_ASSOC_TAC, INT_LEFT_ASSOC_TAC
+}
+
+\ENDDOC

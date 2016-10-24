@@ -1,0 +1,5 @@
+\THEOREM IS_BINARY_NORMALIZED numeral
+|- !digits.
+    IS_BINARY_NORMALIZED digits =
+    IS_BINARY digits /\ IS_NORMALIZED digits
+\ENDTHEOREM

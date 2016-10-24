@@ -1,0 +1,63 @@
+%Macros file
+
+%******************************DATE**********************************
+
+
+
+%***********************EQALIGN & EQALIGNNO**************************
+
+\def\mxxth{\mathsurround=0pt}
+\dimendef\dimenxx=0
+\def\openup{\afterassignment\xxpenup\dimenxx=}
+\def\xxpenup{\advance\lineskip\dimenxx
+  \advance\baselineskip\dimenxx \advance\lineskiplimit\dimenxx}
+\def\eqalign#1{\,\vcenter{\openup1\jot \mxxth
+  \ialign{\strut\hfil$\displaystyle{##}$&$\displaystyle{{}##}$\hfil
+     \crcr#1\crcr}}\,}
+
+\newif\ifdtxxp
+\def\displxxy{\global\dtxxptrue \openup1\jot \mxxth
+  \everycr{\noalign{\ifdtxxp \global\dtxxpfalse
+      \vskip-\lineskiplimit \vskip\normallineskiplimit
+      \else \penalty\interdisplaylinepenalty \fi}}}
+\def\displaylines#1{\displxxy
+  \halign{\hbox to\displaywidth{$\hfil\displaystyle##\hfil$}\crcr
+      #1\crcr}}
+
+\newskip\mycntring \mycntring=0pt plus 1000pt minus 1000pt
+\def\eqalignno#1{\displxxy \tabskip=\mycntring
+  \halign to\displaywidth{\hfil$\displaystyle{##}$\tabskip=0pt
+      &$\displaystyle{{}##}$\hfil\tabskip=\mycntring
+      &\llap{$##$}\tabskip=0pt\crcr
+      #1\crcr}}
+
+%***********************THEOREM TYPE JUNK*****************************
+
+\newtheorem{theorem}{Theorem}[section]		    %for article style
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{df}[theorem]{Definition}
+\newenvironment{definition}{\begin{df}\rm}{\end{df}}
+
+% Some environments for displaying things %
+
+\newenvironment{display}[1]{\begin{trivlist}\item[\hspace{\labelsep}{\bf
+            #1}]}{\end{trivlist}}
+
+%\newenvironment{example}{\begin{display}{Example:}}{\end{display}}%
+
+\renewcommand{\proof}{\noindent{\it Proof. }}
+\newcommand{\qed}{\bigskip\rule[-.4ex]{.4em}{2ex}}
+\newcommand{\cons}{\noindent{\it Construction. }}
+\newenvironment{claim}{\begin{display}{\it Claim:}}{\end{display}}
+\newenvironment{note}{\begin{display}{Note:}}{\end{display}}
+
+%*\newcommand{\imp}{\Rightarrow}
+\renewcommand{\l}{\char'134}
+\renewcommand{\lnot}{\char'176}
+\renewcommand{\land}{/{\l}}
+\renewcommand{\lor}{{\l}/}
+
+

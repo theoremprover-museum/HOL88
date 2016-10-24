@@ -1,0 +1,3 @@
+\THEOREM NOT_DEF bool
+|- $~ = (\t. t ==> F)
+\ENDTHEOREM

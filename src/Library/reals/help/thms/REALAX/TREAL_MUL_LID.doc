@@ -1,0 +1,3 @@
+\THEOREM TREAL_MUL_LID REALAX
+|- !x. (treal_1 treal_mul x) treal_eq x
+\ENDTHEOREM

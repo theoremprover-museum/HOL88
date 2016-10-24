@@ -1,0 +1,50 @@
+\DOC new_type_abbrev
+
+\TYPE {new_type_abbrev : ((string # type) -> void)}
+
+\SYNOPSIS
+Sets up a new type abbreviation.
+
+\DESCRIBE
+A call {new_type_abbrev(`ab`,":ty")} creates and stores in the current theory
+segment a new type abbreviation {ab} for the type {ty}. In future, {":ab"} may
+be used rather than the perhaps complicated expresion {":ty"}.
+
+\FAILURE
+Fails if HOL is not in draft mode.
+
+\EXAMPLE
+{
+#new_theory `gonk`;;
+() : void
+
+#new_type_abbrev(`bt`,":bool#bool#bool");;
+() : void
+
+#let tm = "x:bt" and ty = ":bt";;
+tm = "x" : term
+ty = ":bool # (bool # bool)" : type
+
+#type_of tm = ty;;
+true : bool
+}
+\COMMENTS
+A similar mechanism can be implemented using antiquotation, for example:
+{
+   #let bt = ":bool#bool#bool";;
+   bt = ":bool # (bool # bool)" : type
+
+   #let tm = "x:^bt" and ty = ":^bt";;
+   tm = "x" : term
+   ty = ":bool # (bool # bool)" : type
+
+   #type_of tm = ty;;
+   true : bool
+}
+\noindent although this does have the disadvantage of not being stored in the
+theory file.
+
+\SEEALSO
+types, type_abbrevs, new_type.
+
+\ENDDOC

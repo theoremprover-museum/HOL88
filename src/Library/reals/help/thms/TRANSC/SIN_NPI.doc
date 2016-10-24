@@ -1,0 +1,3 @@
+\THEOREM SIN_NPI TRANSC
+|- !n. sin((& n) * pi) = & 0
+\ENDTHEOREM

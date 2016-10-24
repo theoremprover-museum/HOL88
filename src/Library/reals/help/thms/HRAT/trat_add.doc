@@ -1,0 +1,6 @@
+\THEOREM trat_add HRAT
+|- !x y x' y'.
+    (x,y) trat_add (x',y') =
+    PRE(((SUC x) * (SUC y')) + ((SUC x') * (SUC y))),
+    PRE((SUC y) * (SUC y'))
+\ENDTHEOREM

@@ -1,0 +1,152 @@
+\section{Search paths}
+
+This session searches the ancestry of the theory {\small\verb%HOL%}. The
+patterns used are chosen so that they do not match any theorem. The purpose of
+the session is to illustrate the route taken through a theory hierarchy during
+a search.
+
+\setcounter{sessioncount}{1}
+
+\begin{session}\begin{verbatim}
+
+          _  _    __    _      __    __
+   |___   |__|   |  |   |     |__|  |__|
+   |      |  |   |__|   |__   |__|  |__|
+   
+          Version 2
+
+#load_library `trs`;;
+Loading library `trs` ...
+Updating help search path
+.............................................................................
+......................
+Library `trs` loaded.
+() : void
+\end{verbatim}\end{session}
+
+\index{searching!end of}
+Attempting to continue a search beyond its end causes an exception. We
+illustrate this by binding the \ML\ identifier \ml{none} to a pattern which
+never matches. We then search a single theory with this pattern.
+
+\begin{session}\begin{verbatim}
+#let none = thmname ``;;
+none = - : thmpattern
+
+#find_theorems none (Paths [Theory `HOL`]);;
+Searching theory HOL
+Step([], -) : searchstep
+
+#continue_search it;;
+Endofsearch [] : searchstep
+
+#continue_search it;;
+evaluation failed     continue_search
+\end{verbatim}\end{session}
+
+The above example searches a single theory. The next example searches three
+theories in sequence, in the order specified.
+
+\begin{session}\begin{verbatim}
+#full_search none (Paths [Theory `one`; Theory `num`; Theory `list`]);;
+Searching theory one
+Searching theory num
+Searching theory list
+[] : foundthm list
+\end{verbatim}\end{session}
+
+\index{searching!a theory ancestry}
+We can also search the ancestry of a theory. This is done breadth-first
+starting from the specified theory. Its parents are then searched in the order
+in which they appear as parents. Then the parents of the parents are searched,
+and so on, until no ancestors remain. Since the ancestry is a graph, a theory
+may be encountered more than once. It is ignored on all but the first
+encounter.
+
+\begin{session}\begin{verbatim}
+#full_search none (Paths [Ancestors ([`HOL`],[])]);;
+Searching theory HOL
+Searching theory tydefs
+Searching theory sum
+Searching theory one
+Searching theory BASIC-HOL
+Searching theory ltree
+Searching theory combin
+Searching theory ind
+Searching theory tree
+Searching theory bool
+Searching theory list
+Searching theory PPLAMB
+Searching theory arithmetic
+Searching theory prim_rec
+Searching theory num
+[] : foundthm list
+\end{verbatim}\end{session}
+
+\index{exclusion!of parts of an ancestry}
+Observe that the theory {\small\verb%BASIC-HOL%} is searched quite early on.
+This is because although one may `feel' that it is deep down in the hierarchy,
+it is actually only two steps away from {\small\verb%HOL%}. We can force
+{\small\verb%BASIC-HOL%} and its parents to be searched last by excluding them
+from the first ancestry search and then searching them explicitly afterwards.
+
+\begin{session}\begin{verbatim}
+#full_search none (Paths [Ancestors ([`HOL`],[`BASIC-HOL`]);
+#                         Ancestors ([`BASIC-HOL`],[])]);;
+Searching theory HOL
+Searching theory tydefs
+Searching theory sum
+Searching theory one
+Searching theory ltree
+Searching theory combin
+Searching theory tree
+Searching theory list
+Searching theory arithmetic
+Searching theory prim_rec
+Searching theory num
+Searching theory BASIC-HOL
+Searching theory ind
+Searching theory bool
+Searching theory PPLAMB
+[] : foundthm list
+\end{verbatim}\end{session}
+
+\index{searching!user theories}
+\ml{Ancestry} is a constructor for searching a hierarchy excluding
+{\small\verb%HOL%} and its ancestors. This is useful when searching user theory
+hierarchies. If {\small\verb%HOL%} is not excluded, then because it is a
+parent of every user theory, the search soon dives into the built-in hierarchy.
+
+In the following example, no theories are searched.
+
+\begin{session}\begin{verbatim}
+#full_search none (Paths [Ancestry [`HOL`]]);;
+[] : foundthm list
+\end{verbatim}\end{session}
+
+\index{searching!order of}
+Two theories which do not have a common descendant cannot be `active' at the
+same time. So, they cannot both be specified in a single search. However,
+two ancestors of the current theory can be specified in a single search. For
+example, we can do a breadth-first search of {\small\verb%sum%}, then
+{\small\verb%tydefs%}, then the parents of {\small\verb%sum%}, then the
+parents of {\small\verb%tydefs%}, and so on. {\small\verb%BASIC-HOL%} and its
+ancestors are excluded.
+
+\begin{session}\begin{verbatim}
+#full_search none (Paths [Ancestors ([`sum`;`tydefs`],[`BASIC-HOL`])]);;
+Searching theory sum
+Searching theory tydefs
+Searching theory combin
+Searching theory ltree
+Searching theory tree
+Searching theory list
+Searching theory arithmetic
+Searching theory prim_rec
+Searching theory num
+[] : foundthm list
+
+#quit();;
+$
+\end{verbatim}\end{session}
+

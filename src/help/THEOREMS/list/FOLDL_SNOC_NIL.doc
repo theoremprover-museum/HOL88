@@ -1,0 +1,3 @@
+\THEOREM FOLDL_SNOC_NIL list
+|- !l. FOLDL(\xs x. SNOC x xs)[]l = l
+\ENDTHEOREM

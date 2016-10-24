@@ -1,0 +1,79 @@
+\begin{thebibliography}{10}
+
+\bibitem{denning:announcing}
+P.~J. Denning.
+\newblock Announcing literate programming.
+\newblock {\em Communications of the ACM}, 30(7):593, July 1987.
+
+\bibitem{gries:pearls}
+D.~Gries and J.~Bentley.
+\newblock Programming pearls: Abstract data types.
+\newblock {\em Communications of the ACM}, 30(4):284--290, April 1987.
+
+\bibitem{guntermann:cweb}
+K.~Guntermann and J.~Schrod.
+\newblock {{\tt WEB}} adapted to {C}.
+\newblock {\em {TUG}boat}, 7(3):134--137, October 1986.
+
+\bibitem{kernighan:unix}
+B.~W. Kernighan and R.~Pike.
+\newblock {\em The {UNIX} Programming Environment}.
+\newblock Prentice-Hall, 1984.
+
+\bibitem{knuth:web}
+D.~E. Knuth.
+\newblock The {{\tt WEB}} system of structured documentation.
+\newblock Technical Report 980, Stanford Computer Science, Stanford,
+  California, September 1983.
+
+\bibitem{knuth:literate:book}
+D.~E. Knuth.
+\newblock {\em Literate Programming}, volume~27 of {\em Center for the Study of
+  Language and Information Lecture Notes}.
+\newblock Leland Stanford Junior University, Stanford, California, 1992.
+
+\bibitem{levy:cweb}
+S.~Levy.
+\newblock {\tt WEB} adapted to {C}, another approach.
+\newblock {\em TUGBoat}, 8(1):12--13, 1987.
+
+\bibitem{ramsey:building}
+N.~Ramsey.
+\newblock {L}iterate programming: {\hskip 0pt plus 0.5em}{W}eaving a
+  language-independent {{\tt WEB}}.
+\newblock {\em Communications of the ACM}, 32(9):1051--1055, September 1989.
+
+\bibitem{ramsey:literate}
+N.~Ramsey and C.~Marceau.
+\newblock Literate programming on a team project.
+\newblock {\em Software---Practice \& Experience}, 21(7):677--683, July 1991.
+
+\bibitem{sewell:mangle}
+W.~Sewell.
+\newblock How to {{\tt MANGLE}} your software: the {{\tt WEB}} system for
+  {M}odula-2.
+\newblock {\em {TUG}boat}, 8(2):118--128, July 1987.
+
+\bibitem{sewell:weaving}
+W.~Sewell.
+\newblock {\em Weaving a Program: Literate Programming in {\tt WEB}}.
+\newblock Van Nostrand Reinhold, New York, 1989.
+
+\bibitem{thimbleby:cweb}
+H.~Thimbleby.
+\newblock Experiences of `literate programming' using cweb (a variant of
+  {K}nuth's {WEB}).
+\newblock {\em Computer Journal}, 29(3):201--211, 1986.
+
+\bibitem{thimbleby:review}
+H.~Thimbleby.
+\newblock A review of {Donald} {C}. {L}indsay's text file difference utility,
+  {{\em diff}}.
+\newblock {\em Communications of the ACM}, 32(6):752--755, June 1989.
+
+\bibitem{cvw:assessment}
+C.~J. Van~Wyk.
+\newblock Literate programming: An assessment.
+\newblock {\em Communications of the ACM}, 33(3):361--365, March 1990.
+
+\end{thebibliography}

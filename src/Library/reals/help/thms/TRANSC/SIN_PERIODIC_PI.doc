@@ -1,0 +1,3 @@
+\THEOREM SIN_PERIODIC_PI TRANSC
+|- !x. sin(x + pi) = --(sin x)
+\ENDTHEOREM

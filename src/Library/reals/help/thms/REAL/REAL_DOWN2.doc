@@ -1,0 +1,3 @@
+\THEOREM REAL_DOWN2 REAL
+|- !x y. (& 0) < x /\ (& 0) < y ==> (?z. (& 0) < z /\ z < x /\ z < y)
+\ENDTHEOREM

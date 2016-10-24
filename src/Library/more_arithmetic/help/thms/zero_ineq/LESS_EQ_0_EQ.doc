@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_0_EQ zero_ineq
+|- !m. m <= 0 ==> (m = 0)
+\ENDTHEOREM

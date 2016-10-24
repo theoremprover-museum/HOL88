@@ -1,0 +1,3 @@
+\THEOREM diffl LIM
+|- !f l x. (f diffl l)x = ((\h. ((f(x + h)) - (f x)) / h) --> l)(& 0)
+\ENDTHEOREM

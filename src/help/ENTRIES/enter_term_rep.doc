@@ -1,0 +1,9 @@
+\DOC enter_term_rep
+
+\TYPE {enter_term_rep : ((* # term # * list) -> * list)}
+
+\SYNOPSIS
+This function is for internal use only and is to be deleted from a future
+version of the system. It should not be used.
+
+\ENDDOC

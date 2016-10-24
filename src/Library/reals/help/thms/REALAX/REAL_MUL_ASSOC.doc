@@ -1,0 +1,3 @@
+\THEOREM REAL_MUL_ASSOC REALAX
+|- !x y z. x * (y * z) = (x * y) * z
+\ENDTHEOREM

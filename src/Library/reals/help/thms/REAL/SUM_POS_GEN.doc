@@ -1,0 +1,4 @@
+\THEOREM SUM_POS_GEN REAL
+|- !f m.
+    (!n. m num_le n ==> (& 0) <= (f n)) ==> (!n. (& 0) <= (Sum(m,n)f))
+\ENDTHEOREM

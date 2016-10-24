@@ -1,0 +1,3 @@
+\THEOREM ORDINAL_UNION_LEMMA WELLORDER
+|- !l x. ordinal l ==> fl l x ==> fl(Union ordinal)x
+\ENDTHEOREM

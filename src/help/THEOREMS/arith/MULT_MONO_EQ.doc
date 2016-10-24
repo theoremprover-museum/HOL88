@@ -1,0 +1,3 @@
+\THEOREM MULT_MONO_EQ arithmetic
+|- !m i n. ((SUC n) * m = (SUC n) * i) = (m = i)
+\ENDTHEOREM

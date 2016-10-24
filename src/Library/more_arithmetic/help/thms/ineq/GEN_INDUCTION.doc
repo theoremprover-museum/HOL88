@@ -1,0 +1,3 @@
+\THEOREM GEN_INDUCTION ineq
+|- !P. P 0 /\ (!n. (!m. m < n ==> P m) ==> P n) ==> (!n. P n)
+\ENDTHEOREM

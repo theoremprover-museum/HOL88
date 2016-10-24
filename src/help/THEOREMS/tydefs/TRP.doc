@@ -1,0 +1,3 @@
+\THEOREM TRP tydefs
+|- !P v tl. TRP P(Node v tl) = P v tl /\ ALL_EL(TRP P)tl
+\ENDTHEOREM

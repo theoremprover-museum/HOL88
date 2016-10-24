@@ -1,0 +1,140 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  3 MAR 1994 14:43
+**latex-hol.tex
+(latex-hol.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/makeidx.sty
+Document style option `makeidx' - released 21 Oct 91
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../../../Manual/LaTeX/alltt.sty) (../../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../../Manual/LaTeX/ref-macros.tex)
+(../holmacs.tex)
+\@indexfile=\write3
+
+Writing index file latex-hol.idx 
+(latex-hol.aux (title.aux) (description.aux) (entries.aux) (latex-macros.aux)
+(index.aux)) (title.tex
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 13.
+[1
+
+
+] [2]) (latex-hol.toc)
+\tf@toc=\write4
+ [1
+
+
+] (description.tex [2
+
+
+]
+Chapter 1.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 1.
+[3] [4] [5] [6]) [7] (entries.tex [8
+
+
+
+]
+Chapter 2.
+LaTeX Warning: No \tt typeface in this size, using \rm on input line 1.
+(entries-intro.tex) [9] [10] [11] [12] [13]
+Overfull \hbox (67.8865pt too wide) in paragraph at lines 272--272
+[]\elvtt \THM \FORALL l\DOT (\CONST{\small\verb%LENGTH%} \,l = \CONST{\small\ve
+rb%0%}) = (l = \NIL )[] 
+
+\hbox(7.60416+1.52081)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\elvtt \
+.\elvtt T
+.\elvtt H
+.\elvtt M
+.etc.
+
+
+Overfull \hbox (154.11682pt too wide) in paragraph at lines 272--272
+[]        \elvtt \CONST{\small\verb%LENGTH%} \,(\CONST{\small\verb%MAP%} \,f \,
+l) = \CONST{\small\verb%LENGTH%} \,l[] 
+
+\hbox(7.60416+1.52081)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\penalty 10000
+.\glue 5.74869
+.\penalty 10000
+.\glue 5.74869
+.etc.
+
+[14]
+Overfull \hbox (1.18558pt too wide) in paragraph at lines 312--315
+\twlrm creates a file named []\elvtt bool.tex \twlrm which can then be for-mat-
+ted us-ing the com-mand []\elvtt latex bool\twlrm .
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm c
+.\twlrm r
+.\twlrm e
+.\twlrm a
+.\twlrm t
+.etc.
+
+[15] [16] [17]
+Overfull \hbox (33.39438pt too wide) in paragraph at lines 448--448
+[] []   \elvtt The type of {\small\verb%SUC%} is {\small\verb%\tt ":num -> num"
+%} while a generic[] 
+
+\hbox(7.60416+2.43333)x455.24408
+.\hbox(0.0+0.0)x0.0
+.\glue 0.0
+.\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\glue 0.0
+..\glue -5.87494
+..\hbox(0.0+0.0)x0.0
+..\glue 5.87494
+.\penalty 0
+.\penalty 10000
+.etc.
+
+[18] [19]) [20] (latex-macros.tex
+Chapter 3.
+LaTeX Warning: No \sc typeface in this size, using \rm on input line 1.
+[21
+
+
+
+]) [22] (index.tex [23
+
+
+
+
+]) (latex-hol.aux (title.aux) (description.aux)
+(entries.aux) (latex-macros.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 521 strings out of 11977
+ 4226 string characters out of 87025
+ 41195 words of memory out of 262141
+ 2357 multiletter control sequences out of 9500
+ 20074 words of font info for 76 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 17i,12n,19p,212b,458s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on latex-hol.dvi (25 pages, 45432 bytes).

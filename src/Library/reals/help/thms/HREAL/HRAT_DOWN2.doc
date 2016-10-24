@@ -1,0 +1,3 @@
+\THEOREM HRAT_DOWN2 HREAL
+|- !x y. ?z. z hrat_lt x /\ z hrat_lt y
+\ENDTHEOREM

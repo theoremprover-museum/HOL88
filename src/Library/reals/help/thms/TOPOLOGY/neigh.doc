@@ -1,0 +1,3 @@
+\THEOREM neigh TOPOLOGY
+|- !top N x. neigh top(N,x) = (?P. open top P /\ P subset N /\ P x)
+\ENDTHEOREM

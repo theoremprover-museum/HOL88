@@ -1,0 +1,3 @@
+\THEOREM MULT_SUC_EQ arithmetic
+|- !p m n. (n * (SUC p) = m * (SUC p)) = (n = m)
+\ENDTHEOREM

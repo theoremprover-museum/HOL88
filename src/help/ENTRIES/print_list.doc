@@ -1,0 +1,53 @@
+\DOC print_list
+
+\TYPE {print_list : (bool -> string -> (* -> **) -> * list -> void)}
+
+\SYNOPSIS
+Prints a list to the terminal in a specific format.
+
+\DESCRIBE
+{print_list incon name prfn l} returns {():void} with the side-effect of
+printing the elements of {l} to the terminal using the print function {prfn}.
+The string {name} is also displayed and the flag {incon} specifies whether
+line breaking between elements of the list is to be inconsistent ({incon} is
+{true}) or consistent ({incon} is {false}). If the list {l} is empty, no text
+is displayed. When {l} is not empty, the elements of the list are printed in
+reverse order.
+
+The format of the output is illustrated in the example. {print_list} is used
+within the HOL system for printing theories. It is unlikely to be of use in
+general.
+
+\FAILURE
+Fails if the print function {prfn} fails on any of the arguments of the
+list {l}.
+
+\EXAMPLE
+{
+#set_margin 15;;
+72 : int
+}
+{
+#print_list true `Test1:` print_int [1;2;3;4;5;6];;
+Test1: --
+  6     5
+  4     3
+  2     1
+() : void
+}
+{
+#print_list false `Test2:` print_int [1;2;3;4;5;6];;
+Test2: --
+  6
+  5
+  4
+  3
+  2
+  1
+
+() : void
+}
+\SEEALSO
+print_theory, print_begin, print_end, print_newline.
+
+\ENDDOC

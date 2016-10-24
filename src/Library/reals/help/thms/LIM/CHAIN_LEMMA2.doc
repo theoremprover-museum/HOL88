@@ -1,0 +1,3 @@
+\THEOREM CHAIN_LEMMA2 LIM
+|- !x y d. (abs(x - y)) < d ==> (abs x) < ((abs y) + d)
+\ENDTHEOREM

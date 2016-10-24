@@ -1,0 +1,3 @@
+\THEOREM CUT_BOUNDED HREAL
+|- !X. ?x. ~cut X x
+\ENDTHEOREM

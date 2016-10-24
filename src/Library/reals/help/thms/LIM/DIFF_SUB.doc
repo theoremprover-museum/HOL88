@@ -1,0 +1,5 @@
+\THEOREM DIFF_SUB LIM
+|- !f g l m x.
+    (f diffl l)x /\ (g diffl m)x ==>
+    ((\x. (f x) - (g x)) diffl (l - m))x
+\ENDTHEOREM

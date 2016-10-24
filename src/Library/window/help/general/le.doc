@@ -1,0 +1,32 @@
+\DOC le
+
+\TYPE {le : (int -> int -> bool)}
+
+\SYNOPSIS
+Less-than-or-equal comparison of integers.
+
+\LIBRARY window
+
+\DESCRIBE
+{le} is an infix relation between numbers.
+{n1 le n2} is true iff {n1} is less than, or equal to {n2}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+   #1 le 2;;
+   true : bool
+
+   #2 le 2;;
+   true : bool
+
+   #3 le 2;;
+   false : bool
+}
+
+\SEEALSO
+ge
+
+\ENDDOC

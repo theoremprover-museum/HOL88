@@ -1,0 +1,5 @@
+\THEOREM SUC_SUB sub
+|- !m n.
+    (m < n ==> ((SUC m) - n = 0)) /\
+    (~m < n ==> ((SUC m) - n = SUC(m - n)))
+\ENDTHEOREM

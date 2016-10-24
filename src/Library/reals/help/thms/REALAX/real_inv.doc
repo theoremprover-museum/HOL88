@@ -1,0 +1,4 @@
+\THEOREM real_inv REALAX
+|- !g00024.
+    inv g00024 = mk_real($treal_eq(treal_inv($@(dest_real g00024))))
+\ENDTHEOREM

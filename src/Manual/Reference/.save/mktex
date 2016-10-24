@@ -1,0 +1,37 @@
+#! /bin/sh
+#
+# Shell script to translate individual .doc files into a stand-alone 
+# .tex file, which may then be run through LaTeX. Executing:
+#
+#	/bin/sh mktex <file 1> <file 2> .... <file n>
+#
+# Will translate the files 
+#
+#    <file 1>.doc <file 2>.doc ... <file n>.doc
+#
+# into LaTeX source, and write the results to standard output.
+
+if [ ! -r $1.doc ]
+   then echo "mktex: the file $1.doc does not exist" > /dev/tty ; exit
+fi
+
+echo '\documentstyle[12pt,fleqn,../LaTeX/alltt,../LaTeX/layout]{book}
+
+\input{../LaTeX/commands}
+\input{../LaTeX/ref-macros}
+
+\begin{document}
+
+\setlength{\unitlength}{1mm}
+\setlength{\baselineskip}{16pt}
+
+' 
+
+for i in $*
+    do
+      sed -f doc-to-tex.sed $i.doc
+    done
+
+echo "" 
+echo "\end{document}" 
+

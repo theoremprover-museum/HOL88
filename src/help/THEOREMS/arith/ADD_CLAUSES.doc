@@ -1,0 +1,6 @@
+\THEOREM ADD_CLAUSES arithmetic
+|- (0 + m = m) /\
+   (m + 0 = m) /\
+   ((SUC m) + n = SUC(m + n)) /\
+   (m + (SUC n) = SUC(m + n))
+\ENDTHEOREM

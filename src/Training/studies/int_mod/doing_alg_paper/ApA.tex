@@ -1,0 +1,105 @@
+\appendix
+
+\section{Appendix: HOL Logic}
+
+In the table below a {\tt \$} indicates that the constant which
+follows it is treated in a special manner (such as assumming it is is
+an infix operator) by the parser of HOL.  When the {\tt \$} is used,
+it forces HOL to treat the succeding symbol as an ordinary constant.
+\begin{center} Table 1: Logical Constants\\[10pt] \small \tt
+\begin{tabular}{|l|l|l|l|} \hline
+{\rm Name} & {\rm Term:Type} & {\rm Usage} & {\rm Definition} \\ \hline
+{\rm equality} & \$=:*->(*->bool) & $t_1$ = $t_2$ & {\rm primitve} \\
+{\rm impliction} & \$==>:bool->(bool->bool) & $t_1$ ==> $t_2$ &
+  {\rm primitive} \\
+{\rm choice} & \$@:(*->bool)->* & @$x$:*.$t$ & {\rm primitive} \\
+{\rm truth} & T:bool & &
+  T = (({\l}x:*.x) = ({\l}x:*.x)) \\
+{\rm $\forall$-quant.} & \$!:(*->bool)->bool & !$x$:*.$t$ &
+  \$!\ = ({\l}P:*->bool.P = ({\l}x:*.T)) \\
+{\rm falsity} & F:bool & & F = (!t:bool.t) \\
+{\rm $\exists$-quant.} & \$?:(*->bool)->bool & ?$x$:*.$t$ &
+  \$?\ = ({\l}P:*->bool.P (\$@ P)) \\
+{\rm negation} & \$\lnot:bool->bool & {\lnot}$t$ &
+ \${\lnot} = ({\l}t:bool.t ==> F) \\
+{\rm conjunction} & \$\land:bool->(bool->bool) & $t_1$ {\land} $t_2$ &
+  \${\land} = ({\l}t1 t2.!t.(t1 ==> \\
+&&& \ \ \ \ \ \ (t2 ==> t)) ==> t) \\
+{\rm disjunction} & \$\lor:bool->(bool->bool) & $t_1$ {\lor} $t_2$ &
+  \${\lor} = ({\l}t1 t2.!t.(t1 ==> t) \\
+&&& \ \ \ \ \ \ ==> ((t2 ==> t) ==> t)) \\ \hline
+\end{tabular}
+\end{center}
+
+The following is a listing of basic axioms, or assertions, in the HOL logic.
+All other axioms are the result of definitions of constants or new type
+constructor definitions.  The theories {\tt bool} and {\tt ind} are both
+ancestors of the theory {\tt HOL}.
+\begin{center} Table 2: Basic Axioms\\[10pt] \tt
+\begin{tabular}{|l|l|l|} \hline
+{\rm Theory} & {\rm Name} & {\rm Axiom statment}\\ \hline
+bool & BOOL\_CASES\_AX & |- !t.(t = T) {\l}/ (t = F) \\
+bool & IMP\_ANTISYM\_AX &
+ |- !t1 t2.(t1==>t2) ==> (t2==>t1) ==> (t1 = t2) \\
+bool & ETA\_AX & |- !t.({\l}x.t x) = t \\
+bool & SELECT\_AX & |- !P x.P x ==> P(\$@ P) \\
+ind & INFINITY\_AX & |- ?f:ind -> ind.ONE\_ONE f /{\l} ~ONTO f \\ \hline
+\end{tabular}
+\end{center}
+{\tt ONE\_ONE} and {\tt ONTO} are polymorphic constants with the
+following definitions:
+\begin{verbatim}
+ONE_ONE_DEF  |- !f:*->**. ONE_ONE f = (!x1 x2. (f x1=f x2) ==> (x1=x2))
+
+ONTO_DEF  |- !f:*->**. ONTO f = (!y. ?x. y = f x)
+\end{verbatim}
+
+The following is a list of the eight primitive inference rules of HOL.
+\begin{enumerate}
+\item Introduce an assumption:\qquad{\tt ASSUME : term -> thm}
+$$ t \quad \longrightarrow \quad \mbox{\tt $t$ |- $t$} $$
+
+\item Reflexivity:\qquad{\tt REFL : term -> thm}
+$$ t \quad \longrightarrow \quad \mbox{\tt |- $t$ = $t$}$$
+
+\item Beta-conversion:\qquad{\tt BETA\_CONV : term -> thm}
+$$ \mbox{\tt ({\l}x.$t_1$)$t_2$} \quad \longrightarrow \quad
+  \mbox{\tt |- ({\l}x.$t_1$)$t_2$ = $t_1[t_2/{\tt x}]$} $$
+
+\item Type instantiation:\qquad{\tt INST\_TYPE : (type \# type) list ->
+thm -> thm}
+$$\frac{\mbox{\tt $A$ |- $t$}}{\mbox{\tt $A$ |- $t[\tau_1,\ldots,\tau_n/
+\alpha_1,\ldots,\alpha_n]$}}$$
+where the $\alpha_i$ are type variables which do not occur in $A$.
+
+\item Substitution:\qquad{\tt SUBST : (thm \# term) list -> term -> thm -> thm}
+$$\frac{\mbox{\tt $A_1$ |- $t_1$ = $u_1$ $\ldots$ $A_n$ |- $t_n$ = $u_n$ \quad
+ $A$ |- $t[t_1,\ldots,t_n/x_1,\ldots,x_n]$}}{\mbox{\tt $A_1\cup\ldots\cup A_n
+  \cup A$ |- $t[u_1,\ldots,u_n/x_1,\ldots,x_n]$}}$$
+The arguments to {\tt SUBST} are 
+\begin{center}\tt SUBST [${\cal T}_1$,$x_1$;$\ldots$;${\cal T}_n$,$x_n$]
+ $t[x_1,\ldots,x_n]$ ($A$ |- $t[t_1,\ldots,t_n/x_1,\ldots,x_n]$)
+\end{center}
+where ${\cal T}_i$ is the theorem {\tt $A_i$ |- $t_i$ = $u_i$} and where the
+term $t[x_1,\ldots,x_n]$ serves as a template for the substitution.  The
+variables $x_1$, \ldots, $x_n$ are markers indicating the places where
+substitutions are to occur.  Bound variable names in $t$ will be changed as
+necessary to avoid conflict with free variables in $u_1$, \ldots, $u_n$.
+
+\item Abstraction:\qquad{\tt ABS : term -> thm -> thm}
+$$\frac{\mbox{\tt $A$ |- $t_1$ = $t_2$}}{\mbox{\tt $A$ |- ({\l}$x$.$t_1$) =
+({\l}$x$.$t_2$)}}$$
+provided $x$ is not free in $A$.
+
+\item Discharging an assumption:\qquad{\tt DISCH : term -> thm -> thm}
+$$\frac{\mbox{\tt $A$ |- $t_2$}}{\mbox{\tt $A\setminus\{t_1\}$ |- $t_1$ ==>
+$t_2$}}$$
+where $A\setminus\{t_1\}$ is the set of all terms in $A$ except $t_1$.  In
+particular, it is just $A$ if $t_1$ is not an element of $A$.
+
+\item Modus Ponens:\qquad{\tt MP : thm -> thm -> thm}
+$$\frac{\mbox{\tt $A_1$ |- $t_1$ ==> $t_2$ \quad $A_2$ |- $t_2$}}{\mbox{\tt
+ $A_1 \cup A_2$ |- $t_2$}}$$
+
+\end{enumerate}
+

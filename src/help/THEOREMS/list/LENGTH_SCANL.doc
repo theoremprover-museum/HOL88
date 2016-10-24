@@ -1,0 +1,3 @@
+\THEOREM LENGTH_SCANL list
+|- !f e l. LENGTH(SCANL f e l) = SUC(LENGTH l)
+\ENDTHEOREM

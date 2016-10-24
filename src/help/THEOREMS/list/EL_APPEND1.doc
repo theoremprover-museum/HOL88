@@ -1,0 +1,3 @@
+\THEOREM EL_APPEND1 list
+|- !n l1 l2. n < (LENGTH l1) ==> (EL n(APPEND l1 l2) = EL n l1)
+\ENDTHEOREM

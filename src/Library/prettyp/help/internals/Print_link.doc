@@ -1,0 +1,14 @@
+\DOC Print_link
+
+\BLTYPE
+Print_link :
+   ((((loop_limit # loop_limit) # string list) # print_patt_tree) ->
+    print_patt_tree)
+\ELTYPE
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

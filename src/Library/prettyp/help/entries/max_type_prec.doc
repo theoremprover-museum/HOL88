@@ -1,0 +1,14 @@
+\DOC max_type_prec
+
+\TYPE {max_type_prec : int}
+
+\SYNOPSIS
+Lowest precedence (maximum value) used by the pretty-printer for HOL type
+operators.
+
+\LIBRARY prettyp
+
+\SEEALSO
+min_type_prec, type_prec.
+
+\ENDDOC

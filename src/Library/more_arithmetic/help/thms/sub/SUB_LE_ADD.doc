@@ -1,0 +1,3 @@
+\THEOREM SUB_LE_ADD sub
+|- !n m p. n <= p ==> (m <= (p - n) = (n + m) <= p)
+\ENDTHEOREM

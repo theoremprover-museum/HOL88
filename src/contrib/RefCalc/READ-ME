@@ -1,0 +1,118 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: RefCalc                                                    %
+%                                                                       %
+% DESCRIPTION: Program verification and refinement in predicate         %
+%              transformer semantics                                    %
+%                                                                       %
+% AUTHOR: Joakim von Wright                                             %
+%                                                                       %
+% ADDRESS: Abo Akademi University                                       %
+%          Dept. of Computer Science                                    %
+%          Lemminkaineng. 14 A                                          %
+%          FIN-20520 Turku                                              %
+%          Finland.                                                     %
+%                                                                       %
+%          email: jwright@aton.abo.fi                                   %
+%                                                                       %
+% DATE: 94.02.09                                                        %
+% --------------------------------------------------------------------- %
+
+
+The contribution RefCalc is an implementation of parts of the theory of 
+program refinement in a predicate transformer framework, developed at 
+{\AA}bo Akademi University, Turku, Finland, by R-J. Back (backrj@aton.abo.fi)
+and J. von Wright.
+
+The RefCalc contribution has  parts, each with its own directory
+Wellf:     well-founded orderings
+Predicate: semantic predicates (boolean functions on states)
+Command:   semantic embedding of commands with weakest precondition semantics
+Correct:   total correctness of programs
+Refine :   laws of refinement
+Function:  functional abstraction and function call
+Recursion: methodology for recursive programs
+Procedure: procedural abstraction, procedure call, recursive procedures
+Dataref:   data refinement
+Actsys:    correctness and data refinement of action systems
+Bounded:   bounded nondeterminism and backward data refinement
+Wintool:   doing refinement using the window inference tool
+Example:   example of embedding a syntactic language
+Document:  documentation (compressed PostScript) and listing of theories
+
+Each theory is built in a separate session.
+The theory RCwellf is built in the following way (assuming that the
+RefCalc directory is the current directory):
+1. start HOL
+2. build the theory by loading the file Wellf/mk_RCwellf.ml
+3. exit HOL
+Now, the theory can be loaded inside HOL by loading the file
+Wellf/ld_RCwellf.ml. HOL should be started in the RefCalc directory.
+
+All the other theories are built and used similarly.
+
+The file defs/defs.ml contains abbreviations and definitions that are used
+both in theorems and in examples.
+These have accumulated over the years, so some of them may duplicate theorems
+in existing libraries.
+The only libraries used explicitly by the refinement calculus theories are the 
+taut and pair libraries. Examples may require the more_lists library.
+
+Examples showing how the theories can be used to verify program correctness 
+and to prove simple refinements can be found in the different
+directories in *ex*.ml files. Some of the example create new theories;
+some may require that the more_list or more_arithmetic libraries are loaded.
+
+Disclaimer: there may be lots of redundancies and inefficient proofs. 
+However, the theories are completely definitional, so there are 
+no inconsistencies. The whole contribution has been successfully built
+using AKCL and HOL88 on a Sparcstation.
+
+The RefCalc theories are based on the work reported in the 
+ references below. If you want more information or copies of
+papers, please contact me at jwright@aton.abo.fi.
+
+
+\begin{thebibliography}{10}
+
+\bibitem{BaWr89:lncs}
+R.J.R. Back and J.~von Wright.
+\newblock Refinement calculus, part {I}: {S}equential programs.
+\newblock In {\em REX Workshop for Refinement of Distributed Systems, {\rm
+  volume 430 of} Lecture Notes in Computer Science}, Nijmegen, The Netherlands,
+  1989. Springer--Verlag. 
+\newblock Also available as: Reports on computer science and
+  mathematics~92, \AA bo Akademi, 1989.
+
+\bibitem{BaWr92:rex}
+R.J.R. Back and J.~von Wright.
+\newblock Predicate transformers and higher order logic.
+\newblock In {\em REX Workshop on Semantics: Foundations and Applications}, 
+  Lecture Notes in Computer Science 666, pp. 1--20,
+  Beekbergen, The Netherlands, June 1992.
+
+\bibitem{Wright92:dataref}
+J.~von Wright.
+\newblock The lattice of data refinement.
+\newblock Reports on computer science and mathematics 130, \AA bo Akademi,
+  1992.
+\newblock To appear in Acta Informatica.
+
+\bibitem{Wright94:holwinref}
+J.~von Wright.
+\newblock Program refinement by theorem prover.
+\newblock In {\em Proceedings of the 6th BCS-FACS Refinement
+  Workshop}, London, January 1994. Springer--Verlag (to appear).
+
+\bibitem{WHLL93:fmsd}
+J.~von Wright, J.~Hekanaho, P.~Luostarinen and T.~L{\aa}ngbacka.
+\newblock Mechanising some advanced refinement concepts.
+\newblock Formal Methods in System Design 3:49--81, 1993.
+
+\bibitem{WrSe91}
+J.~von Wright and K.~Sere.
+\newblock Program transformations and refinements in {HOL}.
+\newblock In {\em Proceedings of the 1991 International Workshop 
+  on Higher Order Logic Theorem Proving and its Applications}, Davis,
+  USA, August 1991. ACM.
+
+\end{thebibliography}

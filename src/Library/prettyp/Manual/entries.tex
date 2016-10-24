@@ -1,0 +1,1544 @@
+\chapter{ML Functions in the prettyp Library}
+\input{entries-intro}
+\DOC{Address}
+
+\TYPE {\small\verb%Address : (int list -> address)%}\egroup
+
+\SYNOPSIS
+Type constructor for sub-tree addresses.
+
+\DESCRIBE
+{\small\verb%Address il%} denotes the address of a sub-tree within a tree. The integer
+list {\small\verb%il%} is the path that has to be followed from the root node of the tree
+in order to reach the sub-tree.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+The ML value {\small\verb%Address [1;2]%} is the address within the tree:
+{\par\samepage\setseps\small
+\begin{verbatim}
+         a
+        / \
+       b   c
+      / \   \
+     d   e   f
+        / \
+       g   h
+\end{verbatim}
+}
+\noindent of the sub-tree:
+{\par\samepage\setseps\small
+\begin{verbatim}
+         e   
+        / \
+       g   h
+\end{verbatim}
+}
+\noindent The sub-tree is the second child of the first child of the main tree.
+
+\USES
+Sub-tree addresses are maintained as far as possible during the pretty-printing
+process. They can thus be used to determine which sub-tree of the original
+parse-tree was used to generate some specified part of the pretty-printed
+text.
+
+\SEEALSO
+No_address.
+
+\ENDDOC
+\DOC{All\_types}
+
+\TYPE {\small\verb%All_types : type_selection%}\egroup
+
+\SYNOPSIS
+Value used to control the amount of type information included in the print-tree
+of a term.
+
+\DESCRIBE
+{\small\verb%All_types%} is a value used to instruct the term-to-print-tree conversion
+function to include type information in the tree for every variable and
+constant in the term.
+
+\SEEALSO
+No_types, Hidden_types, Useful_types, term_to_print_tree.
+
+\ENDDOC
+\DOC{apply0}
+
+\TYPE {\small\verb%apply0 : (* -> (string # int) list -> print_binding -> *)%}\egroup
+
+\SYNOPSIS
+Function for constructing environment accessing functions.
+
+\DESCRIBE
+{\small\verb%apply0%} is a higher-order function which can be used to simplify the ML code
+required for user-defined pretty-printer environment accessing functions.
+Instead of having to mention the parameter list and binding explicitly as in:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   \params. \pbind. f
+\end{verbatim}
+}
+\noindent one can use {\small\verb%apply0%}:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   apply0 f
+\end{verbatim}
+}
+\FAILURE
+Cannot fail when given only one argument. However, the resulting function may
+fail. This will depend on the value of the argument.
+
+\EXAMPLE
+A function for testing whether the parameter `{\small\verb%test%}' has value 1 can be
+written as:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   apply2 (curry $=) (bound_number `test`) (apply0 1)
+\end{verbatim}
+}
+\noindent instead of:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   \params. \pbind. (bound_number `test` params pbind) = 1
+\end{verbatim}
+}
+\noindent In this example it is not clear that use of {\small\verb%apply0%} and {\small\verb%apply2%} is
+beneficial. However, it illustrates their usage.
+
+\SEEALSO
+apply1, apply2.
+
+\ENDDOC
+\DOC{apply1}
+
+{\small
+\begin{verbatim}
+apply1 : ((* -> **) ->
+          ((string # int) list -> print_binding -> *) ->
+          ((string # int) list -> print_binding -> **))
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for constructing environment accessing functions.
+
+\DESCRIBE
+{\small\verb%apply1%} is a higher-order function which can be used to simplify the ML code
+required for user-defined pretty-printer environment accessing functions.
+Instead of having to mention the parameter list and binding explicitly as in:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   \params. \pbind. f (val params pbind)
+\end{verbatim}
+}
+\noindent one can use {\small\verb%apply1%}:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   apply1 f val
+\end{verbatim}
+}
+\FAILURE
+Cannot fail when given no more than two arguments. However, the resulting
+function may fail. This will depend on the values of the arguments.
+
+\EXAMPLE
+Suppose a function is required which evaluates the length of the node-name
+bound to the metavariable {\small\verb%***x%}. The ML code for this is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   \params. \pbind. (length o explode) (bound_name `x` params pbind)
+\end{verbatim}
+}
+\noindent The function takes a parameter list and a binding as arguments. It
+uses these to find the node-name bound to the metavariable with name `{\small\verb%x%}'. The
+resulting string is then exploded into a list of single character strings and
+the length of this list is computed. Using {\small\verb%apply1%}, the code can be written
+more simply as:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   apply1 (length o explode) (bound_name `x`)
+\end{verbatim}
+}
+\SEEALSO
+apply0, apply2.
+
+\ENDDOC
+\DOC{apply2}
+
+{\small
+\begin{verbatim}
+apply2 : ((* -> ** -> ***) ->
+          ((string # int) list -> print_binding -> *) ->
+          ((string # int) list -> print_binding -> **) ->
+          ((string # int) list -> print_binding -> ***))
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for constructing environment accessing functions.
+
+\DESCRIBE
+{\small\verb%apply2%} is a higher-order function which can be used to simplify the ML code
+required for user-defined pretty-printer environment accessing functions.
+Instead of having to mention the parameter list and binding explicitly as in:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   \params. \pbind. f (val1 params pbind) (val2 params pbind)
+\end{verbatim}
+}
+\noindent one can use {\small\verb%apply2%}:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   apply2 f val1 val2
+\end{verbatim}
+}
+\FAILURE
+Cannot fail when given no more than three arguments. However, the resulting
+function may fail. This will depend on the values of the arguments.
+
+\EXAMPLE
+A function for testing whether the parameter `{\small\verb%test%}' has value 1 can be
+written as:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   apply2 (curry $=) (bound_number `test`) (\params. \pbind. 1)
+\end{verbatim}
+}
+\noindent instead of:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   \params. \pbind. (bound_number `test` params pbind) = 1
+\end{verbatim}
+}
+\noindent In this example it is not clear that use of {\small\verb%apply2%} is beneficial.
+However, it illustrates its usage.
+
+\SEEALSO
+apply0, apply1.
+
+\ENDDOC
+\DOC{bound\_child}
+
+{\small
+\begin{verbatim}
+bound_child : (string ->
+               (string # int) list ->
+               print_binding ->
+               print_tree)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Obtains the print-tree bound to a pretty-printer metavariable.
+
+\DESCRIBE
+{\small\verb%bound_child%} can be used to obtain the data item bound to a named
+metavariable. It takes the name of a metavariable (less the preceding {\small\verb%*%},
+{\small\verb%**%}, or {\small\verb%***%}) as its first argument and returns a function of type:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> print_tree
+\end{verbatim}
+}
+\noindent When given the current environment as arguments, this function
+yields the print-tree bound to the specified metavariable. The parameter list
+is not used, but is present for consistency.
+
+\FAILURE
+The function fails if the specified metavariable is not bound to a print-tree.
+It also fails if the metavariable cannot be found in the binding.
+
+\SEEALSO
+bound_children, bound_name, bound_names, is_a_member_of, bound_number,
+bound_context.
+
+\ENDDOC
+\DOC{bound\_children}
+
+{\small
+\begin{verbatim}
+bound_children : (string ->
+                  (string # int) list ->
+                  print_binding ->
+                  print_tree list)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Obtains the print-trees bound to a pretty-printer metavariable.
+
+\DESCRIBE
+{\small\verb%bound_children%} can be used to obtain the data item bound to a named
+metavariable. It takes the name of a metavariable (less the preceding {\small\verb%*%},
+{\small\verb%**%}, or {\small\verb%***%}) as its first argument and returns a function of type:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> print_tree list
+\end{verbatim}
+}
+\noindent When given the current environment as arguments, this function yields
+the list of print-trees bound to the specified metavariable. The parameter
+list is not used, but is present for consistency.
+
+\FAILURE
+The function fails if the specified metavariable is not bound to a list of
+print-trees. It also fails if the metavariable cannot be found in the binding.
+
+\SEEALSO
+bound_child, bound_name, bound_names, is_a_member_of, bound_number,
+bound_context.
+
+\ENDDOC
+\DOC{bound\_context}
+
+\TYPE {\small\verb%bound_context : ((string # int) list -> print_binding -> string)%}\egroup
+
+\SYNOPSIS
+Obtains the value of the current context from the pretty-printer environment.
+
+\DESCRIBE
+To make it easier to extract the value of the current context from its rather
+contorted representation in the parameter list, there is a function called
+{\small\verb%bound_context%}. When presented with the current environment by way of its
+arguments, {\small\verb%bound_context%} returns the character string representing the
+current context. The binding is not used, but is present for consistency.
+
+\FAILURE
+The function will not fail unless it is given an invalid parameter list.
+
+\SEEALSO
+is_a_member_of, bound_name, bound_names, bound_child, bound_children,
+bound_number.
+
+\ENDDOC
+\DOC{bound\_name}
+
+\TYPE {\small\verb%bound_name : (string -> (string # int) list -> print_binding -> string)%}\egroup
+
+\SYNOPSIS
+Obtains the node-name bound to a pretty-printer metavariable.
+
+\DESCRIBE
+{\small\verb%bound_name%} can be used to obtain the data item bound to a named metavariable.
+It takes the name of a metavariable (less the preceding {\small\verb%*%}, {\small\verb%**%}, or {\small\verb%***%}) as
+its first argument and returns a function of type:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> string
+\end{verbatim}
+}
+\noindent When given the current environment as arguments, this function yields
+the node-name bound to the specified metavariable. The parameter list is not
+used, but is present for consistency.
+
+\FAILURE
+The function fails if the specified metavariable is not bound to a single
+node-name. It also fails if the metavariable cannot be found in the binding.
+
+\SEEALSO
+bound_names, bound_child, bound_children, is_a_member_of, bound_number,
+bound_context.
+
+\ENDDOC
+\DOC{bound\_names}
+
+{\small
+\begin{verbatim}
+bound_names : (string ->
+               (string # int) list ->
+               print_binding ->
+               string list)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Obtains the node-names bound to a pretty-printer metavariable.
+
+\DESCRIBE
+{\small\verb%bound_names%} can be used to obtain the data item bound to a named
+metavariable. It takes the name of a metavariable (less the preceding {\small\verb%*%},
+{\small\verb%**%}, or {\small\verb%***%}) as its first argument and returns a function of type:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> string list
+\end{verbatim}
+}
+\noindent When given the current environment as arguments, this function yields
+the list of node-names bound to the specified metavariable. The parameter list
+is not used, but is present for consistency.
+
+\FAILURE
+The function fails if the specified metavariable is not bound to a list of
+node-names. It also fails if the metavariable cannot be found in the binding.
+
+\SEEALSO
+bound_name, bound_child, bound_children, is_a_member_of, bound_number,
+bound_context.
+
+\ENDDOC
+\DOC{bound\_number}
+
+\TYPE {\small\verb%bound_number : (string -> print_int_exp)%}\egroup
+
+\SYNOPSIS
+Obtains the value bound to a pretty-printer parameter.
+
+\DESCRIBE
+{\small\verb%bound_number%} takes the name of a pretty-printer parameter as its first
+argument (a string) and returns a function of type:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> int
+\end{verbatim}
+}
+\noindent This function yields the integer value associated with the parameter,
+when it is presented with an environment via its two arguments. The binding is
+not used, but is present for consistency.
+
+\FAILURE
+The function fails if the parameter is not present in the parameter list.
+
+\SEEALSO
+is_a_member_of, bound_name, bound_names, bound_child, bound_children,
+bound_context.
+
+\ENDDOC
+\DOC{get\_margin}
+
+\TYPE {\small\verb%get_margin : (void -> int)%}\egroup
+
+\SYNOPSIS
+Returns the limit on the width of the output produced by the standard HOL
+pretty-printer.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#get_margin ();;
+72 : int
+\end{verbatim}
+}
+\SEEALSO
+set_margin.
+
+\ENDDOC
+\DOC{Hidden\_types}
+
+\TYPE {\small\verb%Hidden_types : type_selection%}\egroup
+
+\SYNOPSIS
+Value used to control the amount of type information included in the print-tree
+of a term.
+
+\DESCRIBE
+{\small\verb%Hidden_types%} is a value used to instruct the term-to-print-tree conversion
+function as to how much type information to include in the tree. Type
+information is only included for variables which, although free, without type
+information appear to be bound. An example of such a variable is {\small\verb%"x:num"%} in
+the term:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   "\(x:bool). (x:num)"
+\end{verbatim}
+}
+\noindent Without types, this term appears as {\small\verb%"\x. x"%}. However, the two
+occurrences of {\small\verb%x%} are different.
+
+\SEEALSO
+No_types, Useful_types, All_types, term_to_print_tree.
+
+\ENDDOC
+\DOC{hol\_rules\_fun}
+
+\TYPE {\small\verb%hol_rules_fun : print_rule_function%}\egroup
+
+\SYNOPSIS
+Pretty-printing rules (as a function) for HOL types, terms and theorems.
+
+\FAILURE
+Fails if none of the rules match the input. However, this function should not
+be applied `by hand'; it should only be used as an argument to one of the
+pretty-printing functions.
+
+\SEEALSO
+hol_type_rules_fun, hol_term_rules_fun, hol_thm_rules_fun, raw_tree_rules_fun,
+then_try, pretty_print, pp, pp_write.
+
+\ENDDOC
+\DOC{hol\_term\_rules\_fun}
+
+\TYPE {\small\verb%hol_term_rules_fun : print_rule_function%}\egroup
+
+\SYNOPSIS
+Pretty-printing rules (as a function) for HOL terms. {\small\verb%hol_type_rules_fun%} is
+required for {\small\verb%hol_term_rules_fun%} to function correctly.
+
+\FAILURE
+Fails if none of the rules match the input. However, this function should not
+be applied `by hand'; it should only be used as an argument to one of the
+pretty-printing functions.
+
+\SEEALSO
+hol_type_rules_fun, hol_thm_rules_fun, hol_rules_fun, raw_tree_rules_fun,
+then_try, pretty_print, pp, pp_write.
+
+\ENDDOC
+\DOC{hol\_thm\_rules\_fun}
+
+\TYPE {\small\verb%hol_thm_rules_fun : print_rule_function%}\egroup
+
+\SYNOPSIS
+Pretty-printing rules (as a function) for HOL theorems. The rules
+{\small\verb%hol_type_rules_fun%} and {\small\verb%hol_term_rules_fun%} are required for
+{\small\verb%hol_thm_rules_fun%} to function correctly.
+
+\FAILURE
+Fails if none of the rules match the input. However, this function should not
+be applied `by hand'; it should only be used as an argument to one of the
+pretty-printing functions.
+
+\SEEALSO
+hol_type_rules_fun, hol_term_rules_fun, hol_rules_fun, raw_tree_rules_fun,
+then_try, pretty_print, pp, pp_write.
+
+\ENDDOC
+\DOC{hol\_type\_rules\_fun}
+
+\TYPE {\small\verb%hol_type_rules_fun : print_rule_function%}\egroup
+
+\SYNOPSIS
+Pretty-printing rules (as a function) for HOL types.
+
+\FAILURE
+Fails if none of the rules match the input. However, this function should not
+be applied `by hand'; it should only be used as an argument to one of the
+pretty-printing functions.
+
+\SEEALSO
+hol_term_rules_fun, hol_thm_rules_fun, hol_rules_fun, raw_tree_rules_fun,
+then_try, pretty_print, pp, pp_write.
+
+\ENDDOC
+\DOC{is\_a\_member\_of}
+
+\TYPE {\small\verb%$is_a_member_of : (string -> string list -> print_test)%}\egroup
+
+\SYNOPSIS
+Function for testing a node-name metavariable in a pretty-printing rule.
+
+\DESCRIBE
+{\small\verb%is_a_member_of%} forms a {\small\verb%print_test%} which yields {\small\verb%true%} only if the
+metavariable whose name is the first argument to {\small\verb%is_a_member_of%} is bound to
+a node-name which appears in the second argument. This evaluation to a Boolean
+value is only performed when the {\small\verb%print_test%} is applied to a parameter list
+and a binding.
+
+\FAILURE
+The function fails if the metavariable named is bound to anything other than
+a single node-name.
+
+\EXAMPLE
+An example of the use of this function is the rule:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   ''::***node(*,*) where
+          {`node` is_a_member_of [`plus`;`minus`;`mult`;`div`]} ->
+       [<h 0> ***node];
+\end{verbatim}
+}
+\SEEALSO
+bound_number, bound_name, bound_names, bound_child, bound_children,
+bound_context.
+
+\ENDDOC
+\DOC{max\_term\_prec}
+
+\TYPE {\small\verb%max_term_prec : int%}\egroup
+
+\SYNOPSIS
+Lowest precedence (maximum value) used by the pretty-printer for HOL function
+constants and syntactic constructs in terms.
+
+\SEEALSO
+min_term_prec, term_prec.
+
+\ENDDOC
+\DOC{max\_type\_prec}
+
+\TYPE {\small\verb%max_type_prec : int%}\egroup
+
+\SYNOPSIS
+Lowest precedence (maximum value) used by the pretty-printer for HOL type
+operators.
+
+\SEEALSO
+min_type_prec, type_prec.
+
+\ENDDOC
+\DOC{min\_term\_prec}
+
+\TYPE {\small\verb%min_term_prec : int%}\egroup
+
+\SYNOPSIS
+Highest precedence (minimum value) used by the pretty-printer for HOL function
+constants and syntactic constructs in terms.
+
+\SEEALSO
+max_term_prec, term_prec.
+
+\ENDDOC
+\DOC{min\_type\_prec}
+
+\TYPE {\small\verb%min_type_prec : int%}\egroup
+
+\SYNOPSIS
+Highest precedence (minimum value) used by the pretty-printer for HOL type
+operators.
+
+\SEEALSO
+max_type_prec, type_prec.
+
+\ENDDOC
+\DOC{new\_child}
+
+{\small
+\begin{verbatim}
+new_child : ((print_tree -> print_tree) ->
+             string ->
+             (string # int) list ->
+             print_binding ->
+             metavar_binding)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for transforming a print-tree bound to a metavariable.
+
+\DESCRIBE
+Within the metavariable transformation part of a pretty-printing rule, a
+typical requirement is to `declare' a new metavariable to be bound to the
+result of performing a transformation on a single existing metavariable. The
+type of function required is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> metavar_binding
+\end{verbatim}
+}
+\noindent There are four functions available to facilitate this, corresponding
+to the four different types of data which can be bound to a metavariable.
+{\small\verb%new_child%} is the function for use when the data is a single print-tree.
+
+The first argument is the transformation function. The second argument is the
+name of the metavariable which is bound to the value to be transformed. When
+provided with these arguments and a pretty-printer environment, {\small\verb%new_child%}
+extracts the item bound to the named metavariable and then applies the
+transformation function to it. The result is then made into a form suitable
+for binding to a metavariable, that is it is made into an object of type
+{\small\verb%metavar_binding%}.
+
+\FAILURE
+{\small\verb%new_child%} fails if the named metavariable does not exist or is bound to an
+item of the wrong type.
+
+\SEEALSO
+new_children, new_name, new_names, bound_child.
+
+\ENDDOC
+\DOC{new\_children}
+
+{\small
+\begin{verbatim}
+new_children :
+   (((print_tree # address) list -> (print_tree # address) list) ->
+    string ->
+    (string # int) list ->
+    print_binding ->
+    metavar_binding)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for transforming a list of print-trees bound to a metavariable.
+
+\DESCRIBE
+Within the metavariable transformation part of a pretty-printing rule, a
+typical requirement is to `declare' a new metavariable to be bound to the
+result of performing a transformation on a single existing metavariable. The
+type of function required is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> metavar_binding
+\end{verbatim}
+}
+\noindent There are four functions available to facilitate this, corresponding
+to the four different types of data which can be bound to a metavariable.
+{\small\verb%new_children%} is the function for use when the data is a list of print-trees.
+
+The first argument is the transformation function. The second argument is the
+name of the metavariable which is bound to the value to be transformed. When
+provided with these arguments and a pretty-printer environment, {\small\verb%new_children%}
+extracts the item bound to the named metavariable and then applies the
+transformation function to it. The result is then made into a form suitable
+for binding to a metavariable, that is it is made into an object of type
+{\small\verb%metavar_binding%}.
+
+Note that the transformation function has to deal with sub-tree addresses in
+addition to the print-trees. If the transformation function is polymorphic, as
+is for example a function to reverse the list, this will not cause any
+difficulties. The addresses have to be dealt with by the transformation
+function because the system cannot know how to re-assign addresses to the
+values in the result list.
+
+\FAILURE
+{\small\verb%new_children%} fails if the named metavariable does not exist or is bound to an
+item of the wrong type.
+
+\SEEALSO
+new_child, new_name, new_names, bound_children.
+
+\ENDDOC
+\DOC{new\_name}
+
+{\small
+\begin{verbatim}
+new_name : ((string -> string) ->
+            string ->
+            (string # int) list ->
+            print_binding ->
+            metavar_binding)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for transforming a node-name bound to a metavariable.
+
+\DESCRIBE
+Within the metavariable transformation part of a pretty-printing rule, a
+typical requirement is to `declare' a new metavariable to be bound to the
+result of performing a transformation on a single existing metavariable. The
+type of function required is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> metavar_binding
+\end{verbatim}
+}
+\noindent There are four functions available to facilitate this, corresponding
+to the four different types of data which can be bound to a metavariable.
+{\small\verb%new_name%} is the function for use when the data is a single node-name.
+
+The first argument is the transformation function. The second argument is the
+name of the metavariable which is bound to the value to be transformed. When
+provided with these arguments and a pretty-printer environment, {\small\verb%new_name%}
+extracts the item bound to the named metavariable and then applies the
+transformation function to it. The result is then made into a form suitable
+for binding to a metavariable, that is it is made into an object of type
+{\small\verb%metavar_binding%}.
+
+\FAILURE
+{\small\verb%new_name%} fails if the named metavariable does not exist or is bound to an
+item of the wrong type.
+
+\SEEALSO
+new_names, new_child, new_children, bound_name.
+
+\ENDDOC
+\DOC{new\_names}
+
+{\small
+\begin{verbatim}
+new_names : (((string # address) list -> (string # address) list) ->
+             string ->
+             (string # int) list ->
+             print_binding ->
+             metavar_binding)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for transforming a list of node-names bound to a metavariable.
+
+\DESCRIBE
+Within the metavariable transformation part of a pretty-printing rule, a
+typical requirement is to `declare' a new metavariable to be bound to the
+result of performing a transformation on a single existing metavariable. The
+type of function required is:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   (string # int) list -> print_binding -> metavar_binding
+\end{verbatim}
+}
+\noindent There are four functions available to facilitate this, corresponding
+to the four different types of data which can be bound to a metavariable.
+{\small\verb%new_names%} is the function for use when the data is a list of node-names.
+
+The first argument is the transformation function. The second argument is the
+name of the metavariable which is bound to the value to be transformed. When
+provided with these arguments and a pretty-printer environment, {\small\verb%new_names%}
+extracts the item bound to the named metavariable and then applies the
+transformation function to it. The result is then made into a form suitable
+for binding to a metavariable, that is it is made into an object of type
+{\small\verb%metavar_binding%}.
+
+Note that the transformation function has to deal with sub-tree addresses in
+addition to the node-names. If the transformation function is polymorphic, as
+is for example a function to reverse the list, this will not cause any
+difficulties. The addresses have to be dealt with by the transformation
+function because the system cannot know how to re-assign addresses to the
+values in the result list.
+
+\FAILURE
+{\small\verb%new_names%} fails if the named metavariable does not exist or is bound to an
+item of the wrong type.
+
+\SEEALSO
+new_name, new_child, new_children, bound_names.
+
+\ENDDOC
+\DOC{No\_address}
+
+\TYPE {\small\verb%No_address : address%}\egroup
+
+\SYNOPSIS
+Type constructor for sub-tree addresses.
+
+\DESCRIBE
+{\small\verb%No_address%} is used to indicate that there is no valid address information
+for a sub-tree.
+
+\SEEALSO
+Address.
+
+\ENDDOC
+\DOC{No\_types}
+
+\TYPE {\small\verb%No_types : type_selection%}\egroup
+
+\SYNOPSIS
+Value used to control the amount of type information included in the print-tree
+of a term.
+
+\DESCRIBE
+{\small\verb%No_types%} is a value used to instruct the term-to-print-tree conversion
+function to include no type information in the tree.
+
+\SEEALSO
+Hidden_types, Useful_types, All_types, term_to_print_tree.
+
+\ENDDOC
+\DOC{pp}
+
+{\small
+\begin{verbatim}
+pp : (print_rule_function -> string -> (string # int) list ->
+      print_tree -> void)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+One of the main pretty-printing functions. For use with the standard HOL
+pretty-printer.
+
+\DESCRIBE
+{\small\verb%pp%} invokes the pretty-printer. It can be used for merging output with text
+produced by the standard HOL pretty-printer. Instead of ending each line of
+text by printing a new-line, it sends its output to the standard HOL printer
+in the form of a pretty-printing block. The arguments to the function are:
+(1) pretty-printing rules expressed as a function, (2) the initial context,
+(3) initial parameters, (4) tree to be printed. {\small\verb%pp%} uses as its maximum width
+the width for the standard HOL printer, as specified by the function
+{\small\verb%set_margin%}. The initial offset from the left margin is taken to be zero.
+
+\FAILURE
+Failure or incorrect behaviour can be caused by mistakes in the pretty-printing
+rules or by inappropriate arguments to the printing function. The most common
+errors are use of uninitialised parameters and reference to unknown
+metavariables. The latter are due to metavariables appearing in the format of a
+rule, but not in the pattern. Errors also occur if a metavariable is used in a
+place inappropriate for the value it is bound to. An example of this is an
+attempt to compare a string with a metavariable that is bound to a tree rather
+than a node-name.
+
+Use of negative indentations in formats may cause text to overflow the left
+margin, and an exception to be raised. Any user defined function may also
+cause a run-time error.
+
+The printing functions have been designed to trap exceptions and to print
+{\small\verb%*error*%}. This does not indicate what caused the error, but it may give some
+indication of where the error occurred. However, this is not the main reason
+for trapping exceptions. The ML directive {\small\verb%top_print%} installs a user print
+function. If an exception is raised within this function, it does not appear
+at the top-level of ML. Instead, an obscure Lisp error is produced. Since the
+pretty-printing functions are normally used with {\small\verb%top_print%}, it is best to
+avoid raising exceptions. For this reason the printing functions display
+{\small\verb%*error*%} instead.
+
+\SEEALSO
+pretty_print, pp_write.
+
+\ENDDOC
+\DOC{pp\_convert\_all\_thm}
+
+\TYPE {\small\verb%pp_convert_all_thm : (thm -> print_tree)%}\egroup
+
+\SYNOPSIS
+Function for converting a HOL theorem into a print-tree.
+
+\DESCRIBE
+{\small\verb%pp_convert_all_thm%} converts a theorem into a print-tree. The hypotheses
+(assumptions) of the theorem are included in the print-tree. Instances of the
+HOL constant {\small\verb%UNCURRY%} in the theorem are converted into an appropriate use of
+ordered pairs in the print-tree. The amount of type information included in
+the print-tree is determined by the value of the HOL system flag {\small\verb%show_types%}.
+If {\small\verb%show_types%} is {\small\verb%true%}, then `useful' types are included in the print-tree.
+Otherwise, only `hidden' types are included.
+
+`Useful' type information is type information on the bound variables of
+abstractions and on one occurrence of every free variable. Type information is
+only included for constants if the constant is a function and it is not fully
+applied.
+
+`Hidden' types are rare. They only occur on variables which, although free,
+without type information appear to be bound.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_convert_thm, pp_convert_type, pp_convert_term, thm_to_print_tree.
+
+\ENDDOC
+\DOC{pp\_convert\_term}
+
+\TYPE {\small\verb%pp_convert_term : (term -> print_tree)%}\egroup
+
+\SYNOPSIS
+Function for converting a HOL term into a print-tree.
+
+\DESCRIBE
+{\small\verb%pp_convert_term%} converts a term into a print-tree. Instances of the HOL
+constant {\small\verb%UNCURRY%} in the term are converted into an appropriate use of
+ordered pairs in the print-tree. The amount of type information included in the
+print-tree is determined by the value of the HOL system flag {\small\verb%show_types%}.
+If {\small\verb%show_types%} is {\small\verb%true%}, then `useful' types are included in the print-tree.
+Otherwise, only `hidden' types are included.
+
+`Useful' type information is type information on the bound variables of
+abstractions and on one occurrence of every free variable. Type information is
+only included for constants if the constant is a function and it is not fully
+applied.
+
+`Hidden' types are rare. They only occur on variables which, although free,
+without type information appear to be bound.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_convert_type, pp_convert_thm, pp_convert_all_thm, term_to_print_tree.
+
+\ENDDOC
+\DOC{pp\_convert\_thm}
+
+\TYPE {\small\verb%pp_convert_thm : (thm -> print_tree)%}\egroup
+
+\SYNOPSIS
+Function for converting a HOL theorem into a print-tree.
+
+\DESCRIBE
+{\small\verb%pp_convert_thm%} converts a theorem into a print-tree. The hypotheses
+(assumptions) of the theorem are not included in the print-tree. Instances of
+the HOL constant {\small\verb%UNCURRY%} in the theorem are converted into an appropriate use
+of ordered pairs in the print-tree. The amount of type information included in
+the print-tree is determined by the value of the HOL system flag {\small\verb%show_types%}.
+If {\small\verb%show_types%} is {\small\verb%true%}, then `useful' types are included in the print-tree.
+Otherwise, only `hidden' types are included.
+
+`Useful' type information is type information on the bound variables of
+abstractions and on one occurrence of every free variable. Type information is
+only included for constants if the constant is a function and it is not fully
+applied.
+
+`Hidden' types are rare. They only occur on variables which, although free,
+without type information appear to be bound.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_convert_all_thm, pp_convert_type, pp_convert_term, thm_to_print_tree.
+
+\ENDDOC
+\DOC{pp\_convert\_type}
+
+\TYPE {\small\verb%pp_convert_type : (type -> print_tree)%}\egroup
+
+\SYNOPSIS
+Function for converting a HOL type into a print-tree.
+
+\DESCRIBE
+{\small\verb%pp_convert_type%} has an identical specification to {\small\verb%type_to_print_tree%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+type_to_print_tree, pp_convert_term, pp_convert_thm, pp_convert_all_thm.
+
+\ENDDOC
+\DOC{pp\_print\_all\_thm}
+
+\TYPE {\small\verb%pp_print_all_thm : (thm -> void)%}\egroup
+
+\SYNOPSIS
+Print function for HOL theorems. Simulates the HOL system function
+{\small\verb%print_all_thm%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_print_thm, pp_print_type, pp_print_term.
+
+\ENDDOC
+\DOC{pp\_print\_term}
+
+\TYPE {\small\verb%pp_print_term : (term -> void)%}\egroup
+
+\SYNOPSIS
+Print function for HOL terms. Simulates the HOL system function {\small\verb%print_term%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_print_type, pp_print_thm, pp_print_all_thm.
+
+\ENDDOC
+\DOC{pp\_print\_theory}
+
+\TYPE {\small\verb%pp_print_theory : (string -> void)%}\egroup
+
+\SYNOPSIS
+Print function for HOL theories.
+
+\DESCRIBE
+{\small\verb%pp_print_theory%} simulates the HOL system function {\small\verb%print_theory%} using the
+pretty-printer library. The function takes a theory-segment name as argument.
+The following information is displayed: the parents of the theory, types
+defined within the theory, constants of the theory, the binders and infixes
+(subsets of the constants), the axioms, the definitions, and the derived
+theorems.
+
+\FAILURE
+Fails if the named theory does not exist or is not an ancestor of the current
+theory.
+
+\SEEALSO
+pp_print_type, pp_print_term, pp_print_thm, pp_print_all_thm.
+
+\ENDDOC
+\DOC{pp\_print\_thm}
+
+\TYPE {\small\verb%pp_print_thm : (thm -> void)%}\egroup
+
+\SYNOPSIS
+Print function for HOL theorems. Simulates the HOL system function {\small\verb%print_thm%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_print_all_thm, pp_print_type, pp_print_term.
+
+\ENDDOC
+\DOC{pp\_print\_type}
+
+\TYPE {\small\verb%pp_print_type : (type -> void)%}\egroup
+
+\SYNOPSIS
+Print function for HOL types. Simulates the HOL system function {\small\verb%print_type%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_print_term, pp_print_thm, pp_print_all_thm.
+
+\ENDDOC
+\DOC{PP\_to\_ML}
+
+\TYPE {\small\verb%PP_to_ML : (bool -> string -> string -> void)%}\egroup
+
+\SYNOPSIS
+Function to compile pretty-printing rules into ML datastructures.
+
+\DESCRIBE
+The function {\small\verb%PP_to_ML%} invokes the parser for the pretty-printing language.
+Its first argument indicates whether or not the output is to be appended to the
+destination file. If the argument is {\small\verb%false%} and the destination file existed
+previously, the file is overwritten. The second and third arguments specify
+the names of the source and destination files respectively. For example, the
+ML function call:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   PP_to_ML false `xxxx.pp` ``;;
+\end{verbatim}
+}
+\noindent compiles the file {\small\verb%xxxx.pp%} to a file called {\small\verb%xxxx_pp.ml%},
+overwriting any previous version.
+
+The `{\small\verb%.pp%}' extension can be omitted. So, the following has precisely the same
+effect as the previous `command':
+{\par\samepage\setseps\small
+\begin{verbatim}
+   PP_to_ML false `xxxx` ``;;
+\end{verbatim}
+}
+\noindent If the last argument is anything other than the empty string, it is
+used as the name of the destination file. So,
+{\par\samepage\setseps\small
+\begin{verbatim}
+   PP_to_ML false `xxxx` `test.ml`;;
+\end{verbatim}
+}
+\noindent compiles the file {\small\verb%xxxx.pp%} to the file {\small\verb%test.ml%}.
+
+\FAILURE
+The compiler may fail to parse the source code. In this case the error message
+specifies the kind of symbol the compiler was expecting and the kind of symbol
+it received. In addition, the compiler displays a few lines of the source file
+following the point at which the failure occurred. This should facilitate the
+location of the fault.
+
+The second kind of error occurs after the parse has completed successfully. At
+this point the compiler is converting the parse-tree into ML. Faults at this
+point are due to additional restrictions not being met, and the error messages
+are correspondingly ad hoc. The part of the parse-tree under conversion is
+printed in the pretty-printing language. This may or may not be helpful,
+depending on the size of the tree.
+
+\ENDDOC
+\DOC{pp\_write}
+
+{\small
+\begin{verbatim}
+pp_write : (string -> int -> int -> print_rule_function -> string ->
+            (string # int) list -> print_tree -> void)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+One of the main pretty-printing functions. Function for printing to files.
+
+\DESCRIBE
+{\small\verb%pp_write%} invokes the pretty-printer. The arguments to this function are:
+(1) file handle (port) of the file to be written to,
+(2) maximum width of output permitted, (3) initial offset from left margin,
+(4) pretty-printing rules expressed as a function, (5) the initial context,
+(6) initial parameters, (7) tree to be printed.
+
+\FAILURE
+Failure or incorrect behaviour can be caused by mistakes in the pretty-printing
+rules or by inappropriate arguments to the printing function. The most common
+errors are use of uninitialised parameters and reference to unknown
+metavariables. The latter are due to metavariables appearing in the format of a
+rule, but not in the pattern. Errors also occur if a metavariable is used in a
+place inappropriate for the value it is bound to. An example of this is an
+attempt to compare a string with a metavariable that is bound to a tree rather
+than a node-name.
+
+Use of negative indentations in formats may cause text to overflow the left
+margin, and an exception to be raised. Any user defined function may also
+cause a run-time error.
+
+The printing functions have been designed to trap exceptions and to print
+{\small\verb%*error*%}. This does not indicate what caused the error, but it may give some
+indication of where the error occurred. However, this is not the main reason
+for trapping exceptions. The ML directive {\small\verb%top_print%} installs a user print
+function. If an exception is raised within this function, it does not appear
+at the top-level of ML. Instead, an obscure Lisp error is produced. Since the
+pretty-printing functions are normally used with {\small\verb%top_print%}, it is best to
+avoid raising exceptions. For this reason the printing functions display
+{\small\verb%*error*%} instead.
+
+\SEEALSO
+pretty_print, pp.
+
+\ENDDOC
+\DOC{pretty\_print}
+
+{\small
+\begin{verbatim}
+pretty_print : (int -> int -> print_rule_function -> string ->
+                (string # int) list -> print_tree -> void)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+One of the main pretty-printing functions. This one writes directly to the
+terminal, independently of the standard HOL printer.
+
+\DESCRIBE
+{\small\verb%pretty_print%} invokes the pretty-printer. The arguments to this function are:
+(1) maximum width of output permitted, (2) initial offset from left margin,
+(3) pretty-printing rules expressed as a function, (4) the initial context,
+(5) initial parameters, (6) tree to be printed.
+
+\FAILURE
+Failure or incorrect behaviour can be caused by mistakes in the pretty-printing
+rules or by inappropriate arguments to the printing function. The most common
+errors are use of uninitialised parameters and reference to unknown
+metavariables. The latter are due to metavariables appearing in the format of a
+rule, but not in the pattern. Errors also occur if a metavariable is used in a
+place inappropriate for the value it is bound to. An example of this is an
+attempt to compare a string with a metavariable that is bound to a tree rather
+than a node-name.
+
+Use of negative indentations in formats may cause text to overflow the left
+margin, and an exception to be raised. Any user defined function may also
+cause a run-time error.
+
+The printing functions have been designed to trap exceptions and to print
+{\small\verb%*error*%}. This does not indicate what caused the error, but it may give some
+indication of where the error occurred. However, this is not the main reason
+for trapping exceptions. The ML directive {\small\verb%top_print%} installs a user print
+function. If an exception is raised within this function, it does not appear
+at the top-level of ML. Instead, an obscure Lisp error is produced. Since the
+pretty-printing functions are normally used with {\small\verb%top_print%}, it is best to
+avoid raising exceptions. For this reason the printing functions display
+{\small\verb%*error*%} instead.
+
+\SEEALSO
+pp, pp_write.
+
+\ENDDOC
+\DOC{Print\_node}
+
+\TYPE {\small\verb%Print_node : ((string # print_tree list) -> print_tree)%}\egroup
+
+\SYNOPSIS
+Constructor function for print-trees (parse-trees).
+
+\DESCRIBE
+{\small\verb%Print_node%} takes a node label and a list of sub-trees and uses them to
+construct a new print-tree. Leaf nodes have an empty sub-tree (child) list.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+print_tree_name, print_tree_children.
+
+\ENDDOC
+\DOC{print\_tree\_children}
+
+\TYPE {\small\verb%print_tree_children : (print_tree -> print_tree list)%}\egroup
+
+\SYNOPSIS
+Function to extract the sub-trees (children) of the root node of a print-tree.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+print_tree_name, Print_node.
+
+\ENDDOC
+\DOC{print\_tree\_name}
+
+\TYPE {\small\verb%print_tree_name : (print_tree -> string)%}\egroup
+
+\SYNOPSIS
+Function to extract the name (label) of the root node of a print-tree.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+print_tree_children, Print_node.
+
+\ENDDOC
+\DOC{raw\_tree\_rules\_fun}
+
+\TYPE {\small\verb%raw_tree_rules_fun : print_rule_function%}\egroup
+
+\SYNOPSIS
+Pretty-printing rules (as a function) for raw print-trees (parse-trees).
+
+\DESCRIBE
+In the event of no pretty-printing rules matching the tree to be printed, a
+default set of rules are used. These rules always match, and the output
+generated is a textual representation of the structure of the tree. The default
+rules are available to the user as {\small\verb%raw_tree_rules_fun%}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+hol_type_rules_fun, hol_term_rules_fun, hol_thm_rules_fun, hol_rules_fun,
+then_try, pretty_print, pp, pp_write.
+
+\ENDDOC
+\DOC{term\_prec}
+
+\TYPE {\small\verb%term_prec : (string -> int)%}\egroup
+
+\SYNOPSIS
+Precedence table for HOL terms (as a function).
+
+\DESCRIBE
+{\small\verb%term_prec%} is a function which given the name of a HOL function constant,
+returns the precedence used by the pretty-printer. The precedences of
+abstractions ({\small\verb%`\\`%}) and type annotations ({\small\verb%`:`%}) are also included.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+min_term_prec, max_term_prec, type_prec.
+
+\ENDDOC
+\DOC{term\_to\_print\_tree}
+
+\TYPE {\small\verb%term_to_print_tree : (bool -> type_selection -> term -> print_tree)%}\egroup
+
+\SYNOPSIS
+Function for converting a HOL term into a print-tree.
+
+\DESCRIBE
+The first argument to {\small\verb%term_to_print_tree%} is a flag. If the flag is {\small\verb%true%},
+the function converts instances of the HOL constant {\small\verb%UNCURRY%} in the term
+into an appropriate use of ordered pairs in the print-tree. If the flag is
+{\small\verb%false%}, {\small\verb%UNCURRY%} is treated in the same way as any other HOL constant. The
+conversion is necessary because the representation of tuples of bound
+variables in a HOL term is so unlike the syntax of the tuples that the
+pretty-printer cannot handle them. So, normally, the flag should be set to
+{\small\verb%true%}.
+
+The second argument to {\small\verb%term_to_print_tree%} controls the amount of type
+information included in the print-tree of the term. If {\small\verb%No_types%} is given as
+the argument, then the print-tree will contain no type information. If
+{\small\verb%All_types%} is given as the argument, the tree will contain type information
+for every variable and constant. Use of {\small\verb%Useful_types%} instructs
+{\small\verb%term_to_print_tree%} to attach type information to the bound variables of
+abstractions, and to one occurrence of every free variable. Type information
+is only included for constants if the constant is a function and it is not
+fully applied. So, the equals sign in {\small\verb%"1 = 2"%} would not be adorned with type
+information, but in {\small\verb%"$= 1"%} it would be.
+
+Finally, using {\small\verb%Hidden_types%} as the second argument to {\small\verb%term_to_print_tree%}
+causes type information to be attached only to variables which, although free,
+without type information appear to be bound. An example of such a variable is
+{\small\verb%"x:num"%} in the term:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   "\(x:bool). (x:num)"
+\end{verbatim}
+}
+\noindent Without types, this term appears as {\small\verb%"\x. x"%}. However, the two
+occurrences of {\small\verb%x%} are different.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#term_to_print_tree true No_types "\x. x /\ T";;
+Print_node(`term`,
+           [Print_node(`ABS`,
+                       [Print_node(`VAR`, [Print_node(`x`, [])]);
+                        Print_node(`COMB`,
+                                   [Print_node(`COMB`,
+                                               [Print_node(`CONST`,
+                                                           [Print_node(`/\`,
+                                                                       [])]);
+                                                Print_node(`VAR`,
+                                                           [Print_node(`x`,
+                                                                       [])])]);
+                                    Print_node(`CONST`,
+                                               [Print_node(`T`, [])])])])])
+: print_tree
+\end{verbatim}
+}
+\SEEALSO
+type_to_print_tree, thm_to_print_tree, pp_convert_term.
+
+\ENDDOC
+\DOC{then\_try}
+
+{\small
+\begin{verbatim}
+$then_try : (print_rule_function ->
+             print_rule_function ->
+             print_rule_function)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for composing print-rule functions.
+
+\DESCRIBE
+{\small\verb%then_try%} is an infix function which forms the composite of two print-rule
+functions, say {\small\verb%prf1%} and {\small\verb%prf2%}. The result is a new print-rule function
+which, when given a tree to match, first tries the rules of {\small\verb%prf1%}; if none of
+these match, it then tries the rules of {\small\verb%prf2%}.
+
+\FAILURE
+Cannot fail when given two print-rule functions as arguments. However, the
+resulting function may fail when used, with this depending on the failure
+properties of the two argument functions.
+
+\SEEALSO
+hol_type_rules_fun, hol_term_rules_fun, hol_thm_rules_fun, hol_rules_fun,
+raw_tree_rules_fun, pretty_print, pp, pp_write.
+
+\ENDDOC
+\DOC{thm\_to\_print\_tree}
+
+{\small
+\begin{verbatim}
+thm_to_print_tree :
+   (bool -> bool -> type_selection -> thm -> print_tree)
+\end{verbatim}
+}\egroup
+
+\SYNOPSIS
+Function for converting a HOL theorem into a print-tree.
+
+\DESCRIBE
+The first argument to {\small\verb%thm_to_print_tree%} determines whether or not the
+hypotheses (assumptions) of the theorem are included in the print-tree in full.
+
+The second argument to {\small\verb%thm_to_print_tree%} is a flag. If the flag is {\small\verb%true%},
+the function converts instances of the HOL constant {\small\verb%UNCURRY%} in the theorem
+into an appropriate use of ordered pairs in the print-tree. If the flag is
+{\small\verb%false%}, {\small\verb%UNCURRY%} is treated in the same way as any other HOL constant. The
+conversion is necessary because the representation of tuples of bound
+variables in a HOL term is so unlike the syntax of the tuples that the
+pretty-printer cannot handle them. So, normally, the flag should be set to
+{\small\verb%true%}.
+
+The third argument to {\small\verb%thm_to_print_tree%} controls the amount of type
+information included in the print-tree of the theorem. If {\small\verb%No_types%} is given
+as the argument, then the print-tree will contain no type information. If
+{\small\verb%All_types%} is given as the argument, the tree will contain type information
+for every variable and constant. Use of {\small\verb%Useful_types%} instructs
+{\small\verb%thm_to_print_tree%} to attach type information to the bound variables of
+abstractions, and to one occurrence of every free variable. Type information
+is only included for constants if the constant is a function and it is not
+fully applied. So, the equals sign in {\small\verb%"1 = 2"%} would not be adorned with type
+information, but in {\small\verb%"$= 1"%} it would be.
+
+Finally, using {\small\verb%Hidden_types%} as the third argument to {\small\verb%thm_to_print_tree%}
+causes type information to be attached only to variables which, although free,
+without type information appear to be bound. An example of such a variable is
+{\small\verb%"x:num"%} in the term:
+{\par\samepage\setseps\small
+\begin{verbatim}
+   "\(x:bool). (x:num)"
+\end{verbatim}
+}
+\noindent Without types, this term appears as {\small\verb%"\x. x"%}. However, the two
+occurrences of {\small\verb%x%} are different.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#thm_to_print_tree false true No_types (UNDISCH (SPEC_ALL FALSITY));;
+Print_node(`thm`,
+           [Print_node(`term`,
+                       [Print_node(`VAR`, [Print_node(`t`, [])])]);
+            Print_node(`dots`, [Print_node(`dot`, [])])])
+: print_tree
+
+#thm_to_print_tree true true No_types (UNDISCH (SPEC_ALL FALSITY));;
+Print_node(`thm`,
+           [Print_node(`term`,
+                       [Print_node(`VAR`, [Print_node(`t`, [])])]);
+            Print_node(`hyp`,
+                       [Print_node(`term`,
+                                   [Print_node(`CONST`,
+                                               [Print_node(`F`, [])])])])])
+: print_tree
+\end{verbatim}
+}
+\SEEALSO
+type_to_print_tree, term_to_print_tree, pp_convert_thm, pp_convert_all_thm.
+
+\ENDDOC
+\DOC{type\_prec}
+
+\TYPE {\small\verb%type_prec : (string -> int)%}\egroup
+
+\SYNOPSIS
+Precedence table for HOL types (as a function).
+
+\DESCRIBE
+{\small\verb%type_prec%} is a function which given the name of a HOL type operator, returns
+the precedence used by the pretty-printer. The standard infix type operators
+should be referred to by {\small\verb%fun%}, {\small\verb%prod%} and {\small\verb%sum%}, rather than by the symbolic
+forms.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+min_type_prec, max_type_prec, term_prec.
+
+\ENDDOC
+\DOC{type\_to\_print\_tree}
+
+\TYPE {\small\verb%type_to_print_tree : (type -> print_tree)%}\egroup
+
+\SYNOPSIS
+Function for converting a HOL type into a print-tree.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{\par\samepage\setseps\small
+\begin{verbatim}
+#type_to_print_tree ":* -> bool";;
+Print_node(`type`,
+           [Print_node(`OP`,
+                       [Print_node(`fun`, []);
+                        Print_node(`VAR`, [Print_node(`*`, [])]);
+                        Print_node(`OP`, [Print_node(`bool`, [])])])])
+: print_tree
+\end{verbatim}
+}
+\SEEALSO
+term_to_print_tree, thm_to_print_tree, pp_convert_type.
+
+\ENDDOC
+\DOC{Useful\_types}
+
+\TYPE {\small\verb%Useful_types : type_selection%}\egroup
+
+\SYNOPSIS
+Value used to control the amount of type information included in the print-tree
+of a term.
+
+\DESCRIBE
+{\small\verb%Useful_types%} is a value used to instruct the term-to-print-tree conversion
+function to attach type information to the bound variables of abstractions,
+and to one occurrence of every free variable. Type information is only
+included for constants if the constant is a function and it is not fully
+applied. So, the equals sign in {\small\verb%"1 = 2"%} would not be adorned with type
+information, but in {\small\verb%"$= 1"%} it would be.
+
+\SEEALSO
+No_types, Hidden_types, All_types, term_to_print_tree.
+
+\ENDDOC

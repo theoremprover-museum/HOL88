@@ -1,0 +1,5 @@
+\THEOREM UNZIP_SNOC list
+|- !x l.
+    UNZIP(SNOC x l) =
+    SNOC(FST x)(FST(UNZIP l)),SNOC(SND x)(SND(UNZIP l))
+\ENDTHEOREM

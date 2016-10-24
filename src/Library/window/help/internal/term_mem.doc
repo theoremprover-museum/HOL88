@@ -1,0 +1,10 @@
+\DOC term_mem
+
+\TYPE {term_mem : (term -> term list -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

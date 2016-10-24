@@ -1,0 +1,36 @@
+\DOC is_infix_type
+
+\TYPE {is_infix_type : (type -> bool)}
+
+\SYNOPSIS
+Determines whether a given type is an appropriate infix type.
+
+\DESCRIBE
+The most general infix type is {":* -> (** -> ***)"}. The function
+{is_infix_type} returns {true} if the given type is an instance of the
+most general infix type: it returns {false} otherwise.
+
+\FAILURE
+Sometimes fails in a nasty way: e.g.,
+{
+   #is_infix_type ":(* -> **)";;
+   evaluation failed     dest_type
+}
+\EXAMPLE
+{
+#is_infix_type ":*->**->***";;
+true : bool
+
+#is_infix_type ":bool->num->bool";;
+true : bool
+
+#is_infix_type ":(bool->bool)";;
+false : bool
+
+#is_infix_type ":bool";;
+false : bool
+}
+\SEEALSO
+is_infix, is_type, is_binder_type
+
+\ENDDOC

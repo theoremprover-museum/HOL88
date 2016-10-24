@@ -1,0 +1,52 @@
+\DOC delete_thm
+
+\TYPE {delete_thm : (string -> string -> thm)}
+
+\SYNOPSIS
+Deletes a theorem from a theory.
+
+\DESCRIBE
+If {thy} is an ancestor theory, and {th} the name of a theorem of that theory,
+then the call
+{
+   delete_thm `thy` `th`
+}
+\noindent will delete the theorem {th} from the theory {thy}. As usual, the
+special string {`-`} is allowed as a theory name, standing for the current
+theory. The call will return the theorem deleted.
+
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {th} is not one of its
+theorems, or for various system-dependent reasons connected with writing to the
+theory file.
+
+\EXAMPLE
+{
+#new_theory `geek`;;
+() : void
+
+#theorems `-`;;
+[] : (string # thm) list
+
+#save_thm(`truth`,TRUTH);;
+|- T
+
+#theorems `-`;;
+[(`truth`, |- T)] : (string # thm) list
+
+#delete_thm `-` `truth`;;
+|- T
+
+#theorems `-`;;
+[] : (string # thm) list
+}
+\COMMENTS
+The particular theorems which are stored in a theory have no logical
+significance, so this operation is quite safe. By contrast, being able to
+delete a definition from a theory would compromise the consistency of the
+logic, so it is not allowed.
+
+\SEEALSO
+prove_thm, save_thm, theorem, theorems.
+
+\ENDDOC

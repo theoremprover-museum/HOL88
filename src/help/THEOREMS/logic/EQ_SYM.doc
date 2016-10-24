@@ -1,0 +1,3 @@
+\THEOREM EQ_SYM \none
+|- !x:* y:*. (x = y) ==> (y = x)
+\ENDTHEOREM

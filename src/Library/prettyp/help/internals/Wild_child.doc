@@ -1,0 +1,10 @@
+\DOC Wild_child
+
+\TYPE {Wild_child : print_patt_tree}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

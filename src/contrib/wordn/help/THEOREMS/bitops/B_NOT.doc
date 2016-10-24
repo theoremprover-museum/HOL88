@@ -1,0 +1,3 @@
+\THEOREM B_NOT wordn_bitops
+|- !l. B_NOT(B_NOT l) = l
+\ENDTHEOREM

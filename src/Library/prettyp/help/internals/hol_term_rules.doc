@@ -1,0 +1,10 @@
+\DOC hol_term_rules
+
+\TYPE {hol_term_rules : print_rule list}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

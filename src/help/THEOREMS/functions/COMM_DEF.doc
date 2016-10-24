@@ -1,0 +1,3 @@
+\THEOREM COMM_DEF fun
+|- !f. COMM f = (!x y. f x y = f y x)
+\ENDTHEOREM

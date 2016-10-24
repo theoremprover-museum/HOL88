@@ -1,0 +1,3 @@
+\THEOREM FOLDL_FILTER list
+|- !f e P l. FOLDL f e(FILTER P l) = FOLDL(\x y. (P y => f x y | x))e l
+\ENDTHEOREM

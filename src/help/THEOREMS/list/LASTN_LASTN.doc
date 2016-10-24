@@ -1,0 +1,4 @@
+\THEOREM LASTN_LASTN list
+|- !l n m.
+    m <= (LENGTH l) ==> n <= m ==> (LASTN n(LASTN m l) = LASTN n l)
+\ENDTHEOREM

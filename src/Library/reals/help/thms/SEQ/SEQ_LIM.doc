@@ -1,0 +1,3 @@
+\THEOREM SEQ_LIM SEQ
+|- !f. convergent f = f --> (lim f)
+\ENDTHEOREM

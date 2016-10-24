@@ -1,0 +1,10 @@
+\DOC open_window
+
+\TYPE {open_window : (win_path -> ... -> window_stack -> window_stack)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

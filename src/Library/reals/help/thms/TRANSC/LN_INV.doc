@@ -1,0 +1,3 @@
+\THEOREM LN_INV TRANSC
+|- !x. (& 0) < x ==> (ln(inv x) = --(ln x))
+\ENDTHEOREM

@@ -1,0 +1,61 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  30 NOV 1992 15:27
+**guide.tex
+(guide.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (/usr/lib/tex/macros/fleqn.sty
+\mathindent=\dimen99
+)
+(../LaTeX/alltt.sty) (../LaTeX/layout.sty
+\@myenumdepth=\count87
+\c@myenumi=\count88
+) (../LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count89
+)
+(../LaTeX/ref-macros.tex) (guide.aux) [1
+
+] [2] [3] [4] [5]
+Underfull \vbox (badness 1314) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.36157
+.\glue(\topskip) 0.0
+.\hbox(12.0+0.0)x455.24408, glue set 130.50192fil
+..\hbox(11.13599+0.0)x29.80783
+...\glue 0.0
+...\svtnbf 4
+...\glue 19.87189
+..\svtnbf S
+..\svtnbf t
+..\svtnbf r
+..\svtnbf u
+..etc.
+.\mark{{}{{4. \ Structure of the reference manual}}}
+.\write1{\@writefile{toc}{\string\contentsline\space {section}{\string\numberl\
+ETC.}
+.\penalty 10000
+.etc.
+
+ [6]
+[7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20] [21]
+[22] [23] [24] [25] [26] [27] [28] (guide.aux) ) 
+Here is how much of TeX's memory you used:
+ 352 strings out of 4463
+ 2818 string characters out of 63169
+ 36106 words of memory out of 262141
+ 2281 multiletter control sequences out of 9500
+ 20109 words of font info for 77 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 14i,12n,17p,214b,524s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on guide.dvi (28 pages, 75112 bytes).

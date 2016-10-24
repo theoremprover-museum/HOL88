@@ -1,0 +1,22 @@
+\DOC PMI_IMP
+
+\TYPE {PMI_IMP : (thm -> thm)}
+
+\SYNOPSIS
+Changes a backward implication into a forward implication.
+
+\LIBRARY window
+
+\DESCRIBE
+{
+ H |- u <== t
+--------------  PMI_IMP
+ H |- t ==> u
+}
+\FAILURE
+{PMI_IMP} will fail if its argument is not a backward implication.
+
+\SEEALSO
+IMP_PMI, PMI_DEF
+
+\ENDDOC

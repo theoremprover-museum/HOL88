@@ -1,0 +1,16 @@
+\THEOREM TERMDIFF_LEMMA2 POWSER
+|- !z h.
+    ~(h = & 0) ==>
+    (((((z + h) pow n) - (z pow n)) / h) -
+     ((& n) * (z pow (n num_sub 1))) =
+     h *
+     (Sum
+      (0,n num_sub 1)
+      (\p.
+        (z pow p) *
+        (Sum
+         (0,(n num_sub 1) num_sub p)
+         (\q.
+           ((z + h) pow q) *
+           (z pow (((n num_sub 2) num_sub p) num_sub q)))))))
+\ENDTHEOREM

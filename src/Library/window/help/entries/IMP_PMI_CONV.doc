@@ -1,0 +1,22 @@
+\DOC IMP_PMI_CONV
+
+\TYPE {IMP_PMI_CONV : (term -> thm)}
+
+\SYNOPSIS
+Changes a forward implication into a backward implication.
+
+\LIBRARY window
+
+\EXAMPLE
+{
+#IMP_PMI_CONV "A ==> B";;
+|- (A ==> B) = (B <== A)
+}
+\FAILURE
+{IMP_PMI_CONV} will fail if its argument is not an implication.
+
+
+\SEEALSO
+PMI_IMP, IMP_PMI, PMI_IMP_CONV, PMI_DEF
+
+\ENDDOC

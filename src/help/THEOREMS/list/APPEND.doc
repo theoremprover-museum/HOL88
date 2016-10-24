@@ -1,0 +1,4 @@
+\THEOREM APPEND list
+|- (!l. APPEND[]l = l) /\
+   (!l1 l2 h. APPEND(CONS h l1)l2 = CONS h(APPEND l1 l2))
+\ENDTHEOREM

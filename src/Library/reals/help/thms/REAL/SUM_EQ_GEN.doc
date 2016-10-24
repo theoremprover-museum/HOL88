@@ -1,0 +1,5 @@
+\THEOREM SUM_EQ_GEN REAL
+|- !f g m n.
+    (!r. m num_le r /\ r num_lt (n num_add m) ==> (f r = g r)) ==>
+    (Sum(m,n)f = Sum(m,n)g)
+\ENDTHEOREM

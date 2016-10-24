@@ -1,0 +1,3 @@
+\THEOREM B_AND_SYM wordn_bitops
+|- !l1 l2. (LENGTH l1 = LENGTH l2) ==> (B_AND l1 l2 = B_AND l2 l1)
+\ENDTHEOREM

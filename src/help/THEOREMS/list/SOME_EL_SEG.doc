@@ -1,0 +1,4 @@
+\THEOREM SOME_EL_SEG list
+|- !m k l.
+    (m + k) <= (LENGTH l) ==> (!P. SOME_EL P(SEG m k l) ==> SOME_EL P l)
+\ENDTHEOREM

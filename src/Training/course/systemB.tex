@@ -1,0 +1,1339 @@
+% =====================================================================
+% HOL Course Slides: overview of higher order logic   (c) T melham 1990
+% =====================================================================
+
+% latest work : rco 8/ii/91
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+\def\meta#1{{$\langle\hbox{\it #1\/}\rangle$}}
+\def\Rule#1#2{\mbox{${\displaystyle\raise 6pt\hbox{$\;\;\;#1\;\;\;$}} \over 
+                     {\displaystyle\lower7pt\hbox{$\;\;\;#2\;\;\;$}}$}}
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{The Core System}{6}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+The Core HOL System
+\esectitle
+
+% =====================================================================
+\slide{Outline}
+
+\point{Theories:}
+\subpoint{What a theory consists of.}
+\subpoint{Functions for creating and building theories.}
+\subpoint{Functions for accessing theory components.}
+
+\point{Core HOL theories:}
+\subpoint{The theory {\tt bool}.}
+\subpoint{The theory {\tt ind}.}
+
+\point{Primitive inference rules in HOL.}
+
+\point{The built-in derived theories.}
+
+
+% =====================================================================
+\slide{Theories}
+
+
+\point{A theory is a collection of}
+
+\subpoint{type constants}
+\subpoint{type operators}
+\subpoint{constants}
+\subpoint{constant definitions}
+\subpoint{type definitions}
+\subpoint{axioms}
+\subpoint{theorems}
+
+\point{Theories also have {\it parents}.}
+
+\point{The user always works within some current theory:}
+
+\subpoint{in {\it draft mode\/} when creating a theory.}
+
+\subpoint{in {\it working mode} otherwise.}
+
+\point{Theories are stored in files on disk.}
+
+
+% =====================================================================
+\slide{Core HOL theories}
+
+\point{The core theory heirarchy:}
+
+\vskip10mm
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,80)
+\put(50,75){\makebox(0,0)[c]{\LARGE {\bf {\tt PPLAMB} }}}
+\put(50,55){\makebox(0,0)[c]{\LARGE {\bf {\tt bool } }}}
+\put(50,35){\makebox(0,0)[c]{\LARGE {\bf {\tt ind } }}}
+\put(50,15){\makebox(0,0)[c]{\LARGE {\bf {\tt BASIC-HOL } }}}
+
+{
+\thicklines
+\put(46,70){\line(0,-1){10}}
+\put(46,50){\line(0,-1){10}}
+\put(46,30){\line(0,-1){10}}
+}
+
+\end{picture}
+\end{center}
+
+
+
+\point{{\tt bool} and {\tt ind} contain the axioms and basic \\definitions of
+higher order logic.}
+
+\point{In principle, only these two theories need to contain axioms that are
+not definitional!}
+
+% =====================================================================
+\slide{Hierarchy of Built-in Theories}
+
+\point{The built-in HOL theories are:}
+
+\vskip10mm
+
+\begin{center}
+\setlength{\unitlength}{0.0150in}
+\begin{picture}(245,292)(90,520)
+\thicklines
+\put(120,674){\line( 0,-1){ 23}}
+\put(120,715){\line( 0,-1){ 23}}
+\put(120,757){\line( 0,-1){ 23}}
+\put(222,635){\line( 1,-2){ 30}}
+\put(335,555){\line(-4,-1){ 80}}
+\put(255,535){\line(-4, 1){ 80}}
+\put(255,555){\line( 0,-1){ 20}}
+\put(175,590){\line( 0,-1){ 18}}
+\put(222,635){\line(-2,-1){ 50}}
+\put(172,609){\line(-2, 1){ 50}}
+\put(120,795){\line( 0,-1){ 25}}
+\put(235,520){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt HOL}}}}
+\put(325,560){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt one}}}}
+\put(240,560){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt sum}}}}
+\put(150,560){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt tydefs}}}}
+\put(150,595){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt TREE}}}}
+\put(195,640){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt combin}}}}
+\put(105,640){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt tree}}}}
+\put(105,680){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt list}}}}
+\put( 90,720){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt arithmetic}}}}
+\put( 95,760){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt prim\_rec}}}}
+\put(100,800){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt num}}}}
+\end{picture}
+\end{center}
+
+\vskip 7mm
+
+\point{These are all definitional and are built on top of the core theories.}
+
+\point{They will be described later.}
+
+% =====================================================================
+\slide{Creating Theories in HOL}
+
+\point{There are two modes of working in HOL:}
+
+\subpoint{{\it draft mode}: used when building a new theory by making 
+definitions.}
+
+\subpoint{{\it working mode}: used when proving theorems in the current theory
+but not adding new definitions}
+
+\vskip5mm
+\point{There is always a {\it current\/} theory.}
+
+\vskip5mm
+
+\point{Current theory and testing for draft mode:}
+
+\begin{session}\begin{verbatim}
+#current_theory();;
+`HOL` : string
+
+#draft_mode();;
+false : bool
+
+#new_theory `foo`;;
+() : void
+
+#draft_mode();;
+true : bool
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Drafting a New Theory}
+
+\point{To create a new theory:}
+\vskip5mm
+\bspindent\LARGE\bf
+     \verb!new_theory : string -> void!
+\espindent
+\vskip5mm
+
+\point{Evaluating {\tt new\_theory `\meta{name}`}:}
+
+\subpoint{enters draft mode and creates the theory `\meta{name}'}
+\subpoint{creates a theory file {\tt \meta{name}.th} on disk}
+\subpoint{makes \meta{name} the current theory}
+
+\vskip4mm
+\point{The previous current theory becomes a parent of the new theory.}
+\vskip5mm
+
+\point{Example:}
+
+\begin{session}\begin{verbatim}
+#current_theory();;
+`HOL` : string
+
+#new_theory `foo`;;
+() : void
+
+#parents `foo`;;
+[`HOL`] : string list
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Adding Parents}
+
+\point{The function:}
+\vskip5mm
+\bspindent\LARGE\bf
+\verb!new_parent : string -> void!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+adds a new parent to the current theory. 
+\epindent
+
+\vskip7mm
+
+\point{Example:}
+\begin{session}\begin{verbatim}
+#current_theory();;
+`foo` : string
+
+#new_parent `bar`;;
+Theory bar loaded
+() : void
+
+#new_parent `baz`;;
+Error: File "baz.th" does not exist.
+evaluation failed     new_parent
+
+#parents `foo`;;
+[`bar`; `HOL`] : string list
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Adding Axioms}
+
+\point{The function:}
+\vskip5mm
+
+\bpindent\LARGE\bf
+\begin{verbatim}
+      new_axiom : (string # term) -> thm
+\end{verbatim}
+\epindent
+\vskip5mm
+\bpindent\LARGE\bf
+adds a new axiom to the current theory. 
+\epindent
+
+\point{Evaluating:}
+
+\bspindent\LARGE\bf {\tt new\_axiom (`\meta{name}`,$t$)}
+\espindent
+
+\subpoint{makes $t$ into an axiom $\vdash t$}
+\subpoint{stores the axiom under the name `\meta{name}' in the current theory}
+
+\vskip7mm
+\point{Warning:}
+
+\newbox\warn
+\setbox\warn=\hbox\bgroup\hskip5mm\begin{minipage}{140mm}\Huge\bf\vskip8mm
+\obeylines
+this function can be used to add 
+inconsistent axioms to a theory!
+\mbox{}
+
+\end{minipage}\hskip5mm\egroup
+
+\begin{center}\Frame{\box\warn}\end{center}
+
+% =====================================================================
+\slide{Defining Constants}
+
+\point{The function for making constant definitions:}
+\vskip5mm
+\bspindent\LARGE\bf
+\verb!new_definition: (string # term) -> thm!
+\espindent
+\vskip7mm
+
+\point{Evaluating:}
+\vskip5mm
+
+\bspindent\LARGE\bf
+{\tt new\_definition (`\meta{name}`,"$c$ = $t$")}
+\espindent
+
+\subpoint{makes $c$ a constant defined by {\tt |- $c$ = $t$}}
+\subpoint{stores {\tt |- $c$ = $t$} in the current theory under the name 
+`\meta{name}'}
+
+\vskip7mm
+\point{Variants:}
+\subpoint{{\tt new\_infix\_definition} makes the constant an infix}
+\subpoint{{\tt new\_binder\_definition} makes it a binder} 
+
+
+% =====================================================================
+\slide{Definition Examples}
+
+\point{A constant definition:}
+\vskip4mm
+
+\begin{session}\begin{verbatim}
+#new_definition(`foo`, "foo x = x+1");;
+|- !x. foo x = x + 1
+\end{verbatim}\end{session}
+
+
+\point{Defining an infix:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_infix_definition
+   (`element`, "$e x P = (P:*->bool) x");;
+|- !x P. x e P = P x
+
+#"$e (y:num) P";;
+"y e P" : term
+
+#"y e (\y. y = T)";;
+"y e (\y. y = T)" : term
+\end{verbatim}\end{session}
+
+\point{Defining a binder:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_binder_definition
+   (`Forall`, "$A = (\P:*->bool. P = (\x. T))");;
+|- $A = (\P. P = (\x. T))
+
+#"$A (\x. x < (x+1))";;
+"A x. x < (x + 1)" : term
+
+#"A y. y < 10";;
+"A y. y < 10" : term
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Common Errors}
+
+\point{Constant already defined:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_definition(`foo`, "foo x = x+2");;
+evaluation failed
+   attempt to redefine the constant foo
+\end{verbatim}\end{session}
+
+\point{Recursive definition:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_definition
+   (`fact`, 
+    "fact n = ((n=0) => 1 | n * fact(n-1))");;
+evaluation failed  
+   recursive definitions not allowed
+\end{verbatim}\end{session}
+
+\point{Free variables on the right-hand side:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#new_definition(`bar`, "bar x y = x + y + z");;
+evaluation failed     unbound var in rhs
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Loose Specification of Constants}
+
+\point{Constant specification is a rule of definition.}
+
+\point{{\tt new\_specification} has ML type:}
+\vskip 5mm
+\bspindent\Large\bf
+   \verb!string -> ((string # string) list) -> thm -> thm!
+\espindent
+\vskip 7mm
+
+\point{Example:}
+\begin{session}\begin{verbatim}
+#th1;;
+|- ?x y. x < y
+
+#new_specification `LOHI`
+   [`constant`,`LO`; `constant`,`HI`] th1;;
+|- LO < HI
+\end{verbatim}\end{session}
+
+\vskip7mm
+\point{The first string in the list of pairs is one of:}
+\vskip5mm
+\bspindent\LARGE\bf
+{\tt `constant`},~~~{\tt `infix`},~~or~~{\tt `binder`}
+\espindent
+
+\point{See the manual for details.}
+
+
+% =====================================================================
+\slide{Type Definitions}
+
+\point{To define a new type use:}
+\vskip5mm
+\bspindent\LARGE\bf
+\verb!new_type_definition!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+which has ML type
+\epindent
+\vskip5mm
+\bspindent\LARGE\bf
+\verb!(string # term # thm) -> thm!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+where
+\epindent
+\vskip5mm
+\subpoint{the string is the name of the new type}
+\subpoint{the term is the subset predicate}
+\subpoint{the theorem is the required existence theorem}
+
+\vskip 7mm
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#eth;;
+|- ?x. (\b. b)x
+
+#new_type_definition
+   (`unit`, "\b:bool. b", eth);;
+|- ?rep:unit->bool. TYPE_DEFINITION(\b. b)rep
+
+#"x:unit";;
+"x" : term
+\end{verbatim}\end{session}
+
+
+
+% =====================================================================
+\slide{Other Theory Functions}
+
+\point{Leave draft mode:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#draft_mode();;
+true : bool
+
+#close_theory();;
+() : void
+
+#draft_mode();;
+false : bool
+\end{verbatim}\end{session}
+
+\point{Return to draft mode:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#extend_theory `foo`;;
+Theory foo loaded
+() : void
+
+#draft_mode();;
+true : bool
+\end{verbatim}\end{session}
+
+\point{Make a theory the current theory:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#load_theory `foo`;;
+Theory foo loaded
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{User Programmable Search Path}
+
+\point{The {\it search path\/} is used when:}
+\subpoint{the system searches for files (e.g.\ via {\tt load})}
+\subpoint{the system loads or reads theories from
+theory files (e.g.\ using {\tt load\_theory}}
+
+\point{Getting the present search path:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#search_path();;
+[``; `~/`; `/usr/lib/hol/theories/`] : string list
+\end{verbatim}\end{session}
+
+
+\point{Setting the search path:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#set_search_path [``; `~/mylib/`];;
+() : void
+
+#search_path();;
+[``; `~/mylib/`] : string list
+\end{verbatim}\end{session}
+
+
+\point{Seeing the result of a search:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#find_file `foo.th`;;
+`foo.th` : string
+
+#find_file `baz.ml`;;
+`~/mylib/baz.ml` : string
+\end{verbatim}\end{session}
+
+% =====================================================================
+\slide{Adding and Deleting Theorems}
+
+\point{Function for saving theorems:}
+\vskip5mm
+\bspindent\LARGE\bf
+\verb!save_thm: (string # thm) -> thm!
+\espindent
+\vskip 7mm
+
+\point{Function for deleting theorems:}
+\vskip5mm
+\bspindent\LARGE\bf
+\verb!delete_thm: string -> string -> thm!
+\espindent
+\vskip 7mm
+
+\point{Functions used to fetch a named theorem, \\
+axiom or definition from a theory:}
+
+\subpoint{\tt theorem: string -> string -> thm}
+
+\subpoint{\tt axiom: string -> string -> thm}
+
+\subpoint{\tt definition: string -> string -> thm}
+
+% =====================================================================
+\slide{Accessing Theory Components}
+
+\point{The following functions extract components from a theory:}
+
+\vskip5mm
+\subpoint{\tt parents: string -> string list}
+\subpoint{\tt types: string -> (int \# string) list}
+\subpoint{\tt constants: string -> term list}
+\subpoint{\tt infixes: string -> term list}
+\subpoint{\tt binders: string -> term list}
+\subpoint{\tt axioms: string -> (string \# thm) list}
+\subpoint{\tt definitions: string -> (string \# thm) list}
+\subpoint{\tt theorems: string -> (string \# thm) list}
+
+\point{The first argument is the theory name.}
+
+
+% =====================================================================
+\slide{Inspecting a Theory}
+
+
+\point{Function for inspecting a theory}
+\vskip5mm
+\bspindent\LARGE\verb!print_theory: string -> void!\espindent
+
+\vskip7mm
+\point{Example:}
+\vskip4mm
+\begin{session}\begin{verbatim}
+#print_thory `foo`;;
+
+The Theory foo
+Parents --  HOL     bar     
+Types --  ":unit"     
+Constants --
+  foo ":num -> num"
+  e ":* -> ((* -> bool) -> bool)"     
+  LO ":num"     HI ":num"     
+Infixes --  e ":* -> ((* -> bool) -> bool)"     
+Definitions --
+  foo  |- !x. foo x = x + 2
+  element  |- !x P. x e P = P x
+  LOHI  |- LO < HI
+  unit_TY_DEF  |- ?rep. TYPE_DEFINITION(\b. b)rep
+  
+******************** foo ********************
+
+() : void
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Summary}
+
+\point{Creating/extending/loading a theory:}
+
+  \subpoint{{\tt new\_theory}}
+  \subpoint{{\tt extend\_theory}}
+  \subpoint{{\tt load\_theory}}
+
+\point{Adding axioms and definitions:}
+
+  \subpoint{{\tt new\_axiom}}
+  \subpoint{{\tt new\_definition}}
+  \subpoint{{\tt new\_infix\_definition}}
+  \subpoint{{\tt new\_binder\_definition}}
+  \subpoint{{\tt new\_specification}}
+  \subpoint{{\tt new\_type\_definition}}
+
+\point{The search path:}
+
+  \subpoint{\tt search\_path}
+  \subpoint{\tt set\_search\_path}
+
+
+% =====================================================================
+\slide{Summary (cont'd)}
+
+\point{Saving/deleting theorems:}
+
+  \subpoint{{\tt save\_thm}}
+  \subpoint{{\tt delete\_thm}}
+
+\point{Other theory-accessing functions:}
+
+\subpoint{\tt parents}
+\subpoint{\tt types}
+\subpoint{\tt constants}
+\subpoint{\tt infixes}
+\subpoint{\tt binders}
+\subpoint{\tt axioms}
+\subpoint{\tt definitions}
+\subpoint{\tt theorems}
+
+\point{Inspecting a theory:}
+
+\subpoint{\tt print\_theory}
+
+% =====================================================================
+\slide{The Primitive HOL Theory}
+
+\point{{\tt bool} is the most basic HOL theory.}
+
+\point{It contains:}
+
+\subpoint{four of the five axioms}
+
+\subpoint{definitions of basic logical constants}
+
+\subpoint{definitions of constants for syntatic abbreviations}
+
+\subpoint{axioms for pairs (explained later)}
+
+% =====================================================================
+\slide{Definitions}
+
+\point{Definitions of the basic logical constants:}
+\vskip5mm
+\bspindent
+\Large\obeylines
+  \verb+|- T = ((\x. x) = (\x. x))+
+  \verb+|- $! = (\P. P = (\x. T))+
+  \verb+|- $? = (\P. P($@ P))+
+  \verb+|- $/\ = (\t1 t2. !t. (t1 ==> t2 ==> t) ==> t)+
+  \verb+|- $\/ = (\t1 t2. !t. (t1 ==> t) ==>+
+\hskip70mm\verb!(t2 ==> t) ==> t)!
+  \verb+|- F = (!t. t)+
+  \verb+|- $~ = (\t. t ==> F)+
+  \verb+|- $?! = (\P. $? P /\ +
+\hskip44mm\verb+(!x y. P x /\ P y ==> (x = y)))+
+\espindent
+
+\point{These are bound to the ML variables:}
+\vskip5mm
+\bspindent\Large\obeylines
+\verb!T_DEF!
+\verb!FORALL_DEF!
+\verb!EXISTS_DEF!
+\verb!AND_DEF!
+\verb!OR_DEF!
+\verb!F_DEF!
+\verb!NOT_DEF!
+\verb!EXISTS_UNIQUE_DEF!
+\espindent
+% =====================================================================
+\slide{Support for Syntactic Sugar}
+
+\point{{\tt bool} also contains the definitions of constants used to support
+syntactic abbreviations.}
+
+\vskip7mm
+\point{For example:}
+\vskip 5mm
+\bspindent
+\Large\obeylines
+  \verb!|- LET = (\f x. f x)!
+  \verb+|- !f x y. UNCURRY f(x,y) = f x y+
+\espindent
+\vskip7mm
+\point{We have already seen how these are used.}
+
+% =====================================================================
+\slide{Axioms}
+
+\point{The axioms in {\tt bool} are:}
+
+\vskip 7mm
+\begin{session}\begin{verbatim}
+#BOOL_CASES_AX;;
+|- !t:bool. (t = T) \/ (t = F)
+
+#IMP_ANTISYM_AX;;
+|- !t1 t2. 
+   (t1 ==> t2) ==> (t2 ==> t1) ==> (t1 = t2)
+
+#ETA_AX;;
+|- !t:*->**. (\x. t x) = t
+
+#SELECT_AX;;
+|- !P:*->bool. !x. P x ==> P($@ P)
+\end{verbatim}\end{session} 
+
+
+% =====================================================================
+\slide{Pairs}
+
+\point{For historical and implementation reasons, pairs are axiomatized in the
+theory {\tt bool}}
+
+\vskip7mm
+\point{The following theorems are in {\tt bool}:}
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb+|- !x. FST x,SND x = x+
+\verb+|- !x y. FST(x,y) = x+
+\verb+|- !x y. SND(x,y) = y+
+\verb+|- !x y a b. (x,y = a,b) = (x = a) /\ (y = b)+
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+bound to {\tt PAIR}, {\tt FST}, {\tt SND}, and {\tt PAIR\_EQ}.
+\epindent
+ 
+\vskip7mm
+\point{In principle pairs can be {\it defined}.}
+
+
+% =====================================================================
+\slide{The Theory of Individuals}
+
+\point{The theory {\tt ind} introduces the infinite type {\tt ind}, which is 
+needed to define numbers.}
+\vskip7mm
+
+\point{It has one axiom:}
+\vskip5mm
+\bspindent\LARGE\bf
+\verb!INFINITY_AX  |- ?f. ONE_ONE f /\ ~ONTO f!
+\espindent
+\vskip5mm
+
+\bpindent\LARGE\bf
+where
+\epindent
+\vskip5mm
+\bspindent\Large\bf\obeylines
+\verb+|- !f. ONTO f = !y. ?x. y = f x+
+\verb+|- !f. ONE_ONE f = +
+\hskip30mm\verb+!x1 x2. (f x1 = f x2) ==> (x1 = x2)+
+\espindent
+
+\vskip7mm
+
+\point{This axiom states that the type {\tt ind} is infinite.}
+
+
+% =====================================================================
+\slide{Primitive Inference Rules}
+
+\point{There are 8 identifiers in the core system which are bound to
+functions that implement primitive inference rules:}
+
+\vskip5mm
+
+\subpoint{\tt ASSUME}
+\subpoint{\tt REFL}
+\subpoint{\tt BETA\_CONV}
+\subpoint{\tt SUBST}
+\subpoint{\tt ABS}
+\subpoint{\tt INST\_TYPE}
+\subpoint{\tt DISCH}
+\subpoint{\tt MP}
+
+\vskip7mm
+\point{These rules are primitive, not defined.}
+
+
+% =====================================================================
+\slide{Introducing an Assumption}
+
+\point{In logic, the rule is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\tt ASSUME:\quad}
+$\Rule{\mbox{-}}{\{ t \} \vdash t}$
+\espindent
+
+\vskip7mm
+
+\point{This rule allows us to deduce $\vdash t=t$ for any boolean term $t$.}
+\vskip7mm
+\point{The HOL inference rule:}
+\vskip5mm
+\bspindent\LARGE
+\verb!ASSUME : term -> thm!
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+therefore takes this term as an argument. \epindent
+
+% =====================================================================
+\slide{An Example}
+
+\point{An example using {\tt ASSUME}:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#ASSUME;;
+- : (term -> thm)
+
+#ASSUME "P /\ Q";;
+. |- T
+
+#top_print print_all_thm
+- : (thm -> void)
+
+#ASSUME "P /\ Q";;
+P /\ Q |- P /\ Q
+\end{verbatim}\end{session}
+
+
+\point{The assumed term must be boolean:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#ASSUME "n:num";;
+evaluation failed     ASSUME
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Reflexivity of Equality}
+
+\point{The rule is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\tt REFL:\quad}
+$\Rule{\mbox{-}}{\vdash t=t}$
+\espindent
+
+\vskip 7mm
+\point{The HOL implementation again takes a term as an argument:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#REFL "T";;
+|- T = T
+
+#REFL "x:bool";;
+|- x = x
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Modus Ponens}
+
+\point{The rule is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\tt MP:\quad} 
+$\Rule{\Gamma_1 \vdash t_1 \supset t_2 \qquad \Gamma_2 \vdash t_1}
+{\Gamma_1 \cup \Gamma_2 \vdash t_2}$
+\espindent
+
+\vskip 7mm
+\point{In HOL, the arguments are:}
+\vskip5mm
+\subpoint{first: the implication $\Gamma_1 \vdash t_1 \supset t_2$}
+\subpoint{second: the antedecent $\Gamma_2 \vdash t_1$}
+
+\vskip 7mm
+\point{Example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#MP;;
+- : (thm -> thm -> thm)
+
+#let th1 = DISCH "T=T" (REFL "F");;
+th1 = |- (T = T) ==> (F = F)
+
+#MP th1 (REFL "T");;
+|- F = F
+
+#MP th1 (ASSUME "T=T");;
+. |- F = F
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Modus Ponens}
+
+
+\point{Modus ponens works up to $\alpha$-equivalence:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th1 = ASSUME "(!x:num. P x) ==> ?x. P x";;
+th1 = . |- (!x. P x) ==> (?x. P x)
+
+#let th2 = ASSUME "!y:num. P y";;
+th2 = . |- !y. P y
+
+#MP th1 th2;;
+.. |- ?x. P x
+\end{verbatim}\end{session}
+
+\vskip7mm
+
+\point{Of course, the antedent must match:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th1 = ASSUME "(!x:num. P x) ==> ?x. P x";;
+th1 = . |- (!x. P x) ==> (?x. P x)
+
+#MP th1 (ASSUME "P(x+y):bool");;
+evaluation failed     MP
+\end{verbatim}\end{session}
+
+
+
+
+% ==================================================================
+\slide{Discharging an Assumption}
+
+\point{The rule is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\tt DISCH:\quad}
+$\Rule{\Gamma \vdash t_2}
+{ \Gamma - \{ t_1 \} \vdash t_1 \supset t_2 }$
+\espindent
+
+\point{In HOL, the arguments to {\tt DISCH} are:}
+\vskip5mm
+\subpoint{first: the term $t_1$}
+\subpoint{second: the theorem $\Gamma \vdash t_2$}
+
+\vskip 7mm
+
+\point{Example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th = ASSUME "F";;
+th = . |- F
+
+#DISCH;;
+- : (term -> thm -> thm)
+
+#DISCH "F" th;;
+|- F ==> F
+
+#DISCH "T" th;;
+. |- T ==> F
+
+#DISCH "x=3" (REFL "x=9");;
+|- (x = 3) ==> ((x = 9) = (x = 9))
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{The Abstraction Rule}
+
+\point{The rule is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\bf ABS:\quad}
+$\Rule{\Gamma \vdash t_1 = t_2}
+{\Gamma \vdash (\lambda x. \; t_1) = (\lambda x.\; t_2) }$
+\vskip4mm
+{\Large\bf $x$ not free in $\Gamma$}
+\espindent
+\vskip7mm
+\point{You must tell {\tt ABS} what the variable $x$ is.}
+
+
+\vskip 7mm
+\point{An example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#ABS;;
+- : (term -> thm -> thm)
+
+#let eq = REFL "x:num";;
+eq = |- x = x
+
+#ABS "x:*" eq;;
+|- (\x. x) = (\x. x)
+
+#ABS "y:*" it;;
+|- (\y x. x) = (\y x. x)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Abstraction: Failure Conditions}
+
+\point{The term argument must be a variable:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#ABS "x+y" (ASSUME "x:* = x");;
+evaluation failed     ABS
+\end{verbatim}\end{session}
+
+\vskip 7mm
+\point{The theorem must be an equation:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#ABS "x:*" (ASSUME "T");;
+evaluation failed     ABS
+\end{verbatim}\end{session}
+
+
+\vskip 7mm
+\point{The variable must not be free in the\\
+assumptions of the theorem:}
+\begin{session}\begin{verbatim}
+#let th = ASSUME "x:*=y";;
+th = . |- x = y
+
+#ABS "x:*" th;;
+evaluation failed     ABS
+
+#ABS "b:bool" th;;
+. |- (\b. x) = (\b. y)
+
+#DISCH "x:*=y" it;;
+|- (x = y) ==> ((\b. x) = (\b. y))
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Beta Conversion}
+
+\point{The $\beta$-conversion rule is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\tt BETA\_CONV:\quad}
+$\Rule{\mbox{-}}
+{\vdash (\lambda x. \; t_1) t_2 = t_1 [ t_2 / x ] }$
+\espindent
+
+\point{In HOL, the function {\tt BETA\_CONV} takes the term $(\lambda x. t_1)
+t_2$ as an argument.}
+
+\vskip 7mm
+\point{Examples:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#BETA_CONV;;
+- : conv
+
+#BETA_CONV "(\x. x=3) 4";;
+|- (\x. x = 3)4 = (4 = 3)
+
+#BETA_CONV "(\x:*. \y. x=y) y";;
+|- (\x y. x = y)y = (\y'. y = y')
+
+#BETA_CONV "x=0";;
+evaluation failed     BETA_CONV
+\end{verbatim}\end{session}
+
+\vskip5mm
+\point{The ML type {\tt conv} abbreviates {\tt term -> thm}.}
+
+
+
+% =====================================================================
+\slide{Substitution}
+
+\point{The rule for substitution is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\tt SUBST:\quad}
+$\Rule{\Gamma_1 \vdash t_1 = t_2 \qquad \Gamma_2 \vdash t [ t_1 ] }
+{\Gamma_1 \cup \Gamma_2 \vdash t [ t_2 ]}$
+\espindent
+
+\vskip5mm
+
+\point{We must tell {\tt SUBST} which free occurences of $t_1$ in 
+the theorem $\Gamma_2 \vdash t[t_1]$ to replace by $t_2$.}
+
+\vskip5mm
+\point{This turns out to be quite complicated:}
+\begin{session}\begin{verbatim}
+#SUBST;;
+- : ((thm # term) list -> term -> thm -> thm)
+\end{verbatim}\end{session}
+\vskip5mm
+
+\point{{\tt SUBST} takes three arguments:}
+\vskip5mm
+\subpoint{first: a list of substitution equations $\vdash t_1 = t_2$ and
+{\it marker variables}}
+\subpoint{second: a {\it template} with marked subterms.}
+\subpoint{third: the theorem $\Gamma_2 \vdash t[t_1]$}
+
+
+% =====================================================================
+\slide{Examples of Substitution}
+
+\point{A simple example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th1 = ASSUME "x=7";;
+th1 = . |- x = 7
+
+#let th2 = REFL "x+x";;
+th2 = |- x + x = x + x
+
+#SUBST [(th1,"m:num")] "m+x = x+m" th2;;
+. |- 7 + x = x + 7
+
+#SUBST [(th1,"m:num")] "x+x = m+x" th2;;
+. |- x + x = 7 + x
+\end{verbatim}\end{session}
+\vskip 7mm
+
+\point{Another example:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th1 = BETA_CONV "(\x. x) 1";;
+th1 = |- (\x. x)1 = 1
+
+#let th2 = REFL "(\x.x) 1";;
+th2 = |- (\x. x)1 = (\x. x)1
+
+#let th3 = SUBST [(th1,"m:num")] "m=(\x.x) 1" th2;;
+th3 = |- 1 = (\x. x)1
+
+#SUBST [(th3,"m:num")] "1=(\x.x)m" th3;;
+|- 1 = (\x. x)((\x. x)1)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Simultaneous Substitution}
+
+\point{{\tt SUBST} allows simultaneous substitutions:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#let th1 = ASSUME "x=7"
+ and th2 = ASSUME "y=x+10";;
+th1 = . |- x = 7
+th2 = . |- y = x + 10
+
+#let th3 = REFL "x+y";;
+th3 = |- x + y = x + y
+
+#SUBST [(th1,"m1:num");(th2,"m2:num")] 
+       "m1+y = x+m2" th3;;
+.. |- 7 + y = x + (x + 10)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Type Instantiation}
+
+
+\point{The type instantiation rule is:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\tt INST\_TYPE:\quad}
+$\Rule{\Gamma \vdash t}
+{ \Gamma \vdash t 
+[ \sigma_1 \ldots \sigma_n / \alpha_1 \ldots \alpha_n]}$
+\espindent
+
+\vskip 7mm
+\point{First argument to {\tt INST\_TYPE} a list of the type\\
+instantiations to be made:}
+\vskip 4mm
+\begin{session}\begin{verbatim}
+#show_types true;;
+false : bool
+
+#let th = REFL "\x:*. f(x) = (y:**)";;
+th = |- (\(x:*). (f:* -> **) x = y) 
+         = 
+        (\(x:*). (f:* -> **) x = y)
+
+#INST_TYPE;;
+- : ((type # type) list -> thm -> thm)
+
+#INST_TYPE [(":num",":*");(":bool",":**")] th;;
+|- (\(x:num). (f:num -> bool) x = y)
+    = 
+   (\(x:num). (f:num -> bool) x = y)
+\end{verbatim}\end{session}
+
+
+% =====================================================================
+\slide{Hierarchy of Standard Theories}
+
+\point{The hierarchy of standard theories:}
+
+\vskip10mm
+
+\begin{center}
+\setlength{\unitlength}{0.0150in}
+\begin{picture}(245,292)(90,520)
+\thicklines
+\put(120,674){\line( 0,-1){ 23}}
+\put(120,715){\line( 0,-1){ 23}}
+\put(120,757){\line( 0,-1){ 23}}
+\put(222,635){\line( 1,-2){ 30}}
+\put(335,555){\line(-4,-1){ 80}}
+\put(255,535){\line(-4, 1){ 80}}
+\put(255,555){\line( 0,-1){ 20}}
+\put(175,590){\line( 0,-1){ 18}}
+\put(222,635){\line(-2,-1){ 50}}
+\put(172,609){\line(-2, 1){ 50}}
+\put(120,795){\line( 0,-1){ 25}}
+\put(235,520){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt HOL}}}}
+\put(325,560){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt one}}}}
+\put(240,560){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt sum}}}}
+\put(150,560){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt tydefs}}}}
+\put(150,595){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt TREE}}}}
+\put(195,640){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt combin}}}}
+\put(105,640){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt tree}}}}
+\put(105,680){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt list}}}}
+\put( 90,720){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt arithmetic}}}}
+\put( 95,760){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt prim\_rec}}}}
+\put(100,800){\makebox(0,0)[lb]{\raisebox{0pt}[0pt][0pt]{\elvrm 
+ {\Large \tt num}}}}
+\end{picture}
+\end{center}
+
+\vskip7mm
+\point{These are all {\it derived\/} in HOL}
+
+
+% =====================================================================
+\slide{The Standard Built-in Theories}
+
+\point{The theories {\tt bool} and {\tt ind} and the primitive inference rules
+form the core of the HOL.}
+
+\vskip7mm
+\point{Standard theories built on top of {\tt bool} and {\tt ind}:}
+\vskip 7mm
+\bspindent\Large\bf
+\begin{tabular}{l l}
+{\tt num} & defines non-negative integers \\
+{\tt prim\_rec} & theory of primitive recursion\\
+{\tt arithmetic} & theory of arithmetic\\
+{\tt list} & defines the type of lists\\
+{\tt tree} & defines trees\\
+{\tt combin} & defines the combinators {\tt S}, {\tt K}, {\tt I}, {\tt o}\\
+{\tt TREE} & defines labelled trees\\
+{\tt tydefs} & for the type definition package\\
+{\tt sum} & defines disjoint sum\\
+{\tt one} & defines a type with only one value\\
+\end{tabular}
+\espindent
+\vskip7mm
+\point{The contents of these theories will be\\ introduced as needed.}
+
+% =====================================================================
+\slide{Summary}
+
+\point{Implementation of theories:}
+\subpoint{Functions for creating and building theories.}
+\subpoint{Functions for accessing theory components.}
+
+\point{The core HOL theories:}
+\subpoint{The theory {\tt bool}.}
+\subpoint{The theory {\tt ind}.}
+
+\point{Primitive inference rules in HOL.}
+
+\point{The built-in derived theories.}
+\end{document}

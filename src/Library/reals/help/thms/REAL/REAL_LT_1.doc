@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_1 REAL
+|- !x y. (& 0) <= x /\ x < y ==> (x / y) < (& 1)
+\ENDTHEOREM

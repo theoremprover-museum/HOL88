@@ -1,0 +1,3 @@
+\THEOREM COMM_ASSOC_FOLDR_REVERSE list
+|- !f. COMM f ==> ASSOC f ==> (!e l. FOLDR f e(REVERSE l) = FOLDR f e l)
+\ENDTHEOREM

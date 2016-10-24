@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_LMUL REAL
+|- !x y z. (& 0) < x ==> ((x * y) < (x * z) = y < z)
+\ENDTHEOREM

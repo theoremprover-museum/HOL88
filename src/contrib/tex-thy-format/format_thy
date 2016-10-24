@@ -1,0 +1,6 @@
+echo 'loadf`format_thy`;; '\
+  'load_theory`'$1'`;; '\
+  'format_theory`'$1'`;; '\
+  'quit();;' |hol |\
+sed -e '1,/----BEGINLaTeX/d' -e 's/\_/\\\_/g' -e 's/\$/\\\$/g' -e 's/\#/\\sq /g'\
+ -e "s/'/\\\\sz /g" -e "s/=>/\\\\sh /g" -e 's/\|/\\sj/g' -e "s/->/\\\\sk/g" -e "/: void/d" >$1.tex

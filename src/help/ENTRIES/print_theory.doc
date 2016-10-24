@@ -1,0 +1,26 @@
+\DOC print_theory
+
+\TYPE {print_theory : (string -> void)}
+
+\SYNOPSIS
+Prints the contents of a HOL theory to the terminal.
+
+\DESCRIBE
+{print_theory `name`} returns {():void} with the side-effect of printing the
+contents of the theory called {name}. {print_theory `-`} prints the current
+theory. The following information is displayed: the parents of the theory,
+types defined within the theory, type abbreviations defined within the theory,
+constants of the theory, the binders and infixes (subsets of the constants),
+the axioms, the definitions, and the derived theorems.
+
+\FAILURE
+Fails if the named theory does not exist or is not an ancestor of the current
+theory.
+
+\EXAMPLE
+To obtain an example, type {print_theory `bool`;;} to the system.
+
+\SEEALSO
+print_type, print_term, print_thm.
+
+\ENDDOC

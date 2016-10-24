@@ -1,0 +1,3 @@
+\THEOREM SIMP_REC_EXISTS prim_rec
+|- !x f n. ?fun. SIMP_REC_REL fun x f n
+\ENDTHEOREM

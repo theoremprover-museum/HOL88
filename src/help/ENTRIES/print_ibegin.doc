@@ -1,0 +1,57 @@
+\DOC print_ibegin
+
+\TYPE {print_ibegin : (int -> void)}
+
+\SYNOPSIS
+Initiates a pretty printing block with inconsistent breaks.
+
+\DESCRIBE
+The function {print_ibegin} initiates a inconsistent printing block.
+Inconsistent breaks cause non-uniform
+indentation at each break which is unlike the `all or nothing'
+approach  of consistent formatting (see {print_begin}). The argument is the
+offset of the block that {print_ibegin} initiates. This offset is added to the
+indentation of any lines broken inside. This offset is very seldom used.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+\noindent Set the margin to be 13 characters wide:
+{
+#set_margin 13;;
+13 : int
+}
+\noindent Then initialize the block using {print_ibegin}:
+{
+#let  example =
+   (print_newline();
+    print_ibegin 0;
+    print_string `first`;
+    print_break (1,2);
+    print_string `second`;
+    print_break (1,2);
+    print_string `third`;
+    print_end();
+    print_newline());;
+
+}
+\noindent After the initialization of the block the strings
+`first', `second' and `third' are printed with breaks between them. The first
+line does not break because we only
+have 12 characters on the line {first second}. When starting to print `third'
+though wrapping has to take place.
+
+\noindent The output we obtain is the following:
+{
+   first second
+     third
+   example =
+   ()
+   : void
+}
+
+\SEEALSO
+print_break, print_end, max_print_depth, print_begin
+
+\ENDDOC

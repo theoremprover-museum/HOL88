@@ -1,0 +1,4 @@
+\THEOREM TREAL_MUL_WELLDEFR REALAX
+|- !x1 x2 y.
+    x1 treal_eq x2 ==> (x1 treal_mul y) treal_eq (x2 treal_mul y)
+\ENDTHEOREM

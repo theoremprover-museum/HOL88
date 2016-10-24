@@ -1,0 +1,8 @@
+       INCLUDES = -I$(TOP) -I$(AWIDGETSRC) -I$(TOOLKITSRC)
+        DEPLIBS = XawClientDepLibs
+LOCAL_LIBRARIES = XawClientLibs
+           SRCS = xholhelp.c xholhelp.h
+           OBJS = xholhelp.o
+
+ComplexProgramTarget(xholhelp)
+

@@ -1,0 +1,3 @@
+\THEOREM MOD_TIMES arithmetic
+|- !n. 0 < n ==> (!q r. ((q * n) + r) MOD n = r MOD n)
+\ENDTHEOREM

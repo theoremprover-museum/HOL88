@@ -1,0 +1,4 @@
+\THEOREM real_tybij REALAX
+|- (!a. mk_real(dest_real a) = a) /\
+   (!r. (\c. ?x. c = $treal_eq x)r = (dest_real(mk_real r) = r))
+\ENDTHEOREM

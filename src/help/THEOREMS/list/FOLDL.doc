@@ -1,0 +1,4 @@
+\THEOREM FOLDL list
+|- (!f e. FOLDL f e[] = e) /\
+   (!f e x l. FOLDL f e(CONS x l) = FOLDL f(f e x)l)
+\ENDTHEOREM

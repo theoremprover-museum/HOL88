@@ -1,0 +1,35 @@
+\DOC search_path
+
+\TYPE {search_path : (void -> string list)}
+
+\SYNOPSIS
+Returns the internal search path use by HOL to find files.
+
+\DESCRIBE
+Evaluating {search_path()} returns a list of strings representing the pathnames
+of the directories that are searched when HOL makes access to files on disk
+(using {load}, {compile}, {load_theory}, etc.). Although the search path can be
+set to an arbitrary list of strings, each string in the search path is normally
+expected to be either empty ({``}) or a pathname with `{/}' as its final
+character.  When HOL looks for a file, the directories in the search path are
+searched in the order in which they occur in the list returned by
+{search_path}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+A typical search path is the following:
+{
+   #search_path();;
+   [``; `~/`; `/usr/lib/hol/theories/`] : string list
+}
+\noindent With this search path, HOL first looks for a file in the current
+working directory (the pathname represented by {``}), then in the user`s home
+directory {`~/`}, and finally in the directory {`/usr/lib/hol/theories/`} (the
+directory containing HOL`s built-in theories).
+
+\SEEALSO
+help_search_path, install, set_help_search_path, set_search_path.
+
+\ENDDOC

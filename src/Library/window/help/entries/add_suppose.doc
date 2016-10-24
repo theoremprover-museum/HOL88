@@ -1,0 +1,28 @@
+\DOC add_suppose
+
+\TYPE {add_suppose : (goal -> window -> window)}
+
+\SYNOPSIS
+Add a supposition to the set associated with a window.
+
+\LIBRARY window
+
+\DESCRIBE
+{add_suppose (p ?- c)} adds the supposition {(p ?- c)} to the set of
+suppositions associated with a window.
+The supposition will not be added if some stronger 
+(equivalent conclusion, subset of assumptions) theorem or supposition is
+already held by the window.
+A limited amount of resolution is also performed on the theorems and
+supposition of a window after each addition.
+For example, if {(q ?- p)} were already a supposition 
+and the supposition {(p ?- c)} was added, then the supposition {(q ?- c)}
+would be inferred.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+ADD_SUPPOSE, conjecture, add_theorem, establish
+
+\ENDDOC

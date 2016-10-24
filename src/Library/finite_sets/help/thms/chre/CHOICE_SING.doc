@@ -1,0 +1,3 @@
+\THEOREM CHOICE_SING finite_sets
+|- !x. CHOICE{{x}} = x
+\ENDTHEOREM

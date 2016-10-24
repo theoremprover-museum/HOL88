@@ -1,0 +1,3 @@
+\THEOREM SEQ_NEG_CONV SEQ
+|- !f. convergent f = convergent(\n. --(f n))
+\ENDTHEOREM

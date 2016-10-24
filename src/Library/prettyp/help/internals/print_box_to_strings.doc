@@ -1,0 +1,10 @@
+\DOC print_box_to_strings
+
+\TYPE {print_box_to_strings : (bool -> int -> * print_box -> string list)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

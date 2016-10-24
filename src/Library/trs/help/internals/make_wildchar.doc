@@ -1,0 +1,10 @@
+\DOC make_wildchar
+
+\TYPE {make_wildchar : (string -> wildchar)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

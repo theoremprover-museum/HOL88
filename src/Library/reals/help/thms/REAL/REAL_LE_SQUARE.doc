@@ -1,0 +1,3 @@
+\THEOREM REAL_LE_SQUARE REAL
+|- !x. (& 0) <= (x * x)
+\ENDTHEOREM

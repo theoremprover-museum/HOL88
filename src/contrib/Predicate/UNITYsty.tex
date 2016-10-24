@@ -1,0 +1,128 @@
+\newcommand{\thf}[1]{\mbox{{\rm \footnotesize #1}}}
+\newcommand{\CodeRef}[1]{$\langle${\em #1}$\rangle$}
+\newcommand{\goal}{\deriv_{?}}
+
+
+
+\newcommand{\SUC}{{\sf SUC}}
+\newcommand{\SPEC}{{\sf SPEC}}
+\newcommand{\CHF}{{\sf CHF}}
+\newcommand{\GSPEC}{{\sf GSPEC}}
+\newcommand{\Fin}{{\sf FINITE}}
+\newcommand{\CARD}{{\cal C}}
+\newcommand{\INSERT}{\mathord{\sf INSERT\ }}
+
+\newcommand{\Dot}{\mbox{{\Huge .}}\ }
+\newcommand{\Eline}{\\ \ \\}
+\newcommand{\TAB}{\hspace{20pt}}
+\newcommand{\NOTE}{\noindent {\bf NOTE:\ }}
+\newcommand{\Bool}{{\sf Bool}}
+\newcommand{\State}{{\sf State}}
+\newcommand{\Pred}{{\sf Pred}}
+\newcommand{\Action}{{\sf Action}}
+\newcommand{\ACTIONS}{{\sf ACTIONS}}
+\newcommand{\VARS}{{\sf VARS}}
+\newcommand{\Uprog}{{\sf Uprog}}
+
+\newcommand{\equ}{\equiv}
+\newcommand{\Nat}{{\cal N}}
+\newcommand{\Set}[1]{\{#1\}}
+\newcommand{\Qset}[2]{\{#1 \mid #2\}}
+\newcommand{\Empty}{\phi}
+\newcommand{\Include}{\supseteq}
+\newcommand{\Subset}{\subseteq}
+\newcommand{\ad}{\backslash}
+\newcommand{\sd}{\div}
+\newcommand{\cut}{\cap}
+\newcommand{\uni}{\cup}
+\newcommand{\NOTin}{\not\in}
+\newcommand{\Pow}[1]{{\cal P}(#1)}
+\newcommand{\fun}{\rightarrow}
+
+\newcommand{\bool}{\mbox{\bf bool}}
+\newcommand{\deriv}{\vdash}
+\newcommand{\true}{\mbox{\sf T}}
+\newcommand{\false}{\mbox{\sf F}}
+\newcommand{\qA}{\forall}
+\newcommand{\qE}{\exists}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\NOT}{\neg}
+
+\newcommand{\TT}{\mbox{\sf TT}}
+\newcommand{\FF}{\mbox{\sf FF}}
+\newcommand{\pNOT}{\mathord{\sf NOT\ }}
+\newcommand{\pAND}{\mathord{\sf\ AND\ }}
+\newcommand{\pOR}{\mathord{\sf\ OR\ }}
+\newcommand{\pIMP}{\mathord{\sf\ IMP\ }}
+\newcommand{\pEQU}{\mathord{\sf\ EQUAL\ }}
+\newcommand{\pA}{\mathop{!!}}
+\newcommand{\pE}{\mathop{??}}
+
+\newcommand{\pSEQ}{\models}
+\newcommand{\SEQ}{\vdash}
+
+\newcommand{\CHFfin}{{\sf CHF\_FINITE}}
+\newcommand{\admitWF}{{\sf ADMIT\_WF\_INDUCT}}
+\newcommand{\WF}{{\sf WELL\_FOUNDED}}
+\newcommand{\UNITY}{{\sf UNITY}}
+\newcommand{\PROG}{{\sf PROG}}
+\newcommand{\INIT}{{\sf INIT}}
+\newcommand{\WRITE}{{\sf WRITE}}
+\newcommand{\AlwaysEn}{\; \mbox{\sf ALWAYS ENABLED}\; }
+\newcommand{\UNLESS}{\mathord{\sf\; UNLESS\; }}
+\newcommand{\ENSURES}{\mathord{\sf\; ENSURES\; }}
+\newcommand{\LTC}{{\sf LTC}}
+\newcommand{\LeadsToRel}{{\sf LeadsToRel}}
+\newcommand{\LTCRel}{{\sf LTCRel}}
+\newcommand{\lead}{\mapsto}
+\newcommand{\IN}{\mathord{\sf\; in\; }}
+
+
+\newlength{\SOMElen}
+\setlength{\SOMElen}{5pt}
+
+\newtheorem{mydef}{Definition}[chapter]
+\newenvironment{definition}[1]{%
+   \ \\ \noindent 
+   \begin{tabular}{|l|} \hline
+   \begin{minipage}{\textwidth}
+   \vspace{\SOMElen}
+   \begin{mydef}
+   \rm {\bf : #1}}{%
+   \end{mydef}
+   \vspace{\SOMElen}
+   \end{minipage} \\ \hline
+   \end{tabular} \vspace{\SOMElen}}
+     
+\newtheorem{mythm}{Theorem}[chapter]
+\newenvironment{theorem}[1]{%
+   \ \\ \noindent 
+   \begin{tabular}{|l|} \hline
+   \begin{minipage}{\textwidth}
+   \vspace{\SOMElen}
+   \begin{mythm}
+   \rm {\bf : #1}}{%
+   \end{mythm}
+  \vspace{\SOMElen}
+   \end{minipage} \\ \hline
+   \end{tabular} \vspace{\SOMElen}}
+
+\newtheorem{myrule}{}[chapter]
+\newenvironment{RULE}[1]{%
+   \ \\ \noindent 
+   \begin{tabular}{|l|} \hline
+   \begin{minipage}{\textwidth}
+   \vspace{\SOMElen}
+   \begin{myrule}
+   \rm {\bf : #1}}{%
+   \end{myrule}
+  \vspace{\SOMElen}
+   \end{minipage} \\ \hline
+   \end{tabular} \vspace{\SOMElen}}
+
+\newenvironment{thmlist}{$\begin{array}{lcl}}{\end{array}$}
+
+\newenvironment{Drule}{\begin{array}{c}}{\end{array}}
+

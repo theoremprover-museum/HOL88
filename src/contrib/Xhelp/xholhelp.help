@@ -1,0 +1,102 @@
+
+INTERFACE TO HOL DOCUMENTATION
+
+The program xholhelp provides an X-based interface to documentation
+for the HOL system. Three types of access are available:
+
+Apropos: produces a short listing of all HOL entities (EXCEPT
+  THEOREMS) whose name contains the substring currently in the
+  dialog box. The string may contain wildcards, as in ASM*TAC.
+
+Reference: the full help entry will be produced. The string in the
+  dialog box must correspond exactly to the name of a documented
+  function.
+
+Theorems: the string in the dialog box is used to access all
+  theorems documented whose name contains the given substring.
+
+These functions are accessed by typing in a string and then pressing
+the appropriate button. Also, pressing the Return key causes the
+"apropos" information to be output. The Escape key can be used to
+obtain full references, and Tab to examine theorem documentation.
+
+A "clear" button has been added to clear the contents of the dialog
+box. The "forward" and the "backward" buttons scroll the text area.
+
+
+ACCELERATORS
+
+The keyboard inputs can be entered anywhere in the window.
+Scrolling can be requested from the text area or the dialog area
+using Ctrl-V and Ctrl-N for forward scrolling, and Meta-V and Ctrl-P
+for backward strolling. A Ctrl-L anywhere in the window clears the
+dialog box.
+
+As a reminder, clicking on any part of a word *twice* quickly makes
+the complete word be selected; this makes it easy to enter words from
+the text area into the dialog box.
+
+
+FAST-PRINTING DOCUMENTATION
+
+The current documentation in the text box can be sent to a 
+printer, or any process which accepts input through a pipe. The
+environment variable HOL_PRINT_CMD must be set appropriately,
+as in:
+
+setenv HOL_PRINT_CMD "lpr -Plw5"
+
+
+SHELL INTERFACE
+
+The three functions can also be accessed directly from a Unix
+shell. The names of the three commands are: "hol_apro", "hol_ref",
+and "hol_thm", which are located in the same directory as the
+"xholhelp" program.
+
+
+
+PATH CUSTOMIZATION
+
+Documentation entries can be searched for in any directory, depending
+on two shell variables: HOL_HELP_PATH and THM_HELP_PATH.
+For example, to access documentation on the string library, as well as
+documentation on other tactics in personal space, use:
+
+setenv HOL_HELP_PATH $HOLDIR/Library/string/help/entries:$HOME/tactics
+
+setenv THM_HELP_PATH $HOLDIR/Library/string/help/thms
+
+(Each directory in the path must be separated by ":", just like in the
+Unix search PATH.)
+
+These paths will be added to default paths, so the program should work
+even if these variables are not set.
+
+
+X RESOURCES
+
+The appearance of the window can be customized by the user. Below are
+the variables, with the default values. The values can be fine-tuned.
+The expressions must be entered into a file on which the shell command
+"xrdb" is called.
+
+xholhelp.height: 400
+xholhelp.width: 600
+xholhelp*font: 7x13bold
+
+xholhelp*Dialog.value.width: 350
+xholhelp*Dialog.value.height: 20
+xholhelp*Command.height: 20
+
+
+
+Enjoy! And, I am open to suggestions for improving the tool.
+
+
+
+					- Sara (sk@cl.cam.ac.uk)
+
+
+
+

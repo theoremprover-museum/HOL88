@@ -1,0 +1,23 @@
+\DOC is_pred
+
+\TYPE {is_pred : (term -> bool)}
+
+\SYNOPSIS
+Determines whether the operator of a combination is a constant.
+
+\DESCRIBE
+The function {is_pred} returns {true} when applied to a term of the form {"c
+tm"} where {c} is a constant. Otherwise it returns {false}.
+
+\EXAMPLE
+{
+   #is_pred "SUC 0";;
+   true : bool
+}
+\COMMENTS
+This function may be reimplemented.
+
+\SEEALSO
+dest_pred
+
+\ENDDOC

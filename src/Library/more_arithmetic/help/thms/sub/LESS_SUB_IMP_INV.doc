@@ -1,0 +1,3 @@
+\THEOREM LESS_SUB_IMP_INV sub
+|- !k l. 0 < (k - l) ==> l < k
+\ENDTHEOREM

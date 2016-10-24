@@ -1,0 +1,3 @@
+\THEOREM RES_FORALL bool
+|- !P B. RES_FORALL P B = (!x. P x ==> B x)
+\ENDTHEOREM

@@ -1,0 +1,184 @@
+% Document Type: LaTeX
+\def\docidx#1#2{\mbox{#1#2}\index{C identifiers!#2@\string\idxname{#1}{#2}}\endgroup}
+\def\cname{\begingroup\makeulother\docidx{\tt}}
+
+\section{The implementation}
+
+This section describes the implementation briefly to provide a guide
+to anyone who needs to extend or modify the programs to suit special
+applications. 
+
+The \mweb\ utility program is currently implemented in the C language.
+The building of the programs is controlled by a {\tt Makefile}. Typing
+the command
+\begin{verbatim}
+  make all
+\end{verbatim}
+will compile all the programs. To install the programs, the path name
+of the binary directory specified in the {\tt Makefile} may need to be
+change. After modifying this to reflect your system set up, typing the
+command
+\begin{verbatim}
+  make install
+\end{verbatim}
+will install all the programs and the \LaTeX\ macro file for the
+default parallel environment.\index{LATEX file@\LaTeX\ file}
+
+The source of the programs consists of several {\tt .c} files and two
+header files. The code common to all programs is in the file {\tt
+common.c}. The header files are also common to all programs except
+{\tt mmerge}. The code specific to each program is in a file named
+after the program, e.g., the file {\tt mweave.c} contains the code for
+\weave. 
+
+The three programs, \tangle, \weave\ and \winnow, are basically simple
+recursive descent parsers. They read the input file line by line. If
+the input line is a command line, the program acts accordingly.
+Otherwise, it will write the line to the output file or discard it
+depending on the state the program is in. 
+
+\subsection{Parameter handling}
+
+The code for handling parameters is common to all programs, so it is
+in the file {\tt common.c}.
+The parameters are stored in a parameter table, \cname{paratab}. Each
+entry of this  table represents a parameter. It is in the form of a
+name-value pair. Both the name and the value are strings. The table is
+a static array of structures which is initialized with default strings.
+Symbolic names representing the indexes to the entries are defined in
+the header file {\tt mweb.h}. They all begin with the upper case
+letter `{\tt P}'. For example, the index to the parameter
+\para{char_cmd} is \cname{Pchar_cmd}. To improve the speed of
+accessing the parameter values, a set of static pointers are declared
+and initialized to point to the values of more frequently used
+parameters. The names of these pointers are identical to the names of
+the parameters whose values are accessing by the pointers.
+
+ The function \cname{set_para}
+takes the name and the value of a parameter as its arguments. It
+updates the value of the parameter in the table if the named parameter
+is already in the table. Otherwise it adds the parameter into the
+table. This function returns the index to the entry. The function
+\cname{get_para} takes the name of a parameter, and returns its
+value. If it cannot find the named parameter, a {\tt NULL} pointer is
+returned. Note that the value of a parameter may be a {\tt NULL}
+string. A pointer to a {\tt NULL} string is not equal to a {\tt NULL}
+pointer.
+
+Some parameters are special. In addition to its value, each  special
+parameter has an associated flag. The association between a parameter
+and a flag is stored in a special parameter table,
+\cname{special_ptab}. When a special parameter is updated, the value
+of the associated flag is also updated. 
+
+
+The procedure \cname{proc_para_def} takes an equation in the format
+accepted by the command \cmd{para_def}. It updates the entry in the
+parameter table. If it is a special parameter, the flag in the special
+parameter table is also updated. This function is called whenever a
+\cmd{para_def} command is encountered.
+
+\subsection{Initialization}
+
+When the \mweb\ programs start, the first task is to call the
+initialization routine, \cname{init}. This sets up the initial values
+of some variables which are common to all programs. It then calls the
+routine \cname{proginit} which does the program specific
+initialization. 
+
+Next, the programs process the command line. The action for simple
+options, such as {\tt -h}, is trivial. The help message is printed and
+the program terminates.  the same action is taken if an unknown option
+is specified. The action for {\tt -I} is to open and process the
+named file which is expected to contain parameter definition and/or tag
+sections. This is done by the routine \cname{proc_incl_file}.  The
+action for other options is to assign the 
+appropriate value to the parameter by  simply calling the function
+\cname{proc_para_def}. 
+
+The names of the input
+and output files specified in the command line are stored in the
+strings \cname{infilename} and \cname{outfilename}. As mentioned in
+Section~\ref{sec-cmd-opt}, if only one name is given, it is taken as
+the input file name. The output file name is derived from the input
+file name. This is done by the routine \cname{fileinit}. It also
+attempts to open the files and connects the input and output
+streams \cname{instream} and \cname{outstream} to these files. All
+subsequent I/O is perform via these streams.
+
+The global variables \cname{linecount} and \cname{seccount} keep
+track of the number of lines and sections, respectively, which have
+been read from the current input file.
+
+\subsection{The \tangle\ program}
+
+The task of \tangle\ is relatively simple. When a section is
+encountered, the program enters the \cname{proc_sec} routine. Within
+this routine, the variable \cname{status} keeps track of which part
+the program is in. Initially, it has the value \cname{NULL}. When
+entering native-language part, \cname{status} 
+is set to the value \cname{NEW}. When \cname{status} has this value,
+all input lines are copied to the output stream. When it has other
+value, all input lines are discarded.
+
+\subsection{The \weave\ program}
+
+Similar to the \tangle\ program, \weave\ enters the routine
+\cname{proc_sec} when entering a section. However, \weave's
+\cname{proc_sec} routine is more complicated. It first checks
+which section-begin command has been seen, and then outputs the
+corresponding parameter. The program should now be in the document
+part. It simply copies all input lines to the output verbatim until a
+command line is found. 
+
+Commands are checked by the function \cname{is_command}. It takes two
+arguments: the first is the current input string, and the second is an
+index to a parameter. It returns a non-zero value if the input string
+is equal to the parameter. This value is the length (number of
+characters) of the parameter.
+
+The variable \cname{status} keeps track of which part of a section
+the program is in. The value \cname{IN_DOC} indicates that the
+program is in document part. When an \cmd{other_part} or
+\cmd{native_part} command is found, \cname{status} is set to the
+values \cname{IN_O} or \cname{IN_N}, respectively. 
+
+When \weave\ is in one of the language parts, the input lines are saved
+in a buffer by the function \cname{store_buf}. The buffers
+\cname{old_buf} and \cname{new_buf} are for this purpose. When the
+end of section is reached, the buffers are processed and written to
+the output. 
+
+\subsection{Tag processing}
+
+Text lines of all tags are stored in a table, \cname{incltext}. This
+is indexed by a tag table \cname{tags}. Both of these tables are of
+type array of \cname{LINE}s. A \cname{LINE} is a structure of two fields:
+an integer field which is the index to a table entry, and a string
+field which contains the text of a line. The string field of
+\cname{tags} contains the name of a tag section. The corresponding
+integer field contains the index to the first text line of the tag
+section in the \cname{incltext} table. The integer field of the
+\cname{incltext} table points to the next text line of the same tag
+section. The integer field of the last line is equal to zero. The
+pointers \cname{tagptr} and \cname{textptr} point to the first
+available space in the table \cname{tags} and \cname{incltext},
+respectively. 
+
+When a \cmd{begin_tag} command is found in an include file, 
+i.e., in the routine \cname{proc_incl_file}, the name of the tag
+section is stored in the \cname{tags} table. The variable
+\cname{state} is set to \cname{INTAG}. All subsequent text lines until
+an \cmd{end_tag} command are stored in the \cname{incltext} table.
+
+When a \cmd{begin_tag} command is found in the document part of a
+section, the \weave\ program enters the routine \cname{proc_tag}.
+This routine searches the \cname{tags} table to find a tag section of
+the same name, and writes the text lines to the output in place of the
+tag command. A warning is issued if no such tag section can be
+found.
+
+% Local Variables: 
+% mode: latex
+% TeX-master: t
+% End: 

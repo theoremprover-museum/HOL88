@@ -1,0 +1,14 @@
+% ===================================================================== %
+% FILE:         greatest.ml                                             %
+%                                                                       %
+% DESCRIPTION:  theory about the greatest of a list of natural numbers  %
+%               and inequalities involving it.                          %
+%                                                                       %
+% AUTHOR:       Catia M. Angelo                                         %
+%               IMEC VZW                                                %
+%               Kapeldreef, 75                                          %
+%               B3001 - Leuven - Belgium                                %
+%               e-mail: catia@imec.be                                   %
+%                                                                       %
+% DATE:         June 4th, 1993.                                         %
+% ===================================================================== %

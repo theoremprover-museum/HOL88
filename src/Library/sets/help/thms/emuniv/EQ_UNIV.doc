@@ -1,0 +1,3 @@
+\THEOREM EQ_UNIV sets
+|- (!x. x IN s) = (s = UNIV)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM prod_TY_DEF bool
+|- ?rep. TYPE_DEFINITION IS_PAIR rep
+\ENDTHEOREM

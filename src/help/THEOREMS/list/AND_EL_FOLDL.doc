@@ -1,0 +1,3 @@
+\THEOREM AND_EL_FOLDL list
+|- !l. AND_EL l = FOLDL $/\ T l
+\ENDTHEOREM

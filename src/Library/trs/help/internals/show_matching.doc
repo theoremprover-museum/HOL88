@@ -1,0 +1,13 @@
+\DOC show_matching
+
+\BLTYPE
+show_matching : (matching ->
+                 ((wildvar # term) list # (wildtype # type) list))
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

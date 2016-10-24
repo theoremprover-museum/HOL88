@@ -1,0 +1,4 @@
+\THEOREM IS_OCTAL_NORMALIZED numeral
+|- !digits.
+    IS_OCTAL_NORMALIZED digits = IS_OCTAL digits /\ IS_NORMALIZED digits
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM TAN_PERIODIC TRANSC
+|- !x. tan(x + ((& 2) * pi)) = tan x
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REAL_LDISTRIB REALAX
+|- !x y z. x * (y + z) = (x * y) + (x * z)
+\ENDTHEOREM

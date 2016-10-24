@@ -1,0 +1,3 @@
+\THEOREM EXP_POS_LT TRANSC
+|- !x. (& 0) < (exp x)
+\ENDTHEOREM

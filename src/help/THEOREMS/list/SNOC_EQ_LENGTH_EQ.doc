@@ -1,0 +1,3 @@
+\THEOREM SNOC_EQ_LENGTH_EQ list
+|- !x1 l1 x2 l2. (SNOC x1 l1 = SNOC x2 l2) ==> (LENGTH l1 = LENGTH l2)
+\ENDTHEOREM

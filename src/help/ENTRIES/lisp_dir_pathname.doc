@@ -1,0 +1,19 @@
+\DOC lisp_dir_pathname
+
+\TYPE {lisp_dir_pathname : string}
+
+\SYNOPSIS
+Absolute pathname to the HOL lisp sources.
+
+\DESCRIBE
+For implementation reasons, the ML variable {lisp_dir_pathname} is bound when
+the system if built to a string giving the absolute pathname of the directory
+containing the HOL lisp sources.  This value is not for general use.
+
+\FAILURE
+Evaluating {lisp_dir_pathname} never fails.
+
+\SEEALSO
+ml_dir_pathname.
+
+\ENDDOC

@@ -1,0 +1,4 @@
+\THEOREM B_XOR_DEF wordn_bitops
+|- (!l. B_XOR[]l = []) /\
+   (!x1 l1 l2. B_XOR(CONS x1 l1)l2 = CONS~(x1 = HD l2)(B_XOR l1(TL l2)))
+\ENDTHEOREM

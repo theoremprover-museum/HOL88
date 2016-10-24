@@ -1,0 +1,34 @@
+#print_theory `more_arith`;;
+The Theory more_arith
+Parents --  HOL     
+Theorems --
+  AND_DIST_OR  |- !t1 t2 t3. t1 /\ (t2 \/ t3) = t1 /\ t2 \/ t1 /\ t3
+  ADDL_GREATER  |- !m n p. m < n ==> m < (p + n)
+  ADDL_GREATER_EQ  |- !m n p. m <= n ==> m <= (p + n)
+  ADDR_GREATER  |- !m n p. m < n ==> m < (n + p)
+  ADDR_GREATER_EQ  |- !m n p. m <= n ==> m <= (n + p)
+  SUB_LESS_TO_LESS_ADDR
+    |- !m n p. p <= m ==> ((m - p) < n = m < (n + p))
+  SUB_LESS_TO_LESS_ADDL
+    |- !m n p. n <= m ==> ((m - n) < p = m < (n + p))
+  LESS_SUB_TO_ADDR_LESS
+    |- !m n p. p <= m ==> (n < (m - p) = (n + p) < m)
+  LESS_SUB_TO_ADDL_LESS
+    |- !m n p. n <= m ==> (p < (m - n) = (n + p) < m)
+  SUB_SAME_EQ_0  |- !m. m - m = 0
+  SUC_SUB
+    |- !m n.
+        (m < n ==> ((SUC m) - n = 0)) /\
+        (~m < n ==> ((SUC m) - n = SUC(m - n)))
+  DOUBLE_SUB  |- !m n p. (m - n) - p = m - (n + p)
+  SIMP1  |- !m n p. p <= n ==> (m + (n - p) = (m + n) - p)
+  SIMP2  |- !m n p. p <= m ==> ((m - p) + n = (m + n) - p)
+  SIMP3  |- !m n p. n <= p ==> (m - (p - n) = (m + n) - p)
+  LEFT_SUB_DISTRIB  |- !m n p. m * (n - p) = (m * n) - (m * p)
+  GEN_INDUCTION
+    |- !P. P 0 /\ (!n. (!m. m < n ==> P m) ==> P n) ==> (!n. P n)
+  WELL_ORDER  |- !S1. (?m. S1 m) ==> (?m. S1 m /\ (!n. n < m ==> ~S1 n))
+  
+******************** more_arith ********************
+
+() : void

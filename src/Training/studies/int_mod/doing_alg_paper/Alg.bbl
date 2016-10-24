@@ -1,0 +1,42 @@
+\begin{thebibliography}{1}
+
+\bibitem{Church40}
+A. Church.
+\newblock A formulation of the simple theory of types.
+\newblock {\it Journal of Symbolic Logic}, 5:56--68, 1940.
+
+\bibitem{ML}
+G. Cousineau, G. Huet, and L. Paulson.
+\newblock {\it The ML Handbook}.
+\newblock {INRIA}, 1986.
+
+\bibitem{Gordon87}
+M.~J.~C. Gordon.
+\newblock Hol: a proof generating system for higher-order logic.
+\newblock In G. Birtwistle and P.~A. Subrahmanyam, editors, {\it VLSI
+  Specification, Verification and Synthesis}, pages~73--128, Kluwer Academic
+  Publishers, 1988.
+
+\bibitem{Herstein}
+I.~N. Herstein.
+\newblock {\it Topics in Algebra}.
+\newblock Xerox College Publishing, 2 edition, 1975.
+
+\bibitem{Huppert}
+B. Huppert.
+\newblock {\it Endliche Gruppen}.
+\newblock Volume~1, Springer-Verlag, 1983.
+
+\bibitem{Melham88}
+Thomas~F. Melham.
+\newblock {\it Automating Recursive Type Definitions in Higher Order Logic}.
+\newblock Technical Report~146, University of Cambridge Computer Laboratory,
+  September 1988.
+
+\bibitem{Paulson87}
+Laurence~C. Paulson.
+\newblock {\it Logic and Computation: Interactive Proof with Cambridge LCF}.
+\newblock {\it Cambridge Tracts in Theoretical Computer Science 2}, Cambridge
+  University Press, 1987.
+
+\end{thebibliography}

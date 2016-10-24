@@ -1,0 +1,6 @@
+\THEOREM real_add REALAX
+|- !g00025 g00026.
+    g00025 + g00026 =
+    mk_real
+    ($treal_eq(($@(dest_real g00025)) treal_add ($@(dest_real g00026))))
+\ENDTHEOREM

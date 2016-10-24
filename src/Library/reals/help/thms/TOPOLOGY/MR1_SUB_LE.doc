@@ -1,0 +1,3 @@
+\THEOREM MR1_SUB_LE TOPOLOGY
+|- !x d. (& 0) <= d ==> (dist mr1(x,x - d) = d)
+\ENDTHEOREM

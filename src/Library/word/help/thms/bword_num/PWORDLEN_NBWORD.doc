@@ -1,0 +1,3 @@
+\THEOREM PWORDLEN_NBWORD bword_num
+|- !n m. PWORDLEN n(NBWORD n m)
+\ENDTHEOREM

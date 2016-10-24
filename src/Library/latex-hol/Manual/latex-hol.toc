@@ -1,0 +1,8 @@
+\contentsline {chapter}{\numberline {1}The {\ptt latex-hol} library}{3}
+\contentsline {section}{\numberline {1.1}Using the Library}{3}
+\contentsline {section}{\numberline {1.2}Typeset a Complete Theory}{4}
+\contentsline {section}{\numberline {1.3}The \p@LaTeX \ macro file}{5}
+\contentsline {section}{\numberline {1.4}Hints on better formatting}{6}
+\contentsline {chapter}{\numberline {2}ML Functions in the {\ptt latex-hol} Library}{9}
+\contentsline {chapter}{\numberline {3}\p@LaTeX \ macros}{21}
+\contentsline {chapter}{Index}{23}

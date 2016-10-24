@@ -1,0 +1,4 @@
+\THEOREM IS_EL list
+|- (!x. IS_EL x[] = F) /\
+   (!y x l. IS_EL y(CONS x l) = (y = x) \/ IS_EL y l)
+\ENDTHEOREM

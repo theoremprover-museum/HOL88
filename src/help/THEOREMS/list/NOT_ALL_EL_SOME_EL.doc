@@ -1,0 +1,3 @@
+\THEOREM NOT_ALL_EL_SOME_EL list
+|- !P l. ~ALL_EL P l = SOME_EL($~ o P)l
+\ENDTHEOREM

@@ -1,0 +1,56 @@
+\DOC wordn_X_CASES_TAC
+
+\TYPE {wordn_X_CASES_TAC : term -> thm -> (term list) -> tactic}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Instantiates variables of type {:wordn} with a list of bits.
+
+\DESCRIBE
+The tactic {wordn_X_CASES_TAC} instantiates occurrences of a variable of
+type {:wordn} in the goal with a list of bits. It takes, as its
+arguments, a term which indicates which variable is to be
+instantiated, a theorem which should in the form  returned by
+{prove_wordn_cases} and a list of terms which is used as the bits in
+the instantiation. The specification of {wordn_X_CASES_TAC} is:
+{
+              A ?- t[w]
+   =============================== wordn_X_CASES_TAC "w" wordn_CASES
+      A ?- t[WORDn[c0;...;cn-1]/w]       ["c0";..."cn-1"]
+}
+\noindent where {wordn_CASES} has the following theorem:
+{
+   |- !w. ?b0...bn. w = WORDn[b0;...bn]
+}
+
+This function specializes the universally quantified variable in the
+theorem {wordn_CASES} with the given term which should match the
+variable required to be instantiated in the goal. It then eliminates
+the existentially quantified vairables {b0},...,{bn-1} using the terms
+given in the last argument as specific witness.
+It then  substitutes the right-hand side of the
+equation for the occurrences of the variable {w} in the goal.
+
+\FAILURE
+Fails if the substitution cannot be performed due to  no matching
+variable of the correct type is found, or the supplied
+terms involve variables which are free in the assumption or other reasons
+as given in the failure conditions of {X_CHOOSE_TAC} and {SUBST1_TAC}.
+
+\EXAMPLE
+Suppose that one wants to solve the following  goal:
+{
+   "!w. LENGTH(BITS3 w) = 3"
+}
+\noindent The tactic {GEN_TAC THEN wordn_X_CASES_TAC "w" word3_CASES ["c1";"c2";"c3"]}
+ may be used to transform it to
+{
+   "LENGTH(BITS3(WORD3[c1;c2;c3])) = 3"
+}
+
+\SEEALSO
+{wordn_CASES_TAC}, {prove_wordn_cases_thm},
+{X_CHOOSE_TAC}, {SUBST1_TAC}.
+
+\ENDDOC

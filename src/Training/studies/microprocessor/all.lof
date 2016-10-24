@@ -1,0 +1,14 @@
+\contentsline {figure}{\numberline {1}{\ignorespaces Functional View of the TAMARACK-3 Microprocessor.}}{6}
+\contentsline {figure}{\numberline {2}{\ignorespaces Fully Synchronous Operation.}}{16}
+\contentsline {figure}{\numberline {3}{\ignorespaces Synchronizing Data Transfer with Handshaking Signals.}}{17}
+\contentsline {figure}{\numberline {4}{\ignorespaces Fully Asynchronous Operation.}}{17}
+\contentsline {figure}{\numberline {5}{\ignorespaces Extended Cycle Operation.}}{18}
+\contentsline {figure}{\numberline {6}{\ignorespaces Register-Transfer Level Architecture.}}{20}
+\contentsline {figure}{\numberline {7}{\ignorespaces Hierarchy of Interpretation Levels.}}{23}
+\contentsline {figure}{\numberline {8}{\ignorespaces Control Unit Finite-State Machine Flow Diagram.}}{25}
+\contentsline {figure}{\numberline {9}{\ignorespaces Mapping from FSM States to Datapath Actions.}}{27}
+\contentsline {figure}{\numberline {10}{\ignorespaces ADD Instruction Cycle Timing.}}{75}
+\contentsline {figure}{\numberline {11}{\ignorespaces JMP Instruction Cycle Timing.}}{75}
+\contentsline {figure}{\numberline {12}{\ignorespaces Control Part of an Interpreter.}}{80}
+\contentsline {figure}{\numberline {13}{\ignorespaces Abstract and Concrete Time Scales.}}{82}
+\contentsline {figure}{\numberline {14}{\ignorespaces Four-Phase Handshaking Timing Diagram.}}{86}

@@ -1,0 +1,3 @@
+\THEOREM HREAL_EQ_LADD REALAX
+|- !x y z. (x hreal_add y = x hreal_add z) = (y = z)
+\ENDTHEOREM

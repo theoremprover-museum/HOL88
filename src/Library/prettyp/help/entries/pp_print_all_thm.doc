@@ -1,0 +1,17 @@
+\DOC pp_print_all_thm
+
+\TYPE {pp_print_all_thm : (thm -> void)}
+
+\SYNOPSIS
+Print function for HOL theorems. Simulates the HOL system function
+{print_all_thm}.
+
+\LIBRARY prettyp
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+pp_print_thm, pp_print_type, pp_print_term.
+
+\ENDDOC

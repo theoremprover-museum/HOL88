@@ -1,0 +1,3 @@
+\THEOREM ISL_OR_ISR sum
+|- !x. ISL x \/ ISR x
+\ENDTHEOREM

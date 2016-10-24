@@ -1,0 +1,4 @@
+\THEOREM node_REP tree
+|- (node_REP[] = 0) /\
+   (!h t. node_REP(CONS h t) = (SUC(h + h)) * (2 EXP (node_REP t)))
+\ENDTHEOREM

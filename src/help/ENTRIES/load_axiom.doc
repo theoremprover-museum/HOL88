@@ -1,0 +1,38 @@
+\DOC load_axiom
+
+\TYPE {load_axiom : (string -> string -> void)}
+
+\SYNOPSIS
+Loads in a given axiom from a given theory.
+
+\DESCRIBE
+If {thy} is the name of an ancestor theory, and {ax} one of its axioms, then
+{
+   load_axiom `thy` `ax`
+}
+\noindent attempts to load the corresponding axiom, that is, to perform
+dynamically the following toplevel binding:
+{
+  let ax = axiom `thy` `ax`;;
+}
+\FAILURE
+Fails if {thy} is not an ancestor theory, or if {ax} is not one of its
+axioms.
+
+\EXAMPLE
+{
+#load_axiom `ind` `INFINITY_AX`;;
+() : void
+
+INFINITY_AX = |- ?f. ONE_ONE f /\ ~ONTO f
+
+#INFINITY_AX;;
+|- ?f. ONE_ONE f /\ ~ONTO f
+}
+\USES
+Useful for autoloading.
+
+\SEEALSO
+axioms, let_after, let_before, load_axioms.
+
+\ENDDOC

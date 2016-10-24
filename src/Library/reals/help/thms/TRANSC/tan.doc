@@ -1,0 +1,3 @@
+\THEOREM tan TRANSC
+|- !x. tan x = (sin x) / (cos x)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM HREAL_ADD_SYM HREAL
+|- !X Y. X hreal_add Y = Y hreal_add X
+\ENDTHEOREM

@@ -1,0 +1,28 @@
+\DOC dest_type
+
+\TYPE {dest_type : (type -> (string # type list))}
+
+\SYNOPSIS
+Breaks apart a type (other than a variable type).
+
+\DESCRIBE
+{dest_type(":(ty1,...,tyn)op")} returns {(`op`,[":ty1";...;":tyn"])}.
+
+\FAILURE
+Fails with {dest_type} if the type is a type variable.
+
+\EXAMPLE
+{
+#dest_type ":bool";;
+(`bool`, []) : (string # type list)
+
+#dest_type ":(bool)list";;
+(`list`, [":bool"]) : (string # type list)
+
+#dest_type ":num -> bool";;
+(`fun`, [":num"; ":bool"]) : (string # type list)
+}
+\SEEALSO
+mk_type, dest_vartype.
+
+\ENDDOC

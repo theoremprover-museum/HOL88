@@ -1,0 +1,5 @@
+echo 'loadt`make_use`;; '\
+   'load_theory`'$1'`;; '\
+  'make_use`'$1'`;; '\
+  'quit();;' \
+|hol

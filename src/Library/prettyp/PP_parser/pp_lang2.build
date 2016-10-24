@@ -1,0 +1,19 @@
+% pp_lang2.build                                                              %
+%-----------------------------------------------------------------------------%
+
+
+let pp_lang2_rules =
+
+   % : (print_rule list) %
+
+   [] : print_rule list;;
+
+
+let pp_lang2_rules_fun =
+
+   % : (print_rule_function) %
+
+   print_rule_fun pp_lang2_rules;;
+
+
+%-----------------------------------------------------------------------------%

@@ -1,0 +1,29 @@
+\DOC new_constant
+
+\TYPE {new_constant : ((string # type) -> void)}
+
+\SYNOPSIS
+Declares a new constant in the current theory.
+
+\DESCRIBE
+A call {new_constant(`c`,":ty")} makes {c} a constant in the current theory.
+Note that it does not specify its value. The constant may have a polymorphic
+type, which can be used in arbitrary instantiations.
+
+\FAILURE
+Fails if HOL is not in draft mode, or if the name is not a valid constant
+name, or there is already a constant of that name in the current theory.
+
+\EXAMPLE
+{
+#new_theory `zonk`;;
+() : void
+
+#new_constant(`graham's_number`,":num");;
+() : void
+}
+\SEEALSO
+constants, infixes, is_constant, is_infix, new_infix, new_definition,
+new_infix_definition.
+
+\ENDDOC

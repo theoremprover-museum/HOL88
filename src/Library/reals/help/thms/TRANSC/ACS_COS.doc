@@ -1,0 +1,3 @@
+\THEOREM ACS_COS TRANSC
+|- !y. (--(& 1)) <= y /\ y <= (& 1) ==> (cos(acs y) = y)
+\ENDTHEOREM

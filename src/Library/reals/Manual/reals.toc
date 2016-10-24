@@ -1,0 +1,18 @@
+\contentsline {chapter}{\numberline {1}The reals library}{1}
+\contentsline {section}{\numberline {1.1}Loading the library}{1}
+\contentsline {section}{\numberline {1.2}Theories in the reals library}{1}
+\contentsline {section}{\numberline {1.3}The user interface}{2}
+\contentsline {section}{\numberline {1.4}Other functions defined}{3}
+\contentsline {chapter}{\numberline {2}Pre-proved Theorems}{5}
+\contentsline {section}{\numberline {2.1}HRAT}{5}
+\contentsline {section}{\numberline {2.2}HREAL}{9}
+\contentsline {section}{\numberline {2.3}REALAX}{14}
+\contentsline {section}{\numberline {2.4}REAL}{21}
+\contentsline {section}{\numberline {2.5}TOPOLOGY}{40}
+\contentsline {section}{\numberline {2.6}NETS}{44}
+\contentsline {section}{\numberline {2.7}LIM}{48}
+\contentsline {section}{\numberline {2.8}SEQ}{55}
+\contentsline {section}{\numberline {2.9}POWSER}{60}
+\contentsline {section}{\numberline {2.10}TRANSC}{63}
+\contentsline {chapter}{References}{75}
+\contentsline {chapter}{Index}{76}

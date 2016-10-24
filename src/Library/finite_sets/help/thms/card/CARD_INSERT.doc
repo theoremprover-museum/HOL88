@@ -1,0 +1,3 @@
+\THEOREM CARD_INSERT finite_sets
+|- !s x. CARD(x INSERT s) = (x IN s => CARD s | SUC(CARD s))
+\ENDTHEOREM

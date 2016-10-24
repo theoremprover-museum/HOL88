@@ -1,0 +1,51 @@
+\DOC pp
+
+\BLTYPE
+pp : (print_rule_function -> string -> (string # int) list ->
+      print_tree -> void)
+\ELTYPE
+
+\SYNOPSIS
+One of the main pretty-printing functions. For use with the standard HOL
+pretty-printer.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{pp} invokes the pretty-printer. It can be used for merging output with text
+produced by the standard HOL pretty-printer. Instead of ending each line of
+text by printing a new-line, it sends its output to the standard HOL printer
+in the form of a pretty-printing block. The arguments to the function are:
+(1) pretty-printing rules expressed as a function, (2) the initial context,
+(3) initial parameters, (4) tree to be printed. {pp} uses as its maximum width
+the width for the standard HOL printer, as specified by the function
+{set_margin}. The initial offset from the left margin is taken to be zero.
+
+\FAILURE
+Failure or incorrect behaviour can be caused by mistakes in the pretty-printing
+rules or by inappropriate arguments to the printing function. The most common
+errors are use of uninitialised parameters and reference to unknown
+metavariables. The latter are due to metavariables appearing in the format of a
+rule, but not in the pattern. Errors also occur if a metavariable is used in a
+place inappropriate for the value it is bound to. An example of this is an
+attempt to compare a string with a metavariable that is bound to a tree rather
+than a node-name.
+
+Use of negative indentations in formats may cause text to overflow the left
+margin, and an exception to be raised. Any user defined function may also
+cause a run-time error.
+
+The printing functions have been designed to trap exceptions and to print
+{*error*}. This does not indicate what caused the error, but it may give some
+indication of where the error occurred. However, this is not the main reason
+for trapping exceptions. The ML directive {top_print} installs a user print
+function. If an exception is raised within this function, it does not appear
+at the top-level of ML. Instead, an obscure Lisp error is produced. Since the
+pretty-printing functions are normally used with {top_print}, it is best to
+avoid raising exceptions. For this reason the printing functions display
+{*error*} instead.
+
+\SEEALSO
+pretty_print, pp_write.
+
+\ENDDOC

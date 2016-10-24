@@ -1,0 +1,3 @@
+\THEOREM ALL_EL_LASTN list
+|- !P l. ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(LASTN m l))
+\ENDTHEOREM

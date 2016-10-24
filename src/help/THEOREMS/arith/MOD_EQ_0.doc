@@ -1,0 +1,3 @@
+\THEOREM MOD_EQ_0 arithmetic
+|- !n. 0 < n ==> (!k. (k * n) MOD n = 0)
+\ENDTHEOREM

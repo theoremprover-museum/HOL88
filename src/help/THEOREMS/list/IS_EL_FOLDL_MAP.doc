@@ -1,0 +1,3 @@
+\THEOREM IS_EL_FOLDL_MAP list
+|- !x l. IS_EL x l = FOLDL $\/ F(MAP($= x)l)
+\ENDTHEOREM

@@ -1,0 +1,25 @@
+\DOC set_flag
+
+\TYPE {set_flag : ((string # bool) -> bool)}
+
+\SYNOPSIS
+Sets a named flag to a specific boolean value.
+
+\DESCRIBE
+The function {set_flag} sets a flag to a given value. The previous value of the
+flag is returned. The list of settable flags can be determined by executing
+{flags ()}.
+
+\FAILURE
+If the named string does not identify a settable flag.
+
+\EXAMPLE
+{
+   #set_flag (`timing`, true);;
+   false : bool
+   Run time: 0.0s
+}
+\SEEALSO
+flags.
+
+\ENDDOC

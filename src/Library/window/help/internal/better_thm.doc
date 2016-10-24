@@ -1,0 +1,10 @@
+\DOC better_thm
+
+\TYPE {better_thm : (thm -> thm -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

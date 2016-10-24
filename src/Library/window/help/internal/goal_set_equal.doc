@@ -1,0 +1,10 @@
+\DOC goal_set_equal
+
+\TYPE {goal_set_equal : (goal list -> goal list -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

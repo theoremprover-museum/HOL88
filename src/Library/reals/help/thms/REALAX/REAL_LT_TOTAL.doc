@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_TOTAL REALAX
+|- !x y. (x = y) \/ x < y \/ y < x
+\ENDTHEOREM

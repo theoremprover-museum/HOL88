@@ -1,0 +1,6 @@
+\THEOREM SPLITP list
+|- (!P. SPLITP P[] = [],[]) /\
+   (!P x l.
+     SPLITP P(CONS x l) =
+     (P x => ([],CONS x l) | (CONS x(FST(SPLITP P l)),SND(SPLITP P l))))
+\ENDTHEOREM

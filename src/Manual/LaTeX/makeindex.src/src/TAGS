@@ -1,0 +1,121 @@
+
+genind.c,201
+flush_line(342,7748
+gen_ind(60,1822
+insert_page(399,8841
+make_entry(98,2591
+make_item(158,4060
+new_entry(198,4997
+old_entry(232,5698
+page_diff(277,6873
+put_header(292,7136
+wrap_line(371,8354
+
+genind.h,119
+#define IND_ERROR(30,921
+#define IND_ERROR(42,1224
+#define PUT(59,1574
+#define PUTC(55,1527
+#define PUTLN(63,1620
+
+mkind.c,162
+check_all(457,11160
+check_idx(346,7959
+find_pageno(533,13206
+main(98,2699
+open_sty(585,14354
+prepare_idx(255,6043
+process_idx(280,6601
+strtoint(658,15951
+
+mkind.h,677
+#define ARGS(687,18436
+#define ARGS(690,18495
+#define CLOSE(418,11029
+#define DONE(680,18239
+#define EXIT(298,8129
+#define FATAL(400,10610
+#define FATAL2(406,10719
+#define IDX_DOT(657,17747
+#define ISDIGIT(422,11108
+#define ISDIGIT(425,11222
+#define ISSYMBOL(423,11139
+#define ISSYMBOL(426,11265
+#define MESSAGE(394,10507
+#define OPEN_IN(416,10955
+#define OPEN_IN_B(413,10909
+#define OPEN_OUT(417,10992
+#define STREQ(391,10424
+#define STRNEQ(392,10465
+#define TOASCII(379,9909
+#define TOASCII(381,9952
+#define TOLOWER(386,10175
+#define TOUPPER(388,10299
+#define access(215,5489
+#define access(229,5789
+#define getenv(233,5933
+#define getenv(711,19106
+
+qsort.c,30
+qqsort(37,1195
+qst(118,3602
+
+scanid.c,368
+#define CHECK_LENGTH(31,884
+group_type(396,9478
+make_key(166,4147
+make_string(219,5303
+scan_alpha_lower(581,13177
+scan_alpha_upper(599,13450
+scan_arabic(454,10728
+scan_arg1(617,13723
+scan_arg2(690,15215
+scan_field(315,7489
+scan_idx(67,2234
+scan_key(233,5638
+scan_no(414,9736
+scan_roman_lower(488,11434
+scan_roman_upper(534,12305
+search_quote(733,16075
+
+scanid.h,450
+#define ALPHA_VAL(81,2177
+#define ALPHA_VAL(87,2364
+#define ENTER(162,4075
+#define IDX_ERROR(114,3002
+#define IDX_ERROR(138,3550
+#define IDX_ERROR2(126,3268
+#define IDX_ERROR2(149,3803
+#define IS_ALPHA_LOWER(83,2251
+#define IS_ALPHA_LOWER(91,2481
+#define IS_ALPHA_UPPER(85,2305
+#define IS_ALPHA_UPPER(94,2541
+#define IS_ROMAN_LOWER(72,1819
+#define IS_ROMAN_UPPER(76,1984
+#define ROMAN_LOWER_VAL(54,1309
+#define ROMAN_UPPER_VAL(63,1564
+
+scanst.c,157
+count_lfd(433,11608
+next_nonblank(305,9339
+process_precedence(449,11778
+scan_char(391,10744
+scan_spec(267,8631
+scan_string(330,9655
+scan_sty(112,3764
+
+scanst.h,139
+#define MULTIPLE(221,5959
+#define SCAN_NO(217,5902
+#define STY_ERROR(165,4697
+#define STY_ERROR2(179,5056
+#define STY_ERROR2(192,5362
+
+sortid.c,148
+check_mixsym(132,2996
+compare(51,1501
+compare_one(78,2012
+compare_page(193,3942
+compare_string(153,3222
+new_strcmp(242,5099
+sort_idx(41,1274

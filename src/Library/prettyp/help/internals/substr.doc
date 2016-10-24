@@ -1,0 +1,33 @@
+\DOC substr
+
+\TYPE {substr : (int -> int -> string -> string)}
+
+\SYNOPSIS
+Function to obtain a sub-string of a string.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{substr i l s} computes the sub-string of {s} beginning at the ({i+1})th
+character and ending at the ({i+l})th character. So, the first {i} characters
+are discarded, and the next {l} characters are taken as the sub-string.
+
+\FAILURE
+The function fails if the string is not long enough to meet the requirements.
+
+\EXAMPLE
+{
+#substr 3 4 `abcdefghij`;;
+`defg` : string
+
+#substr 3 4 `abcdef`;;
+evaluation failed     substr -- string too short
+}
+\COMMENTS
+{substr} is an internal function of the `{prettyp}' library, but is of general
+use.
+
+\SEEALSO
+strlen.
+
+\ENDDOC

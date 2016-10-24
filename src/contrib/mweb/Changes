@@ -1,0 +1,150 @@
+/*-----*/
+  DATE: 29 May 1992 
+  VERSION: 1.0
+  FILES: mweb.h common.c mtangle.c mweave.c
+
+First version.
+
+/*-----*/
+  DATE: 26-30 June 1992 
+  VERSION: 1.1
+  CHANGES: 1) adding the ability of processing an include file in mweave.
+	   2) parameter table and user defined parameters
+
+   The include file format is as described below: The include file
+contains a number of entries. Each entry starts with a start line and
+ends withe an end line. The first character of these lines is the
+command character. The next is the begin_tag and end_tag character,
+respectively. The begin line must has a string following the begin_tag
+character. This is the name of the entry. Blanks between begin_tag and
+the first character of the 
+string are ignored. The string extends to the end of the line, but not
+including the end of line character. It may optionally be enclosed in
+a pair of parathesis(begin_para and end_para). If this is the case,
+anything following the end_para is ignored. The end line may
+optionally contain the same string.  Anything befor the first entry,
+after the last entry or in between entries is ignored.
+
+  The tag command is allowed in the description part. This command is
+represented by the command character followed by the begin_tag at the
+beginning of a line. This if followed by a string which should be the
+name of an entry in the include file. When this command is encountered
+during the input of the master file, the named include file entry is
+searched for. If it is found, the contents of the entry is written to
+the output stream.
+
+  Adding a command line switch "-i" to specify the include file name.
+
+  Parameter definition:
+	all command characters and output strings are defined as parameters.
+	They are stored in a global parameter table paratab. They can be redefined
+ either in the input file or the command line. And new parameter can
+also be defined, but the programs do not use any new parameter. The
+syntax of the definition is as follows:
+<char_cmd><char_para_def>[blank]string[blank][=][blank]string
+where string is a sequence of 0 or more characters (blank is allowed)
+enclosed in { } or " ". If there is no blank character and the length
+is more than 0, the { } or " " can be omitted.
+	The first string is the name of the parameter and the second
+is its value. The programs will search the table for the name, and if
+it is found, the original value is replaced by the new value. If the
+given name is not found, a new parameter is being defined.
+When the program starts, the default values are installed in the
+table. Definitions on the command line will overwrite the default
+values. Then, definitions encountered in the input file will take
+effect at the point it is defined. Thus it is possible to change the
+value of a parameter for part of the input file.
+
+  Changes to files:
+  mweb.h: adding constant definitions and external definitions
+  mtangle.c: dummy function proc_incl_file()
+  common.c: command line switch "-i" "-D"
+            more command characters t,e,D
+	proc_para_def(), proc_str(), set_para(), get_para()
+	new struct PTAB for parameter table.
+  mweave.c: 
+	proc_incl_file(), proc_tag(), proc_tagname()
+
+/*-----*/
+  DATE: 22 Feb -- 1 Mar 1993
+  VERSION: 1.1a
+  CHANGES: 
+	1) a new type of section "ml_only" section, when the parameter
+	   "ml_only" is not a null string, "ml_only" sections will not be 
+	   output at all by mweave
+	2) new parameters to allow setting of line length and number of lines
+	   in the source output part
+	3) adding message showing the names of the input/output files
+   FILE: mweb.h
+	1) Increasing the values MAXNOLINE and MAXLINELEN
+	2) Adding symbolic names for indexes to all parameters in the table
+	3) Adding extern declaration for char_ml_sec
+   FILE: mweave.c
+        1) using symbolic names to index the parameter table
+        2) implement CHANGES 1) and 2).
+   FILE: mtangle.c
+        1) using symbolic names to index the parameter table
+   FILE: common.c
+        1) adding four new parameters: char_ml_sec, ml_only, ml_line_length
+	   ml_line_count
+	2) using symbolic names to index the parameter table
+	3) command line option 'M' for "ml_only"
+	4) adding message showing the names of the input/output files
+	
+/*-----*/
+  DATE: 4 Mar 1993
+  VERSION: 2.0 pre-release
+  CHANGES: 
+	1) adding a filter mode----if this is activated, all text out side 
+	   the sections in the master file will be passed to the output file
+	   by mweave.
+	2) recognize multi-character commands.
+
+/*-----*/
+  DATE: 16 Mar 1993
+  VERSION: 2.0
+  CHANGES:
+	1) The most important changes is that a manual is added which
+	   describes all features of the programs.
+        2) more operation modes and more parameters(see manual for details).
+
+/*-----*/
+  DATE: 21 Jun 1993
+  VERSION: 2.0 patchlevel 1
+  CHANGES:
+	1) mweave expands TAB in the other and native part into spaces.
+	   Number of spaces is specified by the value of the parameter
+	   tab_spaces. The default is 8.
+
+/*-----*/
+  DATE: 26 July 1993
+  VERSION: 2.0 patchlevel 2
+  CHANGES:
+	1) Adding option in mtangle to keep the line count in the output
+           file the same as the input file. The is useful for
+	   debugging since many compilers report error with line numbers.
+	   By keeping the output line count the same as the master
+	   file, it is musch easier to find and fix bugs.
+	   The option is governed by the new parameter line_mode.
+	   The default is disabled. The command line option for
+	   enabling this feature is -l.
+
+/*-----*/
+  DATE: 16 Sept. 1993
+  VERSION: 2.0 patchlevel 3
+  CHANGES: to function output_s_sec in mweave.c
+	Adding the two tests for non-zero values of oldp and newp.
+	This change will make mweave not to ouput anything for
+	either of the languages parts when they are empty and
+	when not in parallel mode.
+
+/*-----*/
+  DATE: 29 Jan. 1994
+  VERSION: 3.0
+  CHANGES: 
+	1) New feature: supporting multiple language parts, i.e.,
+	   more than two languages. Command line option in mtangle to
+	   select which language (or languages) to be output.
+
+	2) The manual is revised to give more examples on how to use the
+	   programs and to format the output file generated by mweave.

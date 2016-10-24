@@ -1,0 +1,529 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  mk_transfinite.ml wo_fns.ml well_order.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 12:15:11 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'mk_transfinite.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'mk_transfinite.ml'\"
+else
+echo shar: Extracting \"'mk_transfinite.ml'\" \(13827 characters\)
+sed "s/^X//" >'mk_transfinite.ml' <<'END_OF_FILE'
+X%<
+XFILE: mk_transfin_induct.ml
+X
+XAUTHOR: Ton Kalker
+X
+XDATE: 11-7-89
+X
+XCOMMENT: Proves transfinite induction theorem
+X         and transfinite recursion theorem.
+X         Follows the outline from "mk_prim_rec".
+X>% 
+X
+Xnew_theory `transfinite`;;  
+X
+Xload_library `auxiliary`;; 
+X
+Xload_library `taut`;;
+X
+Xnew_parent `well_order`;;
+X
+Xautoload_defs_and_thms `well_order`;;
+X
+Xautoload_defs_and_thms `fixpoints`;; 
+X
+Xlet WLESS = new_infix_definition(`WLESS`,
+X           "WLESS x (y:*) = (x WLEQ y) /\ ~(x = y)");;
+X                                           
+X%<RESTRICT (x:*) (f:*->**):*->(*#**)>%
+X
+Xlet RESTRICT = new_definition(`RESTRICT`,
+X          "RESTRICT (x:*) f = (x, (\y.((y WLESS x) => (f y)|(LEAST TOP:**))))");;
+X
+Xlet PRE_REC_REL = new_definition(`PRE_REC_REL`,
+X          "PRE_REC_REL tau f (x:*) = !y:*.(y WLEQ x) ==>
+X                                      ((f y) = (tau (RESTRICT y f):**))");;
+X
+Xlet PRE_REC_FUN = new_definition(`PRE_REC_FUN`,
+X          "PRE_REC_FUN tau (x:*) = @f:*->**.PRE_REC_REL tau f x");; 
+X
+Xlet REC_REL = new_definition(`REC_REL`,
+X          "REC_REL tau f = !y:*.(f y:**) = tau (RESTRICT y f)");; 
+X
+Xlet REC_FUN = new_definition(`REC_FUN`,
+X          "REC_FUN tau x = PRE_REC_FUN tau x (x:*):**");; 
+X
+X%<First we prove some properties of WLESS>%
+X
+Xlet w = "!x y z:*.(x WLEQ y) /\ (y WLESS z) ==> (x WLESS z)";;  
+X
+Xlet LEMMA1 = prove(w,
+X             REWRITE_TAC[WLESS] THEN
+X             REPEAT STRIP_TAC THEN 
+X             IMP_RES_TAC TRANS_WLEQ THEN
+X             FILTER_FILTER_RULE_ASSUM_TAC [7] [4] REWRITE_RULE THEN
+X             IMP_RES_TAC ANTI_SYM_WLEQ THEN
+X             RES_TAC);; 
+X
+Xlet w = "!x y z:*.(x WLESS y) /\ (y WLEQ z) ==> (x WLESS z)";;  
+X
+Xlet LEMMA2 = prove(w,
+X             REWRITE_TAC[WLESS] THEN
+X             REPEAT STRIP_TAC THEN 
+X             IMP_RES_TAC TRANS_WLEQ THEN
+X             FILTER_FILTER_RULE_ASSUM_TAC [6;7] [4] REWRITE_RULE THEN
+X             IMP_RES_TAC ANTI_SYM_WLEQ THEN
+X             RES_TAC);;  
+X
+Xlet w = "!x y z:*.(x WLESS y) /\ (y WLESS z) ==> (x WLESS z)";;
+X
+Xlet LEMMA3 = prove(w,
+X             REPEAT STRIP_TAC THEN
+X             FILTER_ASSUM_LIST [1] (MAP_EVERY (STRIP_ASSUME_TAC o REWRITE_RULE[WLESS])) THEN
+X             IMP_RES_TAC LEMMA2);; 
+X
+Xlet TRANSITIVITY_CLAUSES =
+X             save_thm(`TRANSITIVITY_CLAUSES`,
+X             LIST_CONJ [TRANS_WLEQ;
+X                        LEMMA1;
+X                        LEMMA2;
+X                        LEMMA3]);;  
+X
+Xlet w = "!x:*.~(x WLESS x)";;
+X
+Xlet IRREFLEX_WLESS = prove_thm(
+X              `IRREFLEX_WLESS`,
+X               w,
+X               REWRITE_TAC[WLESS]);;  
+X
+Xlet w = "!x y:*.(x WLESS y) \/ (x = y) \/ (y WLESS x)";;
+X
+Xlet WLESS_CASES = prove_thm(
+X              `WLESS_CASES`,
+X               w, 
+X               REWRITE_TAC[WLESS] THEN
+X               REPEAT GEN_TAC THEN
+X               ASSUME_TAC (SYM_CONV "y = x:*") THEN
+X               DISJ_CASES_TAC (SPEC_ALL LINEAR_WLEQ) THEN
+X               ASM_REWRITE_TAC[] THEN
+X               TAUT_TAC);;
+X
+X%<Then we prove the induction theorem>%
+X                                      
+Xlet w = "!Q. (!x:*.(!y.(y WLESS x) ==> (Q y)) ==> (Q x)) ==> !x.Q x";;
+X
+Xlet TRANSFIN_INDUCTION = prove(w,
+X         GEN_TAC THEN
+X         STRIP_TAC THEN
+X         ASM_CASES_TAC "!x:*.Q x" THEN 
+X         ASM_REWRITE_TAC[] THEN 
+X         DEFINE "D  =\x:*. ~(Q x)" THEN
+X         SUBGOAL_THEN "~(D = BOT:*->bool)" ASSUME_TAC THENL
+X           [CONV_TAC (RAND_CONV FUN_EQ_CONV) THEN 
+X            ASM_REWRITE_TAC[BOT] THEN 
+X            BETA_TAC THEN
+X            ASM_REWRITE_TAC[];ALL_TAC] THEN
+X         IMP_RES_TAC (CONJUNCT1 WOP_LEAST) THEN
+X         SUBGOAL_THEN "!y:*.(y WLESS (LEAST D)) ==> ~(D y)" ASSUME_TAC THENL
+X           [REWRITE_TAC[WLESS] THEN 
+X            REPEAT STRIP_TAC THEN
+X            SUB_ASSUM_TAC [1;2;3] THEN 
+X            IMP_RES_TAC (SPEC "D:*->bool" (CONJUNCT2 WOP_LEAST)) THEN
+X            IMP_RES_TAC ANTI_SYM_WLEQ THEN
+X            RES_TAC;ALL_TAC] THEN
+X          REWRITE_RULE_ASSUM_TAC [1;2] [4] THEN
+X          FILTER_RULE_ASSUM_TAC [1;2] BETA_RULE THEN
+X          FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[]) THEN
+X          FILTER_RULE_ASSUM_TAC [4] SYM THEN
+X          REWRITE_RULE_ASSUM_TAC [1;2] [4] THEN
+X          (2 TIMES RES_TAC));;   
+X
+Xlet TRANSFIN_INDUCTION = save_thm(`TRANSFIN_INDUCTION`,TRANSFIN_INDUCTION);;
+X
+Xlet TRANSFIN_INDUCT_TAC (A,t) = 
+X    (let th = TRANSFIN_INDUCTION in
+X     let th_tac = ASSUME_TAC in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in
+X     let tac = 
+X     (MATCH_MP_TAC thm THEN 
+X      GEN_TAC THEN
+X      CONV_TAC (RAND_CONV BETA_CONV) THEN
+X      CONV_TAC (LHS_CONV(BINDER_CONV(RAND_CONV BETA_CONV))) THEN
+X      REPEAT STRIP_TAC) in
+X      (tac (A,t))) ? failwith `TRANSFIN_INDUCT`;; 
+X
+X%<Rewrite with definition of PRE_REC_FUN and PRE_REC_REL>%  
+X
+Xlet w = "(?f:*->**.PRE_REC_REL tau f x) = PRE_REC_REL tau (PRE_REC_FUN tau x) x";;  
+X
+Xlet LEMMA3 = prove(w,
+X             REWRITE_TAC[EXISTS_DEF] THEN
+X             BETA_TAC THEN
+X             REWRITE_TAC[SYM(SPEC_ALL PRE_REC_FUN)]);;
+X
+Xlet w = "(?f:*->**.PRE_REC_REL tau f x) = (!y.(y WLEQ x) ==>
+X     ((PRE_REC_FUN tau x y) = tau (RESTRICT y (PRE_REC_FUN tau x))))";;
+X
+Xlet LEMMA4 = prove(w,
+X             REWRITE_TAC[EXISTS_DEF] THEN
+X             BETA_TAC THEN
+X             REWRITE_TAC[SYM(SPEC_ALL PRE_REC_FUN)] THEN
+X             REWRITE_TAC[PRE_REC_REL]);;
+X
+X%<Prove that PRE_REC_REL is downward closed>%  
+X
+Xlet w = "!f:*->**.!tau.!x y.(x WLEQ y) /\ (PRE_REC_REL tau f y) ==>
+X                            (PRE_REC_REL tau f x)";;  
+X
+Xlet LEMMA5 = prove(w,
+X             REWRITE_TAC[PRE_REC_REL] THEN
+X             REPEAT STRIP_TAC THEN
+X             IMP_RES_TAC TRANS_WLEQ THEN
+X             RES_TAC);;
+X
+Xlet w = "!f g:*->**.(PRE_REC_REL tau f x) /\ (PRE_REC_REL tau g x) ==> (!y. (y WLEQ x) ==> ((f y) = (g y)))";;
+X
+Xlet LEMMA6 = prove(w,
+X             (2 TIMES GEN_TAC) THEN
+X             STRIP_TAC THEN
+X             TRANSFIN_INDUCT_TAC THEN
+X             SUBGOAL_THEN "!y:*.(y WLESS x') ==> (f y = (g y:**))" ASSUME_TAC THENL
+X              [REPEAT STRIP_TAC THEN 
+X               RES_TAC THEN
+X               FILTER_RULE_ASSUM_TAC [2] (REWRITE_RULE[WLESS]) THEN
+X               FILTER_STRIP_ASSUM_TAC [2] THEN
+X               IMP_RES_TAC TRANS_WLEQ THEN 
+X               RES_TAC;ALL_TAC] THEN
+X             SUB_ASSUM_TAC [1;2;4;5] THEN
+X             SUBGOAL_THEN "RESTRICT x' f = (RESTRICT x' (g:*->**))" ASSUME_TAC THENL
+X              [REWRITE_TAC[RESTRICT;PAIR_EQ_THM] THEN
+X               CONV_TAC FUN_EQ_CONV THEN 
+X               BETA_TAC THEN
+X               GEN_TAC THEN 
+X               ASM_CASES_TAC "(x'':*) WLESS x'" THEN 
+X               ASM_REWRITE_TAC[] THEN
+X               RES_TAC THEN
+X               ASM_REWRITE_TAC[];ALL_TAC] THEN
+X             IMP_RES_TAC LEMMA5 THEN
+X             SUB_ASSUM_TAC [1;2;4] THEN
+X             FILTER_RULE_ASSUM_TAC [1;2]  (REWRITE_RULE[PRE_REC_REL]) THEN
+X             ASSUME_TAC (SPEC "x':*" REFLEX_WLEQ) THEN
+X             RES_TAC THEN
+X             ASM_REWRITE_TAC[]);;  
+X
+Xlet w = "!f g:*->**.!x:*.(!y.(y WLESS x) ==> ((f y) = g y)) ==> ((RESTRICT x f) = (RESTRICT x g))";;
+X
+Xlet LEMMA7 = prove(w,
+X             REPEAT STRIP_TAC THEN 
+X             REWRITE_TAC[RESTRICT;PAIR_EQ_THM] THEN
+X             CONV_TAC FUN_EQ_CONV THEN 
+X             BETA_TAC THEN 
+X             GEN_TAC THEN
+X             ASM_CASES_TAC "(x':*) WLESS x" THEN 
+X             ASM_REWRITE_TAC[] THEN
+X             RES_TAC THEN 
+X             ASM_REWRITE_TAC[]);; 
+X
+Xlet w = "!f g:*->**.!x:*.(!y.(y WLESS x) ==> ((f y) = g y)) ==> 
+X                         (!z.(z WLEQ x) ==> ((RESTRICT z f) = (RESTRICT z g)))";;
+X                                      
+Xlet LEMMA8 = prove(w,
+X             REPEAT STRIP_TAC THEN
+X             SUBGOAL_THEN "!w:*.(w WLESS z) ==>((f w:**) = g w)" ASSUME_TAC THENL
+X              [REPEAT STRIP_TAC THEN
+X               IMP_RES_TAC (SPEC "x:*" (SPEC "y:*" (SPEC "w:*" LEMMA2))) THEN
+X               RES_TAC;ALL_TAC] THEN
+X             IMP_RES_TAC LEMMA7);;  
+X
+X
+X
+Xlet w = "!x:*.?f:*->**.PRE_REC_REL tau f x";; 
+X
+Xlet LEMMA9 = prove(w,
+X             TRANSFIN_INDUCT_TAC THEN
+X             DEFINE "F0:*->** = \x.PRE_REC_FUN tau x x" THEN
+X             SUBGOAL_THEN "!w1 w2 y:*.(w2 WLEQ w1) /\ (y WLEQ w2) /\ (w1 WLESS x)  ==> 
+X                                     ((PRE_REC_FUN tau w2 y:**) = (PRE_REC_FUN tau w1 y))" ASSUME_TAC THENL
+X              [REPEAT STRIP_TAC THEN
+X               SUBGOAL_THEN "(w2:*) WLESS x" ASSUME_TAC THENL
+X                [REWRITE_TAC[WLESS] THEN
+X                 FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[WLESS]) THEN
+X                 FILTER_STRIP_ASSUM_TAC [1] THEN
+X                 IMP_RES_TAC TRANS_WLEQ THEN
+X                 ASM_CASES_TAC "(w2:*) = x" THEN 
+X                 ASM_REWRITE_TAC[] THEN
+X                 FILTER_FILTER_RULE_ASSUM_TAC [10] [1] REWRITE_RULE THEN
+X                 IMP_RES_TAC ANTI_SYM_WLEQ THEN
+X                 RES_TAC;ALL_TAC] THEN
+X               RES_TAC THEN
+X               FILTER_RULE_ASSUM_TAC [1;2] (REWRITE_RULE[LEMMA3]) THEN
+X               SUB_ASSUM_TAC [1;2;3;4;5;6] THEN
+X               IMP_RES_TAC LEMMA5 THEN
+X               SUB_ASSUM_TAC [1;6;9;10] THEN
+X               IMP_RES_TAC LEMMA6;ALL_TAC] THEN
+X            SUBGOAL_THEN "!w y:*.(w WLESS x) /\ (y WLEQ w) ==> 
+X                                  ((F0 y:**) = (PRE_REC_FUN tau w y))" ASSUME_TAC THENL
+X             [REPEAT STRIP_TAC THEN
+X              ASM_REWRITE_TAC[] THEN
+X              BETA_TAC THEN
+X              ASSUME_TAC (SPEC "y:*" REFLEX_WLEQ) THEN
+X              RES_TAC;ALL_TAC] THEN
+X            SUBGOAL_THEN "!y:*.(y WLESS x) ==> (PRE_REC_REL tau (F0:*->**) y)" ASSUME_TAC THENL
+X             [REPEAT STRIP_TAC THEN
+X              REWRITE_TAC[PRE_REC_REL] THEN
+X              REPEAT STRIP_TAC THEN
+X              SUB_ASSUM_TAC [1;2;3;6] THEN
+X              FILTER_RULE_ASSUM_TAC [3] (SPEC "y:*") THEN
+X              FILTER_FILTER_RULE_ASSUM_TAC [3] [2] REWRITE_RULE THEN
+X              RES_TAC THEN
+X              FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[LEMMA4]) THEN
+X              RES_TAC THEN
+X              SUB_ASSUM_TAC [2;4;5;6;7] THEN
+X              SUBGOAL_THEN  "!y':*. y' WLESS y ==> ((F0 y':**) = PRE_REC_FUN tau y y')" ASSUME_TAC THENL
+X               [REWRITE_TAC[WLESS] THEN 
+X                REPEAT STRIP_TAC THEN 
+X                RES_TAC;ALL_TAC] THEN
+X              IMP_RES_TAC LEMMA8 THEN
+X              ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            SUB_ASSUM_TAC [1] THEN
+X            DEFINE "G0 = \y:*.(y WLESS x) => (F0 y:**)|(tau (RESTRICT y F0))" THEN
+X            SUBGOAL_THEN "!z:*.(z WLEQ x) ==> ((RESTRICT z (F0:*->**)) = RESTRICT z G0)" ASSUME_TAC THENL
+X             [REPEAT STRIP_TAC THEN
+X              MATCH_MP_TAC LEMMA7 THEN
+X              REPEAT STRIP_TAC THEN
+X              IMP_RES_TAC (SPEC "x:*" (SPEC "z:*" (SPEC "y:*" LEMMA2))) THEN
+X              ASM_REWRITE_TAC[] THEN
+X              BETA_TAC THEN
+X              ASM_REWRITE_TAC[];ALL_TAC] THEN
+X            EXISTS_TAC "G0:*->**" THEN
+X            REWRITE_TAC[PRE_REC_REL] THEN
+X            REPEAT STRIP_TAC THEN
+X            RES_TAC THEN
+X            FILTER_RULE_ASSUM_TAC [1;4] SYM THEN
+X            ASM_REWRITE_TAC[] THEN
+X            FILTER_RULE_ASSUM_TAC [4] SYM THEN
+X            ASM_REWRITE_TAC[] THEN
+X            BETA_TAC THEN
+X            ASM_CASES_TAC "(y:*) WLESS x" THEN 
+X            ASM_REWRITE_TAC[] THEN
+X            RES_TAC THEN
+X            FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[PRE_REC_REL]) THEN
+X            ASSUME_TAC (SPEC "y:*" REFLEX_WLEQ) THEN
+X            RES_TAC);; 
+X
+Xlet w = "!y w:*.(y WLEQ w) ==> ((REC_FUN tau y:**) = PRE_REC_FUN tau w y)";;   
+X
+Xlet LEMMA10 = prove(w, 
+X              REWRITE_TAC[REC_FUN] THEN
+X              REPEAT STRIP_TAC THEN
+X              ASSUME_TAC (SPEC "y:*" LEMMA9) THEN
+X              ASSUME_TAC (SPEC "w:*" LEMMA9) THEN
+X              FILTER_RULE_ASSUM_TAC [1;2] (REWRITE_RULE[LEMMA3]) THEN
+X              IMP_RES_TAC LEMMA5 THEN
+X              SUB_ASSUM_TAC [1;4] THEN
+X              ASSUME_TAC (SPEC "y:*" REFLEX_WLEQ) THEN 
+X              IMP_RES_TAC LEMMA6);;
+X
+Xlet w = "REC_REL (tau:(*#(*->**)) -> **) (REC_FUN tau)";;  
+X
+Xlet LEMMA11 = prove(w,
+X              REWRITE_TAC[REC_REL;REC_FUN] THEN
+X              STRIP_TAC THEN
+X              SUBGOAL_THEN "!w:*.(w WLESS y) ==> ((REC_FUN tau w:**) = PRE_REC_FUN tau y w)" 
+X                                                                              ASSUME_TAC THENL
+X               [REWRITE_TAC[WLESS] THEN 
+X                REPEAT STRIP_TAC THEN 
+X                IMP_RES_TAC LEMMA10;ALL_TAC] THEN
+X              IMP_RES_TAC LEMMA7 THEN
+X              ASM_REWRITE_TAC[] THEN
+X              ASSUME_TAC (SPEC "y:*" LEMMA9) THEN
+X              FILTER_RULE_ASSUM_TAC [1] (REWRITE_RULE[LEMMA4]) THEN
+X              ASSUME_TAC (SPEC "y:*" REFLEX_WLEQ) THEN
+X              RES_TAC);; 
+X
+Xlet w = "(REC_REL tau (f:*->**)) /\  (REC_REL tau g) ==> (f = g)";;
+X
+Xlet LEMMA12 = prove(w,
+X              REWRITE_TAC[REC_REL] THEN
+X              REPEAT STRIP_TAC THEN
+X              CONV_TAC FUN_EQ_CONV THEN 
+X              STRIP_TAC THEN
+X              SUBGOAL_THEN "PRE_REC_REL tau (f:*->**) x" ASSUME_TAC THENL
+X                [ASM_REWRITE_TAC[PRE_REC_REL];ALL_TAC] THEN
+X              SUBGOAL_THEN "PRE_REC_REL tau (g:*->**) x" ASSUME_TAC THENL
+X                [ASM_REWRITE_TAC[PRE_REC_REL];ALL_TAC] THEN
+X              ASSUME_TAC (SPEC "x:*" REFLEX_WLEQ) THEN
+X              IMP_RES_TAC LEMMA6);;  
+X
+Xlet w = "!tau.?!f:*->**.REC_REL tau f";;
+X
+Xlet wo_Axiom = save_thm(
+X   `wo_Axiom`,
+X    REWRITE_RULE[REC_REL]
+X   (prove(
+X    w, 
+X    EXP_UNIQUE_TAC THEN
+X    GEN_TAC THEN
+X    CONJ_TAC THEN
+X    REWRITE_TAC[LEMMA12] THEN
+X    EXISTS_TAC "REC_FUN (tau:(*#(*->**)) -> **)" THEN
+X    REWRITE_TAC[LEMMA11])));; 
+END_OF_FILE
+if test 13827 -ne `wc -c <'mk_transfinite.ml'`; then
+    echo shar: \"'mk_transfinite.ml'\" unpacked with wrong size!
+fi
+chmod +x 'mk_transfinite.ml'
+# end of 'mk_transfinite.ml'
+fi
+if test -f 'wo_fns.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'wo_fns.ml'\"
+else
+echo shar: Extracting \"'wo_fns.ml'\" \(2446 characters\)
+sed "s/^X//" >'wo_fns.ml' <<'END_OF_FILE'
+X%<
+XFILE: wo_fns.ml.ml
+X
+XAUTHOR: Ton Kalker
+X
+XDATE: 13-9-89
+X
+XCOMMENT: Functions for canonical well_ordering.
+X    	 
+X         1) Induction tac
+X
+X         2) Conversion that transforms a term into
+X            the appropriat existence theorem.
+X
+X         3) wo_rec_induction
+X>% 
+X%<
+Xload_library `auxiliary`;;
+X
+Xload_theory `transfinite`;; 
+X
+Xautoload_defs_and_thms `transfinite`;;
+X>%  
+X
+Xlet TRANSFIN_INDUCT_TAC (A,t) = 
+X    (let th = TRANSFIN_INDUCTION in
+X     let th_tac = ASSUME_TAC in
+X     let x,body = dest_forall t in
+X     let tyi = snd(match (fst(dest_forall (concl th))) "\^x.T") in
+X     let spec = SPEC (mk_abs(x,body)) (INST_TYPE tyi th) in
+X     let spec' = DISCH_ALL (CONV_RULE (GEN_ALPHA_CONV x) (UNDISCH spec)) in
+X     let thm = CONV_RULE(RAND_CONV(BINDER_CONV BETA_CONV)) spec' in
+X     let tac = 
+X     (MATCH_MP_TAC thm THEN 
+X      GEN_TAC THEN
+X      CONV_TAC (RAND_CONV BETA_CONV) THEN
+X      CONV_TAC (LHS_CONV(BINDER_CONV(RAND_CONV BETA_CONV))) THEN
+X      REPEAT STRIP_TAC) in
+X      (tac (A,t))) ? failwith `TRANSFIN_INDUCT`;; 
+X
+Xlet WO_CONV tm = 
+X       (let th = GEN_ALL(CONJUNCT1(EXP_UNIQUE_RULE (SPEC_ALL wo_Axiom))) in
+X	let lhs,rhs = dest_eq(snd(strip_forall tm)) in
+X        let obpat = "RESTRICT (y:*) (f:*->**)" in
+X	let pred  = can (\t.match obpat t) in
+X	let t1 = hd(find_terms pred tm) in
+X	let v = genvar(type_of t1) in
+X	let t2 = subst [v,t1] rhs in
+X	let t3 = mk_abs(v,t2) in
+X	let tau = fst(dest_forall(concl th)) in
+X	let tyi = snd(match tau t3) in
+X	let th1 = (SPEC t3 (INST_TYPE tyi th)) in
+X	let th2 = SELECT_RULE th1 in
+X	let th3 = BETA_RULE th2 in
+X	let fn,body = dest_exists(concl th1) in
+X	let gn,l = (strip_comb(rator lhs)) in
+X	let fsel = list_mk_abs(l,(mk_select(fn,body))) in
+X	let func = genvar(type_of fsel) in
+X	let funcexp = list_mk_comb(func,l) in
+X	let body' = list_mk_forall(l,(subst [funcexp,fn] body)) in
+X	let w = mk_exists(func,body') in
+X	let th4 = prove(w,EXISTS_TAC fsel THEN ((length l) TIMES GEN_TAC) THEN
+X                  BETA_TAC THEN REWRITE_TAC[th3]) in
+X	let th5 = BETA_RULE(CONV_RULE (GEN_ALPHA_CONV gn) th4) in
+X        th5) ? failwith `WO_CONV`;;
+X
+Xlet wo_rec_definition infix_flag name tm = 
+X	let thm = WO_CONV tm 
+X	in
+X	new_specification
+X	name
+X	[(infix_flag=>`infix`|`constant`),
+X	((fst o dest_var o fst o dest_exists o concl) thm)]
+X	thm;; 
+X
+X
+X%<TESTING:
+X
+Xlet tm = "(f (A:*->*) (B:*->*) (y:*):*) = A(SND(RESTRICT y (f A B))(FST(RESTRICT y (f A B))))" ;;   
+X
+XWO_CONV tm;;
+X
+Xwo_rec_definition false `test` tm;;
+X
+X>%
+END_OF_FILE
+if test 2446 -ne `wc -c <'wo_fns.ml'`; then
+    echo shar: \"'wo_fns.ml'\" unpacked with wrong size!
+fi
+chmod +x 'wo_fns.ml'
+# end of 'wo_fns.ml'
+fi
+if test -f 'well_order.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'well_order.ml'\"
+else
+echo shar: Extracting \"'well_order.ml'\" \(795 characters\)
+sed "s/^X//" >'well_order.ml' <<'END_OF_FILE'
+X% FILE		: well_order.ml						%
+X% DESCRIPTION   : loads the library WELL-ORDER into hol.	        %
+X%									%
+X% AUTHOR        : T. Kalker						%
+X% DATE		: 10 July 1989						%
+X
+X
+Xif draft_mode() 
+X then (if not(mem `transfinite` (parents (current_theory()))) 
+X         then
+X            (print_newline();
+X             print_string `transfinite declared a new parent`;
+X             print_newline();
+X             new_parent `transfinite`)
+X         else 
+X            (print_newline();
+X             print_string `transfinite is parent`;
+X             print_newline())
+X       )
+X else (load_theory`transfinite` ? print_newline());;   
+X
+Xload_library `set`;;
+X
+Xautoload_defs_and_thms `well_order`;;
+X
+Xautoload_defs_and_thms `transfinite`;;
+X              
+Xloadx `wo_fns`;;
+X
+Xlet goal = g
+Xand apply  = expandf;;
+X
+END_OF_FILE
+if test 795 -ne `wc -c <'well_order.ml'`; then
+    echo shar: \"'well_order.ml'\" unpacked with wrong size!
+fi
+chmod +x 'well_order.ml'
+# end of 'well_order.ml'
+fi
+echo shar: End of shell archive.
+exit 0

@@ -1,0 +1,3 @@
+\THEOREM MAX_SYM min_max
+|- !n p. MAX n p = MAX p n
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM COS_ISZERO TRANSC
+|- ?! x. (& 0) <= x /\ x <= (& 2) /\ (cos x = & 0)
+\ENDTHEOREM

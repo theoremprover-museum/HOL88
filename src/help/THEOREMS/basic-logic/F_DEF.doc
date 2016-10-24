@@ -1,0 +1,3 @@
+\THEOREM F_DEF bool
+|- F = (!t. t)
+\ENDTHEOREM

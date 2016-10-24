@@ -1,0 +1,802 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  READ-ME Makefile functions.ml rules.ml tactics.ml
+#   theorems.ml conversions.ml auxiliary.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 11:34:04 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'READ-ME' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'READ-ME'\"
+else
+echo shar: Extracting \"'READ-ME'\" \(1864 characters\)
+sed "s/^X//" >'READ-ME' <<'END_OF_FILE'
+X+ =====================================================================	+
+X|									|
+X| LIBRARY	: auxiliary						|
+X|									|
+X| DESCRIPTION   : Definition of auxiliary theory.                          |
+X|									|
+X| AUTHOR	: T. kalker						|
+X| DATE		: 8 JUNE 1989  			         		|
+X|									|
+X+ =====================================================================	+
+X
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| FILES:								|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X 
+X    functions.ml              functions
+X
+X    tactics.ml                tactics
+X  
+X    rules.ml                  rules
+X
+X    theorems.ml               useful defs and theorems
+X
+X    conversions.ml            conversions
+X
+X    auxiliary.ml              loads the library into hol
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| DOCUMENTATION:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+XThis library contains a collection rules, tactics, conversions, 
+Xdefinitions and theorems for general use. Prominent are
+Xthe filter tactics and the conversions. Included are also
+Xtwo resolution tactics which use renaming if necessary, and
+Xuse specialising as little as possible.
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO REBUILD THE LIBRARY:						|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X   1) edit the pathnames in the Makefile (if necessary)
+X
+X   2) type "make clean"
+X
+X   3) type "make all"
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO USE THE LIBRARY:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X   load_library `auxiliary`;;
+X
+X
+END_OF_FILE
+if test 1864 -ne `wc -c <'READ-ME'`; then
+    echo shar: \"'READ-ME'\" unpacked with wrong size!
+fi
+chmod +x 'READ-ME'
+# end of 'READ-ME'
+fi
+if test -f 'Makefile' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Makefile'\"
+else
+echo shar: Extracting \"'Makefile'\" \(1895 characters\)
+sed "s/^X//" >'Makefile' <<'END_OF_FILE'
+X# =====================================================================
+X#
+X# 		 MAKEFILE FOR THE HOL LIBRARY: AUXILIARY
+X#
+X# =====================================================================
+X
+X# =====================================================================
+X#
+X# MAIN ENTRIES:
+X#
+X# make all	    : create theories and compile code
+X#
+X# make clean	    : remove theories and compiled code
+X#	
+X# =====================================================================
+X
+X# =====================================================================
+X# MACROS:
+X#
+X# Hol	    : the pathname of the version of hol used
+X# =====================================================================
+X
+XHol=~/com/hol
+X
+Xclean:
+X	rm -f *_ml.o *_ml.l *.th 
+X	@echo "===> library auxiliary: all object code and theory files deleted"
+X
+Xfunctions_ml.o: functions.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'compilet `functions`;;'\
+X	     'quit();;' | ${Hol}
+X
+Xtactics_ml.o: tactics.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X             'compilet `tactics`;;'\
+X             'quit();;' | ${Hol}
+X
+Xrules_ml.o: rules.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X             'compilet `rules`;;'\
+X	     'quit();;' | ${Hol}
+X
+Xauxiliary.th: functions.ml tactics.ml rules.ml theorems.ml
+X	rm -f auxiliary.th
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'loadf `functions`;;'\
+X	     'loadf `tactics`;;'\
+X	     'loadf `rules`;;'\
+X             'loadt `theorems`;;'\
+X	     'quit();;' | ${Hol}
+X
+Xconversions_ml.o: functions_ml.o auxiliary.th conversions.ml
+X	echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'load_theory `auxiliary`;;'\
+X	     'loadf `functions`;;'\
+X	     'autoload_defs_and_thms `auxiliary`;;'\
+X 	     'compilet `conversions`;;'\
+X	     'quit();;' | ${Hol}  
+X
+X                                 
+Xall:    functions_ml.o tactics_ml.o rules_ml.o auxiliary.th conversions_ml.o
+X	@echo "===> library auxiliary rebuilt"
+END_OF_FILE
+if test 1895 -ne `wc -c <'Makefile'`; then
+    echo shar: \"'Makefile'\" unpacked with wrong size!
+fi
+chmod +x 'Makefile'
+# end of 'Makefile'
+fi
+if test -f 'functions.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'functions.ml'\"
+else
+echo shar: Extracting \"'functions.ml'\" \(207 characters\)
+sed "s/^X//" >'functions.ml' <<'END_OF_FILE'
+Xlet autoload_defs_and_thms thy =
+X map (\name. autoload_theory(`definition`,thy,name))
+X     (map fst (definitions thy));
+X map (\name. autoload_theory(`theorem`,thy,name))
+X     (map fst (theorems thy));
+X ();;
+END_OF_FILE
+if test 207 -ne `wc -c <'functions.ml'`; then
+    echo shar: \"'functions.ml'\" unpacked with wrong size!
+fi
+chmod +x 'functions.ml'
+# end of 'functions.ml'
+fi
+if test -f 'rules.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'rules.ml'\"
+else
+echo shar: Extracting \"'rules.ml'\" \(132 characters\)
+sed "s/^X//" >'rules.ml' <<'END_OF_FILE'
+Xlet EXP_UNIQUE_RULE = (CONV_RULE (REDEPTH_CONV BETA_CONV)) o
+X                      (CONV_RULE (REDEPTH_CONV EXISTS_UNIQUE_CONV));; 
+END_OF_FILE
+if test 132 -ne `wc -c <'rules.ml'`; then
+    echo shar: \"'rules.ml'\" unpacked with wrong size!
+fi
+chmod +x 'rules.ml'
+# end of 'rules.ml'
+fi
+if test -f 'tactics.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'tactics.ml'\"
+else
+echo shar: Extracting \"'tactics.ml'\" \(2542 characters\)
+sed "s/^X//" >'tactics.ml' <<'END_OF_FILE'
+X
+Xletrec sublist numl l =
+X    if null numl then []
+X    else (el (hd numl) l).(sublist (tl numl) l);;
+X
+Xlet SUB_ASSUM_TAC filter:tactic (asl,g) =
+X    let goal = (sublist filter asl,g) in
+X    let prf = \[thm].TAC_PROOF((asl,g),ACCEPT_TAC thm) in
+X    [goal],prf;;  
+X
+Xlet FILTER_ASSUM_TAC filter termtactic (asl,g) =
+X    let tmlist = sublist filter asl in
+X    (MAP_EVERY termtactic tmlist) (asl,g);;
+X
+Xlet FILTER_RULE_ASSUM_TAC filter rule (asl,g) =
+X    letrec mklist n =(if n=0 then []
+X                      else (mklist (n-1))@[n]) in
+X    let intlist = mklist (length asl) in
+X    let tasl = map ASSUME asl in
+X    let fasl = (map (\n. if (mem n filter) then rule (el n tasl)
+X                        else (el n tasl)) intlist) in
+X    MAP_EVERY ASSUME_TAC (rev fasl) ([],g);;
+X
+Xlet REWRITE_RULE_ASSUM_TAC filter1 filter2 =
+X    ASSUM_LIST(\asl.FILTER_RULE_ASSUM_TAC filter1 (REWRITE_RULE (sublist filter2 asl)));;
+X
+X
+Xlet EXP_UNIQUE_TAC = 
+X     REWRITE_TAC[EXISTS_UNIQUE_DEF] THEN
+X     CONV_TAC (REDEPTH_CONV BETA_CONV);;
+X
+Xlet FILTER_FILTER_RULE_ASSUM_TAC filter1 filter2 rule =
+X    ASSUM_LIST(\asl.FILTER_RULE_ASSUM_TAC filter1 
+X                      (rule (sublist filter2 asl)));;
+X
+Xlet DEFINE deftm  =
+X       let y,fx = dest_eq deftm in 
+X       let name,ty = dest_var y in 
+X       let thm  = EXISTS("? ^y.^deftm",fx) (REFL fx) in 
+X       let prf = \[th].(CHOOSE(y,thm) th) in    
+X          \(asl,g).
+X          ([deftm.asl,g],prf)
+X        ;;
+X
+Xml_curried_infix `TIMES`;;
+X
+Xletrec n TIMES tac = 
+X       if n=0 then ALL_TAC
+X       if n =1 then tac
+X       else tac THEN ((n-1) TIMES tac);;
+X
+Xlet FILTER_STRIP_ASSUM_TAC nl =
+X       let l = length nl in 
+X       FILTER_ASSUM_TAC (rev nl) UNDISCH_TAC THEN
+X       (l TIMES STRIP_TAC) ;; 
+X
+X 
+Xlet GENVAR th =
+X    let vl = fst(strip_forall (concl th)) in
+X    let vln = map (genvar o type_of) vl in
+X    GEN_ALL (SPECL vln th);; 
+X
+Xletrec NEW_HOL_RESOLVE_THEN antel ttac impth : tactic =
+X    let answers = map GEN_ALL (mapfilter (HOL_MATCH_MP impth) antel) in
+X    EVERY (mapfilter ttac answers)
+X    THEN
+X    (EVERY (mapfilter (NEW_HOL_RESOLVE_THEN antel ttac) answers));;
+X
+Xlet NEW_IMP_RES_THEN ttac impth =
+X ASSUM_LIST
+X    (\asl. EVERY (mapfilter (NEW_HOL_RESOLVE_THEN asl ttac) (RES_CANON (GENVAR impth))));;
+X
+Xlet NEW_RES_THEN ttac = 
+X    ASSUM_LIST (EVERY o (mapfilter (NEW_IMP_RES_THEN ttac)));;
+X
+Xlet NEW_IMP_RES_TAC = NEW_IMP_RES_THEN HOL_STRIP_ASSUME_TAC
+Xand NEW_RES_TAC     = NEW_RES_THEN     HOL_STRIP_ASSUME_TAC;;  
+X
+Xlet FILTER_ASSUM_LIST filter asltac  =
+X          ASSUM_LIST  (asltac o (sublist filter));;
+X
+X
+END_OF_FILE
+if test 2542 -ne `wc -c <'tactics.ml'`; then
+    echo shar: \"'tactics.ml'\" unpacked with wrong size!
+fi
+chmod +x 'tactics.ml'
+# end of 'tactics.ml'
+fi
+if test -f 'theorems.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'theorems.ml'\"
+else
+echo shar: Extracting \"'theorems.ml'\" \(8683 characters\)
+sed "s/^X//" >'theorems.ml' <<'END_OF_FILE'
+Xnew_theory `auxiliary`;;
+X
+Xautoload_defs_and_thms `bool`;;
+X
+X
+X%<*************DEFINITIONS*********************************>%
+X
+Xlet ISO = 
+X    new_definition
+X    (`ISO`,
+X     "ISO (f:*->**) = (ONE_ONE f) /\ (ONTO f)");;  
+X
+Xlet INV=
+X    new_definition
+X    (`INV`,
+X     "INV (f:*->**) = \x:**.@y:*.x = (f y)");;  
+X
+X
+X
+X
+X%<*******************THEOREMS******************************>% 
+X         
+Xlet w = "!f.(ONTO (f:*->**)) ==> (!g h:**->***.(!x:*.(g(f x) = h(f x))) ==> (g = h))";;
+X
+Xlet ONTO_PROPERTY = prove_thm(
+X        `ONTO_PROPERTY`,
+X         w, 
+X         REPEAT STRIP_TAC THEN
+X         RULE_ASSUM_TAC (REWRITE_RULE [ONTO_DEF]) THEN
+X         REPEAT STRIP_TAC THEN
+X         CONV_TAC FUN_EQ_CONV THEN 
+X         BETA_TAC THEN
+X         GEN_TAC THEN
+X         FILTER_RULE_ASSUM_TAC [2] (SPEC "x:**") THEN
+X         POP_ASSUM_LIST (MAP_EVERY STRIP_ASSUME_TAC) THEN
+X         ASM_REWRITE_TAC[]);;
+X
+X
+Xlet w = "!x1 x2:*.!y1 y2:**.(x1,y1 = x2, y2) = ((x1 = x2) /\ (y1 = y2))";;
+X
+Xlet PAIR_EQ_THM = prove_thm(
+X     `PAIR_EQ_THM`,
+X      w, 
+X      REPEAT GEN_TAC THEN
+X      EQ_TAC THEN
+X      STRIP_TAC THENL
+X         [ASSUM_LIST (\asl.(MAP_EVERY ASSUME_TAC)
+X             [REWRITE_RULE [] (AP_TERM "FST:*#**->*" (hd asl));
+X              REWRITE_RULE [] (AP_TERM "SND:*#**->**" (hd asl))])
+X               THEN ASM_REWRITE_TAC[];
+X          ASM_REWRITE_TAC[]]);;
+X
+X
+Xlet w = "ONTO (f:*->**) = (!x.f((INV f) x) = x)";;  
+X
+Xlet RIGHT_INV = prove_thm(
+X   `RIGHT_INV`,
+X    w,
+X    REWRITE_TAC[INV;ONTO_DEF] THEN
+X    BETA_TAC THEN
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THENL
+X          [RULE_ASSUM_TAC (SPEC "x:**") THEN
+X           RULE_ASSUM_TAC SELECT_RULE THEN
+X           RULE_ASSUM_TAC SYM THEN
+X           ASM_REWRITE_TAC[];
+X           RULE_ASSUM_TAC (SPEC "y:**") THEN
+X           EXISTS_TAC "@z:*.(y:**) = (f:*->**)z" THEN
+X           ASM_REWRITE_TAC[]]);;   
+X
+Xlet w = "ONE_ONE (f:*->**) = !x.((INV f) (f x)) = x";;
+X
+Xlet LEFT_INV = prove_thm(
+X   `LEFT_INV`,
+X    w, 
+X    REWRITE_TAC[ONE_ONE_DEF;INV] THEN
+X    BETA_TAC THEN
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THENL
+X           [SUBGOAL_THEN "?y:*.f x:** = f y" ASSUME_TAC THENL
+X                      [EXISTS_TAC "x:*" THEN REFL_TAC;
+X                       FILTER_RULE_ASSUM_TAC [1] SELECT_RULE THEN
+X                       NEW_RES_TAC THEN
+X                       FILTER_RULE_ASSUM_TAC [1] SYM THEN 
+X                       ASM_REWRITE_TAC[]];
+X            FILTER_ASSUM_LIST [2] (MAP_EVERY (ASSUME_TAC o (SPEC "x1:*"))) THEN
+X            FILTER_ASSUM_LIST [3] (MAP_EVERY (ASSUME_TAC o (SPEC "x2:*"))) THEN
+X            FILTER_RULE_ASSUM_TAC [1;2] SYM THEN 
+X            ONCE_ASM_REWRITE_TAC[] THEN
+X            SUB_ASSUM_TAC [3] THEN 
+X            ASM_REWRITE_TAC[]]);;    
+X
+Xlet w = "!f:*->**.!g:**->*.(!x.f(g x) = x) ==> ((ONTO f) /\ (ONE_ONE g))";;  
+X
+Xlet ID_INJ_SURJ =
+X    prove_thm(
+X    `ID_INJ_SURJ`,
+X     w,
+X     REWRITE_TAC[ONTO_DEF;ONE_ONE_DEF] THEN 
+X     REPEAT STRIP_TAC THENL
+X           [EXISTS_TAC "g (y:**):*" THEN 
+X            ASM_REWRITE_TAC[];
+X            FILTER_RULE_ASSUM_TAC [2] (CONV_RULE (BINDER_CONV SYM_CONV)) THEN
+X            ONCE_ASM_REWRITE_TAC[] THEN
+X            FILTER_ASSUM_LIST [1] REWRITE_TAC]);;
+X
+Xlet w = "!f:*->**.!g:**->*.((!x.f(g x) = x) /\ (!x.g(f x) = x)) ==> 
+X                           ((ISO f) /\ (ISO g))";; 
+X
+Xlet ID_ISO =
+X    prove_thm(
+X    `ID_ISO`,
+X     w,
+X     REWRITE_TAC[ISO] THEN 
+X     REPEAT STRIP_TAC THEN 
+X     NEW_IMP_RES_TAC ID_INJ_SURJ);;
+X
+Xlet w = "!f:*->**.!g:**->*.((!x.f(g x) = x) /\ (!x.g(f x) = x)) ==>   
+X                           ((INV f = g) /\ (INV g = f))";;
+X
+Xlet INV_ISO =
+X   prove_thm(
+X   `INV_ISO`,
+X    w,
+X    REPEAT STRIP_TAC THEN 
+X    CONV_TAC FUN_EQ_CONV THEN
+X    GEN_TAC THEN
+X    IMP_RES_TAC ID_INJ_SURJ THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[LEFT_INV;RIGHT_INV]) THENL
+X    [FILTER_RULE_ASSUM_TAC [3] SPEC_ALL;
+X     FILTER_RULE_ASSUM_TAC [4] SPEC_ALL] THENL
+X    [FILTER_RULE_ASSUM_TAC [3] SYM;
+X     FILTER_RULE_ASSUM_TAC [4] SYM] THEN
+X    ONCE_ASM_REWRITE_TAC[] THENL
+X    [FILTER_RULE_ASSUM_TAC [3] SYM;
+X     FILTER_RULE_ASSUM_TAC [4] SYM] THEN 
+X    ASM_REWRITE_TAC[]);;
+X
+X
+Xlet w = "!f:*->**.!P.(ONTO f) ==> ((!x:**.P x) = (!y:*.P (f y)))";; 
+X
+Xlet BASE_CHANGE_SURJ_FORALL = prove_thm(
+X      `BASE_CHANGE_SURJ_FORALL`,
+X       w,
+X       REPEAT STRIP_TAC THEN 
+X       EQ_TAC THEN 
+X       DISCH_TAC THEN
+X       GEN_TAC THENL
+X        [ASM_REWRITE_TAC[];
+X         FILTER_RULE_ASSUM_TAC [2] 
+X           (SYM o (SPEC "x:**") o (REWRITE_RULE[RIGHT_INV])) THEN
+X         ONCE_ASM_REWRITE_TAC[] THEN
+X         FILTER_ASSUM_LIST [1] REWRITE_TAC]);;
+X
+Xlet w = "!f:*->**.!P.(ISO f) ==> ((!x:**.P x) = (!y:*.P (f y)))";; 
+X
+Xlet BASE_CHANGE_ISO_FORALL = prove_thm(
+X      `BASE_CHANGE_ISO_FORALL`,
+X       w, 
+X       REWRITE_TAC[ISO] THEN 
+X       REPEAT STRIP_TAC THEN 
+X       IMP_RES_TAC BASE_CHANGE_SURJ_FORALL);;  
+X
+Xlet w = "!f:*->**.!P.(ONTO f) ==> ((?x:**.P x) = (?y:*.P (f y)))";; 
+X
+Xlet BASE_CHANGE_ONTO_EXISTS = prove_thm(
+X      `BASE_CHANGE_ONTO_EXISTS`,
+X       w,
+X       REPEAT STRIP_TAC THEN
+X       EQ_TAC THEN
+X       REPEAT STRIP_TAC THEN
+X       RULE_ASSUM_TAC (REWRITE_RULE[RIGHT_INV]) THENL
+X        [EXISTS_TAC "INV (f:*->**) x";
+X         EXISTS_TAC "(f:*->**) y"] THEN
+X       ASM_REWRITE_TAC[]);; 
+X
+Xlet w = "!f:*->**.!P.(ISO f) ==> ((?x:**.P x) = (?y:*.P (f y)))";;  
+X
+Xlet BASE_CHANGE_ISO_EXISTS = prove_thm(
+X      `BASE_CHANGE_ISO_EXISTS`,
+X       w,
+X       REWRITE_TAC[ISO] THEN
+X       REPEAT STRIP_TAC THEN
+X       IMP_RES_TAC BASE_CHANGE_ONTO_EXISTS);; 
+X
+Xlet w = "!f:*->**.!P.(ISO f) ==> ((?!x:**.P x) = (?!y:*.P (f y)))";;  
+X
+Xlet BASE_CHANGE_EXISTS_UNIQUE = prove_thm(
+X      `BASE_CHANGE_EXISTS_UNIQUE`,
+X       w,  
+X       EXP_UNIQUE_TAC THEN
+X       REPEAT STRIP_TAC THEN
+X       EQ_TAC THEN
+X       REPEAT STRIP_TAC THENL
+X        [RULE_ASSUM_TAC (REWRITE_RULE[ISO;RIGHT_INV]) THEN
+X         EXISTS_TAC "INV (f:*->**) x" THEN
+X         ASM_REWRITE_TAC[];
+X         RULE_ASSUM_TAC (REWRITE_RULE[ISO;ONE_ONE_DEF]) THEN
+X         RES_TAC;
+X         EXISTS_TAC "f (y:*):**" THEN 
+X         ASM_REWRITE_TAC[];
+X         RULE_ASSUM_TAC (REWRITE_RULE[ISO;RIGHT_INV]) THEN
+X         FILTER_RULE_ASSUM_TAC  [3] 
+X              ((SPEC "INV (f:*->**) x") o (SPEC "INV (f:*->**) y'")) THEN
+X         REWRITE_RULE_ASSUM_TAC [3] [5] THEN
+X         RES_TAC THEN
+X         FILTER_RULE_ASSUM_TAC [1] (AP_TERM "f:*->**") THEN
+X         REWRITE_RULE_ASSUM_TAC [1] [7] THEN
+X         ASM_REWRITE_TAC[]]);;  
+X
+Xlet w = "(!x:*1#*2.P x) = (!x1 x2.P (x1,x2))";; 
+X
+Xlet PRODUCT_FORALL_THM = prove_thm(
+X      `PRODUCT_FORALL_THM`,
+X       w,
+X       EQ_TAC THEN
+X       REPEAT STRIP_TAC THENL
+X        [ASM_REWRITE_TAC[];
+X         PURE_ONCE_REWRITE_TAC[SYM(SPEC "x:*#**" PAIR)] THEN
+X         PURE_ASM_REWRITE_TAC[]]);;  
+X
+Xlet w = "(?x:*1#*2.P x) = (?x1 x2.P (x1,x2))";; 
+X
+Xlet PRODUCT_EXISTS_THM = prove_thm(
+X      `PRODUCT_EXISTS_THM`,
+X       w,
+X       EQ_TAC THEN 
+X       REPEAT STRIP_TAC THENL
+X        [EXISTS_TAC "(FST:*1#*2->*1) x" THEN
+X         EXISTS_TAC "(SND:*1#*2->*2) x";
+X         EXISTS_TAC "(x1:*1,x2:*2)"] THEN
+X       ASM_REWRITE_TAC[]);;
+X
+X%<PROD_CONV needed; conversions loaded uncompiled>%
+X
+Xloadf `conversions`;;
+X
+Xlet w = "!f:*#**->***.(UNCURRY(CURRY f) = f)";; 
+X
+Xlet THM_UC = prove(w,
+X           GEN_TAC THEN
+X           CONV_TAC (FUN_EQ_CONV THENC (REDEPTH_CONV BETA_CONV)) THEN
+X           CONV_TAC PROD_CONV THEN
+X           REWRITE_TAC[CURRY_DEF;UNCURRY_DEF]);;
+X
+Xlet w = "!f:*->**->***.(CURRY(UNCURRY f) = f)";;
+X
+Xlet THM_CU = prove(w, 
+X           GEN_TAC THEN 
+X           (CONV_TAC FUN_EQ_CONV) THEN 
+X           (CONV_TAC (ONCE_DEPTH_CONV FUN_EQ_CONV)) THEN
+X           REWRITE_TAC[UNCURRY_DEF;CURRY_DEF]);;   
+X
+Xlet CURRY_THM =
+X         save_thm(
+X         `CURRY_THM`,
+X          (LIST_CONJ ([THM_UC;THM_CU])));;
+X
+Xlet CURRY_ISO =
+X         save_thm(
+X         `CURRY_ISO`,
+X          MATCH_MP ID_ISO CURRY_THM);; 
+X
+X%<The following theorems are useful in conjunction
+X  with MATCH_MP>%
+X
+Xlet w0 = "!Q.(!x:*.((Q x) = (?y:**.x = f y))) ==> !y.Q (f y)";;
+X
+Xlet w1 = "!Q.(!x:*.((Q x) = (?y:**.(f y) = x))) ==> !y.Q (f y)";;
+X
+Xlet DEF_THM1 = prove_thm(
+X   `DEF_THM1`,
+X    w0,
+X    REPEAT STRIP_TAC THEN
+X    ASM_REWRITE_TAC[] THEN
+X    EXISTS_TAC "y:**" THEN
+X    REWRITE_TAC[]);;
+X
+Xlet DEF_THM2 = prove_thm(
+X   `DEF_THM2`,
+X    w1,
+X    REPEAT STRIP_TAC THEN
+X    ASM_REWRITE_TAC[] THEN
+X    EXISTS_TAC "y:**" THEN
+X    REWRITE_TAC[]);;  
+X
+X%<Theorem for use with new_specification: removes
+X  free variables>%   
+X
+Xlet SPEC_THM = prove_thm(
+X   `SPEC_THM`,
+X    "(!y:*1.?z:*2.Q y z) = (?f.!y.Q y (f y))",
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THENL
+X    [EXISTS_TAC "\y:*1.@z:*2.Q y z" THEN
+X     BETA_TAC THEN
+X     RULE_ASSUM_TAC (BETA_RULE o REWRITE_RULE[EXISTS_DEF]) THEN
+X     ASM_REWRITE_TAC[];
+X     EXISTS_TAC "f (y:*1):*2" THEN
+X     ASM_REWRITE_TAC[]]);;
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+END_OF_FILE
+if test 8683 -ne `wc -c <'theorems.ml'`; then
+    echo shar: \"'theorems.ml'\" unpacked with wrong size!
+fi
+chmod +x 'theorems.ml'
+# end of 'theorems.ml'
+fi
+if test -f 'conversions.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'conversions.ml'\"
+else
+echo shar: Extracting \"'conversions.ml'\" \(4265 characters\)
+sed "s/^X//" >'conversions.ml' <<'END_OF_FILE'
+X%<We name the theorems needed,
+X  so compilation will not be confused>%
+X
+XPRODUCT_FORALL_THM;;
+X
+XPRODUCT_EXISTS_THM;;
+X
+XBASE_CHANGE_SURJ_FORALL;;
+X
+XBASE_CHANGE_ISO_FORALL;;
+X
+XBASE_CHANGE_ONTO_EXISTS;;
+X
+XBASE_CHANGE_ISO_EXISTS;;
+X
+XBASE_CHANGE_EXISTS_UNIQUE;;
+X        
+X
+X%<PROD_CONV transforms "!x.P", where x is a product-type,
+X  into !x1 x2 ....xn.P((x1,x2,.....,xn)/x)>%
+X
+Xlet is_product ty = 
+X       let name,tylist = dest_type ty ? `not_prod`,[ty] in
+X       name = `prod`;;
+X
+Xletrec dest_prod ty = 
+X       let name,tylist = dest_type ty ? `not_construct`,[ty] in
+X       if not ( name = `prod` ) then [ty]
+X       else (hd tylist).(dest_prod (el 2 tylist));;  
+X
+Xlet mk_prod_names x varlist = 
+X        letrec mk_list n = if n = 0 then []
+X                           else ((mk_list (n-1))@[n]) 
+X        in 
+X        let name,ty = dest_var x
+X        in 
+X        let tylist = dest_prod ty 
+X        in
+X        let mk_numbered (n,ty) = mk_primed_var(name ^ (string_of_int n),ty)
+X        in
+X        let num_ty_list = combine (mk_list(length tylist),tylist)
+X        in
+X        if length tylist = 1 then [x]
+X        else  
+X          let prelist = map mk_numbered num_ty_list in
+X          map (variant varlist) prelist;; 
+X
+Xletrec LIST_GEN_ALPHA_CONV tmlist =
+X         let l = length tmlist in 
+X            if l = 0 then ALL_CONV
+X            if l > 0 then ((BINDER_CONV (LIST_GEN_ALPHA_CONV (tl tmlist))) THENC
+X                            GEN_ALPHA_CONV (hd tmlist))
+X            else fail;;
+X
+Xlet SIMPLE_PROD_CONV thm tm = 
+X        let derbndr,x,body = ((I # dest_abs) o dest_comb) tm in  
+X        if is_product (type_of x) then 
+X             (let tyi = snd(match "x:*1#*2" x) in
+X              let th2 = INST_TYPE tyi (GEN_ALL thm) in 
+X              let th3 = SPEC (mk_abs(x,body)) th2 in
+X              let th4 = (CONV_RULE (LHS_CONV(BINDER_CONV BETA_CONV))) th3 in 
+X              let th5 = (CONV_RULE (LHS_CONV (GEN_ALPHA_CONV x))) th4 in
+X              (CONV_RULE (RAND_CONV(BINDER_CONV(BINDER_CONV BETA_CONV)))) th5)
+X        else ALL_CONV tm;; 
+X
+Xlet PROD_CONV tm =
+X        let derbndr,x,body = ((I # dest_abs) o dest_comb) tm in  
+X        let tok = fst(dest_const derbndr) in
+X        let th1 = 
+X            (if tok = `!` then PRODUCT_FORALL_THM
+X             if tok = `?` then PRODUCT_EXISTS_THM
+X             else fail) in
+X        let prod_vars = mk_prod_names x [] in
+X        letrec pre_prod_conv trml =
+X            if ((length trml) = 0) then ALL_CONV
+X            else ((SIMPLE_PROD_CONV th1) THENC
+X                  (BINDER_CONV (pre_prod_conv (tl trml)))) in
+X        let thm' = pre_prod_conv prod_vars tm in
+X        (CONV_RULE (RAND_CONV (LIST_GEN_ALPHA_CONV prod_vars))) thm';;
+X
+X
+X%<The following conversion allows for change of base:
+X  for proving quantified formulas.
+X  Note that it depends on 5 theorems, which
+X  first must be proved in theorems.ml>%
+X
+Xlet BASE_CHANGE_CONV =
+Xset_fail `BASE_CHANGE_CONV`
+X(\thm tm.
+Xlet derbndr,x,body = ((I # dest_abs) o dest_comb) tm in 
+Xlet tok = fst(dest_const derbndr) in
+Xlet thmtype,fnc = (((fst o dest_const) # I) o dest_comb o concl) thm in 
+Xif   
+X     not((mem tok [`!`;`?`;`?!`])) or
+X     not((mem thmtype [`ONTO`;`ISO`])) or
+X     (not(thmtype = `ISO`) & (tok = `?!`)) then fail 
+Xelse
+X     let tyi = snd(match "f:*->**" fnc) in
+X     let quant_ty = el 2 (snd(dest_type (type_of fnc))) in
+X     let tyi' = snd(match "x:^quant_ty" x) in
+X     let th1 = 
+X        (if ((tok = `!`) & (thmtype = `ONTO`)) then
+X                       BASE_CHANGE_SURJ_FORALL
+X         if ((tok = `!`) & (thmtype = `ISO`)) then 
+X                       BASE_CHANGE_ISO_FORALL
+X         if ((tok = `?`) & (thmtype = `ONTO`)) then
+X                       BASE_CHANGE_ONTO_EXISTS
+X         if ((tok = `?`) & (thmtype = `ISO`)) then
+X                       BASE_CHANGE_ISO_EXISTS
+X         if (tok = `?!`) then 
+X                       BASE_CHANGE_EXISTS_UNIQUE
+X         else fail) in
+X     let th2 = INST_TYPE tyi th1 in
+X     let th3 = INST_TYPE tyi' (SPEC fnc th2) in 
+X     let th4 = SPEC (mk_abs(x,body)) th3 in 
+X     let th5 = MP th4 (INST_TYPE tyi' thm) in
+X     let th6 = (CONV_RULE (LHS_CONV(BINDER_CONV BETA_CONV))) th5 in  
+X     let th7 = (CONV_RULE (LHS_CONV (GEN_ALPHA_CONV x))) th6 in
+X     (CONV_RULE (RAND_CONV(BINDER_CONV BETA_CONV))) th7);;
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X       
+X
+X 
+X
+X
+X
+X
+X
+X
+END_OF_FILE
+if test 4265 -ne `wc -c <'conversions.ml'`; then
+    echo shar: \"'conversions.ml'\" unpacked with wrong size!
+fi
+chmod +x 'conversions.ml'
+# end of 'conversions.ml'
+fi
+if test -f 'auxiliary.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'auxiliary.ml'\"
+else
+echo shar: Extracting \"'auxiliary.ml'\" \(793 characters\)
+sed "s/^X//" >'auxiliary.ml' <<'END_OF_FILE'
+X% FILE		: auxiliary.ml						%
+X% DESCRIPTION   : loads the library auxiliary into hol.  			%
+X%                                         					%
+X% AUTHOR        : T. Kalker		          				%
+X% DATE		: 28 August 1989						%
+X
+Xif draft_mode()
+X then (if not(mem `auxiliary` (parents (current_theory()))) 
+X         then
+X            (print_newline();
+X             print_string `auxiliary declared a new parent`;
+X             print_newline();
+X             new_parent `auxiliary`)
+X         else 
+X            (print_newline();
+X             print_string `auxiliary is parent`;
+X             print_newline())
+X       )
+X else  (load_theory `auxiliary` ? print_newline());;
+X
+Xmap
+X loadx
+X (words `functions tactics rules conversions`);;   
+X
+Xautoload_defs_and_thms `auxiliary`;;
+X
+Xlet goal = g
+Xand apply  = expandf;;
+END_OF_FILE
+if test 793 -ne `wc -c <'auxiliary.ml'`; then
+    echo shar: \"'auxiliary.ml'\" unpacked with wrong size!
+fi
+chmod +x 'auxiliary.ml'
+# end of 'auxiliary.ml'
+fi
+echo shar: End of shell archive.
+exit 0

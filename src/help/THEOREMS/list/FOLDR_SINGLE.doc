@@ -1,0 +1,3 @@
+\THEOREM FOLDR_SINGLE list
+|- !f e x. FOLDR f e[x] = f x e
+\ENDTHEOREM

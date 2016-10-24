@@ -1,0 +1,15 @@
+This is makeindex, portable version 2.11 [11-Sep-1991].
+Scanning input file b209e.idx....done (85 entries accepted, 0 rejected).
+Sorting entries....done (525 comparisons).
+Generating output file b209e.ind....
+## Warning (input = b209e.idx, line = 4; output = b209e.ind, line = 4):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b209e.idx, line = 51; output = b209e.ind, line = 19):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = b209e.idx, line = 82; output = b209e.ind, line = 28):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+done (30 lines written, 3 warnings).
+Output written in b209e.ind.
+Transcript written in b209e.ilg.

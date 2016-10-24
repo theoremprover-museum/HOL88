@@ -1,0 +1,147 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  14 APR 1992 10:21
+**wordn.tex
+(wordn.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/book.sty
+Document Style `book' <24 Nov 89>.
+(/usr/lib/tex/macros/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/fleqn.sty
+\mathindent=\dimen100
+)
+(../../Manual/LaTeX/alltt.sty) (../../Manual/LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+)
+(../../Manual/LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+) (../../Manual/LaTeX/ref-macros.tex)
+\@indexfile=\write3
+
+Writing index file wordn.idx 
+(wordn.aux (title.aux) (description.aux) (entries.aux) (theorems.aux)
+(references.aux) (index.aux)) (title.tex [1
+
+
+] [2]) (wordn.toc)
+\tf@toc=\write4
+ [3
+
+
+] [4
+
+]
+(description.tex
+Chapter 1.
+) [1
+
+
+] (entries.tex [2
+
+
+
+]
+Chapter 2.
+(entries-intro.tex)
+Overfull \hbox (8.76486pt too wide) in paragraph at lines 11--18
+[]\elvtt define_wordn_bit_ops wordn n\twlrm , where []\elvtt wordn \twlrm is th
+e the-o-rem re-turned by []\elvtt define_wordn_type
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\elvtt d
+.\elvtt e
+.\elvtt f
+.\elvtt i
+.etc.
+
+[3] [4] [5] [6] [7] [8] [9] [10] [11]
+Overfull \hbox (3.97455pt too wide) in paragraph at lines 459--463
+[]\elvtt prove_wordn_const_cases \twlrm de-rives an ex-haus-tive cases the-o-re
+m for con-stants of type []\elvtt :wordn\twlrm .
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\elvtt p
+.\elvtt r
+.\elvtt o
+.\elvtt v
+.etc.
+
+
+Overfull \hbox (4.47563pt too wide) in paragraph at lines 459--463
+\twlrm Use only for small n. The in-put is a the-o-rem of the form re-turned by
+ []\elvtt prove_word_cases_thm\twlrm : 
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\twlrm U
+.\twlrm s
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm o
+.etc.
+
+[12] [13] [14]
+Overfull \hbox (71.65536pt too wide) in paragraph at lines 608--621
+[]\elvtt prove_wordn_cases_thm\twlrm , []\elvtt prove_BITS_one_one\twlrm , []\e
+lvtt prove_BITS_onto\twlrm , []\elvtt prove_WORD_one_one\twlrm , []\elvtt prove
+_WORD_onto\twlrm ,
+
+\hbox(6.69167+2.43333)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\elvtt p
+.\elvtt r
+.\elvtt o
+.\elvtt v
+.etc.
+
+[15]
+Overfull \hbox (26.60457pt too wide) in paragraph at lines 665--671
+\twlrm some ba-sic the-o-rems about these op-er-a-tors. It com-bines the func-t
+ions of []\elvtt define_wordn_bit_ops\twlrm ,
+
+\hbox(8.33331+2.43333)x455.24408, glue set - 1.0
+.\twlrm s
+.\twlrm o
+.\twlrm m
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[16] [17] [18] [19] [20] [21]) [22] (theorems.tex
+Chapter 3.
+(theorems-intro.tex) [23
+
+
+
+] [24]) [25]
+No file references.tex.
+(index.tex [26
+
+
+
+
+
+]) (wordn.aux (title.aux) (description.aux) (entries.aux)
+(theorems.aux) (references.aux) (index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 455 strings out of 4463
+ 3667 string characters out of 63169
+ 36372 words of memory out of 262141
+ 2274 multiletter control sequences out of 9500
+ 19640 words of font info for 75 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 18i,10n,19p,241b,410s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on wordn.dvi (30 pages, 42112 bytes).

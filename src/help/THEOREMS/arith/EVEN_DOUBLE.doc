@@ -1,0 +1,3 @@
+\THEOREM EVEN_DOUBLE arithmetic
+|- !n. EVEN(2 * n)
+\ENDTHEOREM

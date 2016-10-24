@@ -1,0 +1,3 @@
+\THEOREM INSEG_PROPER_SUBSET WELLORDER
+|- !l m. m inseg l /\ ~(l = m) ==> (?x y. l(x,y) /\ ~m(x,y))
+\ENDTHEOREM

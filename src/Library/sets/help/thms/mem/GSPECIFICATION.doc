@@ -1,0 +1,3 @@
+\THEOREM GSPECIFICATION sets
+|- !f v. v IN (GSPEC f) = (?x. v,T = f x)
+\ENDTHEOREM

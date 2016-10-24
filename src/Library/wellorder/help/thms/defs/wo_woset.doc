@@ -1,0 +1,11 @@
+\THEOREM wo_woset WELLORDER
+|- !l.
+    woset l =
+    (!x. fl l x ==> l(x,x)) /\
+    (!x y z. l(x,y) /\ l(y,z) ==> l(x,z)) /\
+    (!x y. l(x,y) /\ l(y,x) ==> (x = y)) /\
+    (!x y. fl l x /\ fl l y ==> l(x,y) \/ l(y,x)) /\
+    (!P.
+      (!x. P x ==> fl l x) /\ (?x. P x) ==>
+      (?y. P y /\ (!z. P z ==> l(y,z))))
+\ENDTHEOREM

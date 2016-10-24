@@ -1,0 +1,554 @@
+		       Revision History for MakeIndex
+
+This is a reverse time-ordered history of changes to MakeIndex.
+
+-----------------------------------------------------------------
+[19-Oct-1991]
+	Merged in small set of changes into mkind.c and mkind.h for
+	IBM VM/CMS support.  Since there are no operational changes,
+	and 2.11 has only been distributed to the beta test list,
+	I'm leaving the version number at 2.11, and advancing the date.
+
+[11-Sep-1991]
+	Version 2.11 released by Nelson H.F. Beebe <beebe@math.utah.edu>
+
+	This version incorporates feedback from test sites for 2.10,
+	and importantly, replaces memory-gobbling fixed strings in the
+	index entries with dynamically-allocated strings, reducing the
+	storage per entry from 1844 bytes to 80 bytes + actual string
+	lengths.  For details, see the new NOTES file.  The use of
+	dynamic strings now lets MakeIndex 2.11 process all of the
+	entries in test/b209f.idx; with MakeIndex 2.10 and earlier, 6
+	were rejected because of long fields.
+
+	Reorder two lines in doc/makeindex.l to avoid single quote at
+	beginning of line, which nroff and troff then lose.
+
+	Move typeout of version string in mkind.c to before parsing of
+	style file; otherwise, MakeIndex can terminate with an error
+	message before identifying itself.
+
+	Correct argument parsing in mkind.c to check for a following
+	argument before assuming it is there.
+
+	Change long macro PUT_HEADER in genind.h to function
+	put_header() in genind.c; it was too long for some compilers.
+
+	Correct bad args to STY_ERROR2() in scanst.c (had LINE_MAX
+	instead of LINEMAX).
+
+	Correct array dimension in flush_line() in genind.c from
+	tmp[LINE_MAX] to tmp[sizeof(buff)]; long index entries
+	otherwise overwrote stack storage.
+
+	Correct array dimension in mkind.c from pageno[STRING_MAX] to
+	pageno[NUMBER_MAX].
+
+	Correct array dimension in scanid.c from keyword[STRING_MAX]
+	to keyword[ARRAY_MAX].
+
+	Correct two array dimensions in genind.c from 2*STRING_MAX to
+	2*ARGUMENT_MAX.
+
+	Document array sizes xxx_MAX in mkind.h (note above corrections).
+
+	Add more code in scanid.c to check for overflow of field[].  A
+	case was found where overwriting occurred if an idx_escape is
+	found when i == ARRAY_MAX - 1.  In this new version, the length
+	is no longer ARRAY_MAX, but is passed as an additional argument
+	to the function scan_field().
+
+	In sortid.c, change type of idx_gc from `int' to `long' to avoid
+	integer overflow or wraparound when there are more than 32767
+	(or whatever the host INT_MAX value is) comparisons.
+
+	Change two tests in scanid.c in scan_roman_lower() and
+	scan_roman_upper() from "if (... && (new = ...))" to
+	"if (... & ((new = ...) != 0))" to suppress compiler warnings on
+	some systems about possible error in use of = instead of ==.
+
+	Add test/b211a.idx to test MakeIndex with very long
+	index fields near, at, and beyond the standard internal array
+	dimensions.
+
+	Add test/b211b.{idx,ist} to test MakeIndex with the German
+	sort option.
+
+	Add missing "level = i;" in genind.c; this fixes an obscure bug
+	that is seen only when certain style files are used.  The
+	test/b211b.idx file tests the fix.
+
+	Lattice has gone out of business, so the files src/make-lc.bat
+	and src/makefile.lc are in some sense obsolete, and will receive
+	no further maintenance.  They are retained in the distribution
+	for now because some sites may still be using that compiler.
+
+	Revise scanid.c to permit idx_quote (by default, a quotation
+	mark) to quote ANY input character in the first argument to
+	the indexentry macro.  Revise sortid.c to use unsigned char
+	data for sorting, removing architecture dependence.  This also
+	requires a change in the TOLOWER and TOUPPER macros in mkind.h.
+	This is an important extension to MakeIndex: it permits sort
+	keys to be created for all ASCII characters, including braces
+	and others that otherwise have significance to MakeIndex (by
+	default, @, |, !).  It also permits the user to get characters
+	1..255 into the actual field; this will be important for TeX
+	3.0 which can support a 256-character set.  Character 0 cannot
+	be easily supported, because it is a string terminator in C,
+	the language in which MakeIndex is currently implemented.  A
+	future extension might support an escape mechanism for it.
+	Too bad MakeIndex was not originally designed to support
+	C-like \ooo (octal) and \xhh (hexadecimal) escape sequences!
+	The file test/b211e.idx tests the sorting and display of all
+	characters in 1..255, and the file test/b211e.ltx typesets the
+	test index.  Because Ctl-Z is an end-of-file marker in PC DOS
+	text files, test/b211h.idx is derived from test/b211e.idx by
+	removing the line with that character, and used in dosdiff.bat
+	in place of b211e.  Note that MakeIndex collates space and the
+	characters in 1..31 and 127..255 somewhat differently than
+	ASCII.  The MakeIndex order is:
+
+		punctuation characters (in ASCII order),
+		digits,
+		control characters (1..31),
+		space (32),
+		letters (ignoring case),
+		characters 127 .. 255.
+
+	In prepare_idx() in mkind.c, add a check for a NULL `head';
+	this can arise if the input file is garbage (e.g. you type
+	makeindex foo, meaning foo.idx, but a foo file already exists,
+	and is used instead of foo.idx).  Without this check, a NULL
+	pointer is subsequently dereferenced, with core dumps on some
+	machines.  The problem really lies in process_index() in
+	mkind.c, where idx_tc gets incremented before we know we have
+	a valid entry, such that in main(), idx_gt gets set to 1, when
+	`head' is still NULL.  It seems easier to catch this error in
+	prepare_idx() instead of process_index().
+
+	Add additional architecture-specific targets to Makefile
+	to incorporate the compiler switches shown under the 2.10
+	LOG file entry below.
+
+	The book.idx file is still too big for a Turbo C 2.0 compiled
+	version of MakeIndex 2.11 on MS DOS to handle.
+
+	Fix several loops that called GET_CHAR() without checking
+	for an EOF result (genind.c, mkind.c, mkind.h, scanid.c,
+	scanst.h).
+
+	Fix range handling error in compare_page() in sortid.c; the file
+	test/b211f.idx tests that the fix is correct.
+
+	Incorporate bug repairs from:
+
+		Eberhard Mattes <mattes@azu.informatik.uni-stuttgart.de>
+
+		Mark James <mark@bdblues.altair.fr>, <mark@nuri.inria.fr>
+
+-----------------------------------------------------------------
+[05-Jul-1991]
+	Version 2.10 released by Nelson H.F. Beebe <beebe@math.utah.edu>
+
+	Testing of this version has been carried out on these systems:
+
+		===================================	=================
+		System					Compile Defines
+		===================================	=================
+		Apollo DN/10000				-DOS_SYSV -U__STDC__
+		DECstation Ultrix 4.2
+		HP 375 (4.3BSD)
+		HP 9000/720 (HP-UX, System V UNIX)	-DOS_SYSV
+		HP 9000/850S (HP-UX, System V UNIX)	-DOS_SYSV
+		IBM 3090/600S-VF AIX			-D_BSD
+		IBM PC DOS
+		IBM RS/6000 AIX 3.1
+		NeXT Mach
+		Silicon Graphics 4D-240			-DOS_SYSV
+		Stardent 1520 UNIX Release 2.2
+		SunOS 4.1.1 (BSD UNIX)
+		VAX VMS 5.3
+		===================================	=================
+
+	This version addresses all outstanding bug reports that I am
+	aware of, and brings the code completely up to the level of
+	Standard C (ANSI X3.159-1989 Programming Language--C, ISO C
+	1990).
+
+	In test/, rename long filenames to shorter ones, and add
+	several new test files, and a Makefile to automate the testing
+	of a new version on UNIX.
+
+	Add a README file with compilation instructions.
+
+	In mkind.c, mkind.h, and scanst.c, rename LONG_MAX to
+	ARRAY_MAX.  LONG_MAX is used in Standard C for the largest
+	long integer.
+
+	In mkind.h, drop IBM_PC_LATTICE.  There were no uses of it
+	elsewhere in the code, and Lattice is no longer in business, and
+	Microsoft C and Turbo C are now the major compilers on PC DOS
+	(Waterloo and TopSpeed lag far behind).  Existing support for
+	TOPS-20 will be retained for now, even though by the end of
+	1991, there may not be any more TOPS-20 systems alive; ours was
+	retired 31-Oct-1990, and the American Mathematical Society's on
+	31-Mar-1991.
+
+	In mkind.h, except in OS_PCDOS, increase STRING_MAX from 128 to
+	256, and in genind.c, change dimensions of 2*LINE_MAX to
+	2*STRING_MAX.  Anita Hoover <anita@brahms.udel.edu> reported a
+	need for this.
+
+	Fix sort bug reported by Andreas Brosig <brosig@gmdzi.gmd.de>
+	and Ed Sznyter <ews@Pescadero.Stanford.EDU>.  This bug was
+	introduced in sortid.c at version 2.8 by the fix for another
+	bug.  The code in compare_page() did not handle the case where
+	two entries were the same in index fields and page numbers, but
+	differed in their encap fields.  The resulting incorrect
+	comparison could then later cause bogus page ranges to be
+	produced.  Test file b209e.idx has been included for future
+	testing.  From version 2.10, bugs reported in version x.yy will
+	have files test/bxyy*.idx (* = a, b, ...) that will be preserved
+	for regression testing.
+
+	In doc/, in the manual page file, makeindex.l, alphabetize
+	command-line switch descriptions, correct some spelling errors,
+	and add new descriptions.  Add a Makefile and targets to
+	automatically create the .dvi, .hlp, .info, .ps, and .vms files,
+	and to install and uninstall the manual pages.  The .hlp, .info,
+	.ps, and .vms files will be included with the distribution since
+	they can be generated only on some UNIX systems.
+
+	In paper/, add a Makefile, and create LaTeX picture mode
+	equivalent of fig1.ps, so that ind.tex can be formatted and
+	printed at any TeX installation. Remove the old output
+	PostScript file, ind.ps, saving 300KB of disk space, since it is
+	no longer needed.
+
+	Incorporate additional contributions from:
+
+		Johannes Braams <braams@hlsdnl5.bitnet> (bug fixes for
+		VAX VMS)
+
+		Joachim Schrod <xitijsch@ddathd21.bitnet> (2.9.1
+		changes)
+
+		Rainer Schoepf <bk4@dhdurz1.bitnet> (more Atari TOS
+		changes)
+
+		Eberhard Mattes <mattes@azu.informatik.uni-stuttgart.de>
+		(OS/2 Makefile and .def description file)
+
+		Richard P. C. Rodgers <rodgers@maxwell.mmwb.ucsf.edu>
+		(manual page additions)
+
+------------------------------------------------------------------------
+[22-Jun-1990]
+	Version 2.9.1 by Joachim Schrod <xitijsch@ddathd21.bitnet>
+
+	Testing carried out on:
+		PC DOS          Microsoft C 5.1
+		BSD             Sun OS 4.0 cc
+				gcc 1.37.1
+		System V R3     MUNIX cc
+				IBM AIX/2 cc
+				IBM AIX/370 cc
+
+	Added difference between BSD (OS_BSD) and System V R3 (OS_SYSV).
+	Deleted UNIX (OS_UNIX).
+
+	There doesn't exist a single `UNIX' system, e.g. the naming of
+	index/rindex versus strchr/strrchr may be called a `cultural
+	difference'.
+
+	Updated comments concerning the preprocessor constants to reflect
+	the actual state of the source.
+
+	Please note that the Atari port seems to be incorrect; look for
+	FIXME in mkind.h.
+
+	By the way, it is not mentioned what compiler is used on the
+	Atari -- it is one that uses index/rindex.
+
+-----------------------------------------------------------------
+[12-Dec-1989]
+	Version 2.9 released by Nelson H.F. Beebe <beebe@math.utah.edu>
+
+	Testing carried out on:
+		PC DOS		Microsoft C 5.0, Turbo C 2.0, Lattice C 6.02
+		TOPS-20		KCC-20 and PCC-20
+		UNIX		Sun OS 4.0.3 cc and gcc 1.36
+		VAX ULTRIX-32	cc
+		VAX VMS		VMS C 2.3
+
+	Added support for Turbo C 2.0 and Lattice C 6.02 on IBM PC DOS.
+
+	Although compilation and linking were successful with Lattice
+	C, the executable produced a 'Not enough core...abort' message
+	at run time under the D, L, and H memory models.  Replacing
+	malloc(n) calls by halloc(1L,n) did not remove the problem;
+	debugging statements (selected by defining DEBUG at compile
+	time) showed that calls to malloc() and calloc() allocated
+	less than 15KB before the abort.  Curiously, a separate little
+	test program that allocated 1000-byte blocks with malloc() or
+	calloc() could allocate over 55KB in the small memory model,
+	and over 500KB in the large models, before aborting.  Thus, we
+	conclude for now that Lattice C 6.02 is not usable for
+	MakeIndex.
+
+	Added ARGS macro to simplify function declarations in ANSI and
+	pre-ANSI styles.
+
+	Added missing definition of OS_XENIX in mkind.h.
+
+	Moved declarations of static functions from mkind.h to relevant
+	*.c files to remove compiler warnings about declared, but unused,
+	objects.
+
+	Removed a couple of unreachable break statements that raised
+	compiler warnings.
+
+	Use ANSI strchr/strrchr instead of K&R index/rindex; the former
+	are #defined to the latter for systems that have only the old
+	names.
+
+	Fixed scan_arabic() in scanid.c to allow ARABIC_MAX digits,
+	instead of one less than that, and fix condition on which the
+	error message about too many Arabic digits is triggered.
+
+	Repair widespread confusion between NUL (the character '\0'),
+	and NULL (the pointer).  NUL is a user-definable name, while
+	NULL is defined by the implementation; on segmented memory
+	machines, pointers and integers need not be equivalent, so it
+	may hold that NULL != NUL.  Previous versions of MakeIndex used
+	NULL to mean both, and redefined NULL to be '\0'.  In general,
+	NULL must be typecast to a pointer of the appropriate type,
+	since under ANSI C, it will usually be defined to be something
+	like (void*)0 or (void*)0L.
+
+-----------------------------------------------------------------
+[11-Nov-1989]
+	Version 2.8 released by Pehong Chen <chen@renoir.berkeley.edu>.
+	(1) ARABic_MAX changed from 4 to 5, duo to Sebastian Rahtz's
+	    <spqr%ecs.southampton.ac.uk@NSFnet-Relay.AC.UK> report
+	    on TeXhax #87 (9/17/1989).
+	(2) A nasty sorting bug was fixed due to a report from
+	    Martha Wershofen-Mersbach <GRZTEX%dbngmd21.bitnet@NET.BIO.NET>
+	    of the German National Research Center For Computer Science (GMD).
+	(3) Siemens BS2000 ported done by Andreas Brosig of the German
+	    National Research Center For Computer Science (GMD).
+	(4) German word ordering, the "-g" option contributed by Brosig.
+	(5) Miscellaneous bug fixes by Brosig:
+	    A. Blank compression routine ("-c") fixed.
+	    B. The "-p" option now works for MSDOS and MVS.  Have to open
+	       logfile in binary mode for OS_PCDOS and add OS_MVSXA to an
+	       existing #if because fseek(...) does not work under MVS.
+	    C. If an indexentry contains more than 2 IDX_LEVEL '!' or more
+	       than 3 IDX_ACTUAL '@', MakeIndex would ignore this entry
+	       and writes "Extra ... at position ..." to the transcript file.
+	       This is now fixed.
+	    D. If an indexentry is too long (> STRING_MAX), MakeIndex would
+	       ignore it and write a message to the transcript file.
+	       This is now fixed.
+	    E. For MSDOS(OS_PCDOS) LONG_MAX is set back to 144
+	       and STRING_MAX to 64.  Otherwise a core error will occur
+	       in the case of a big IDX-file.
+
+-----------------------------------------------------------------
+[1-Oct-1988]
+	Version 2.7 released by Pehong Chen <chen@orc.olivetti.com>.
+	(1) Fixed a string printing bug reported by anita@brahms.udel.edu
+	    through Leslie Lamport.  The string should be an argument
+	    to the printf format, instead of the format itself.
+
+-----------------------------------------------------------------
+[14-Jul-1988]
+	Version 2.6 released by Pehong Chen <chen@orc.olivetti.com>.
+	(1) The documentation for UNIX man page makeindex.l went through
+	    revision by Rick P. C. Rodgers of UCSF <rodgers@cca.ucsf.edu>.
+	    Rick also provided a sample style file for MakeIndex to work
+	    with troff (see the man page for details).
+	(2) String length (LONG_MAX) was increased from 144 to 1024.
+	(3) Fixed a letter heading bug.  It used to put the heading
+	    below the first index entry.
+	(4) Added a new feature, the terminating delimiter for page list.
+	    This delim_t string is null by default.  It can be redefined
+	    as a period if one would like a page list to be terminated
+	    by a period, for example.  This delimeter has no effect
+	    on an index entry which does not have any page number
+	    associated with it.
+
+-----------------------------------------------------------------
+[14-Apr-1988]
+	Version 2.5 released by Pehong Chen <phc@berkeley.edu>,
+	with VAX/VMS extensions by
+	    Charles Karney
+	    Plasma Physics Laboratory  Phone:   +1 609 243 2607
+	    Princeton University       MFEnet:  Karney@PPC.MFEnet
+	    PO Box 451                 ARPAnet: Karney%PPC.MFEnet@NMFECC.ARPA
+	    Princeton, NJ 08543-0451   Bitnet:  Karney%PPC.MFEnet@ANLVMS.Bitnet
+	The file VMSmake.com for VAX/VMS users who don't have make.
+	This version also includes a fix under XENIX by
+	    Baron O.A. Grey 		UCLA Computer Science Department
+	    baron@CS.UCLA.EDU		...!(ucbvax,ihnp4)!ucla-cs!baron
+
+-----------------------------------------------------------------
+[20-Mar-1988]
+	Version 2.4 released by Pehong Chen <phc@berkeley.edu>,
+	the ``official'' version of MakeIndex that enters public domain.
+
+	* length() (originally defined in mkind.c) is replaced by
+	the standard function strlen(), which in some C implementations
+	is, or can be, expanded to in-line efficient hardware instructions
+	(e.g.  Microsoft C and VAX Unix); I have not yet done this.
+
+-----------------------------------------------------------------
+[20-Jan-1988]
+	Portable version 2.3 released by Nelson H.F. Beebe
+	<beebe@math.utah.edu>.
+
+	I spent 3 days implementing MakeIndex on Sun OS3.3 Unix
+	(cc and gcc), TOPS-20 (KCC-20 and PCC-20 compilers), PC
+	DOS (Microsoft C Version 5.0), and VAX VMS.  This was at
+	times a frustrating experience, because the effort
+	revealed a great many portability problems in the
+	original code (from VAX Unix, I think), plus some genuine
+	bugs in MakeIndex, plus a bug in each of two compilers
+	(KCC-20 and PCC-20)!
+
+	The changes for this version over 2.2 are exclusively bug
+	fixes and portability enhancements.  Thanks to the
+	original authors' careful design, no functionality
+	changes are likely to be necessary.
+
+	Besides getting the code working correctly on 4 systems
+	and 6 compilers, I have made several passes over the code
+	to reduce the lint complaints to a minimum, and remove
+	all of the warnings produced by the IBM PC Microsoft C
+	Version 5.0 compiler, which is the only one of the above
+	systems which completely implements October 1986 draft
+	ANSI C; the ANSI function prototype checking caught
+	numerous problems.
+
+	With these changes, I believe that we now have a version
+	of MakeIndex that satisfies the important goal of TeX --
+	the same input will produce identical output results on
+	all machines, whether they be micros, minis, mainframes,
+	or supercomputers.  This is true at least for the 6
+	systems for which testing has been possible at Utah.
+
+	Here is a summary of bug corrections and other changes:
+
+	* Several routines fell off the end without returning a
+	value, when the caller expected it; this was particularly
+	hard to trace (2 days of effort--the code only failed on
+	PCC-20, and work correctly with the other 4).
+
+	* Equivalence of *short and *int was incorrectly assumed
+	in one routine; this made the code dependent on the byte
+	storage order (it works on the little-Endian VAX
+	architecture, but will fail on big-Endian architectures
+	(IBM et al)).
+
+	* Equivalence of *int and *char was incorrectly assumed
+	in the call to qsort(); the only one of the 6 compilers
+	which uses a different format for *char values is KCC-20,
+	and that feature caught this bug (the compiler didn't
+	find it for me, but when the sort failed, I tracked it down).
+
+	* Routines which do not return a value are now explicitly
+	typed `void' instead of nothing or `int', and mkind.h has
+	both K&R old-style and new ANSI style function
+	declarations for all routines; the choice is made on the
+	basis of the compiler and operating-system switch
+	selections.
+
+	* A single (incorrect) use of backslash-dot (\.) escape
+	sequence in scanid.h has been reduced to dot (.).
+
+	* exit() was called without a valid argument in mkind.h.
+
+	* In several places, code of the form
+		char c;
+		while ((c = getchar()) != EOF)
+	existed; this is incorrect and will fail on many machines
+	when the EOF (== -1) value returned by getchar() is
+	truncated to a byte value for storage in c, then extended
+	to an integer again and compared with EOF.  The correct
+	approach is to use "int c;" instead of "char c;".  Type
+	declarations have been changed from "short" or "int" to
+	"char" or vice versa in several places in order to
+	achieve consistency, and explicit typecasts are used when
+	data types are intentionally changed by assignment or
+	argument association.
+
+	* mkind.h now has a SHORTNAMES section to define short
+	names for the 45 long ones which clash when reduced to 6
+	characters (although KCC-20 and PCC-20 both handle long
+	names, they produce assembly code output, and the
+	assembler limits names to 6 case-insensitive chars).
+
+	* File names have been reduced to 6 characters, allowing
+	the source to be ported to all of the above systems
+	without tedious file renaming.  The TOPS-20 LINK program
+	also runs under TOPS-10, and because TOPS-10 has a
+	6-character file name limit, LINK-20 does too, sigh...
+	The executable is called makeindex on all systems except
+	PC DOS, where the 8-character limit reduces it to
+	makeindx.  Similarly, filenames with special characters
+	(ind+ and ind-) have been renamed to portable names.
+
+	* Reference to sys/file.h has been eliminated; it was
+	only needed for the symbol R_OK passed to access().
+	sys/file.h is missing from most non-Unix C
+	implementations, while the value of R_OK (4) for access()
+	is consistent for all but PCC-20, where only F_OK (0) is
+	implemented.
+
+	* Makefiles have been produced for each of the above
+	systems (I have the same version of a public-domain make
+	running on all of them).
+
+	* A public version of qsort.c has been included in
+	MakeIndex for two reasons.  First, some non-Unix C
+	implementations lack it.  Second, quicksort is not a
+	`stable' sorting algorithm; that is, the order of items
+	with equal keys is not necessarily identical between the
+	input and the output.  Different implementations of the
+	sort algorithm in the host qsort() can therefore give
+	different ordering in such cases (PCC-20 and KCC-20
+	differed, which is how I caught this).  qsort is
+	#define'd to qqsort for all systems, in order to avoid
+	possible clashes with the standard library version (this
+	happens with IBM PC Microsoft C and with VAX VMS).
+
+	* Version 2.2 did not come with any documents containing
+	index entries to test MakeIndex with.  I have taken the
+	liberty of preparing an index for Leslie Lamport's
+	article, ../doc/makeindex.tex for a test version,
+	../test/test.tex.   This can be used both to test MakeIndex,
+	as well as to illustrate the production of an index for
+	new users (I'm using it in a class that I am teaching on
+	LaTeX).  test.tex uses the showidx document style option
+	to get the index entries displayed as marginal notes, and
+	the index entries in test.tex have been carefully
+	formatted  to always begin a line; that way, they can be
+	easily extracted (e.g. by grep), so that one can see the
+	original entries, the LaTeX output .idx file, and the
+	MakeIndex output .ind file.
+
+	* The bug fix for PCC-20 has been posted to the TOPS-20
+	bulletin board; PCC-20 was developed at CS.UTAH.EDU, but
+	we (SCIENCE.UTAH.EDU) now have their DEC-20, so I guess
+	we have become the default PCC bug-fix site.  The bug in
+	KCC-20's preprocessor has been reported to the KCC
+	developers at SRI-NIC.ARPA but cannot be easily fixed
+	until the draft ANSI C support in KCC-20 is complete; in
+	the meantime, conditional compilation is used to provide
+	alternate code which compiles correctly.
+
+-----------------------------------------------------------------
+[29-May-1987]
+	Version 2.2 (5/29/1987) released by Pehong Chen <phc@berkeley.edu>.
+
+-----------------------------------------------------------------

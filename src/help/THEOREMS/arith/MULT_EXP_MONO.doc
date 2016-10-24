@@ -1,0 +1,3 @@
+\THEOREM MULT_EXP_MONO arithmetic
+|- !p q n m. (n * ((SUC q) EXP p) = m * ((SUC q) EXP p)) = (n = m)
+\ENDTHEOREM

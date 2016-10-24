@@ -1,0 +1,754 @@
+% =====================================================================
+% HOL Course Slides: overview of higher order logic   (c) T melham 1990
+% =====================================================================
+
+\documentstyle[12pt,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings.
+% ---------------------------------------------------------------------
+
+\renewcommand{\textfraction}{0.01}	  % 0.01 of the page must contain text
+\setcounter{totalnumber}{10}	 	  % max of 10 figures per page
+\flushbottom				  % text extends right to the bottom
+\pagestyle{slides}			  % slides page style
+\setlength{\unitlength}{1mm}		  % unit = 1 mm
+
+% ---------------------------------------------------------------------
+% load macros
+% ---------------------------------------------------------------------
+\input{macros}
+\def\Rule#1#2{\mbox{${\displaystyle\raise 6pt\hbox{$\;\;\;#1\;\;\;$}} \over 
+                     {\displaystyle\lower7pt\hbox{$\;\;\;#2\;\;\;$}}$}}
+
+
+% ---------------------------------------------------------------------
+% set caption at the foot of pages for this series of slides
+% ---------------------------------------------------------------------
+\ftext{Primitive basis of the logic}{3}
+
+% ---------------------------------------------------------------------
+% Slides
+% ---------------------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------------------
+% Title page for this series of slides
+% ---------------------------------------------------------------------
+
+\bsectitle
+Overview of\\
+Higher Order Logic\\
+{\vrule width20mm height2.5mm depth-2mm}\\
+Primitive Basis
+\esectitle
+
+% =====================================================================
+\slide{The Theory {\rm bool}}
+
+\point{The most basic HOL theory is {\rm bool}.}
+
+\point{The theory {\rm bool} contains:}
+
+\vskip 7mm
+\bspindent{\Large{\bf Type constants:~~~$bool$ }}
+\espindent
+\vskip 5mm
+\bspindent{\Large{\bf Type operators:~~~$\rightarrow$ }}
+\espindent
+
+\vskip 5mm
+\bspindent{\Large{\bf Constants:}
+\vskip 4mm
+\begin{tabular}{@{\qquad} l}
+ \( \supset \;\; = \;\; \epsilon \) \\
+ \( T \;\; F \;\; \neg \) \\
+ \$$\forall$~~~\$$\exists$~~~\$$\exists${\em !} \\
+ \$$\vee$~~~\$$\wedge$
+\end{tabular} }
+\espindent
+\vskip5mm
+\bpindent\LARGE\bf
+plus a few other constants (discussed later).
+\epindent
+\vskip7mm
+
+\point{The constants $\supset$, $=$, and $\epsilon$ are primitive.}
+\point{All the other constants are defined.}
+
+% =====================================================================
+\slide{Definitions in the Theory {\rm bool}}
+
+\point{The constant definitions are:}
+
+\bspindent{\LARGE
+\vskip 6mm
+\( \vdash T = ((\lambda x.\: x) \; = \; (\lambda x.\:x)) \) 
+\vskip 6mm
+\( \vdash\) \$$\forall$ \( \;=\; \lambda P.\:\; P = (\lambda x.\:T) \) 
+\vskip 6mm
+\( \vdash\) \$$\exists$ \( \;=\; \lambda P.\:\; P(\) \$$\epsilon$ \( P) \) 
+\vskip 6mm
+\( \vdash F \;=\; \forall b. \; b \) 
+\vskip 6mm
+\( \vdash \neg \;=\; \forall b. \; b \supset F \) 
+\vskip 6mm
+\( \vdash\) \$$\wedge$ \( \;=\; \lambda b_1\;b_2. \; \forall b. \;
+             (b_1 \supset (b_2 \supset b)) \supset b \)
+\vskip 6mm
+\( \vdash\) \$$\vee$ \( \;=\; \lambda b_1\;b_2. \; \forall b. \;
+             (b_1 \supset b) \supset ((b_2 \supset b) \supset b) \)
+\vskip 6mm
+\( \vdash\) \$$\exists${\em !} \( \;=\; \lambda P.\: \exists\;P \wedge
+\forall x \; y.\: P\; x \wedge P\; y \supset x{=}y \)
+}
+\espindent
+
+\vskip7mm
+\point{All the usual logical properties follow from\\
+these definitions.}
+
+
+% =====================================================================
+\slide{Axioms in the Theory {\rm bool}}
+
+\point{The theory {\rm bool} has only 4 axioms:}
+
+\vskip7mm
+
+\bspindent\LARGE
+
+$\begin{array}[t]{@{}l}
+\vdash \forall \; b. \;\; (b = T) \; \vee \; (b = F) \\[3mm]
+
+\vdash \forall \; b_1\;b_2. \;\;
+         (b_1 \supset b_2) \supset (b_2 \supset b_1) \supset (b_1 = b_2)\\[3mm]
+
+\vdash \forall \; f. \;\; (\lambda x. \; f x) = f \\[3mm]
+
+\vdash \forall \; P \; x. \;\; P\; x \supset P(\epsilon\; P)
+
+\end{array}$
+\espindent
+
+\vskip7mm
+
+% =====================================================================
+\slide{The Theory {\rm ind}}
+
+\point{There is only one other primitive theory: {\rm ind}}
+\vskip7mm
+\point{The theory {\rm bool} is a parent of {\rm ind}.}
+\vskip7mm
+\point{The theory {\rm ind} contains:}
+
+\vskip 7mm
+\bspindent{\Large{\bf Type constants:~~~$ind$}}
+\espindent
+\vskip 5mm
+\bspindent\Large{\bf Axioms:}
+\vskip 4mm
+\qquad$\exists f\begin{array}[t]{@{}l}{:}ind{\rightarrow}ind.\:\\
+       (\forall x\;y.\:f x = f y \supset x = y)  \wedge
+       (\neg \forall x.\:\exists y.\: x = f\; y) \end{array}$
+\espindent
+
+% =====================================================================
+\slide{Primitive Inference Rules}
+
+\point{Inference rules enable us to deduce new\\
+theorems from existing ones.}
+
+\point{Notation used to describe the rules:}
+
+\vskip10mm
+
+\bspindent\LARGE\bf
+\Rule
+{\Gamma_1 \vdash t_1,\; \dots,\; \Gamma_n \vdash t_n}
+{\Gamma \vdash t}
+\espindent
+
+\vskip7mm
+\point{
+this means that
+if $\Gamma_1 \vdash t_1$, \dots, $\Gamma_n \vdash t_n$
+are all theorems 
+then so is $\Gamma \vdash t$.}
+
+% =====================================================================
+\slide{Primitive Inference Rules}
+
+\point{There are only 8 primitive inference rules:}
+\vskip18mm
+
+\bspindent\LARGE\bf
+{\Large\bf ASSUME:\quad}
+$\Rule{\mbox{-}}{\{ t \} \vdash t}$
+\espindent
+
+\vskip18mm
+
+\bspindent\LARGE\bf
+{\Large\bf REFL:\quad}
+$\Rule{\mbox{-}}{\vdash t=t}$
+\espindent
+
+\vskip18mm
+
+\bspindent\LARGE\bf
+{\Large\bf MP:\quad} 
+$\Rule{\Gamma_1 \vdash t_1 \supset t_2 \qquad \Gamma_2 \vdash t_1}
+{\Gamma_1 \cup \Gamma_2 \vdash t_2}$
+\espindent
+
+\vskip18mm
+
+\bspindent\LARGE\bf
+{\Large\bf DISCH:\quad}
+$\Rule{\Gamma \vdash t_2}
+{ \Gamma - \{ t_1 \} \vdash t_1 \supset t_2 }$
+\espindent
+
+\vskip18mm
+
+\bspindent\LARGE\bf
+{\Large\bf ABS:\quad}
+$\Rule{\Gamma \vdash t_1 = t_2}
+{\Gamma \vdash (\lambda x. \; t_1) = (\lambda x.\; t_2) }$
+\vskip4mm
+{\Large\bf $x$ not free in $\Gamma$}
+\espindent
+
+
+% =====================================================================
+\slide{Beta Conversion}
+
+\point{The rule for beta-conversion:}
+\vskip15mm
+\bspindent\LARGE\bf
+{\Large\bf BETA\_CONV:\quad}
+$\Rule{\mbox{-}}
+{ \vdash (\lambda x. \; t_1) t_2 = t_1 [ t_2 / x ] }$
+\espindent
+
+
+\vskip 15mm
+
+\point{\( t_1 [ t_2 / x ]  \) denotes the result of substituting $t_2$ for all free occurrences of $x$ in $t_1$.}
+
+\vskip 7mm
+\point{Bound variables renamed if necessary, so that
+no free variable in $t_2$ becomes bound.}
+
+\vskip 7mm
+\point{Examples:}
+\vskip5mm
+\bspindent\LARGE
+$\begin{array}[t]{@{}l}
+\vdash (\lambda x.\; x+3)\;7 \;=\; 7+3 \\[3mm]
+\vdash (\lambda x.\; (\forall x.\: x=T) \supset x)\;F \;=\; 
+(\forall x.\: x=T) \supset F) \\[3mm]
+\vdash (\lambda y. \; \forall x.\: x=y)\;x \; = \; (\forall x'.\: x'=x)
+\end{array}$
+\espindent
+
+
+% =====================================================================
+\slide{Substitution}
+
+
+\point{The rule for substitution:}
+\vskip15mm
+\bspindent\LARGE\bf
+{\Large\bf SUBST:\quad}
+$\Rule{\Gamma_1 \vdash t_1 = t_2 \qquad \Gamma_2 \vdash t [ t_1 ] }
+{\Gamma_1 \cup \Gamma_2 \vdash t [ t_2 ]}$
+\espindent
+
+\vskip 7mm
+\bpindent\LARGE\bf
+where
+\epindent
+\vskip5mm
+\bspindent\Large\bf
+\( t [ t_1 ] \) is a term with 
+selected free occurences of $t_1$\\ `singled out' for 
+replacement
+\vskip 5mm
+\( t [ t_2 ] \) is the result of replacing those chosen $t_1$ by $t_2$
+\vskip 5mm
+bound variables are renamed so that variables free in $t_2$
+do not become bound in $t [t_2]$
+\espindent
+
+
+% =====================================================================
+\slide{Examples of Substitution}
+
+\point{Examples:}
+\vskip 15mm
+
+\bspindent\LARGE\bf
+$\Rule
+{\Gamma \vdash x=17 \qquad \Gamma \vdash x<20 \supset x<21}
+{\Gamma \vdash 17<20 \supset x<21}$
+\vskip 20mm
+
+$\Rule{\Gamma \vdash x=17 \qquad \Gamma \vdash x<20 \supset x<21}
+{\Gamma \vdash x<20 \supset 17<21}$
+\vskip20mm
+
+$\Rule{\{x=y\} \vdash x=y \quad \Gamma \vdash x=0 \supset
+\forall y.\; y+1 > x }
+{\{x=y\},\Gamma \vdash x=0 \supset \forall y'.\; y'+1 > y}$
+\espindent
+
+
+% =====================================================================
+\slide{Type Instantiation}
+
+\point{The rule for type instantiation}
+\vskip15mm
+\bspindent\LARGE\bf
+{\Large\bf INST\_TYPE:\quad}
+$\Rule{\Gamma \vdash t}
+{ \Gamma \vdash t 
+[ \sigma_1 \ldots \sigma_n / \alpha_1 \ldots \alpha_n]}$
+\espindent
+\vskip15mm
+\bpindent\LARGE\bf
+which effects the parallel substitution of types \( \sigma_1 \ldots \sigma_n\)
+for type variables \( \alpha_1 \ldots \alpha_n\) in $t$.
+\epindent
+\vskip7mm
+\point{
+Restriction: none of  \( \alpha_1 \ldots \alpha_n\) occur in $\Gamma$.}
+\vskip7mm
+\point{Example:}
+\vskip 15mm
+\bspindent\LARGE
+$\Rule{\vdash I(x:\alpha)=x}
+{ \vdash I(x:num)=x}$
+\espindent
+
+% =====================================================================
+\slide{Higher Order Logic}
+
+\point{The primitive basis of the logic:}
+
+\subpoint{Two types: $bool$ and $ind$}
+\subpoint{One type operator: $\rightarrow$}
+\subpoint{Five axioms}
+\subpoint{Eight inference rules}
+\subpoint{Three rules of definition}
+
+\vskip7mm
+
+\point{From these, the following are defined:}
+\subpoint{the type of pairs: $\alpha \times \beta$}
+\subpoint{the type of natural numbers: $num$}
+\subpoint{the type of lists: $(\alpha)list$}
+\subpoint{the theory of primitive recursive definitions}
+\subpoint{the theory of arithmetic}
+\subpoint{\dots and much more}
+
+
+\vskip7mm
+\point{We shall see how new types are defined later.}
+
+
+% =====================================================================
+\slide{An Example Proof}
+
+\point{Here is a proof of the theorem \( \;\; \vdash \neg F \)}
+
+\vskip 10mm
+\bspindent{\Large{\bf
+\begin{tabular}{@{}l@{$\;\;\;\;$}l@{$\;\;\;\;$}l@{}}
+1) & \( \vdash (\lambda b. \; b \supset F)F = (F \supset F) \) &
+    {\Large\bf BETA\_CONV}\\[3mm]
+2) & \( \vdash (\lambda b. \; b \supset F)F =
+         (\lambda b. \; b \supset F)F \) &
+{\Large\bf REFL} \\[3mm]
+3) & \( \vdash (F \supset F) = (\lambda b. \; b \supset F)F \) &
+SUBST 1,2 \\[3mm]
+4) & \( \{F\} \vdash F \) & ASSUME \\[3mm]
+5) & \( \vdash F \supset F \) & DISCH 4 \\[3mm]
+6) & \( \vdash (\lambda b. \; b \supset F)F \) & SUBST 3,5\\[3mm]
+7) & \( \vdash \neg = (\lambda b. \; b \supset F)  \) & DEFN of $\neg$\\[3mm]
+8) & \( \vdash \neg = \neg  \) & REFL\\[3mm]
+9) & \( \vdash (\lambda b. \; b \supset F) = \neg \) & SUBST 7,8\\[3mm]
+10) & \( \vdash \neg F \) & SUBST 6,9 \\
+\end{tabular}}}
+\espindent
+
+\vskip 7mm
+\point{Such proofs are tedious; we need to be able to take larger steps.}
+
+
+% =====================================================================
+\slide{Derived Inference Rules}
+
+\point{Notice that the sequences 1--3 and 7--9 both reverse
+the order of an equality:}
+
+\vskip 7mm
+\bspindent{\Large{\bf
+1) \( \vdash (\lambda b. \; b \supset F)F = (F \supset F) \)
+\vskip 4mm
+2) \( \vdash (\lambda b. \; b \supset F)F = (\lambda b. \; b \supset F)F \)
+\vskip 4mm
+3) \( \vdash (F \supset F) = (\lambda b. \; b \supset F)F \) 
+\vskip 10mm
+7) \( \vdash\neg = (\lambda b. \; b \supset F) \) 
+\vskip 4mm 
+8) \( \vdash \neg = \neg  \)
+\vskip 4mm 
+9) \( \vdash (\lambda b. \; b \supset F) = \neg \) 
+}}
+\espindent
+\vskip 7mm
+
+\point{The same sequence could be used to reverse the
+direction of any equation.}
+\vskip 7mm
+\point{This suggests the derived inference rule:}
+\vskip 7mm
+\bspindent\LARGE\bf
+{\Large\bf SYM:\quad}
+\Rule{\Gamma \vdash t_1  =  t_2}
+{\Gamma \vdash t_2  =  t_1}
+\espindent
+
+
+% =====================================================================
+\slide{Derived Inference Rules}
+
+
+\point{Every derived inference rule must have a proof 
+of soundness in the form of a derivation.}
+
+\point{Example:}
+\vskip10mm
+\bspindent\LARGE\bf
+{\Large\bf SYM:\quad}
+\Rule{\Gamma \vdash t_1 \; = \; t_2}
+{\Gamma \vdash t_2 \; = \; t_1}
+\vskip 10mm
+\begin{tabular}{l l @{\qquad} l}
+1) & \( \Gamma \vdash t_1 \; = \; t_2 \) & {\Large\bf HYPOTHESIS} \\
+2) & \( \vdash t_1 \; = \; t_1  \)       & {\Large\bf REFL}\\
+3) & \( \Gamma \vdash t_2 \; = \; t_1 \) & {\Large\bf SUBST 1,2}
+\end{tabular}
+\espindent
+\vskip 7mm
+
+\point{Note:}
+
+\subpoint{$t_1$ and $t_2$ are arbitrary terms of the same type}
+
+\subpoint{$\Gamma$ is an arbitrary set of assumptions}
+
+\vskip 7mm
+\point{Once derived, {\Large\bf SYM} can be used just like\\ a primitive
+inference rule.}
+
+
+% =====================================================================
+\slide{Another Derived Inference Rule}
+
+\point{Analysis of boolean equality:}
+
+\vskip15mm
+\bspindent\LARGE\bf
+{\Large\bf EQ\_IMP\_RULE:\quad}
+\Rule{\Gamma \vdash t_1 \; = \; t_2}
+{\Gamma \vdash t_1 \supset t_2 \qquad 
+   \Gamma \vdash t_2 \supset t_1}
+\espindent
+
+\point{Derivation:}
+
+\vskip 7mm
+\bspindent{\Large{\bf
+\begin{tabular}{@{}l@{$\;\;\;\;$}l@{$\;\;\;\;$}l@{}}
+1) & \( \Gamma \vdash t_1 = t_2 \) & HYPOTHESIS \\
+2) & \( t_1 \vdash t_2 \)          & ASSUME \\
+3) & \( \Gamma,t_1 \vdash t_2 \)   & SUBST 1,2\\
+4) & \( \Gamma \vdash t_1 \supset t_2 \) & DISCH 3\\
+5) & \( \Gamma \vdash t_2 = t_1 \) & SYM 1\\
+6) & \( t_2 \vdash t_2 \)          & ASSUME\\
+7) & \( \Gamma,t_2 \vdash t_1\)      & SUBST 5,6\\
+8) & \( \Gamma \vdash t_2 \supset t_1\) & DISCH 7\\
+9) & \( \Gamma \vdash t_1 \supset t_2\), 
+     \( \;\; \Gamma \vdash t_1 \supset t_2 \;\; \)
+  & LINES 4,8
+\end{tabular}}}
+\espindent
+
+% =====================================================================
+\slide{Summary of Higher Order Logic}
+
+\point{Syntax}
+\subpoint{Variables, Constants, Applications, Abstractions}
+
+\point{Types}
+\subpoint{Simple, Compound, Polymorphic}
+
+\point{Syntactic Sugar}
+\subpoint{Infixes, Binders, Pairs, Lists, Conditionals}
+
+\point{Formulas}
+\subpoint{Boolean terms}
+
+\point{Sequents}
+\subpoint{\( (\Gamma, t) \) -- assumptions and conclusion}
+
+\point{Theorems}
+\subpoint{\( \Gamma \vdash t \) -- sequents derived by proof}
+
+\point{Constant definitions}
+\subpoint{ \( \vdash c = t\) -- constants abbreviating terms}
+
+
+% =====================================================================
+\slide{Summary of Higher Order Logic}
+
+\point{Theories}
+\subpoint{Sets of types, type operators, constants, \\
+definitions, axioms, theorems}
+
+\point{The basic theories}
+\subpoint{{\rm bool} and {\rm ind}}
+
+\point{Five axioms}
+
+\point{Inference Rules}
+\subpoint{Eight primitive. Many derived.}
+
+\point{Still to be discussed:}
+\subpoint{Type definitions}
+\subpoint{Rule of constant specification}
+\subpoint{Semantics}
+
+\point{Reference:} 
+
+\subpoint{Hvg, {\it The HOL System: DESCRIPTION} (DSTO, University of Cambridge
+and SRI International, 1991).}
+
+
+% =====================================================================
+\slide{Type Definitions}
+
+\point{Theories can contain type definitions.}
+
+\point{The primitive types are:}
+
+\subpoint{$bool$ and $ind$}
+\subpoint{type variables}
+\subpoint{types formed using the type operator $\rightarrow$}
+
+\point{All other types are defined by taking `subsets' of existing
+types.}
+
+
+% =====================================================================
+\slide{Type Definitions}
+
+\point{Suppose $ty$ is a type denoting some set\\
+ of values:}
+
+\vskip 7mm
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,40)
+\thicklines
+\put(25,20){\oval(30,30)}
+\put(24,28){\large $ty$}
+\end{picture}
+\end{center}
+
+\point{A type definition introduces a new type that denotes a subset of the
+existing type $ty$.}
+
+
+\point{We specify this subset with a predicate}
+\vskip5mm
+\bspindent\LARGE
+$P: ty \rightarrow bool$\espindent\vskip5mm
+\bpindent\LARGE\bf
+that is true of just those values of type $ty$ that the subset contains:
+\epindent
+
+\vskip 7mm
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,40)
+\thicklines
+\put(25,20){\oval(30,30)}
+\put(25,15){\oval(12,12)}
+\put(24,28){\large $ty$}
+\put(24,15){\large $P$}
+\end{picture}
+\end{center}
+
+
+
+% =====================================================================
+\slide{Type Definitions}
+
+\point{The subset that is to form the new type must be non-empty}
+\vskip 7mm
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,40)
+\thicklines
+\put(25,20){\oval(30,30)}
+\put(25,15){\oval(12,12)}
+\put(24,28){\large $ty$}
+\put(24,15){\large $P$}
+\put(28,12){\circle*{2}}
+\end{picture}
+\end{center}
+\bpindent\LARGE\bf
+since all types must denote non-empty sets. \epindent
+
+\vskip7mm
+\point{We must therefore prove:}
+\vskip 7mm
+\bspindent\LARGE\bf
+$\vdash$ $\exists$ $x{:}ty.$ $P$($x$) 
+\espindent
+\vskip7mm
+
+\point{This is because $\epsilon$-terms involving variables of the new type
+must denote something.}
+
+% =====================================================================
+\slide{Type Definitions}
+
+\point{Given a subset $P$ of an existing type $ty$}
+\vskip 7mm
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,40)
+\thicklines
+\put(25,20){\oval(30,30)}
+\put(25,15){\oval(12,12)}
+\put(24,28){\large $ty$}
+\put(24,15){\large $P$}
+\put(28,12){\circle*{2}}
+\end{picture}
+\end{center}
+\bpindent\LARGE\bf
+we can introduce a new type symbol, say $ty'$\epindent
+
+
+\point{A type definition then asserts that $ty'$ denotes a set of values in
+one-to-one corespondence with values in the subset $P$:}
+\vskip 7mm
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,40)
+\thicklines
+\put(25,20){\oval(30,30)}
+\put(25,15){\oval(12,12)}
+\put(65,15){\oval(12,12)}
+\thinlines
+\put(25,21){\line(1,0){40}}
+\put(25,9){\line(1,0){40}}
+\put(24,28){\large $ty$}
+\put(64,15){\large $ty'$}
+\put(24,15){\large $P$}
+\put(28,12){\circle*{2}}
+\end{picture}
+\end{center}
+
+\point{That is, there is a bijection between $ty'$ and $P$.}
+
+% =====================================================================
+\slide{Type Definitions}
+
+\point{A type definition states that there is a\\
+bijection from the new type $ty'$ to the subset\\
+of the existing type $ty$ given by $P$:}
+
+\vskip 7mm
+\bspindent\LARGE
+$\vdash \exists f\begin{array}[t]{@{}l}: ty' \rightarrow ty.\\
+   \forall a_1\; a_2.\:f\;a_1 = f\;a_2 \supset a_1 = a_2\; \wedge \\
+   \forall r.\: P\;r = \exists a.\:r = f\; r\end{array}$
+\espindent
+\vskip 7mm
+\bpindent\LARGE\bf
+That is:\epindent
+
+\vskip 7mm
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(100,40)
+\thicklines
+\put(25,20){\oval(30,30)}
+\put(25,15){\oval(12,12)}
+\put(65,15){\oval(12,12)}
+\thinlines
+\put(25,21){\line(1,0){40}}
+\put(25,9){\line(1,0){40}}
+
+\put(45,15){\large $\longleftarrow$ $f$}
+
+\put(24,28){\large $ty$}
+\put(64,15){\large $ty'$}
+\put(24,15){\large $P$}
+\put(28,12){\circle*{2}}
+\end{picture}
+\end{center}
+
+\point{Any such definition is a {\it conservative extension\/}\\
+ of the logic.}
+
+% =====================================================================
+\slide{Type Operators}
+
+\point{Type operators can be defined by having type variables in the
+representing type.}
+
+\vskip7mm
+\point{For example $\alpha \times \beta$ can be defined as an\\
+appropriate subset of the type:}
+\vskip5mm
+\bspindent\LARGE\bf
+$\alpha \rightarrow \beta \rightarrow {\rm bool}$
+\espindent
+
+\vskip7mm
+
+\point{Examples will be given later \ldots}
+
+
+% =====================================================================
+\slide{Summary: Type Definitions}
+
+\point{To define a new type:}
+
+\subpoint{Introduce a new type symbol $\sigma$}
+
+\subpoint{Specify a representing subset of an existing type $\tau$ by a
+predicate $P : \tau{\rightarrow} bool$}
+
+\subpoint{Prove that $\exists x.\: P(x)$}
+
+\subpoint{Add the definitional axiom:}
+\vskip 7mm
+\bspindent\Large
+\quad$\vdash \exists f\begin{array}[t]{@{}l}: \sigma \rightarrow \tau.\\
+   \forall a_1\; a_2.\:f\;a_1 = f\;a_2 \supset a_1 = a_2\; \wedge \\
+   \forall r. P\;r = \exists a.\:r = f\; r\end{array}$
+\espindent
+\vskip 7mm
+
+\point{All non-primitive types in HOL are defined this way.}
+
+
+\end{document}

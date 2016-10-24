@@ -1,0 +1,3 @@
+\THEOREM COS_NEG TRANSC
+|- !x. cos(-- x) = cos x
+\ENDTHEOREM

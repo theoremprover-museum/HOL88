@@ -1,0 +1,9 @@
+\begin{verbatim}
+
+**********************
+mapshape
+**********************
+
+mapshape = - : (int list -> (* list -> **) list -> * list -> ** list)
+
+\end{verbatim}

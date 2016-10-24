@@ -1,0 +1,3 @@
+\THEOREM SNOC_Axiom list
+|- !e f. ?! fn. (fn[] = e) /\ (!x l. fn(SNOC x l) = f(fn l)x l)
+\ENDTHEOREM

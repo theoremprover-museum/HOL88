@@ -1,0 +1,3 @@
+\THEOREM REAL_LT REAL
+|- !m n. (& m) < (& n) = m num_lt n
+\ENDTHEOREM

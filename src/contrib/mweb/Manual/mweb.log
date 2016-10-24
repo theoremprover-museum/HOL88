@@ -1,0 +1,276 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=latex2e 94.2.18)  19 FEB 1994 10:50
+**&latex2e mweb.tex
+(mweb.tex
+LaTeX2e <1994/02/03> PRELIMINARY TEST RELEASE
+(/usr/lib/tex/macros/latex2e/latex2e/latex209.def
+Entering LaTeX 2.09 compatibility mode <1994/02/10>.
+\footheight=\dimen104
+\@maxsep=\dimen105
+\@dblmaxsep=\dimen106
+(/usr/lib/tex/macros/latex2e/latex2e/tracefnt.sty
+Package: `tracefnt' v2.3c <1994/01/26> (FMi and RmS)
+English Documentation      <1994/01/17> (FMi and RmS)
+\tracingfonts=\count83
+)
+\symbold=\mathgroup4
+\symsans=\mathgroup5
+\symtypewriter=\mathgroup6
+\symitalic=\mathgroup7
+\symsmallcaps=\mathgroup8
+\symslanted=\mathgroup9
+
+Font Info: Redeclaring math alphabet \mathbf on input line 130.
+
+
+Font Info: Redeclaring math alphabet \mathsf on input line 131.
+
+
+Font Info: Redeclaring math alphabet \mathtt on input line 132.
+
+
+Font Info: Redeclaring math alphabet \mathit on input line 138.
+
+
+(/usr/lib/tex/macros/latex2e/latex2e/latexsym.sty
+Package: `latexsym' v2.1a  <93/12/06> (FMi)
+English Documentation      <93/12/06> (FMi)
+\symlasy=\mathgroup10
+Font Note: Overwriting symbol font `lasy' in version `bold'
+Font           U/lasy/m/n --> U/lasy/b/n on input line 52.
+)
+Font Note: Redeclaring math delimiter \lgroup on input line 196.
+Font Note: Redeclaring math delimiter \rgroup on input line 198.
+Font Note: Redeclaring math delimiter \bracevert on input line 200.
+) (/usr/lib/tex/macros/latex2e/latex2e/article.cls
+Standard Document Class `article' <1994/02/03>.
+(/usr/lib/tex/macros/latex2e/latex2e/size12.clo)
+\c@part=\count84
+\c@section=\count85
+\c@subsection=\count86
+\c@subsubsection=\count87
+\c@paragraph=\count88
+\c@subparagraph=\count89
+\c@figure=\count90
+\c@table=\count91
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+Compatibility mode: redefinition of \rm ignored.
+Compatibility mode: redefinition of \sf ignored.
+Compatibility mode: redefinition of \tt ignored.
+Compatibility mode: redefinition of \bf ignored.
+Compatibility mode: redefinition of \it ignored.
+Compatibility mode: redefinition of \sl ignored.
+Compatibility mode: redefinition of \sc ignored.
+\bibindent=\dimen107
+)
+(/usr/lib/tex/macros/latex2e/latex2e/newlfont.sty
+Package: `newlfont' v2.2b <1994/01/27> (FMi and RmS)
+English Documentation          <1994/01/27> (FMi and RmS)
+)
+(/usr/lib/tex/macros/contrib/fancyheadings.sty
+\headrulewidth=\dimen108
+\footrulewidth=\dimen109
+\plainheadrulewidth=\dimen110
+\plainfootrulewidth=\dimen111
+\headwidth=\dimen112
+) (array.sty
+Style-Option: `array' v2.0d  <90/08/20> (F.M.)
+English documentation dated  <90/08/20> (F.M.)
+\col@sep=\dimen113
+\extrarowheight=\dimen114
+) (/usr/lib/tex/macros/multicol/multicol.sty
+Style option: `multicol' v1.4m <92/09/04> (FMi)
+English documentation          <92/09/04> (FMi)
+\mult@box=\box25
+\multicol@leftmargin=\dimen115
+\c@unbalance=\count92
+\c@collectmore=\count93
+\c@tracingmulticols=\count94
+\col@number=\count95
+\doublecol@number=\count96
+\multicoltolerance=\count97
+\multicolpretolerance=\count98
+\full@width=\dimen116
+\page@free=\dimen117
+\premulticols=\dimen118
+\postmulticols=\dimen119
+\multicolsep=\skip43
+\multicolbaselineskip=\skip44
+\partial@page=\box26
+\last@line=\box27
+) (/usr/lib/tex/macros/verbatim/verbatim.sty
+Style-Option: `verbatim' v1.4i <92/01/20> (RmS)
+English Documentation          <91/12/18> (RmS)
+\every@verbatim=\toks15
+\verbatim@line=\toks16
+) (/homes/ww/lib/tex/inputs/vrbinput.sty
+Style-Option: `vrbinput' v1.0b <91/06/30> (br)
+English Documentation           <91/08/05> (br)
+\verbatim@in@stream=\read1
+\verbatim@in@stream=\read2
+) (/homes/ww/lib/tex/inputs/makeidx.sty) (macros.tex
+(/homes/ww/lib/tex/inputs/holmacs.tex) (tokmac.tex)
+\c@VerbatimLineNo=\count99
+\HDRULEBOX=\box28
+)
+\@indexfile=\write4
+
+Writing index file mweb.idx 
+(mweb.aux (title.aux))
+Font Note: Check substitution defaults for T1/cmr/m/n on input line 15.
+Font Note: ... okay on input line 15.
+Font Note: Check substitution defaults for OT1/cmr/m/n on input line 15.
+Font Note: ... okay on input line 15.
+Font Note: Check substitution defaults for OML/cmm/m/it on input line 15.
+Font Note: ... okay on input line 15.
+Font Note: Check substitution defaults for OMS/cmsy/m/n on input line 15.
+Font Note: ... okay on input line 15.
+Font Note: Check substitution defaults for OMX/cmex/m/n on input line 15.
+Font Note: ... okay on input line 15.
+Font Note: Check substitution defaults for U/cmr/m/n on input line 15.
+Font Note: ... okay on input line 15.
+ (title.tex
+
+Font Info: Font shape `OT1/cmtt/bx/n' in size <24.88> not available.
+Font       Font shape `OT1/cmtt/m/n' tried instead on input line 16.
+
+ [1
+
+
+]
+Font Note: No math setup on input line 65.
+Font Note: External font `cmex10' loaded for size <12> on input line 65.
+Font Note: External font `cmex10' loaded for size <8> on input line 65.
+Font Note: External font `cmex10' loaded for size <6> on input line 65.
+Font Note: Try loading font information for U+lasy on input line 65.
+
+(/usr/lib/tex/macros/latex2e/latex2e/Ulasy.fd
+Fontdef file produced from: `latexsym.dtx' v2.1a <93/12/06> (FMi and RmS)
+) [2]) (mweb.toc
+
+Font Info: Font shape `OT1/cmtt/bx/n' in size <12> not available.
+Font       Font shape `OT1/cmtt/m/n' tried instead on input line 8.
+
+)
+\tf@toc=\write5
+ [3
+
+] [4]
+(description.tex
+
+Font Info: Font shape `OT1/cmtt/bx/n' in size <14.4> not available.
+Font       Font shape `OT1/cmtt/m/n' tried instead on input line 4.
+
+Font Note: No math setup on input line 19.
+Font Note: External font `cmex10' loaded for size <7> on input line 19.
+Font Note: External font `cmex10' loaded for size <5> on input line 19.
+ (web.tex)
+Overfull \hbox (4.115pt too wide) in paragraph at lines 37--54
+[]\OT1/cmr/m/n/12 The ba-sic \OT1/cmtt/m/n/12 mweb \OT1/cmr/m/n/12 util-ity con
+-sists of two pro-grams: \OT1/cmtt/m/n/12 mtangle \OT1/cmr/m/n/12 and \OT1/cmtt
+/m/n/12 mweave\OT1/cmr/m/n/12 . \OT1/cmtt/m/n/12 mtangle
+
+\hbox(8.33331+2.66666)x411.93877, glue set - 1.0
+.\hbox(0.0+0.0)x17.62482
+.\OT1/cmr/m/n/12 T
+.\OT1/cmr/m/n/12 h
+.\OT1/cmr/m/n/12 e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[1
+
+] [2] [3] [4] [5]
+Font Note: No math setup on input line 170.
+ (../Examples/lmem.tex) [6] [7]
+
+Font Info: Font shape `OT1/cmtt/bx/n' in size <17.28> not available.
+Font       Font shape `OT1/cmtt/m/n' tried instead on input line 252.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 273--290
+
+
+\hbox(0.0+0.0)x295.80061
+.\penalty -10000
+.\glue(\rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 273--290
+
+
+\hbox(0.0+0.0)x295.80061
+.\glue(\rightskip) 0.0
+
+
+Overfull \hbox (5.72034pt too wide) in paragraph at lines 323--329
+[][]\OT1/cmr/m/n/12 , [][] and [][]. The other-language
+
+\hbox(8.33331+2.33331)x411.93877, glue set - 1.0
+.\hbox(8.33331+2.33331)x93.73933
+..\sfc b
+..\kern0.32639
+..\sfc e
+..\sfc g
+..\sfc i
+..etc.
+.\write4{\indexentry{begin_star_section@\idxname{\sfc }{begin_star_section}}{\t
+hepage \ETC.}
+.\OT1/cmr/m/n/12 ,
+.\glue 3.91663 plus 2.44789 minus 1.04443
+.\hbox(8.33331+2.33331)x87.75603
+..\sfc b
+..\kern0.32639
+..\sfc e
+..\sfc g
+..\sfc i
+..etc.
+.etc.
+
+[8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20] [21] [22]
+[23] [24] [25] [26]) (winnow.tex [27] [28] [29] [30]
+Underfull \hbox (badness 1325) in paragraph at lines 221--234
+\OT1/cmr/m/n/12 by [][] and [][]; [][] [][]
+
+\hbox(8.33331+2.66666)x388.43901, glue set 2.36835
+.\OT1/cmr/m/n/12 b
+.\kern-0.32639
+.\OT1/cmr/m/n/12 y
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\hbox(7.33333+2.66666)x80.27504
+..\OT1/cmtt/m/n/12 m
+..\OT1/cmtt/m/n/12 a
+..\OT1/cmtt/m/n/12 c
+..\OT1/cmtt/m/n/12 _
+..\OT1/cmtt/m/n/12 b
+..etc.
+.etc.
+
+[31] [32] [33]
+Overfull \hbox (1.71695pt too wide) in paragraph at lines 392--400
+\OT1/cmr/m/n/12 tions are de-lin-eated by com-mands of the form []\OT1/cmtt/m/n
+/12 @t{<filename>_<seccount>}
+
+\hbox(8.33331+2.33331)x382.56407, glue set - 1.0
+.\OT1/cmr/m/n/12 t
+.\OT1/cmr/m/n/12 i
+.\OT1/cmr/m/n/12 o
+.\OT1/cmr/m/n/12 n
+.\OT1/cmr/m/n/12 s
+.etc.
+
+[34]) (imp.tex [35] [36] [37]) (mweb.bbl (/homes/ww/lib/tex/inputs/bibnames.sty
+This is bibnames.sty, Version 1.04 <13 June 1992>
+(/usr/lib/tex/macros/eplain/texnames.sty
+This is texnames.sty, Version 1.08 <1 March 1993>
+))) [38] (mweb.ind [39] [40]) (mweb.aux (title.aux)) ) 
+Here is how much of TeX's memory you used:
+ 844 strings out of 11429
+ 8486 string characters out of 78219
+ 57938 words of memory out of 262141
+ 3144 multiletter control sequences out of 9500
+ 22056 words of font info for 84 fonts, out of 100000 for 255
+ 20 hyphenation exceptions out of 607
+ 25i,11n,22p,294b,364s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on mweb.dvi (44 pages, 131192 bytes).

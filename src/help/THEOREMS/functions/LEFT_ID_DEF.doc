@@ -1,0 +1,3 @@
+\THEOREM LEFT_ID_DEF fun
+|- !f e. LEFT_ID f e = (!x. f e x = x)
+\ENDTHEOREM

@@ -1,0 +1,7 @@
+\THEOREM HEX_EXP_LESS_OR_EQ numeral
+|- !l.
+    ~NULL l ==>
+    IS_NORMALIZED l ==>
+    IS_HEX l ==>
+    (16 EXP ((LENGTH l) - 1)) <= (HEX l)
+\ENDTHEOREM

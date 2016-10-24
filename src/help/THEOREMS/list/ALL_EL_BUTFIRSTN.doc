@@ -1,0 +1,4 @@
+\THEOREM ALL_EL_BUTFIRSTN list
+|- !P l.
+    ALL_EL P l ==> (!m. m <= (LENGTH l) ==> ALL_EL P(BUTFIRSTN m l))
+\ENDTHEOREM

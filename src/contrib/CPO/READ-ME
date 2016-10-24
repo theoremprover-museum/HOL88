@@ -1,0 +1,36 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: CPO							%
+%									%
+% DESCRIPTION: basic theory of CPO's and fixed-points 			%
+%									%
+% AUTHOR: Albert J Camilleri						%
+%									%
+% ADDRESS: Hewlet Packard Laboratories					%
+%	   Filton road							%
+%	   Stoke Gifford						%
+%	   Bristol, BS12 6QZ						%
+%	   England.							%
+%									%
+%	   email: ac@uucp.hplb						%
+%									%
+% DATE: 90.06.01							%
+% --------------------------------------------------------------------- %
+
+I have found the [contributed] theory very useful for defining non primitive
+recursive operators. I use it to define the recursive operators in my latest
+model for CSP and I intend to install it in the library in some future release
+of HOL. In the mean time, however, it might come in handy to other HOL users.
+
+The [contributed] HOL theory is simply intended to lead to the fixed point
+theorem which will allow the definitions of recursive operators.  It is not
+intended as an exhaustive theory on domains, etc.  Users may need to prove
+further theorems as required, but I think that [it] gives a good start for
+defining recursions. For example, in CSP an ordering on processes (<= say) is
+defined and proved to be a CPO, a `bottom' process is defined and proved to be
+so, and then for all functions f:process->process, recursion can be defined as
+(CONTINUOUS f) ==> (MU f = FIX f $<=) and the definition of FIX can be
+expanded to the value of the least upper bound.
+
+Hope it comes in useful.
+
+Albert

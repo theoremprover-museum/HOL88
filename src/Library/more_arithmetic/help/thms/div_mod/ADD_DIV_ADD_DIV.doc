@@ -1,0 +1,3 @@
+\THEOREM ADD_DIV_ADD_DIV div_mod
+|- !n. 0 < n ==> (!x r. ((x * n) + r) DIV n = x + (r DIV n))
+\ENDTHEOREM

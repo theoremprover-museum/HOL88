@@ -1,0 +1,3 @@
+\THEOREM LESS_ANTISYM arithmetic
+|- !m n. ~(m < n /\ n < m)
+\ENDTHEOREM

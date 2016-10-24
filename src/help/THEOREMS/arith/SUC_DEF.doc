@@ -1,0 +1,3 @@
+\THEOREM SUC_DEF num
+|- !m. SUC m = ABS_num(SUC_REP(REP_num m))
+\ENDTHEOREM

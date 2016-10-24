@@ -1,0 +1,3 @@
+\THEOREM POW_PLUS1 REAL
+|- !e. (& 0) < e ==> (!n. ((& 1) + ((& n) * e)) <= (((& 1) + e) pow n))
+\ENDTHEOREM

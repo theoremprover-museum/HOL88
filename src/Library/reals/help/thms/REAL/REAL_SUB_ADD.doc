@@ -1,0 +1,3 @@
+\THEOREM REAL_SUB_ADD REAL
+|- !x y. (x - y) + y = x
+\ENDTHEOREM

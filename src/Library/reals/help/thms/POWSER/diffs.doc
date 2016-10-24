@@ -1,0 +1,3 @@
+\THEOREM diffs POWSER
+|- !c. diffs c = (\n. (&(SUC n)) * (c(SUC n)))
+\ENDTHEOREM

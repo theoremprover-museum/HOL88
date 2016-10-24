@@ -1,0 +1,324 @@
+\indexentry{definition!of (*)set@of {\ptt (*)set}|(}{1}
+\indexentry{set\_TY\_DEF@{\ptt set\_TY\_DEF}}{1}
+\indexentry{define\_new\_type\_bijections@{\ptt define\_new\_type\_bijections}}{1}
+\indexentry{SPEC@{\ptt SPEC}}{1}
+\indexentry{CHF@{\ptt CHF}}{1}
+\indexentry{set\_ISO\_DEF@{\ptt set\_ISO\_DEF}}{1}
+\indexentry{definition!of CHF@of {\ptt CHF}}{1}
+\indexentry{definition!of SPEC@of {\ptt SPEC}}{1}
+\indexentry{naming conventions!for definitions|(}{2}
+\indexentry{naming conventions!for definitions|)}{2}
+\indexentry{definition!of (*)set@of {\ptt (*)set}|)}{2}
+\indexentry{definition!of IN@of {\ptt IN}}{2}
+\indexentry{IN\_DEF@{\ptt IN\_DEF}}{2}
+\indexentry{axiom of extension}{2}
+\indexentry{EXTENSION@{\ptt EXTENSION}}{2}
+\indexentry{SPECIFICATION@{\ptt SPECIFICATION}}{2}
+\indexentry{axiom of specification}{2}
+\indexentry{GSPEC@{\ptt GSPEC}}{3}
+\indexentry{definition!of GSPEC@of {\ptt GSPEC}}{3}
+\indexentry{GSPEC\_DEF@{\ptt GSPEC\_DEF}}{3}
+\indexentry{axiom of specification!for generalized set specifications}{3}
+\indexentry{GSPECIFICATION@{\ptt GSPECIFICATION}}{3}
+\indexentry{define\_set\_abstraction\_syntax@{\ptt define\_set\_abstraction\_syntax}}{3}
+\indexentry{print\_set@{\ptt print\_set} (flag)}{4}
+\indexentry{SET\_SPEC\_CONV@{\ptt SET\_SPEC\_CONV}|(}{5}
+\indexentry{conversions!SET\_SPEC\_CONV@{\ptt SET\_SPEC\_CONV}|(}{5}
+\indexentry{axiom of specification!for set abstractions}{5}
+\indexentry{SET\_SPEC\_CONV@{\ptt SET\_SPEC\_CONV}|)}{6}
+\indexentry{conversions!SET\_SPEC\_CONV@{\ptt SET\_SPEC\_CONV}|)}{6}
+\indexentry{definition!of EMPTY@of {\ptt EMPTY}}{6}
+\indexentry{EMPTY\_DEF@{\ptt EMPTY\_DEF}}{6}
+\indexentry{definition!of UNIV@of {\ptt UNIV}}{6}
+\indexentry{UNIV\_DEF@{\ptt UNIV\_DEF}}{6}
+\indexentry{NOT\_IN\_EMPTY@{\ptt NOT\_IN\_EMPTY}}{6}
+\indexentry{IN\_UNIV@{\ptt IN\_UNIV}}{6}
+\indexentry{definition!of SUBSET@of {\ptt SUBSET}}{7}
+\indexentry{SUBSET\_DEF@{\ptt SUBSET\_DEF}}{7}
+\indexentry{definition!of PSUBSET@of {\ptt PSUBSET}}{7}
+\indexentry{PSUBSET\_DEF@{\ptt PSUBSET\_DEF}}{7}
+\indexentry{SUBSET\_TRANS@{\ptt SUBSET\_TRANS}}{7}
+\indexentry{SUBSET\_REFL@{\ptt SUBSET\_REFL}}{7}
+\indexentry{SUBSET\_ANTISYM@{\ptt SUBSET\_ANTISYM}}{7}
+\indexentry{EMPTY\_SUBSET@{\ptt EMPTY\_SUBSET}}{7}
+\indexentry{SUBSET\_UNIV@{\ptt SUBSET\_UNIV}}{7}
+\indexentry{NOT\_PSUBSET\_EMPTY@{\ptt NOT\_PSUBSET\_EMPTY}}{7}
+\indexentry{NOT\_UNIV\_PSUBSET@{\ptt NOT\_UNIV\_PSUBSET}}{7}
+\indexentry{naming conventions!for theorems generally|(}{7}
+\indexentry{naming conventions!for theorems generally|)}{7}
+\indexentry{definition!of UNION@of {\ptt UNION}}{7}
+\indexentry{UNION\_DEF@{\ptt UNION\_DEF}}{7}
+\indexentry{definition!of INTER@of {\ptt INTER}}{7}
+\indexentry{INTER\_DEF@{\ptt INTER\_DEF}}{7}
+\indexentry{definition!of DIFF@of {\ptt DIFF}}{7}
+\indexentry{DIFF\_DEF@{\ptt DIFF\_DEF}}{7}
+\indexentry{naming conventions!for membership conditions|(}{8}
+\indexentry{naming conventions!for membership conditions|)}{8}
+\indexentry{IN\_UNION@{\ptt IN\_UNION}}{8}
+\indexentry{IN\_INTER@{\ptt IN\_INTER}}{8}
+\indexentry{IN\_DIFF@{\ptt IN\_DIFF}}{8}
+\indexentry{definition!of DISJOINT@of {\ptt DISJOINT}}{8}
+\indexentry{DISJOINT\_DEF@{\ptt DISJOINT\_DEF}}{8}
+\indexentry{definition!of INSERT@of {\ptt INSERT}}{8}
+\indexentry{INSERT\_DEF@{\ptt INSERT\_DEF}}{8}
+\indexentry{definition!of DELETE@of {\ptt DELETE}}{8}
+\indexentry{DELETE\_DEF@{\ptt DELETE\_DEF}}{8}
+\indexentry{IN\_INSERT@{\ptt IN\_INSERT}}{9}
+\indexentry{IN\_DELETE@{\ptt IN\_DELETE}}{9}
+\indexentry{define\_finite\_set\_syntax@{\ptt define\_finite\_set\_syntax}}{9}
+\indexentry{print\_set@{\ptt print\_set} (flag)}{9}
+\indexentry{IN\_CONV@{\ptt IN\_CONV}|(}{10}
+\indexentry{conversions!IN\_CONV@{\ptt IN\_CONV}|(}{10}
+\indexentry{IN\_CONV@{\ptt IN\_CONV}|)}{11}
+\indexentry{conversions!IN\_CONV@{\ptt IN\_CONV}|)}{11}
+\indexentry{UNION\_CONV@{\ptt UNION\_CONV}|(}{11}
+\indexentry{conversions!UNION\_CONV@{\ptt UNION\_CONV}|(}{11}
+\indexentry{UNION\_CONV@{\ptt UNION\_CONV}|)}{12}
+\indexentry{conversions!UNION\_CONV@{\ptt UNION\_CONV}|)}{12}
+\indexentry{INSERT\_CONV@{\ptt INSERT\_CONV}|(}{12}
+\indexentry{conversions!INSERT\_CONV@{\ptt INSERT\_CONV}|(}{12}
+\indexentry{INSERT\_CONV@{\ptt INSERT\_CONV}|)}{13}
+\indexentry{conversions!INSERT\_CONV@{\ptt INSERT\_CONV}|)}{13}
+\indexentry{DELETE\_CONV@{\ptt DELETE\_CONV}|(}{13}
+\indexentry{conversions!DELETE\_CONV@{\ptt DELETE\_CONV}|(}{13}
+\indexentry{DELETE\_CONV@{\ptt DELETE\_CONV}|)}{13}
+\indexentry{conversions!DELETE\_CONV@{\ptt DELETE\_CONV}|)}{13}
+\indexentry{definition!of SING@of {\ptt SING}}{14}
+\indexentry{SING\_DEF@{\ptt SING\_DEF}}{14}
+\indexentry{SING@{\ptt SING}}{14}
+\indexentry{SING@{\ptt SING}}{14}
+\indexentry{naming conventions!for theorems about singletons|(}{14}
+\indexentry{naming conventions!for theorems about singletons|)}{14}
+\indexentry{definition!of CHOICE@of {\ptt CHOICE}}{14}
+\indexentry{CHOICE\_DEF@{\ptt CHOICE\_DEF}}{14}
+\indexentry{definition!of REST@of {\ptt REST}}{14}
+\indexentry{REST\_DEF@{\ptt REST\_DEF}}{14}
+\indexentry{definition!of IMAGE@of {\ptt IMAGE}}{15}
+\indexentry{IMAGE\_DEF@{\ptt IMAGE\_DEF}}{15}
+\indexentry{IN\_IMAGE@{\ptt IN\_IMAGE}}{15}
+\indexentry{IMAGE\_CONV@{\ptt IMAGE\_CONV}|(}{15}
+\indexentry{conversions!IMAGE\_CONV@{\ptt IMAGE\_CONV}|(}{15}
+\indexentry{IMAGE\_CONV@{\ptt IMAGE\_CONV}|)}{16}
+\indexentry{conversions!IMAGE\_CONV@{\ptt IMAGE\_CONV}|)}{16}
+\indexentry{definition!of INJ@of {\ptt INJ}}{16}
+\indexentry{INJ\_DEF@{\ptt INJ\_DEF}}{16}
+\indexentry{definition!of SURJ@of {\ptt SURJ}}{16}
+\indexentry{SURJ\_DEF@{\ptt SURJ\_DEF}}{16}
+\indexentry{definition!of BIJ@of {\ptt BIJ}}{17}
+\indexentry{BIJ\_DEF@{\ptt BIJ\_DEF}}{17}
+\indexentry{definition!of LINV@of {\ptt LINV}}{17}
+\indexentry{LINV\_DEF@{\ptt LINV\_DEF}}{17}
+\indexentry{definition!of RINV@of {\ptt RINV}}{17}
+\indexentry{RINV\_DEF@{\ptt RINV\_DEF}}{17}
+\indexentry{definition!of FINITE@of {\ptt FINITE}}{17}
+\indexentry{FINITE\_DEF@{\ptt FINITE\_DEF}}{17}
+\indexentry{FINITE\_EMPTY@{\ptt FINITE\_EMPTY}}{17}
+\indexentry{FINITE\_INSERT@{\ptt FINITE\_INSERT}}{17}
+\indexentry{definition!of INFINITE@of {\ptt INFINITE}}{17}
+\indexentry{INFINITE\_DEF@{\ptt INFINITE\_DEF}}{17}
+\indexentry{IMAGE\_11\_INFINITE@{\ptt IMAGE\_11\_INFINITE}}{18}
+\indexentry{FINITE\_CONV@{\ptt FINITE\_CONV}|(}{18}
+\indexentry{conversions!FINITE\_CONV@{\ptt FINITE\_CONV}|(}{18}
+\indexentry{FINITE\_CONV@{\ptt FINITE\_CONV}|)}{18}
+\indexentry{conversions!FINITE\_CONV@{\ptt FINITE\_CONV}|)}{18}
+\indexentry{SET\_INDUCT\_TAC@{\ptt SET\_INDUCT\_TAC}|(}{18}
+\indexentry{tactics!SET\_INDUCT\_TAC@{\ptt SET\_INDUCT\_TAC}|(}{18}
+\indexentry{SET\_INDUCT\_TAC@{\ptt SET\_INDUCT\_TAC}|)}{19}
+\indexentry{tactics!SET\_INDUCT\_TAC@{\ptt SET\_INDUCT\_TAC}|)}{19}
+\indexentry{definition!of CARD@of {\ptt CARD}}{19}
+\indexentry{CARD\_DEF@{\ptt CARD\_DEF}}{19}
+\indexentry{CARD\_SING@{\ptt CARD\_SING}}{19}
+\indexentry{FINITE\_ISO\_NUM@{\ptt FINITE\_ISO\_NUM}}{19}
+\indexentry{load\_sets@{\ptt load\_sets}|(}{21}
+\indexentry{load\_sets@{\ptt load\_sets}|)}{21}
+\indexentry{DELETE\_CONV@{\ptt DELETE\_CONV}}{23}
+\indexentry{FINITE\_CONV@{\ptt FINITE\_CONV}}{24}
+\indexentry{IMAGE\_CONV@{\ptt IMAGE\_CONV}}{25}
+\indexentry{INSERT\_CONV@{\ptt INSERT\_CONV}}{27}
+\indexentry{IN\_CONV@{\ptt IN\_CONV}}{28}
+\indexentry{SET\_INDUCT\_TAC@{\ptt SET\_INDUCT\_TAC}}{30}
+\indexentry{SET\_SPEC\_CONV@{\ptt SET\_SPEC\_CONV}}{30}
+\indexentry{UNION\_CONV@{\ptt UNION\_CONV}}{31}
+\indexentry{set\_ISO\_DEF@{\ptt set\_ISO\_DEF}}{33}
+\indexentry{set\_TY\_DEF@{\ptt set\_TY\_DEF}}{33}
+\indexentry{EXTENSION@{\ptt EXTENSION}}{33}
+\indexentry{GSPECIFICATION@{\ptt GSPECIFICATION}}{33}
+\indexentry{GSPEC\_DEF@{\ptt GSPEC\_DEF}}{33}
+\indexentry{IN\_DEF@{\ptt IN\_DEF}}{33}
+\indexentry{NOT\_EQUAL\_SETS@{\ptt NOT\_EQUAL\_SETS}}{33}
+\indexentry{NUM\_SET\_WOP@{\ptt NUM\_SET\_WOP}}{34}
+\indexentry{SET\_MINIMUM@{\ptt SET\_MINIMUM}}{34}
+\indexentry{SPECIFICATION@{\ptt SPECIFICATION}}{34}
+\indexentry{EMPTY\_DEF@{\ptt EMPTY\_DEF}}{34}
+\indexentry{EMPTY\_NOT\_UNIV@{\ptt EMPTY\_NOT\_UNIV}}{34}
+\indexentry{EQ\_UNIV@{\ptt EQ\_UNIV}}{34}
+\indexentry{IN\_UNIV@{\ptt IN\_UNIV}}{34}
+\indexentry{MEMBER\_NOT\_EMPTY@{\ptt MEMBER\_NOT\_EMPTY}}{34}
+\indexentry{NOT\_IN\_EMPTY@{\ptt NOT\_IN\_EMPTY}}{34}
+\indexentry{UNIV\_DEF@{\ptt UNIV\_DEF}}{34}
+\indexentry{UNIV\_NOT\_EMPTY@{\ptt UNIV\_NOT\_EMPTY}}{34}
+\indexentry{EMPTY\_SUBSET@{\ptt EMPTY\_SUBSET}}{34}
+\indexentry{NOT\_PSUBSET\_EMPTY@{\ptt NOT\_PSUBSET\_EMPTY}}{34}
+\indexentry{NOT\_UNIV\_PSUBSET@{\ptt NOT\_UNIV\_PSUBSET}}{35}
+\indexentry{PSUBSET\_DEF@{\ptt PSUBSET\_DEF}}{35}
+\indexentry{PSUBSET\_IRREFL@{\ptt PSUBSET\_IRREFL}}{35}
+\indexentry{PSUBSET\_MEMBER@{\ptt PSUBSET\_MEMBER}}{35}
+\indexentry{PSUBSET\_TRANS@{\ptt PSUBSET\_TRANS}}{35}
+\indexentry{PSUBSET\_UNIV@{\ptt PSUBSET\_UNIV}}{35}
+\indexentry{SUBSET\_ANTISYM@{\ptt SUBSET\_ANTISYM}}{35}
+\indexentry{SUBSET\_DEF@{\ptt SUBSET\_DEF}}{35}
+\indexentry{SUBSET\_EMPTY@{\ptt SUBSET\_EMPTY}}{35}
+\indexentry{SUBSET\_REFL@{\ptt SUBSET\_REFL}}{35}
+\indexentry{SUBSET\_TRANS@{\ptt SUBSET\_TRANS}}{35}
+\indexentry{SUBSET\_UNIV@{\ptt SUBSET\_UNIV}}{35}
+\indexentry{UNIV\_SUBSET@{\ptt UNIV\_SUBSET}}{35}
+\indexentry{EMPTY\_UNION@{\ptt EMPTY\_UNION}}{35}
+\indexentry{INTER\_ASSOC@{\ptt INTER\_ASSOC}}{36}
+\indexentry{INTER\_COMM@{\ptt INTER\_COMM}}{36}
+\indexentry{INTER\_DEF@{\ptt INTER\_DEF}}{36}
+\indexentry{INTER\_EMPTY@{\ptt INTER\_EMPTY}}{36}
+\indexentry{INTER\_IDEMPOT@{\ptt INTER\_IDEMPOT}}{36}
+\indexentry{INTER\_OVER\_UNION@{\ptt INTER\_OVER\_UNION}}{36}
+\indexentry{INTER\_SUBSET@{\ptt INTER\_SUBSET}}{36}
+\indexentry{INTER\_UNIV@{\ptt INTER\_UNIV}}{36}
+\indexentry{IN\_INTER@{\ptt IN\_INTER}}{36}
+\indexentry{IN\_UNION@{\ptt IN\_UNION}}{36}
+\indexentry{SUBSET\_INTER\_ABSORPTION@{\ptt SUBSET\_INTER\_ABSORPTION}}{36}
+\indexentry{SUBSET\_UNION@{\ptt SUBSET\_UNION}}{36}
+\indexentry{SUBSET\_UNION\_ABSORPTION@{\ptt SUBSET\_UNION\_ABSORPTION}}{36}
+\indexentry{UNION\_ASSOC@{\ptt UNION\_ASSOC}}{36}
+\indexentry{UNION\_COMM@{\ptt UNION\_COMM}}{36}
+\indexentry{UNION\_DEF@{\ptt UNION\_DEF}}{36}
+\indexentry{UNION\_EMPTY@{\ptt UNION\_EMPTY}}{37}
+\indexentry{UNION\_IDEMPOT@{\ptt UNION\_IDEMPOT}}{37}
+\indexentry{UNION\_OVER\_INTER@{\ptt UNION\_OVER\_INTER}}{37}
+\indexentry{UNION\_UNIV@{\ptt UNION\_UNIV}}{37}
+\indexentry{DIFF\_DEF@{\ptt DIFF\_DEF}}{37}
+\indexentry{DIFF\_DIFF@{\ptt DIFF\_DIFF}}{37}
+\indexentry{DIFF\_EMPTY@{\ptt DIFF\_EMPTY}}{37}
+\indexentry{DIFF\_EQ\_EMPTY@{\ptt DIFF\_EQ\_EMPTY}}{37}
+\indexentry{DIFF\_UNIV@{\ptt DIFF\_UNIV}}{37}
+\indexentry{EMPTY\_DIFF@{\ptt EMPTY\_DIFF}}{37}
+\indexentry{IN\_DIFF@{\ptt IN\_DIFF}}{37}
+\indexentry{DISJOINT\_DEF@{\ptt DISJOINT\_DEF}}{37}
+\indexentry{DISJOINT\_DELETE\_SYM@{\ptt DISJOINT\_DELETE\_SYM}}{37}
+\indexentry{DISJOINT\_EMPTY@{\ptt DISJOINT\_EMPTY}}{38}
+\indexentry{DISJOINT\_EMPTY\_REFL@{\ptt DISJOINT\_EMPTY\_REFL}}{38}
+\indexentry{DISJOINT\_SYM@{\ptt DISJOINT\_SYM}}{38}
+\indexentry{DISJOINT\_UNION@{\ptt DISJOINT\_UNION}}{38}
+\indexentry{IN\_DISJOINT@{\ptt IN\_DISJOINT}}{38}
+\indexentry{ABSORPTION@{\ptt ABSORPTION}}{38}
+\indexentry{COMPONENT@{\ptt COMPONENT}}{38}
+\indexentry{DECOMPOSITION@{\ptt DECOMPOSITION}}{38}
+\indexentry{DELETE\_COMM@{\ptt DELETE\_COMM}}{38}
+\indexentry{DELETE\_DEF@{\ptt DELETE\_DEF}}{38}
+\indexentry{DELETE\_DELETE@{\ptt DELETE\_DELETE}}{38}
+\indexentry{DELETE\_INSERT@{\ptt DELETE\_INSERT}}{38}
+\indexentry{DELETE\_INTER@{\ptt DELETE\_INTER}}{38}
+\indexentry{DELETE\_NON\_ELEMENT@{\ptt DELETE\_NON\_ELEMENT}}{38}
+\indexentry{DELETE\_SUBSET@{\ptt DELETE\_SUBSET}}{39}
+\indexentry{DIFF\_INSERT@{\ptt DIFF\_INSERT}}{39}
+\indexentry{DISJOINT\_INSERT@{\ptt DISJOINT\_INSERT}}{39}
+\indexentry{EMPTY\_DELETE@{\ptt EMPTY\_DELETE}}{39}
+\indexentry{INSERT\_COMM@{\ptt INSERT\_COMM}}{39}
+\indexentry{INSERT\_DEF@{\ptt INSERT\_DEF}}{39}
+\indexentry{INSERT\_DELETE@{\ptt INSERT\_DELETE}}{39}
+\indexentry{INSERT\_DIFF@{\ptt INSERT\_DIFF}}{39}
+\indexentry{INSERT\_INSERT@{\ptt INSERT\_INSERT}}{39}
+\indexentry{INSERT\_INTER@{\ptt INSERT\_INTER}}{39}
+\indexentry{INSERT\_SUBSET@{\ptt INSERT\_SUBSET}}{39}
+\indexentry{INSERT\_UNION@{\ptt INSERT\_UNION}}{39}
+\indexentry{INSERT\_UNION\_EQ@{\ptt INSERT\_UNION\_EQ}}{39}
+\indexentry{INSERT\_UNIV@{\ptt INSERT\_UNIV}}{39}
+\indexentry{IN\_DELETE@{\ptt IN\_DELETE}}{39}
+\indexentry{IN\_DELETE\_EQ@{\ptt IN\_DELETE\_EQ}}{40}
+\indexentry{IN\_INSERT@{\ptt IN\_INSERT}}{40}
+\indexentry{NOT\_EMPTY\_INSERT@{\ptt NOT\_EMPTY\_INSERT}}{40}
+\indexentry{NOT\_INSERT\_EMPTY@{\ptt NOT\_INSERT\_EMPTY}}{40}
+\indexentry{PSUBSET\_INSERT\_SUBSET@{\ptt PSUBSET\_INSERT\_SUBSET}}{40}
+\indexentry{SET\_CASES@{\ptt SET\_CASES}}{40}
+\indexentry{SUBSET\_DELETE@{\ptt SUBSET\_DELETE}}{40}
+\indexentry{SUBSET\_INSERT@{\ptt SUBSET\_INSERT}}{40}
+\indexentry{SUBSET\_INSERT\_DELETE@{\ptt SUBSET\_INSERT\_DELETE}}{40}
+\indexentry{CHOICE\_DEF@{\ptt CHOICE\_DEF}}{40}
+\indexentry{CHOICE\_INSERT\_REST@{\ptt CHOICE\_INSERT\_REST}}{40}
+\indexentry{CHOICE\_NOT\_IN\_REST@{\ptt CHOICE\_NOT\_IN\_REST}}{40}
+\indexentry{CHOICE\_SING@{\ptt CHOICE\_SING}}{40}
+\indexentry{REST\_DEF@{\ptt REST\_DEF}}{40}
+\indexentry{REST\_PSUBSET@{\ptt REST\_PSUBSET}}{41}
+\indexentry{REST\_SING@{\ptt REST\_SING}}{41}
+\indexentry{REST\_SUBSET@{\ptt REST\_SUBSET}}{41}
+\indexentry{SING\_IFF\_EMPTY\_REST@{\ptt SING\_IFF\_EMPTY\_REST}}{41}
+\indexentry{IMAGE\_COMPOSE@{\ptt IMAGE\_COMPOSE}}{41}
+\indexentry{IMAGE\_DEF@{\ptt IMAGE\_DEF}}{41}
+\indexentry{IMAGE\_DELETE@{\ptt IMAGE\_DELETE}}{41}
+\indexentry{IMAGE\_EMPTY@{\ptt IMAGE\_EMPTY}}{41}
+\indexentry{IMAGE\_EQ\_EMPTY@{\ptt IMAGE\_EQ\_EMPTY}}{41}
+\indexentry{IMAGE\_ID@{\ptt IMAGE\_ID}}{41}
+\indexentry{IMAGE\_IN@{\ptt IMAGE\_IN}}{41}
+\indexentry{IMAGE\_INSERT@{\ptt IMAGE\_INSERT}}{41}
+\indexentry{IMAGE\_INTER@{\ptt IMAGE\_INTER}}{41}
+\indexentry{IMAGE\_SUBSET@{\ptt IMAGE\_SUBSET}}{41}
+\indexentry{IMAGE\_UNION@{\ptt IMAGE\_UNION}}{42}
+\indexentry{IN\_IMAGE@{\ptt IN\_IMAGE}}{42}
+\indexentry{BIJ\_COMPOSE@{\ptt BIJ\_COMPOSE}}{42}
+\indexentry{BIJ\_DEF@{\ptt BIJ\_DEF}}{42}
+\indexentry{BIJ\_EMPTY@{\ptt BIJ\_EMPTY}}{42}
+\indexentry{BIJ\_ID@{\ptt BIJ\_ID}}{42}
+\indexentry{IMAGE\_SURJ@{\ptt IMAGE\_SURJ}}{42}
+\indexentry{INJ\_COMPOSE@{\ptt INJ\_COMPOSE}}{42}
+\indexentry{INJ\_DEF@{\ptt INJ\_DEF}}{42}
+\indexentry{INJ\_EMPTY@{\ptt INJ\_EMPTY}}{42}
+\indexentry{INJ\_ID@{\ptt INJ\_ID}}{42}
+\indexentry{LINV\_DEF@{\ptt LINV\_DEF}}{42}
+\indexentry{RINV\_DEF@{\ptt RINV\_DEF}}{42}
+\indexentry{SURJ\_COMPOSE@{\ptt SURJ\_COMPOSE}}{43}
+\indexentry{SURJ\_DEF@{\ptt SURJ\_DEF}}{43}
+\indexentry{SURJ\_EMPTY@{\ptt SURJ\_EMPTY}}{43}
+\indexentry{SURJ\_ID@{\ptt SURJ\_ID}}{43}
+\indexentry{DELETE\_EQ\_SING@{\ptt DELETE\_EQ\_SING}}{43}
+\indexentry{DISJOINT\_SING\_EMPTY@{\ptt DISJOINT\_SING\_EMPTY}}{43}
+\indexentry{EQUAL\_SING@{\ptt EQUAL\_SING}}{43}
+\indexentry{FINITE\_SING@{\ptt FINITE\_SING}}{43}
+\indexentry{INSERT\_SING\_UNION@{\ptt INSERT\_SING\_UNION}}{43}
+\indexentry{IN\_SING@{\ptt IN\_SING}}{43}
+\indexentry{NOT\_EMPTY\_SING@{\ptt NOT\_EMPTY\_SING}}{43}
+\indexentry{NOT\_SING\_EMPTY@{\ptt NOT\_SING\_EMPTY}}{43}
+\indexentry{SING@{\ptt SING}}{43}
+\indexentry{SING\_DEF@{\ptt SING\_DEF}}{44}
+\indexentry{SING\_DELETE@{\ptt SING\_DELETE}}{44}
+\indexentry{SING\_FINITE@{\ptt SING\_FINITE}}{44}
+\indexentry{FINITE\_DEF@{\ptt FINITE\_DEF}}{44}
+\indexentry{FINITE\_DELETE@{\ptt FINITE\_DELETE}}{44}
+\indexentry{FINITE\_DIFF@{\ptt FINITE\_DIFF}}{44}
+\indexentry{FINITE\_EMPTY@{\ptt FINITE\_EMPTY}}{44}
+\indexentry{FINITE\_INDUCT@{\ptt FINITE\_INDUCT}}{44}
+\indexentry{FINITE\_INSERT@{\ptt FINITE\_INSERT}}{44}
+\indexentry{FINITE\_ISO\_NUM@{\ptt FINITE\_ISO\_NUM}}{44}
+\indexentry{FINITE\_PSUBSET\_INFINITE@{\ptt FINITE\_PSUBSET\_INFINITE}}{44}
+\indexentry{FINITE\_PSUBSET\_UNIV@{\ptt FINITE\_PSUBSET\_UNIV}}{44}
+\indexentry{FINITE\_UNION@{\ptt FINITE\_UNION}}{45}
+\indexentry{IMAGE\_11\_INFINITE@{\ptt IMAGE\_11\_INFINITE}}{45}
+\indexentry{IMAGE\_FINITE@{\ptt IMAGE\_FINITE}}{45}
+\indexentry{INFINITE\_DEF@{\ptt INFINITE\_DEF}}{45}
+\indexentry{INFINITE\_DIFF\_FINITE@{\ptt INFINITE\_DIFF\_FINITE}}{45}
+\indexentry{INFINITE\_SUBSET@{\ptt INFINITE\_SUBSET}}{45}
+\indexentry{INFINITE\_UNIV@{\ptt INFINITE\_UNIV}}{45}
+\indexentry{INTER\_FINITE@{\ptt INTER\_FINITE}}{45}
+\indexentry{IN\_INFINITE\_NOT\_FINITE@{\ptt IN\_INFINITE\_NOT\_FINITE}}{45}
+\indexentry{NOT\_IN\_FINITE@{\ptt NOT\_IN\_FINITE}}{45}
+\indexentry{PSUBSET\_FINITE@{\ptt PSUBSET\_FINITE}}{45}
+\indexentry{SUBSET\_FINITE@{\ptt SUBSET\_FINITE}}{45}
+\indexentry{CARD\_DEF@{\ptt CARD\_DEF}}{46}
+\indexentry{CARD\_DELETE@{\ptt CARD\_DELETE}}{46}
+\indexentry{CARD\_DIFF@{\ptt CARD\_DIFF}}{46}
+\indexentry{CARD\_EMPTY@{\ptt CARD\_EMPTY}}{46}
+\indexentry{CARD\_EQ\_0@{\ptt CARD\_EQ\_0}}{46}
+\indexentry{CARD\_INSERT@{\ptt CARD\_INSERT}}{46}
+\indexentry{CARD\_INTER\_LESS\_EQ@{\ptt CARD\_INTER\_LESS\_EQ}}{46}
+\indexentry{CARD\_PSUBSET@{\ptt CARD\_PSUBSET}}{46}
+\indexentry{CARD\_SING@{\ptt CARD\_SING}}{46}
+\indexentry{CARD\_SUBSET@{\ptt CARD\_SUBSET}}{46}
+\indexentry{CARD\_UNION@{\ptt CARD\_UNION}}{47}
+\indexentry{LESS\_CARD\_DIFF@{\ptt LESS\_CARD\_DIFF}}{47}
+\indexentry{SING\_IFF\_CARD1@{\ptt SING\_IFF\_CARD1}}{47}

@@ -1,0 +1,3 @@
+\THEOREM SIN_ASN TRANSC
+|- !x. (--(pi / (& 2))) <= x /\ x <= (pi / (& 2)) ==> (asn(sin x) = x)
+\ENDTHEOREM

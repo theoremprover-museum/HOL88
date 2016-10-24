@@ -1,0 +1,4 @@
+\THEOREM BUTLASTN list
+|- (!l. BUTLASTN 0 l = l) /\
+   (!n x l. BUTLASTN(SUC n)(SNOC x l) = BUTLASTN n l)
+\ENDTHEOREM

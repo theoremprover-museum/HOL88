@@ -1,0 +1,5 @@
+\THEOREM TREAL_LT_MUL REALAX
+|- !x y.
+    treal_0 treal_lt x /\ treal_0 treal_lt y ==>
+    treal_0 treal_lt (x treal_mul y)
+\ENDTHEOREM

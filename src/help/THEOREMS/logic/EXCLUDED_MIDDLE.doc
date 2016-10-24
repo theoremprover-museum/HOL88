@@ -1,0 +1,3 @@
+\THEOREM EXCLUDED_MIDDLE \none
+|- !t. t \/ ~t
+\ENDTHEOREM

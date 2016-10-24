@@ -1,0 +1,3 @@
+\THEOREM PRE_ADD pre
+|- !n m. 0 < n ==> (PRE(n + m) = (PRE n) + m)
+\ENDTHEOREM

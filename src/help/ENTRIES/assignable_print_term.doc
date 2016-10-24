@@ -1,0 +1,70 @@
+\DOC assignable_print_term
+
+\TYPE {assignable_print_term : (term -> void)}
+
+\SYNOPSIS
+Assignable term-printing function used for printing goals.
+
+\DESCRIBE
+The printing of terms can be modified using the ML directive {top_print}.
+However the term printing functions used for printing goals are not affected
+by {top_print}. To make use of user-defined print functions in goals, the
+assignable variable {assignable_print_term} must be changed.
+
+\EXAMPLE
+{
+#let my_print_term tm =
+# do (print_string `<<`;print_term tm;print_string `>>`);;
+my_print_term = - : (term -> void)
+
+#"x ==> y";;
+"x ==> y" : term
+
+#top_print my_print_term;;
+- : (term -> void)
+
+#"x ==> y";;
+<<"x ==> y">> : term
+}
+{
+#g "(x ==> y) /\ (y ==> x) ==> (x = y)";;
+"(x ==> y) /\ (y ==> x) ==> (x = y)"
+
+() : void
+
+#expand (REPEAT STRIP_TAC);;
+OK..
+"x = y"
+    [ "x ==> y" ]
+    [ "y ==> x" ]
+
+() : void
+}
+{
+#assignable_print_term := my_print_term;;
+- : (term -> void)
+
+#expand ALL_TAC;;
+OK..
+<<"x = y">>
+    [ <<"x ==> y">> ]
+    [ <<"y ==> x">> ]
+
+() : void
+}
+{
+#assignable_print_term := print_term;;
+- : (term -> void)
+
+#expand ALL_TAC;;
+OK..
+"x = y"
+    [ "x ==> y" ]
+    [ "y ==> x" ]
+
+() : void
+}
+\SEEALSO
+print_term, top_print.
+
+\ENDDOC

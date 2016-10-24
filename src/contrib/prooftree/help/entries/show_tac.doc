@@ -1,0 +1,29 @@
+\DOC show_tac
+
+\TYPE {show_tac : (void -> void)}
+
+\SYNOPSIS
+Shows the composed tactic used to expand the current proof tree.
+
+\DESCRIBE
+Part of the enhanced subgoal package, where proofs under development
+are stored as trees. The function {show_tac} corresponds to the
+application of {show_the_tactic} to the current default proof tree.
+
+\KEYWORDS
+subgoal.
+
+\LIBRARY prooftree
+
+\FAILURE
+Fails if there is no current proof tree.
+
+\EXAMPLE
+See the example for {show_the_tactic}.
+
+\SEEALSO
+all_subgoals, do_tac, cancel_tac, current_goal, current_proof,
+move_to_proof, new_goal, remove_proof, show_all_proofs,
+show_all_subgoals, show_the_tactic, subgoal_tac, top_goal.
+
+\ENDDOC

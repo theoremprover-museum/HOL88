@@ -1,0 +1,524 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  13 MAR 1991 20:47
+**all
+(all.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (/usr/lib/tex/macros/fleqn.sty
+\mathindent=\dimen99
+) (layout.sty)
+(commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count87
+) (BoxMacro.tex
+\ttboxwidth=\skip43
+) (all.aux) (saveboxes.tex
+\loopcirc=\box25
+) (title.tex [1
+
+])
+(all.toc [2])
+\tf@toc=\write3
+ [3] (all.lof)
+\tf@lof=\write4
+ (all.lot)
+\tf@lot=\write5
+ [4] (intro.tex (fig-func.tex) [5]
+[6] [7] [8]) (desc.tex [9] [10] [11] (fig-format.tex) [12] [13] [14] [15]
+(fig-syn.tex) (fig-hand.tex) (fig-asyn.tex) [16] [17] (fig-ext.tex) [18]
+(fig-rtl.tex) [19] [20] [21]
+Overfull \hbox (7.23862pt too wide) in paragraph at lines 822--826
+[]\twlrm Simplifying these ex-pres-sions with the ear-lier men-tioned ab-bre-vi
+-a-tions []\twltt inst \twlrm and []\twltt operand\twlrm ,
+
+\hbox(8.33331+2.66666)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm S
+.\twlrm i
+.\twlrm m
+.\twlrm p
+.etc.
+
+[22] (fig-hier.tex) [23] (fig-flow.tex) (fig-map.tex) [24] [25] [26] [27]
+(fig-bits.tex) [28] [29]) (abst.tex [30]
+Overfull \hbox (21.37962pt too wide) in paragraph at lines 119--126
+\twlrm Our use of the pre-fix []\twltt * \twlrm for un-in-ter-preted data types
+ in the in-for-mal de-scrip-tion of [],
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\twlrm O
+.\twlrm u
+.\twlrm r
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.\twlrm u
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 12.9374
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.12314
+..\twlrm t
+..\twlrm h
+..\twlrm e
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\twlrm b
+..etc.
+.\penalty 150
+.\glue(\baselineskip) 3.83337
+.\hbox(8.33331+0.0)x455.24408, glue set 370.1261fil
+..\twlrm o
+..\twlrm f
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\hbox(6.83331+0.0)x68.47232
+...\tenrm T
+...\kern-0.83334
+...\tenrm A
+...\tenrm M
+...\tenrm A
+...etc.
+..\twlrm .
+..etc.
+.etc.
+
+ [31]
+[32]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 14.70941
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 0.06197
+..\twlrm o
+..\twlrm n
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\twlrm u
+..\twlrm n
+..etc.
+.\penalty 150
+.\glue(\baselineskip) 3.83337
+.\hbox(8.33331+2.33331)x455.24408, glue set 80.64618fil
+..\twlrm t
+..\twlrm h
+..\twlrm e
+..\twlrm o
+..\twlrm r
+..etc.
+.etc.
+
+ [33]
+[34] [35]) (spec.tex [36]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 5.21968
+.\glue(\topskip) 0.0
+.\hbox(23.5953+17.5953)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(23.5953+17.5953)x455.24408
+...\mathon
+...\vbox(23.5953+17.5953)x455.24408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [37]
+[38]
+Overfull \hbox (7.26369pt too wide) in paragraph at lines 196--203
+[]\twlrm The time-dependent con-di-tion reg-u-lat-ing the be-haviour of bus dri
+vers in the []
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[39] [40] [41] [42] [43] [44] [45] [46] [47] [48]
+Underfull \vbox (badness 1742) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.59357
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 146.09174fil
+..\twlrm i
+..\twlrm n
+..\kern-0.32639
+..\twlrm t
+..\twlrm e
+..etc.
+.\penalty -51
+.\glue 13.0 plus 7.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [49]
+Overfull \vbox (4.00804pt too high) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 0.0
+.\hbox(327.09752+321.09752)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(327.09752+321.09752)x455.24408
+...\mathon
+...\vbox(327.09752+321.09752)x455.24408 []
+...\mathoff
+..etc.
+.\glue -4.0
+
+
+[50] [51] [52]
+Overfull \hbox (1.74695pt too wide) in paragraph at lines 942--950
+[]\twlrm External mem-ory im-ple-ments the un-in-ter-preted op-er-a-tions se-le
+cted by []\twltt fetch \twlrm and []\twltt store\twlrm .
+
+\hbox(8.33331+2.33331)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm E
+.\twlrm x
+.\twlrm t
+.\twlrm e
+.etc.
+
+) (plan.tex [53] [54] [55]) (verf.tex [56] [57]
+Underfull \vbox (badness 1360) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.38904
+.\glue(\topskip) 0.0
+.\hbox(163.89745+157.89745)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(163.89745+157.89745)x455.24408
+...\mathon
+...\vbox(163.89745+157.89745)x455.24408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [58]
+[59] [60] [61] [62] [63] [64] [65]
+Overfull \hbox (17.73224pt too wide) in paragraph at lines 515--524
+[]\twlrm The pred-i-cate []\twltt SynSystem \twlrm is de-fined be-low to spec-i
+fy a sys-tem con-sist-ing of the []
+
+\hbox(8.33331+2.66666)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x11.38109
+.\twlrm T
+.\twlrm h
+.\twlrm e
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+[66]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 13.26039
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.66666)x455.24408, glue set 1.0372
+..\hbox(0.0+0.0)x11.38109
+..\hbox(0.0+0.0)x0.0
+..\twltt M
+..\twltt i
+..\twltt c
+..etc.
+.\penalty 250
+.\glue(\baselineskip) 2.32307
+.\hbox(9.51027+2.33331)x455.24408, glue set - 0.85133
+..\twlrm p
+..\twlrm r
+..\twlrm e
+..\twlrm s
+..\twlrm s
+..etc.
+.etc.
+
+ [67]
+[68] [69]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 5.14989
+.\glue(\topskip) 0.0
+.\hbox(94.68074+88.68073)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(94.68074+88.68073)x455.24408
+...\mathon
+...\vbox(94.68074+88.68073)x455.24408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [70]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 27.352
+.\glue(\topskip) 0.0
+.\hbox(94.68074+88.68073)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(94.68074+88.68073)x455.24408
+...\mathon
+...\vbox(94.68074+88.68073)x455.24408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue -13.0 plus -6.0 minus -8.0
+.etc.
+
+ [71]
+[72]
+Overfull \hbox (24.53944pt too wide) in paragraph at lines 919--934
+\twlrm the-o-rem shown be-low is ob-tained by case anal-y-sis on the three pa-r
+am-e-ters of []\twltt SynCorrectness1\twlrm .
+
+\hbox(8.33331+2.66666)x455.24408, glue set - 1.0
+.\twlrm t
+.\twlrm h
+.\twlrm e
+.\discretionary
+..\twlrm -
+.\twlrm o
+.etc.
+
+[73] [74] (fig-add.tex) (fig-jmp.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 5.96866
+.\vbox(160.95322+0.0)x455.24408
+..\penalty -51
+..\glue 13.0 plus 6.0 minus 8.0
+..\glue(\parskip) 0.0
+..\hbox(108.1199+0.0)x455.24408, glue set 33.60864fil
+...\glue(\leftskip) 0.0 plus 1.0fil
+...\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\hbox(0.0+0.0)x0.0 []
+...\penalty 0
+...etc.
+..\write1{\@writefile{lof}{\string\contentsline\space {figure}{\string\numberli
+\ETC.}
+..etc.
+.\glue 12.0 plus 2.0 minus 2.0
+.\vbox(160.95322+0.0)x455.24408
+..\penalty -51
+..\glue 13.0 plus 6.0 minus 8.0
+..\glue(\parskip) 0.0
+..\hbox(108.1199+0.0)x455.24408, glue set 33.60864fil
+...\glue(\leftskip) 0.0 plus 1.0fil
+...\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\hbox(0.0+0.0)x0.0 []
+...\penalty 0
+...etc.
+..\write1{\@writefile{lof}{\string\contentsline\space {figure}{\string\numberli
+\ETC.}
+..etc.
+.\glue 12.0 plus 2.0 minus 2.0
+.\glue -12.0 plus -2.0 minus -2.0
+.etc.
+
+ [75]
+[76] [77]
+Underfull \vbox (badness 6094) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 3.93791
+.\glue(\topskip) 0.0
+.\hbox(34.69739+28.69739)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(34.69739+28.69739)x455.24408
+...\mathon
+...\vbox(34.69739+28.69739)x455.24408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [78])
+(temp.tex [79] (fig-next.tex) [80] [81] (fig-temp.tex) [82] [83]
+Underfull \vbox (badness 6859) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 4.09499
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.27614
+..\hbox(0.0+0.0)x11.38109
+..\twlrm T
+..\twlrm h
+..\twlrm e
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..etc.
+.\penalty 250
+.\glue(\baselineskip) 3.83337
+.\hbox(8.33331+2.33331)x455.24408, glue set - 0.1499
+..\twlrm t
+..\twlrm i
+..\twlrm o
+..\twlrm n
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..etc.
+.etc.
+
+ [84])
+(asyn.tex [85] (fig-style.tex) [86] [87] [88] [89] [90] [91]
+Underfull \vbox (badness 2368) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 2.87343
+.\glue(\topskip) 1.66669
+.\hbox(8.33331+2.33331)x455.24408, glue set 155.59409fil
+..\hbox(7.73332+0.0)x48.0
+...\glue 0.0
+...\twlbf 1
+...\twlbf 0
+...\twlbf .
+...\twlbf 5
+...etc.
+..\twlbf I
+..\twlbf m
+..\twlbf p
+..\twlbf l
+..etc.
+.\write1{\@writefile{toc}{\string\contentsline\space {subsubsection}{\string\n\
+ETC.}
+.\penalty 10000
+.\glue 7.75 plus 1.03331
+.etc.
+
+ [92]
+[93]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 8.57643
+.\glue(\topskip) 0.0
+.\hbox(135.937+129.937)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(135.937+129.937)x455.24408
+...\mathon
+...\vbox(135.937+129.937)x455.24408 []
+...\mathoff
+..etc.
+.\penalty -51
+.\glue 13.0 plus 6.0 minus 8.0
+.\glue(\parskip) 0.0 plus 1.0
+.etc.
+
+ [94])
+(what.tex [95] [96]) (relate.tex [97] [98]
+Overfull \vbox (2.18303pt too high) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408
+.\glue(\topskip) 0.0
+.\hbox(326.18501+320.18501)x455.24408
+..\hbox(0.0+0.0)x0.0
+..\glue 0.0
+..\hbox(0.0+0.0)x0.0
+...\glue 0.0
+...\glue 0.0
+...\glue -5.87494
+...\hbox(0.0+0.0)x0.0
+...\glue 5.87494
+..\penalty 0
+..\hbox(326.18501+320.18501)x455.24408
+...\mathon
+...\vbox(326.18501+320.18501)x455.24408 []
+...\mathoff
+..etc.
+.\glue -4.0
+
+
+[99] [100]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(640.187+0.0)x455.24408, glue set 6.33957
+.\glue(\topskip) 0.00002
+.\hbox(9.99998+2.79999)x455.24408, glue set 315.08301fil
+..\hbox(9.27998+0.0)x45.99966
+...\glue 0.0
+...\frtnbf 1
+...\frtnbf 2
+...\frtnbf .
+...\frtnbf 2
+...etc.
+..\frtnbf H
+..\frtnbf i
+..\frtnbf g
+..\frtnbf h
+..etc.
+.\mark{{\uppercase {12\hskip 1em\relax Relating this proof to other levels}}\ET
+C.}
+.\write1{\@writefile{toc}{\string\contentsline\space {subsection}{\string\numb\
+ETC.}
+.\penalty 10000
+.etc.
+
+ [101]
+[102]) (sum.tex [103]) [104] (refs.tex [105] [106] [107] [108]) [109]
+(exer.tex) [110] (apx.tex [111] [112] [113] [114] [115] [116] [117] [118])
+[119] (all.aux) ) 
+Here is how much of TeX's memory you used:
+ 465 strings out of 4463
+ 4052 string characters out of 63169
+ 52474 words of memory out of 262141
+ 2320 multiletter control sequences out of 9500
+ 19472 words of font info for 74 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 17i,17n,23p,184b,406s stack positions out of 300i,60n,60p,3000b,4000s
+
+Output written on all.dvi (119 pages, 342724 bytes).

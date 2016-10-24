@@ -1,0 +1,3 @@
+\THEOREM hreal_of_treal REALAX
+|- !x y. hreal_of_treal(x,y) = (@d. x = y hreal_add d)
+\ENDTHEOREM

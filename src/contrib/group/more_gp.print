@@ -1,0 +1,392 @@
+print_theory `more_gp`;;
+The Theory more_gp
+Parents --  HOL     elt_gp     
+Constants --
+  SUBGROUP ":(* -> bool) # (* -> (* -> *)) -> ((* -> bool) -> bool)"
+  LEFT_COSET
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> (* -> (* -> bool)))"
+  EQUIV_REL ":(* -> bool) -> ((* -> (* -> bool)) -> bool)"
+  NORMAL ":(* -> bool) # (* -> (* -> *)) -> ((* -> bool) -> bool)"
+  set_prod
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> ((* -> bool) -> (* -> bool)))"
+  quot_set
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> ((* -> bool) -> bool))"
+  quot_prod
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> ((* -> bool) -> ((* -> bool) -> (* -> bool))))"
+  GP_HOM
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) -> ((* -> **) -> bool))"
+  IM ":(* -> bool) -> ((* -> **) -> (** -> bool))"
+  KERNEL
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) -> ((* -> **) -> (* -> bool)))"
+  INV_IM ":(* -> bool) -> ((** -> bool) -> ((* -> **) -> (* -> bool)))"
+  NAT_HOM
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((* -> bool) -> (* -> (* -> bool)))"
+  quot_hom
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) ->
+       ((* -> bool) -> ((* -> **) -> ((* -> bool) -> **))))"
+  GP_ISO
+    ":(* -> bool) # (* -> (* -> *)) ->
+      ((** -> bool) # (** -> (** -> **)) -> ((* -> **) -> bool))"     
+Definitions --
+  SUBGROUP_DEF
+    |- !G prod H.
+        SUBGROUP(G,prod)H =
+        GROUP(G,prod) /\ (!x. H x ==> G x) /\ GROUP(H,prod)
+  LEFT_COSET_DEF
+    |- !G prod H x y.
+        LEFT_COSET(G,prod)H x y =
+        GROUP(G,prod) /\
+        SUBGROUP(G,prod)H /\
+        G x /\
+        G y /\
+        (?h. H h /\ (y = prod x h))
+  EQUIV_REL_DEF
+    |- !G R.
+        EQUIV_REL G R =
+        (!x. G x ==> R x x) /\
+        (!x y. G x /\ G y ==> R x y ==> R y x) /\
+        (!x y z. G x /\ G y /\ G z ==> R x y /\ R y z ==> R x z)
+  NORMAL_DEF
+    |- !G prod N.
+        NORMAL(G,prod)N =
+        SUBGROUP(G,prod)N /\
+        (!x n. G x /\ N n ==> N(prod(INV(G,prod)x)(prod n x)))
+  SET_PROD_DEF
+    |- !G prod A B.
+        set_prod(G,prod)A B =
+        (\x.
+          GROUP(G,prod) /\
+          (!a. A a ==> G a) /\
+          (!b. B b ==> G b) /\
+          (?a. A a /\ (?b. B b /\ (x = prod a b))))
+  QUOTIENT_SET_DEF
+    |- !G prod N q.
+        quot_set(G,prod)N q =
+        NORMAL(G,prod)N /\ (?x. G x /\ (q = LEFT_COSET(G,prod)N x))
+  QUOTIENT_PROD_DEF
+    |- !G prod N q r.
+        quot_prod(G,prod)N q r =
+        LEFT_COSET
+        (G,prod)
+        N
+        (prod
+         (@x. G x /\ (q = LEFT_COSET(G,prod)N x))
+         (@y. G y /\ (r = LEFT_COSET(G,prod)N y)))
+  GP_HOM_DEF
+    |- !G1 prod1 G2 prod2 f.
+        GP_HOM(G1,prod1)(G2,prod2)f =
+        GROUP(G1,prod1) /\
+        GROUP(G2,prod2) /\
+        (!x. G1 x ==> G2(f x)) /\
+        (!x y. G1 x /\ G1 y ==> (f(prod1 x y) = prod2(f x)(f y)))
+  IM_DEF  |- !G f. IM G f = (\y. ?x. G x /\ (y = f x))
+  KERNEL_DEF
+    |- !G1 prod1 G2 prod2 f.
+        KERNEL(G1,prod1)(G2,prod2)f =
+        (\x.
+          GP_HOM(G1,prod1)(G2,prod2)f /\ G1 x /\ (f x = ID(G2,prod2)))
+  INV_IM_DEF  |- !G1 G2 f. INV_IM G1 G2 f = (\x. G1 x /\ G2(f x))
+  NAT_HOM_DEF
+    |- !G prod N x.
+        NAT_HOM(G,prod)N x =
+        (\y.
+          GROUP(G,prod) /\ NORMAL(G,prod)N /\ LEFT_COSET(G,prod)N x y)
+  QUOTIENT_HOM_DEF
+    |- !G1 prod1 G2 prod2 N f.
+        quot_hom(G1,prod1)(G2,prod2)N f =
+        (\q.
+          f
+          (@w.
+            GP_HOM(G1,prod1)(G2,prod2)f /\
+            NORMAL(G1,prod1)N /\
+            (!n. N n ==> KERNEL(G1,prod1)(G2,prod2)f n) /\
+            (?x. G1 x /\ (q = LEFT_COSET(G1,prod1)N x)) ==>
+            G1 w /\ (q = LEFT_COSET(G1,prod1)N w)))
+  GP_ISO_DEF
+    |- !G1 prod1 G2 prod2 f.
+        GP_ISO(G1,prod1)(G2,prod2)f =
+        GP_HOM(G1,prod1)(G2,prod2)f /\
+        (?g.
+          GP_HOM(G2,prod2)(G1,prod1)g /\
+          (!x. G1 x ==> (g(f x) = x)) /\
+          (!y. G2 y ==> (f(g y) = y)))
+  
+Theorems --
+  SBGP_ID_GP_ID  |- SUBGROUP(G,prod)H ==> (ID(H,prod) = ID(G,prod))
+  SBGP_INV_GP_INV
+    |- SUBGROUP(G,prod)H ==> (!x. H x ==> (INV(H,prod)x = INV(G,prod)x))
+  SBGP_SBGP_LEMMA
+    |- SUBGROUP(G,prod)H /\ SUBGROUP(H,prod)K1 ==> SUBGROUP(G,prod)K1
+  GROUP_IS_SBGP  |- GROUP(G,prod) ==> SUBGROUP(G,prod)G
+  ID_IS_SBGP  |- GROUP(G,prod) ==> SUBGROUP(G,prod)(\x. x = ID(G,prod))
+  SUBGROUP_LEMMA
+    |- SUBGROUP(G,prod)H =
+       GROUP(G,prod) /\
+       (?x. H x) /\
+       (!x. H x ==> G x) /\
+       (!x y. H x /\ H y ==> H(prod x y)) /\
+       (!x. H x ==> H(INV(G,prod)x))
+  SBGP_INTERSECTION
+    |- (?j. Ind j) ==>
+       (!i. Ind i ==> SUBGROUP(G,prod)(H i)) ==>
+       SUBGROUP(G,prod)(\x. !i. Ind i ==> H i x)
+  COR_SBGP_INT
+    |- SUBGROUP(G,prod)H /\ SUBGROUP(G,prod)K1 ==>
+       SUBGROUP(G,prod)(\x. H x /\ K1 x)
+  LEFT_COSETS_COVER
+    |- SUBGROUP(G,prod)H ==> (!x. G x ==> LEFT_COSET(G,prod)H x x)
+  LEFT_COSET_DISJOINT_LEMMA
+    |- SUBGROUP(G,prod)H ==>
+       (!x y.
+         G x /\ G y ==>
+         (?w. LEFT_COSET(G,prod)H x w /\ LEFT_COSET(G,prod)H y w) ==>
+         (!z. LEFT_COSET(G,prod)H x z ==> LEFT_COSET(G,prod)H y z))
+  LEFT_COSET_DISJOINT_UNION
+    |- SUBGROUP(G,prod)H ==>
+       (!x. G x ==> (?y. G y /\ LEFT_COSET(G,prod)H y x)) /\
+       (!x y.
+         G x /\ G y ==>
+         (LEFT_COSET(G,prod)H x = LEFT_COSET(G,prod)H y) \/
+         ((\z. LEFT_COSET(G,prod)H x z /\ LEFT_COSET(G,prod)H y z) =
+          (\z. F)))
+  LEFT_COSET_EQUIV_REL
+    |- SUBGROUP(G,prod)H ==> EQUIV_REL G(LEFT_COSET(G,prod)H)
+  LEFT_COSETS_SAME_SIZE
+    |- SUBGROUP(G,prod)H ==>
+       (!x y.
+         G x /\ G y ==>
+         (?f g.
+           (!u. LEFT_COSET(G,prod)H x u ==> LEFT_COSET(G,prod)H y(f u)) /\
+           (!v. LEFT_COSET(G,prod)H y v ==> LEFT_COSET(G,prod)H x(g v)) /\
+           (!u. LEFT_COSET(G,prod)H x u ==> (g(f u) = u)) /\
+           (!v. LEFT_COSET(G,prod)H y v ==> (f(g v) = v))))
+  GROUP_IS_NORMAL  |- GROUP(G,prod) ==> NORMAL(G,prod)G
+  ID_IS_NORMAL  |- GROUP(G,prod) ==> NORMAL(G,prod)(\x. x = ID(G,prod))
+  NORMAL_INTERSECTION
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N ==>
+       NORMAL(H,prod)(\x. H x /\ N x)
+  NORM_NORM_INT
+    |- NORMAL(G,prod)N1 /\ NORMAL(G,prod)N2 ==>
+       NORMAL(G,prod)(\n. N1 n /\ N2 n)
+  NORMAL_PROD
+    |- NORMAL(G,prod)N /\ SUBGROUP(G,prod)H ==>
+       SUBGROUP(G,prod)(set_prod(G,prod)H N)
+  QUOT_PROD
+    |- NORMAL(G,prod)N ==>
+       (!x y.
+         G x /\ G y ==>
+         (quot_prod
+          (G,prod)
+          N
+          (LEFT_COSET(G,prod)N x)
+          (LEFT_COSET(G,prod)N y) =
+          LEFT_COSET(G,prod)N(prod x y)))
+  QUOTIENT_GROUP
+    |- NORMAL(G,prod)N ==> GROUP(quot_set(G,prod)N,quot_prod(G,prod)N)
+  GP_HOM_COMP
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ GP_HOM(G2,prod2)(G3,prod3)g ==>
+       GP_HOM(G1,prod1)(G3,prod3)(\x. g(f x))
+  HOM_ID_INV_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (f(ID(G1,prod1)) = ID(G2,prod2)) /\
+       (!x. G1 x ==> (f(INV(G1,prod1)x) = INV(G2,prod2)(f x)))
+  Id_GP_HOM  |- GROUP(G1,prod1) ==> GP_HOM(G1,prod1)(G1,prod1)(\x. x)
+  Triv_GP_HOM
+    |- GROUP(G1,prod1) /\ GROUP(G2,prod2) ==>
+       GP_HOM(G1,prod1)(G2,prod2)(\x. ID(G2,prod2))
+  GP_HOM_RESTRICT_DOM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ SUBGROUP(G1,prod1)H1 ==>
+       GP_HOM(H1,prod1)(G2,prod2)f
+  SUBGROUP_HOM_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (!H. SUBGROUP(G1,prod1)H ==> SUBGROUP(G2,prod2)(IM H f))
+  GROUP_HOM_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==> SUBGROUP(G2,prod2)(IM G1 f)
+  GP_HOM_RESTRICT_RANGE
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\
+       SUBGROUP(G2,prod2)H2 /\
+       (!y. IM G1 f y ==> H2 y) ==>
+       GP_HOM(G1,prod1)(H2,prod2)f
+  GP_HOM_RES_TO_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==> GP_HOM(G1,prod1)(IM G1 f,prod2)f
+  GP_HOM_RES_TO_SBGP
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ SUBGROUP(G1,prod1)H ==>
+       GP_HOM(H,prod1)(G2,prod2)f /\
+       (KERNEL(H,prod1)(G2,prod2)f =
+        (\x. H x /\ KERNEL(G1,prod1)(G2,prod2)f x)) /\
+       (!y. IM H f y ==> IM G1 f y)
+  KERNEL_NORMAL
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       NORMAL(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f)
+  KERNEL_IM_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (IM(KERNEL(G1,prod1)(G2,prod2)f)f = (\y. y = ID(G2,prod2)))
+  KERNEL_INV_IM_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (KERNEL(G1,prod1)(G2,prod2)f = INV_IM G1(\y. y = ID(G2,prod2))f)
+  SUBGROUP_INV_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ SUBGROUP(G2,prod2)H ==>
+       SUBGROUP(G1,prod1)(INV_IM G1 G2 f) /\
+       (!x. KERNEL(G1,prod1)(G2,prod2)f x ==> INV_IM G1 G2 f x)
+  NORMAL_INV_IM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\ NORMAL(G2,prod2)H ==>
+       NORMAL(G1,prod1)(INV_IM G1 G2 f)
+  NAT_HOM_THM
+    |- GROUP(G,prod) /\ NORMAL(G,prod)N ==>
+       GP_HOM
+       (G,prod)
+       (quot_set(G,prod)N,quot_prod(G,prod)N)
+       (NAT_HOM(G,prod)N) /\
+       (!q.
+         (?x. G x /\ (q = LEFT_COSET(G,prod)N x)) ==>
+         (?x. G x /\ (q = NAT_HOM(G,prod)N x))) /\
+       (KERNEL
+        (G,prod)
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (NAT_HOM(G,prod)N) =
+        N)
+  QUOTIENT_HOM_LEMMA
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\
+       SUBGROUP(G1,prod1)H /\
+       (!h. H h ==> KERNEL(G1,prod1)(G2,prod2)f h) ==>
+       (!x y. LEFT_COSET(G1,prod1)H x y ==> (f x = f y))
+  QUOT_HOM_THM
+    |- GP_HOM(G1,prod1)(G2,prod2)f /\
+       NORMAL(G1,prod1)N /\
+       (!n. N n ==> KERNEL(G1,prod1)(G2,prod2)f n) ==>
+       GP_HOM
+       (quot_set(G1,prod1)N,quot_prod(G1,prod1)N)
+       (G2,prod2)
+       (quot_hom(G1,prod1)(G2,prod2)N f) /\
+       (!x.
+         G1 x ==>
+         (quot_hom(G1,prod1)(G2,prod2)N f(NAT_HOM(G1,prod1)N x) = f x)) /\
+       (IM(quot_set(G1,prod1)N)(quot_hom(G1,prod1)(G2,prod2)N f) =
+        IM G1 f) /\
+       (KERNEL
+        (quot_set(G1,prod1)N,quot_prod(G1,prod1)N)
+        (G2,prod2)
+        (quot_hom(G1,prod1)(G2,prod2)N f) =
+        IM(KERNEL(G1,prod1)(G2,prod2)f)(NAT_HOM(G1,prod1)N)) /\
+       (!g.
+         GP_HOM(quot_set(G1,prod1)N,quot_prod(G1,prod1)N)(G2,prod2)g /\
+         (!x. G1 x ==> (g(NAT_HOM(G1,prod1)N x) = f x)) ==>
+         (!q.
+           quot_set(G1,prod1)N q ==>
+           (g q = quot_hom(G1,prod1)(G2,prod2)N f q)))
+  QUOTIENT_IM_LEMMA
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N /\ (!n. N n ==> H n) ==>
+       (IM H(NAT_HOM(G,prod)N) = quot_set(H,prod)N)
+  GP_ISO_COMP
+    |- GP_ISO(G1,prod1)(G2,prod2)f /\ GP_ISO(G2,prod2)(G3,prod3)g ==>
+       GP_ISO(G1,prod1)(G3,prod3)(\x. g(f x))
+  Id_GP_ISO  |- GROUP(G1,prod1) ==> GP_ISO(G1,prod1)(G1,prod1)(\x. x)
+  GP_ISO_INV
+    |- GP_ISO(G1,prod1)(G2,prod2)f ==>
+       (?g.
+         (!x. G1 x ==> (g(f x) = x)) /\
+         (!y. G2 y ==> (f(g y) = y)) /\
+         GP_ISO(G2,prod2)(G1,prod1)g)
+  GP_ISO_IM_LEMMA  |- GP_ISO(G1,prod1)(G2,prod2)f ==> (IM G1 f = G2)
+  GP_ISO_KERNEL
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (GP_ISO(G1,prod1)(IM G1 f,prod2)f =
+        (KERNEL(G1,prod1)(G2,prod2)f = (\x. x = ID(G1,prod1))))
+  GP_ISO_CHAR
+    |- GP_ISO(G1,prod1)(G2,prod2)f =
+       GP_HOM(G1,prod1)(G2,prod2)f /\
+       (IM G1 f = G2) /\
+       (KERNEL(G1,prod1)(G2,prod2)f = (\x. x = ID(G1,prod1)))
+  FIRST_ISO_THM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       GP_ISO
+       (quot_set(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f),
+        quot_prod(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f))
+       (IM G1 f,prod2)
+       (quot_hom(G1,prod1)(G2,prod2)(KERNEL(G1,prod1)(G2,prod2)f)f) /\
+       (!x.
+         G1 x ==>
+         (quot_hom
+          (G1,prod1)
+          (G2,prod2)
+          (KERNEL(G1,prod1)(G2,prod2)f)
+          f
+          (NAT_HOM(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f)x) =
+          f x))
+  CLASSICAL_FIRST_ISO_THM
+    |- GP_HOM(G1,prod1)(G2,prod2)f ==>
+       (?f_bar.
+         GP_ISO
+         (quot_set(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f),
+          quot_prod(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f))
+         (IM G1 f,prod2)
+         f_bar /\
+         (!x.
+           G1 x ==>
+           (f_bar(NAT_HOM(G1,prod1)(KERNEL(G1,prod1)(G2,prod2)f)x) =
+            f x)))
+  SND_ISO_THM
+    |- NORMAL(G,prod)N /\ NORMAL(G,prod)M /\ (!n. N n ==> M n) ==>
+       GP_ISO
+       (quot_set
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (quot_set(M,prod)N),
+        quot_prod
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (quot_set(M,prod)N))
+       (quot_set(G,prod)M,quot_prod(G,prod)M)
+       (quot_hom
+        (quot_set(G,prod)N,quot_prod(G,prod)N)
+        (quot_set(G,prod)M,quot_prod(G,prod)M)
+        (quot_set(M,prod)N)
+        (quot_hom
+         (G,prod)
+         (quot_set(G,prod)M,quot_prod(G,prod)M)
+         N
+         (NAT_HOM(G,prod)M)))
+  CLASSICAL_SND_ISO_THM
+    |- NORMAL(G,prod)N /\ NORMAL(G,prod)M /\ (!n. N n ==> M n) ==>
+       (?f.
+         GP_ISO
+         (quot_set
+          (quot_set(G,prod)N,quot_prod(G,prod)N)
+          (quot_set(M,prod)N),
+          quot_prod
+          (quot_set(G,prod)N,quot_prod(G,prod)N)
+          (quot_set(M,prod)N))
+         (quot_set(G,prod)M,quot_prod(G,prod)M)
+         f)
+  THIRD_ISO_THM
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N ==>
+       GP_ISO
+       (quot_set(H,prod)(\x. H x /\ N x),
+        quot_prod(H,prod)(\x. H x /\ N x))
+       (quot_set(set_prod(G,prod)H N,prod)N,
+        quot_prod(set_prod(G,prod)H N,prod)N)
+       (quot_hom
+        (H,prod)
+        (quot_set(set_prod(G,prod)H N,prod)N,
+         quot_prod(set_prod(G,prod)H N,prod)N)
+        (\x. H x /\ N x)
+        (NAT_HOM(set_prod(G,prod)H N,prod)N))
+  CLASSICAL_THIRD_ISO_THM
+    |- SUBGROUP(G,prod)H /\ NORMAL(G,prod)N ==>
+       (?f.
+         GP_ISO
+         (quot_set(H,prod)(\x. H x /\ N x),
+          quot_prod(H,prod)(\x. H x /\ N x))
+         (quot_set(set_prod(G,prod)H N,prod)N,
+          quot_prod(set_prod(G,prod)H N,prod)N)
+         f)
+  
+******************** more_gp ********************
+
+() : void

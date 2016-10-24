@@ -1,0 +1,3 @@
+\THEOREM IS_BASEN_APPEND numeral
+|- !r l m. IS_BASEN r(APPEND l m) = IS_BASEN r l /\ IS_BASEN r m
+\ENDTHEOREM

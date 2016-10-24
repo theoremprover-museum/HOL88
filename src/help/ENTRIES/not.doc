@@ -1,0 +1,15 @@
+\DOC not
+
+\TYPE {$not : (bool -> bool)}
+
+\SYNOPSIS
+Built-in ML logical negation.
+
+\DESCRIBE
+When given a boolean value, {not} returns its negation. Although it is a prefix
+function, it needs to be preceded by {$} to suppress its special parse status.
+
+\FAILURE
+Never fails.
+
+\ENDDOC

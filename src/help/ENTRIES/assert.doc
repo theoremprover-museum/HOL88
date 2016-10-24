@@ -1,0 +1,33 @@
+\DOC assert
+
+\TYPE {assert : ((* -> bool) -> * -> *)}
+
+\SYNOPSIS
+Checks that a value satisfies a predicate.
+
+\DESCRIBE
+{assert p x} returns {x} if the application {p x} yields {true}. Otherwise,
+{assert p x} fails.
+
+\FAILURE
+{assert p x} fails with the string {`fail`} if the predicate {p} yields
+{false} when applied to the value {x}.
+
+\EXAMPLE
+{
+#null [];;
+true : bool
+
+#assert null [];;
+[] : * list
+
+#null [1];;
+false : bool
+
+#assert null [1];;
+evaluation failed     fail
+}
+\SEEALSO
+can.
+
+\ENDDOC

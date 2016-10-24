@@ -1,0 +1,6 @@
+\THEOREM mono SEQ
+|- !f.
+    mono f =
+    (!m n. m num_le n ==> (f m) <= (f n)) \/
+    (!m n. m num_le n ==> (f m) >= (f n))
+\ENDTHEOREM

@@ -1,0 +1,7 @@
+\THEOREM TOPOLOGY TOPOLOGY
+|- !L.
+    open L null /\
+    open L universe /\
+    (!x y. open L x /\ open L y ==> open L(x intersect y)) /\
+    (!P. P subset (open L) ==> open L(Union P))
+\ENDTHEOREM

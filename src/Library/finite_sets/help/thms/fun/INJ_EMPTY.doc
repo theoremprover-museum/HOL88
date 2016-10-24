@@ -1,0 +1,3 @@
+\THEOREM INJ_EMPTY finite_sets
+|- !f. (!s. INJ f{{}}s) /\ (!s. INJ f s{{}} = (s = {{}}))
+\ENDTHEOREM

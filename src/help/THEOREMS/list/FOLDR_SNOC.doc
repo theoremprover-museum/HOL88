@@ -1,0 +1,3 @@
+\THEOREM FOLDR_SNOC list
+|- !f e x l. FOLDR f e(SNOC x l) = FOLDR f(f x e)l
+\ENDTHEOREM

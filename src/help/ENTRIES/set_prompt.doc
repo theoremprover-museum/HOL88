@@ -1,0 +1,34 @@
+\DOC set_prompt
+
+\TYPE {set_prompt : (string -> string)}
+
+\SYNOPSIS
+Changes the ML prompt string.
+
+\DESCRIBE
+If {s} is a string, then {set_prompt s} sets the ML prompt (which is `{#}' by
+default) to the string {s}, and returns the previous prompt string. The string
+may contain newlines, or be null (although {prompt false} is a cleaner way of
+completely eliminating the prompt).
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+In the following session, the prompt is set to {`Ready`} on a line of its own,
+then reset to its original state.
+{
+   #let oldprompt = set_prompt `Ready\
+   #`;;
+   oldprompt = `#` : string
+
+   Ready
+   do set_prompt oldprompt;;
+   () : void
+
+   # ...more ML...
+}
+\SEEALSO
+prompt, set_lambda, set_turnstile.
+
+\ENDDOC

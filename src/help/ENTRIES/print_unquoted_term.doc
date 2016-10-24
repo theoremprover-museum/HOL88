@@ -1,0 +1,27 @@
+\DOC print_unquoted_term
+
+\TYPE {print_unquoted_term : (term -> void)}
+
+\SYNOPSIS
+Prints a HOL term to the terminal without surrounding quotes.
+
+\DESCRIBE
+{print_unquoted_term tm} returns {():void} with the side-effect of printing
+the value of {tm} to the terminal without surrounding quotes. The text is not
+terminated with a carriage return. In fact, the text is queued until the
+pretty-printer decides where line breaks are needed, or until the queue is
+explicitly flushed.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#print_unquoted_term "x /\ y";;
+x /\ y() : void
+}
+\SEEALSO
+print_term, print_begin, print_end, print_newline, show_types, print_type,
+print_thm, print_unquoted_type.
+
+\ENDDOC

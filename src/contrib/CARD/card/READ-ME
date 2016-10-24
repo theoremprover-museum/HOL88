@@ -1,0 +1,57 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: card                                                  |
+|									|
+| DESCRIPTION   : Definition cardinal types.                            |
+|									|
+| AUTHOR	: T. kalker						|
+| DATE		: 10 JUly 1989  			                |
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+
+        mk_card: defines the type of cardinals    
+
+        card.ml: loads the theory card
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+ 
+The type of cardinals is defined as the equivalence classes
+of equi_potent sets. The canonical order "<<<" is defined,
+and it proved that "<<<" is a linear order. This latter prove
+is done using transfinite induction .
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +  
+
+   0) necessary libraries: auxiliary, well_order, taut
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `card`;;
+
+

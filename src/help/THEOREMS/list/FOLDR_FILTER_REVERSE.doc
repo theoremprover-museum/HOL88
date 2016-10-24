@@ -1,0 +1,5 @@
+\THEOREM FOLDR_FILTER_REVERSE list
+|- !f.
+    (!a b c. f a(f b c) = f b(f a c)) ==>
+    (!e P l. FOLDR f e(FILTER P(REVERSE l)) = FOLDR f e(FILTER P l))
+\ENDTHEOREM

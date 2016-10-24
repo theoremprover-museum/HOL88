@@ -1,0 +1,29 @@
+\DOC save
+
+\TYPE {save : (string -> void)}
+
+\SYNOPSIS
+Saves an executable version of HOL in its current state.
+
+\DESCRIBE
+The call {save `image`} will save an executable core image, called {image}, of
+HOL in its current state. This means that if this image is subsequently
+executed instead of the normal HOL, any bindings set up will be preserved.
+
+\FAILURE
+Will fail only in system-dependent ways, such as running out of disk space.
+
+\COMMENTS
+Note that a HOL image is rather large; exactly how large depends on the version
+of Lisp and other factors, but it is usually a good many megabytes.
+
+\USES
+Avoiding the need to re-execute certain initializations, in particular,
+installation, every time HOL is run. Note that a {hol-init.ml} file will be
+executed automatically every time HOL is run, and is usually sufficient for
+private initializations. See the DESCRIPTION for details.
+
+\SEEALSO
+install.
+
+\ENDDOC

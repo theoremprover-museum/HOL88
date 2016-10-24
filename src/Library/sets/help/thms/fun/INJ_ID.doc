@@ -1,0 +1,3 @@
+\THEOREM INJ_ID sets
+|- !s. INJ(\x. x)s s
+\ENDTHEOREM

@@ -1,0 +1,18 @@
+\DOC delete_cache
+
+\TYPE {delete_cache : (string -> void)}
+
+\SYNOPSIS
+Deletes a theory from the theory cache.
+
+\DESCRIBE
+A call {delete_cache thy} deletes the named theory from the theory cache.
+For more details of the cacheing mechanism, see the DESCRIPTION.
+
+\FAILURE
+Never fails, even if the name is not the name of a loaded theory.
+
+\SEEALSO
+cached_theories.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM FOLDR_FOLDL list
+|- !f e. MONOID f e ==> (!l. FOLDR f e l = FOLDL f e l)
+\ENDTHEOREM

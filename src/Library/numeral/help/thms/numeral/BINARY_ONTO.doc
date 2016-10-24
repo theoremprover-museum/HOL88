@@ -1,0 +1,3 @@
+\THEOREM BINARY_ONTO numeral
+|- !l. ?n. BINARY l = n
+\ENDTHEOREM

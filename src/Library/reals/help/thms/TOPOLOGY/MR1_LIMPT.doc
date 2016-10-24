@@ -1,0 +1,3 @@
+\THEOREM MR1_LIMPT TOPOLOGY
+|- !x. limpt(mtop mr1)x universe
+\ENDTHEOREM

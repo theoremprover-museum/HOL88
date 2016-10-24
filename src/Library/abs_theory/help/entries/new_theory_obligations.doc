@@ -1,0 +1,28 @@
+\DOC new_theory_obligations
+
+\TYPE {new_theory_obligations : (string # term) -> void}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Declares new theory obligations.
+
+
+\DESCRIBE 
+A call to {new_theory_obligations stp} adds the theory obligation in
+{stp} to theory obligation list in the current theory, where {stp}
+is a string--term pair where the first string is the name of the obligation
+and the term is a predicate that must be met for an instantiation to be
+valid. 
+
+\USES
+Declaring theory obligations for an abstract object declared in an abstract
+theory.
+
+\FAILURE
+Fails if a term in {stp} is not a predicate.
+
+\SEEALSO
+new_abstract_representation, instantiate_abstract_theorem
+
+\ENDDOC

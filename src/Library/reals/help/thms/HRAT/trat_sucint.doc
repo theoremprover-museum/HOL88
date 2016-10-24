@@ -1,0 +1,4 @@
+\THEOREM trat_sucint HRAT
+|- (trat_sucint 0 = trat_1) /\
+   (!n. trat_sucint(SUC n) = (trat_sucint n) trat_add trat_1)
+\ENDTHEOREM

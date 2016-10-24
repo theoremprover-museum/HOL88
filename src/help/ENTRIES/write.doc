@@ -1,0 +1,42 @@
+\DOC write
+
+\TYPE {write : ((string # string) -> void)}
+
+\SYNOPSIS
+Writes characters to a file.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+The call {write(port,`characters`)}, where {characters} is a string of
+characters to write, and {port} is a string describing a port (a port is the
+standard ML file descriptor, normally obtained from a call to {openw} or
+{append_openw}), will write the given characters to the file corresponding to
+the port.
+
+\FAILURE
+May fail or hang in system-dependent ways when given an invalid port
+descriptor.
+
+\EXAMPLE
+The following assumes that HOL is being run under Unix. It will overwrite any
+existing file {test-file} in the current directory. Notice that the actual
+string returned by {openw} may vary on other systems.
+{
+   #let port = openw `test-file`;;
+   port = `%test-file` : string
+
+   #write(port,`Hello world`);;
+   () : void
+
+   #close port;;
+   () : void
+
+   #system `cat test-file`;;
+   Hello world0 : int
+}
+\SEEALSO
+append_openw, close, openi, openw, read, tty_read, tty_write.
+
+\ENDDOC

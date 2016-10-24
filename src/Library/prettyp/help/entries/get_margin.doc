@@ -1,0 +1,22 @@
+\DOC get_margin
+
+\TYPE {get_margin : (void -> int)}
+
+\SYNOPSIS
+Returns the limit on the width of the output produced by the standard HOL
+pretty-printer.
+
+\LIBRARY prettyp
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#get_margin ();;
+72 : int
+}
+\SEEALSO
+set_margin.
+
+\ENDDOC

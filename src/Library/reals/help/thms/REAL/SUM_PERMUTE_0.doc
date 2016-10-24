@@ -1,0 +1,5 @@
+\THEOREM SUM_PERMUTE_0 REAL
+|- !n p.
+    (!y. y num_lt n ==> (?! x. x num_lt n /\ (p x = y))) ==>
+    (!f. Sum(0,n)(\n'. f(p n')) = Sum(0,n)f)
+\ENDTHEOREM

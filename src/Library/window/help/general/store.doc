@@ -1,0 +1,16 @@
+\DOC store
+
+\TYPE {store : (* pointer -> * -> void)}
+
+\SYNOPSIS
+Stores a value in a pointer.
+
+\LIBRARY window
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+dispose, is_nil, ptrtype, store, value.
+
+\ENDDOC

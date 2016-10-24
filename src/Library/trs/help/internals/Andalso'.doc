@@ -1,0 +1,10 @@
+\DOC Andalso'
+
+\TYPE {Andalso' : ((thmpattern_rep # thmpattern_rep) -> thmpattern_rep)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

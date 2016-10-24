@@ -1,0 +1,3 @@
+\THEOREM POW_MUL REAL
+|- !n x y. (x * y) pow n = (x pow n) * (y pow n)
+\ENDTHEOREM

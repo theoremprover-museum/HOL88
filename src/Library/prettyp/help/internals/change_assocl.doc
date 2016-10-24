@@ -1,0 +1,10 @@
+\DOC change_assocl
+
+\TYPE {change_assocl : ((* # **) list -> (* # **) list -> (* # **) list)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

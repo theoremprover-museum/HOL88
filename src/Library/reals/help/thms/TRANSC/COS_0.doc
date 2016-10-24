@@ -1,0 +1,3 @@
+\THEOREM COS_0 TRANSC
+|- cos(& 0) = & 1
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REAL_POW2_ABS REAL
+|- !x. (abs x) pow 2 = x pow 2
+\ENDTHEOREM

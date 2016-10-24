@@ -1,0 +1,30 @@
+\DOC prove_BITS_WORD
+
+\TYPE {prove_BITS_WORD : thm -> thm}
+
+\LIBRARY wordn
+
+\SYNOPSIS
+Proves a theorem for reducing {BITSn(WORDn [...])} to {[...]}.
+
+\DESCRIBE
+{prove_BITS_WORDS} takes a theorem returned by {define_wordn_type} and
+deduces a theorem which is an instance of the second conjunct of the
+type definition theorem. This theorem is usually used in rewriting to
+simplify terms containing the expression {BITSn(WORDn [...]}. 
+
+\FAILURE
+Fails if the input theorem is not in the expected form.
+
+\EXAMPLE
+{prove_BITS_WORD word3} where {word3} is the theorem 
+{
+   |- (!w. WORD3(BITS3 w) = w) /\
+      (!l. (LENGTH l = 3) = (BITS3(WORD3 l) = l))
+}
+\noindent returns the following theorem:
+{
+   |- !b0 b1 b2. BITS3(WORD3[b0; b1; b2]) = [b0; b1; b2]
+}
+
+\ENDDOC

@@ -1,0 +1,16 @@
+\DOC value
+
+\TYPE {value : (* pointer -> *)}
+
+\SYNOPSIS
+Returns the value stored in a pointer.
+
+\LIBRARY window
+
+\FAILURE
+{value p} will fail if {p} is nil.
+
+\SEEALSO
+dispose, is_nil, ptrtype, store
+
+\ENDDOC

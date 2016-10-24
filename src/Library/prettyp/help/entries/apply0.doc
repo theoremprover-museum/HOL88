@@ -1,0 +1,41 @@
+\DOC apply0
+
+\TYPE {apply0 : (* -> (string # int) list -> print_binding -> *)}
+
+\SYNOPSIS
+Function for constructing environment accessing functions.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{apply0} is a higher-order function which can be used to simplify the ML code
+required for user-defined pretty-printer environment accessing functions.
+Instead of having to mention the parameter list and binding explicitly as in:
+{
+   \params. \pbind. f
+}
+\noindent one can use {apply0}:
+{
+   apply0 f
+}
+\FAILURE
+Cannot fail when given only one argument. However, the resulting function may
+fail. This will depend on the value of the argument.
+
+\EXAMPLE
+A function for testing whether the parameter `{test}' has value 1 can be
+written as:
+{
+   apply2 (curry $=) (bound_number `test`) (apply0 1)
+}
+\noindent instead of:
+{
+   \params. \pbind. (bound_number `test` params pbind) = 1
+}
+\noindent In this example it is not clear that use of {apply0} and {apply2} is
+beneficial. However, it illustrates their usage.
+
+\SEEALSO
+apply1, apply2.
+
+\ENDDOC

@@ -1,0 +1,5 @@
+\THEOREM POWREV POWSER
+|- !n x y.
+    Sum(0,SUC n)(\p. (x pow p) * (y pow (n num_sub p))) =
+    Sum(0,SUC n)(\p. (x pow (n num_sub p)) * (y pow p))
+\ENDTHEOREM

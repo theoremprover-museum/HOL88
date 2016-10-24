@@ -1,0 +1,6 @@
+\THEOREM bht tree
+|- bht =
+   PRIM_REC
+   (\tr. tr = node[])
+   (\res n tr. ?trl. (tr = node trl) /\ ALL_EL res trl)
+\ENDTHEOREM

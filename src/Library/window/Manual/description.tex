@@ -1,0 +1,1096 @@
+\newcommand{\hand}{\tt/\symbol{"5C}}
+\newcommand{\hor}{\tt\symbol{"5C}/}
+\newcommand{\hnot}{\tt\symbol{"7E}}
+
+\newcommand{\nn}[1]{#1n}
+
+\index{<==@{{\ptt <==} (backward implication)}|see{{\ptt PMI\_DEF}}}
+
+\chapter{Statement of Rights}
+
+Jim Grundy, hereafter referred to as `the Author', retains the
+copyright and all other legal rights to the software contained in
+the window library, hereafter referred to as `the Software'.
+The Software is made available free of charge on an `as is' basis.
+No guarantee, either express or implied, of maintenance, reliability,
+merchantability or suitability for any purpose is made by the Author.
+
+The user is granted the right to make personal or internal use
+of the Software provided that both:
+\begin{enumerate}
+    \item   The Software is not used for commercial gain.
+    \item   The user shall not hold the Author liable for any consequences
+            arising from use of the Software.
+\end{enumerate}
+The user is granted the right to further distribute the Software
+provided that both:
+\begin{enumerate}
+    \item   The Software and this statement of rights is not modified.
+    \item   The Software does not form part or the whole of a system
+            distributed for commercial gain.
+\end{enumerate}
+The user is granted the right to modify the Software for personal or
+internal use provided that all of the following conditions are
+observed:
+\begin{enumerate}
+    \item   The user does not distribute the modified software.
+    \item   The modified software is not used for commercial gain.
+    \item   The Author retains all rights to the modified software.
+\end{enumerate}
+
+Anyone seeking a licence to use this software for commercial purposes
+is invited to contact the Author.
+
+\chapter{The window Library}
+
+This manual describes the use of the window library.
+The window library has been provided to facilitate a style of 
+reasoning called {\it window inference}.
+Window inference should prove more useful than goal directed reasoning in
+situations where
+very fine grain manipulations are required,
+when a proof is more easily progressed forwards than backwards,
+or when a proof makes extensive use of contextual information.
+Users interested in transformational design, refinement and equational 
+reasoning should find the window library interesting.
+
+For more details on window inference, see:
+\begin{center}
+	\begin{minipage}{0.8\columnwidth}
+		\small
+		\noindent
+		Jim Grundy.
+		Window Inference in the HOL System.
+		In Phil J. Windley, Mylar Archer, Karl N. Levitt and
+		Jeff J. Joyce, editors,
+		{\it The Proceedings of the International Tutorial and Workshop on
+		the HOL Theorem Proving System and its Applications},
+		University of California at Davis, 28--30 August 1991.
+		IEEE Computer Society / ACM SIGDA, IEEE Computer Society Press,
+		10662 Los Vaqueros Circle, PO Box 3014,
+		Los Alamitos CA 907020-1264, United States, 1992.
+	\end{minipage}
+\end{center}
+
+\section{Window Inference}
+
+Window inference is a style of reasoning where the user may transform an
+expression by restricting attention to a subexpression and transforming it.
+While restricting attention to a subexpression, the user can transform the
+subexpression without affecting the remainder of the enclosing expression.
+Also, while transforming a subexpression, the user can make assumptions based
+on the context of the subexpression.
+For example, suppose a user wishes to transform the expression
+\ml{"A \hand\ B"};
+this may be done by transforming \ml{"A"} under the assumption \ml{"B"}.
+It is possible to assume \ml{"B"} while transforming \ml{"A"},
+because were \ml{"B"} false,
+the enclosing expression \ml{"A \hand\ B"} would be false regardless of
+\ml{"A"}.
+Using contextual information in the transformation of subexpressions adds a
+degree of complexity to the proof tree.
+The advantage of the window inference technique is that the user is shielded
+from this added complexity.
+
+In the window inference style of proof,
+a user starts with an expression \ml{"P"} and transforms it to \ml{"Q"} such
+that \ml{"Q R P"} for some relation \ml{"R"}\footnote
+{\ml{"R"} denotes an infix, reflexive, transitive relation.};
+thus creating a proof that \ml{|- Q R P}.
+Such a proof need be neither strictly forward nor backward.
+Window inference encompasses both backward and forward reasoning.
+The user may start with the expression \ml{"P"} and transform it to
+\ml{"T"}(true) while preserving the relation \ml{"==>"}.
+Such a process would build the theorem \ml{|- T ==> P},
+and would constitute a backward proof of \ml{"P"}.
+Alternatively,
+the user may start with the expression \ml{"T"} and transform it to
+\ml{"P"} while preserving the relation
+\ml{"<=="}\index{PMI\_DEF@{\ptt PMI\_DEF}|nn}\footnote
+{\ml{PMI\_DEF} \ml{|- !a, b. (a <== b) = (b ==> a)}}.
+Such a process would build the theorem
+\ml{|- P <== T},
+and would constitute a forward proof of \ml{"P"}.
+
+\section{Getting Started}	\label{sec:start}
+
+Before you can use window inference in HOL you must load the
+window library.
+To load the window library, issue the following command:
+\begin{hol}\begin{alltt}
+	load_library `window`;;
+\end{alltt}\end{hol}
+It is not always possible to load the window library.
+This is because the library contains a small theory called {\tt win}.
+If you have loaded another theory before attempting to load the window
+library, and you are not in draft mode, then you will not be able to 
+load the window library.
+If this happens, a new function
+\ml{load\_window}\index{load\_window@{\ptt load\_window}} is defined which
+can be used to complete the loading process if \HOL\ is placed in draft mode.
+
+Within a window inference system reasoning is conducted with a stack of windows.
+Each window is comprised of a {\it focus}\index{focus},
+$f$, that is the expression to be transformed,
+a set of formulae $\Gamma$ called the {\it assumptions}\index{assumptions},
+that can be assumed true in the context of the focus, and a
+relation\index{relation} $R$\/ that
+must relate the focus and the expression to which it is transformed.
+(Note that the type of the focus is not restricted to \ml{:bool} as is the
+case with goals in the subgoal package.)
+Such a window will be written as follows.
+\begin{hol}\begin{alltt}
+     ! \(\Gamma\)
+   \(R\!\) * \(f\)
+\end{alltt}\end{hol}\index{"!@{{\ptt "!} (assumption prefix)}}
+
+To begin using the system,
+you create a window stack which contains a single window.
+The focus of that window should be the expression you want to transform,
+the assumptions of the window should be those things you wish to assume,
+and the relation of the window should be 
+the relation you wish to preserve as you transform the focus.
+For example, suppose you wish to find something that implies
+\ml{"(A \hand\ (B \hand\ C)) \hand\ D"} under the assumption \ml{"\hnot C"}.
+To create such a stack, you should use the command:
+\begin{boxed}\begin{verbatim}
+   BEGIN_STACK : string -> term -> term list -> thm list -> void
+\end{verbatim}\end{boxed}\index{BEGIN\_STACK@{\ptt BEGIN\_STACK}|(}
+The first parameter is the name that will be associated with the stack.
+The second parameter is a term containing both the focus and the relation
+to be preserved.
+The third parameter is the list of terms that you wish to assume.
+The last parameter is a list of theorems that might be relevant to the proof.
+The function of the last parameter will be explained in section~\ref{sec:lem},
+until then we will give this parameter the empty list.
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #BEGIN_STACK `intro` "(==>) ((A /\ (B /\ C)) /\ D)" ["~C"] [];;
+       ! ~C
+   ==> * (A /\ B /\ C) /\ D
+   () : void
+\end{verbatim}\end{session}
+As a side effect the
+\ml{BEGIN\_STACK}\index{BEGIN\_STACK@{\ptt BEGIN\_STACK}|)}
+command prints the top window of the stack.
+To print the top window at any time use the
+\ml{PRINT\_STACK}\index{PRINT\_STACK@{\ptt PRINT\_STACK}|(}
+command.
+\begin{boxed}\begin{verbatim}
+   PRINT_STACK : void -> void
+\end{verbatim}\end{boxed}\index{PRINT\_STACK@{\ptt PRINT\_STACK}|)}
+
+Initially the user may choose one of \ml{"="}, \ml{"==>"} or \ml{"<=="} as
+the relation to be preserved by a window.
+However the system can be tailored to preserve any reflexive, transitive
+relation.
+Details of how to declare a new relation for use with the system are
+given in section~\ref{sec:rel}.
+
+Each window holds a theorem.
+To obtain the theorem held by the current window use the following command:
+\begin{boxed}\begin{verbatim}
+   WIN_THM : void -> thm
+\end{verbatim}\end{boxed}\index{WIN\_THM@{\ptt WIN\_THM}|(}
+Initially (before you have transformed the focus) this theorem 
+will simply state that the original focus of the window is related to itself.
+\begin{session}\begin{verbatim}
+   #WIN_THM();;
+   |- (A /\ B /\ C) /\ D ==> (A /\ B /\ C) /\ D
+\end{verbatim}\end{session}\index{WIN\_THM@{\ptt WIN\_THM}|)}
+
+\section{Transforming the Focus}
+
+Once you have a window the next thing you want to do is transform it.
+Each transformation of a focus $f_n$ to $f_{n+1}$ must be justified by a 
+theorem of the following form:
+\begin{alltt}
+   \(\Gamma\) |- \(f\sb{n+1}\) \(R\) \(f\sb{n}\)
+\end{alltt}
+Where $\Gamma$ is some subset of the assumptions of the window, and
+$R$\/ is the relation which is being preserved by the window.
+The relation could, in fact, be any relation which the
+system knows to be as strong as $R$.
+The system already knows that equality is as strong as any reflexive relation.
+For the definition of {\it stronger\/} see section~\ref{sec:rel}.
+
+To take a theorem of the form above and use it to transform a window,
+use the command:
+\begin{boxed}\begin{verbatim}
+   TRANSFORM_WIN : thm -> void
+\end{verbatim}\end{boxed}\index{TRANSFORM\_WIN@{\ptt TRANSFORM\_WIN}}
+To make life easier,
+the following commands are provided for transforming the focus of a
+window.
+These commands automatically generate a theorem of the correct form and
+use it to transform the window:\footnote{Other versions of rewriting
+are described in chapter~\ref{chap:ref}.}
+\begin{boxed}\begin{verbatim}
+   MATCH_TRANSFORM_WIN: thm -> void
+   REWRITE_WIN : thm list -> void
+   PURE_REWRITE_WIN : thm list -> void
+   CONVERT_WIN : conv -> void
+   RULE_WIN : (thm -> thm) -> void
+   THM_RULE_WIN : (thm -> thm) -> void
+   FOC_RULE_WIN : (term -> thm) -> void
+   TACTIC_WIN : tactic -> void
+\end{verbatim}\end{boxed}\index{MATCH\_TRANSFORM\_WIN@{\ptt MATCH\_TRANSFORM\_WIN}}\index{REWRITE\_WIN@{\ptt REWRITE\_WIN}}\index{PURE\_REWRITE\_WIN@{\ptt PURE\_REWRITE\_WIN}}\index{CONVERT\_WIN@{\ptt CONVERT\_WIN}}\index{RULE\_WIN@{\ptt RULE\_WIN}}\index{THM\_RULE\_WIN@{\ptt THM\_RULE\_WIN}}\index{FOC\_RULE\_WIN@{\ptt FOC\_RULE\_WIN}}\index{TACTIC\_WIN@{\ptt TACTIC\_WIN}}
+We shall stick to using rewriting in our examples because its function should
+be familiar.
+We can rewrite the focus of the window created in the
+previous section with the assumption of that window.
+\begin{session}\begin{verbatim}
+   #PURE_REWRITE_WIN [ASSUME "~C"];;
+       ! ~C
+   ==> * (A /\ B /\ F) /\ D
+   () : void
+
+   #WIN_THM ();;
+   ~C |- (A /\ B /\ F) /\ D ==> (A /\ B /\ C) /\ D
+\end{verbatim}\end{session}
+
+If you decide that the last thing you did was a mistake,
+then you can use the \ml{UNDO} command to undo it.
+\begin{boxed}\begin{verbatim}
+   UNDO : void -> void
+\end{verbatim}\end{boxed}\index{UNDO@{\ptt UNDO}}
+
+\section{Opening subwindows}
+If you wish to concentrate your attention on some subterm of the focus,
+you should open a window on that subterm.
+This is accomplished with the command:
+\begin{boxed}\begin{verbatim}
+   OPEN_WIN : path -> void
+\end{verbatim}\end{boxed}\index{OPEN\_WIN@{\ptt OPEN\_WIN}|(}
+\ml{OPEN\_WIN} takes as an argument a \ml{path} that describes the
+position of the desired subterm within the focus.
+A \ml{path}\index{path@{\ptt path}} is a list made up of the following
+constructors: \ml{RATOR}, \ml{RAND} and \ml{BODY}.
+You should think of using each element in the list to select
+an ever decreasing subterm until the list is exhausted.
+
+For example, if we wished to concentrate on the subterm \ml{"B \hand\ F"} in
+the previous window, we should open a subwindow at \ml{[RATOR; RAND; RAND]}:
+\begin{session}\begin{verbatim}
+   #OPEN_WIN [RATOR; RAND; RAND];;
+       ! ~C
+       ! D
+       ! A
+   ==> * B /\ F
+   () : void
+\end{verbatim}\end{session}
+
+A subwindow will have all the assumptions of the parent window,
+plus any additional assumptions which follow from the context of the subwindow.
+The one exception to this rule is when a window is opened inside the body of an
+abstraction.
+In this case, all assumptions with free occurrences of the variable bound
+by the abstraction will be hidden.
+(In the future this may be handled by renaming.)
+
+The relation in the subwindow may not be the same as the relation in the
+parent window.   The system will choose the weakest relation for the
+subwindow which it knows will preserve the relation of the parent window.
+To learn how the system makes these choices refer to section~\ref{sec:win}.
+
+Having got a subwindow you will want to transform it, and then close it.
+To close a subwindow, use the function:
+\begin{boxed}\begin{verbatim}
+   CLOSE_WIN : void -> void
+\end{verbatim}\end{boxed}\index{CLOSE\_WIN@{\ptt CLOSE\_WIN}|(}
+We continue our example by transforming the subwindow with rewriting,
+and then closing it.
+Once back in the parent window, we check the theorem proved so far.
+\begin{session}\begin{verbatim}
+   #REWRITE_WIN [];;
+       ! ~C
+       ! D
+       ! A
+   ==> * F
+   () : void
+   
+   #CLOSE_WIN ();;
+       ! ~C
+   ==> * (A /\ F) /\ D
+   () : void
+   
+   #WIN_THM ();;
+   ~C |- (A /\ F) /\ D ==> (A /\ B /\ C) /\ D
+\end{verbatim}\end{session}\index{CLOSE\_WIN@{\ptt CLOSE\_WIN}|)}
+
+If opening a particular window proves to be a mistake,
+you can return to the parent window with the \ml{UNDO\_WIN} command.
+\begin{boxed}\begin{verbatim}
+   UNDO_WIN : void -> void
+\end{verbatim}\end{boxed}\index{UNDO\_WIN@{\ptt UNDO\_WIN}}
+Alternatively, you can use the \ml{UNDO}\index{UNDO@{\ptt UNDO}} command
+if the \ml{OPEN\_WIN}\index{OPEN\_WIN@{\ptt OPEN\_WIN}|)}
+was the last command you made.
+
+\section{Lemmas}\index{lemma|(}	\label{sec:lem}
+
+The window stack can hold a set of theorems which are considered relevant
+to the current problem.
+The last parameter of the \ml{CREATE\_WIN} command is the initial list of
+theorems which should be considered relevant to the window stack.
+In section~\ref{sec:start} we created a window with an empty list of 
+relevant theorems.
+
+If the hypotheses of a theorem are a subset of the assumptions of a window,
+then that theorem is said to be {\it applicable\/} in the context of that
+window.
+When a window is printed, the conclusions of those theorems held
+by the stack that are applicable to the window are printed 
+with the assumptions of the window.
+Such conclusions are called the
+{\it lemmas}\/ of the window.
+Lemmas may be used in the same way as the assumptions.
+We will refer to lemmas and assumptions collectively as the {\it context}
+of a window.
+When printed, lemmas are prefixed with
+`\ml{|}'\index{"|@{{\ptt "|} (lemma prefix)}} rather than `\ml{!}' to
+distinguish them from assumptions.
+
+As an example,
+suppose we wish to simplify the term \ml{"A \hand\ B"} given that we 
+have a theorem \ml{a\_then\_b} which states that \ml{A |- B}.
+We create a window stack which has a window with \ml{"A \hand\ B"} as its
+focus, and which stores the theorem \ml{A |- B} in the stack as a
+potentially relevant theorem.
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #BEGIN_STACK `lemma-ex` "(=) (A /\ B)" [] [a_then_b];;
+   = * A /\ B
+   () : void
+\end{verbatim}\end{session}
+If we now open a subwindow on \ml{"B"} we enter a context in which the
+stored theorem is applicable.
+We can then use the conclusion of the stored theorem to rewrite the focus
+of the subwindow.
+\begin{session}\begin{verbatim}
+   #OPEN_WIN [RAND];;
+     ! A
+     | B
+   = * B
+   () : void
+   
+   #REWRITE_WIN [ASSUME "B:bool"];;
+     ! A
+     | B
+   = * T
+   () : void
+   
+   #CLOSE_WIN ();;
+   = * A /\ T
+   () : void
+\end{verbatim}\end{session}
+
+You can add more theorems to the set of relevant theorems during the course of
+a proof by using the
+\ml{ADD\_THEOREM}\index{ADD\_THEOREM@{\ptt ADD\_THEOREM}} command.
+\begin{boxed}\begin{verbatim}
+   ADD_THEOREM : thm -> void
+\end{verbatim}\end{boxed}
+You can also recover the list of theorems held by the window stack for
+use with another proof by using the
+\ml{LEMMA\_THMS}\index{LEMMA\_THMS@{\ptt LEMMA\_THMS}} command.
+\begin{boxed}\begin{verbatim}
+   LEMMA_THMS : void -> thm list
+\end{verbatim}\end{boxed}\index{lemma|)}
+
+\subsection{Windows on the Context}
+
+Sometimes you might want to make use of a fact that follows indirectly from
+the context of a window.
+To allow this style of reasoning we provide a command for opening subwindows
+on subterms in the context.
+You can now open a window on some fact in the context and attempt to 
+derive a new fact from it.
+When you close such a window a theorem is added to the set of theorems
+held by the window stack so that the fact you derived becomes a lemma.
+
+The command to open a subwindow in the context is:
+\begin{boxed}\begin{verbatim}
+   OPEN_CONTEXT : term -> path -> void
+\end{verbatim}\end{boxed}\index{OPEN\_CONTEXT@{\ptt OPEN\_CONTEXT}}
+The first parameter is the term in the context you wish to open a window on,
+the second is the path to the desired focus within that term.
+More often than not, the path will be empty (denoting the entire expression).
+
+For example, consider the window below:
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #PRINT_STACK ();;
+       ! A = Z
+       ! (A /\ B) /\ A
+   ==> * (Z /\ B) /\ A
+   () : void
+\end{verbatim}\end{session}
+If we open a subwindow on the first \ml{"A"} in the assumption
+\ml{"(A \hand\ B) \hand\ A}, 
+we can use the assumption \ml{"A = Z"} to rewrite the \ml{"A"} to a \ml{"Z"}.
+The resulting lemma could then be used to simplify the focus to \ml{"T"}.
+\begin{session}\begin{verbatim}
+   #OPEN_CONTEXT "(A /\ B) /\ A" [RATOR; RAND; RATOR; RAND];;
+       ! A = Z
+       ! (A /\ B) /\ A
+       ! A
+       ! B
+   <== * A
+   () : void
+\end{verbatim}\end{session}
+Note that we are now preserving the relation \ml{"<=="},
+this is because we are trying to derive a new fact that follows from 
+the assumption we opened a subwindow on.
+\begin{session}\begin{verbatim}
+   #REWRITE_WIN [ASSUME "A:bool = Z:bool"];;
+       ! A = Z
+       ! (A /\ B) /\ A
+       ! A
+       ! B
+   <== * Z
+   () : void
+   
+   #CLOSE_WIN ();;
+       ! A = Z
+       ! (A /\ B) /\ A
+       | (Z /\ B) /\ A
+   ==> * (Z /\ B) /\ A
+   () : void
+\end{verbatim}\end{session}
+
+\section{Conjectures}	\label{sec:con}
+
+The window stack carries with it a set of goals, called 
+{\it suppositions}\index{supposition},
+which the user supposes to be true.
+A supposition of the form \ml{P ?- C} means that the user believes that
+\ml{"C"} follows from \ml{"P"}.
+Initially the set of suppositions associated with the window stack is empty.
+Suppositions can be added to the stack with the command:
+\begin{boxed}\begin{verbatim}
+   ADD_SUPPOSE : (goal -> void)
+\end{verbatim}\end{boxed}\index{ADD\_SUPPOSE@{\ptt ADD\_SUPPOSE}}
+The command \ml{CONJECTURE "C"} is a shorthand for adding a supposition with
+conclusion \ml{"C"} and assumptions the same as those of the current window.
+\begin{boxed}\begin{verbatim}
+   CONJECTURE : (term -> void)
+\end{verbatim}\end{boxed}\index{CONJECTURE@{\ptt CONJECTURE}}
+
+If the premises of any supposition are a subset of the assumptions of a window,
+then that supposition is said to be
+{\it applicable}\index{applicable}\/ in the context of that
+window.
+When a window is printed, the conclusions of those suppositions which
+are held by the stack and which are applicable are printed with the 
+assumptions and lemmas of the window.
+The conclusions of such suppositions are called the 
+{\it conjectures}\index{conjectures}\/ of the
+window.
+Conjectures are part of the context of a window.
+When printed, conjectures are prefixed with
+`\ml{?}'\index{?@{{\ptt ?} (conjecture prefix)}} to distinguish them
+from the other elements of the context.
+
+Conjectures may be used like the other elements of the context, except once
+used\index{conjectures!used} a conjecture must be proved.
+Once a conjecture has been used, its prefix will change from `\ml{?}' to
+`\ml{\$}'\index{\$@{{\ptt \$} (used conjecture prefix)}}.
+If you have used a conjecture in a subwindow, and that conjecture is not
+part of the context of the parent window,
+or if the subwindow is inside the body of the abstraction and the variable
+bound by the abstraction occurs free in the conjecture,
+then that conjecture {\it must\/}
+be proved before you can be allowed to close the subwindow.
+Such conjectures are called {\it bad\/}
+conjectures\index{conjectures!bad}.
+Bad conjectures are prefixed with
+`\ml{@}'\index{"@@{{\ptt "@} (bad conjecture prefix)}}.
+A list of the bad conjectures of the current window can be obtained with 
+the command:
+\begin{boxed}\begin{verbatim}
+   BAD_CONJECTURES : void -> term list
+\end{verbatim}\end{boxed}\index{BAD\_CONJECTURES@{\ptt BAD\_CONJECTURES}}
+All conjectures used at the very bottom of the window stack are considered bad
+because they appear as extra assumptions in the theorem held by that window.
+
+Consider the window below:
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #BEGIN_STACK `suppose-ex` "(=) ((A \/ ~A) \/ B)" [] [];;
+   = * (A \/ ~A) \/ B
+   () : void
+\end{verbatim}\end{session}
+If we assume that we can prove \ml{"A \hor\ \hnot A"},
+we can simplify the focus, and then return to prove our assumption later.
+\begin{session}\begin{verbatim}
+   #CONJECTURE "A \/ ~A";;
+     ? A \/ ~A
+   = * (A \/ ~A) \/ B
+   () : void
+   
+   #REWRITE_WIN [ASSUME "A \/ ~A"];;
+     @ A \/ ~A
+   = * T
+   () : void
+
+   #WIN_THM ();;
+   A \/ ~A |- T = (A \/ ~A) \/ B
+\end{verbatim}\end{session}
+
+If you open a subwindow in the context of a window,
+and in that subwindow you use a conjecture,
+when you return to the parent window you may find that the conjecture is no
+longer considered to have been used.
+This is because the conjecture has {\it not\/} been used to transform the
+focus of this window.
+However, if you use the lemma generated by the subwindow,
+all conjectures used in generating that lemma will then be
+considered to have been used.
+
+To remove a usage of a conjecture, you must introduce a lemma that is
+the same as the conjecture.
+You can do this by adding a theorem to the set of relevant theorems directly,
+by deriving the desired lemma from the context
+(using the conjecture to derive the required lemma will not work),
+or by using the command \ml{ESTABLISH}\index{ESTABLISH@{\ptt ESTABLISH}}.
+\begin{boxed}\begin{verbatim}
+   ESTABLISH : term -> void
+\end{verbatim}\end{boxed}
+\ml{ESTABLISH "C"} opens a new subwindow with \ml{"C"} as its focus and
+\ml{"==>"} as the relation it preserves.
+If you can transform the focus of this subwindow to \ml{"T"} and then
+close the window, \ml{"C"} will become a lemma in the parent window.
+
+So, to continue our example, we must now prove the conjecture we have used:
+\begin{session}\begin{verbatim}
+#ESTABLISH "A \/ ~A";;
+    ? A \/ ~A
+==> * A \/ ~A
+() : void
+
+#REWRITE_WIN [EXCLUDED_MIDDLE];;
+    ? A \/ ~A
+==> * T
+() : void
+
+#CLOSE_WIN ();;
+  | A \/ ~A
+= * T
+() : void
+
+#WIN_THM ();;
+|- T = (A \/ ~A) \/ B
+\end{verbatim}\end{session}
+
+\section{Window Stacks}
+
+We have already used the
+\ml{BEGIN\_STACK}\index{BEGIN\_STACK@{\ptt BEGIN\_STACK}} command
+introduced in section~\ref{sec:start} to create a window stack.
+It is possible to work with several window stacks at the same time.
+When you create a new stack with
+\ml{BEGIN\_STACK}\index{BEGIN\_STACK@{\ptt BEGIN\_STACK}}
+it becomes the current stack.
+You can set the current stack to another stack by using the
+command \ml{SET\_STACK}\index{SET\_STACK@{\ptt SET\_STACK}}:
+\begin{boxed}\begin{verbatim}
+   SET_STACK : string -> void
+\end{verbatim}\end{boxed}
+The first parameter of 
+\ml{SET\_STACK}\index{SET\_STACK@{\ptt SET\_STACK}} is the name of
+the stack that you wish to be the current stack.
+
+If you have finished working with a particular stack,
+it can be destroyed with the 
+\ml{END\_STACK}\index{END\_STACK@{\ptt END\_STACK}} command.
+\begin{boxed}\begin{verbatim}
+   END_STACK : string -> void
+\end{verbatim}\end{boxed}
+The first parameter of the 
+\ml{END\_STACK}\index{END\_STACK@{\ptt END\_STACK}} command is the name
+of the stack you wish to destroy.
+It is possible, and in fact usual, to destroy the current stack, 
+leaving yourself with no current stack.
+
+The command \ml{CURRENT\_NAME}\index{CURRENT\_NAME@{\ptt CURRENT\_NAME}}
+returns the name of the current stack, if there is one.
+\begin{boxed}\begin{verbatim}
+   CURRENT_NAME : string -> void
+\end{verbatim}\end{boxed}
+The \ml{ALL\_STACKS}\index{ALL\_STACKS@{\ptt ALL\_STACKS}} command
+can be used to find out the names of all the stacks in the system.
+\begin{boxed}\begin{verbatim}
+   ALL_STACKS : void -> void
+\end{verbatim}\end{boxed}
+
+\subsection{The xlabel Library Component}
+
+If you are running the HOL and the window system from within an Xterminal
+(an X windows pseudo-terminal),
+then the xlabel library component may be of help to you.
+The xlabel library component will set the title bar of the Xterminal
+to contain the name of the current stack, and maintain the title whenever the
+the current stack is changed.
+To load the xlabel component, first load the library as described in
+section~\ref{sec:start}, then type the following:
+\begin{hol}\begin{alltt}
+	load_library `window:xlabel`;;
+\end{alltt}\end{hol}
+
+\section{Batch Proof}
+
+Once you have completed a proof with the window system, you may wish to
+reuse part or all of that proof.
+Until now, the proof has been developed as a series of operations on a stack
+of windows.
+Proofs can be repeated noninteractively without using the window stack.
+Each of the interactive commands we have seen so far
+(except the undo and stack related commands)
+has a batch equivalent.
+The batch commands have the same name as their interactive
+counterparts, except they are in lowercase.
+
+A batch command to transform a window
+takes the original window as an argument and returns the transformed window.
+All such commands will have the basic type \ml{:window -> window}.
+Batch analogues to commands which create subwindows
+have an argument of the transformation function to apply to the subwindow.
+They then take the original parent window as an argument,
+open a subwindow in the parent,
+apply the transformation function to the subwindow,
+and close the subwindow,
+returning the transformed parent window.
+All of these commands will have the basic type 
+\ml{:(window -> window) -> window -> window}.
+The batch commands use of the \ML\ run-time stack 
+mirrors the use of the window stack during interactive proof.
+
+As an illustration of batch proof, we now repeat the first proof of
+section~\ref{sec:start}.
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #let w1 = create_win "(==>) (A /\ (B /\ C))" ["~C"] [] [];;
+   w1 = (|- A /\ B /\ C ==> A /\ B /\ C, ["~C"], [], []) : window
+\end{verbatim}\end{session}
+The \ml{create\_win} command creates a window with the specified 
+relation and focus.   Its other parameters specify lists of assumptions
+to make and theorems that might be relevant to the window.
+\ml{create\_win} is the noninteractive analogue of \ml{BEGIN\_STACK}.
+\begin{session}\begin{verbatim}
+   #let w2 = ((pure_rewrite_win [ASSUME "~C"]) CB
+   #          (open_win [RAND] (rewrite_win []))) w1;;
+   w2 = (~C |- A /\ F ==> A /\ B /\ C, ["~C"], [], []) : window
+   
+   #win_thm w2;;
+   ~C |- A /\ F ==> A /\ B /\ C
+\end{verbatim}\end{session}
+(Note that \ml{CB}\index{CB@{\ptt CB}} is new to release 2.0 of \HOL:
+\ml{f CB g = g o f}.)
+Since this particular combination of commands is quite common,
+the one command \ml{transform} has been created for this situation.
+\begin{boxed}\begin{verbatim}
+   transform : (term -> term list -> thm list -> (window -> window) -> thm
+\end{verbatim}\end{boxed}\index{transform@{\ptt transform}}
+\ml{transform} creates a window, transforms it and returns the resulting
+theorem.
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #transform "(==>) (A /\ (B /\ C))" ["~C"] []
+   #          ((pure_rewrite_win [ASSUME "~C"]) CB
+   #           (open_win [RAND] (rewrite_win [])));;
+   ~C |- A /\ F ==> A /\ B /\ C
+\end{verbatim}\end{session}
+
+To interface between interactive and batch proof the following
+functions are provided:
+\begin{boxed}\begin{verbatim}
+   TOP_WIN : void -> window
+   APPLY_TRANSFORM : (window -> window) -> void
+\end{verbatim}\end{boxed}\index{TOP\_WIN@{\ptt TOP\_WIN}}\index{APPLY\_TRANSFORM@{\ptt APPLY\_TRANSFORM}}
+\ml{TOP\_WIN} returns the window on the top of the window stack.
+\ml{APPLY\_TRANSFORM} applies a window transformation function to the top of
+the stack.
+All the interactive transformation commands can be described with
+\ml{APPLY\_TRANSFORM}.
+For example,
+\begin{alltt}
+   REWRITE_WIN thms \(=\) APPLY_TRANSFORM (rewrite_win thms)
+\end{alltt}
+
+\section{The tactic Library Component}
+
+Most proof done with \HOL\ uses the subgoal package.
+For most applications the subgoal package remains the most appropriate tool.
+However it is possible to mix the two proof styles.
+If you would like to use window inference from within the subgoal package
+you should load the tactic library component as follows:
+\begin{hol}\begin{alltt}
+	load_library `window:tactic`;;
+\end{alltt}\end{hol}
+
+The tactic library component contains the following functions for 
+mixing the window inference and subgoal proof styles:
+\begin{boxed}\begin{verbatim}
+   BEGIN_STACK_TAC : string -> path -> thm list -> tactic
+   END_STACK_TAC : tactic
+   open_TAC : path -> thm list -> (window -> window) -> tactic
+\end{verbatim}\end{boxed}\index{BEGIN\_STACK\_TAC@{\ptt BEGIN\_STACK\_TAC}}\index{CLOSE\_STACK\_TAC@{\ptt CLOSE\_STACK\_TAC}}\index{open\_TAC@{\ptt open\_TAC}}
+\ml{BEGIN\_STACK\_TAC} and \ml{END\_STACK\_TAC} are for interactive use only and
+should be used to develop a proof.
+Once developed, a proof can be repeated with \ml{open\_TAC}.
+The idea behind these tactics is to open a window inside the current goal,
+so as to transform some subterm of the goal.
+The path parameter of both \ml{OPEN\_TAC} and \ml{open\_TAC} is the path
+through the goal to the focus of the required subwindow.
+The list of theorems is the list of theorems that might be relevant to
+the proof.
+
+Here is a simple interactive example.
+Suppose we had as our current goal the term \ml{"A \hand\ B \hand\ F"}.
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #set_goal ([], "A /\ B /\ F");;
+   "A /\ B /\ F"
+   
+   () : void
+\end{verbatim}\end{session}
+If we wanted to rewrite just the subterm \ml{"B \hand\ F"} to \ml{"F"} we
+can do this by opening a window on the subterm.
+\begin{session}\begin{verbatim}
+   #expand (BEGIN_STACK_TAC `tac-ex` [RAND] []);;
+   OK..
+   ==> * B /\ F
+   "A /\ B /\ F"
+   
+   () : void
+\end{verbatim}\end{session}
+Having opened at window on the desired subterm we can rewrite it without
+effecting the remainder of the goal.
+\begin{session}\begin{verbatim}
+   #REWRITE_WIN [];;
+   ==> * F
+   () : void
+\end{verbatim}\end{session}
+The \ml{END\_STACK\_TAC} tactic then takes the reasoning done in the 
+window stack and applies it to the goal.
+\ml{END\_STACK\_TAC}, will not work if you have made any changes to the
+goal since creating the stack.
+\begin{session}\begin{verbatim}
+   #expand (END_STACK_TAC `tac-ex`);;
+   ==> * F
+   OK..
+   "A /\ F"
+   
+   () : void
+\end{verbatim}\end{session}
+The same example is repeated here with the window inference performed
+noninteractively.
+\setcounter{sessioncount}{1}
+\begin{session}\begin{verbatim}
+   #set_goal ([], "A /\ (B /\ F)");;
+   "A /\ B /\ F"
+   
+   () : void
+   
+   #expand (open_TAC [RAND] [] (rewrite_win []));;
+   OK..
+   "A /\ F"
+   
+   () : void
+\end{verbatim}\end{session}
+
+\section{Adding New Window Rules}	\label{sec:win}
+
+To allow the opening and closing of subwindows,
+the system chains together several inference rules on behalf of the user.
+These rules are called {\it window rules\/} and the system keeps them
+in a data base together with some information about them.
+
+The system has a full set of rules for opening and closing
+subwindows on \HOL\ terms.
+These rules are capable of preserving the following relations:
+\ml{"="}, \ml{"==>"} and \ml{"<=="}.
+The rules in the system exploit the contextual
+information available when windowing on the positions 
+marked with `\ml{\_}' in the following
+terms: \ml{"\_\hand\_"}, \ml{"\_\hor\_"}, \ml{"\_==>\_"}, \ml{"\_<==\_"},
+\ml{"\_=>\_|\_"}, \ml{"(\\\_.\_)\_"}, and \ml{let\_=\_in\_}.
+However, if you would like the system to preserve other relations,
+or exploit the contextual information available inside other terms,
+then you will have to add some rules to the database.
+
+Each window rule must be of type \ml{:term -> (thm -> thm)}.
+A rule should take, the focus of the parent window and the theorem held
+by the child window, and return the theorem required to transform the parent
+window.
+For example, the window rule \ml{IMP\_CONJ1\_CLOSE} as defined below is used
+when opening a subwindow at \ml{"A"} in \ml{"A \hand\ B"} while preserving
+\ml{"==>"} in the parent window.
+\begin{verbatim}
+          B |- A' ==> A
+   ---------------------------  IMP_CONJ1_CLOSE "A /\ B" 
+    |- (A' /\ B) ==> (A /\ B)
+\end{verbatim}
+Each rule in the system is packaged with the following information:
+\begin{itemize}
+	\item	The path from the focus of the parent window to the focus
+		of the child window.
+		In the case of \ml{IMP\_CONJ1\_CLOSE} this is 
+		\ml{[RATOR; RAND]}.
+	\item	A function from the focus of the parent window to \ml{bool}.
+		The function is true iff the rule is applicable to the
+		focus.
+		\ml{IMP\_CONJ1\_CLOSE} only works on conjunctions,
+		so it is stored with the function \ml{is\_conj}.
+	\item	A function which takes the focus of the parent window and
+		the relation that we want to preserve in the parent window,
+		and returns the relation that this rule will preserve in
+		the child window.
+		\ml{IMP\_CONJ1\_CLOSE} always preserves \ml{"==>"} in the
+		child window.
+	\item	A function which takes the focus of the parent window and
+		the relation that we want to preserve in the parent window,
+		and returns the relation that this rule will preserve in
+		the parent window.
+		\ml{IMP\_CONJ1\_CLOSE} always preserves \ml{"==>"} in the
+		parent window.
+	\item	A function which takes the focus and assumptions of the
+		parent window, and returns the assumptions of the 
+		child window.
+
+		The assumptions of a window are represented by a list of
+		theorems each of which has just one hypothesis.
+		An assumption {\it a}\/ is typically represented by the
+		theorem \ml{\(a\) |- \(a\)}.
+		However, consider a window with focus
+		\ml{"\(a\) \hand\ \(b\) \hand\ \(c\)"}.
+		If you were to open a subwindow at \ml{"\(a\)"} in such a 
+		window, you might expect the subwindow to have two new
+		assumptions, \ml{"\(b\)"} and \ml{"\(c\)"}.
+		However a batch command would probably expect that when
+		opening a window at the first operand of a conjunction, it
+		would gain the second operand of the conjunction
+		(namely \ml{"\(b\) \hand\ \(c\)"}) as an assumption.
+		To avoid this a conflict of expectations, the following
+		theorems should be added when opening the window:
+		\ml{\(b\) \hand\ \(c\) |- \(b\)} and
+		\ml{\(b\) \hand\ \(c\) |- \(c\)}.
+		The system then knows that \ml{"\(b\) \hand\ \(c\)"} can
+		be assumed true, and that from that it can derive the
+		\ml{"\(b\)"} and \ml{"\(c\)"}.
+		Only the conclusions of these theorems 
+		(namely \ml{"\(b\)"} and \ml{"\(c\)"}) will be displayed as
+		assumptions to the user during interactive proof.
+
+	\item   A function which takes the focus of the parent window
+		and returns the list of variables which appear
+		bound in the parent window, but which are free in the
+		child window.
+		That is, if the window rule opens inside the body of 
+		an abstraction, it returns the list of variables bound by
+		the abstraction, otherwise the empty list is returned.
+\end{itemize}
+To add a window rule to the system, use the function
+\ml{store\_rule}\index{store\_rule@{\ptt store\_rule}|(}.
+\begin{boxed}\begin{verbatim}
+   store_rule : window_rule -> void
+\end{verbatim}\end{boxed}\index{store\_rule@{\ptt store\_rule}|)}
+Where \ml{window\_rule} is defined as:
+\begin{verbatim}
+   lettype window_rule = (  path
+                         #  (term -> bool)
+                         #  (term -> term -> term)
+                         #  (term -> term -> term)
+                         #  (term -> ((thm list) -> (thm list)))
+                         #  (term -> (term list))
+                         #  (term -> (thm -> thm))
+                         );;
+\end{verbatim}\index{window\_rule@{\ptt window\_rule}}
+Namely, a tuple of those components just described, and the window rule 
+itself.
+For example, \ml{IMP\_CONJ1\_CLOSE} was added to the system with the
+following command:
+\begin{verbatim}
+   store_rule   (   [RATOR; RAND]
+                ,   is_conj
+                ,   (\foc.\rel. "==>")
+                ,   (\foc.\rel. "==>")
+                ,   (\foc.\hyps. (SMASH (ASSUME (rand foc)))@hyps)
+                ,   (\foc. [])
+                ,   IMP_CONJ1_CLOSE
+                );;
+\end{verbatim}
+(Note that \ml{SMASH} is new inference rule introduced by the window library.
+ \ml{SMASH} is similar to \ml{CONJUNCTS}.)
+
+When opening a window it will usually be the case that there are several
+possible lists of window rules which could have been chained together 
+to open a window at the required position.
+The system uses the following heuristics to decide which of two potential
+lists of rules is the {\it better}:
+\begin{enumerate}
+	\item	The system considers the child window which would result from
+		using each of possible lists of rules.
+		\begin{itemize}	
+			\item	If the relation required to be preserved by one
+				child window is known to be weaker than that
+				required by the other, the list of rules
+				which produced the window with the weaker
+				relation is chosen.
+			\item	Otherwise, the list of rules which produced
+				the child window with the most hypotheses is
+				chosen.
+		\end{itemize}
+	\item	If step 1 can not distinguish between the lists of rules then
+		the choice between them is somewhat arbitrary.
+		In such a case the lists are compared one rule at
+		a time until one is found which is regarded as being more
+		{\it specific}\/ than the other.
+		\begin{itemize}
+			\item	Rules which follow a longer path are regarded as
+				more specific.
+			\item	Rules which preserve a weaker relation in the
+				parent window are regarded as more specific.
+			\item	Rules which preserve a weaker relation in the
+				child window are regarded as more specific.
+			\item	Rules which create more assumptions in the
+				child window are regarded as more specific.
+			\item	Rules which were more recently added to the
+				system are regarded as more specific.
+		\end{itemize}
+\end{enumerate}
+
+\section{Adding New Relations}	\label{sec:rel}
+
+Before the window library can be used to preserve a relation, the
+system must know that the relation is reflexive and transitive.
+The system is already aware that the following relations are reflexive
+and transitive: \ml{"="}, \ml{"==>"} and \ml{"<=="}.
+
+To tell the system that some relation is reflexive and transitive, use
+\ml{add\_relation}\index{add\_relation@{\ptt add\_relation}|(}.
+\begin{boxed}\begin{verbatim}
+   add_relation : (thm # thm) -> void
+\end{verbatim}\end{boxed}
+\ml{add\_relation} takes a pair of theorems, which should be of the same form
+as \ml{EQ\_REFL} and \ml{EQ\_TRANS} and stores these theorems for use by
+the system.
+For example, to tell the system that implication was reflexive and transitive
+we defined two theorems
+\ml{IMP\_REFL\_THM}\index{IMP\_REFL\_THM@{\ptt IMP\_REFL\_THM}|(}
+and
+\ml{IMP\_TRANS\_THM}\index{IMP\_TRANS\_THM@{\ptt IMP\_TRANS\_THM}|(}
+of the following form:
+\begin{verbatim}
+   IMP_REFL_THM = |- !x. x ==> x
+
+   IMP_TRANS_THM = |- !x y z. (x ==> y) /\ (y ==> z) ==> x ==> z
+\end{verbatim}
+and then issued the command:
+\begin{verbatim}
+   add_relation (IMP_REFL_THM, IMP_TRANS_THM);;
+\end{verbatim}\index{IMP\_TRANS\_THM@{\ptt IMP\_TRANS\_THM}|)}\index{IMP\_REFL\_THM@{\ptt IMP\_REFL\_THM}|)}\index{add\_relation@{\ptt add\_relation}|)}
+
+\subsection{Relative Strengths}
+
+We say that some relation, $r_1$,
+is {\it stronger}\index{stronger}\/ than another relation, $r_2$, 
+if whenever some $x$ and $y$ are related by $r_1$
+they are also related by $r_2$.
+Note that stronger is a reflexive relation.
+
+If the system knows that $r_1$ is stronger than $r_2$ then
+it will allow you use theorems of the form 
+\begin{alltt}
+   |- \(f\sb{n+1}\) \(r\sb{1}\) \(f\sb{n}\)
+\end{alltt}
+to transform the focus of a window which is supposed to be preserving
+the relation $r_2$.
+Furthermore, if you ask the system to open a subwindow 
+in the focus of a window which is supposed to be preserving the relation
+$r_2$, and the system has no window rule for that case, it can substitute
+a window rule which preserves $r_1$.
+
+Every relation used with the window library must be reflexive.
+From this we can deduce that equality is stronger than any relation that can be
+used with system.
+The window library knows this, so,
+when adding some new relation,
+there is no need to state that equality is stronger than it.
+However, if you plan on adding two new relations to the system,
+say \ml{"r1"} and \ml{"r2"}, such that \ml{"r1"} is stronger than \ml{"r2"},
+you will need to tell the system about that.
+
+First you should prove the following theorem \ml{WEAKEN\_r1\_r2}:
+\begin{verbatim}
+    WEAKEN_r1_r2 = |- !x y. (x r1 y) ==> (x r2 y)
+\end{verbatim}
+then call
+\ml{add\_weak}\index{add\_weak@{\ptt add\_weak}|(}
+to add the theorem to the system:
+\begin{boxed}\begin{verbatim}
+   add_weak : thm -> void
+\end{verbatim}\end{boxed}
+as in:
+\begin{verbatim}
+   add_weak WEAKEN_r1_r2;;
+\end{verbatim}\index{add\_weak@{\ptt add\_weak}|)}
+
+\section{Future Changes}
+
+Some changes to the window library are currently being considered.
+These changes include:
+\begin{itemize}
+	\item	The window rules for opening inside the body of abstractions
+		may be changed so that they rename
+		bound variables rather than hiding assumptions in which
+		the bound variables occur.
+	\item	I may add the ability to weaken the premises of
+		a supposition.
+		This would be an alternative to compelling the user to prove
+		used conjectures.
+	\item	It may be possible to specify a path to a subterm with
+		pattern matching.
+	\item	Some functions which are currently considered {\it internal\/}
+		to the system may be documented in future releases.
+\end{itemize}
+
+The window library is still work in progress.
+It has been released to solicit comment as much as to provide a service.
+As people begin to use the software I expect various infelicities to be brought
+to light.
+It is my intention to keep the interface fluid
+for the first couple to releases so that I can capitalise on
+the feedback I get from people's experiences with using it.
+While I hope that the vast majority of the code is bug-free,
+I will not be too surprised to learn otherwise.
+If you do have a suggestion for improving the system, or find a bug, please
+contact me.   I will endeavour to provide bug fixes as soon as possible.
+When reporting a bug, please be sure to tell me which versions of the 
+window inference system and \HOL\ you are using.
+The constant \ml{window\_version} contains the version number of the window
+system.
+I can be contacted at:
+\begin{center}
+	\begin{tabular}{l@{\hspace{10mm}}ll}
+		Jim Grundy				&			&								\\
+		University of Cambridge	& phone:	&	+44$\;$223$\:$33$\,$4760	\\
+		Computer Laboratory		& fax:		&	+44$\;$223$\:$33$\,$4678	\\
+		New Museums Site		& telex:	&	CAMSPLG 81240				\\
+		Pembroke Street			& email:	&	jg@cl.cam.ac.uk				\\
+		Cambridge\ \ {\small CB}2 3{\small QG}	&	&						\\
+		UNITED KINGDOM			&			&								\\
+	\end{tabular}
+\end{center}
+
+\section{Bugs}
+
+	Opening a window inside a \ml{let} expression will not work properly
+		for \ml{let} expressions involving tuples of variables or
+		which use the \ml{and} construct.
+
+\section*{Acknowledgements}
+	I would like to thank Andy Gordon, Mats Larsson, Laurent Thery and
+		Joakim von Wright, all of whom have found bugs in earlier versions of
+		the system, and suggested many improvements.

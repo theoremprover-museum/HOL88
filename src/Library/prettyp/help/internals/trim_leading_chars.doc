@@ -1,0 +1,10 @@
+\DOC trim_leading_chars
+
+\TYPE {trim_leading_chars : (string list -> string -> string)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

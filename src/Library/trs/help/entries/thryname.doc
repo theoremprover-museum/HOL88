@@ -1,0 +1,25 @@
+\DOC thryname
+
+\TYPE {thryname : (string -> thmpattern)}
+
+\SYNOPSIS
+Generates a pattern for testing the name of the theory to which a theorem
+belongs.
+
+\LIBRARY trs
+
+\DESCRIBE
+{thryname s} returns a pattern that matches a theorem if and only if the
+string {s} when interpreted as a pattern for names matches the name of the
+theory to which the theorem belongs. The string is used as a pattern in
+which {*} is interpreted as `match any number of characters (including
+none)' and {?} is interpreted as `match any single character'. All other
+characters in the string are taken literally.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+thmname, kind, conc, hypP, hypF, Andalso, Orelse, Not, Where, BigAnd, BigOr.
+
+\ENDDOC

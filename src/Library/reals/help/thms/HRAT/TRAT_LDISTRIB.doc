@@ -1,0 +1,5 @@
+\THEOREM TRAT_LDISTRIB HRAT
+|- !h i j.
+    (h trat_mul (i trat_add j)) trat_eq
+    ((h trat_mul i) trat_add (h trat_mul j))
+\ENDTHEOREM

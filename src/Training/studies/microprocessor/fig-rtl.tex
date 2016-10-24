@@ -1,0 +1,196 @@
+% ===== Register Transfer Level Architecture ===========================
+% ======================================================================
+\setlength{\unitlength}{1mm}
+% The real height is 224 and origin at 0 but cheat a bit to move the
+% caption up.
+%\begin{picture}(160,224)(0,0)
+\begin{picture}(160,217)(0,3)
+
+% datapath devices
+  {\thicklines {\put(90,205){\framebox(30,10)[c]{\large {\verb"interface"}}}}}
+  {\thicklines {\put(97.5,190){\framebox(15,10)[c]{\large {\verb"dreq"}}}}}
+  {\thicklines {\put(90,175){\framebox(30,10)[c]{\large {\verb"mar"}}}}}
+  {\thicklines {\put(90,160){\framebox(30,10)[c]{\large{\verb"addr"}}}}}
+  {\thicklines {\put(90,145){\framebox(30,10)[c]{\large {\verb"pc"}}}}}
+  {\thicklines {\put(90,130){\framebox(30,10)[c]{\large {\verb"acc"}}}}}
+  {\thicklines {\put(90,115){\framebox(30,10)[c]{\large {\verb"zeroflag"}}}}}
+  {\thicklines {\put(90,100){\framebox(30,10)[c]{\large {\verb"ir"}}}}}
+  {\thicklines {\put(90,85){\framebox(30,10)[c]{\large {\verb"opc"}}}}}
+  {\thicklines {\put(90,70){\framebox(30,10)[c]{\large {\verb"rtn"}}}}}
+  {\thicklines {\put(97.5,55){\framebox(15,10)[c]{\large {\verb"iack"}}}}}
+  {\thicklines {\put(90,40){\framebox(30,10)[c]{\large {\verb"arg"}}}}}
+  {\thicklines {\put(90,25){\framebox(30,10)[c]{\large {\verb"alu"}}}}}
+  {\thicklines {\put(90,10){\framebox(30,10)[c]{\large {\verb"buf"}}}}}
+
+% datapath outputs
+  \put(80,212.5){\line(0,1){7.5}}
+  \put(80,220){\vector(1,0){80}}
+  \put(120,207.5){\line(1,0){14}}
+  \put(136,207.5){\vector(1,0){24}}
+  \put(112.5,195){\line(1,0){21.5}}
+  \put(136,195){\vector(1,0){24}}
+  \put(120,165){\line(1,0){14}}
+  \put(136,165){\vector(1,0){24}}
+  \put(150,60){\vector(1,0){10}}
+
+  \put(159,222.5){\makebox(0,0)[r]{\small{\verb"wmem"}}}
+  \put(159,210){\makebox(0,0)[r]{\small{\verb"dataout"}}}
+  \put(159,197.5){\makebox(0,0)[r]{\small{\verb"dreq"}}}
+  \put(159,167.5){\makebox(0,0)[r]{\small{\verb"addr"}}}
+  \put(159,62.5){\makebox(0,0)[r]{\small{\verb"iack"}}}
+
+% the bus
+  \put(135,8){\vector(0,1){209}}
+  \put(135,217){\vector(0,-1){209}}
+  \put(137,130){\makebox(0,0)[l]{\small{\verb"system"}}}
+  \put(137,126){\makebox(0,0)[l]{\small{\verb"bus"}}}
+
+% feedback lines: zeroflag, opc, iack
+  \put(120,120){\line(1,0){14}}
+  \put(136,120){\line(1,0){13}}
+  \put(120,90){\line(1,0){14}}
+  \put(136,90){\line(1,0){11}}
+  \put(112.5,60){\line(1,0){21.5}}
+  \put(136,60){\line(1,0){10}}
+  \put(149,120){\line(0,-1){120}}
+  \put(147,90){\line(0,-1){88}}
+  \put(145,60){\line(0,-1){56}}
+  \put(149,0){\line(-1,0){132.5}}
+  \put(147,2){\line(-1,0){128.5}}
+  \put(145,4){\line(-1,0){124.5}}
+  \put(20.5,4){\vector(0,1){76}}
+  \put(18.5,2){\vector(0,1){78}}
+  \put(16.5,0){\vector(0,1){80}}
+
+% control signals
+  {\thicklines {\put(63,10){\framebox(2,192.5){}}}}
+  \put(80,210){\vector(1,0){10}}
+  \put(80,212.5){\line(0,-1){15}}
+  \put(85,207.5){\vector(1,0){5}}
+  \put(85,207.5){\line(0,-1){9}}
+  \put(85,196.5){\line(0,-1){4}}
+  \put(65,197.5){\vector(1,0){32.5}}
+  \put(65,192.5){\vector(1,0){32.5}}
+  \put(65,180){\vector(1,0){25}}
+  \put(65,152.5){\vector(1,0){25}}
+  \put(65,147.5){\vector(1,0){25}}
+  \put(65,137.5){\vector(1,0){25}}
+  \put(65,132.5){\vector(1,0){25}}
+  \put(65,107.5){\vector(1,0){25}}
+  \put(65,102.5){\vector(1,0){25}}
+  \put(65,77.5){\vector(1,0){25}}
+  \put(65,72.5){\vector(1,0){25}}
+  \put(80,57.5){\vector(1,0){17.5}}
+  \put(80,57.5){\line(0,1){15}}
+  \put(85,62.5){\vector(1,0){12.5}}
+  \put(85,62.5){\line(0,1){9}}
+  \put(85,73.5){\line(0,1){4}}
+  \put(65,45){\vector(1,0){25}}
+  \put(65,32.5){\vector(1,0){25}}
+  \put(65,27.5){\vector(1,0){25}}
+  \put(65,15){\vector(1,0){25}}
+
+  \put(66,200){\makebox(0,0)[l]{\small{\verb"wmem"}}}
+  \put(66,195){\makebox(0,0)[l]{\small{\verb"rmem"}}}
+  \put(66,182.5){\makebox(0,0)[l]{\small{\verb"wmar"}}}
+  \put(66,155){\makebox(0,0)[l]{\small{\verb"wpc"}}}
+  \put(66,150){\makebox(0,0)[l]{\small{\verb"rpc"}}}
+  \put(66,140){\makebox(0,0)[l]{\small{\verb"wacc"}}}
+  \put(66,135){\makebox(0,0)[l]{\small{\verb"racc"}}}
+  \put(66,110){\makebox(0,0)[l]{\small{\verb"wir"}}}
+  \put(66,105){\makebox(0,0)[l]{\small{\verb"rir"}}}
+  \put(66,80){\makebox(0,0)[l]{\small{\verb"wrtn"}}}
+  \put(66,75){\makebox(0,0)[l]{\small{\verb"rrtn"}}}
+  \put(66,47.5){\makebox(0,0)[l]{\small{\verb"warg"}}}
+  \put(66,35){\makebox(0,0)[l]{\small{\verb"alu0"}}}
+  \put(66,30){\makebox(0,0)[l]{\small{\verb"alu1"}}}
+  \put(66,17,5){\makebox(0,0)[l]{\small{\verb"rbuf"}}}
+
+% non-bus connections between devices in datapath
+  \put(105,175){\vector(0,-1){5}}
+  \put(105,130){\vector(0,-1){5}}
+  \put(105,100){\vector(0,-1){5}}
+  \put(105,40){\vector(0,-1){5}}
+  \put(105,25){\vector(0,-1){5}}
+
+% one-way and two-way connections to bus
+  \put(135,212.5){\vector(-1,0){15}}
+  \put(120,212.5){\vector(1,0){15}}
+  \put(135,180){\vector(-1,0){15}}
+  \put(135,150){\vector(-1,0){15}}
+  \put(120,150){\vector(1,0){15}}
+  \put(135,135){\vector(-1,0){15}}
+  \put(120,135){\vector(1,0){15}}
+  \put(135,105){\vector(-1,0){15}}
+  \put(120,105){\vector(1,0){15}}
+  \put(135,75){\vector(-1,0){15}}
+  \put(120,75){\vector(1,0){15}}
+  \put(135,45){\vector(-1,0){15}}
+  \put(135,30){\vector(-1,0){15}}
+  \put(120,15){\vector(1,0){15}}
+
+  {\thicklines {\put(7.5,115){\framebox(30,30)[c]{\large {\verb"rom"}}}}}
+  {\thicklines {\put(7.5,95){\framebox(30,10)[c]{\large {\verb"mpc"}}}}}
+  {\thicklines {\put(7.5,80){\framebox(30,10)[c]{\large {\verb"next"}}}}}
+  {\thicklines {\put(41.5,115){\framebox(2,30){}}}}
+
+% next to mpc, mpc to rom, mpc to next, rom to decoder
+  \put(22.5,90){\vector(0,1){5}}
+  \put(22.5,105){\vector(0,1){10}}
+  \put(22.5,110){\line(1,0){22.5}}
+  \put(45,110){\line(0,-1){41}}
+  \put(45,69){\line(-1,0){10.5}}
+  \put(34.5,69){\vector(0,1){11}}
+  \put(37.5,130){\vector(1,0){4}}
+
+% decoder outputs (right)
+  \put(43.5,135){\vector(1,0){19.5}}
+  \put(43.5,129){\line(1,0){13.5}}
+  \put(43.5,127){\line(1,0){11.5}}
+  \put(43.5,125){\line(1,0){9.5}}
+  \put(43.5,123){\line(1,0){7.5}}
+  \put(43.5,121){\line(1,0){5.5}}
+  \put(43.5,119){\line(1,0){3.5}}
+
+% rom and decoder outputs (down)
+  \put(57,129){\line(0,-1){72}}
+  \put(55,127){\line(0,-1){68}}
+  \put(53,125){\line(0,-1){64}}
+  \put(51,123){\line(0,-1){60}}
+  \put(49,121){\line(0,-1){56}}
+  \put(47,119){\line(0,-1){52}}
+
+% rom and decoder outputs (left)
+  \put(57,57){\line(-1,0){34.5}}
+  \put(55,59){\line(-1,0){30.5}}
+  \put(53,61){\line(-1,0){26.5}}
+  \put(51,63){\line(-1,0){22.5}}
+  \put(49,65){\line(-1,0){18.5}}
+  \put(47,67){\line(-1,0){14.5}}
+
+% rom and decoder outputs (up)
+  \put(22.5,57){\vector(0,1){23}}
+  \put(24.5,59){\vector(0,1){21}}
+  \put(26.5,61){\vector(0,1){19}}
+  \put(28.5,63){\vector(0,1){17}}
+  \put(30.5,65){\vector(0,1){15}}
+  \put(32.5,67){\vector(0,1){13}}
+
+% inputs
+  \put(14.5,39){\vector(0,1){41}}
+  \put(14.5,39){\line(-1,0){14.5}}
+  \put(12.5,54){\vector(0,1){26}}
+  \put(12.5,54){\line(-1,0){12.5}}
+  \put(10.5,69){\vector(0,1){11}}
+  \put(10.5,69){\line(-1,0){10.5}}
+
+  \put(0,72){\makebox(0,0)[l]{\small{\verb"dack"}}}
+  \put(0,57){\makebox(0,0)[l]{\small{\verb"idle"}}}
+  \put(0,42){\makebox(0,0)[l]{\small{\verb"ireq"}}}
+
+  \put(0,212.5){\line(1,0){79}}
+  \put(81,212.5){\vector(1,0){9}}
+
+  \put(0,215.5){\makebox(0,0)[l]{\small{\verb"datain"}}}
+
+\end{picture}

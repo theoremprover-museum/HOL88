@@ -1,0 +1,4 @@
+\THEOREM ACS_BOUNDS TRANSC
+|- !y.
+    (--(& 1)) <= y /\ y <= (& 1) ==> (& 0) <= (acs y) /\ (acs y) <= pi
+\ENDTHEOREM

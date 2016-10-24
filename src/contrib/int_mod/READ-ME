@@ -1,0 +1,108 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: int_mod						|
+|									|
+| DESCRIPTION   : development of some basic algebraic properties of	|
+|		  subgroups of the integers and basic arithmetic 	|
+|		  properties of modular arithmetic.  This directory	|
+|		  is a companion to the Studies directory int_mod.	|
+|		  As a result it is not automatically added to the	|
+|		  library search path.	 However, the command 		|
+|		  load_library `int_mod`;;   will add it.		|
+|									|
+|									|
+| AUTHOR	: E. L. Gunter						|
+| DATE		: 89.7.27						|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    int_sbgp.show1.ml  gives a history of the development of some of the
+                       facts about subgroups of the integers which are
+                       relevant to the development of modular arithmetic.
+
+#    int_sbgp.shell1    contains a shell script of the execution of the
+#                       commands in int_sbgp.show1.ml
+#    Moved to Studies/int_mod  (ELG 90.2.24)
+
+
+    int_mod.show.ml    gives a history of the development of some of the
+                       initial theory of modular arithmetic.
+
+
+#    int_mod.shell      contains a shell script of the execution of the
+#                       commands in int_mod.show.ml
+#    Moved to Studies/int_mod  (ELG 90.2.24)
+
+
+    int_sbgp.show2.ml  gives a history of the development of the fact that
+                       every subgroup of the integers is closed under
+                       multiplication by an arbitrary integer, and the fact
+                       that every subgroup is cyclic.
+
+
+#    int_sbgp.shell1    contains a shell script of the execution of the
+#                       commands in int_sbgp.show2.ml
+#    Moved to Studies/int_mod  (ELG 1990.2.24)
+
+
+    mk_int_sbgp.ml     creates the theorems worked out in int_sbgp.show1.ml
+                       and int_sbgp.show2.ml.  The resulting theory file is
+                       called int_sbgp.th
+
+    mk_int_mod.ml      creates the basic modular arithmetic, as found in
+                       int_mod.show.ml.  The resulting theory file is callled
+                       int_mod.th
+
+
+    inst_int_mod.ml    defines functions for instatiating single theorems
+                       and the whole theory of the integers mod n with a
+                       particular value for n.
+
+    int_sbgp.print     gives a listing of the theory int_sbgp.th
+
+    int_mod.print      gives a listing of the theory int_mod.th
+
+    int_mod.ml         loads the definitions and theorems from the theories
+                       int_sbgp.th and int_mod.th contained in this library,
+                       along with the functions for intstantiating the
+                       modular arithmetic with a particular integer value.
+                       It also adds this directory to the library search path.
+
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   To automatically load the theories of int_sbgp.th and int_mod.th,
+   execute
+              load_lib `int_mod`;;
+
+   If you are in draft mode, it will add int_mod.th (and hence int_sbgp.th)
+   as an ancestor.  If you are not in draft, it will attempt to execute
+   load_theory `int_mod`.  If it cannot succeed  with load_theory `int_mod`,
+   it will proceed with the remainer of the loading anyway.  But for it
+   to succeed in the case where you are not in draft mode and it cannot
+   execute load_theory `int_mod`, int_mod.th must be a predeclared ancestor
+   of the current theory.
+

@@ -1,0 +1,10 @@
+\DOC print_box_sizes
+
+\TYPE {print_box_sizes : (* print_box -> ((int # int # int) # int))}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

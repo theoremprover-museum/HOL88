@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_MULTIPLE REAL
+|- !n d. 1 num_lt n ==> (d < ((& n) * d) = (& 0) < d)
+\ENDTHEOREM

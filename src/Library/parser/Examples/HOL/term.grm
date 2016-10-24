@@ -1,0 +1,246 @@
+FIRST_CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+             A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+             1 2 3 4 5 6 7 8 9 0 *`.
+
+CHARS `a b c d e f g h i j k l m n o p q r s t u v w x y z 
+       A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+       1 2 3 4 5 6 7 8 9 0 ' *`.
+
+USEFUL [(`\``,`\``)].
+
+MAIN_LOOP --> Term [EOF].
+
+Term --> [\\] {preterm_abs(Var_or_const,Abstraction)}
+       | Term1 more_Term.
+
+Abstraction --> [.] Term
+              | [\\] {preterm_abs(Var_or_const,Abstraction)}
+              | {preterm_abs(Var_or_const,Abstraction)}.
+
+Term1 --> [~] {mk_unop_typed(`~`,Term1,`bool`,`bool`)}
+        | [(] Term [)] is_typed
+        | [\[] Term_list is_typed
+        | [CONS] {mk_binop_untyped(`CONS`,Term,Term)}
+        | Var_or_const.
+
+Term_list --> [\]] {preterm_const(`NIL`)}
+            | {mk_cons(Term,rest_of_list)}.
+
+rest_of_list --> [;] {mk_cons(Term,rest_of_list)}
+               | [\]] {preterm_const(`NIL`)}.
+
+Var_or_const --> [`] {string_const(WORD)} [`] is_typed
+               | [NIL] {preterm_const(`NIL`)} is_typed
+               | {num_const(TOKEN)} is_typed
+               | {bool_const(TOKEN)} is_typed
+               | {preterm_var(TOKEN)} is_typed.
+
+is_typed --> [:] {change_to_typed(POP,typ)}
+           | [].
+
+more_Term --> [o] {mk_binop_untyped(`o`,POP,Term)}
+            | [Sum] {mk_binop_untyped(`Sum`,POP,Term)}
+            | [IS_ASSUMPTION_OF] 
+              {mk_binop_untyped(`IS_ASSUMPTION_OF`,POP,Term)}
+            | [=] Term1 EQ_lower
+              {mk_binop_untyped(`=`,POP,more_EQ)}
+              {mk_binop_untyped(`=`,POP,POP)} EQ_higher
+            | [<=>] Term1 IFF_lower 
+              {mk_binop_typed(`<=>`,POP,more_IFF,`bool`,`bool`,`bool`)}
+              {mk_binop_typed(`<=>`,POP,POP,`bool`,`bool`,`bool`)} IFF_higher 
+            | [==>] Term1 IMP_lower
+              {mk_binop_typed(`==>`,POP,more_IMP,`bool`,`bool`,`bool`)}
+              {mk_binop_typed(`==>`,POP,POP,`bool`,`bool`,`bool`)} IMP_higher
+            | [\\/] Term1 DISJ_lower
+              {mk_binop_typed(`\\/`,POP,more_DISJ,`bool`,`bool`,`bool`)}
+              {mk_binop_typed(`\\/`,POP,POP,`bool`,`bool`,`bool`)} DISJ_higher
+            | [/\\] Term1 CONJ_lower
+              {mk_binop_typed(`/\\`,POP,more_CONJ,`bool`,`bool`,`bool`)}
+              {mk_binop_typed(`/\\`,POP,POP,`bool`,`bool`,`bool`)} CONJ_higher
+            | [>] Term1 BOOL_lower
+              {mk_binop_typed(`>`,POP,more_BOOL,`num`,`num`,`bool`)}
+              {mk_binop_typed(`>`,POP,POP,`num`,`num`,`bool`)} BOOL_higher
+            | [<] Term1 BOOL_lower
+              {mk_binop_typed(`<`,POP,more_BOOL,`num`,`num`,`bool`)}
+              {mk_binop_typed(`<`,POP,POP,`num`,`num`,`bool`)} BOOL_higher
+            | [>=] Term1 BOOL_lower
+              {mk_binop_typed(`>=`,POP,more_BOOL,`num`,`num`,`bool`)}
+              {mk_binop_typed(`>=`,POP,POP,`num`,`num`,`bool`)} BOOL_higher
+            | [<=] Term1 BOOL_lower
+              {mk_binop_typed(`<=`,POP,more_BOOL,`num`,`num`,`bool`)}
+              {mk_binop_typed(`<=`,POP,POP,`num`,`num`,`bool`)} BOOL_higher
+            | [+] Term1 P_M_lower
+              {mk_binop_typed(`+`,POP,more_P_M,`num`,`num`,`num`)}
+              {mk_binop_typed(`+`,POP,POP,`num`,`num`,`num`)} P_M_higher
+            | [-] Term1 P_M_lower
+              {mk_binop_typed(`-`,POP,more_P_M,`num`,`num`,`num`)}
+              {mk_binop_typed(`-`,POP,POP,`num`,`num`,`num`)} P_M_higher
+            | [*] Term1 MLT_lower
+              {mk_binop_typed(`*`,POP,more_MLT,`num`,`num`,`num`)}
+              {mk_binop_typed(`*`,POP,POP,`num`,`num`,`num`)} MLT_higher
+            | [DIV] Term1 D_M_lower
+              {mk_binop_typed(`DIV`,POP,more_D_M,`num`,`num`,`num`)}
+              {mk_binop_typed(`DIV`,POP,POP,`num`,`num`,`num`)} D_M_higher
+            | [MOD] Term1 D_M_lower
+              {mk_binop_typed(`MOD`,POP,more_D_M,`num`,`num`,`num`)}
+              {mk_binop_typed(`MOD`,POP,POP,`num`,`num`,`num`)} D_M_higher
+            | [EXP] {mk_binop_typed(`EXP`,Term1,more_EXP,`num`,`num`,`num`)}
+              {mk_binop_typed(`EXP`,POP,POP,`num`,`num`,`num`)} EXP_higher
+            | {IS_infix(WORD)} {arbit_binop3(POP,POP,Term1,more_arbit)}
+              arbit_higher
+            | [].
+
+more_arbit --> {IS_infix(WORD)} {arbit_binop2(POP,Term1,more_arbit)}
+             | {dummy}.
+
+more_EXP --> [EXP] Term1 EXP_lower
+             {mk_binop_typed(`EXP`,POP,more_EXP,`num`,`num`,`num`)}
+           | {dummy}.
+
+EXP_lower --> {IS_infix(WORD)}
+              {arbit_binop3(POP,POP,Term1,more_arbit)}
+            | [].
+
+more_D_M --> [DIV] Term1 D_M_lower
+             {mk_binop_typed(`DIV`,POP,more_D_M,`num`,`num`,`num`)}
+           | [MOD] Term1 D_M_lower
+             {mk_binop_typed(`MOD`,POP,more_D_M,`num`,`num`,`num`)}
+           | {dummy}.
+
+D_M_lower --> [EXP]
+              {mk_binop_typed(`EXP`,Term1,more_EXP,`num`,`num`,`num`)}
+              {mk_binop_typed(`EXP`,POP,POP,`num`,`num`,`num`)}
+            | EXP_lower.
+
+more_MLT --> [*] Term1 MLT_lower
+             {mk_binop_typed(`*`,POP,more_MLT,`num`,`num`,`num`)}
+           | {dummy}.
+
+MLT_lower --> [DIV] 
+              {mk_binop_typed(`DIV`,Term1,more_D_M,`num`,`num`,`num`)}
+              {mk_binop_typed(`DIV`,POP,POP,`num`,`num`,`num`)}
+            | [MOD] 
+              {mk_binop_typed(`MOD`,Term1,more_D_M,`num`,`num`,`num`)}
+              {mk_binop_typed(`MOD`,POP,POP,`num`,`num`,`num`)}
+            | D_M_lower.
+
+more_P_M --> [+] Term1 P_M_lower
+             {mk_binop_typed(`+`,POP,more_P_M,`num`,`num`,`num`)}
+           | [-] Term1 P_M_lower
+             {mk_binop_typed(`-`,POP,more_P_M,`num`,`num`,`num`)}
+           | {dummy}.
+
+P_M_lower --> [*]
+              {mk_binop_typed(`*`,Term1,more_MLT,`num`,`num`,`num`)}
+              {mk_binop_typed(`*`,POP,POP,`num`,`num`,`num`)}
+            | MLT_lower.
+
+more_BOOL --> [<] Term1 BOOL_lower
+              {mk_binop_typed(`<`,POP,more_BOOL,`num`,`num`,`bool`)}
+            | [>] Term1 BOOL_lower
+              {mk_binop_typed(`>`,POP,more_BOOL,`num`,`num`,`bool`)}
+            | [<=] Term1 BOOL_lower
+              {mk_binop_typed(`<=`,POP,more_BOOL,`num`,`num`,`bool`)}
+            | [>=] Term1 BOOL_lower
+              {mk_binop_typed(`>=`,POP,more_BOOL,`num`,`num`,`bool`)}
+            | {dummy}.
+
+BOOL_lower --> [+]
+               {mk_binop_typed(`+`,Term1,more_P_M,`num`,`num`,`num`)}
+               {mk_binop_typed(`+`,POP,POP,`num`,`num`,`num`)}
+             | [-]
+               {mk_binop_typed(`-`,Term1,more_P_M,`num`,`num`,`num`)}
+               {mk_binop_typed(`-`,POP,POP,`num`,`num`,`num`)}
+             | P_M_lower.
+
+more_CONJ --> [/\\] Term1 CONJ_lower
+              {mk_binop_typed(`/\\`,POP,more_CONJ,`bool`,`bool`,`bool`)}
+            | {dummy}.
+
+CONJ_lower --> [<] 
+               {mk_binop_typed(`<`,Term1,more_BOOL,`num`,`num`,`bool`)}
+               {mk_binop_typed(`<`,POP,POP,`num`,`num`,`bool`)}
+             | [>]
+               {mk_binop_typed(`>`,Term1,more_BOOL,`num`,`num`,`bool`)}
+               {mk_binop_typed(`>`,POP,POP,`num`,`num`,`bool`)}
+             | [<=]
+               {mk_binop_typed(`<=`,Term1,more_BOOL,`num`,`num`,`bool`)}
+               {mk_binop_typed(`<=`,POP,POP,`num`,`num`,`bool`)}
+             | [>=]
+               {mk_binop_typed(`>=`,Term1,more_BOOL,`num`,`num`,`bool`)}
+               {mk_binop_typed(`>=`,POP,POP,`num`,`num`,`bool`)}
+             | BOOL_lower.
+
+more_DISJ --> [\\/] Term1 DISJ_lower
+              {mk_binop_typed(`\\/`,POP,more_DISJ,`bool`,`bool`,`bool`)}
+            | {dummy}.
+
+DISJ_lower --> [/\\]
+               {mk_binop_typed(`/\\`,Term1,more_CONJ,`bool`,`bool`,`bool`)}
+               {mk_binop_typed(`/\\`,POP,POP,`bool`,`bool`,`bool`)}
+             | CONJ_lower.
+
+more_IMP --> [==>] Term1 IMP_lower
+             {mk_binop_typed(`==>`,POP,more_IMP,`bool`,`bool`,`bool`)}
+           | {dummy}.
+
+IMP_lower --> [\\/] 
+              {mk_binop_typed(`\\/`,Term1,more_DISJ,`bool`,`bool`,`bool`)}
+              {mk_binop_typed(`\\/`,POP,POP,`bool`,`bool`,`bool`)}
+            | DISJ_lower.
+
+more_IFF --> [<=>] Term1 IFF_lower
+             {mk_binop_typed(`<=>`,POP,more_IFF,`bool`,`bool`,`bool`)}
+           | {dummy}.
+
+IFF_lower --> [==>] {mk_binop_typed(`==>`,Term1,more_IMP,`bool`,`bool`,`bool`)}
+              {mk_binop_typed(`==>`,POP,POP,`bool`,`bool`,`bool`)}
+            | IMP_lower.
+
+more_EQ --> [=] Term1 EQ_lower {mk_binop_untyped(`=`,POP,POP)}
+          | {dummy}.
+
+EQ_lower --> [<=>] {mk_binop_typed(`<=>`,Term1,more_IFF,`bool`,`bool`,`bool`)}
+             {mk_binop_typed(`<=>`,POP,POP,`bool`,`bool`,`bool`)}
+           | IFF_lower.
+
+arbit_higher --> [EXP] {mk_binop_typed(`EXP`,POP,Term,`num`,`num`,`num`)}
+               | EXP_higher.
+
+EXP_higher --> [MOD] {mk_binop_typed(`MOD`,POP,Term,`num`,`num`,`num`)}
+             | [DIV] {mk_binop_typed(`DIV`,POP,Term,`bool`,`bool`,`num`)}
+             | D_M_higher.
+
+D_M_higher --> [*] {mk_binop_typed(`*`,POP,Term,`num`,`num`,`num`)}
+             | MLT_higher.
+
+MLT_higher -->  [+] {mk_binop_typed(`+`,POP,Term,`num`,`num`,`num`)}
+              | [-] {mk_binop_typed(`-`,POP,Term,`num`,`num`,`num`)}
+              | P_M_higher.
+
+P_M_higher --> [<] {mk_binop_typed(`<`,POP,Term,`num`,`num`,`bool`)}
+             | [<=] {mk_binop_typed(`<=`,POP,Term,`num`,`num`,`bool`)}
+             | [>] {mk_binop_typed(`>`,POP,Term,`num`,`num`,`bool`)}
+             | [>=] {mk_binop_typed(`>=`,POP,Term,`num`,`num`,`bool`)}
+             | BOOL_higher.
+
+BOOL_higher --> [/\\] {mk_binop_typed(`/\\`,POP,Term,`bool`,`bool`,`bool`)}
+              | CONJ_higher.
+
+CONJ_higher --> [\\/] {mk_binop_typed(`\\/`,POP,Term,`bool`,`bool`,`bool`)}
+              | DISJ_higher.
+
+DISJ_higher --> [==>] {mk_binop_typed(`==>`,POP,Term,`bool`,`bool`,`bool`)}
+              | IMP_higher.
+
+IMP_higher --> [<=>] {mk_binop_typed(`<=>`,POP,Term,`bool`,`bool`,`bool`)}
+             | IFF_higher.
+
+IFF_higher --> [=] {mk_binop_untyped(`=`,POP,Term)}
+             | EQ_higher.
+
+EQ_higher --> [o] {mk_binop_untyped(`o`,POP,Term)}
+            | [Sum] {mk_binop_untyped(`Sum`,POP,Term)}
+            | [IS_ASSUMPTION_OF]
+              {mk_binop_untyped(`IS_ASSUMPTION_OF`,POP,Term)}
+            | [].

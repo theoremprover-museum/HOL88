@@ -1,0 +1,10 @@
+\DOC replace_box_label
+
+\TYPE {replace_box_label : (* -> * print_box -> * print_box)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

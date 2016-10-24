@@ -1,0 +1,10 @@
+\THEOREM COS_FDIFF TRANSC
+|- diffs(\n. (EVEN n => ((--(& 1)) pow (n DIV 2)) / (&(FACT n)) | & 0)) =
+   (\n.
+     --
+     ((\n.
+        (EVEN n =>
+         & 0 |
+         ((--(& 1)) pow ((n num_sub 1) DIV 2)) / (&(FACT n))))
+      n))
+\ENDTHEOREM

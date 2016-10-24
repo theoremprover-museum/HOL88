@@ -1,0 +1,3 @@
+\THEOREM ZERO_MOD arithmetic
+|- !n. 0 < n ==> (0 MOD n = 0)
+\ENDTHEOREM

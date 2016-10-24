@@ -1,0 +1,3 @@
+\THEOREM FILTER_FOLDR list
+|- !P l. FILTER P l = FOLDR(\x l'. (P x => CONS x l' | l'))[]l
+\ENDTHEOREM

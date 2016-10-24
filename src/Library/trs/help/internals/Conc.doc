@@ -1,0 +1,10 @@
+\DOC Conc
+
+\TYPE {Conc : (termpattern -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

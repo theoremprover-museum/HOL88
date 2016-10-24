@@ -1,0 +1,256 @@
+%  mk_Pterm2.ml
+
+  Theory of HOL-proofs: key results about Pterm functions
+%
+
+
+
+% --- Palreplace preserves well-typing --- %
+
+let vvlty = ":((string#Type)#(string#Type))list";;
+let tvlty = ":(Pterm#(string#Type))list";;
+let Palrep1_type = save_thm(`Palrep1_type`,prove
+ ("!t vvl tvl. Palreplace1 t' vvl tvl t /\
+      EVERY (\(v',v). SND v' = SND v) vvl /\
+      EVERY (\(t,v). Ptype_of t = SND v) tvl
+     ==> (Ptype_of t' = Ptype_of t)",
+  GEN_TAC THEN MP_TAC (SPEC "t:Pterm" Pterm_cases) THEN STRIP_TAC THEN
+  POP_ASSUM SUBST1_TAC THEN RT[Palreplace1_DEF] THENL
+  [REPEAT STRIP_TAC THEN ART[Ptype_of_DEF]
+  ;INDUCT_THEN list_INDUCT ASSUME_TAC THENL
+   [LRT[EVERY_DEF;mem1_DEF] THEN
+    INDUCT_THEN list_INDUCT ASSUME_TAC THENL
+    [LRT[EVERY_DEF;mem2_DEF] THEN STRIP_TAC THEN ART[]
+    ;LRT[EVERY_DEF;mem2_DEF;corr2_DEF] THEN
+     P_PGEN_TAC "tm:Pterm,v:string#Type" THEN
+     ASM_CASES_TAC "p:string#Type = v" THEN ART[] THENL
+     [PBETA_TAC THEN STRIP_TAC THEN ART[Ptype_of_DEF]
+     ;PBETA_TAC THEN STRIP_TAC THEN RES_TAC
+    ]]
+   ;LRT[EVERY_DEF;mem1_DEF;corr1_DEF] THEN
+    P_PGEN_TAC "v2:string#Type,v1:string#Type" THEN RT[] THEN PBETA_TAC THEN
+    POP_ASSUM MP_TAC THEN ASM_CASES_TAC "Is_Var t'" THEN ART[] THENL
+    [REPEAT (POP_ASSUM MP_TAC) THEN
+     MP_TAC (SPEC "t':Pterm" Pterm_cases) THEN STRIP_TAC THEN
+     POP_ASSUM SUBST1_TAC THEN LRT[Is_Var_DEF;Var_var_DEF] THEN
+     ASM_CASES_TAC "p':string#Type = v2" THEN ART[] THENL
+     [REPEAT STRIP_TAC THEN ART[Ptype_of_DEF]
+     ;ASM_CASES_TAC "p:string#Type = v2" THEN ART[] THENL
+      [ASM_CASES_TAC "mem1 p' (vvl:^vvlty)" THEN ART[] THEN
+       REPEAT STRIP_TAC THEN RES_TAC
+      ;REPEAT STRIP_TAC THEN RES_TAC
+     ]]
+    ;ASM_CASES_TAC "p:string#Type = v2" THEN ART[] THEN
+     REPEAT STRIP_TAC THEN RES_TAC
+   ]]
+  ;MP_TAC (SPEC "t':Pterm" Pterm_cases) THEN STRIP_TAC THEN
+   POP_ASSUM SUBST1_TAC THEN LRT[Is_App_DEF;App_ty_DEF] THEN
+   REPEAT STRIP_TAC THEN ART[Ptype_of_DEF]
+  ;MP_TAC (SPEC "t':Pterm" Pterm_cases) THEN STRIP_TAC THEN
+   POP_ASSUM SUBST1_TAC THEN
+   LRT[Is_Lam_DEF;Lam_var_DEF;Lam_bod_DEF;Lam_ty_DEF] THEN
+   REPEAT STRIP_TAC THEN ART[Ptype_of_DEF]
+  ]) );;
+
+let thm1 = prove
+ ("(SND p' = SND p) /\ EVERY(\(v',v). SND v' = SND v)(vvl:^vvlty)
+      ==> EVERY(\(v',v). SND v' = SND v)(CONS(p',p)vvl)",
+   RT[EVERY_DEF] THEN PBETA_TAC THEN RT[]);;
+let Palrep1_wty = save_thm(`Palrep1_wty`,prove
+ ("!t t' vvl tvl. Pwell_typed Typl Conl t /\ Palreplace1 t' vvl tvl t /\
+      EVERY (Pwell_typed Typl Conl) (MAP FST tvl) /\
+      EVERY (\(v',v). SND v' = SND v) vvl /\
+      EVERY (\(t,v). Ptype_of t = SND v) tvl
+     ==> Pwell_typed Typl Conl t'",
+  INDUCT_THEN Pterm_induct ASSUME_TAC THEN RT[Palreplace1_DEF] THENL
+  [REPEAT STRIP_TAC THEN ART[]
+  ;GEN_TAC THEN GEN_TAC THEN INDUCT_THEN list_INDUCT ASSUME_TAC THENL
+   [LRT[EVERY_DEF;mem1_DEF] THEN
+    INDUCT_THEN list_INDUCT ASSUME_TAC THENL
+    [LRT[EVERY_DEF;mem2_DEF] THEN STRIP_TAC THEN ART[]
+    ;LRT[MAP;EVERY_DEF;mem2_DEF;corr2_DEF] THEN
+     P_PGEN_TAC "tm:Pterm,v:string#Type" THEN
+     ASM_CASES_TAC "p:string#Type = v" THEN ART[] THENL
+     [PBETA_TAC THEN STRIP_TAC THEN ART[]
+     ;PBETA_TAC THEN STRIP_TAC THEN RES_TAC
+    ]]
+   ;LRT[MAP;EVERY_DEF;mem1_DEF;corr1_DEF] THEN
+    P_PGEN_TAC "v2:string#Type,v1:string#Type" THEN RT[] THEN PBETA_TAC THEN
+    POP_ASSUM MP_TAC THEN ASM_CASES_TAC "Is_Var t'" THEN ART[] THENL
+    [POP_ASSUM MP_TAC THEN MP_TAC (SPEC "t':Pterm" Pterm_cases) THEN
+     STRIP_TAC THEN POP_ASSUM SUBST1_TAC THEN LRT[Is_Var_DEF;Var_var_DEF] THEN
+     ASM_CASES_TAC "p':string#Type = v2" THEN ART[] THENL
+     [PORT[Pwell_typed_DEF] THEN REPEAT STRIP_TAC THEN
+      UNDISCH_TAC "Type_OK Typl(SND(p:string#Type))" THEN ART[]
+     ;ASM_CASES_TAC "p:string#Type = v2" THEN ART[] THENL
+      [ASM_CASES_TAC "mem1 p'(vvl:^vvlty)" THEN ART[] THEN
+       REPEAT STRIP_TAC THEN RES_TAC
+      ;REPEAT STRIP_TAC THEN RES_TAC
+     ]]
+    ;ASM_CASES_TAC "p:string#Type = v2" THEN ART[] THEN
+     REPEAT STRIP_TAC THEN RES_TAC
+   ]]
+  ;REPEAT GEN_TAC THEN MP_TAC (SPEC "t''':Pterm" Pterm_cases) THEN
+   STRIP_TAC THEN POP_ASSUM SUBST1_TAC THEN 
+   LRT[Is_App_DEF;App_fun_DEF;App_arg_DEF;App_ty_DEF;Pwell_typed_DEF] THEN
+   STRIP_TAC THEN 
+   ASSUM_LIST(\l.RT[MATCH_MP(el 11 l)
+     (CONJ(el 9 l)(CONJ(el 5 l)(CONJ(el 3 l)(CONJ(el 2 l)(hd l)))))]) THEN
+   ASSUM_LIST(\l.RT[MATCH_MP(el 10 l)
+     (CONJ(el 8 l)(CONJ(el 4 l)(CONJ(el 3 l)(CONJ(el 2 l)(hd l)))))]) THEN
+   IMP_RES_TAC Palrep1_type THEN ART[]
+  ;REPEAT GEN_TAC THEN MP_TAC (SPEC "t':Pterm" Pterm_cases) THEN
+   STRIP_TAC THEN POP_ASSUM SUBST1_TAC THEN 
+   LRT[Is_Lam_DEF;Lam_var_DEF;Lam_bod_DEF;Lam_ty_DEF;Pwell_typed_DEF] THEN
+   STRIP_TAC THEN IMP_RES_TAC thm1 THEN
+   ASSUM_LIST(\l.RT[MATCH_MP(el 11 l)
+     (CONJ(el 10 l)(CONJ(el 5 l)(CONJ(el 4 l)(CONJ(hd l)(el 2 l)))))]) THEN
+   IMP_RES_TAC Palrep1_type THEN ART[]
+  ]) );;
+
+let Palrep_wty = save_thm(`Palrep_wty`,prove
+ ("!t t' tvl. Pwell_typed Typl Conl t /\ Palreplace t' tvl t /\
+      EVERY (Pwell_typed Typl Conl) (MAP FST tvl) /\
+      EVERY (\(t,v). Ptype_of t = SND v) tvl
+     ==> Pwell_typed Typl Conl t' /\ (Ptype_of t' = Ptype_of t)",
+  LRT[Palreplace_DEF] THEN REPEAT STRIP_TAC THENL
+  [MATCH_MP_TAC Palrep1_wty THEN EXISTS_TAC "t:Pterm" THEN
+   EXISTS_TAC "[]:^vvlty" THEN EXISTS_TAC "tvl:^tvlty" THEN
+   ART[EVERY_DEF]
+  ;MATCH_MP_TAC Palrep1_type THEN
+   EXISTS_TAC "[]:^vvlty" THEN EXISTS_TAC "tvl:^tvlty" THEN
+   ART[EVERY_DEF]
+  ]) );;
+
+
+% --- Palpha preserves well-typing --- %
+
+let Palpha_wty = save_thm(`Palpha_wty`,prove
+ ("!t' t. Pwell_typed Typl Conl t /\ Palpha t' t
+     ==> Pwell_typed Typl Conl t' /\ (Ptype_of t' = Ptype_of t)",
+  LRT[Palpha_DEF] THEN REPEAT GEN_TAC THEN STRIP_TAC THEN
+  MATCH_MP_TAC Palrep_wty THEN EXISTS_TAC "[]:^tvlty" THEN
+  ART[MAP;EVERY_DEF]) );;
+
+
+% --- Pbeta preserves well-typing --- %
+
+let Pbeta_wty = save_thm(`Pbeta_wty`,prove
+ ("!t' x t1 t2. Pwell_typed Typl Conl t1 /\ Pwell_typed Typl Conl t2 /\ 
+         (Ptype_of t2 = SND x) /\ Pbeta t' x t1 t2
+     ==> Pwell_typed Typl Conl t' /\ (Ptype_of t' = Ptype_of t1)",
+  LRT[Pbeta_DEF] THEN REPEAT GEN_TAC THEN STRIP_TAC THEN
+  MATCH_MP_TAC Palrep_wty THEN EXISTS_TAC "[t2,x]:^tvlty" THEN
+  LRT[MAP;EVERY_DEF] THEN PBETA_TAC THEN ART[]) );;
+
+
+% --- Psubst preserves well-typing --- %
+
+let ttvlty = ":(Pterm#Pterm#string#Type)list";;
+let Psubst_wty_lemma1 = prove
+ ("!t' ttvl td t. Pwell_typed Typl Conl td /\ 
+      EVERY (Pwell_typed Typl Conl) (MAP FST ttvl) /\
+      EVERY (Pwell_typed Typl Conl) (MAP (FST o SND) ttvl) /\
+      Psubst Typl Conl t' ttvl td t
+     ==> Pwell_typed Typl Conl t' /\ (Ptype_of t' = Ptype_of td)",
+  LRT[Psubst_DEF;o_DEF] THEN REPEAT GEN_TAC THEN STRIP_TAC THEN
+  MATCH_MP_TAC Palrep_wty THEN EXISTS_TAC "list13(ttvl:^ttvlty)" THEN
+  ART[] THEN NREPEAT 3 (POP_ASSUM (\th.ALL_TAC)) THEN 
+  NREPEAT 3 (POP_ASSUM MP_TAC) THEN POP_ASSUM (\th.ALL_TAC) THEN
+  SPEC_TAC ("ttvl:^ttvlty","ttvl:^ttvlty") THEN
+  INDUCT_THEN list_INDUCT ASSUME_TAC THEN
+  LRT[list13_DEF;Psubst_triples_DEF;MAP;EVERY_DEF] THEN
+  P_PGEN_TAC "t1:Pterm,t2:Pterm,s:string,ty:Type" THEN PBETA_TAC THEN
+  RT[] THEN REPEAT STRIP_TAC THEN RES_TAC THEN ART[]);;
+let Psubst_wty_lemma2 = save_thm(`Psubst_wty_lemma2`,prove
+ ("!t' ttvl td t. Pwell_typed Typl Conl td /\ 
+      EVERY (Pwell_typed Typl Conl) (MAP FST ttvl) /\
+      EVERY (Pwell_typed Typl Conl) (MAP (FST o SND) ttvl) /\
+      Psubst Typl Conl t' ttvl td t
+     ==> Pwell_typed Typl Conl t /\ (Ptype_of t = Ptype_of td)",
+  LRT[Psubst_DEF;o_DEF] THEN REPEAT GEN_TAC THEN STRIP_TAC THEN
+  MATCH_MP_TAC Palrep_wty THEN EXISTS_TAC "MAP SND(ttvl:^ttvlty)" THEN
+  ART[] THEN NREPEAT 3 (POP_ASSUM (\th.ALL_TAC)) THEN 
+  NREPEAT 3 (POP_ASSUM MP_TAC) THEN POP_ASSUM (\th.ALL_TAC) THEN
+  SPEC_TAC ("ttvl:^ttvlty","ttvl:^ttvlty") THEN
+  INDUCT_THEN list_INDUCT ASSUME_TAC THEN
+  LRT[Psubst_triples_DEF;MAP;EVERY_DEF] THEN
+  P_PGEN_TAC "t1:Pterm,t2:Pterm,s:string,ty:Type" THEN PBETA_TAC THEN
+  RT[] THEN REPEAT STRIP_TAC THEN RES_TAC THEN ART[] THEN
+  UNDISCH_TAC "Ptype_of t1 = ty" THEN ART[]) );;
+let Psubst_wty = save_thm(`Psubst_wty`,prove
+ ("!t' ttvl td t. Pwell_typed Typl Conl td /\ 
+      EVERY (Pwell_typed Typl Conl) (MAP FST ttvl) /\
+      EVERY (Pwell_typed Typl Conl) (MAP (FST o SND) ttvl) /\
+      Psubst Typl Conl t' ttvl td t
+     ==> Pwell_typed Typl Conl t' /\ (Ptype_of t' = Ptype_of t)",
+  REPEAT GEN_TAC THEN STRIP_TAC THEN
+  IMP_RES_TAC Psubst_wty_lemma1 THEN IMP_RES_TAC Psubst_wty_lemma2 THEN
+  ART[]) );;
+
+
+% --- Ptyinst preserves well-typing --- %
+
+let thm1 = prove("b => F | F = F", ASM_CASES_TAC "b:bool" THEN ART[]);;
+let thm2 = prove
+ ("(SND p' = Type_replace tyl (SND p)) /\ 
+    EVERY(\(v',v). SND v' = Type_replace tyl (SND v))(vvl:^vvlty)
+      ==> EVERY(\(v',v). SND v' = Type_replace tyl (SND v))(CONS(p',p)vvl)",
+   RT[EVERY_DEF] THEN PBETA_TAC THEN RT[]);;
+let Ptyinst1_wty = save_thm(`Ptyinst1_wty`,prove
+ ("!t t' bvl tyl. Ptyinst1 t' bvl fvl tyl t /\
+      Pwell_typed Typl Conl t /\ 
+      EVERY (\(v',v). SND v' = Type_replace tyl (SND v)) bvl /\
+      EVERY (Type_OK Typl) (MAP FST tyl)
+     ==> Pwell_typed Typl Conl t' /\
+         (Ptype_of t' = Type_replace tyl (Ptype_of t))",
+  INDUCT_THEN Pterm_induct ASSUME_TAC THEN RT[Ptyinst1_DEF] THENL
+  [RT[Pwell_typed_DEF] THEN REPEAT STRIP_TAC THEN ART[Ptype_of_DEF] THEN
+   RT[Pwell_typed_DEF] THEN IMP_RES_TAC Type_OK_replace THEN 
+   IMP_RES_TAC Type_compat_replace THEN IMP_RES_TAC Type_nocontr_replace THEN
+   ART[]
+  ;GEN_TAC THEN GEN_TAC THEN MP_TAC (SPEC "t':Pterm" Pterm_cases) THEN
+   STRIP_TAC THEN POP_ASSUM SUBST1_TAC THEN LRT[Is_Var_DEF;Var_var_DEF] THEN
+   LRT[Pterm_11;Pterm_distinct;GSYM Pterm_distinct;thm1] THEN
+   INDUCT_THEN list_INDUCT ASSUME_TAC THENL
+   [LRT[EVERY_DEF;mem1_DEF] THEN ASM_CASES_TAC "mem2 p (fvl:^vvlty)" THEN
+    ART[corr2_DEF;Pwell_typed_DEF] THEN REPEAT STRIP_TAC THEN
+    ART[Ptype_of_DEF] THEN IMP_RES_TAC Type_OK_replace
+   ;LRT[EVERY_DEF;mem1_DEF;corr1_DEF] THEN
+    P_PGEN_TAC "v2:string#Type,v1:string#Type" THEN RT[] THEN PBETA_TAC THEN 
+    ASM_CASES_TAC "p':string#Type = v2" THEN ART[] THENL
+    [GEN_TAC THEN STRIP_TAC THEN 
+     UNDISCH_TAC "Pwell_typed Typl Conl(Var p)" THEN
+     UNDISCH_TAC "SND(v2:string#Type) = Type_replace tyl(SND(p:string#Type))"
+     THEN ART[Ptype_of_DEF;Pwell_typed_DEF] THEN
+     DISCH_TAC THEN IMP_RES_TAC Type_OK_replace
+    ;GEN_TAC THEN STRIP_TAC THEN RES_TAC THEN ART[]
+   ]]
+  ;REPEAT GEN_TAC THEN MP_TAC (SPEC "t'':Pterm" Pterm_cases) THEN
+   STRIP_TAC THEN POP_ASSUM SUBST1_TAC THEN 
+   LRT[Is_App_DEF;App_fun_DEF;App_arg_DEF;App_ty_DEF;Pwell_typed_DEF] THEN
+   STRIP_TAC THEN ART[Ptype_of_DEF] THEN
+   ASSUM_LIST(\l.RT[MATCH_MP(el 10 l)
+     (CONJ(el 7 l)(CONJ(el 5 l)(CONJ(el 2 l)(hd l))))]) THEN
+   ASSUM_LIST(\l.RT[MATCH_MP(el 9 l)
+     (CONJ(el 6 l)(CONJ(el 4 l)(CONJ(el 2 l)(hd l))))]) THEN
+   ART[Type_replace_DEF;MAP]
+  ;NREPEAT 3 GEN_TAC THEN MP_TAC (SPEC "t':Pterm" Pterm_cases) THEN
+   STRIP_TAC THEN POP_ASSUM SUBST1_TAC THEN LRT[Is_Lam_DEF;Lam_var_DEF;
+      Lam_bod_DEF;Lam_ty_DEF;Pwell_typed_DEF;Ptype_of_DEF] THEN
+   REPEAT GEN_TAC THEN STRIP_TAC THEN IMP_RES_TAC thm2 THEN
+   ASSUM_LIST(\l.MP_TAC (MATCH_MP(el 11 l)
+     (CONJ(el 7 l)(CONJ(el 6 l)(CONJ(hd l)(el 2 l)))))) THEN
+   STRIP_TAC THEN ART[Type_replace_DEF;MAP] THEN IMP_RES_TAC Type_OK_replace
+  ]) );;
+
+let Ptyinst_wty = save_thm(`Ptyinst_wty`,prove
+ ("!as t t' tyl. Ptyinst as t' tyl t /\
+      Pwell_typed Typl Conl t /\ 
+      EVERY (Type_OK Typl) (MAP FST tyl)
+     ==> Pwell_typed Typl Conl t' /\
+         (Ptype_of t' = Type_replace tyl (Ptype_of t))",
+  PORT[Ptyinst_DEF] THEN REPEAT GEN_TAC THEN STRIP_TAC THEN
+  MATCH_MP_TAC (GEN_ALL Ptyinst1_wty) THEN
+  EXISTS_TAC "Pnewfree t' t" THEN EXISTS_TAC "[]:^vvlty" THEN
+  ART[EVERY_DEF]) );;

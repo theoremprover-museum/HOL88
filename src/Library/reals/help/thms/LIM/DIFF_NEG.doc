@@ -1,0 +1,3 @@
+\THEOREM DIFF_NEG LIM
+|- !f l x. (f diffl l)x ==> ((\x. --(f x)) diffl (-- l))x
+\ENDTHEOREM

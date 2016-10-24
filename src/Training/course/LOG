@@ -1,0 +1,157 @@
+This is TeX, C Version 3.0
+(intro.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file intro.aux.
+[1] [2] [3] [4] [5] (intro.aux) )
+Output written on intro.dvi (5 pages, 4148 bytes).
+Transcript written on intro.log.
+This is TeX, C Version 3.0
+(logicA.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file logicA.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+[18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32]
+[33] [34] (logicA.aux) )
+Output written on logicA.dvi (34 pages, 31136 bytes).
+Transcript written on logicA.log.
+This is TeX, C Version 3.0
+(logicB.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file logicB.aux.
+[1] [2] [3] [4] [5] [6] [7]
+Underfull \hbox (badness 10000) in paragraph at lines 259--263
+ 
+[8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20] [21] [22]
+[23] [24] [25] (logicB.aux) )
+(see the transcript file for additional information)
+Output written on logicB.dvi (25 pages, 26476 bytes).
+Transcript written on logicB.log.
+This is TeX, C Version 3.0
+(ml.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file ml.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] (ml.aux) )
+Output written on ml.dvi (13 pages, 12344 bytes).
+Transcript written on ml.log.
+This is TeX, C Version 3.0
+(primrec.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file primrec.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] (primrec.aux) )
+Output written on primrec.dvi (12 pages, 11784 bytes).
+Transcript written on primrec.log.
+This is TeX, C Version 3.0
+(systemA.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file systemA.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+[18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30]
+Underfull \hbox (badness 1189) in paragraph at lines 861--861
+[]\\pbf\@xxpt These func-tions cor-re-spond to the log-i-cal
+[31] [32] [33] (systemA.aux) )
+(see the transcript file for additional information)
+Output written on systemA.dvi (33 pages, 31192 bytes).
+Transcript written on systemA.log.
+This is TeX, C Version 3.0
+(systemB.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file systemB.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+[18] [19]
+Overfull \hbox (10.61798pt too wide) detected at line 518
+| [] |
+[20]
+Overfull \hbox (10.61798pt too wide) detected at line 540
+| [] |
+[21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [35]
+[36] [37] [38]
+Overfull \hbox (3.27513pt too wide) in paragraph at lines 1069--1081
+ [][] 
+[39] (systemB.aux) )
+(see the transcript file for additional information)
+Output written on systemB.dvi (39 pages, 36852 bytes).
+Transcript written on systemB.log.
+This is TeX, C Version 3.0
+(thmproveA.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file thmproveA.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+Underfull \hbox (badness 2521) in paragraph at lines 578--578
+[]\\pbf\@xxpt The dif-fer-ence be-tween REWRITE[]RULE
+[18] [19] [20] [21] [22] [23] (thmproveA.aux) )
+(see the transcript file for additional information)
+Output written on thmproveA.dvi (23 pages, 28932 bytes).
+Transcript written on thmproveA.log.
+This is TeX, C Version 3.0
+(thmproveB.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file thmproveB.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+[18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32]
+[33] [34] [35] [36] [37] [38] [39] [40] [41] [42]
+Underfull \hbox (badness 3492) in paragraph at lines 1073--1073
+[]\\pbf\@xxpt FIRST[]ASSUM and EV-ERY[]ASSUM are
+[43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53]
+Underfull \vbox (badness 10000) has occurred while \output is active [54]
+[55] [56] [57] (thmproveB.aux) )
+(see the transcript file for additional information)
+Output written on thmproveB.dvi (57 pages, 57388 bytes).
+Transcript written on thmproveB.log.
+This is TeX, C Version 3.0
+(tydefs.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/lib/tex/macros/art12.sty)) (layout.sty
+HOL Course Slide Layout
+) (macros.tex)
+No file tydefs.aux.
+[1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+[18] [19] (tydefs.aux) )
+Output written on tydefs.dvi (19 pages, 22456 bytes).
+Transcript written on tydefs.log.

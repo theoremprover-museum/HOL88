@@ -1,0 +1,10 @@
+\DOC pp_lang1_rules
+
+\TYPE {pp_lang1_rules : print_rule list}
+
+\SYNOPSIS
+Internal value of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

@@ -1,0 +1,43 @@
+\DOC new_name
+
+\BLTYPE
+new_name : ((string -> string) ->
+            string ->
+            (string # int) list ->
+            print_binding ->
+            metavar_binding)
+\ELTYPE
+
+\SYNOPSIS
+Function for transforming a node-name bound to a metavariable.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+Within the metavariable transformation part of a pretty-printing rule, a
+typical requirement is to `declare' a new metavariable to be bound to the
+result of performing a transformation on a single existing metavariable. The
+type of function required is:
+{
+   (string # int) list -> print_binding -> metavar_binding
+}
+\noindent There are four functions available to facilitate this, corresponding
+to the four different types of data which can be bound to a metavariable.
+{new_name} is the function for use when the data is a single node-name.
+
+The first argument is the transformation function. The second argument is the
+name of the metavariable which is bound to the value to be transformed. When
+provided with these arguments and a pretty-printer environment, {new_name}
+extracts the item bound to the named metavariable and then applies the
+transformation function to it. The result is then made into a form suitable
+for binding to a metavariable, that is it is made into an object of type
+{metavar_binding}.
+
+\FAILURE
+{new_name} fails if the named metavariable does not exist or is bound to an
+item of the wrong type.
+
+\SEEALSO
+new_names, new_child, new_children, bound_name.
+
+\ENDDOC

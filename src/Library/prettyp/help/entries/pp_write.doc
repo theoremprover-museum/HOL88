@@ -1,0 +1,47 @@
+\DOC pp_write
+
+\BLTYPE
+pp_write : (string -> int -> int -> print_rule_function -> string ->
+            (string # int) list -> print_tree -> void)
+\ELTYPE
+
+\SYNOPSIS
+One of the main pretty-printing functions. Function for printing to files.
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{pp_write} invokes the pretty-printer. The arguments to this function are:
+(1) file handle (port) of the file to be written to,
+(2) maximum width of output permitted, (3) initial offset from left margin,
+(4) pretty-printing rules expressed as a function, (5) the initial context,
+(6) initial parameters, (7) tree to be printed.
+
+\FAILURE
+Failure or incorrect behaviour can be caused by mistakes in the pretty-printing
+rules or by inappropriate arguments to the printing function. The most common
+errors are use of uninitialised parameters and reference to unknown
+metavariables. The latter are due to metavariables appearing in the format of a
+rule, but not in the pattern. Errors also occur if a metavariable is used in a
+place inappropriate for the value it is bound to. An example of this is an
+attempt to compare a string with a metavariable that is bound to a tree rather
+than a node-name.
+
+Use of negative indentations in formats may cause text to overflow the left
+margin, and an exception to be raised. Any user defined function may also
+cause a run-time error.
+
+The printing functions have been designed to trap exceptions and to print
+{*error*}. This does not indicate what caused the error, but it may give some
+indication of where the error occurred. However, this is not the main reason
+for trapping exceptions. The ML directive {top_print} installs a user print
+function. If an exception is raised within this function, it does not appear
+at the top-level of ML. Instead, an obscure Lisp error is produced. Since the
+pretty-printing functions are normally used with {top_print}, it is best to
+avoid raising exceptions. For this reason the printing functions display
+{*error*} instead.
+
+\SEEALSO
+pretty_print, pp.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM MULT arithmetic
+|- (!n. 0 * n = 0) /\ (!m n. (SUC m) * n = (m * n) + n)
+\ENDTHEOREM

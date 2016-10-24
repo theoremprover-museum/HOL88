@@ -1,0 +1,33 @@
+\DOC type_abbrevs
+
+\TYPE {type_abbrevs : (string -> (string # type) list)}
+
+\SYNOPSIS
+Lists the type abbreviations in a named theory.
+
+\DESCRIBE
+Given the name of a theory, {type_abbrevs} returns a list of pairs; each
+pair contains the abbreviation and the actual type it denotes.
+
+\FAILURE
+Fails if the named theory is not an ancestor of the current theory.
+
+\EXAMPLE
+{
+#load_library `string`;;
+Loading library `string` ...
+Updating search path
+.Updating help search path
+.Declaring theory string a new parent
+Theory string loaded
+......
+Library `string` loaded.
+() : void
+
+#type_abbrevs `string`;;
+[(`tok`, ":string")] : (string # type) list
+}
+\SEEALSO
+new_type_abbrev
+
+\ENDDOC

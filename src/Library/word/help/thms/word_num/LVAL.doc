@@ -1,0 +1,5 @@
+\THEOREM LVAL word_num
+|- (!f b. LVAL f b[] = 0) /\
+   (!l f b x.
+     LVAL f b(CONS x l) = ((f x) * (b EXP (LENGTH l))) + (LVAL f b l))
+\ENDTHEOREM

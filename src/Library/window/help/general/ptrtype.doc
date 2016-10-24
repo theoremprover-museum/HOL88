@@ -1,0 +1,23 @@
+\DOC ptrtype
+
+\TYPE {ptrtype : (string -> string -> void)}
+
+\SYNOPSIS
+Creates a new pointer type.
+
+\LIBRARY window
+
+\DESCRIBE
+{ptrtype `name` `type`} defines a new function
+{newptr_name : void -> type pointer} which can then be used to create new 
+pointers of type {type}.
+
+Only works when the {compiling} flag is {true}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+dispose, is_nil, store, value.
+
+\ENDDOC

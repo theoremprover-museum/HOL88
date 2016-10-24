@@ -1,0 +1,3 @@
+\THEOREM MULT_ODD odd_even
+|- !n m. ODD(n * m) ==> ODD n /\ ODD m
+\ENDTHEOREM

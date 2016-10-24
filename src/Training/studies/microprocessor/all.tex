@@ -1,0 +1,81 @@
+% =====================================================================
+% HOL Case Study: Microprocessor. By Jeff Joyce.
+% =====================================================================
+
+\documentstyle[12pt,twoside,fleqn,layout]{article}
+
+% ---------------------------------------------------------------------
+% Preliminary settings etc.
+% ---------------------------------------------------------------------
+
+\renewcommand{\topfraction}{0.8}	  % 0.8 of the top page can be fig.
+\renewcommand{\bottomfraction}{0.8}	  % 0.8 of the bottom page can be fig.
+\renewcommand{\textfraction}{0.1}	  % 0.1 of the page must contain text
+\setcounter{totalnumber}{4}	 	  % max of 4 figures per page
+\setcounter{secnumdepth}{3}		  % number sections down to level 3
+\setcounter{tocdepth}{3}		  % toc contains numbers to level 3
+
+% ---------------------------------------------------------------------
+% Macros
+% ---------------------------------------------------------------------
+\input{commands}
+\input{BoxMacro}
+
+
+\newcommand{\Tamarack}{\mbox{\footnotesize TAMARACK-3}}
+\newcommand{\Viper}{\mbox{\footnotesize VIPER}}
+
+\newcommand{\TLNext}{\bigcirc}
+\newcommand{\TLNot}{\tt{not}}
+\newcommand{\TLImp}{\longrightarrow}
+\newcommand{\TLAnd}{\tt{and}}
+
+\begin{document}
+
+\pagestyle{plain}
+
+\input{saveboxes}
+
+\input{title}
+
+\tableofcontents 
+\newpage
+
+\newpage
+\listoffigures
+
+\listoftables
+
+\newpage
+\input{intro}
+
+\input{desc}
+
+\input{abst}
+
+\input{spec}
+
+\input{plan}
+
+\input{verf}
+
+\input{temp}
+
+\input{asyn}
+
+\input{what}
+
+\input{relate}
+
+\input{sum}
+
+\newpage
+\input{refs}
+
+\newpage
+\input{exer}
+
+\newpage
+\input{apx}
+
+\end{document}

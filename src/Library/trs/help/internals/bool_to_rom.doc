@@ -1,0 +1,10 @@
+\DOC bool_to_rom
+
+\TYPE {bool_to_rom : (bool -> result_of_match)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

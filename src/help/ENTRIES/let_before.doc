@@ -1,0 +1,46 @@
+\DOC let_before
+
+\TYPE {let_before : ((string # string # string list) -> void)}
+
+\SYNOPSIS
+Makes an ML declaration dynamically before other pending declarations.
+
+\DESCRIBE
+The call
+{
+   let_before(`x`,`f`,[`arg1`;...;`argn`])
+}
+\noindent puts an ML declaration
+{
+   let x = f [`arg1`;...;`argn`];;
+}
+\noindent at the head of the queue of currently pending toplevel items. It will
+be evaluated after the phrase which invoked {let_before}. This gives a way of
+performing declarations dynamically. Note that the first two argument strings
+are interpreted as single identifiers, whereas the arguments are passed as
+literal strings.
+
+\FAILURE
+Never fails, although the subsequent declaration may well fail for any of the
+usual reasons.
+
+\EXAMPLE
+{
+#let fn = \l:(string)list. 1;;
+fn = - : (string list -> int)
+
+#let_before(`x`,`fn`,[]);;
+() : void
+
+x = 1 : int
+
+#x;;
+1 : int
+}
+\USES
+Performing variants on autoloading.
+
+\SEEALSO
+inject_input, let_after, ML_eval.
+
+\ENDDOC

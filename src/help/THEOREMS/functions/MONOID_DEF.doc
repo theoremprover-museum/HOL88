@@ -1,0 +1,3 @@
+\THEOREM MONOID_DEF fun
+|- !f e. MONOID f e = ASSOC f /\ RIGHT_ID f e /\ LEFT_ID f e
+\ENDTHEOREM

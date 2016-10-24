@@ -1,0 +1,3 @@
+\THEOREM REAL_LT_TRANS REALAX
+|- !x y z. x < y /\ y < z ==> x < z
+\ENDTHEOREM

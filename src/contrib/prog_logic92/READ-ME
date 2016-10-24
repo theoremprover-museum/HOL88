@@ -1,0 +1,107 @@
+---------------------------------------------
+Author: 
+
+	Gavan Tredoux
+	Laboratory for Formal Aspects of CS
+	Dept Mathematics
+	University of Cape Town
+	Rondebosch 7700
+	South Africa
+
+	email: gavan@elc.mth.uct.ac.za
+
+--------------------------------------------
+	
+
+
+Directory contains sources for a mechanization of program semantics
+in HOL, including (unbounded) nondeterminism and total correctness.
+
+Some standard programming logics are derived: 
+
+1. Dijkstra's predicate transformer calculus, weakest and weakest
+   liberal preconditions.
+
+2. Hoare logic for partial and total correctness.
+
+3. A syntax-directed logic of invariant relations.
+
+4. A temporal logic, DX, due to Pnueli
+
+The semantics is based on execution sequences. An outline description
+of the semantics and the mechanization can be found in the documents
+in ./doc. This documentation is still in progress. Email for the latest.
+
+Theories, chronologically:
+
+arith_hack		Some miscellaneous arithmetic hacks.
+
+cpo			Complete partial orders and well-founded sets.
+
+lnum			Lengths of sequences, "numbers" with
+			a complete partial ordering, addition and subtraction.
+
+exseq			Execution sequences of program states, with a complete
+			partial ordering, addition and subtraction.
+
+pred			Predicates.
+
+sem			Semantics of programs, including a language with 
+			"random" assignment, partial commands and recursion.
+
+wp 			Dijkstra's wp/wlp calculus
+
+hoare			Hoare logic for partial and total correctness
+
+inv			Invariant relations
+
+temporal		The Temporal logic, DX
+
+Sources:
+
+The Makefile provided will make a desired theory, eg "make wp.th".  
+
+Loading theories:
+
+The file l_*.ml declares the theory * a parent, and defines any
+special symbols used. Theorems and defns used will be autoloaded as they are
+needed. 
+
+Files and subdirectories:
+
+Makefile	Makes theories, eg. "make hoare.th" 
+README		This file
+
+mytactics.ml	Miscellaneous tactics and rules used to build theories
+
+arith_hack.ml	
+cpo.ml
+exseq.ml
+hoare.ml
+inv.ml
+lnum.ml
+pred.ml
+sem.ml
+temporal.ml
+wp.ml
+hol-init.ml	Sources for theories described above
+
+l_arith_hack.ml
+l_cpo.ml
+l_exseq.ml
+l_hoare.ml
+l_inv.ml
+l_lnum.ml
+l_pred.ml
+l_sem.ml
+l_temporal.ml
+l_wp.ml		Loads the appropriate theory as described above
+
+doc		Some documentation
+
+Library		Roger Flemming's half-rewriting tactics patched
+		for hol2
+
+------------------------------------------------------------------------------
+ 
+Comments and suggestions welcome at the above email address.

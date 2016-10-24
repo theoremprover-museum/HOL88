@@ -1,0 +1,19 @@
+\contentsline {chapter}{\numberline {1}The string Library}{1}
+\contentsline {section}{\numberline {1.1}Ascii character codes}{1}
+\contentsline {subsection}{\numberline {1.1.1}Function definitions on type {\ptt ascii}}{2}
+\contentsline {subsection}{\numberline {1.1.2}Theorems about the type {\ptt ascii}}{2}
+\contentsline {subsection}{\numberline {1.1.3}Decision procedure for ascii code equality}{3}
+\contentsline {section}{\numberline {1.2}Character strings}{3}
+\contentsline {subsection}{\numberline {1.2.1}Function definitions on type {\ptt string}}{4}
+\contentsline {subsection}{\numberline {1.2.2}Theorems about the type {\ptt string}}{4}
+\contentsline {subsection}{\numberline {1.2.3}String constants}{5}
+\contentsline {subsection}{\numberline {1.2.4}Decision procedure for string equality}{6}
+\contentsline {section}{\numberline {1.3}Using the library}{7}
+\contentsline {subsection}{\numberline {1.3.1}Example session}{7}
+\contentsline {subsection}{\numberline {1.3.2}The {\ptt load\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}string} function}{8}
+\contentsline {chapter}{\numberline {2}ML Functions in the string Library}{9}
+\contentsline {chapter}{\numberline {3}Pre-proved Theorems}{13}
+\contentsline {section}{\numberline {3.1}Definitions}{13}
+\contentsline {section}{\numberline {3.2}Theorems}{14}
+\contentsline {chapter}{References}{17}
+\contentsline {chapter}{Index}{18}

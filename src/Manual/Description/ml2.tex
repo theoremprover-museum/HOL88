@@ -1,0 +1,526 @@
+\chapter{Syntax of ML}
+\label{MLsyntax}
+
+We shall use variables to range over the various constructs of \ML\ as
+follows:
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+Variable & Ranges over\\
+\hline
+$var$    & variables\\
+$con$    & constructors\\
+$ce$     & constant expressions\\
+$ty$     & types\\
+$tab$    & type abbreviation bindings (see~\ref{MLtypeabbrev})\\
+$cb$     & concrete type bindings (see~\ref{ML-concrete-types})\\
+$ab$     & abstract type bindings (see~\ref{ML-abstract-types})\\
+$d$      & declarations\\
+$b$      & bindings\\
+$p$      & patterns\\
+$e$      & expressions\\
+\hline
+\end{tabular}
+\end{center}
+
+Variables and  constructors are  both represented  by identifiers  but they are
+different syntax classes.  Identifiers  and constant  expressions are described
+in Section~\ref{ML-ident}  below.    Types  and type-bindings  are explained in
+Chapter~\ref{ML-types}.  Declarations,  bindings, patterns  and expressions are
+defined by the following BNF-like\index{BNF syntax,
+explanation of} syntax equations\index{syntax of ML@syntax of \ML!explanation of} in which:
+
+\begin{enumerate}
+
+\item Each variable ranges over constructs as above.
+
+\item The numbers following the various variables are there merely to 
+distinguish between different occurrences---this will be convenient when we 
+describe the semantics in Chapter~\ref{MLsemantics}.
+
+\item {\small\verb%{%}$C${\small\verb%}%} denotes an optional occurrence 
+of $C$, and for $n > 1$  
+{\small\verb%{%}$C_1${\small\verb%|%}$C_2 \ldots${\small\verb% | %}$C_n${\small\verb%}%}
+denotes a choice of exactly one of $C_1${\small\verb%,%}$C_2${\small\verb%,%}$\ldots${\small\verb%,%}$C_n$.
+
+\item The constructs are listed in order of decreasing binding power\index{precedence, in ML@precedence, in \ML}.
+
+\item `L' or `R' following a construct means that it associates\index{associativity, of constructs in ML@associativity, of constructs in \ML} to the left
+(L) or right (R) when juxtaposed with itself (where this is syntactically
+admissible).
+
+\item Certain constructs are equivalent to others and this is indicated by
+`equiv.'\index{equiv.} followed by the equivalent construct.
+
+\end{enumerate}
+
+
+\section{Syntax equations for ML}
+
+\index{type variables, in ML@type variables, in \ML|(}
+\index{variables, in ML@variables, in \ML!syntax of|(}
+\vfill
+\subsubsection*{Declarations $d$}\index{ML@\ML!syntax of declarations in}\index{declarations, in ML@declarations, in \ML!syntax of}\index{type constraint!in ML@in \ML}
+
+\noindent\begin{tabular}{@{}ll}
+{\small\verb%   %}$d${\small\verb% ::= let %}$b$ 	& ordinary variables\index{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!syntax of}\\
+
+{\small\verb%      |  letref %}$b$	& assignable variables\index{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!syntax of}\\
+
+{\small\verb%      |  letrec %}$b$	& recursive functions\index{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!syntax of}\\
+
+
+{\small\verb%      |  lettype %}$tab$	& type abbreviations\index{abbreviation of types, in ML@abbreviation of types, in \ML}\index{types, in ML@types, in \ML!abbreviation of}\index{lettype@{\small\verb+lettype+}}\\[1ex]
+
+{\small\verb%      |  type %}$cb$		& {}\index{type@\ml{type}}\\
+
+{\small\verb%      |  rectype %}$cb$	& recursive concrete types\index{rectype@\ml{rectype}}\index{types, in ML@types, in \ML!concrete}\\[1ex]
+
+{\small\verb%      |  abstype %}$ab$	& abstract types\index{types, in ML@types, in \ML!abstract}\\ 
+
+{\small\verb%      |  absrectype %}$ab$	& recursive abstract types\index{absrectype@{\small\verb+absrectype+}$\ldots${\small\verb+with+}$\ldots$}\\
+\end{tabular}
+
+\vfill
+\subsubsection*{Bindings $b$}\index{ML@\ML!syntax of bindings in}\index{bindings, in ML@bindings, in \ML!syntax of}
+
+\noindent\begin{tabular}{@{}ll}
+{\small\verb%   %}$b${\small\verb% ::= %}$p${\small\verb%=%}$e$\index{ binding operator, in ML@{\small\verb+=+} (binding operator, in \ML)}				& simple binding\\[1ex]
+
+{\small\verb%      |  var %}$p_1$ $p_2\ldots p_n${\small\verb% {:%}$ty${\small\verb%} = %}$e$	& function definition\\[1ex]
+{\small\verb%      |  %}$b_1${\small\verb% and %}$b_2 \ldots${\small\verb% and %}$b_n$\index{and@{\small\verb+and+}}		& multiple binding\\
+\end{tabular}
+
+\vfill
+
+\subsubsection*{Patterns $p$}\index{ML@\ML!syntax of patterns in}\index{patterns, in ML@patterns, in \ML!syntax of}
+
+\noindent\begin{tabular}{@{}ll}
+{\small\verb%   %}$p${\small\verb% ::= _%}\index{wildcard, in ML@wildcard, in \ML}\index{ wildcard, in ML@{\small\verb+_+} (wildcard, in \ML)}	& wildcard\\[1ex]
+
+{\small\verb%      |  %}$ce$			& constant\\[1ex]
+
+{\small\verb%      |  %}$var$			& variable\\[1ex]
+
+{\small\verb%      |  %}$con$ $p$		& construction\index{constructions, in ML@constructions, in \ML}\\[1ex]
+
+{\small\verb%      |  %}$p${\small\verb%:%}$ty$\index{type constraint!in ML@in \ML}\index{ type constraint, in ML@{\small\verb+:+} (type constraint, in \ML)}	& type constraint\\[1ex]
+
+{\small\verb%      |  %}$p_1${\small\verb%.%}$p_2$	& R list cons\index{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)}\\[1ex]
+
+{\small\verb%      |  %}$p_1${\small\verb%,%}$p_2$\index{ pair constructor, in ML@{\small\verb+,+} (pair constructor, in \ML)}\index{pairs, in ML@pairs, in \ML!syntax of} & R pairing\\[1ex]
+
+{\small\verb%      |  []%}			& empty list\\[1ex]
+{\small\verb%      |  [%}$p_1${\small\verb%;%}$p_2 \ldots${\small\verb%;%}$p_n${\small\verb%]%}		& list of $n$ elements\index{list constructor, in ML@list constructor, in \ML!syntax of}\index{lists, in ML@lists, in \ML!syntax of}\\[1ex]
+
+{\small\verb%      |  (%}$p${\small\verb%)%}\index{ brackets, in ML@{\small\verb+(+$\cdots$\verb+)+} (brackets, in \ML)}	& equiv. $p$\\
+\end{tabular}
+
+\newpage 
+
+\subsubsection*{Expressions $e$}\index{ML@\ML!syntax of expressions in|(}\index{expressions, in ML@expressions, in \ML!syntax of}
+
+
+\noindent\begin{tabular}{@{}ll}
+{\small\verb%   %}$e${\small\verb% ::= %}$ce$		& constant\\[1ex]
+
+{\small\verb%      |  %}$var$		& variable\index{type variables, in ML@type variables, in \ML|)}\index{variables, in ML@variables, in \ML!syntax of|)}\\[1ex]
+
+{\small\verb%      |  %}$con$		& constructor\index{constructors, in ML@constructors, in \ML}\\[1ex]
+
+{\small\verb%      |  %}$e_1 e_2$	& L function application\index{function application, in ML@function application, in \ML!syntax of}\\[1ex]
+
+{\small\verb%      |  %}$e${\small\verb%:%}$ty$\index{type constraint!in ML@in \ML}\index{ type constraint, in ML@{\small\verb+:+} (type constraint, in \ML)}	& type constraint\\[1ex]
+
+{\small\verb%      |  -%}$e$\index{ minus, in ML@{\small\verb+-+} (minus, in \ML)}		& unary minus\\
+{\small\verb%      |  %}$e_1${\small\verb%*%}$e_2$\index{ multiplication, in ML@{\small\verb+*+} (multiplication, in \ML)}		& L multiplication\\
+{\small\verb%      |  %}$e_1${\small\verb%/%}$e_2$\index{ division, in ML@{\small\verb+/+} (division, in \ML)}		& L division\\
+{\small\verb%      |  %}$e_1${\small\verb%+%}$e_2$\index{ addition, in ML@{\small\verb7+7} (addition, in \ML)}
+		& L addition\\
+{\small\verb%      |  %}$e_1${\small\verb%-%}$e_2$\index{ subtraction, in ML@{\small\verb+-+} (subtraction, in \ML)}		& L subtraction\\
+{\small\verb%      |  %}$e_1${\small\verb%<%}$e_2$\index{ less than, in ML@{\small\verb+<+} (less than, in \ML)}		& less than\\
+{\small\verb%      |  %}$e_1${\small\verb%>%}$e_2$\index{ greater than, in ML@{\small\verb+>+} (greater than, in \ML)}		& greater than\\[1ex]
+
+{\small\verb%      |  %}$e_1${\small\verb%.%}$e_2$\index{list constructor, in ML@list constructor, in \ML!syntax of}		& R list cons\index{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)}\\
+{\small\verb%      |  %}$e_1${\small\verb%@%}$e_2$\index{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)}\index{concatenation, of lists!in ML@in \ML}		& R list append\\
+{\small\verb%      |  %}$e_1${\small\verb%=%}$e_2$\index{ equality, in ML@{\small\verb+=+} (equality, in \ML)}		& L equality\index{equality, in ML@equality, in \ML!syntax of}\\[1ex]
+
+{\small\verb%      |  not %}$e$\index{not@\ml{not}}		& negation\\
+{\small\verb%      |  %}$e_1${\small\verb%&%}$e_2$\index{conjunction, in ML@conjunction, in \ML}\index{ conjunction, in ML@{\small\verb+&+} (conjunction, in \ML)}		& R conjunction\\
+{\small\verb%      |  %}$e_1${\small\verb% or %}$e_2$\index{or@\ml{or}}	& R disjunction\index{disjunction, in ML@disjunction, in \ML}\\[1ex]
+
+
+{\small\verb%      |  %}$e_1${\small\verb%=>%}$e_2${\small\verb%|%}$e_3$		& R equiv. if $e_1$ then $e_2$ else $e_3$\\[1ex]
+
+{\small\verb%      |  do %}$e$\index{do@\ml{do}}		& evaluate $e$
+ for side effects\\[1ex]
+
+{\small\verb%      |  %}$e_1${\small\verb%,%}$e_2$\index{ pair constructor, in ML@{\small\verb+,+} (pair constructor, in \ML)}\index{pairs, in ML@pairs, in \ML!syntax of} & R pairing\\[1ex]
+
+{\small\verb%      |  %}$p${\small\verb%:=%}$e$\index{ assignment, in ML@{\small\verb+:=+} (assignment, in \ML)}\index{assignments, in ML@assignments, in \ML!syntax of}		& assignment\\[1ex]
+
+{\small\verb%      |  fail%}\index{fail@{\small\verb+fail+}}		& equiv. {\small\verb%failwith `fail`%}\\
+{\small\verb%      |  failwith %}$e$\index{failwith@\ml{failwith}}	& failure with explicit string\\[1ex]
+
+{\small\verb%      |  if %}$e_1${\small\verb% {then|loop} %}$e_{1}'$\index{if then else@{\small if $\cdots$ then $\cdots$ else $\cdots$}}\index{if loop loop@{\small if $\cdots$ loop $\cdots$ loop $\cdots$}}\index{if then loop@{\small if $\cdots$ then $\cdots$ loop $\cdots$}}\index{if loop else@{\small if $\cdots$ loop $\cdots$ else $\cdots$}!syntax of}	& conditional and loop\index{conditional loop construct, in ML@conditional/loop construct, in \ML!syntax of}\index{conditional loop construct, in ML@conditional/loop construct, in \ML}\\
+{\small\verb%        {if %}$e_2${\small\verb% {then|loop} %}$e_{2}'$	& {\ }\\
+{\small\verb%                    %}$\vdots$	& {\ }\\
+{\small\verb%         if %}$e_n${\small\verb% {then|loop} %}$e_{n}'${\small\verb%}%}	& {\ }\\
+{\small\verb%        {{else|loop} %}$e_{n}''${\small\verb%}%} & {\ }\\[1ex]
+\end{tabular}
+
+\newpage
+
+\noindent\begin{tabular}{@{}ll}
+{\small\verb%      |  %}$e${\small\verb% {??|!!} %}$e_1 e_{1}'$\index{failure, in ML@failure, in \ML!iterative selective trapping of}\index{failure, in ML@failure, in \ML!iterative trapping of}\index{failure, in ML@failure, in \ML!selective trapping of}\index{failure, in ML@failure, in \ML!trapping of}
+\index{ failure trap, selective, in ML@{\small\verb+??+} (failure trap, selective, in \ML)}\index{ failure trap, iterative selective, in ML@{\small\verb+"!"!+} (failure trap, iterative selective, in \ML)}	   & R failure trap and loop\\
+{\small\verb%           {??|!!} %}$e_2 e_{2}'$	   & {\ }\\
+{\small\verb%              %}$\vdots$	   & {\ }\\
+{\small\verb%           {??|!!} %}$e_n e_{n}'$	   & {\ }\\
+{\small\verb%           {{?|!|?%}$id${\small\verb%|!%}$id${\small\verb%} %}$e_{n}''${\small\verb%}%}	   & {\ }\index{ failure trap, in ML@{\small\verb+?+} (failure trap, in \ML)}\index{ failure trap,
+iterative, in ML@{\small\verb+"!+} (failure trap, iterative, in \ML)}\\[1ex]
+
+{\small\verb%      |  while %}$e_1${\small\verb% do %}$e$\index{while do@{\small\ml{while}$\cdots$\ml{do}$\cdots$}!syntax of}\index{while construct, in ML@while construct, in \ML} & while loop\\[1ex]
+
+{\small\verb%      |  %}$e_1${\small\verb%;%}$e_2 \ldots${\small\verb% ;%}$e_n$\index{ sequencing, in ML@{\small\verb+;+} (sequencing, in \ML)}\index{sequencing!of ML expressions@of \ML\ expressions}  & sequencing\\[1ex]
+
+{\small\verb%      |  []%}		   & empty list\\
+{\small\verb%      |  [%}$e_1${\small\verb%;%}$e_2 \ldots${\small\verb% ; %}$e_n${\small\verb%]%}\index{ lists, in ML@{\small\ml{[} $\cdots$ \ml{;} $\cdots$ \ml{]}} (lists, in \ML)}\index{lists, in ML@lists, in \ML!syntax of}  & list of $n$ elements\\[1ex]
+
+{\small\verb%      |  %}$e${\small\verb% where %}$b$\index{where@{\small\verb+where+}}		   & R equiv. {\small\verb%let %}$b${\small\verb% in %}$e$\\
+{\small\verb%      |  %}$e${\small\verb% whereref %}$b$\index{whereref@{\small\verb+whereref+}}	   & R equiv. {\small\verb%letref %}$b${\small\verb% in %}$e$\\
+{\small\verb%      |  %}$e${\small\verb% whererec %}$b$\index{whererec@{\small\verb+whererec+}}	   & R equiv. {\small\verb%letrec %}$b${\small\verb% in %}$e$\\
+{\small\verb%      |  %}$e${\small\verb% wheretype %}$db$\index{wheretype@{\small\verb+wheretype+}}	   & equiv. {\small\verb%lettype %}$db${\small\verb% in %}$e$\\
+{\small\verb%      |  %}$e${\small\verb% whereabstype %}$ab$\index{whereabstype@{\small\verb+whereabstype+}}	   & equiv. {\small\verb%abstype %}$ab${\small\verb% in %}$e$\\
+{\small\verb%      |  %}$e${\small\verb% whereabsrectype %}$ab$\index{whereabsrectype@{\small\verb+whereabsrectype+}} & equiv. {\small\verb%absrectype %}$ab${\small\verb% in %}$e$\\[1ex]
+
+{\small\verb%      |  %}$d${\small\verb% in %}$e$\index{in@{\small\verb+in+}}		   & local declaration\index{declarations, in ML@declarations, in \ML!local}\index{let in@\ml{let} $\ldots$ \ml{in} $\ldots$!syntax of}\index{letref in@\ml{letref} $\ldots$ \ml{in} $\ldots$!syntax of}\index{letrec in@\ml{letrec} $\ldots$ \ml{in} $\ldots$!syntax of}\\[1ex]
+
+{\small\verb%      |  case %}$e${\small\verb% of %}$p_1${\small\verb%.%}$e_1${\small\verb% | %}$\ldots${\small\verb%| %}$p_n${\small\verb%.%}$e_n$ & case statement, equiv.\\
+   {\ }             &    {\small\verb%(fun %}$p_1${\small\verb%.%}$e_1${\small\verb% | %}$\ldots${\small\verb% | %}$p_n${\small\verb%.%}$e_n${\small\verb%) %}$e$\index{case of@{\small\ml{case} $\cdots$ \ml{of} $\cdots$ \ml{"|} $\cdots$}}\\[1ex]
+
+{\small\verb%      |  \ %}$p_1 p_2 \ldots p_n${\small\verb%. %}$e$\index{ function abstraction binder, in ML@{\small\verb+\+} (function
+abstraction binder, in \ML)}\index{function abstraction, in ML@function abstraction, in \ML!syntax of}\index{function (pattern) selection abstraction, in ML@function (pattern) selection abstraction, in \ML} & abstraction\\[1ex]
+
+{\small\verb%      |   fun %}$p_1${\small\verb%.%}$e_1${\small\verb% | %}$p_2${\small\verb%.%}$e_2${\small\verb% | %}$\ldots${\small\verb% | %}$p_n${\small\verb%.%}$e_n$
+ & pattern selection abstraction\index{fun@{\ml{fun$\cdots$}\ml{"|}\ml{$\cdots$}}!syntax of}\\[1ex]
+
+{\small\verb%      |  (%}$e${\small\verb%)%}\index{ brackets, in ML@{\small\verb+(+$\cdots$\verb+)+} (brackets, in \ML)}		& equiv. $e$\\[1ex]
+\end{tabular}
+\index{ML@\ML!syntax of expressions in|)}
+
+%\clearpage
+
+
+\section{Notes on the syntax equations for ML}
+
+
+\begin{enumerate}
+
+\item In the syntax equations constructs are listed in order of decreasing
+binding power\index{binding power, in ML@binding power, in \ML}.  For example, since $e_1 e_2$ is listed before
+$e_1${\small\verb%;%}$e_2$ function application binds more tightly than sequencing and  thus
+$e_1 e_2${\small\verb%;%}$e_3$ parses as {\small\verb%(%}$e_1 e_2${\small\verb%);%}$e_3$.  This convention 
+determines only the relative binding power of different constructs.  The left
+  or
+right association\index{associativity, of constructs in ML@associativity, of constructs in \ML} of a construct is indicated explicitly by `L' for left
+and `R' for right.  For example, as application associates to the left, the
+expression
+$e_1 e_2 e_3$ parses as {\small\verb%(%}$e_1 e_2${\small\verb%)%}$e_3$, and
+ since $e_1${\small\verb%=>%}$e_2${\small\verb%|%}$e_3$
+associates to the right, the expression $e_1${\small\verb%=>%}$e_2${\small\verb%|%}$e_3${\small\verb%=>%}$e_4${\small\verb%|%}$e_5$
+\index{case of@{\small\ml{case} $\cdots$ \ml{of} $\cdots$ \ml{"|} $\cdots$}!relation to abstraction} parses as $e_1${\small\verb%=>%}$e_2${\small\verb%|(%}$e_3${\small\verb%=>%}$e_4${\small\verb%|%}$e_5${\small\verb%)%}.
+
+\item Only functions can be defined with {\small\verb%letrec%}. For example,
+{\small\verb%letrec x = 2-x%} would cause a syntax error.
+
+\item All the variables occurring in a pattern must be distinct.  On the
+other hand, a pattern can contain multiple occurrences of the wildcard\index{wildcard, in ML@wildcard, in \ML}
+`{\small\verb%_%}'.
+
+\item Spaces\index{spaces!in ML expressions@in \ML\ expressions} ({\small ASCII} 32)\index{ASCII@{\small ASCII}}, carriage returns\index{carriage return!in ML expressions@in \ML\ expressions} ({\small ASCII} 13), 
+line feeds\index{line feed!in ML expressions@in \ML\ expressions} ({\small ASCII} 10)
+form feeds\index{form feed!in ML expressions@in \ML\ expressions} ({\small\verb%^L%}, {\small ASCII} 12) and tabs\index{tab!in ML expressions@in \ML\ expressions} 
+({\small\verb%^I%}, {\small ASCII} 9)
+can be inserted and deleted arbitrarily
+without affecting the meaning (as long as obvious ambiguities are not
+introduced).  For example, the space in {\small\verb%- %}$x$ but not in
+{\small\verb%not %}$x$ can be omitted.  
+Comments\index{comments, in ML@comments, in \ML} can be of two kinds:
+
+\begin{enumerate}
+\item Arbitrary sequences of
+characters surrounded by 
+{\small\verb$%$}'s\index{ comment markers, in ML@\per $\cdots$ \per\ (comment markers, in \ML)}.
+
+\item Text enclosed in the nesting comment brackets
+{\small\verb$%<$}\index{ comment markers, nested, in ML@\pes $\cdots$ \pee\ (comment markers, nested, in \ML)}
+ and {\small\verb$>%$}.
+The only way to terminate a comment starting with {\small\verb$%<$} is
+with a matching {\small\verb$>%$}. 
+If {\small\verb$%$}$x$, where $x$ is not \ml{<}, 
+occurs outside a {\small\verb$%<$} $\ldots$ {\small\verb$>%$} pair,
+then the comment is terminated by the next {\small\verb$%$}. 
+Thus {\small\verb$%<$} and {\small\verb$>%$} 
+can be used to comment out comments of the form 
+{\small\verb$%$} $\ldots$ {\small\verb$%$}, but not
+vice versa.
+\end{enumerate}
+
+Comments can be inserted anywhere a space is allowed.
+
+\end{enumerate}
+
+
+
+\section{Identifiers and other lexical matters}\label{ML-ident}
+
+In this section the lexical structure of \ML\ is defined. The
+details pertaining to the \HOL\ logic are given in Section~\ref{HOL-lex}.
+
+\subsection{Identifiers}
+
+The structure of \ML\ 
+identifiers\index{identifiers, in ML@identifiers, in \ML!lexical aspects of|(}\index{ML@\ML!identifiers in|(}
+is partly programmable. The default
+is that an identifier can be of two forms:
+\index{alphanumerics, in ML@alphanumerics, in \ML|(}
+\begin{myenumerate}
+\item A sequence of alphanumerics starting with a letter, 
+where the default structure of an alphanumeric is that it is a letter, 
+a digit, a prime (\ml{`}) or an underbar (\ty{\_}).
+\item A 
+special~symbol\index{special symbols, in ML@special symbols, in \ML|(}\index{ML@\ML!special symbols of|(}
+chosen from the following list
+
+{\small\begin{verbatim}
+   **    ++    <--   <->   -->    ---    ><    >>    >=    <==   <=>
+
+   ===   ==>   \/    //    /\     !?     !!    !\    ?!    ??    ?\
+
+   :=    <>    <-    <<    <=     --    ->    =>    ==
+\end{verbatim}}
+
+\end{myenumerate}
+
+\noindent A letter\index{letters, in ML@letters, in \ML} is a member of the list:
+
+
+{\small\begin{verbatim}
+   a b c d e f g h i j k l m n o p q r s t u v w x y z
+
+   A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+\end{verbatim}}
+
+\noindent \ML\ is case-sensitive: upper and lower case letters are 
+considered to be different. 
+
+The function
+
+\begin{boxed}\index{new_letter@\ml{new\_letter}|pin}
+\begin{verbatim}
+   new_letter : string -> void
+\end{verbatim}\end{boxed}
+
+\noindent makes a new character behave like a letter. (The
+unique object of \ML\ type {\small\verb%void%} is the value
+of the expression {\small\verb%()%}.) For example:
+
+{\small\begin{verbatim}
+        new_letter `+`;;
+\end{verbatim}}
+
+\noindent will make \ml{+int} and \ml{foo+bar} become allowable identifiers.
+Failure occurs if the argument string is longer than one character.
+
+The function
+
+\begin{boxed}\index{is_letter@\ml{is\_letter}|pin}
+\begin{verbatim}
+   is_letter : string -> bool
+\end{verbatim}\end{boxed}
+
+\noindent tests if a unit string is a letter; it fails if the string has more
+than one character.
+
+Alphanumerics are, by default, letters or digits.  A digit is one of
+{\small\verb%0%}, {\small\verb%1%}, {\small\verb%2%}, {\small\verb%3%},
+{\small\verb%4%}, {\small\verb%5%}, {\small\verb%6%}, {\small\verb%7%},
+{\small\verb%8%}, or {\small\verb%9%}. The function
+
+\begin{boxed}\index{new_alphanum@\ml{new\_alphanum}|pin}
+\begin{verbatim}
+   new_alphanum : string -> void
+\end{verbatim}\end{boxed}
+   
+\noindent makes a new character behave like an alphanumeric. For example:  
+
+\begin{hol}\begin{verbatim}
+   new_alphanum `+`;;
+\end{verbatim}\end{hol}
+
+\noindent will make \ml{foo+bar} and \ml{foo+} 
+become allowable names (but not \ml{+bar}). 
+Failure occurs if the argument string is longer than one character.
+
+The function
+
+\begin{boxed}\index{is_alphanum@\ml{is\_alphanum}|pin}
+\begin{verbatim}
+   is_alphanum : string -> bool
+\end{verbatim}\end{boxed}
+
+\noindent tests if a unit string is an alphanumeric; it fails if the string has
+more than one character.
+
+It is a consequence of the way lexical analysis is implemented that any initial
+subsequence of a 
+special~symbol
+is also a special symbol (\eg\ since
+\ml{==>} is a special symbol, so are \ml{==} and \ml{=}). The function
+
+\begin{boxed}\index{new_special_symbol@\ml{new\_special\_symbol}|pin}
+\begin{verbatim}
+   new_special_symbol : string -> bool
+\end{verbatim}\end{boxed}
+  
+\noindent makes the argument string, and all its initial
+ substrings, special symbols. It fails if 
+
+\begin{myenumerate}
+\item the argument string is a single character, or 
+\item it starts with a letter or alphanumeric. 
+\end{myenumerate}\index{alphanumerics, in ML@alphanumerics, in \ML|)}
+
+\noindent For example:
+
+{\small\begin{verbatim}
+       new_special_symbol `===>>>`;;
+\end{verbatim}}
+
+\noindent makes \ml{===>>>}, \ml{===>>}, \ml{===>} and \ml{===} 
+into new special symbols 
+(\ml{==} is already a special symbol because \ml{==>} is).
+
+The function
+
+\begin{boxed}\index{special_symbols@\ml{special\_symbols}|pin}
+\begin{verbatim}
+   special_symbols : void -> string list
+\end{verbatim}\end{boxed}
+
+\noindent returns the list of currently declared special symbols.
+\index{identifiers, in ML@identifiers, in \ML!lexical aspects of|)}
+\index{special symbols, in ML@special symbols, in \ML|)}\index{ML@\ML!special symbols of|)}
+
+\subsection{Constant expressions}\label{MLconexp}
+
+The \ML\ constant expressions ($ce$'s)
+are:\index{constant expressions, in ML@constant expressions, in \ML}\index{ML@\ML!constant expressions in} 
+
+\begin{enumerate}
+\item Integers---\ie\ strings of the digits {\small\verb%0,1...,9%}\index{integers, in ML@integers, in \ML}.
+\item Truth values {\small\verb%true%}\index{true in ML@\ml{true} in \ML} and {\small\verb+false+}\index{false@\ml{false}}.\index{truth values, in ML@truth values, in \ML}
+\item Strings\index{strings, in ML@strings, in \ML} consist of any sequence of characters surrounded by
+string quotes ({\small\verb%`%}), \eg\\ 
+{\small\verb%`This is a single string`%}.\index{ string markers@{\small\verb+`+ $\cdots$ \verb+`+} (string markers, in \ML)} 
+In any string the occurrence of {\small\verb%\%}$x$\index{ escape, in ML strings@{\small\verb+\+} (escape, in \ML\ strings)} has the following meanings for
+different $x$'s:
+
+\medskip
+
+\begin{tabular}{rcl}
+{\small\verb%\0%} &  = & ten spaces\index{spaces!in ML strings@in \ML\ strings}\\
+{\small\verb%\n%} &  = & {\small\verb%n%} spaces (0$<${\small\verb%n%}$<$10)\\
+{\small\verb%\S%} &  = & one space\\
+{\small\verb%\R%} &  = & return\index{carriage return!in ML strings@in \ML\ strings}\\
+{\small\verb%\L%} &  = & line-feed\index{line feed!in ML strings@in \ML\ strings}\\
+{\small\verb%\T%} &  = & tab\index{tab!in ML strings@in \ML\ strings}\\
+{\small\verb%\F%} &  = & form feed\index{form feed!in ML strings@in \ML\ strings}\\
+{\small\verb%\x%} &  = & {\small\verb%x%} taken literally otherwise
+ (\eg\ {\small\verb+\`+} to include quotes in a string)\\
+\end{tabular}
+\item The expression {\small\verb%()%},
+      called {\it empty\/}, which evaluates to the
+      unique object of \ML\ type {\small\verb%void%}.
+\item expressions of the form $con$ where $con$ is a 0-ary
+      constructor\index{constructors, in ML@constructors, in \ML} or {\small\verb%(%}$con$ $ce${\small\verb%)%} where $con$ is a constructor
+      and $ce$ a constant expression.
+\end{enumerate}
+
+The following function changes 
+the string escape character ({\small\verb%\%}).\index{strings, in ML@strings, in \ML!changing the escape}
+
+\begin{boxed}\index{set_string_escape@\ml{set\_string\_escape}|pin}
+\begin{verbatim}
+   set_string_escape : int -> int
+\end{verbatim}\end{boxed}
+
+\noindent This changes the escape character to be the character with the
+supplied ascii code (initially this is {\small\verb%92%}, 
+viz. `{\small\verb%\%}`). 
+The old escape character is returned.
+
+\subsection{Prefixes and infixes}
+
+\index{prefixes, in ML@prefixes, in \ML|(}
+The \ML\ {\it prefixes\/}\index{prefixes, in ML@prefixes, in \ML} $px$ and
+ {\it infixes\/}\index{infixes, in ML@infixes, in \ML} $ix$ are given by:
+
+\begin{hol}
+\index{list constructor, in ML@list constructor, in \ML}
+\index{not@\ml{not}}\index{do@\ml{do}}
+\index{or@\ml{or}!not a dollared infix}
+\index{ minus, in ML@{\small\verb+-+} (minus, in \ML)}
+\index{ conjunction, in ML@{\small\verb+&+} (conjunction, in \ML)}
+\index{ multiplication, in ML@{\small\verb+*+} (multiplication, in \ML)}
+\index{ division, in ML@{\small\verb+/+} (division, in \ML)}
+\index{ addition, in ML@{\small\verb7+7} (addition, in \ML)}
+\index{ subtraction, in ML@{\small\verb+-+} (subtraction, in \ML)}
+\index{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)|(}
+\index{concatenation, of lists!in ML@in \ML}
+\index{ list constructor, in ML@{\small\verb+.+} (list constructor, in \ML)}
+\index{ equality, in ML@{\small\verb+=+} (equality, in \ML)}
+\index{ less than, in ML@{\small\verb+<+} (less than, in \ML)}
+\index{ greater than, in ML@{\small\verb+>+} (greater than, in \ML)}
+\index{ pair constructor, in ML@{\small\verb+,+} (pair constructor, in \ML)}
+
+{\small\verb%   %}$px${\small\verb% ::= not | - | do%}
+
+{\small\verb%   %}$ix${\small\verb% ::= * | / | + | - | . | @ | = | < | > | & | or | ,%}
+\end{hol}
+
+
+In addition, any identifier (and certain single characters) can be made into
+an infix.  Such user-defined infixes bind more tightly than
+{\small\verb%...=>...|...%} but more weakly than {\small\verb%or%}. All 
+of them have the same power binding\index{precedence, in ML@precedence, in \ML!of infixes, in ML@of infixes, in \ML}\index{precedence, in ML@precedence, in \ML!of prefixes, in ML@of prefixes, in \ML} 
+and associate\index{associativity, of constructs in ML@associativity, of constructs in \ML!of infixes} to the left.
+
+Except for {\small\verb%&%} and {\small\verb%or%}, each infix $ix$
+ (or prefix $px$) has correlated with it a special identifier 
+{\small\verb%$%}$ix$ (or {\small\verb%$%}$px$) which is bound to the 
+associated function. For example, the
+identifier {\small\verb%$+%} is bound to the addition function, and
+ {\small\verb%$@%} to
+the list-append function (see Chapter~\ref{MLprims} for the
+meaning of {\small\verb%$%}-ed
+infixes).  This is useful for passing functions as arguments; for example,
+$f${\small\verb% $@%}\index{concatenation, of lists!in ML@in \ML}\index{ list concatenation, in ML@{\small\verb+"@+} (list concatenation, in \ML)|)} applies
+$f$ to the append function\index{ML@\ML!identifiers in|)}.
+
+See the descriptions of the functions \ml{ml\_paired\_infix} and
+\ml{ml\_curried\_infix} in Section~\ref{MLinfixfns} for details of how to give
+an identifier (or admissible special symbol) infix status.
+
+\index{prefixes, in ML@prefixes, in \ML|)}
+
+
+
+
+
+
+
+
+

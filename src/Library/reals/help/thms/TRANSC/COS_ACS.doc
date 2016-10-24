@@ -1,0 +1,3 @@
+\THEOREM COS_ACS TRANSC
+|- !x. (& 0) <= x /\ x <= pi ==> (acs(cos x) = x)
+\ENDTHEOREM

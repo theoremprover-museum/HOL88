@@ -1,0 +1,3 @@
+\THEOREM REAL_SUB_LDISTRIB REAL
+|- !x y z. x * (y - z) = (x * y) - (x * z)
+\ENDTHEOREM

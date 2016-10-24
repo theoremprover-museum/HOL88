@@ -1,0 +1,35 @@
+\DOC new_special_symbol
+
+\TYPE {new_special_symbol : (string -> void)}
+
+\SYNOPSIS
+Adds new string to the list of special symbols.
+
+\DESCRIBE
+An identifier, at the ML or object level, is either alphanumeric, e.g. {true}
+or {T}, or consists of a special symbol which starts with a non-alphanumeric
+character, e.g. {==>} or {+}. It is a consequence of the non-backtracking
+implementation of lexical analysis that any (non-null) initial segment of a
+special symbol is also a special symbol, so from the above we know that {==}
+and {=} are. The function {new_special_symbol} makes the given string and its
+non-null initial segments into special symbols, provided the string does not
+start with an alphanumeric character (according to {is_alphanum}).
+
+\FAILURE
+Fails if the string provided starts with an alphanumeric character. The test is
+performed using the function {is_alphanum}, so this may include some unexpected
+characters if {new_alphanum} has been used.
+
+\EXAMPLE
+The call:
+{
+   new_special_symbol `.EQ.`;;
+}
+\noindent makes the following three strings special symbols:
+{
+   .E  .EQ  .EQ.
+}
+\SEEALSO
+is_alphanum, new_alphanum, special_symbols.
+
+\ENDDOC

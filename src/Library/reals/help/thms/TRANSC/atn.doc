@@ -1,0 +1,5 @@
+\THEOREM atn TRANSC
+|- !y.
+    atn y =
+    (@x. (--(pi / (& 2))) < x /\ x < (pi / (& 2)) /\ (tan x = y))
+\ENDTHEOREM

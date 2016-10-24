@@ -1,0 +1,3 @@
+\THEOREM WOSET_NUM WELLORDER
+|- woset(\(m,n). m <= n)
+\ENDTHEOREM

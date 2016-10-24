@@ -1,0 +1,4 @@
+\THEOREM real_of_hreal REALAX
+|- !g00031.
+    real_of_hreal g00031 = mk_real($treal_eq(treal_of_hreal g00031))
+\ENDTHEOREM

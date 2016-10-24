@@ -1,0 +1,26 @@
+\DOC load
+
+\TYPE {load : ((string # bool) -> void)}
+
+\SYNOPSIS
+Loads ML phrases from the named file.
+
+\DESCRIBE
+A call {load(`file`,flag)} will load ML phrases from the file described by
+{file}. If the boolean value {flag} is true, then toplevel printing of the
+system responses will occur, otherwise just a dot is printed for each toplevel
+phrase. The name {file} is expanded into a real filename using the same
+mechanism as {find_ml_file}.
+
+\FAILURE
+Fails if the appropriate file cannot be found on the search path, or if an
+error occurs in the ML which is being loaded.
+
+\COMMENTS
+It is usual to use either {loadf} or {loadt} rather than this function, which
+perform the same action with one or the other setting of the flag.
+
+\SEEALSO
+find_ml_file, loadf, loadt, search_path, set_search_path.
+
+\ENDDOC

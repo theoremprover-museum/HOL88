@@ -1,0 +1,66 @@
+LIBRARY:     reduce
+
+DESCRIPTION: Tools for the reduction of boolean and numeric expressions.
+             The library works entirely by inference (but uses num_CONV).
+
+AUTHOR:      John Harrison
+             University of Cambridge Computer Laboratory
+             New Museums Site
+             Pembroke Street
+             Cambridge CB2 3QG
+             England.
+
+             jrh@cl.cam.ac.uk
+
+DATE:        18th May 1991
+
+NOTES:       To maximize flexibility, the library is split into three parts:
+             (1) boolconv.ml - Conversions for boolean expressions
+             (2) arithconv.ml - Conversions for arithmetic constant-expressions
+             (3) reduce.ml - General reduction tools using both the above.
+
+             The first two parts can be loaded separately.
+
+             The boolean conversions essentially package up the
+             standard rewrites.
+
+             The arithmetic conversions demand that all
+             operands are actually numeric constants, so for
+             example `ADD_CONV "0 + x"' will fail.
+
+             BEQ_CONV and COND_CONV perform a similar function
+             to the inbuilt conversions bool_EQ_CONV and
+             COND_CONV, but are included for the sake of
+             completeness. NEQ_CONV and ADD_CONV reproduce the
+             function of the inbuilt num_EQ_CONV and ADD_CONV,
+             but are significantly more efficient in many
+             circumstances.
+
+             I have tried to make asymptotic performance fast
+             both in terms of the number of primitive
+             inferences performed and the CPU time taken.
+             Inevitably, the use of a unary number representation
+             requires a prohibitively large amount of
+             computation for some fairly small numbers.
+
+             All loops are explicitly iterative (the current version
+             of ML doesn't optimize tail calls), so there should
+             be no problems with space usage.
+
+             A slight speedup could be obtained by coupling
+             certain conversions (eg. SBC_CONV -> ADD_CONV ->
+             MUL_CONV -> EXP_CONV) at an ML-integer rather than
+             HOL-term level, but the code would be less clean.
+
+             One candidate for improvement is RED_CONV, which
+             could explicitly check the head operator then
+             choose the appropriate basic conversion.
+
+             There is also scope for some top-down optimization not
+             admitted by the reduction strategy of REDUCE_CONV.
+             For example in the current version the evaluation
+             of `REDUCE_CONV "T ==> (2 EXP 5) | (2 EXP 6)"'
+             evaluates of both exponential subterms.
+
+             Comments, bug reports and suggested improvements are
+             welcome, preferably via the email address given above.

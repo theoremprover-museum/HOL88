@@ -1,0 +1,36 @@
+% =====================================================================
+% HOL Manual LaTeX Source: libraries manual
+% =====================================================================
+
+\documentstyle[12pt,fleqn,../LaTeX/alltt,../LaTeX/layout]{book}
+
+% ---------------------------------------------------------------------
+% Read in defined macros and commands
+% ---------------------------------------------------------------------
+\input{../LaTeX/commands}
+\input{../LaTeX/ref-macros}
+
+%\includeonly{title,contents,preface,tactics,index}
+
+\verbosereftrue				  % verbose typesetting
+
+\makeindex
+
+\begin{document}
+
+   \setlength{\unitlength}{1mm}		  % unit of length = 1mm
+   \setlength{\baselineskip}{16pt}        % line spacing = 16pt
+
+   % ---------------------------------------------------------------------
+   % prelims
+   % ---------------------------------------------------------------------
+
+   \pagenumbering{roman}	          % roman page numbers for prelims
+   \setcounter{page}{1}		          % start at page 1
+
+   \include{title}			  % reference title page
+   \include{preface}			  % preface to libraries manual
+
+\end{document}
+
+

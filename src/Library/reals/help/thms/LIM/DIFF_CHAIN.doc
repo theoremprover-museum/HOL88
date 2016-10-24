@@ -1,0 +1,4 @@
+\THEOREM DIFF_CHAIN LIM
+|- !f g x.
+    (f diffl l)(g x) /\ (g diffl m)x ==> ((\x. f(g x)) diffl (l * m))x
+\ENDTHEOREM

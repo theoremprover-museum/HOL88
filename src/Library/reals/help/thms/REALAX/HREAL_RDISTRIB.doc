@@ -1,0 +1,5 @@
+\THEOREM HREAL_RDISTRIB REALAX
+|- !x y z.
+    (x hreal_add y) hreal_mul z =
+    (x hreal_mul z) hreal_add (y hreal_mul z)
+\ENDTHEOREM

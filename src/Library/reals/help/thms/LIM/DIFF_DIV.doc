@@ -1,0 +1,7 @@
+\THEOREM DIFF_DIV LIM
+|- !f g l m.
+    (f diffl l)x /\ (g diffl m)x /\ ~(g x = & 0) ==>
+    ((\x. (f x) / (g x)) diffl
+     (((l * (g x)) - (m * (f x))) / ((g x) pow 2)))
+    x
+\ENDTHEOREM

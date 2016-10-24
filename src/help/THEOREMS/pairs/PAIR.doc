@@ -1,0 +1,3 @@
+\THEOREM PAIR bool
+|- !x. FST x,SND x = x
+\ENDTHEOREM

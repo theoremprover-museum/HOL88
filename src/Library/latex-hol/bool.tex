@@ -1,0 +1,279 @@
+\documentstyle{article}
+\input holmacs
+\title{The Theory {\tt bool}}
+\author{} \date{\printtimestamp}
+\begin{document}
+\maketitle
+ 
+\sec{Parents}
+\begin{ttlist}
+PPLAMB
+\end{ttlist}
+ 
+\sec{Types}
+\begin{ttlist}
+":bool"
+":* \# **"
+\end{ttlist}
+ 
+\sec{Constants}
+\begin{typelist}
+\item[{\sf =}]
+":* -> (* -> bool)"
+\item[{\sf ==\GRE }]
+":bool -> (bool -> bool)"
+\item[{\sf /\BS }]
+":bool -> (bool -> bool)"
+\item[{\sf \BS /}]
+":bool -> (bool -> bool)"
+\item[{\sf IS\US ASSUMPTION\US OF}]
+":bool -> (bool -> bool)"
+\item[{\sf ,}]
+":* -> (** -> * \# **)"
+\item[{\sf BINDERS}]
+":* -> bool"
+\item[{\sf HOL\US DEFINITION}]
+":bool -> bool"
+\item[{\sf @}]
+":(* -> bool) -> *"
+\item[{\sf ?}]
+":(* -> bool) -> bool"
+\item[{\sf T}]
+":bool"
+\item[{\sf !}]
+":(* -> bool) -> bool"
+\item[{\sf F}]
+":bool"
+\item[{\sf \TI }]
+":bool -> bool"
+\item[{\sf ?!}]
+":(* -> bool) -> bool"
+\item[{\sf LET}]
+":(* -> **) -> (* -> **)"
+\item[{\sf COND}]
+":bool -> (* -> (* -> *))"
+\item[{\sf RES\US FORALL}]
+":(* -> bool) -> ((* -> bool) -> bool)"
+\item[{\sf RES\US EXISTS}]
+":(* -> bool) -> ((* -> bool) -> bool)"
+\item[{\sf RES\US SELECT}]
+":(* -> bool) -> ((* -> bool) -> *)"
+\item[{\sf ARB}]
+":*"
+\item[{\sf RES\US ABSTRACT}]
+":(* -> bool) -> ((* -> **) -> (* -> **))"
+\item[{\sf ONE\US ONE}]
+":(* -> **) -> bool"
+\item[{\sf ONTO}]
+":(* -> **) -> bool"
+\item[{\sf TYPE\US DEFINITION}]
+":(* -> bool) -> ((** -> *) -> bool)"
+\item[{\sf MK\US PAIR}]
+":* -> (** -> (* -> (** -> bool)))"
+\item[{\sf IS\US PAIR}]
+":(* -> (** -> bool)) -> bool"
+\item[{\sf REP\US prod}]
+":* \# ** -> (* -> (** -> bool))"
+\item[{\sf FST}]
+":* \# ** -> *"
+\item[{\sf SND}]
+":* \# ** -> **"
+\item[{\sf UNCURRY}]
+":(* -> (** -> ***)) -> (* \# ** -> ***)"
+\item[{\sf CURRY}]
+":(* \# ** -> ***) -> (* -> (** -> ***))"
+\end{typelist}
+ 
+\sec{Infixes}
+\begin{typelist}
+\item[{\sf =}]
+":* -> (* -> bool)"
+\item[{\sf ==\GRE }]
+":bool -> (bool -> bool)"
+\item[{\sf /\BS }]
+":bool -> (bool -> bool)"
+\item[{\sf \BS /}]
+":bool -> (bool -> bool)"
+\item[{\sf IS\US ASSUMPTION\US OF}]
+":bool -> (bool -> bool)"
+\item[{\sf ,}]
+":* -> (** -> * \# **)"
+\end{typelist}
+ 
+\sec{Binders}
+\begin{typelist}
+\item[{\sf @}]
+":(* -> bool) -> *"
+\item[{\sf !}]
+":(* -> bool) -> bool"
+\item[{\sf ?!}]
+":(* -> bool) -> bool"
+\end{typelist}
+ 
+\sec{Axioms}
+\begin{thmlist}
+\item[{\tt ARB\US THM}] $
+\THM \$\CONST{=} = \$\CONST{=}
+$
+\item[{\tt BOOL\US CASES\US AX}] $
+\THM \FORALL t\DOT (t = \CONST{T}) \OR  (t = \CONST{F})
+$
+\item[{\tt IMP\US ANTISYM\US AX}] $
+\THM \FORALL t_{1} \,t_{2}\DOT (t_{1} \IMP  t_{2}) \IMP 
+                                  ((t_{2} \IMP  t_{1}) \IMP  (t_{1} = t_{2}))
+$
+\item[{\tt ETA\US AX}] $
+\THM \FORALL t\DOT (\LAMBDA x \DOT t \,x) = t
+$
+\item[{\tt SELECT\US AX}] $
+\THM \FORALL P \,x\DOT P \,x \IMP  P \,(\$\CONST{\SELECT } \,P)
+$
+\end{thmlist}
+ 
+\sec{Definitions}
+\begin{thmlist}
+\item[{\tt T\US DEF}] $
+\THM \CONST{T} = ((\LAMBDA x \DOT x) = (\LAMBDA x \DOT x))
+$
+\item[{\tt FORALL\US DEF}] $
+\THM \$\FORALL  = (\LAMBDA P \DOT P = (\LAMBDA x \DOT \CONST{T}))
+$
+\item[{\tt EXISTS\US DEF}] $
+\THM \$\EXISTS  = (\LAMBDA P \DOT P \,(\$\CONST{\SELECT } \,P))
+$
+\item[{\tt AND\US DEF}] $
+\THM \$\AND  = (\LAMBDA t_{1} \, t_{2} \DOT
+                   (\FORALL t\DOT (t_{1} \IMP  (t_{2} \IMP  t)) \IMP  t))
+$
+\item[{\tt OR\US DEF}] $
+\THM \$\OR  =
+        (\LAMBDA t_{1} \, t_{2} \DOT
+            (\FORALL t\DOT (t_{1} \IMP  t) \IMP  ((t_{2} \IMP  t) \IMP  t)))
+$
+\item[{\tt F\US DEF}] $
+\THM \CONST{F} = (\FORALL t\DOT t)
+$
+\item[{\tt NOT\US DEF}] $
+\THM \NOT  = (\LAMBDA t \DOT t \IMP  \CONST{F})
+$
+\item[{\tt EXISTS\US UNIQUE\US DEF}] $
+\THM \$\CONST{\EXISTSUNIQUE } =
+        (\LAMBDA P \DOT \$\EXISTS  \,P \AND 
+                        (\FORALL x \,y\DOT P \,x \AND  P \,y \IMP  (x = y)))
+$
+\item[{\tt LET\US DEF}] $
+\THM \CONST{LET} = (\LAMBDA f \, x \DOT f \,x)
+$
+\item[{\tt COND\US DEF}] $
+\THM \CONST{COND} =
+        (\LAMBDA t \, t_{1} \, t_{2} \DOT
+            (\SELECT x\DOT ((t = \CONST{T}) \IMP  (x = t_{1})) \AND 
+                           ((t = \CONST{F}) \IMP  (x = t_{2}))))
+$
+\item[{\tt RES\US FORALL}] $
+\THM \FORALL P \,B\DOT
+        \CONST{RES\US FORALL} \,P \,B = (\FORALL x\DOT P \,x \IMP  B \,x)
+$
+\item[{\tt RES\US EXISTS}] $
+\THM \FORALL P \,B\DOT
+        \CONST{RES\US EXISTS} \,P \,B = (\EXISTS x\DOT P \,x \AND  B \,x)
+$
+\item[{\tt RES\US SELECT}] $
+\THM \FORALL P \,B\DOT
+        \CONST{RES\US SELECT} \,P \,B = (\SELECT x\DOT P \,x \AND  B \,x)
+$
+\item[{\tt ARB}] $
+\THM \CONST{ARB} = (\SELECT x\DOT \CONST{T})
+$
+\item[{\tt RES\US ABSTRACT}] $
+\THM \FORALL P \,B\DOT
+        \CONST{RES\US ABSTRACT} \,P \,B =
+           (\LAMBDA x \DOT (P \,x \Rightarrow  B \,x \mid  \CONST{ARB}))
+$
+\item[{\tt ONE\US ONE\US DEF}] $
+\THM \FORALL f\DOT \CONST{ONE\US ONE} \,f =
+                      (\FORALL x_{1} \,x_{2}\DOT
+                          (f \,x_{1} = f \,x_{2}) \IMP  (x_{1} = x_{2}))
+$
+\item[{\tt ONTO\US DEF}] $
+\THM \FORALL f\DOT
+        \CONST{ONTO} \,f = (\FORALL y\DOT (\EXISTS x\DOT y = f \,x))
+$
+\item[{\tt IS\US ASSUMPTION\US OF}] $
+\THM \FORALL t_{1} \,t_{2}\DOT
+        (t_{1} \:\CONST{IS\US ASSUMPTION\US OF}\: t_{2}) = t_{1} \IMP  t_{2}
+$
+\item[{\tt TYPE\US DEFINITION}] $
+\THM \FORALL P \,rep\DOT
+        \CONST{TYPE\US DEFINITION} \,P \,rep =
+           (\FORALL x' \,x''\DOT (rep \,x' = rep \,x'') \IMP  (x' = x''))
+           \AND  (\FORALL x\DOT P \,x = (\EXISTS x'\DOT x = rep \,x'))
+$
+\item[{\tt MK\US PAIR\US DEF}] $
+\THM \FORALL x \,y\DOT \CONST{MK\US PAIR} \,x \,y =
+                          (\LAMBDA a \, b \DOT (a = x) \AND  (b = y))
+$
+\item[{\tt IS\US PAIR\US DEF}] $
+\THM \FORALL p\DOT \CONST{IS\US PAIR} \,p =
+                      (\EXISTS x \,y\DOT p = \CONST{MK\US PAIR} \,x \,y)
+$
+\item[{\tt prod\US TY\US DEF}] $
+\THM \EXISTS rep\DOT \CONST{TYPE\US DEFINITION} \,\CONST{IS\US PAIR} \,rep
+$
+\item[{\tt REP\US prod}] $
+\THM \CONST{REP\US prod} =
+        (\SELECT rep\DOT
+            (\FORALL p' \,p''\DOT (rep \,p' = rep \,p'') \IMP  (p' = p''))
+            \AND 
+            (\FORALL p\DOT
+                \CONST{IS\US PAIR} \,p = (\EXISTS p'\DOT p = rep \,p')))
+$
+\item[{\tt COMMA\US DEF}] $
+\THM \FORALL x \,y\DOT
+        x,y = (\SELECT p\DOT
+                  \CONST{REP\US prod} \,p = \CONST{MK\US PAIR} \,x \,y)
+$
+\item[{\tt FST\US DEF}] $
+\THM \FORALL p\DOT
+        \CONST{FST} \,p =
+           (\SELECT x\DOT
+               (\EXISTS y\DOT
+                   \CONST{MK\US PAIR} \,x \,y = \CONST{REP\US prod} \,p))
+$
+\item[{\tt SND\US DEF}] $
+\THM \FORALL p\DOT
+        \CONST{SND} \,p =
+           (\SELECT y\DOT
+               (\EXISTS x\DOT
+                   \CONST{MK\US PAIR} \,x \,y = \CONST{REP\US prod} \,p))
+$
+\item[{\tt UNCURRY\US DEF}] $
+\THM \FORALL f \,x \,y\DOT \CONST{UNCURRY} \,f \,(x,y) = f \,x \,y
+$
+\item[{\tt CURRY\US DEF}] $
+\THM \FORALL f \,x \,y\DOT \CONST{CURRY} \,f \,x \,y = f \,(x,y)
+$
+\end{thmlist}
+ 
+\sec{Theorems}
+\begin{thmlist}
+\item[{\tt PAIR\US EXISTS}] $
+\THM \EXISTS p\DOT \CONST{IS\US PAIR} \,p
+$
+\item[{\tt PAIR}] $
+\THM \FORALL x\DOT \CONST{FST} \,x,\CONST{SND} \,x = x
+$
+\item[{\tt FST}] $
+\THM \FORALL x \,y\DOT \CONST{FST} \,(x,y) = x
+$
+\item[{\tt SND}] $
+\THM \FORALL x \,y\DOT \CONST{SND} \,(x,y) = y
+$
+\item[{\tt PAIR\US EQ}] $
+\THM \FORALL x \,y \,a \,b\DOT (x,y = a,b) = (x = a) \AND  (y = b)
+$
+\end{thmlist}
+ 
+\endthy{bool}
+\end{document}
+ 

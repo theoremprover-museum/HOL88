@@ -1,0 +1,3 @@
+\THEOREM LESS_LEMMA1 prim_rec
+|- !m n. m < (SUC n) ==> (m = n) \/ m < n
+\ENDTHEOREM

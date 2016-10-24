@@ -1,0 +1,3 @@
+\THEOREM ATN_BOUNDS TRANSC
+|- !y. (--(pi / (& 2))) < (atn y) /\ (atn y) < (pi / (& 2))
+\ENDTHEOREM

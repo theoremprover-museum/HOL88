@@ -1,0 +1,3 @@
+\THEOREM mr1 TOPOLOGY
+|- mr1 = metric(\(x,y). abs(y - x))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM REAL_ABS_CIRCLE REAL
+|- !x y h. (abs h) < ((abs y) - (abs x)) ==> (abs(x + h)) < (abs y)
+\ENDTHEOREM

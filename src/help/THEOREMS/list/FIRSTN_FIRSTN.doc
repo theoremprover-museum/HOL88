@@ -1,0 +1,5 @@
+\THEOREM FIRSTN_FIRSTN list
+|- !m l.
+    m <= (LENGTH l) ==>
+    (!n. n <= m ==> (FIRSTN n(FIRSTN m l) = FIRSTN n l))
+\ENDTHEOREM

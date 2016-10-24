@@ -1,0 +1,4 @@
+\THEOREM OR_IMP_THM \none
+|- !t1 t2. (t1 = t2 \/ t1) = t2 ==> t1
+\ENDTHEOREM
+

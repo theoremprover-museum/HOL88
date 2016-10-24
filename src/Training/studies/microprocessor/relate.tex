@@ -1,0 +1,305 @@
+\section{Relating this proof to other levels}
+\label{sec-relate}
+
+The representation variable \verb"rep" which appears as an extra
+parameter in definitions throughout the formal specification of \Tamarack\
+is effectively a parameterization of the formal theory.
+It provides a means of relating this theory to
+both lower and higher level models of computation.
+
+This section illustrates how our formal theory for \Tamarack\
+might be linked into a verified 
+stack\footnote{
+The term `verified stack' is
+due to researchers at Computational Logic Inc.\ who
+have made noteworthy progress in the development of this concept
+\cite{Bevier87,Bevier89}.}
+with examples drawn from
+the following \HOL\ source file:
+
+\begin{quote}
+\verb"hol/Training/studies/microprocessor/proof/example5.ml"
+\end{quote}
+
+\subsection{Lower levels}
+
+By assigning an appropriate value to
+the representation variable \verb"rep",
+the formal theory about \Tamarack\ can made
+to stack upon
+a lower level theory about the implementation
+of register-transfer level devices.
+This lowel level theory might, in turn, be parameterized by its own
+representation variable
+and stacked upon an even lower level of representation at the transistor
+level.
+
+To illustrate this idea with a simple example,
+the constant \verb"REP16" is defined
+as a value for \verb"rep" based on the built-in \HOL\ data types
+described in
+\cite{Gordon:tech41,Joyce:calgary86,Cohn:banff87}.
+In this case, we have created data types for a \mbox{16-bit} version
+of \Tamarack.
+\footnote{
+In the {\HOL}88 system,
+these built-in data types are provided by
+\verb"eval" library.
+However,
+the constants \verb"V" and \verb"SEG" are no longer supported
+and must now be defined by the user.}
+
+\newpage % PBHACK
+
+
+\begintt
+loadt `eval`;;
+
+declare_word_widths [3;4;13;16];;
+
+declare_memories [13,16];;
+
+let ISZERO16 = new_definition (
+  `ISZERO16`,
+  "ISZERO16 w = ((VAL16 w) = 0)");;
+
+let INC16 = new_definition (
+  `INC16`,
+  "INC16 w = WORD16 ((VAL16 w) + 1)");;
+
+let ADD16 = new_definition (
+  `ADD16`,
+  "ADD16 (w1,w2) = WORD16 ((VAL16 w1) + (VAL16 w2))");;
+
+let SUB16 = new_definition (
+  `SUB16`,
+  "SUB16 (w1,w2) = WORD16 ((VAL16 w1) - (VAL16 w2))");;
+
+let OPCODE = new_definition (
+  `OPCODE`,
+  "OPCODE w = WORD3 (V (SEG (0,2) (BITS16 w)))");;
+
+let ADDRESS = new_definition (
+  `ADDRESS`,
+  "ADDRESS w = WORD13 (V (SEG (3,15) (BITS16 w)))");;
+
+let REP16 = new_definition (
+  `REP16`,
+  "REP16 =
+    ISZERO16,                             % iszero %
+    INC16,                                % inc %
+    ADD16,                                % add %
+    SUB16,                                % sub %
+    WORD16,                               % wordn %
+    VAL16,                                % valn %
+    OPCODE,                               % opcode %
+    VAL3,                                 % val3 %
+    ADDRESS,                              % address %
+    (\(\lambda\)(x,y). FETCH13 x y),                % fetch %
+    (\(\lambda\)(x,y,z). STORE13 y z x),            % store %
+    WORD4,                                % word4 %
+    VAL4");;                              % val4 %
+\endtt
+
+The current version of these built-in \HOL\ data types
+(as given by the \verb"eval" library in the {\HOL}88 system)
+is not fully axiomatized or secure,
+\footnote{
+An incomplete set of postulated axioms exists in the form of
+evaluation rules which use \verb"mk\_thm" to create unproven theorems.
+The recursive data types package developed for \HOL\ by Melham
+\cite{Melham:thesis} provides a foundation for building a secure
+set of data types for reasoning about machine words and bit patterns.}
+but with a complete axiomatization it would be possible to
+derive the assumptions
+expressed by the predicates \verb"Val3_CASES_ASM" and \verb"Val4Word4_ASM"
+as proven theorems.
+
+\begintt
+|- Val3_CASES_ASM REP16
+
+|- Val4Word4_ASM REP16
+\endtt
+
+If these assumptions were established as theorems for this particular
+value of the representation variable,
+we could then obtain the following correctness result for a 16-bit version
+of \Tamarack\ (along with similar results for fully synchronous mode).
+
+\begintt
+|- AsynSystem REP16 (idreq,mpc,mar,pc,acc,ir,rtn,arg,buf,idack,dack,mem) \(\wedge\)
+   ((VAL4 o mpc) 0 = 0)
+   ==>
+   let f = TimeOf (((VAL4 o mpc) Eq 0) and (not dack)) in
+   TamarackBeh REP16 (idreq o f,mem o f,pc o f,acc o f,rtn o f,idack o f)
+\endtt
+
+Hence,
+one of the purposes of relating our formal theory to lower levels
+is to replace assumptions about uninterpreted
+data types by theorems derived
+from lower level representations of data.
+
+Another purpose is to derive correctness results for implementations
+of register-transfer level primitives, for example,
+to verify that an implementation of the ALU correctly implements
+a set of arithmetic/logical operations.
+
+Because the current version of
+the built-in \HOL\ data types for machine words
+is not fully axiomatized or secure,
+we have used an alternate representation where bit patterns are modelled
+by functions which map bit positions to bit values.
+In addition to completeness and security,
+this representation offers the advantage of
+being able to parameterize specifications
+by the number of bits in a machine word instead of the fixed word widths
+provided by the built-in \HOL\ data types.
+Functions such as \verb"Valn" and \verb"Wordn" are defined to
+establish relationships between this
+function-based representation and higher-algebraic levels, i.e.,
+the natural numbers.
+Correctness results
+for implementations of
+register-transfer level primitives
+are expressed
+in terms of \verb"Valn" and \verb"Wordn".
+We have used this approach to verify a complete
+implementation of an earlier version of \Tamarack\
+down to the transistor level
+\cite{Joyce:firstyear,Joyce:glasgow,Joyce:pisa,Joyce:vlsi89,Joyce:integration}.
+
+\subsection{Higher levels}
+
+While lower levels of representation may yield theorems to
+replace assumptions about data types,
+stacking higher levels upon
+our correctness results for \Tamarack\ may conversely
+require the introduction
+of more assumptions about the data types.
+As explained earlier,
+the use of uninterpreted data types and uninterpreted primitives
+for operations on these data types makes
+computational aspects of our programming level model somewhat transparent.
+To reason about the execution of programs requires
+the introduction of some more primitives and more assumptions
+to provide the programming level model
+with more computation details.
+
+At the very least, it would likely be necessary to
+provide some details of the operation selected by \verb"inc",
+used to increment the program counter \verb"pc", in order to reason
+about the sequential execution of \Tamarack\ instructions.
+For example, the predicate \verb"INC_ASM",
+
+\begintt
+let INC_ASM = new_definition (
+  `INC_ASM`,
+  "INC_ASM n (rep:^rep_ty) =
+    \(\forall\)w. ((valn rep) ((inc rep) w)) = ((((valn rep) w) + 1) MOD (2 EXP n))");;
+\endtt
+
+\noindent
+could be defined to
+provide an arithmetic interpretation for the operation selected from
+the representation variable by \verb"inc".
+\footnote{
+The assumption expressed by \verb"INC\_ASM" is stronger than
+necessary if it is only necessary to know that the address field
+of the full-size machine word is incremented.
+This assumption would be too restrictive for an
+implementation where
+the address bits are not necessarily the low-order bits of the full-size
+machine word stored in the program counter \verb"pc".}
+In this case,
+machine words (of various sizes) are modelled at this higher level
+by natural numbers where
+the finite precision of operations performed by hardware
+is modelled by modular arithmetic.
+The parameter \verb"n" is the
+number of bits in a full-size machine word;
+for instance, \verb"n" would be equal to sixteen for a \mbox{16-bit} version
+of \Tamarack.
+
+Similar assumptions expressed by
+\verb"ADD_ASM" and \verb"SUB_ASM" provide arithmetic
+interpretations for the operations selected by \verb"add" and \verb"sub".
+\footnote{
+Subtraction in the natural numbers as axiomatized in \HOL\
+does not correspond
+exactly to subtraction in two's complement arithmetic.
+The definition of two's complement subtraction given in
+\cite{Joyce:pisa} provides a more accurate model of
+how this ALU operation would likely be implemented in hardware.}
+The predicate \verb"FETCH_STORE_ASM" provides an interpretation
+for memory operations.
+
+\begintt
+let ISZERO_ASM = new_definition (
+`ISZERO_ASM`,
+  "ISZERO_ASM (rep:^rep_ty) =
+    \(\forall\)w. ((iszero rep) w) = (((valn rep) w) = 0)");;
+
+let ADD_ASM = new_definition (
+  `ADD_ASM`,
+  "ADD_ASM n (rep:^rep_ty) =
+    \(\forall\)w1 w2.
+      ((valn rep) ((add rep) (w1,w2))) =
+        ((((valn rep) w1) + ((valn rep) w2)) MOD (2 EXP n))");;
+
+let SUB_ASM = new_definition (
+  `SUB_ASM`,
+  "SUB_ASM n (rep:^rep_ty) =
+    \(\forall\)w1 w2.
+      ((valn rep) ((sub rep) (w1,w2))) =
+        ((((valn rep) w1) - ((valn rep) w2)) MOD (2 EXP n))");;
+
+let FETCH_STORE_ASM = new_definition (
+  `FETCH_STORE_ASM`,
+  "FETCH_STORE_ASM (rep:^rep_ty) =
+    \(\forall\)m a1 a2 w.
+      ((a1 = a2) =>
+        ((fetch rep) (((store rep) (m,a1,w)),a2) = w) |
+        ((fetch rep) (((store rep) (m,a1,w)),a2) = (fetch rep) (m,a2)))");;
+\endtt
+
+Like the assumptions expressed by \verb"Val3_CASES_ASM"
+and \verb"Val4Word4_ASM",
+these additional assumptions could be proven as theorems
+from a lower level representation of data.
+For instance, a complete axiomatization
+of built-in HOL data types for machine words
+would yield the theorems,
+
+\begintt
+|- INC_ASM 16 REP16
+
+|- ISZERO_ASM REP16
+
+|- ADD_ASM 16 REP16
+
+|- SUB_ASM 16 REP16
+
+|- FETCH_STORE_ASM REP16
+\endtt
+
+\noindent
+as properties of the constant \verb"REP16".
+In the case of \verb"INC_ASM", \verb"ADD_ASM" and \verb"SUB_ASM",
+the axiomatization would need to include the following property.
+A similar theorem has been derived for the function-based
+representation described in \cite{Joyce:glasgow,Joyce:pisa}.
+
+\begintt
+|- \(\forall\)m. VAL16 (WORD16 m) = (m MOD (2 EXP 16))
+\endtt
+
+Together with some additional assumptions about operations
+for extracting the opcode and operand address bits from
+a full-size machine word,
+the above assumptions
+would introduce enough substance to the programming level model
+of \Tamarack\ to reason about the execution of programs.
+In particular, it would provide enough computational power to support
+the compiler verification study reported
+in \cite{Joyce:tech167,Joyce:cornell}.

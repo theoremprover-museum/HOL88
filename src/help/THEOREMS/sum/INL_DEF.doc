@@ -1,0 +1,3 @@
+\THEOREM INL_DEF sum
+|- !e. INL e = ABS_sum(\b x y. (x = e) /\ b)
+\ENDTHEOREM

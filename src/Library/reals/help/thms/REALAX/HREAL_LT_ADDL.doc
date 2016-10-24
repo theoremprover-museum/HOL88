@@ -1,0 +1,3 @@
+\THEOREM HREAL_LT_ADDL REALAX
+|- !x y. x hreal_lt (x hreal_add y)
+\ENDTHEOREM

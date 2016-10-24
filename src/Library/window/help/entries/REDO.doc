@@ -1,0 +1,24 @@
+\DOC REDO
+
+\TYPE {REDO: (void -> void)}
+
+\SYNOPSIS
+Redoes the last change that was undone.
+
+\LIBRARY window
+
+\DESCRIBE
+Redoes the last change that was undone from the current stack.
+Several {REDO}s can undo the effect of several {UNDO}s.
+It is not possible to {REDO} more {UNDO}s than are stored in the stacks
+history.   To find out how many states can be stored in a stack, use the
+{GET_MAX_HIST} command.
+
+\FAILURE
+{REDO ()} will fail if nothing has been undone, or if some other
+change has been made to the stack since the last {UNDO}.
+
+\SEEALSO
+UNDO, SET_MAX_HIST, GET_MAX_HIST
+
+\ENDDOC

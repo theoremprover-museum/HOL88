@@ -1,0 +1,3 @@
+\THEOREM SUM_EQ REAL
+|- !N. (!n. N num_le n ==> (f n = g n)) ==> (!n. Sum(N,n)f = Sum(N,n)g)
+\ENDTHEOREM

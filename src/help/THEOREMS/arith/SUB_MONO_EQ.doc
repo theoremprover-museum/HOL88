@@ -1,0 +1,3 @@
+\THEOREM SUB_MONO_EQ arithmetic
+|- !n m. (SUC n) - (SUC m) = n - m
+\ENDTHEOREM

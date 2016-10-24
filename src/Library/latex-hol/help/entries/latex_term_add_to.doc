@@ -1,0 +1,25 @@
+\DOC latex_term_add_to
+
+\TYPE {latex_term_add_to : (string -> term -> void)}
+
+\SYNOPSIS
+Translate \HOL\ terms to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+This function is similar to {latex_term} except the result is appended
+to a file whose name is specified as the first argument. If the named
+file does not exist, it is created.
+
+\FAILURE
+Fails if the second argument is not a term.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to},
+{latex_thm}, {latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to}, {latex_theory_to},
+{latex_theorems_to} and {latex_theorems_add_to}.
+
+\ENDDOC

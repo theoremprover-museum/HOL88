@@ -1,0 +1,72 @@
+#!/bin/sh
+
+# This file is used to help update ml files from HOL2.0 to HOL2.01
+# usage: newrw file.ml
+# It replaces instances of REWRITE_CONV in file.ml with REWR_CONV.
+# A copy of the original version of the file is saved in file.ml.old
+# An alternative usage for newrw is as follows:
+# usage: newrw file.ml target replacement
+# When used in this way newrw replaces instances of target in file.ml by
+# replacement.
+# newrc checks that replacement does not already appear in file.ml
+
+if /usr/bin/test ! \( \( $# -eq 1 \) -o \( $# -eq 3 \) \)
+then
+    echo usage: update file [target replacement]
+    exit 1
+fi
+
+PROG=$0
+FILE=$1
+OLD=${FILE}.old
+TARGET=${2:-REWRITE_CONV}
+REPLACEMENT=${3:-REWR_CONV}
+
+if /usr/bin/test ! \( -f $FILE \)
+then
+    echo File $FILE is not a readable file.
+    exit 1
+fi
+
+if test `/usr/bin/fgrep $TARGET $FILE | /usr/ucb/wc -l` -eq 0
+then
+    echo The string \"$TARGET\" does not appear in the file: $FILE
+    exit 1
+fi
+
+if /usr/bin/test -f $OLD
+then
+    echo File $OLD already exists.
+    exit 1
+fi
+
+if /usr/bin/fgrep -s $REPLACEMENT $FILE
+then
+    echo The string \"$REPLACEMENT\" already appears in the file: $FILE
+    echo Select one of the following:
+    echo r\) Dam the torpedoes and make the Replacement anyway.
+    echo c\) Chose another replacement.   
+    echo -n Your choice is:
+    read CHOICE
+    while
+        /usr/bin/test ! \( \( $CHOICE = r \) -o \( $CHOICE = c \) \)
+    do
+        echo -n You must pick one of r\) replace anyway or c\) chose again:
+        read CHOICE
+    done
+    case $CHOICE in 
+        r) ;;
+        c)  echo -n Enter another choice for the replacement:
+            read REPLACEMENT
+            while /usr/bin/fgrep -s $REPLACEMENT $FILE
+            do
+                echo The string \"$REPLACEMENT\" also already appears in    \
+                    the file: $FILE
+                echo -n enter another choice:
+                read REPLACEMENT
+            done ;;
+    esac
+fi
+
+mv $FILE $OLD
+sed s/$TARGET/$REPLACEMENT/g $OLD > $FILE

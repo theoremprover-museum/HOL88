@@ -1,0 +1,3 @@
+\THEOREM MONOID_ADD_0 arithmetic
+|- MONOID $+ 0
+\ENDTHEOREM

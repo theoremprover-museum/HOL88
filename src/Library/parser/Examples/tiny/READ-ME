@@ -1,0 +1,15 @@
+This directory contains a grammar describing a parser for the
+programming language of the library "prog_logic88".  
+
+The file tiny.grm contains the grammar for the parser.  tiny_help.ml
+holds the definitions of the action symbols.  Heavy use of 
+antiquotation is made.
+
+The file examples.ml is a rewrite of the examples file from the
+programming logics library.  It makes use of the newly constructed
+parser rather than the lisp hacks previously used.
+
+To remake the parser, edit the Makefile to reflect the appropriate
+pathnames.  To remake from scratch, run the generator over the file
+tiny.grm.  To load into HOL, edit the file loader.ml, and perform
+a loadf on it.

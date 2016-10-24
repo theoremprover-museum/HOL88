@@ -1,0 +1,3 @@
+\THEOREM REAL_POS REALAX
+|- !X. r0 < (real_of_hreal X)
+\ENDTHEOREM

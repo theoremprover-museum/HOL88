@@ -1,0 +1,4 @@
+\THEOREM BASEN_LESS_OR_EQ_EXP_LENGTH numeral
+|- !r l.
+    1 < r ==> IS_BASEN r l ==> (BASEN r l) <= ((r EXP (LENGTH l)) - 1)
+\ENDTHEOREM

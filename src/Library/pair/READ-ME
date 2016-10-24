@@ -1,0 +1,57 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: pair                                                  |
+|									|
+| DESCRIPTION   : This package allows people use paired abstraction and |
+|                 qauntification with almost as much ease as the        |
+|                 unpaired versions.                                    |
+|									|
+| AUTHOR	: Jim Grundy                                            |
+|									|
+| VERSION       : 2.1                                                   |
+| DATE		: 20 November 1992                                      |
+|									|
+| VERSION       : 3.1                                                   |
+| DATE		: 7 December 1993                                       |
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+   all.ml       Functions for dealing with paired universal quantification.
+   basic.ml     Basic functions for dealing with paried abstractions.
+   both1.ml	Funtions common to universal and existential quantifications.
+   both2.ml	More functions for universal and existential quantifications.
+   conv.ml	Conversions for moving paired quantifications about.
+   exi.ml	Functions for pair existential quantifications.
+   pair.ml	The file that loads it all.
+   syn.ml	Funtions on the syntax of paired abstractions.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
+   (If you are fortunate enough to be using RCS, why not uncomment the  )
+   (relevant entries from the Makefile.                                 )
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+
+   Add the relevant path to your LIBRARY_SEARCH_PATH and type:
+     load_library `pair`;;

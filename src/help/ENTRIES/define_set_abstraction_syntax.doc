@@ -1,0 +1,38 @@
+\DOC define_set_abstraction_syntax
+
+\TYPE {define_set_abstraction_syntax : (string -> void)}
+
+\SYNOPSIS
+Sets up an interpretation of set abstraction syntax.
+
+\DESCRIBE
+The HOL quotation parser supports the notation {"{{x | P}}"}. This is primarily
+intended for use in the {sets} library and dependent work, meaning `the set of
+elements {x} such that {P} is true' (presumably {x} will be free in {P}), but
+this function allows the interpretation to be changed. A call
+{
+   define_set_abstraction_syntax `c`
+}
+\noindent where {c} is a constant of the current theory, will make the
+quotation parser interpret
+{
+   {{x | P}}
+}
+\noindent as
+{
+   c (\(x1...xn). (x,P))
+}
+\noindent where the {x1...xn} are all the variables that occur free in both
+{x} or {P}.  The printer will invert this transformation.
+
+\FAILURE
+Fails if {c} is not a constant of the current theory.
+
+\COMMENTS
+For further details about the use of this function in the {sets} library, refer
+to the DESCRIPTION.
+
+\SEEALSO
+define_finite_set_syntax, load_library.
+
+\ENDDOC

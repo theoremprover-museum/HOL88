@@ -1,0 +1,20 @@
+\DOC handle
+
+\TYPE {handle : (* signal -> (* -> void) -> void)}
+
+\SYNOPSIS
+Associates a signal handler with a particular signal.
+
+\LIBRARY window
+
+\DESCRIBE
+{handle s h} associates the signal handler {h} with the signal {s}.
+Now whenever {s} is raised {h} will be evaluated.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+clear, signal, sigtype.
+
+\ENDDOC

@@ -1,0 +1,7 @@
+\contentsline {chapter}{\numberline {1}The wordn Library}{1}
+\contentsline {chapter}{\numberline {2}ML Functions in the wordn Library}{3}
+\contentsline {chapter}{\numberline {3}Pre-proved Theorems}{23}
+\contentsline {section}{\numberline {3.1}The theory {\ptt wordn\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}base}}{23}
+\contentsline {section}{\numberline {3.2}The theory {\ptt wordn\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}bitops}}{23}
+\contentsline {section}{\numberline {3.3}The theory {\ptt wordn\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em}num}}{24}
+\contentsline {chapter}{Index}{26}

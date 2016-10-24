@@ -1,0 +1,10 @@
+\DOC prove_hyp
+
+\TYPE {prove_hyp : (goal -> goal -> goal)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

@@ -1,0 +1,10 @@
+\DOC goal_subset
+
+\TYPE {goal_subset : (goal list -> goal list -> bool)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

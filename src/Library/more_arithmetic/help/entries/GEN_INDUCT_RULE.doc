@@ -1,0 +1,39 @@
+\DOC GEN_INDUCT_RULE
+
+\TYPE {GEN_INDUCT_RULE : (thm -> thm -> thm)}
+
+\SYNOPSIS
+Performs a proof by general mathematical induction on the natural numbers.
+
+\KEYWORDS
+rule.
+
+\LIBRARY more_arithmetic
+
+\DESCRIBE
+The derived inference rule {GEN_INDUCT_RULE} implements the rule of general
+mathematical induction:
+{
+    A1 |- P[0/n]      A2 |- !n. (!m. m < n ==> P[m/n]) ==> P
+   ----------------------------------------------------------  GEN_INDUCT_RULE
+                        A1 u A2 |- !n. P
+}
+\noindent When supplied with a theorem {A1 |- P[0/n]}, which asserts the base
+case of a proof of the proposition {P} by general induction on {n}, and the
+ theorem
+{
+   A2 |- !n. (!m. m < n ==> P[m/n]) ==> P
+}
+
+\noindent which asserts the step case in the induction on
+{n}, the inference rule {GEN_INDUCT_RULE} returns {A1 u A2 |- !n. P}.
+
+\FAILURE
+A call to {GEN_INDUCT_RULE th1 th2} fails if the theorems {th1} and {th2} do
+ not have the forms
+{A1 |- P[0/n]} and {A2 |- !n. (!m. m < n ==> P[m/n]) ==> P} respectively.
+
+\SEEALSO
+GEN_INDUCT_TAC, INDUCT.
+
+\ENDDOC

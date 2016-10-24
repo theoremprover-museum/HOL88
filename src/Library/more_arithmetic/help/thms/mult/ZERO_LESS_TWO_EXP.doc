@@ -1,0 +1,3 @@
+\THEOREM ZERO_LESS_TWO_EXP mult
+|- !n. 0 < (2 EXP n)
+\ENDTHEOREM

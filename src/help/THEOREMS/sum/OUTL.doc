@@ -1,0 +1,3 @@
+\THEOREM OUTL sum
+|- !x. OUTL(INL x) = x
+\ENDTHEOREM

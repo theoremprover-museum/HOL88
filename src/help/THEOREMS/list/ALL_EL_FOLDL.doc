@@ -1,0 +1,3 @@
+\THEOREM ALL_EL_FOLDL list
+|- !P l. ALL_EL P l = FOLDL(\l' x. l' /\ P x)T l
+\ENDTHEOREM

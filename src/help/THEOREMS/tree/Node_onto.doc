@@ -1,0 +1,3 @@
+\THEOREM Node_onto ltree
+|- !l. ?v trl. l = Node v trl
+\ENDTHEOREM

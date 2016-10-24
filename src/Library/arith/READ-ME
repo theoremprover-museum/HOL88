@@ -1,0 +1,63 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: arith							|
+|									|
+| DESCRIPTION   : Proof procedure for a subset of linear arithmetic.	|
+|									|
+| AUTHOR	: R.J.Boulton						|
+| DATE		: 1st October 1992					|
+|									|
++ =====================================================================	+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+   arith.ml		Loads the library
+   arith_cons.ml	Syntax functions for arithmetic terms
+   decls.ml		Declarations of theorems and rewriting conversions
+   exists_arith.ml	Procedure for purely existential arithmetic formulae
+   gen_arith.ml		Generalised arithmetic proof procedure
+   instance.ml		Dealing with substitution instances
+   int_extra.ml		Additional functions for integer arithmetic in ML
+   norm_arith.ml	Normalizing arithmetic terms
+   norm_bool.ml		Normalizing Boolean terms
+   norm_ineqs.ml	Normalizing inequalities
+   prenex.ml		Putting formulae in Prenex Normal Form
+   qconv.ml		Conversions that use failure for optimisation
+   rationals.ml		Rational numbers in ML
+   sol_ranges.ml	Ranges of the solutions to linear programming problems
+   solve.ml		Procedure for purely universal arithmetic formulae
+   solve_ineqs.ml	Solving inequalities
+   streams.ml		Datatype and functions for streams (lazy lists)
+   string_extra.ml	Additional functions for ML strings
+   sub_and_cond.ml	Elimination of subtraction and conditionals
+   sup-inf.ml		SUP-INF method for Presburger arithmetic
+   term_coeffs.ml	Representation of arithmetic terms as coefficient lists
+   theorems.ml		Theorems required by the proof procedure
+   thm_convs.ml		Conversions for rewriting with arithmetic theorems
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) Rebuild the "reduce" library
+
+   2) edit the pathnames in the Makefile (if necessary)
+
+   3) type "make clean"
+
+   4) type "make all"
+
++ --------------------------------------------------------------------- +
+|                                                                       |
+| TO USE THE LIBRARY:                                                   |
+|                                                                       |
++ --------------------------------------------------------------------- +
+
+   Load arith.ml
+

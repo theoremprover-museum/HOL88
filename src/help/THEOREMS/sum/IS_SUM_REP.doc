@@ -1,0 +1,6 @@
+\THEOREM IS_SUM_REP sum
+|- !f.
+    IS_SUM_REP f =
+    (?v1 v2.
+      (f = (\b x y. (x = v1) /\ b)) \/ (f = (\b x y. (y = v2) /\ ~b)))
+\ENDTHEOREM

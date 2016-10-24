@@ -1,0 +1,3 @@
+\THEOREM POW_2 REAL
+|- !x. x pow 2 = x * x
+\ENDTHEOREM

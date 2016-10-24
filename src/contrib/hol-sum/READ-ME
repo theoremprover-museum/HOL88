@@ -1,0 +1,44 @@
++ =====================================================================	+
+|									|
+| DIRECTORY	: hol-sum						|
+|									|
+| DESCRIPTION   : Summary of HOL system Version 2			|
+|									|
+| AUTHOR	: Wai Wong						|
+|									|
+| DATE		: 18 Sept 1991						|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+	READ-ME		this file
+	hol-sum.ps	Summary of HOL in PostScript 
+
++ --------------------------------------------------------------------- +
+|									|
+| DESCRIPTION:								|
+|									|
++ --------------------------------------------------------------------- +
+
+
+This directory contains a summary of HOL system Version 2.
+It is divided into five sections:
+	1) Inference rules --- all built-in rules
+	2) Conversions --- all built-in conversions
+	3) Tactics and tacticals --- all built-in tactics and tacticals
+	4) Pre-proved theorems --- all built-in theorems
+	5) Libraries --- some system libraries. There are only three
+	   libraries included in this section currently, namely
+	   prog_logic88, sets and string. I'll put other libraries in
+	   when I have time to do so.
+
+The file hol-sum.ps can be printed in any PostScript printer.
+
+Any bug reports, comments, suggestions should be sent to 
+ww@eng.warwick.ac.uk.

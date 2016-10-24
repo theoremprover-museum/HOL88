@@ -1,0 +1,3 @@
+\THEOREM MOD_PLUS arithmetic
+|- !n. 0 < n ==> (!j k. ((j MOD n) + (k MOD n)) MOD n = (j + k) MOD n)
+\ENDTHEOREM

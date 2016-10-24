@@ -1,0 +1,5 @@
+\THEOREM LIM_DIV LIM
+|- !f g l m.
+    (f --> l)x /\ (g --> m)x /\ ~(m = & 0) ==>
+    ((\x. (f x) / (g x)) --> (l / m))x
+\ENDTHEOREM

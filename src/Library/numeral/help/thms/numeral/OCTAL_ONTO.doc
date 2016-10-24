@@ -1,0 +1,3 @@
+\THEOREM OCTAL_ONTO numeral
+|- !l. ?n. OCTAL l = n
+\ENDTHEOREM

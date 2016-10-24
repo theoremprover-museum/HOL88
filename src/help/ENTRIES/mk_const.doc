@@ -1,0 +1,30 @@
+\DOC mk_const
+
+\TYPE {mk_const : ((string # type) -> term)}
+
+\SYNOPSIS
+Constructs a constant.
+
+\DESCRIBE
+{mk_const(`const`,":ty")} returns the constant {"const:ty"}.
+
+\FAILURE
+Fails with {mk_const: ...} if the string supplied is not the name of a known
+constant, or if it is known but the type supplied is not the correct type for
+the constant.
+
+\EXAMPLE
+{
+#mk_const (`T`,":bool");;
+"T" : term
+
+#mk_const (`T`,":num");;
+evaluation failed     mk_const: wrong type for T supplied
+
+#mk_const (`test`,":bool");;
+evaluation failed     mk_const: test not a constant
+}
+\SEEALSO
+dest_const, is_const, mk_var, mk_comb, mk_abs.
+
+\ENDDOC

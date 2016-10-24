@@ -1,0 +1,5 @@
+\THEOREM TREAL_BIJ REALAX
+|- (!h. hreal_of_treal(treal_of_hreal h) = h) /\
+   (!r.
+     treal_0 treal_lt r = (treal_of_hreal(hreal_of_treal r)) treal_eq r)
+\ENDTHEOREM

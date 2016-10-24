@@ -1,0 +1,5 @@
+\THEOREM SEG_SEG list
+|- !n1 m1 n2 m2 l.
+    (n1 + m1) <= (LENGTH l) /\ (n2 + m2) <= n1 ==>
+    (SEG n2 m2(SEG n1 m1 l) = SEG n2(m1 + m2)l)
+\ENDTHEOREM

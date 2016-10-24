@@ -1,0 +1,3 @@
+\THEOREM TRAT_EQ_TRANS HRAT
+|- !p q r. p trat_eq q /\ q trat_eq r ==> p trat_eq r
+\ENDTHEOREM

@@ -1,0 +1,21 @@
+\DOC preterm_to_term
+
+\TYPE {preterm_to_term : (preterm -> term)}
+
+\SYNOPSIS
+Converts a preterm to a HOL term.
+
+\DESCRIBE
+Preterms are untypechecked terms, and are included in the HOL system
+to allow embedding of special purpose parsers, and to provide a way
+of experimenting with other forms of type checking.  {preterm_to_term} is
+the hook for pushing preterms through the standard HOL typechecker.
+
+\FAILURE
+Fails with the appropriate HOL error message.
+
+\SEEALSO
+preterm_abs, preterm_antiquot, preterm_comb, preterm_const, preterm_typed,
+preterm_var.
+
+\ENDDOC

@@ -1,0 +1,3 @@
+\THEOREM GSPEC_DEF sets
+|- !f. GSPEC f = SPEC(\y. ?x. y,T = f x)
+\ENDTHEOREM

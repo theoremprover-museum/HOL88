@@ -1,0 +1,3 @@
+\THEOREM ATN_TAN TRANSC
+|- !y. tan(atn y) = y
+\ENDTHEOREM

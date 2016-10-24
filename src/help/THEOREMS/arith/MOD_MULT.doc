@@ -1,0 +1,3 @@
+\THEOREM MOD_MULT arithmetic
+|- !n r. r < n ==> (!q. ((q * n) + r) MOD n = r)
+\ENDTHEOREM

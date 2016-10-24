@@ -1,0 +1,62 @@
+\DOC load_library
+
+\TYPE {load_library : (string -> void)}
+
+\SYNOPSIS
+Load a library.
+
+\DESCRIBE
+The function {load_library} can either be used to load an entire library or to
+load only a part of a library. Loading an entire library called `{name}' is
+done by evaluating 
+{
+   load_library `name`;;
+}
+\noindent This will attempt to load the library called {name} unless it is
+already loaded, in which case a message is printed. The loading of a library
+{name} is done by searching for the library's load file `{name/name.ml}' using
+the internal library search path and then loading this file.  For example, if
+the library search path contains the pathnames to a local library and to the
+system library:
+{
+   [`~/lib/`; `/usr/lib/hol/Library/`]
+}
+\noindent then {load_library} will load the ML file
+{
+   ~/lib/name/name.ml
+} 
+\noindent if this exists in the local library.  Otherwise, the file
+{
+   /usr/lib/hol/Library/name/name.ml
+}
+\noindent will be loaded from the system library.
+
+A named part of a library is loaded by evaluating:
+{
+   load_library `name:partname`;;
+}
+\noindent where {name} is the name of the library, and {partname} is the name
+of a segment of this library.  In this case, {load_library} searches along the
+library search path for the load file {name/partname.ml}.  Note that this can
+be used to load an arbitrary ML file from the library. Users should not,
+however, rely on this feature, but should access libraries only in the ways the
+officially supported and documented in library manuals.
+
+The results of evaluation during the loading of a library are displayed if the
+flag {print_lib} is {true}.  Otherwise, the results of evaluation are not
+printed but abbreviated by a series of dots, each of which represents the
+evaluation of one ML phrase.
+
+\FAILURE
+Fails if the library load file cannot be found or if the ML code being loaded
+itself fails for any reason.
+
+\COMMENTS
+More detail about the organization of libraries, in particular how to create
+your own, can be found in DESCRIPTION, which also gives a list of all the
+libraries currently in the standard HOL distribution.
+
+\SEEALSO
+libraries, library_pathname, library_search_path, set_library_search_path.
+
+\ENDDOC

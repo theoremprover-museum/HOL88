@@ -1,0 +1,3 @@
+\THEOREM RES_SELECT bool
+|- !P B. RES_SELECT P B = (@x. P x /\ B x)
+\ENDTHEOREM

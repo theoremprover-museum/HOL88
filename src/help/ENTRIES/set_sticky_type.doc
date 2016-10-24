@@ -1,0 +1,45 @@
+\DOC set_sticky_type
+
+\TYPE {set_sticky_type : ((string # type) -> void)}
+
+\SYNOPSIS
+Gives a particular sticky type to a named variable.
+
+\DESCRIBE
+A call {set_sticky_type(`name`,":ty")} will give the name {name} a sticky type
+{ty}. This means that if {name} occurs in a quotation with a completely
+unconstrained type (in particular, the sticky type will not be used if the name
+is that of a constant), the type {ty} is automatically inferred. For further
+details of the sticky type mechanism, refer to the DESCRIPTION.
+
+\FAILURE
+Never fails, even if the name could not be the name of a variable or constant.
+It is permissible to redefine a sticky type.
+
+\EXAMPLE
+The following shows how the sticky type is used only when the type of the
+variable is unconstrained by context.
+{
+  #set_sticky_type(`n`,":num");;
+  () : void
+
+  #"n = n";;
+  "n = n" : term
+
+  #type_of (snd (dest_eq it));;
+  ":num" : type
+
+  #"HD [F] = n";;
+  "HD[F] = n" : term
+
+  #type_of (snd (dest_eq it));;
+  ":bool" : type
+}
+\COMMENTS
+If the flag {sticky} is set, the name is liable to have its sticky type
+changed automatically, just like any other name.
+
+\SEEALSO
+remove_sticky_type, sticky_list.
+
+\ENDDOC

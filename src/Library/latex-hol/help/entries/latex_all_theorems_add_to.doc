@@ -1,0 +1,26 @@
+\DOC latex_all_theorems_add_to
+
+\TYPE {latex_all_theorems_add_to : (string -> (string -> thm) -> string list -> void)}
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+This function is similar to {latex_theorems_add_to} except the assumptions
+of the theorem are also printed.
+See manual entry of {latex_theorems_to} for detail of usage.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to}, {latex_term_add_to},
+{latex_thm}, {latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to}
+{latex_theorems_to}, {latex_theorems_add_to}, {latex_all_theorems_add_to},
+{latex_theory_to}
+
+\ENDDOC

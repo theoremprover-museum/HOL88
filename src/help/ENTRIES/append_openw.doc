@@ -1,0 +1,39 @@
+\DOC append_openw
+
+\TYPE {append_openw : (string -> string)}
+
+\SYNOPSIS
+Opens a port for appending to a named file.
+
+\KEYWORDS
+file.
+
+\DESCRIBE
+When applied to a filename {`name`}, the function {append_openw} opens the file
+{name} for writing, such that existing contents are appended to rather than
+overwritten. It returns a port descriptor string, which can be used by {write}
+to append to the file, and by {close} to close it.
+
+\EXAMPLE
+The following example assumes that HOL is being run under Unix. It will
+overwrite an existing file {test-file} in the current directory.
+{
+   #system `echo -n 'Hello ' >test-file`;;
+   0 : int
+
+   #let port = append_openw `test-file`;;
+   port = `%test-file` : string
+
+   #write(port,`world`);;
+   () : void
+
+   #close port;;
+   () : void
+
+   #system `cat test-file`;;
+   Hello world0 : int
+}
+\SEEALSO
+close, openi, openw, read, write.
+
+\ENDDOC

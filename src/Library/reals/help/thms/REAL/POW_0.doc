@@ -1,0 +1,3 @@
+\THEOREM POW_0 REAL
+|- !n. (& 0) pow (SUC n) = & 0
+\ENDTHEOREM

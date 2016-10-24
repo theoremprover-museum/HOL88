@@ -1,0 +1,3 @@
+\THEOREM MULT_DIV div_mod
+|- !n q. 0 < n ==> ((q * n) DIV n = q)
+\ENDTHEOREM

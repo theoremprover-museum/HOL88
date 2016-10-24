@@ -1,0 +1,3 @@
+\THEOREM POW_ADD REAL
+|- !c m n. c pow (m num_add n) = (c pow m) * (c pow n)
+\ENDTHEOREM

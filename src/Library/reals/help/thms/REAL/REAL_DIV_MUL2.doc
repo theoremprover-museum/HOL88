@@ -1,0 +1,3 @@
+\THEOREM REAL_DIV_MUL2 REAL
+|- !x z. ~(x = & 0) /\ ~(z = & 0) ==> (!y. y / z = (x * y) / (x * z))
+\ENDTHEOREM

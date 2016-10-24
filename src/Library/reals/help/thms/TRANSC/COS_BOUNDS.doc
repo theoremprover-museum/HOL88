@@ -1,0 +1,3 @@
+\THEOREM COS_BOUNDS TRANSC
+|- !x. (--(& 1)) <= (cos x) /\ (cos x) <= (& 1)
+\ENDTHEOREM

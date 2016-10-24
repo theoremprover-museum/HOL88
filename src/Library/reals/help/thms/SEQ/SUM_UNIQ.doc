@@ -1,0 +1,3 @@
+\THEOREM SUM_UNIQ SEQ
+|- !f x. f sums x ==> (x = suminf f)
+\ENDTHEOREM

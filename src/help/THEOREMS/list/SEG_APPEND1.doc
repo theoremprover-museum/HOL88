@@ -1,0 +1,4 @@
+\THEOREM SEG_APPEND1 list
+|- !n m l1.
+    (n + m) <= (LENGTH l1) ==> (!l2. SEG n m(APPEND l1 l2) = SEG n m l1)
+\ENDTHEOREM

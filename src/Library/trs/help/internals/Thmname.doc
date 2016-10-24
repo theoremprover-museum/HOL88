@@ -1,0 +1,10 @@
+\DOC Thmname
+
+\TYPE {Thmname : (namepattern -> thmpattern)}
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

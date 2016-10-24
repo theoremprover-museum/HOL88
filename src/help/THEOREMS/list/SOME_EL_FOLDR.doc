@@ -1,0 +1,3 @@
+\THEOREM SOME_EL_FOLDR list
+|- !P l. SOME_EL P l = FOLDR(\x l'. P x \/ l')F l
+\ENDTHEOREM

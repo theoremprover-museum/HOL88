@@ -1,0 +1,25 @@
++ ===================================================================== +
+| HOL DISTRIBUTION DIRECTORY: contrib                                   |
++ ===================================================================== +
+
+This directory contains contributions from the HOL user community. They are
+not edited, and the University of Cambridge Computer Laboratory assumes no
+responsibility to support any code or tools distributed in this directory.
+
+The aim of contrib is to provide a vehicle to make it easy for the HOL
+community to share theories, proofs, examples, tools, documents, and other
+material which may be of interest to users of the HOL system, but which is not
+included in the library.
+
+Each contribution is given a separate subdirectory within contrib. A standard
+READ-ME file is included in each subdirectory, giving at least the following
+information:
+
+   * name of the subdirectory
+   * a one-line description of the contents
+   * names and addresses of the authors,
+   * date of inclusion in contrib
+
+Contributors may also include other information in the READ-ME file.
+
+The file CONTENTS contains a brief summary of each entry.

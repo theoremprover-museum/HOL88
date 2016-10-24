@@ -1,0 +1,34 @@
+\DOC g
+
+\TYPE {g : (term -> void)}
+
+\LIBRARY {abs_theory}
+
+\SYNOPSIS
+Initializes the subgoal package with a new goal which has no assumptions
+except those created from the theory obligations.
+
+\DESCRIBE
+The call
+{
+   g "tm"
+}
+\noindent is equivalent to
+{
+   set_abs_goal([],"tm")
+}
+\noindent 
+and clearly more convenient if a goal has no assumptions.
+For a description of the subgoal package, see  {set_abs_goal}.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+b, backup, backup_limit, e, expand, expandf, get_state, p, print_state, r,
+rotate, save_top_thm, set_abs_goal, set_state, top_goal, top_thm.
+
+\ENDDOC
+
+
+

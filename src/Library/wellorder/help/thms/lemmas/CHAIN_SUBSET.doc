@@ -1,0 +1,3 @@
+\THEOREM CHAIN_SUBSET WELLORDER
+|- !l P Q. chain l P /\ Q subset P ==> chain l Q
+\ENDTHEOREM

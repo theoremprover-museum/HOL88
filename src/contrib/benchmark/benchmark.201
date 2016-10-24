@@ -1,0 +1,16 @@
+
+rm -f NEXT.th
+/usr/groups/hol/HOL21/bin/hol < mk_NEXT.ml
+
+rm -f MULT_FUN_CURRY.th
+/usr/groups/hol/HOL21/bin/hol < MULT_FUN_CURRY.ml
+
+rm -f MULT_FUN.th
+/usr/groups/hol/HOL21/bin/hol < MULT_FUN.ml
+
+rm -f prims.th
+rm -f MULT_IMP.th
+rm -f MULT_VER.th
+/usr/groups/hol/HOL21/bin/hol  < HOL_MULT.ml
+
+echo 'Multiplier verified in hol22'

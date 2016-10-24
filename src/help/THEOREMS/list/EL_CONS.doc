@@ -1,0 +1,3 @@
+\THEOREM EL_CONS list
+|- !n. 0 < n ==> (!x l. EL n(CONS x l) = EL(PRE n)l)
+\ENDTHEOREM

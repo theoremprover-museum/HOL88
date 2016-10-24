@@ -1,0 +1,33 @@
+\DOC basen_of_int
+
+\TYPE {basen_of_int : term -> thm}
+
+\SYNOPSIS
+Given a radix and a value, returns a term containing a BASEN numeral in that
+radix, with that value.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {r} and {n} are ML integers, and {r} is at least 2, and {n} is positive,
+then {basen_of_int r n} returns the term containing the canonical BASEN numeral
+in that radix, of that value.
+
+\FAILURE
+The radix must have a value of at least 2, and {n} must be positive.
+
+\EXAMPLE
+{
+#basen_of_int (10, 34567);;
+"BASEN 10[3;4;5;6;7]" : term
+
+#basen_of_int (2, 23);;
+"BASEN 2[1;0;1;1;1]" : term
+
+#basen_of_int (16, 3072);;
+"BASEN 16[12;0;0]" : term
+}
+\SEEALSO
+BASEN_OF_NUM_CONV, int_of_basen, mk_basen.
+
+\ENDDOC

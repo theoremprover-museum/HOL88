@@ -1,0 +1,32 @@
+\DOC contains
+
+\TYPE {$contains : (term -> term -> thmpattern)}
+
+\SYNOPSIS
+Side-condition test. Tests the value bound to a pattern variable to see if
+any part of it matches a new pattern.
+
+\LIBRARY trs
+
+\DESCRIBE
+{contains} can be used to test whether part of a hypothesis or conclusion
+contains a term, anywhere within it, that matches a pattern. Its first
+argument is a variable used in a pattern for the hypothesis/conclusion. The
+other argument is the pattern to be searched for within the term to which the
+variable has been matched.
+
+\FAILURE
+Fails if the first argument is not a variable. May also cause a failure to
+match, when used in a search, if the pattern variable does not appear in the
+binding.
+
+\EXAMPLE
+Here is a pattern that matches a theorem if the conclusion is an equality in
+which the right-hand side contains a conjunction.
+{
+   (conc "l = (r:*)") Where ("r:*" contains "x /\ y")
+}
+\SEEALSO
+matches, has_body, Where.
+
+\ENDDOC

@@ -1,0 +1,755 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  READ-ME Makefile mk_card.ml card.ml
+# Wrapped by kalker@tomcat on Mon Sep 25 11:49:17 1989
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'READ-ME' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'READ-ME'\"
+else
+echo shar: Extracting \"'READ-ME'\" \(1715 characters\)
+sed "s/^X//" >'READ-ME' <<'END_OF_FILE'
+X+ =====================================================================	+
+X|									|
+X| LIBRARY	: card                                                  |
+X|									|
+X| DESCRIPTION   : Definition cardinal types.                            |
+X|									|
+X| AUTHOR	: T. kalker						|
+X| DATE		: 10 JUly 1989  			                |
+X|									|
+X+ =====================================================================	+
+X
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| FILES:								|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X
+X        mk_card: defines the type of cardinals    
+X
+X        card.ml: loads the theory card
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| DOCUMENTATION:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X 
+XThe type of cardinals is defined as the equivalence classes
+Xof equi_potent sets. The canonical order "<<<" is defined,
+Xand it proved that "<<<" is a linear order. This latter prove
+Xis done using transfinite induction .
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO REBUILD THE LIBRARY:						|
+X|									|
+X+ --------------------------------------------------------------------- +  
+X
+X   0) necessary libraries: auxiliary, well_order, taut
+X
+X   1) edit the pathnames in the Makefile (if necessary)
+X
+X   2) type "make clean"
+X
+X   3) type "make all"
+X
+X+ --------------------------------------------------------------------- +
+X|									|
+X| TO USE THE LIBRARY:							|
+X|									|
+X+ --------------------------------------------------------------------- +
+X
+X   load_library `card`;;
+X
+X
+END_OF_FILE
+if test 1715 -ne `wc -c <'READ-ME'`; then
+    echo shar: \"'READ-ME'\" unpacked with wrong size!
+fi
+chmod +x 'READ-ME'
+# end of 'READ-ME'
+fi
+if test -f 'Makefile' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Makefile'\"
+else
+echo shar: Extracting \"'Makefile'\" \(1000 characters\)
+sed "s/^X//" >'Makefile' <<'END_OF_FILE'
+X# =====================================================================
+X#
+X# 		 MAKEFILE FOR THE HOL LIBRARY: CARD
+X#
+X# =====================================================================
+X
+X# =====================================================================
+X#
+X# MAIN ENTRIES:
+X#
+X# make all	    : create theories and compile code
+X#
+X# make clean	    : remove theories and compiled code
+X#	
+X# =====================================================================
+X
+X# =====================================================================
+X# MACROS:
+X#
+X# Hol	    : the pathname of the version of hol used
+X# =====================================================================
+X
+XHol=~/com/hol
+X
+Xclean:
+X	rm -f *_ml.o *_ml.l *.th 
+X	@echo "===> library card: all object code and theory files deleted"
+X                      
+Xcard.th: mk_card.ml
+X	     rm -f card.th
+X	     echo 'set_flag(`abort_when_fail`,true);;'\
+X	     'loadt `mk_card`;;' | ${Hol}           
+X
+Xall:    card.th 
+X	@echo "===> library card rebuilt"
+END_OF_FILE
+if test 1000 -ne `wc -c <'Makefile'`; then
+    echo shar: \"'Makefile'\" unpacked with wrong size!
+fi
+chmod +x 'Makefile'
+# end of 'Makefile'
+fi
+if test -f 'mk_card.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'mk_card.ml'\"
+else
+echo shar: Extracting \"'mk_card.ml'\" \(17254 characters\)
+sed "s/^X//" >'mk_card.ml' <<'END_OF_FILE'
+X%<
+XAUTHOR:	Ton Kalker
+X
+XDATE: 	23 june 1989
+X
+XCOMMENT: theory of cardinals, showing the use
+X         of quotient constructs.
+X
+X>%
+X
+Xnew_theory `card`;; 
+X                   
+X%<We need `set` as a basis for `card`>%  
+X
+Xload_library `auxiliary`;;  
+X
+Xautoload_defs_and_thms `bool`;;
+X
+Xload_library `set`;;
+X
+Xload_library `taut`;; 
+X
+Xload_library `fixpoints`;;
+X
+Xload_library `quotient`;;
+X
+Xload_library `well_order`;;
+X
+Xnew_special_symbol `<<<`;;       
+X
+X%<*************DEFINITIONS*********************************>%
+X
+Xlet EQUI_POTENT = 
+X    new_definition
+X    (`EQUI_POTENT`,
+X      "EQUI_POTENT (A:*->bool) (B:*->bool) = ?f.(A <--> B) f");; 
+X
+Xlet SLEQ = 
+X    new_infix_definition
+X    (`SLEQ`, 
+X     "SLEQ A (B:*->bool) = (?f.((A >--> B) f))");;  
+X
+X%<*****************THEOREMS**************************************>%
+X
+Xlet w1 = "REFLEX (EQUI_POTENT:(*->bool)->(*->bool)->bool)";;
+X
+Xlet thm1 = 
+X   prove
+X    (w1,
+X    REWRITE_TAC [REFLEX] THEN
+X    BETA_TAC THEN 
+X    REWRITE_TAC[EQUI_POTENT] THEN
+X    GEN_TAC THEN
+X    EXISTS_TAC "I:*->*" THEN
+X    REWRITE_TAC[FUN_IDEN]);;   
+X
+Xlet w2 = "SYMMETRY (EQUI_POTENT:(*->bool)->(*->bool)->bool)";;  
+X
+Xlet thm2 = 
+X   prove
+X    (w2,
+X    REWRITE_TAC [SYMMETRY] THEN
+X    BETA_TAC THEN 
+X    REWRITE_TAC[EQUI_POTENT] THEN
+X    REPEAT GEN_TAC THEN
+X    EQ_TAC THEN 
+X    REPEAT STRIP_TAC THENL
+X    [EXISTS_TAC "FINV x y (f:*->*)";EXISTS_TAC "FINV y x (f:*->*)"] THEN
+X    IMP_RES_TAC ISO_FINV);;
+X
+X
+Xlet w3 = "TRANSITIVITY (EQUI_POTENT:(*->bool)->(*->bool)->bool)";;   
+X
+Xlet thm3 = 
+X   prove
+X    (w3,
+X    REWRITE_TAC [TRANSITIVITY] THEN
+X    BETA_TAC THEN 
+X    REWRITE_TAC[EQUI_POTENT] THEN 
+X    REPEAT STRIP_TAC THEN
+X    EXISTS_TAC "(f':*->*) o (f:*->*)" THEN
+X    IMP_RES_TAC FUN_COMP);; 
+X
+Xlet w = "EQUIVALENCE (EQUI_POTENT:(*->bool)->(*->bool)->bool)";; 
+X
+Xlet EQUIVALENCE_CARD =
+X    save_thm
+X    (`EQUIVALENCE_CARD`,
+X     TAC_PROOF(
+X     ([],w),
+X     REWRITE_TAC[EQUIVALENCE] THEN
+X     BETA_TAC THEN
+X     REWRITE_TAC[thm1;thm2;thm3]));; 
+X
+X
+Xlet [thm_onto;thm_univ;thm_factor] = define_quotient_type(`card`,EQUIVALENCE_CARD);;  
+X
+X
+X%< Tactic that rewrites to conditions for defining
+X   factorization >%
+X
+Xlet CARD_FACTOR_TAC = FACTOR_TAC [thm_onto] [thm_univ];;  
+X
+Xlet CARD_LIFT_CONV = BASE_CHANGE_CONV thm_onto;;
+X
+Xlet CARD_QUOTIENT_TAC =
+X     CONV_TAC (BASE_CHANGE_CONV thm_onto) THEN
+X     GEN_TAC;;
+X  
+X
+X
+X%<*************Defining canonical ordering**************************>%
+X
+Xlet w = "?!L:(*)card#(*)card->bool.(UNCURRY $SLEQ) = L o (PROJ_card P PROJ_card)";;
+X
+Xlet LEMMA1 = 
+X    prove(w,                        %<Here we use FACTOR_TAC>%
+X     CARD_FACTOR_TAC THEN
+X     REWRITE_TAC[UNCURRY_DEF;EQUI_POTENT;SLEQ] THEN 
+X     REPEAT STRIP_TAC THEN EQ_TAC THEN 
+X     REPEAT STRIP_TAC THEN
+X     IMP_RES_TAC ISO_FINV THENL
+X     [SUB_ASSUM_TAC[1;3;4];SUB_ASSUM_TAC[2;3;5]] THEN
+X     FILTER_RULE_ASSUM_TAC[1;3] (CONJUNCT1 o (REWRITE_RULE[FUN_ISO])) THEN
+X     (2 TIMES (IMP_RES_TAC FUN_COMP)) THEN
+X     FILTER_ASSUM_TAC [1] (\tm.EXISTS_TAC (rand tm)) THEN
+X     ASM_REWRITE_TAC[]);; 
+X
+Xlet LEMMA2 = 
+X    let th1 = (CONV_RULE (BINDER_CONV (SYM_CONV THENC FUN_EQ_CONV))) LEMMA1 in
+X    let th2 = (CONV_RULE (BINDER_CONV PROD_CONV)) th1 in
+X    let th3 = REWRITE_RULE[UNCURRY_DEF;o_DEF;P] th2 in
+X    let th4 = BETA_RULE th3 in
+X    let th5 = (CONV_RULE (BASE_CHANGE_CONV (fst(CONJ_PAIR CURRY_ISO)))) th4 in
+X    REWRITE_RULE[UNCURRY_DEF] th5;;
+X
+X%<We define the ordering on the cardinals>% 
+X
+Xlet [CLEQ;CLEQ_UNIQUE] = new_unique_specification `CLEQ` [`infix`,`<<<`] LEMMA2;;  
+X
+X%<****************************THEOREMS******************************>% 
+X
+Xlet w = "!a:(*)card.a <<< a";; 
+X
+Xlet CLEQ_REFLEX =
+X    prove_thm(
+X    `CLEQ_REFLEX`,
+X     w,
+X     CARD_QUOTIENT_TAC THEN
+X     REWRITE_TAC[CLEQ;SLEQ] THEN
+X     EXISTS_TAC "I:*->*" THEN
+X     REWRITE_TAC[FUN_IDEN]);;   
+X
+Xlet w = "!a b c:(*)card.((a <<< b) /\ (b <<< c)) ==> (a <<< c)";;
+X
+Xlet CLEQ_TRANSITIVITY =
+X    prove_thm(
+X    `CLEQ_TRANSITIVITY`,
+X     w,
+X     (3 TIMES CARD_QUOTIENT_TAC) THEN
+X     REWRITE_TAC[CLEQ;SLEQ] THEN
+X     REPEAT STRIP_TAC THEN
+X     IMP_RES_TAC FUN_COMP THEN
+X     FILTER_ASSUM_TAC [1] (\tm.EXISTS_TAC (rand tm)) THEN
+X     ASM_REWRITE_TAC[]);;
+X
+X
+X%<A preliminary for proving `<<<` to be a partial order:
+X  Note the use of the DEFINE tactic>% 
+X
+Xlet w = "!A (B:*->bool).!f.
+X          (( B SUBSET A) /\ ((A >--> B) f))  
+X           ==>
+X          (?g.((A <--> B) g))";;
+X                
+X                                           
+Xlet SCHROEDER_BERNSTEIN_TAC =
+X
+XREPEAT STRIP_TAC THEN 
+X
+X%<First the basic definitions>%
+X
+XDEFINE "D:*->bool = A DELETE B" THEN                           
+XDEFINE "fixfun = \V:*->bool. D UNION (IMAGE f V)" THEN 
+X
+X%<Prove "fixfun" continuous>%
+X          
+XLEMMA_PROOF "CONTINUOUS (fixfun:(*->bool)->(*->bool))"             
+X           [SUB_ASSUM_TAC [1];                                   
+X            ASM_REWRITE_TAC[CONTINUOUS;CHAIN;LUB;UNION;IMAGE];
+X            SUB_ASSUM_TAC [];
+X            BETA_TAC THEN BETA_TAC;
+X            REPEAT STRIP_TAC;
+X            CONV_TAC FUN_EQ_CONV THEN BETA_TAC THEN STRIP_TAC;
+X            EQ_TAC THEN REPEAT STRIP_TAC THENL
+X                        [ASM_REWRITE_TAC[];
+X                         EXISTS_TAC "n:num" THEN
+X                         DISJ2_TAC THEN
+X                         EXISTS_TAC "b:*" THEN
+X                         ASM_REWRITE_TAC[];
+X                         ASM_REWRITE_TAC[];
+X                         DISJ2_TAC THEN
+X                         EXISTS_TAC "b:*" THEN
+X                         ASM_REWRITE_TAC[] THEN
+X                         EXISTS_TAC "n:num" THEN
+X                         ASM_REWRITE_TAC[]]
+X           ]   THEN  
+X
+X%<Let E be the least fixpoint of fixfun>% 
+X
+XDEFINE "E:*->bool = FIX fixfun" THEN                              
+X
+X%<And check it's indeed a fixpoint>%
+X
+XLEMMA_PROOF "fixfun (E:*->bool) = E"
+X            [SUB_ASSUM_TAC[1;2];
+X             IMP_RES_TAC FIX_THM;
+X             ASM_REWRITE_TAC[]] THEN 
+X
+X%<Formulate a property>%
+X
+XDEFINE "inA = \V:*->bool. V SUBSET A" THEN 
+X
+X%<and check that E satisfies this property>%
+X
+XLEMMA_PROOF "(inA:(*->bool)->bool) E"   
+X           [ASSUM_LIST (REWRITE_TAC o (sublist [3]));
+X            MATCH_MP_TAC SCOTT_INDUCTION_THM; 
+X            FILTER_ASSUM_TAC [7;8] UNDISCH_TAC;
+X            ASM_REWRITE_TAC
+X              [ADMITS_INDUCTION;FUN_ONE_ONE;SUBSET;BOT;UNION;DELETE;IMAGE;CHAIN;LUB];
+X            2 TIMES BETA_TAC;
+X            SUB_ASSUM_TAC []; 
+X            REWRITE_TAC[];
+X            REPEAT STRIP_TAC THENL
+X                 [RES_TAC; 
+X                  RES_TAC THEN
+X                  ASM_REWRITE_TAC[]]] THEN
+X
+X%<Rewrite with definitions of fixfun and inA>%
+X
+XREWRITE_RULE_ASSUM_TAC [3] [6;7] THEN
+XREWRITE_RULE_ASSUM_TAC [1] [2] THEN 
+X
+X%<and remove these definitions>%
+X
+XSUB_ASSUM_TAC [1;3;8;9] THEN
+XRULE_ASSUM_TAC BETA_RULE THEN 
+X
+X%<Property of E: E closed under f>%
+X
+XLEMMA_PROOF  "!x:*.(E x) ==> (E (f x))" 
+X             [SUB_ASSUM_TAC [2];
+X              REPEAT STRIP_TAC;
+X              FILTER_RULE_ASSUM_TAC [2]  (REWRITE_RULE [DELETE;UNION;IMAGE]);
+X              FILTER_RULE_ASSUM_TAC [2] (CONV_RULE FUN_EQ_CONV);
+X              RULE_ASSUM_TAC BETA_RULE;
+X              FILTER_RULE_ASSUM_TAC [2] (SPEC "(f:*->*) x:*");
+X              FILTER_RULE_ASSUM_TAC [2] SYM;
+X              ASM_REWRITE_TAC[];
+X              DISJ2_TAC;
+X              EXISTS_TAC "x:*";
+X              ASM_REWRITE_TAC[]] THEN  
+X
+X%<Property of E: E contains D>%
+X
+XLEMMA_PROOF "!x:*. ((A x) /\ ~(E x)) ==> (B x)"     
+X             [SUB_ASSUM_TAC[3];
+X              REPEAT STRIP_TAC;
+X              FILTER_RULE_ASSUM_TAC [3]  (REWRITE_RULE [DELETE;UNION;IMAGE]);
+X              FILTER_RULE_ASSUM_TAC [3] (CONV_RULE FUN_EQ_CONV);
+X              RULE_ASSUM_TAC BETA_RULE;
+X              FILTER_RULE_ASSUM_TAC [3] (SPEC "x:*");
+X              FILTER_RULE_ASSUM_TAC [3] SYM;
+X              REWRITE_RULE_ASSUM_TAC [1] [3;2];
+X              ASM_CASES_TAC "B (x:*):bool";
+X              FILTER_ASSUM_TAC [2] UNDISCH_TAC;
+X              ASM_REWRITE_TAC[]]   THEN  
+X
+X%<Property of E: there are enough preimages in E>%
+X                                              
+XLEMMA_PROOF "!x:*.((E x) /\ (B x)) ==> (?b.(E b) /\ (x = (f b)))"  
+X             [SUB_ASSUM_TAC[4];
+X              REPEAT STRIP_TAC;
+X              FILTER_RULE_ASSUM_TAC [3]  (REWRITE_RULE [DELETE;UNION;IMAGE]);
+X              FILTER_RULE_ASSUM_TAC [3] (CONV_RULE FUN_EQ_CONV);
+X              RULE_ASSUM_TAC BETA_RULE; 
+X              FILTER_RULE_ASSUM_TAC [3] (SPEC "x:*");
+X              REWRITE_RULE_ASSUM_TAC [3] [1;2];
+X              ASM_REWRITE_TAC[]] THEN 
+X
+X%<Define the candidate function g,
+X  set the task of verifying that g
+X  has the right properties, and
+X  rewrite with the definitions of
+X  the theory set>%
+X
+XDEFINE "g:*->* = \x.(E x) => (f x) | x" THEN
+XEXISTS_TAC "g:*->*" THEN   
+XFILTER_ASSUM_TAC [5;7;8] UNDISCH_TAC  THEN
+XASM_REWRITE_TAC [SUBSET;UNION;FUN_ISO;FUN_ONE_ONE;FUN_ONTO] THEN
+XBETA_TAC  THEN
+XBETA_TAC THEN
+XSUB_ASSUM_TAC [2;3;4] THEN  
+XREPEAT STRIP_TAC THENL  
+X
+X%<Prove that g(A) contained in B,
+X  from injection part  >% 
+X  
+X          [ASM_CASES_TAC "E (x:*):bool" THEN
+X           RES_TAC THEN 
+X           ASM_REWRITE_TAC[];
+X
+X%<Prove g is injective: split into 4 cases:
+X  x,y in/(not in) E >%
+X
+X            MAP_EVERY ASM_CASES_TAC ["E (x:*):bool";"E (y:*):bool"] THEN
+X            REWRITE_RULE_ASSUM_TAC [3] [1;2]  THENL   
+X
+X%<Both in E>%
+X
+X                       [RES_TAC; 
+X 
+X%<Only 1 in E: uses closure property of E>%
+X
+X                        SUB_ASSUM_TAC [1;2;3;12] THEN
+X                        RES_TAC THEN
+X                        FILTER_ASSUM_TAC [1] UNDISCH_TAC THEN 
+X                        ASM_REWRITE_TAC[];
+X                        SUB_ASSUM_TAC [1;2;3;12] THEN
+X                        RES_TAC THEN
+X                        FILTER_ASSUM_TAC [3] UNDISCH_TAC THEN 
+X                        ASM_REWRITE_TAC[];
+X
+X%<Both not in E>%
+X   
+X                        ASM_REWRITE_TAC[]]; 
+X
+X%<Prove that g(A) contained in B,
+X  from surjection part  >% 
+X  
+X           ASM_CASES_TAC "E (x:*):bool" THEN
+X           RES_TAC THEN 
+X           ASM_REWRITE_TAC[];
+X
+X%<Prove that B is contained in g(A),
+X  from surjection part>%
+X
+X                 ASM_CASES_TAC "E (x:*):bool" THENL
+X                     [SUB_ASSUM_TAC[1;2;3;7] THEN
+X                      RES_TAC THEN 
+X                      SUB_ASSUM_TAC[1;6] THEN  
+X                      FILTER_STRIP_ASSUM_TAC [1] THEN
+X                      EXISTS_TAC "b:*";EXISTS_TAC "x:*"] THEN
+X                  RES_TAC THEN 
+X                  ASM_REWRITE_TAC[]];;
+X
+X
+Xlet SCHROEDER_BERNSTEIN_LEMMA = 
+X    prove(w,SCHROEDER_BERNSTEIN_TAC);;     
+X
+Xlet w = "!A (B:*->bool).((A SLEQ B) /\ (B SLEQ A)) ==> (EQUI_POTENT A B)";;  
+X
+Xlet ANTI_SYM_SLEQ =
+X   prove(
+X    w,  
+X    REPEAT GEN_TAC THEN
+X    REWRITE_TAC[SLEQ] THEN
+X    REPEAT STRIP_TAC THEN 
+X
+X%<Set up the scene for using the main lemma >%
+X
+X    DEFINE "D = IMAGE (f':*->*) B" THEN 
+X
+X%<Prove that D is a subset of A >%
+X    
+X    IMP_RES_TAC FUN_TY THEN
+X    RULE_ASSUM_TAC (REWRITE_RULE[FUN_TY_IMAGE]) THEN
+X    FILTER_RULE_ASSUM_TAC [3] SYM THEN
+X    REWRITE_RULE_ASSUM_TAC [2] [3] THEN
+X    SUB_ASSUM_TAC [2;3;4;5] THEN
+X
+X%<Prove D equi_potent with B >%
+X
+X   LEMMA_PROOF "((B <--> D) (f':*->*))" 
+X                [REWRITE_TAC[FUN_ISO];
+X                 BETA_TAC;
+X                 FILTER_RULE_ASSUM_TAC [2] (REWRITE_RULE[SYM(SPEC_ALL ONTO_IMAGE)]);
+X                 ASM_REWRITE_TAC[];  
+X                 FILTER_ASSUM_TAC[2;3] UNDISCH_TAC;
+X                 REWRITE_TAC[FUN_ONE_ONE;FUN_ONTO];
+X                 BETA_TAC;
+X                 REPEAT STRIP_TAC;
+X                 RES_TAC] THEN  
+X
+X%<Reduce to a problem on A >%
+X
+X    DEFINE "(g:*->*) = f' o (f:*->*)" THEN  
+X    LEMMA_PROOF "((A >--> D) (g:*->*))"    
+X                 [FILTER_RULE_ASSUM_TAC [2] (BETA_RULE o (REWRITE_RULE[FUN_ISO])); 
+X                  FILTER_STRIP_ASSUM_TAC [2]; 
+X                  SUB_ASSUM_TAC[1;2;3;7];
+X                  IMP_RES_TAC  FUN_COMP; 
+X                  ASM_REWRITE_TAC[]] THEN 
+X
+X%<Now use the MAIN_LEMMA >%
+X                                 
+X    IMP_RES_TAC SCHROEDER_BERNSTEIN_LEMMA THEN
+X    FILTER_STRIP_ASSUM_TAC [1] THEN 
+X
+X%<Now we have A and D equi_potent and
+X  B and D equi_potent>%
+X                                           
+X%<and use transitivity of equi_potence>% 
+X
+X  REWRITE_TAC[EQUI_POTENT] THEN
+X  SUB_ASSUM_TAC [1;5] THEN
+X  IMP_RES_TAC ISO_FINV THEN
+X  NEW_IMP_RES_TAC FUN_COMP THEN
+X  FILTER_ASSUM_TAC [4] (\tm.EXISTS_TAC (rand tm)) THEN 
+X  ASM_REWRITE_TAC[]);;
+X
+X%<With the help of CARD_TAC it's now easy to prove that
+X  <<< is a partial order>% 
+X
+Xlet w = "!a b:(*)card. ((a <<< b) /\ (b <<< a)) ==> (a = b)";;
+X
+Xlet ANTI_SYM_CLEQ =
+X    prove_thm(
+X    `ANTI_SYM_CLEQ`,
+X     w,
+X    (2 TIMES CARD_QUOTIENT_TAC) THEN
+X    REWRITE_TAC[CLEQ;thm_univ;ANTI_SYM_SLEQ]);; 
+X
+Xlet tm1 = "FUNC (A:*->bool) (B:*->bool) x = let (z,f) = (RESTRICT x (FUNC A B)) in
+X                         (?y.((B y) /\ (!w. ((w WLESS z) /\ (A w)) ==> (~(y = (f w)))))) => 
+X                         (@y.(((B y) /\ (!w. ((w WLESS z) /\ (A w)) ==> (~(y = (f w))))))) |
+X                             @y.(B y)";;
+X
+Xlet FUNC = wo_rec_definition false `FUNC` tm1;; 
+X
+Xlet w = "!f:*->*.!x:*.~((A -->> B) f) /\ ((A --> B) f)  ==> 
+X                                      (?z.(B z) /\ (!w.(w WLESS x) /\ (A w) ==> ~(z = f w)))";;
+X
+Xlet LEMMA1 = prove(
+X    w,
+X    REWRITE_TAC[FUN_ONTO;FUN_TY_DEF;NOT_BOT] THEN
+X    REPEAT STRIP_TAC THEN 
+X    REWRITE_RULE_ASSUM_TAC [2] [1] THEN
+X    FILTER_RULE_ASSUM_TAC [2] (CONV_RULE NOT_FORALL_CONV) THEN
+X    FILTER_STRIP_ASSUM_TAC [2] THEN
+X    ASM_CASES_TAC "B (x':*):bool" THEN 
+X    REWRITE_RULE_ASSUM_TAC [2] [1] THENL
+X    [ALL_TAC;FILTER_ASSUM_LIST [2] (MAP_EVERY CONTR_TAC)] THEN
+X    FILTER_RULE_ASSUM_TAC [2] (CONV_RULE NOT_EXISTS_CONV) THEN
+X    EXISTS_TAC "x':*" THEN 
+X    REPEAT STRIP_TAC THENL
+X    [ASM_REWRITE_TAC[];
+X     FILTER_RULE_ASSUM_TAC [5] (SPEC "w:*") THEN
+X     REWRITE_RULE_ASSUM_TAC [5] [1;2] THEN
+X     ASM_REWRITE_TAC[]]);;  
+X
+Xlet w = "~(B = BOT:*->bool) ==> ((A --> B) (FUNC A B))";; 
+X
+Xlet USE_GOAL func termtac (asl,g) = termtac (func g) (asl,g);; 
+X
+Xlet LEMMA2 = prove(w,
+X    REWRITE_TAC[FUN_TY_DEF;NOT_BOT] THEN
+X    DISCH_TAC THEN 
+X    TRANSFIN_INDUCT_TAC THEN
+X    REWRITE_TAC[FUNC] THEN
+X    REWRITE_TAC[LET_DEF;RESTRICT] THEN 
+X    BETA_TAC THEN
+X    REWRITE_TAC[UNCURRY_DEF] THEN 
+X    (2 TIMES BETA_TAC) THEN
+X    USE_GOAL (rand o rator o rator o rand) ASM_CASES_TAC THEN 
+X    ASM_REWRITE_TAC[] THENL
+X    [FILTER_RULE_ASSUM_TAC [1] SELECT_RULE THEN
+X     FILTER_STRIP_ASSUM_TAC [1];
+X     FILTER_RULE_ASSUM_TAC [4] SELECT_RULE THEN 
+X     ASM_REWRITE_TAC[]]);;  
+X
+Xlet w = "(!w:*.
+X            w WLESS x /\ A w ==>
+X            ~(y' = (w WLESS x => FUNC A B w | LEAST TOP))) = 
+X         (!w. 
+X            w WLESS x /\ A w ==> 
+X            ~(y' = FUNC A B w))" ;; 
+X
+Xlet LEMMA3 = prove(w,
+X    EQ_TAC THEN
+X    REPEAT STRIP_TAC THENL
+X    [RES_TAC THEN
+X     REWRITE_RULE_ASSUM_TAC [1] [5] THEN
+X     RES_TAC;
+X     REWRITE_RULE_ASSUM_TAC [1] [3] THEN
+X     RES_TAC]);;
+X
+Xlet LEMMA4 = 
+X    let th1 = SPEC "x:*"(SPEC "B:*->bool"(SPEC "A:*->bool" FUNC)) in
+X    let th2 = REWRITE_RULE[LET_DEF;RESTRICT] th1 in
+X    let th3 = BETA_RULE th2 in
+X    let th4 = REWRITE_RULE[UNCURRY_DEF] th3 in
+X    (BETA_RULE o BETA_RULE) th4;;  
+X
+Xlet LEMMA5 = REWRITE_RULE[LEMMA3] LEMMA4;;
+X
+Xlet w = "!x y:*.~(B = BOT) /\ (~((A -->> B) (FUNC A B))) /\ (A y) /\ (A x) /\ (y WLESS x) 
+X                                  ==>  ~((FUNC A B y) = (FUNC A B x))";;
+X
+Xlet LEMMA6 = prove(w,
+X    REPEAT STRIP_TAC THEN
+X    IMP_RES_TAC LEMMA2 THEN 
+X    IMP_RES_TAC LEMMA1 THEN
+X    SUB_ASSUM_TAC [1;4;5;6;7] THEN
+X    ASSUME_TAC LEMMA5 THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [2] THEN
+X    FILTER_RULE_ASSUM_TAC [2] SELECT_RULE THEN 
+X    FILTER_STRIP_ASSUM_TAC [2] THEN
+X    FILTER_RULE_ASSUM_TAC [3] SYM THEN
+X    REWRITE_RULE_ASSUM_TAC [1] [3] THEN
+X    RES_TAC THEN
+X    FILTER_RULE_ASSUM_TAC [6] SYM THEN 
+X    RES_TAC);;  
+X
+Xlet w = "(~(B = BOT:*->bool)) /\ (~((A -->> B) (FUNC A B))) ==> ((A >--> B) (FUNC A B))";;
+X
+Xlet LEMMA7 = prove(w,
+X    REPEAT STRIP_TAC THEN
+X    REWRITE_TAC[FUN_ONE_ONE] THEN
+X    IMP_RES_TAC (REWRITE_RULE[FUN_TY_DEF] LEMMA2) THEN
+X    ASM_REWRITE_TAC[] THEN 
+X    REPEAT STRIP_TAC THEN
+X    DISJ_CASES_TAC (SPEC_ALL WLESS_CASES) THENL
+X    [NEW_IMP_RES_TAC LEMMA6;
+X     FILTER_STRIP_ASSUM_TAC [1] THEN
+X     NEW_IMP_RES_TAC LEMMA6 THEN
+X     REWRITE_RULE_ASSUM_TAC [3] [11] THEN
+X     FILTER_ASSUM_LIST [3] (MAP_EVERY CONTR_TAC)]);; 
+X
+Xlet w = "!A B:*->bool.(A SLEQ B) \/ (B SLEQ A)";;
+X
+Xlet LEMMA8 = prove(w,
+X    REWRITE_TAC[SLEQ] THEN
+X    REPEAT GEN_TAC THEN 
+X    ASM_CASES_TAC "A = BOT:*->bool" THEN
+X    ASM_CASES_TAC "B = BOT:*->bool" THEN
+X    ASM_REWRITE_TAC[BOTTOM_LEFT] THEN
+X    ASM_CASES_TAC "((A -->> (B:*->bool)) (FUNC A B))" THENL
+X    [ALL_TAC;IMP_RES_TAC LEMMA7 THEN
+X             DISJ1_TAC THEN 
+X             EXISTS_TAC "FUNC A (B:*->bool)" THEN 
+X             ASM_REWRITE_TAC[]] THEN
+X    DISJ2_TAC THEN
+X    IMP_RES_TAC SURJ_FINV THEN
+X    IMP_RES_TAC FUN_TY THEN
+X    NEW_IMP_RES_TAC FUN_INV_TY THEN
+X    SUB_ASSUM_TAC [1;3;4] THEN
+X    FILTER_RULE_ASSUM_TAC [1] ((SPEC "FUNC A (B:*->bool)") o (SPEC "B:*->bool")) THEN
+X    IMP_RES_TAC INJ_SURJ_PINVERSE THEN
+X    EXISTS_TAC "FINV A B  (FUNC A (B:*->bool))" THEN
+X    ASM_REWRITE_TAC[]);;
+X
+Xlet w = "!a b:(*)card.(a <<< b) \/ (b <<< a)";;
+X
+Xlet LINEAR_CLEQ = prove_thm(
+X   `LINEAR_CLEQ`, 
+X    w,
+X    (2 TIMES CARD_QUOTIENT_TAC) THEN
+X    REWRITE_TAC[CLEQ;LEMMA8]);;
+X
+X
+X
+END_OF_FILE
+if test 17254 -ne `wc -c <'mk_card.ml'`; then
+    echo shar: \"'mk_card.ml'\" unpacked with wrong size!
+fi
+chmod +x 'mk_card.ml'
+# end of 'mk_card.ml'
+fi
+if test -f 'card.ml' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'card.ml'\"
+else
+echo shar: Extracting \"'card.ml'\" \(755 characters\)
+sed "s/^X//" >'card.ml' <<'END_OF_FILE'
+X% FILE		: card.ml						%
+X% DESCRIPTION   : loads the library card into hol.       	        %
+X%									%
+X% AUTHOR        : T. Kalker						%
+X% DATE		: 10 July 1989						%
+X
+X
+Xif draft_mode() 
+X then (if not(mem `card` (parents (current_theory()))) 
+X         then
+X            (print_newline();
+X             print_string `card declared a new parent`;
+X             print_newline();
+X             new_parent `card`)
+X         else 
+X            (print_newline();
+X             print_string `card is parent`;
+X             print_newline())
+X       )
+X else (load_theory`card` ? print_newline());; 
+X
+Xnew_special_symbol `<<<` ? print_newline();;
+X
+Xload_from_lib false `auxiliary` `functions`;;         
+X
+Xautoload_defs_and_thms `card`;;
+X
+Xlet goal = g
+Xand apply  = expandf;;
+X
+END_OF_FILE
+if test 755 -ne `wc -c <'card.ml'`; then
+    echo shar: \"'card.ml'\" unpacked with wrong size!
+fi
+chmod +x 'card.ml'
+# end of 'card.ml'
+fi
+echo shar: End of shell archive.
+exit 0

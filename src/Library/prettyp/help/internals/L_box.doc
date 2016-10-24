@@ -1,0 +1,10 @@
+\DOC L_box
+
+\TYPE {L_box : (((nat # nat # * print_box # * print_box) # *) -> * print_box)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

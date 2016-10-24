@@ -1,0 +1,42 @@
+\DOC BASEN_SUB_CONV
+
+\TYPE {BASEN_SUB_CONV : term -> thm}
+
+\SYNOPSIS
+Proves the result of subtracting one numeral from another.
+
+\LIBRARY basen
+
+\DESCRIBE
+If {m} and {n} are lists of digits in base {r}, and {p} is the list of digits
+in the base {r} numeral representing the sum of {m} and {n}, then
+{BASEN_SUB_CONV} returns the theorem:
+{
+        |- (BASEN r m - BASEN r n) = BASEN r p
+}
+\FAILURE
+The argument to {BASEN_SUB_CONV} must be of the form
+{"BASEN r [...] - BASEN r [...]"}, and the radix of the two numerals must be
+the same, and the radix must be a numeric constant that is at least 2, and all
+elements of the digit lists must be numeric constants, and must be less than
+the radix.
+
+\EXAMPLE
+{
+#BASEN_SUB_CONV "BASEN 10 [3;4;5] - BASEN 10 [3;4;5]";;
+|- BASEN 10 [3;4;5] - BASEN 10 [3;4;5] = BASEN 10 []
+
+#BASEN_SUB_CONV "BASEN 2 [1;1;1;1] - BASEN 2 [1;1;1;0]";;
+|- BASEN 2 [1;1;1;1] - BASEN 2 [1;1;1;0]) = BASEN 2 [1]
+
+#BASEN_SUB_CONV "BASEN 16 [10;14] - BASEN 16 [8;4]";;
+|- BASEN 16 [10;14] - BASEN 16 [8;4]) = BASEN 16 []
+}
+\COMMENTS
+This is natural number arithmetic, so subtracting a large number from a small
+number returns 0.
+
+\SEEALSO
+BASEN_PRE_CONV.
+
+\ENDDOC

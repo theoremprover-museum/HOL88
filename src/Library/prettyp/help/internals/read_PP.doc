@@ -1,0 +1,10 @@
+\DOC read_PP
+
+\TYPE {read_PP : ((string -> string) -> string -> print_tree)}
+
+\SYNOPSIS
+Internal function of the `{prettyp}' library.
+
+\LIBRARY prettyp
+
+\ENDDOC

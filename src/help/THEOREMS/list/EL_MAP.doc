@@ -1,0 +1,3 @@
+\THEOREM EL_MAP list
+|- !n l. n < (LENGTH l) ==> (!f. EL n(MAP f l) = f(EL n l))
+\ENDTHEOREM

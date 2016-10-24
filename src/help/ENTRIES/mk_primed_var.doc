@@ -1,0 +1,34 @@
+\DOC mk_primed_var
+
+\TYPE {mk_primed_var : ((string # type) -> term)}
+
+\SYNOPSIS
+Primes a variable name sufficiently to make it distinct from all constants.
+
+\DESCRIBE
+When applied to a string {`v`} and a type {":ty"}, the function {mk_primed_var}
+constructs a variable whose name consists of {v} followed by however many
+primes are necessary to make it distinct from any constants in the current
+theory.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE
+{
+#new_theory `wombat`;;
+() : void
+
+#mk_primed_var(`x`,":bool");;
+"x" : term
+
+#new_constant(`x`,":num");;
+() : void
+
+#mk_primed_var(`x`,":bool");;
+"x'" : term
+}
+\SEEALSO
+genvar, variant.
+
+\ENDDOC

@@ -1,0 +1,53 @@
+% File: mk_RCcommand.ml %
+
+% make the theory RCcommand %
+
+
+new_theory `RCcommand`;;
+new_parent `RCpredicate`;;
+
+let  state  = ":*s"
+ and state1 = ":*s1"
+ and state2 = ":*s2"
+ and state3 = ":*s3"
+ and state4 = ":*s4"
+ and estate = ":*#*s";;
+let  pred  = ":^state->bool"
+ and pred1 = ":^state1->bool"
+ and pred2 = ":^state2->bool"
+ and pred3 = ":^state3->bool"
+ and pred4 = ":^state4->bool"
+ and epred = ":^estate->bool";;
+let  ptrans  = ":^pred->^pred"
+ and ptrans12 = ":^pred1->^pred2"
+ and ptrans13 = ":^pred1->^pred3"
+ and ptrans21 = ":^pred2->^pred1"
+ and ptrans22 = ":^pred2->^pred2"
+ and ptrans23 = ":^pred2->^pred3"
+ and ptrans34 = ":^pred3->^pred4"
+ and eptrans = ":^epred->^epred";;
+
+loadf `Command/mk_RCcommand1`;;
+
+load_library `taut`;;
+let TAUT t = TAC_PROOF(([],t),TAUT_TAC);;
+loadf `defs`;;
+
+let autoload_defs thy =
+  map (\name. autoload_theory(`definition`,thy,name))
+      (map fst (definitions thy));;
+let autoload_thms thy =
+  map (\name. autoload_theory(`theorem`,thy,name))
+      (map fst (theorems thy));;
+autoload_defs `RCpredicate`;;
+autoload_thms `RCpredicate`;;
+loadf `Predicate/RCpredicate_convs`;;
+
+loadf `Command/mk_RCcommand2`;;
+loadf `Command/mk_RCcommand3`;;
+
+load_library `pair`;;
+
+loadf `Command/mk_RCcommand4`;;
+
+close_theory();;

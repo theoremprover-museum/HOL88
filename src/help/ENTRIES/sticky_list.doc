@@ -1,0 +1,21 @@
+\DOC sticky_list
+
+\TYPE {sticky_list : (void -> (string # type) list)}
+
+\SYNOPSIS
+Returns a list of the current sticky type settings.
+
+\DESCRIBE
+A call {sticky_list()} will return a list of names and the associated sticky
+types. This list can be changed explicitly via {set_sticky_type} and
+{remove_sticky_type}, or if the flag {sticky} is set, will be changed behind
+the scenes as terms are parsed. For more details of the sticky type mechanism,
+refer to the DESCRIPTION.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+remove_sticky_type, set_sticky_type.
+
+\ENDDOC

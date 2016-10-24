@@ -1,0 +1,8 @@
+\THEOREM TERMDIFF_LEMMA3 POWSER
+|- !z h n K.
+    ~(h = & 0) /\ (abs z) <= K /\ (abs(z + h)) <= K ==>
+    (abs
+     (((((z + h) pow n) - (z pow n)) / h) -
+      ((& n) * (z pow (n num_sub 1))))) <=
+    ((& n) * ((&(n num_sub 1)) * ((K pow (n num_sub 2)) * (abs h))))
+\ENDTHEOREM

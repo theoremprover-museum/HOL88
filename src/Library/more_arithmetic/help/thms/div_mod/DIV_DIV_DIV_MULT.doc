@@ -1,0 +1,3 @@
+\THEOREM DIV_DIV_DIV_MULT div_mod
+|- !m n. 0 < m /\ 0 < n ==> (!x. (x DIV m) DIV n = x DIV (m * n))
+\ENDTHEOREM

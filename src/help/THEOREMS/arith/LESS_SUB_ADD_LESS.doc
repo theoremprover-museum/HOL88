@@ -1,0 +1,3 @@
+\THEOREM LESS_SUB_ADD_LESS arithmetic
+|- !n m i. i < (n - m) ==> (i + m) < n
+\ENDTHEOREM

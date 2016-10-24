@@ -1,0 +1,3 @@
+\THEOREM Union TOPOLOGY
+|- !S. Union S = (\x. ?s. S s /\ s x)
+\ENDTHEOREM

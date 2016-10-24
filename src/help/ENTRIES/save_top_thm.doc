@@ -1,0 +1,44 @@
+\DOC save_top_thm
+
+\TYPE {save_top_thm : (string -> thm)}
+
+\SYNOPSIS
+Stores the theorem just proved with the subgoal package in the current theory
+segment.
+
+\DESCRIBE
+The function {save_top_thm} is part of the subgoal package.  A proof state of
+the package consists of either goal and justification stacks if a proof is in
+progress or a theorem if a proof has just been completed. If the proof state
+consists of a theorem, the call {save_top_thm `name`} adds that theorem to the
+current theory segment under the name {name}. The theorem is returned as a
+value. The name {name} must be a distinct name within the theory segment, but
+may be the same as for items within other theory segments of the theory. If the
+current theory segment is named {thy}, the theorem will be written to the
+file {thy.th} in the directory from which HOL was called. If the system is in
+draft mode, other changes made to the current theory segment  during the
+session will also be written to the theory file. If the theory file does not
+exist, it will be created. The call can be made in both proof and draft mode.
+For a description of the subgoal package, see {set_goal}.
+
+\FAILURE
+A call to {save_top_thm} will fail if the proof state does not hold a theorem.
+This will be so either because no goal has been set or because a proof is in
+progress with unproven subgoals. It will fail if the name given is the same as
+the name of an existing fact in the current theory segment.
+Storing the theorem involves writing to the file system. If the write fails for
+any reason {save_top_thm} will fail. For example, on start up the initial
+theory is {HOL}. The associated theory files are read-only so an attempt to
+store a theorem in that theory segment will fail.
+
+\USES
+Adding theorems to the current theory. Saving theorems for retrieval
+in later sessions. The theorem may be retrieved using the function
+{theorem}.  Binding the result of {save_top_thm} to an ML variable makes it
+easy to access the theorem in the current terminal session.
+
+\SEEALSO
+get_state, new_theory, print_state, prove_thm, save_thm, set_goal, set_state,
+theorem, top_thm.
+
+\ENDDOC

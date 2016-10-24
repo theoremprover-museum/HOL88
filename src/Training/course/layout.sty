@@ -1,0 +1,92 @@
+% ===================================================================== 
+% Layout for HOL course slides			      (c) T Melham 1990
+% =====================================================================
+
+\typeout{HOL Course Slide Layout}
+
+% ---------------------------------------------------------------------
+% make "@" a letter
+% ---------------------------------------------------------------------
+\makeatletter
+
+% ---------------------------------------------------------------------
+% PAPER SIZE 
+%
+% TeX expects 1 inch margins all around (1 inch = 25.4 mm). 
+% a4 is exactly 297mm high by 210mm wide.
+% 
+% ---------------------------------------------------------------------
+
+\vsize=159.2truemm
+\hsize=246.2truemm
+
+% ---------------------------------------------------------------------
+% PAGE LAYOUT
+%
+% text size = 176 wide by 230 high
+%
+% inner margin  = 17mm
+% top margin    = 10mm
+% outer margin  = 17mm
+% bottom margin = 10mm
+%
+% ---------------------------------------------------------------------
+
+\textwidth 176truemm
+\textheight 226truemm
+
+\oddsidemargin  -8.4truemm
+\evensidemargin -8.4truemm
+\topmargin -15.4truemm
+
+% ---------------------------------------------------------------------
+% HEAD: no head
+% ---------------------------------------------------------------------
+\headheight 0.0cm
+\headsep 0.0cm
+
+% ---------------------------------------------------------------------
+% FOOT: page numbers at very bottom
+% ---------------------------------------------------------------------
+\footheight 12pt
+\footskip 44mm
+
+% ---------------------------------------------------------------------
+% INDENTATION
+%
+% no indentation
+% --------------------------------------------------------------------- 
+\parindent 0.0mm
+
+% ---------------------------------------------------------------------
+% FLOATS
+% ---------------------------------------------------------------------
+
+\floatsep 12pt plus 2pt minus 2pt
+\textfloatsep  20pt plus 2pt minus 4pt
+\intextsep 12pt plus 2pt minus 2pt
+\@maxsep 20pt
+
+% ---------------------------------------------------------------------
+% Page style: foot has caption and page number at bottom
+% ---------------------------------------------------------------------
+\newbox\rfootbox
+\setbox\rfootbox=\hbox{}
+\newbox\lfootbox
+\setbox\lfootbox=\hbox{}
+\def\ftext#1#2{\setbox\rfootbox=\hbox{\small\bf #1:\ }
+               \setbox\lfootbox=\hbox{\small\bf #2}}
+\def\ps@slides{\let\@mkboth\@gobbletwo
+     \def\@oddhead{}\def\@evenhead{}
+     \def\@oddfoot{\vbox{\hrule height0.9pt\vskip4pt 
+           \hbox to \textwidth{\small\bf The HOL system: \copy\lfootbox\hfill
+           \copyright\ T F Melham 1990\hfill\copy\rfootbox\bf \thepage}}}
+     \def\@evenfoot{\vbox{\hrule height0.9pt\vskip4pt 
+           \hbox to \textwidth{\small\bf The HOL system: \copy\lfootbox\hfill
+           \copyright\ T F Melham 1990\hfill\copy\rfootbox\bf \thepage}}}}
+
+% ---------------------------------------------------------------------
+% make "@" an other
+% ---------------------------------------------------------------------
+\makeatother
+

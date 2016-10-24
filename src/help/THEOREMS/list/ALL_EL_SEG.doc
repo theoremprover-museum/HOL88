@@ -1,0 +1,4 @@
+\THEOREM ALL_EL_SEG list
+|- !P l.
+    ALL_EL P l ==> (!m k. (m + k) <= (LENGTH l) ==> ALL_EL P(SEG m k l))
+\ENDTHEOREM

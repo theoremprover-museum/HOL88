@@ -1,0 +1,10 @@
+\DOC search_rule
+
+\TYPE {search_rule :  (path -> window_rule list)}
+
+\SYNOPSIS
+Window library internal use only.
+
+\LIBRARY window
+
+\ENDDOC

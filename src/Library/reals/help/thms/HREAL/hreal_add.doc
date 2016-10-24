@@ -1,0 +1,5 @@
+\THEOREM hreal_add HREAL
+|- !X Y.
+    X hreal_add Y =
+    hreal(\w. ?x y. (w = x hrat_add y) /\ cut X x /\ cut Y y)
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM DIFF_EXP TRANSC
+|- !x. (exp diffl (exp x))x
+\ENDTHEOREM

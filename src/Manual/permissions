@@ -1,0 +1,12 @@
+# ---------------------------------------------------------------------
+# change permissions in the directory where you now are.
+#
+# First, change all DIRECTORIES to:  drwxrwxr-x   (mode 775)
+
+find . -type d  -exec chmod 775 {} \;
+
+# Now, change all FILES to:  -rw-rw-r--   (mode 664)
+
+find .  -type f  -exec chmod 664 {} \;
+
+# ---------------------------------------------------------------------

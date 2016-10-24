@@ -1,0 +1,4 @@
+\THEOREM LENGTH_CONS list
+|- !l n.
+    (LENGTH l = SUC n) = (?h l'. (LENGTH l' = n) /\ (l = CONS h l'))
+\ENDTHEOREM

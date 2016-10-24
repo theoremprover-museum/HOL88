@@ -1,0 +1,3 @@
+\THEOREM LENGTH_MAP list
+|- !l f. LENGTH(MAP f l) = LENGTH l
+\ENDTHEOREM

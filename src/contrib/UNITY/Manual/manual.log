@@ -1,0 +1,590 @@
+This is TeX, C Version 3.0 (format=lplain 90.7.30)  30 OCT 1992 10:37
+**manual.tex
+(manual.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/lib/tex/macros/report.sty
+Document Style `report' <13 Nov 89>.
+(/usr/lib/tex/macros/rep12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+ (/usr/lib/tex/macros/titlepage.sty))
+(/usr/lib/tex/macros/a4.sty
+Page Layout 'a4' -- version of 9 Jun 1986.
+) (fasty.sty
+\c@fathm=\count88
+\c@facor=\count89
+\c@falem=\count90
+\c@faeq=\count91
+\myprooflistmargin=\dimen100
+\mydescrmargin=\dimen101
+\premisskip=\dimen102
+\ursep=\dimen103
+\overshoot=\dimen104
+\infthick=\dimen105
+\pp@box=\box25
+\p@box=\box26
+\f@box=\box27
+\n@box=\box28
+\p@skip=\dimen106
+\p@width=\dimen107
+\pp@skip=\dimen108
+\pp@end=\dimen109
+) (unity.sty
+Document Style `UNITY' <25 Sep 91>.
+) (psfig.tex
+\@unused=\write3
+
+psfig/tex 1.2
+\ps@stream=\read0
+) (manual.aux) [0
+
+] (manual.toc
+Overfull \hbox (53.17378pt too wide) detected at line 52
+\twlbf Appendix A 
+
+\hbox(8.33331+2.33331)x17.62482, glue set - 1.0
+.\twlbf A
+.\twlbf p
+.\twlbf p
+.\kern0.375
+.\twlbf e
+.etc.
+
+
+Overfull \hbox (52.57657pt too wide) detected at line 53
+\twlbf Appendix B 
+
+\hbox(8.33331+2.33331)x17.62482, glue set - 1.0
+.\twlbf A
+.\twlbf p
+.\twlbf p
+.\kern0.375
+.\twlbf e
+.etc.
+
+[1
+
+])
+\tf@toc=\write4
+ [2] [1
+
+
+] [2
+
+]
+Chapter 1.
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\write-{}
+.\write1{\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberl\
+ETC.}
+.\write1{\@writefile{lof}{\string\addvspace\space {10pt}}}
+.\write1{\@writefile{lot}{\string\addvspace\space {10pt}}}
+.\glue(\topskip) 0.0
+.etc.
+
+ [3
+
+]
+[4] [5] [6] [7] [8]
+Chapter 2.
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\write-{}
+.\write-{}
+.\write1{\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberl\
+ETC.}
+.\write1{\@writefile{lof}{\string\addvspace\space {10pt}}}
+.\write1{\@writefile{lot}{\string\addvspace\space {10pt}}}
+.etc.
+
+ [9
+
+
+]
+[10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20] [21]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+0.95135)x426.79134, glue set 279.79262fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 4.1042
+.\hbox(6.94444+0.95135)x426.79134, glue set 216.79317fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [22]
+[23]
+Overfull \hbox (0.4712pt too wide) in paragraph at lines 1386--1406
+[]$[]$  
+
+\hbox(111.7499+105.74988)x426.79134, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\mathon
+.\vbox(111.7499+105.74988)x424.65146
+..\hbox(10.14995+4.35004)x424.65146
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x109.017, glue set 335.73036fil []
+...\glue(\tabskip) 0.0
+...\hbox(0.0+0.0)x65.52852
+...\glue(\tabskip) 0.0
+...etc.
+..\glue(\lineskip) 0.0
+..\hbox(10.14995+4.35004)x424.65146
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x109.017, glue set 272.00919fil []
+...\glue(\tabskip) 0.0
+...\hbox(0.0+0.0)x65.52852
+...\glue(\tabskip) 0.0
+...etc.
+..\glue(\lineskip) 0.0
+..\hbox(10.14995+4.35004)x424.65146
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x109.017 []
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x65.52852, glue set 55.52852fil []
+...\glue(\tabskip) 0.0
+...etc.
+..etc.
+.\mathoff
+.\glue 3.91663 plus 1.95831 minus 1.30554
+.etc.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134, glue set 9.29765
+.\glue(\topskip) 0.00002
+.\hbox(9.99998+0.0)x426.79134, glue set 284.89233fil
+..\hbox(9.27998+0.0)x50.59962
+...\glue 0.0
+...\frtnbf 2
+...\frtnbf .
+...\frtnbf 3
+...\frtnbf .
+...etc.
+..\frtnbf I
+..\frtnbf n
+..\kern-0.46
+..\frtnbf t
+..etc.
+.\write1{\@writefile{toc}{\string\contentsline\space {subsection}{\string\numb\
+ETC.}
+.\penalty 10000
+.\glue 7.75 plus 1.03331
+.etc.
+
+ [24]
+[25] [26] [27] [28] [29]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.88889
+.\hbox(6.11111+0.95135)x426.79134, glue set 311.29234fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 4.1042
+.\hbox(6.94444+1.38887)x426.79134, glue set 33.04477fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [30]
+[31] [32] [33] [34] [35] [36] [37]
+Overfull \hbox (0.58041pt too wide) in paragraph at lines 2264--2270
+[][]$[]$ 
+
+\hbox(17.49998+11.49998)x397.41664
+.\hbox(0.0+0.0)x0.0
+.\hbox(0.0+0.0)x12.45244
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\glue 8.53581
+.\mathon
+.\vbox(17.49998+11.49998)x385.54462
+..\hbox(10.14995+4.35004)x385.54462
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x312.4544 []
+...\glue(\tabskip) 0.0
+..\glue(\lineskip) 0.0
+..\hbox(10.14995+4.35004)x385.54462
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x312.4544, glue set 114.94498fil []
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x73.09021 []
+...\glue(\tabskip) 0.0
+.\mathoff
+.etc.
+
+
+Overfull \hbox (0.58041pt too wide) in paragraph at lines 2275--2283
+[][]$[]$ 
+
+\hbox(17.49998+11.49998)x397.41664
+.\hbox(0.0+0.0)x0.0
+.\hbox(0.0+0.0)x12.45244
+..\glue 3.91663 plus 1.95831 minus 1.30554
+..\glue 8.53581
+.\mathon
+.\vbox(17.49998+11.49998)x385.54462
+..\hbox(10.14995+4.35004)x385.54462
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x312.4544 []
+...\glue(\tabskip) 0.0
+..\glue(\lineskip) 0.0
+..\hbox(10.14995+4.35004)x385.54462
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x312.4544, glue set 59.22696fil []
+...\glue(\tabskip) 0.0
+...\hbox(10.14995+4.35004)x73.09021 []
+...\glue(\tabskip) 0.0
+.\mathoff
+.etc.
+
+[38] [39] [40] [41] [42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52]
+[53] [54] [55
+
+
+] [56] [57] [58] [59] [60]
+Underfull \vbox (badness 3449) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134, glue set 3.2582
+.\write-{}
+.\write-{}
+.\glue(\topskip) 10.0
+.\rule(0.0+0.0)x*
+.\penalty 10000
+.etc.
+
+ [61
+
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 164.29362fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+0.8333)x426.79134, glue set 138.04385fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [62]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 227.29308fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+2.22223)x426.79134, glue set 169.54358fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [63]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 90.79427fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+2.22223)x426.79134, glue set 90.79427fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [64]
+[65]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+0.8333)x426.79134, glue set 363.79189fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 4.22226
+.\hbox(6.94444+2.22223)x426.79134, glue set 253.54285fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [66]
+[67] [68] [69]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 59.29454fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.66666
+.\hbox(6.11111+0.0)x426.79134, glue set 358.54193fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [70]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 306.04239fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.66666
+.\hbox(6.11111+0.95135)x426.79134, glue set 353.29198fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [71]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 195.79335fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+2.22223)x426.79134, glue set 274.54266fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [72]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 201.0433fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+0.8333)x426.79134, glue set 353.29198fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [73]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 321.79225fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+2.22223)x426.79134, glue set 195.79335fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [74]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 348.04202fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+2.22223)x426.79134, glue set 290.29253fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [75]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 180.04349fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+2.22223)x426.79134, glue set 106.54413fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [76]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 195.79335fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 2.83333
+.\hbox(6.94444+0.8333)x426.79134, glue set 285.04257fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [77]
+Underfull \vbox (badness 10000) has occurred while \output is active
+\vbox(654.41338+0.0)x426.79134
+.\glue(\topskip) 3.05556
+.\hbox(6.94444+2.22223)x426.79134, glue set 180.04349fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.\glue(\parskip) 0.0
+.\glue(\baselineskip) 3.66666
+.\hbox(6.11111+0.95135)x426.79134, glue set 348.04202fil
+..\hbox(0.0+0.0)x0.0
+..\penalty 10000
+..\glue 5.24995
+..\penalty 10000
+..\glue 5.24995
+..etc.
+.etc.
+
+ [78]
+[79] [80] [81
+
+
+] [82] (manual.aux) ) 
+Here is how much of TeX's memory you used:
+ 612 strings out of 4463
+ 5008 string characters out of 63169
+ 61140 words of memory out of 262141
+ 2537 multiletter control sequences out of 9500
+ 19996 words of font info for 75 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 15i,14n,18p,217b,398s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on manual.dvi (85 pages, 205728 bytes).

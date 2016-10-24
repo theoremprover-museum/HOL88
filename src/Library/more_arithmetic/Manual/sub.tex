@@ -1,0 +1,24 @@
+\section{The Theory {\tt sub}}
+
+The theory \ml{sub}\index{sub, theory@{\ptt sub}, theory} contains an
+\adhoc\ collection of 
+theorems about subtraction. It contains no new definitions.
+The theorems that have been pre-proved in this theory include but are not
+restricted to the following:
+\begin{hol}
+\index{SUB\_LE\_ADD@{\ptt SUB\_LE\_ADD}}
+\index{NOT\_0\_SUB@{\ptt NOT\_0\_SUB}}
+\index{ADD\_SUB\_SYM@{\ptt ADD\_SUB\_SYM}}
+\index{SUB\_ADD\_SELF@{\ptt SUB\_ADD\_SELF}}
+\index{SUB\_BOTH\_SIDES@{\ptt SUB\_BOTH\_SIDES}}
+\begin{verbatim}
+  SUB_LE_ADD      |- !n m p. n <= p ==> (m <= (p - n) = (n + m) <= p)
+
+  NOT_0_SUB       |- !m n. ~(m - n = 0) ==> ~(m = 0)
+
+  ADD_SUB_SYM     |- !a c. (c + a) - c = a
+
+  SUB_ADD_SELF    |- !m n. ~m < n ==> ((m - n) + n = m)
+
+  SUB_BOTH_SIDES  |- !m n p. (m = n) ==> (m - p = n - p)
+\end{verbatim}\end{hol}

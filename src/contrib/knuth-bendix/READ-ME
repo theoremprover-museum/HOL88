@@ -1,0 +1,33 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: knuth-bendix						%
+%									%
+% DESCRIPTION: Knuth Bendix completion as a derived inference rule.	%
+%									%
+% AUTHOR: Konrad Slind							%
+%									%
+% ADDRESS: Department of Computer Science				%
+%          University of Calgary					%
+%	   2500 University Drive N.W.					%
+%	   Calgary, Alberta						%
+%	   Canada, T2N 1N4.						%
+%									%
+%	   email: slind@ca.ucalgary.cpsc				%
+%									%
+% DATE: 90.04.11							%
+% --------------------------------------------------------------------- %
+
+The contents of this directory are as follows:
+
+    sys.ml      -- loads the files in the right order
+    lib.ml      -- auxiliary function definitions, some of general interest
+    rewrite.ml  -- rewriting sans conversions - not as general, 
+                   but often faster.
+    kb.ml       -- implements Knuth-Bendix completion
+    order.ml    -- term orderings a la Dershowitz
+    group.ml    -- the standard tests (from the original KB paper)
+    paper.tex   -- an explanatory paper
+
+The paper is absolutely standard latex. To run the system, load sys.ml into
+hol88 and try the tests given at the end of group.ml. All files have varying
+(usually small) amounts of documentation. Reference is made to the relevant
+papers at the heads of the relevant files.

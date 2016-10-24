@@ -1,0 +1,9 @@
+This is makeindex, portable version 2.11 [11-Sep-1991].
+Scanning input file test.idx....done (125 entries accepted, 0 rejected).
+Sorting entries....done (956 comparisons).
+Generating output file test.ind....
+## Warning (input = test.idx, line = 85; output = test.ind, line = 121):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+done (164 lines written, 1 warning).
+Output written in test.ind.
+Transcript written in test.ilg.

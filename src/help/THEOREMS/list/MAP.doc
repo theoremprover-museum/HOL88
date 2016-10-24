@@ -1,0 +1,3 @@
+\THEOREM MAP list
+|- (!f. MAP f[] = []) /\ (!f h t. MAP f(CONS h t) = CONS(f h)(MAP f t))
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM treal_1 REALAX
+|- treal_1 = hreal_1 hreal_add hreal_1,hreal_1
+\ENDTHEOREM

@@ -1,0 +1,3 @@
+\THEOREM SIMP_REC prim_rec
+|- !x f n. SIMP_REC x f n = SIMP_REC_FUN x f(SUC n)n
+\ENDTHEOREM

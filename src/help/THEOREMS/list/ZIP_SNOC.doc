@@ -1,0 +1,5 @@
+\THEOREM ZIP_SNOC list
+|- !l1 l2.
+    (LENGTH l1 = LENGTH l2) ==>
+    (!x1 x2. ZIP(SNOC x1 l1,SNOC x2 l2) = SNOC(x1,x2)(ZIP(l1,l2)))
+\ENDTHEOREM

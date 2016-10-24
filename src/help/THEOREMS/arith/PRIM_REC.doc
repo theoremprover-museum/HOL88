@@ -1,0 +1,3 @@
+\THEOREM PRIM_REC prim_rec
+|- !x f m. PRIM_REC x f m = PRIM_REC_FUN x f m(PRE m)
+\ENDTHEOREM

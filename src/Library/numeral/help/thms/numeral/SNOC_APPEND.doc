@@ -1,0 +1,3 @@
+\THEOREM SNOC_APPEND numeral
+|- !h l. SNOC h l = APPEND l[h]
+\ENDTHEOREM

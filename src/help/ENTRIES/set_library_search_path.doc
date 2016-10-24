@@ -1,0 +1,34 @@
+\DOC set_library_search_path
+
+\TYPE {set_library_search_path : (string list -> void)}
+
+\SYNOPSIS
+Sets the internal search path use by HOL to find libraries.
+
+\DESCRIBE
+When applied to a list of strings {l}, each of which represents the pathname to
+a directory, {set_library_search_path} sets the internal search path used when
+the {load_library} function searches for library load files to the list {l}.
+Although the library search path can be set to an arbitrary list of strings,
+each string is normally expected to be a pathname with `{/}' as its final
+character.  When {load_library} looks for a library load file, the directories
+in the search path are searched in the order in which they occur in the list
+supplied to {set_library_search_path}.
+
+\FAILURE
+Never fails.
+
+\EXAMPLE 
+The following call adds a user's local library directory {~/hol/lib/} to the
+library search path:
+{
+   set_library_search_path (union [`~/hol/lib/`] (library_search_path()));;
+}
+\noindent Users with local libraries would typically have a line of this form
+in their {hol-init} file. Note that the function {union} is used to avoid
+multiple occurrences of the same pathname in the library search path.
+
+\SEEALSO
+library_pathname, library_search_path, load_library.
+
+\ENDDOC

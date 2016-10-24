@@ -1,0 +1,6 @@
+\THEOREM REP_prod bool
+|- REP_prod =
+   (@rep.
+     (!p' p''. (rep p' = rep p'') ==> (p' = p'')) /\
+     (!p. IS_PAIR p = (?p'. p = rep p')))
+\ENDTHEOREM

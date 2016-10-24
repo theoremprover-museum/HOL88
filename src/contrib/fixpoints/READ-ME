@@ -1,0 +1,66 @@
++ =====================================================================	+
+|									|
+| LIBRARY	: fixpoints						|
+|									|
+| DESCRIPTION   : Definition of a fixedpoint operator and derivation    |
+|		  of Scott Induction (Computation Induction).           |
+|									|
+| AUTHOR	: M. Gordon						|
+| DATE		: 3 April 1989  					|
+|									|
++ =====================================================================	+
+
+
++ --------------------------------------------------------------------- +
+|									|
+| FILES:								|
+|									|
++ --------------------------------------------------------------------- +
+
+    mk_fixpoints.ml    creates the theory of fixedpoints.
+
+    fixpoints.ml       loads the library into hol.
+
++ --------------------------------------------------------------------- +
+|									|
+| DOCUMENTATION:							|
+|									|
++ --------------------------------------------------------------------- +
+
+The concepts of monotonicity, continuity, fixedpoints
+and chain-completeness (i.e. admitting induction) are defined
+for polymorphic predicates. Various basic lemmas are proved, 
+concluding with the validity of Scott induction (also called 
+fixedpoint induction and computation induction) in the following form:
+
+    |- !(p:(*->bool)->bool) fun.
+        ADMITS_INDUCTION p /\ 
+        CONTINUOUS fun     /\
+        p BOT              /\ 
+        (!f. p f ==> p(fun f)) 
+        ==> 
+        p(FIX fun)
+
+See the comments in Library/fixpoints/mk_fixpoints.ml for more details.
+
++ --------------------------------------------------------------------- +
+|									|
+| TO REBUILD THE LIBRARY:						|
+|									|
++ --------------------------------------------------------------------- +
+
+   1) edit the pathnames in the Makefile (if necessary)
+
+   2) type "make clean"
+
+   3) type "make all"
+
++ --------------------------------------------------------------------- +
+|									|
+| TO USE THE LIBRARY:							|
+|									|
++ --------------------------------------------------------------------- +
+
+   load_library `fixpoints`;;
+
+

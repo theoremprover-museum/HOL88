@@ -1,0 +1,25 @@
+name:        newrw
+description: Updates rewriting conversions in HOL2.0 code to HOL2.01
+author:      Jim Grundy
+address:     Univeristy of Cambridge, Computer Laboratory
+date:        October 1992
+
+One of the differences between HOL2.0 and HOL2.01 is that the function
+previously called REWRITE_CONV is now called REWR_CONV.
+This has allowed the introduction of rewriting conversions analagous
+to the existing rewrite rules and tactics.
+
+The shell script newrw in this directory can be used to subsitute instances
+of REWRITE_CONV with REWR_CONV in your ml files to help you update them
+to HOL2.01.
+
+Here are the expanatory comments from newrw.
+# This file is used to help update ml files from HOL2.0 to HOL2.01
+# usage: newrw file.ml
+# It replaces instances of REWRITE_CONV in file.ml with REWR_CONV.
+# A copy of the original version of the file is saved in file.ml.old
+# An alternative usage for newrw is as follows:
+# usage: newrw file.ml target replacement
+# When used in this way newrw replaces instances of target in file.ml by
+# replacement.
+# newrc checks that replacement does not already appear in file.ml

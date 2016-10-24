@@ -1,0 +1,3 @@
+\THEOREM LASTN_CONS list
+|- !n l. n <= (LENGTH l) ==> (!x. LASTN n(CONS x l) = LASTN n l)
+\ENDTHEOREM

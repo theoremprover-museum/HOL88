@@ -1,0 +1,21 @@
+\DOC term_prec
+
+\TYPE {term_prec : (string -> int)}
+
+\SYNOPSIS
+Precedence table for HOL terms (as a function).
+
+\LIBRARY prettyp
+
+\DESCRIBE
+{term_prec} is a function which given the name of a HOL function constant,
+returns the precedence used by the pretty-printer. The precedences of
+abstractions ({`\\`}) and type annotations ({`:`}) are also included.
+
+\FAILURE
+Never fails.
+
+\SEEALSO
+min_term_prec, max_term_prec, type_prec.
+
+\ENDDOC

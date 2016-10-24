@@ -1,0 +1,3 @@
+\THEOREM EXP_MONO_LE TRANSC
+|- !x y. (exp x) <= (exp y) = x <= y
+\ENDTHEOREM

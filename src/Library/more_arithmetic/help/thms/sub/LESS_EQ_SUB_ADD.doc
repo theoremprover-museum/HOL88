@@ -1,0 +1,3 @@
+\THEOREM LESS_EQ_SUB_ADD sub
+|- !m n p. p <= m ==> ((m - p) + n = (m + n) - p)
+\ENDTHEOREM

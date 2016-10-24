@@ -1,0 +1,17 @@
+\DOC dest_eq
+
+\TYPE {dest_eq : (term -> (term # term))}
+
+\SYNOPSIS
+Term destructor for equality.
+
+\DESCRIBE
+{dest_eq("t1 = t2")} returns {("t1","t2")}.
+
+\FAILURE
+Fails with {dest_eq} if term is not an equality.
+
+\SEEALSO
+mk_eq, is_eq.
+
+\ENDDOC

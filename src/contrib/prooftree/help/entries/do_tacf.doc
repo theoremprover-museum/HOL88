@@ -1,0 +1,30 @@
+\DOC do_tacf
+
+\TYPE {do_tacf : (string -> string -> tactic -> void)}
+
+\SYNOPSIS
+Applies a tactic under the enhanced subgoal package.
+
+\DESCRIBE
+Used to apply a tactic the proof pointed by the first argument, at the
+node pointed to by the second argument.
+
+\KEYWORDS
+subgoal
+
+\LIBRARY prettyp
+
+\FAILURE
+See under {do_tac}.
+
+\USES
+In practice this function is not very useful in exploring a goal, as
+it does not perform a validity check and thus the resulting proof may
+not correspond to the original goal. Nevertheless, once a proof is
+being re-run it may be faster to use this function.
+
+\SEEALSO
+all_subgoals, cancel_tac, complete_proof, do_tac, move_to_proof, new_goal,
+proven, remove_proof, show_all_proofs, show_tac, subgoal_tac, VALID.
+
+\ENDDOC

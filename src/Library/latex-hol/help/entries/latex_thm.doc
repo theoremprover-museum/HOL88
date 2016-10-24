@@ -1,0 +1,41 @@
+\DOC latex_thm
+
+\TYPE {latex_thm : (thm -> void)}
+
+\SYNOPSIS
+Translate \HOL\ theorems to \LaTeX\ format for typesetting.
+
+\LIBRARY latex-hol
+
+\DESCRIBE
+The function {latex_thm} converts a \HOL\ theorem to \LaTeX\ format for
+typesetting it. All \LaTeX\ special characters are escaped or changed
+to a \LaTeX\ command which should produces the desired symbol. All
+constants are tagged with the command {\CONST}. Numbers in variable
+names are converted to subscripts. The
+result is written to the user's terminal. 
+For example,
+{
+# latex_thm INDUCTION;;
+\THM \FORALL P\DOT
+        P \,\CONST{0} \AND 
+        (\FORALL n\DOT P \,n \IMP  P \,(\CONST{SUC} \,n)) \IMP 
+           (\FORALL n\DOT P \,n)
+() : void
+}
+The output of this function can be incorporated into a \LaTeX\
+document. It should be put in one of the \LaTeX\ math modes, i.e.,
+enclosed between a pair of {$}s or {\[ ... \]}. The macro file
+{holmacs.tex} should be input before where the theorems appear.
+
+\FAILURE
+Fails if the argument is not an expression evaluated to having type {thm}.
+
+\SEEALSO
+{latex_type}, {latex_type_to}, {latex_type_add_to},
+{latex_term}, {latex_term_to}, {latex_term_add_to},
+{latex_thm_to}, {latex_thm_add_to},
+{latex_all_thm}, {latex_all_thm_to}, {latex_all_thm_add_to}
+and {latex_theory_to}
+
+\ENDDOC

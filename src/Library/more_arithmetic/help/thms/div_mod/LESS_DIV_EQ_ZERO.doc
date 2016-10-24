@@ -1,0 +1,3 @@
+\THEOREM LESS_DIV_EQ_ZERO div_mod
+|- !r n. r < n ==> (r DIV n = 0)
+\ENDTHEOREM

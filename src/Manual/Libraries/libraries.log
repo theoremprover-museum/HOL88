@@ -1,0 +1,61 @@
+This is TeX, Version 3.1415 (C version 6.1) (format=lplain 94.2.9)  4 MAR 1994 10:32
+**libraries.tex
+(libraries.tex
+LaTeX Version 2.09 <25 March 1992>
+(/usr/lib/tex/macros/latex/book.sty
+Standard Document Style `book' <14 Jan 92>.
+(/usr/lib/tex/macros/latex/bk12.sty)
+\descriptionmargin=\dimen99
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+) (/usr/lib/tex/macros/latex/fleqn.sty
+Document style option `fleqn' - Released 04 Nov 91
+\mathindent=\dimen100
+) (../LaTeX/alltt.sty) (../LaTeX/layout.sty
+\@myenumdepth=\count88
+\c@myenumi=\count89
+) (../LaTeX/commands.tex
+\minipagewidth=\skip41
+\hsbw=\skip42
+\c@sessioncount=\count90
+)
+(../LaTeX/ref-macros.tex)
+\@indexfile=\write3
+
+Writing index file libraries.idx 
+No file libraries.aux.
+(title.tex (../LaTeX/cover_info.tex
+
+     The title page being created is a LaTeX approximation of a fancy
+     PostScript cover page. All the fancy cover pages for the HOL
+     Manual may be generated if you have (1) a PostScript printer,
+     (2) the "psfig" TeX macros, and (3) a DVI to PostScript converter
+     that understands these macros. The cover pages may be found in
+     ../LaTeX/Covers, and shoud be made pursuant to the instructions
+     given in ../LaTeX/Covers/READ-ME.
+
+) [1
+
+
+] [2]) (preface.tex) [3
+
+
+
+] (libraries.aux (title.aux) (preface.aux)) ) 
+Here is how much of TeX's memory you used:
+ 362 strings out of 11977
+ 3004 string characters out of 87025
+ 30938 words of memory out of 262141
+ 2275 multiletter control sequences out of 9500
+ 19612 words of font info for 74 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 12i,6n,17p,178b,190s stack positions out of 300i,100n,60p,3000b,4000s
+
+Output written on libraries.dvi (3 pages, 2196 bytes).

@@ -1,0 +1,14 @@
+\DOC remove_bv
+
+\BLTYPE
+remove_bv : (term ->
+             ((term # term) list # (type # type) list) ->
+             ((term # term) list # (type # type) list))
+\ELTYPE
+
+\SYNOPSIS
+Internal function of `{trs}' library.
+
+\LIBRARY trs
+
+\ENDDOC

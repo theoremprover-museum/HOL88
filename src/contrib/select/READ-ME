@@ -1,0 +1,23 @@
+% --------------------------------------------------------------------- %
+% DIRECTORY: select							%
+%									%
+% DESCRIPTION: Note on dealing with the epsilon-operator in HOL proofs. %
+%									%
+% AUTHOR: Brian Graham							%
+%									%
+% ADDRESS: Department of Computer Science				%
+%          University of Calgary					%
+%	   2500 University Drive N.W.					%
+%	   Calgary, Alberta						%
+%	   Canada, T2N 1N4.						%
+%									%
+%	   email: grahamb@ca.ucalgary.cpsc				%
+%									%
+% DATE: 90.04.20							%
+% REVISED: 01.02.92 - updated select_appendix.tex to remove nonstandard %
+%                     abbreviations, and update the example files to    %
+%                     run on HOL88 version 2.0.                         %
+% --------------------------------------------------------------------- %
+
+Top-level LaTeX file: select.tex
+
